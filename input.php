@@ -797,7 +797,5 @@ function GetChartData($gameid,$userid,$ChartID)
 	}
 	return $dataChart;
 }
-
 $url = site_root."input.php?Scenario=".$result->Link_ScenarioID;
-
 include_once doc_root.'views/input.php';
