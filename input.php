@@ -790,9 +790,7 @@ function GetChartData($gameid,$userid,$ChartID)
 				$subcompName    = $functionsObj->FetchObject($subcompDetails);
 				
 				$dataChart[$subcompName->SubComp_Name]  .= $row->input_current;
-			}
-			
-			
+			}			
 		}
 	}
 	return $dataChart;
