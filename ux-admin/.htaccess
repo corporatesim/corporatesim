@@ -1,0 +1,21 @@
+Options -MultiViews
+
+<IfModule mod_rewrite.c>
+
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^([A-Za-z0-9]+)/([A-Za-z0-9]+)/([A-Za-z0-9\=]+)/([A-Za-z0-9\=]+)/([A-Za-z0-9\=]+)$ index.php?q=$1&$2=$3&$4=$5 [NC,L]
+
+RewriteRule ^([A-Za-z0-9]+)/([A-Za-z0-9]+)/([A-Za-z0-9\=]+)$ index.php?q=$1&$2=$3 [NC,L]
+
+RewriteRule ^([A-Za-z0-9]+)$ index.php?q=$1 [NC,L]
+
+RewriteRule ^([A-Za-z0-9]+)$ $1.php [NC,L]
+
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+DirectoryIndex index.php index.html
+
+</IfModule>

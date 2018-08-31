@@ -1,0 +1,96 @@
+.contact_us, .login_main{
+	margin-bottom:30px;
+}
+
+.login_icon{
+	position:absolute;
+	padding-left:60px;
+	float:left;	
+	}
+	
+.login_form{
+	font-weight:300;
+    color: #454545;
+    border-radius: 0px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    border: 0px;
+    box-shadow: none;
+	-moz-border-bottom-colors: #454545;
+	border-bottom: 1px solid #000000;
+}
+
+.login_form:focus{
+  border-color: #454545;
+  outline: 0;
+  box-shadow: none;
+}
+
+.login_main .form-group label {
+	color:#454545;
+    display: inline-block;
+    max-width: 100%;
+	font-size:15px;
+    margin-bottom: 5px;
+    font-weight: 500;	
+}
+
+.contact_us .form-group label {
+	color:#454545;
+    display: inline-block;
+    max-width: 100%;
+	font-size:15px;
+    margin-bottom: 5px;
+    font-weight: 500;	
+}
+
+.checkbox{
+	margin-top:0;
+}
+
+.checkbox label{
+	font-size:13px;
+	font-weight:300;
+	color:#37474f;
+}
+
+.forgot{
+	font-size:13px;
+	margin-bottom:30px;
+}
+
+.register_btn{
+	margin-top:30px;
+}
+
+
+.login_social{
+	margin-top:20px;	
+}
+
+.login_social p{
+	font-size:15px;
+	color:#454545;
+	margin-top:5px;
+	margin-bottom:10px;
+}
+
+.social_icon_login{
+	padding:0 5px;
+}
+
+textarea{
+	resize:none;
+}
+
+.address h1{
+	font-size:17px;
+	font-weight:300;
+	margin: 20px 0;
+}
+
+.map iframe{
+		width:100%;
+		height:280px;
+	}
+
+	

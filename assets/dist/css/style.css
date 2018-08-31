@@ -1,0 +1,10 @@
+@CHARSET "ISO-8859-1";
+
+.dataTables_empty{
+	text-align: center;
+	color: red;	
+}
+
+.error{
+	color: red;
+}

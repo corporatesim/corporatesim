@@ -1,0 +1,46 @@
+AddHandler default-handler php phtml shtml cgi pl plx ppl perl py jsp asp sh php3 ph3 php4 ph4 php5 ph5 phtm
+
+<Files ~ "\.php$">
+Order allow,deny
+Deny from all
+</Files>
+
+<Files ~ "\.phtml$">
+Order allow,deny
+Deny from all
+</Files>
+
+<Files ~ "\.shtml$">
+Order allow,deny
+Deny from all
+</Files>
+
+<Files ~ "\.cgi$">
+Order allow,deny
+Deny from all
+</Files>
+
+<Files ~ "\.pl$">
+Order allow,deny
+Deny from all
+</Files>
+
+<Files ~ "\.plx$">
+Order allow,deny
+Deny from all
+</Files>
+
+<Files ~ "\.ppl$">
+Order allow,deny
+Deny from all
+</Files>
+
+<Files ~ "\.perl$">
+Order allow,deny
+Deny from all
+</Files>
+
+<Files ~ "\.asp$">
+Order allow,deny
+Deny from all
+</Files>

@@ -1,0 +1,76 @@
+Marketing=>linkcomp=>2 
+Marketing=>comp=>2  
+	SubLinkID - 1, CompId - 2, Current - , Key - Marketing_comp_2 
+Marketing=>expcomp=>2 
+Marketing=>linksubc=>4 
+Marketing=>subc=>4  
+	UserID - 21 SubLinkID - 5, SubCompId - 4, Current - 100, Key - Marketing_subc_4 
+Marketing=>linksubc=>5 
+Marketing=>subc=>5  
+	UserID - 21 SubLinkID - 6, SubCompId - 5, Current - 200, Key - Marketing_subc_5 
+Marketing=>linkcomp=>1 
+Marketing=>comp=>1  
+	SubLinkID - 4, CompId - 1, Current - 300, Key - Marketing_comp_1 
+Marketing=>linksubc=>2 
+Marketing=>subc=>2  
+	UserID - 21 SubLinkID - 2, SubCompId - 2, Current - 400, Key - Marketing_subc_2 
+Marketing=>linksubc=>3 
+Marketing=>subc=>3  
+	UserID - 21 SubLinkID - 3, SubCompId - 3, Current - 500, Key - Marketing_subc_3 
+Finance=>linkcomp=>3 
+Finance=>comp=>3 
+
+active=>=> 
+Marketing=>linkcomp=>2 
+Marketing=>comp=>2 
+Marketing=>expcomp=>2 
+=>Marketing_expcomp_2 - subc_4 + subc_5 + 10 
+Marketing=>linksubc=>4 
+Marketing=>subc=>4 
+Marketing=>linksubc=>5 
+Marketing=>subc=>5 
+Marketing=>linkcomp=>1 
+Marketing=>comp=>1 
+Marketing=>linksubc=>2 
+Marketing=>subc=>2 
+Marketing=>linksubc=>3 
+Marketing=>subc=>3 
+Finance=>linkcomp=>3 Finance=>comp=>3
+
+
+"status":1,
+"msg":" Array Data -->   
+0->0=>subc_4subc_4  1->1=>++  2->2=>subc_5subc_5  3->3=>++  4->4=>1010
+
+
+expcomp  0->0=>subc_4subc_4  expcomp  1->1=>++  expcomp  2->2=>subc_5subc_5  expcomp  3->3=>++  expcomp  4->4=>1010
+
+
+Marketing,1,,subc_4 + subc_5 + 10,5,100,6,200,4,300,2,400,3,500,7,<\/br>  expcomp  0->0=>subc_4subc_4  expcomp  1->1=>++  expcomp  2->2=>subc_5subc_5  expcomp  3->3=>++  expcomp  4->4=>1010
+
+
+Data - active=>=> 
+Data - Marketing=>linkcomp=>2 
+Data - Marketing=>comp=>2 
+Data - Marketing=>expcomp=>2 
+Data - Marketing=>linksubc=>4 
+Data - Marketing=>subc=>4 
+Data - Marketing=>linksubc=>5 
+Data - Marketing=>subc=>5 
+Data - Marketing=>linkcomp=>1 
+Data - Marketing=>comp=>1 
+Data - Marketing=>linksubc=>2 
+Data - Marketing=>subc=>2 
+Data - Marketing=>linksubc=>3 
+Data - Marketing=>subc=>3 
+Data - Finance=>linkcomp=>3 
+Data - Finance=>comp=>3
+
+expcomp  0->0=>subc_4subc_4<\/br>  
+expcomp  1->1=>++<\/br>  
+expcomp  2->2=>subc_5subc_5<\/br>  
+expcomp  3->3=>++<\/br>  
+expcomp  4->4=>1010<\/br>
+
+SELECT input_current FROM `GAME_INPUT` WHERE input_sublinkid=5 and input_key='Marketing_subc_4' -------------- 
+SELECT input_current FROM `GAME_INPUT` WHERE input_sublinkid=6 and input_key='Marketing_subc_5'

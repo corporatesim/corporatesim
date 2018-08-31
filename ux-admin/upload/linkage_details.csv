@@ -1,0 +1,90 @@
+Area Name,Comp ID,Comp Name,Sub Comp ID,SubComp Name,Input Mode,expression,expression string
+TARGETS,122,SALES (TARGET),,,admin,,
+TARGETS,123,AVERAGE SALES PER HOUR (TARGET),,,admin,,
+TARGETS,124,SALES TO PAYROLL EXPENSE (TARGET),,,admin,,
+TARGETS,164,EMPLOYEE COST (TARGET),,,admin,,
+MANPOWER,131,ASSOCIATE WORKING HOURS WITH OVERTIME- Required,,,formula, comp_122 / comp_123,{SALES (TARGET)} {/} {AVERAGE SALES PER HOUR (TARGET)}
+MANPOWER,194,LAST QUARTER EXIT HEADCOUNT- Associate,,,user,,
+MANPOWER,177,HEADCOUNT DECISIONS FOR THIS QUARTER- Associate,,,formula, subc_45 - subc_46 - subc_47,{Headcount Ramp Up- Associates} {-} {Headcount Ramp Down- Associates} {-} {Promotion To Supervisor (Nos.)}
+MANPOWER,177,HEADCOUNT DECISIONS FOR THIS QUARTER- Associate,45,Headcount Ramp Up- Associates,user,,
+MANPOWER,177,HEADCOUNT DECISIONS FOR THIS QUARTER- Associate,46,Headcount Ramp Down- Associates,user,,
+MANPOWER,177,HEADCOUNT DECISIONS FOR THIS QUARTER- Associate,47,Promotion To Supervisor (Nos.),user,,
+MANPOWER,192,HEADCOUNT AVAILABILITY- Associates,,,formula, comp_194 + comp_177,{LAST QUARTER EXIT HEADCOUNT- Associate} {+} {HEADCOUNT DECISIONS FOR THIS QUARTER- Associate}
+MANPOWER,195,LAST QUARTER EXIT HEADCOUNT- Supervisor,,,user,,
+MANPOWER,180,HEADCOUNT DECISIONS FOR THIS QUARTER- Supervisor,49,Headcount Ramp Up- Supervisors,user,,
+MANPOWER,180,HEADCOUNT DECISIONS FOR THIS QUARTER- Supervisor,50,Headcount Ramp Down- Supervisors,user,,
+MANPOWER,180,HEADCOUNT DECISIONS FOR THIS QUARTER- Supervisor,155,Promotion From Associate Level (Nos.),formula, subc_47,{Promotion To Supervisor (Nos.)}
+MANPOWER,193,HEADCOUNT AVAILABILITY- Supervisors,,,formula, comp_195 + comp_180,{LAST QUARTER EXIT HEADCOUNT- Supervisor} {+} {HEADCOUNT DECISIONS FOR THIS QUARTER- Supervisor}
+MANPOWER,130,ASSOCIATE WORKING HOURS WITH OVERTIME- Actuals,,,formula, comp_122 / comp_123,{SALES (TARGET)} {/} {AVERAGE SALES PER HOUR (TARGET)}
+MANPOWER,130,ASSOCIATE WORKING HOURS WITH OVERTIME- Actuals,53,Standard Working Hours Of Current Associates,formula, 3 * 25 * 8 * comp_192,{3} {*} {2} {5} {*} {8} {*} {HEADCOUNT AVAILABILITY- Associates}
+MANPOWER,130,ASSOCIATE WORKING HOURS WITH OVERTIME- Actuals,54,Overtime (OT) By Current Associates Required,formula, comp_122 / comp_123,{SALES (TARGET)} {/} {AVERAGE SALES PER HOUR (TARGET)}
+MANPOWER,130,ASSOCIATE WORKING HOURS WITH OVERTIME- Actuals,143,Overtime (OT) By Current Associates- As Per Decision,user,,
+MANPOWER,133,HIRING REQUIREMENTS & COST,,,formula, ( subc_150 + subc_45 ) * subc_148,{(} {Voluntary Attrition Backfill} {+} {Headcount Ramp Up- Associates} {)} {*} {Average Cost Of Hiring- Associate}
+MANPOWER,133,HIRING REQUIREMENTS & COST,55,Voluntary Attrition Back Fill To Join Next Quarter,formula, comp_138,{QUARTERLY ATTRITION (Nos.)- Voluntary}
+MANPOWER,133,HIRING REQUIREMENTS & COST,56,Ramp-up Hiring For This Quarter,formula, subc_45,{Headcount Ramp Up- Associates}
+MANPOWER,133,HIRING REQUIREMENTS & COST,148,Average Cost Of Hiring- Associate,admin,,
+MANPOWER,138,QUARTERLY ATTRITION (Nos.)- Voluntary,68,Associate Voluntary Attrition- Better Career Growth (Nos.),formula, comp_192 * subc_165,{HEADCOUNT AVAILABILITY- Associates} {*} {Attriton Rate % (Better Career)- Admin}
+MANPOWER,138,QUARTERLY ATTRITION (Nos.)- Voluntary,165,Attriton Rate % (Better Career)- Admin,admin,,
+MANPOWER,138,QUARTERLY ATTRITION (Nos.)- Voluntary,149,Associate Voluntary Attrition-Anomic (Nos.),formula, subc_46,{Headcount Ramp Down- Associates}
+MANPOWER,139,QUARTERLY ATTRITION RATE (%)- Voluntary,,,admin,,
+PAYROLL,140,QUARTERLY SALARY COST- Associates,,,formula, 3 * subc_71 * comp_192,{3} {*} {Monthly Salary Rate Of Associates} {*} {HEADCOUNT AVAILABILITY- Associates}
+PAYROLL,140,QUARTERLY SALARY COST- Associates,71,Monthly Salary Rate Of Associates,admin,,
+PAYROLL,141,QUARTERLY SALARY COST- Supervisors,,,formula, 3 * subc_75 * comp_193,{3} {*} {Monthly Salary Rate Of Supervisors} {*} {HEADCOUNT AVAILABILITY- Supervisors}
+PAYROLL,141,QUARTERLY SALARY COST- Supervisors,75,Monthly Salary Rate Of Supervisors,admin,,
+PAYROLL,142,QUARTERLY SALARY COST- Overall,,,formula, comp_140 + comp_141 + 3 * subc_77 * comp_192 + 3 * subc_75 * comp_193,{QUARTERLY SALARY COST- Associates} {+} {QUARTERLY SALARY COST- Supervisors} {+} {3} {*} {Monthly Average Increment- Associates} {*} {HEADCOUNT AVAILABILITY- Associates} {+} {3} {*} {Monthly Salary Rate Of Supervisors} {*} {HEADCOUNT AVAILABILITY- Supervisors}
+PAYROLL,143,QUARTERLY INCREMENT AMOUNT- Overall,,,formula, 3 * ( subc_77 + subc_78 ),{3} {*} {(} {Monthly Average Increment- Associates} {+} {Monthly Average Increment- Supervisor} {)}
+PAYROLL,143,QUARTERLY INCREMENT AMOUNT- Overall,77,Monthly Average Increment- Associates,user,,
+PAYROLL,143,QUARTERLY INCREMENT AMOUNT- Overall,78,Monthly Average Increment- Supervisor,user,,
+PAYROLL,145,QUARTERLY SALES COMMISSION,,,formula, subc_144 * subc_151 * comp_142 / 100,{SC As A % Of Salary Cost} {*} {Sales Commission Coverage(%)} {*} {QUARTERLY SALARY COST- Overall} {/} {1} {0} {0}
+PAYROLL,145,QUARTERLY SALES COMMISSION,144,Sales Commission As A Percentage Of Salary Cost,user,,
+PAYROLL,145,QUARTERLY SALES COMMISSION,151,Sales Commission Coverage(%),user,,
+PAYROLL,146,OVERTIME (OT) COST,,,formula, subc_85 * subc_86,{Overtime Rate (Per Hour)} {*} {Overtime Hours}
+PAYROLL,146,OVERTIME (OT) COST,85,Overtime Rate (Per Hour),admin,,
+PAYROLL,146,OVERTIME (OT) COST,86,Overtime Hours,formula, subc_143,{Overtime (OT) By Current Associates- As Per Decision}
+PAYROLL,147,TERMINATION COST,,,formula, subc_87 + subc_89,{Termination Cost- Associate} {+} {Termination Cost- Supervisor}
+PAYROLL,147,TERMINATION COST,87,Termination Cost- Associate,formula, 2 * subc_71 * subc_46,{2} {*} {Monthly Salary Rate Of Associates} {*} {Headcount Ramp Down- Associates}
+PAYROLL,147,TERMINATION COST,89,Termination Cost- Supervisor,formula, 2 * subc_75 * subc_50,{2} {*} {Monthly Salary Rate Of Supervisors} {*} {Headcount Ramp Down- Supervisors}
+PAYROLL,147,TERMINATION COST,96,Associates Terminated (Nos.),formula, subc_46,{Headcount Ramp Down- Associates}
+PAYROLL,147,TERMINATION COST,90,Supervisors Terminated (Nos.),formula, subc_50,{Headcount Ramp Down- Supervisors}
+PAYROLL,150,PAYROLL COST- Overall,,,formula, comp_142 + comp_145 + comp_143 + comp_147 + comp_146 + comp_178,{QUARTERLY SALARY COST- Overall} {+} {QUARTERLY SALES COMMISSION} {+} {QUARTERLY INCREMENT AMOUNT- Overall} {+} {TERMINATION COST} {+} {OVERTIME (OT) COST} {+} {SALES PRODUCTIVITY INCENTIVE}
+PAYROLL,178,SALES PRODUCTIVITY INCENTIVE,,,formula, comp_165 * 0.01,{SALES ACHIEVED (ACTUALS)} {*} {0} {.} {0} {1}
+TRAINING-WELFARE-EVENTS,151,WELFARE & BENEFITS (W&B) COST,,,formula, 0.02 * ( comp_142 + comp_143 ),{0} {.} {0} {2} {*} {(} {QUARTERLY SALARY COST- Overall} {+} {QUARTERLY INCREMENT AMOUNT- Overall} {)}
+TRAINING-WELFARE-EVENTS,151,WELFARE & BENEFITS (W&B) COST,100,W&B COST- Supervisor,formula, 0.2 ( comp_141 + 3 * subc_78 ),{0} {.} {2} {(} {QUARTERLY SALARY COST- Supervisors} {+} {3} {*} {Monthly Average Increment- Supervisor} {)}
+TRAINING-WELFARE-EVENTS,151,WELFARE & BENEFITS (W&B) COST,99,W&B COST- Associates,formula, 0.2 ( comp_140 + 3 * subc_77 ),{0} {.} {2} {(} {QUARTERLY SALARY COST- Associates} {+} {3} {*} {Monthly Average Increment- Associates} {)}
+TRAINING-WELFARE-EVENTS,152,REWARD EVENTS COST,,,formula, subc_102 + subc_105 * subc_104,{Total Rewards} {+} {No. of Events} {*} {Event Expense}
+TRAINING-WELFARE-EVENTS,152,REWARD EVENTS COST,103,Average Reward Cost,admin,,
+TRAINING-WELFARE-EVENTS,152,REWARD EVENTS COST,102,Total Rewards,formula, subc_101 * subc_103,{Employees Targeted For Events} {*} {Average Reward Cost}
+TRAINING-WELFARE-EVENTS,152,REWARD EVENTS COST,105,No. of Events,user,,
+TRAINING-WELFARE-EVENTS,152,REWARD EVENTS COST,104,Event Expense,admin,,
+TRAINING-WELFARE-EVENTS,153,COMMUNICATION AND OTHER EVENTS COST,,,formula, ( subc_137 + subc_138 + subc_139 ) * subc_106,{(} {Grievance Townhall (Nos.)} {+} {Business Update (Nos.)} {+} {Manager Round-Table (Nos.)} {)} {*} {Average Event Expense}
+TRAINING-WELFARE-EVENTS,153,COMMUNICATION AND OTHER EVENTS COST,106,Average Event Expense,admin,,
+TRAINING-WELFARE-EVENTS,153,COMMUNICATION AND OTHER EVENTS COST,137,Grievance Townhall (Nos.),user,,
+TRAINING-WELFARE-EVENTS,153,COMMUNICATION AND OTHER EVENTS COST,138,Business Update (Nos.),user,,
+TRAINING-WELFARE-EVENTS,153,COMMUNICATION AND OTHER EVENTS COST,139,Manager Round-Table (Nos.),user,,
+TRAINING-WELFARE-EVENTS,137,TRAINING COST,,,formula, subc_154 + subc_64 * subc_152,{Induction Training (Standard Days)- Agency Payment} {+} {Induction Training (Extra Days)- Agency Payment Per Day} {*} {Induction Training- No. Of Extra Days}
+TRAINING-WELFARE-EVENTS,137,TRAINING COST,64,Induction Training (Extra Days)- Agency Payment Per Day,admin,,
+TRAINING-WELFARE-EVENTS,137,TRAINING COST,152,Induction Training- No. Of Extra Days,user,,
+TRAINING-WELFARE-EVENTS,137,TRAINING COST,164,Induction Training- Standard Days,admin,,
+TRAINING-WELFARE-EVENTS,137,TRAINING COST,154,Induction Training (Standard Days)- Agency Payment,admin,,
+TRAINING-WELFARE-EVENTS,179,CORPORATE SOCIAL RESPONSIBILITY COST,,,formula, 0.5 * comp_165 / 100,{0} {.} {5} {*} {SALES ACHIEVED (ACTUALS)} {/} {1} {0} {0}
+TRAINING-WELFARE-EVENTS,183,GOVERNMENT REIMBURSEMENT,,,formula, 0.15 * comp_137,{0} {.} {1} {5} {*} {TRAINING COST}
+INDICES-DONT-SHOW,154,Incentive Index,,,formula, ( 0.15 - ( comp_145 / comp_142 ) ) * 100,{(} {0} {.} {1} {5} {-} {(} {QUARTERLY SALES COMMISSION} {/} {QUARTERLY SALARY COST- Overall} {)} {)} {*} {1} {0} {0}
+INDICES-DONT-SHOW,155,Event Penetration Index,,,formula,,
+INDICES-DONT-SHOW,156,Induction Index,,,formula, ( subc_152 / 2 ) * 100,{(} {Induction Training- No. Of Extra Days} {/} {2} {)} {*} {1} {0} {0}
+INDICES-DONT-SHOW,157,Overtime Index,,,formula, ( 0.2 - ( subc_143 / subc_53 ) ) * 100,{(} {0} {.} {2} {-} {(} {Overtime (OT) By Current Associates- As Per Decision} {/} {Standard Working Hours Of Current Associates} {)} {)} {*} {1} {0} {0}
+IMPACT,163,TOTAL WEIGHTED SCORE,,,formula, 0.35 * comp_162 + 0.3 * comp_159 + 0.2 * comp_160 + 0.15 * comp_161,{0} {.} {3} {5} {*} {Employee Cost- Weighted Score} {+} {0} {.} {3} {*} {Productivity- Weighted Score} {+} {0} {.} {2} {*} {Retention- Weighted Score} {+} {0} {.} {1} {5} {*} {Employee Sat- Weighted Score}
+IMPACT,159,Productivity- Weighted Score,,,formula, 0.3 * comp_154 + 0.6 * comp_155 + 1.3 * comp_157 + 1.4 * comp_156,{0} {.} {3} {*} {Incentive Index} {+} {0} {.} {6} {*} {Event Penetration Index} {+} {1} {.} {3} {*} {Overtime Index} {+} {1} {.} {4} {*} {Induction Index}
+IMPACT,160,Retention- Weighted Score,,,formula, 1.1 * comp_154 + 0.7 * comp_155 + 0.7 * comp_157 + 0.1 * comp_156,{1} {.} {1} {*} {Incentive Index} {+} {0} {.} {7} {*} {Event Penetration Index} {+} {0} {.} {7} {*} {Overtime Index} {+} {0} {.} {1} {*} {Induction Index}
+IMPACT,161,Employee Sat- Weighted Score,,,formula, 0.6 * comp_154 + 0.7 * comp_155 + 0.5 * comp_156,{0} {.} {6} {*} {Incentive Index} {+} {0} {.} {7} {*} {Event Penetration Index} {+} {0} {.} {5} {*} {Induction Index}
+IMPACT,162,Employee Cost- Weighted Score,,,formula, ( comp_164 - comp_169 ) / comp_164 ) * 100,{(} {EMPLOYEE COST (TARGET)} {-} {EMPLOYEE COST (ACTUALS)} {)} {/} {EMPLOYEE COST (TARGET)} {)} {*} {1} {0} {0}
+OUTCOME,198,PRODUCTIVITY,,,formula, 0.3 * comp_154 + 0.6 * comp_155 + 1.3 * comp_157 + 1.4 * comp_156,{0} {.} {3} {*} {Incentive Index} {+} {0} {.} {6} {*} {Event Penetration Index} {+} {1} {.} {3} {*} {Overtime Index} {+} {1} {.} {4} {*} {Induction Index}
+OUTCOME,199,RETENTION,,,formula, 1.1 * comp_154 + 0.7 * comp_155 + 0.7 * comp_157 + 0.1 * comp_156,{1} {.} {1} {*} {Incentive Index} {+} {0} {.} {7} {*} {Event Penetration Index} {+} {0} {.} {7} {*} {Overtime Index} {+} {0} {.} {1} {*} {Induction Index}
+OUTCOME,200,E-SATISFACTION,,,formula, 0.6 * comp_154 + 0.7 * comp_155 + 0.5 * comp_156,{0} {.} {6} {*} {Incentive Index} {+} {0} {.} {7} {*} {Event Penetration Index} {+} {0} {.} {5} {*} {Induction Index}
+OUTCOME,201,EMPLOYEE COST,,,formula, ( comp_164 - comp_169 ) / comp_164 ) * 100,{(} {EMPLOYEE COST (TARGET)} {-} {EMPLOYEE COST (ACTUALS)} {)} {/} {EMPLOYEE COST (TARGET)} {)} {*} {1} {0} {0}
+ACHIEVEMENTS,165,SALES ACHIEVED (ACTUALS),,,admin,,
+ACHIEVEMENTS,166,SALES ACHIEVED % (ACTUALS),,,formula, comp_165 / comp_122 * 100,{SALES ACHIEVED (ACTUALS)} {/} {SALES (TARGET)} {*} {1} {0} {0}
+ACHIEVEMENTS,167,AVERAGE SALES PER HOUR (ACTUALS),,,formula, comp_123,{AVERAGE SALES PER HOUR (TARGET)}
+ACHIEVEMENTS,168,SALES TO PAYROLL EXPENSE (ACTUALS),,,formula, comp_165 / comp_150,{SALES ACHIEVED (ACTUALS)} {/} {PAYROLL COST- Overall}
+ACHIEVEMENTS,169,EMPLOYEE COST (ACTUALS),,,formula, comp_136 + comp_150 + comp_151 + comp_137 - comp_183 + comp_179 + comp_153 + comp_152,{HIRING COST} {+} {PAYROLL COST- Overall} {+} {WELFARE & BENEFITS (W&B) COST} {+} {TRAINING COST} {-} {GOVERNMENT REIMBURSEMENT} {+} {CORPORATE SOCIAL RESPONSIBILITY COST} {+} {COMMUNICATION AND OTHER EVENTS COST} {+} {REWARD EVENTS COST}
+ACHIEVEMENTS,184,EVENTS- REWARD & COMMUNICATION (ACTUAL NUMBERS),,,formula, subc_105 + subc_137 subc_138 subc_139,{No. of Events} {+} {Grievance Townhall (Nos.)} {Business Update (Nos.)} {Manager Round-Table (Nos.)}
+ACHIEVEMENTS,185,TRAINING DAYS (ACTUALS),,,formula, subc_164 + subc_152,{Induction Training- Standard Days} {+} {Induction Training- No. Of Extra Days}
