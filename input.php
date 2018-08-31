@@ -12,7 +12,7 @@ $userid = $_SESSION['userid'];
 //echo $userid."</br>";
 //$linkid = $_GET['Link'];
 
-$gameid =  $_GET['ID'];
+$gameid = $_GET['ID'];
 
 //echo $gameid."</br>";
 
