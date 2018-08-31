@@ -153,7 +153,8 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	if($object->num_rows > 0)
 	{
 		$addedit = "Edit";
-		while($row = $object->fetch_object()){
+		while($row = $object->fetch_object())
+		{
 			$data[$row->input_key]  = $row->input_current;
 		//echo $row->key."-".$row->current.",";
 		}
@@ -282,8 +283,8 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 					$sublinkid = $data[$str[0].'_linksubc_'.$str[2]];
 					$compid    = 0;
 					$subcompid = $str[2];
-				$current   = $x_value;	//check for REPLACE condition
-				$key       = $x;
+					$current   = $x_value;	//check for REPLACE condition
+					$key       = $x;
 				//echo "SubComp".$subcompid."--".$current.",";
 				if(!empty($current) && isset($current))
 				{

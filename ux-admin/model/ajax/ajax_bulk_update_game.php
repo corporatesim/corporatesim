@@ -40,8 +40,8 @@ if( isset( $_FILES['updategame_csv']['name'] ) && !empty( $_FILES['updategame_cs
 				$object = $funObj->SelectData(array(), 'GAME_SITE_USERS', $where, '', '', '', '', 0);
 				if($object->num_rows > 0)
 				{
-					if( !empty($filesop) ){
-
+					if( !empty($filesop) )
+					{
 						$objectgame = $object->fetch_object();
 						$gameids    = $objectgame->User_games;
 						$gameidsval = array(
