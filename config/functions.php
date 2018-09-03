@@ -131,6 +131,28 @@ class Functions extends database{
 		if($print_flag == 1){
 			echo($sql);			
 		}
+		die($sql);
+		$result = $this->ExecuteQuery($sql); //Execute sql statement
+		return $result;
+	}
+
+	// adding this new function for bulk insert/update
+	function BulkInsertUpdateData($tblName, $FieldName, $Fieldvalue, $status, $print_flag=0)
+	{
+		$updateQueryField = array();
+		$flag             = true; // to avoid the updation of primary key value
+		foreach ($FieldName as $row)
+		{
+			$updateQueryField[] = $row.'='.'VALUES('.$row.')';
+		}
+		// removing first element of an array, as it would be ID(Primary Key) for updation
+		if($status == 'update')
+		{
+			array_shift($updateQueryField);
+		}
+
+		$sql  = " INSERT INTO ".$tblName ."(".implode(',',$FieldName).") VALUES ".$Fieldvalue." ON DUPLICATE KEY UPDATE ".implode(',',$updateQueryField);
+		
 		$result = $this->ExecuteQuery($sql); //Execute sql statement
 		return $result;
 	}

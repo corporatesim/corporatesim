@@ -3,14 +3,18 @@ include_once '../../config/settings.php';
 include_once '../../config/functions.php';
 set_time_limit(30000);
 
-$funObj    = new Functions();
-$userid    = $_SESSION['userid'];
-$strresult = "";
-$strdata   = "";
-$sublinkid = "";
-$current   = "";
-$key       = "";
-$array     = "";
+$funObj     = new Functions();
+$userid     = $_SESSION['userid'];
+$strresult  = "";
+$strdata    = "";
+$sublinkid  = "";
+$current    = "";
+$key        = "";
+$array      = "";
+$insertArr  = array();
+$insertData = array();
+$updateArr  = array();
+$updateData = array();
 
 if (!isset($_SESSION['userid']))
 {
@@ -47,7 +51,7 @@ if( !empty($_POST) )
 		$flag = true;
 		foreach($data as $x => $x_value)
 		{
-			$str = explode("_",$x);			
+			$str = explode("_",$x);		// breaking string by '_' and creating array	
 			
 			//if($str[0] == $_POST['active'])
 			//{
@@ -115,7 +119,7 @@ if( !empty($_POST) )
 					}
 				}				
 					//execute using eval
-				$value     = implode(" ",$strvalue);
+				$value     = implode(" ",$strvalue); // creating string from array ' ' seprated.
 					//$tmp     =$str[0]."_linkcomp_".$str[2];
 				$strresult = $strresult."value : ".$value." , tmp : ".$tmp." , data[tmp] : ".$data[$tmp]." sublinkid : ".$data[$str[0].'_link'.$y_value]."</br>";
 					//Update
@@ -179,7 +183,14 @@ if( !empty($_POST) )
 							'input_current' => $current
 						);
 
-						$result    = $funObj->UpdateData ( 'GAME_INPUT', $array, 'input_id', $res->input_id );
+						// creating update array 
+						$updateArr[] = array(
+							'input_current' => $current,
+							'input_id'      => $res->input_id,
+						);
+
+						// commenting this function to update bulk data in single query, function written down
+						// $result    = $funObj->UpdateData ( 'GAME_INPUT', $array, 'input_id', $res->input_id );
 						$strresult = $strresult." Update for comp id ".$res->input_id."</br>";
 							//$strdata = $strdata." Update for id ".$res->input_id;
 					}
@@ -210,7 +221,14 @@ if( !empty($_POST) )
 								'input_current'   => $current
 							);
 
-							$funObj->InsertData('GAME_INPUT', $array, 0, 0);
+							$insertArr[] = array(
+								'input_user'      => $userid,
+								'input_sublinkid' => $data[$tmp],
+								'input_key'       => $str[0]."_comp_". $str[2],
+								'input_current'   => $current
+							);
+							// commenting this function to insert bulk data in one time query new function wriiten down
+							// $funObj->InsertData('GAME_INPUT', $array, 0, 0);
 								//$strresult = $strresult." INSERT ".$data[$str[0].'_link'.$y_value]."  ".$str[0]."_comp_". $str[2]."  VALUE: ".$value."</br>";
 							$strresult = $strresult." INSERT ".$data[$tmp]."  ".$str[0]."_comp_". $str[2]."  VALUE: ".$value."</br>";
 						}
@@ -317,7 +335,13 @@ if( !empty($_POST) )
 							'input_current' => $current
 						);
 
-						$result    = $funObj->UpdateData ( 'GAME_INPUT', $array, 'input_id', $res->input_id );
+						$updateArr[] = array(
+							'input_current' => $current,
+							'input_id'      => $res->input_id,
+						);
+
+						// commenting this function to update bulk data in single query, function written down
+						// $result    = $funObj->UpdateData ( 'GAME_INPUT', $array, 'input_id', $res->input_id );
 						$strresult = $strresult." Update for subc id ".$res->input_id."</br>";
 					}
 					else
@@ -346,8 +370,16 @@ if( !empty($_POST) )
 								'input_key'       => $str[0]."_subc_". $str[2],
 								'input_current'   => $current
 							);	
-								//check for REPLACE condition								
-							$funObj->InsertData('GAME_INPUT', $array, 0, 0);
+								//check for REPLACE condition			
+							$insertArr[] = array(
+								'input_user'      => $userid,									
+								'input_sublinkid' => $data[$tmp],
+								'input_key'       => $str[0]."_subc_". $str[2],
+								'input_current'   => $current
+							);
+
+							// commenting this function to insert bulk data in one time query new function wriiten down
+							// $funObj->InsertData('GAME_INPUT', $array, 0, 0);
 								//$strresult = $strresult." INSERT ".$data[$str[0].'_link'.$y_value]."  ".$str[0]."_comp_". $str[2]."  VALUE: ".$value."</br>";
 							$strresult = $strresult." INSERT ".$data[$tmp]."  ".$str[0]."_subc_". $str[2]."  VALUE: ".$value."</br>";
 						}
@@ -362,8 +394,30 @@ if( !empty($_POST) )
 		{
 			$flag=true;
 		}
+
+		// if already exist data then update
+		if (count($updateArr) > 0)
+		{
+			foreach ($updateArr as $row)
+			{
+				$updateData[] = "('".$row['input_id']."','".$row['input_current']."')";
+			}
+			$fieldName  = ['input_id','input_current'];
+			$updateData = implode(',',$updateData);	
+			$result     = $funObj->BulkInsertUpdateData('GAME_INPUT', $fieldName, $updateData,'update');
+		}
+		// if data not exist then insert data
+		if (count($insertArr) > 0)
+		{
+			foreach ($insertArr as $wrow)
+			{
+				$insertData[] = "('".$wrow['input_user']."','".$wrow['input_sublinkid']."','".$wrow['input_key']."','".$wrow['input_current']."')";
+			}
+			$fieldName  = ['input_user','input_sublinkid','input_key','input_current'];
+			$insertData = implode(',',$insertData);		
+			$result     = $funObj->BulkInsertUpdateData('GAME_INPUT', $fieldName, $insertData,'insert');
+		}
 	}
-	
 	$msg = array(
 		"status" =>	1,
 		"msg"    =>	$active
