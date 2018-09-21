@@ -23,7 +23,7 @@
 			<div class="navbar-header">
 			  <!--<a class="navbar-brand logo" href="#">Logo</a>-->
 			   <!--a style="padding: 2px 15px;" class="navbar-brand" href="<?php echo site_root."index.php";?>"--> 
-					<img src="<?php echo site_root."images/logo-main.png";?>"  height="60" />
+					<img src="<?php echo site_root."images/logo-main.png";?>"  width="40px" />
 				<!--/a-->
 			</div>
 			<ul class="nav navbar-nav navbar-right headerNav">

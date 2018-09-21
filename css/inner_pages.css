@@ -35,9 +35,10 @@
 }
 .shadow{
 	box-shadow:0 2px 8px 0 rgba(0,0,0, 0.20);
-	padding-top:10px;
-	padding-bottom:10px;
-	margin-bottom:10px;
+	padding-top:1px;
+	/*padding-top:10px;*/
+	/*padding-bottom:10px;*/
+	/*margin-bottom:10px;*/
 	background:#ffffff;
 }
 
@@ -94,7 +95,7 @@
 }
 
 .nextPrevbottom{
-	margin-top:-12px!important;
+	margin-top: 0% !important;
 }
 
 .gamename{

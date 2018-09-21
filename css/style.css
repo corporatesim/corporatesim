@@ -5,13 +5,13 @@
 }
 
 html {
-  height: 100%;
-  box-sizing: border-box;
+	height: 100%;
+	box-sizing: border-box;
 }
 
 body{
 	font-family:'roboto', sans-sarif;
-	font-size: 16px;
+	font-size: 14px;
 	line-height:1.5;
 	font-weight:300;
 	color:#000000;
@@ -24,6 +24,10 @@ a{
 }
 .clearfix{
 	clear:both;
+}
+
+#video_player{
+	margin-top: -1.5%;
 }
 
 .img-cntr{
@@ -80,10 +84,12 @@ header{
 .navbar{
 	background:#ffffff;
 	box-shadow:0 2px 8px 0 rgba(0,0,0, 0.20);
-	padding-top:5px;
-	padding-bottom:5px;
+	padding-top:2px;
+	/*padding-bottom:5px;*/
 	margin-bottom:0;
-	}
+	max-height: 50px;
+	min-height: 5%;
+}
 .logo{
 	min-height:40px;
 	padding:15px;
@@ -122,8 +128,8 @@ header{
 }
 .form-group label{
 	font-weight:300;
-	  height: 34px; 
-     line-height: 34px; 
+	height: 34px; 
+	line-height: 34px; 
 }
 
 .pageHeadLine{
@@ -163,6 +169,12 @@ footer span{
 	font-size:16px;
 	font-weight:400;
 	color:#ffffff;
+}
+
+@media(max-width: 992px){
+	.hide_this{
+		display: none;
+	}
 }
 
 article, aside, figure, footer, header, hgroup,
