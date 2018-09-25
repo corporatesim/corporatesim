@@ -12,13 +12,6 @@ span.alert-danger {
 }
 
 </style>
-
-<?php 
-//echo "Test message";
-//exit(); 
-
-?>
-
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script src="<?php echo site_root; ?>assets/components/ckeditor/ckeditor.js" type="text/javascript"></script>
 
