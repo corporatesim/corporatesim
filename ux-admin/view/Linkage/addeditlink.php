@@ -196,33 +196,10 @@ span.alert-danger {
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<form method="POST" action="" id="siteuser_frm" name="siteuser_frm">
-					<!-- adding this to adjust viewing order at the user end -->
 					<div class="row">	
-
-						<div class="col-md-2">
-							<label>Viewing Order</label> 
-						</div>
-
-						<div class="col-md-4">
-							<select class="form-control" name="SubLink_ViewingOrder" id="SubLink_ViewingOrder">
-								<!-- <option value="">-- SELECT --</option> -->
-								<option value="1" <?php echo ($SubLink_ViewingOrder == 1?'selected':''); ?>>Subcomponent Name - Details/Chart - Input Fields</option>
-								<option value="2" <?php echo ($SubLink_ViewingOrder == 2?'selected':''); ?>>Subcomponent Name - Input Fields - Details/Chart</option>
-								<option value="3" <?php echo ($SubLink_ViewingOrder == 3?'selected':''); ?>>Details/Chart - Input Fields - Subcomponent Name</option>
-								<option value="4" <?php echo ($SubLink_ViewingOrder == 4?'selected':''); ?>>Details/Chart - Subcomponent Name - Input Fields</option>
-								<option value="5" <?php echo ($SubLink_ViewingOrder == 5?'selected':''); ?>>Input Fields - Details/Chart - Subcomponent Name</option>
-								<option value="6" <?php echo ($SubLink_ViewingOrder == 6?'selected':''); ?>>Input Fields - Subcomponent Name - Details/Chart </option>
-							</select>
-						</div>
-						<br><br>
-					</div>
-
-					<div class="row">	
-
 						<div class="col-md-2">
 							<label><span class="alert-danger">*</span>Select Area</label> 
 						</div>
-
 						<div class="col-md-4">
 							<select class="form-control" name="area_id" id="area_id">
 								<option value="">-- SELECT --</option>
@@ -250,7 +227,6 @@ span.alert-danger {
 								<input type="radio" name="Mode" value="subcomp"
 								<?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID>0){ echo "checked"; } ?> > Sub Component
 							</div>
-
 						</div>			
 		<!--</div>
 			<div class="row">-->
@@ -278,8 +254,28 @@ span.alert-danger {
 						<?php } ?>
 					</select>
 				</div>
-
 			</div>
+
+			<!-- adding this to adjust viewing order at the user end -->
+					<div class="row">	
+
+						<div class="col-md-2">
+							<label>Viewing Order</label> 
+						</div>
+
+						<div class="col-md-4">
+							<select class="form-control" name="SubLink_ViewingOrder" id="SubLink_ViewingOrder">
+								<option value="">-- SELECT --</option>
+								<option value="1" <?php echo ($SubLink_ViewingOrder == 1?'selected':''); ?>>Subcomponent Name - Details/Chart - Input Fields</option>
+								<option value="2" <?php echo ($SubLink_ViewingOrder == 2?'selected':''); ?>>Subcomponent Name - Input Fields - Details/Chart</option>
+								<option value="3" <?php echo ($SubLink_ViewingOrder == 3?'selected':''); ?>>Details/Chart - Input Fields - Subcomponent Name</option>
+								<option value="4" <?php echo ($SubLink_ViewingOrder == 4?'selected':''); ?>>Details/Chart - Subcomponent Name - Input Fields</option>
+								<option value="5" <?php echo ($SubLink_ViewingOrder == 5?'selected':''); ?>>Input Fields - Details/Chart - Subcomponent Name</option>
+								<option value="6" <?php echo ($SubLink_ViewingOrder == 6?'selected':''); ?>>Input Fields - Subcomponent Name - Details/Chart </option>
+							</select>
+						</div>
+						<br><br>
+					</div>
 
 			<div class="row">
 				<div class="col-md-8">
