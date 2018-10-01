@@ -257,25 +257,78 @@ span.alert-danger {
 			</div>
 
 			<!-- adding this to adjust viewing order at the user end -->
-					<div class="row">	
+			<div class="row">	
 
-						<div class="col-md-2">
-							<label>Viewing Order</label> 
-						</div>
+				<div class="col-md-2">
+					<label>Viewing Order</label> 
+				</div>
 
-						<div class="col-md-4">
-							<select class="form-control" name="SubLink_ViewingOrder" id="SubLink_ViewingOrder">
-								<option value="">-- SELECT --</option>
-								<option value="1" <?php echo ($SubLink_ViewingOrder == 1?'selected':''); ?>>Subcomponent Name - Details/Chart - Input Fields</option>
-								<option value="2" <?php echo ($SubLink_ViewingOrder == 2?'selected':''); ?>>Subcomponent Name - Input Fields - Details/Chart</option>
-								<option value="3" <?php echo ($SubLink_ViewingOrder == 3?'selected':''); ?>>Details/Chart - Input Fields - Subcomponent Name</option>
-								<option value="4" <?php echo ($SubLink_ViewingOrder == 4?'selected':''); ?>>Details/Chart - Subcomponent Name - Input Fields</option>
-								<option value="5" <?php echo ($SubLink_ViewingOrder == 5?'selected':''); ?>>Input Fields - Details/Chart - Subcomponent Name</option>
-								<option value="6" <?php echo ($SubLink_ViewingOrder == 6?'selected':''); ?>>Input Fields - Subcomponent Name - Details/Chart </option>
-							</select>
-						</div>
-						<br><br>
-					</div>
+				<div class="col-md-4">
+					<select class="form-control" name="SubLink_ViewingOrder" id="SubLink_ViewingOrder">
+						<option value="">-- SELECT --</option>
+						<option value="1" <?php echo ($SubLink_ViewingOrder == 1?'selected':''); ?>>Name - Details/Chart - Input Fields</option>
+						<option value="2" <?php echo ($SubLink_ViewingOrder == 2?'selected':''); ?>>Name - Input Fields - Details/Chart</option>
+						<option value="3" <?php echo ($SubLink_ViewingOrder == 3?'selected':''); ?>>Details/Chart - Input Fields - Name</option>
+						<option value="4" <?php echo ($SubLink_ViewingOrder == 4?'selected':''); ?>>Details/Chart - Name - Input Fields</option>
+						<option value="5" <?php echo ($SubLink_ViewingOrder == 5?'selected':''); ?>>Input Fields - Details/Chart - Name</option>
+						<option value="6" <?php echo ($SubLink_ViewingOrder == 6?'selected':''); ?>>Input Fields - Name - Details/Chart </option>
+						<option value="7" <?php echo ($SubLink_ViewingOrder == 7?'selected':''); ?>>Input Fields - Name - Full Length</option>
+						<option value="8" <?php echo ($SubLink_ViewingOrder == 8?'selected':''); ?>>Input Fields - Details/Chart</option>
+						<option value="9" <?php echo ($SubLink_ViewingOrder == 9?'selected':''); ?>>Name - Details/Chart</option>
+						<option value="10" <?php echo ($SubLink_ViewingOrder == 10?'selected':''); ?>>Name - Input Fields - Full Length</option>
+						<option value="11" <?php echo ($SubLink_ViewingOrder == 11?'selected':''); ?>>Details/Chart - Name</option>
+						<option value="12" <?php echo ($SubLink_ViewingOrder == 12?'selected':''); ?>>Details/Chart - Input Fields</option>
+						<option value="13" <?php echo ($SubLink_ViewingOrder == 13?'selected':''); ?>>Name - Input Fields - Half Length</option>
+						<option value="14" <?php echo ($SubLink_ViewingOrder == 14?'selected':''); ?>>Input Fields - Name - Half Length</option>
+						<!-- <option value="15" <?php // echo ($SubLink_ViewingOrder == 15?'selected':''); ?>>Name - Input Fields - Full Length</option> -->
+						<!-- <option value="16" <?php // echo ($SubLink_ViewingOrder == 16?'selected':''); ?>>Input Fields - Name - Full Length</option> -->
+					</select>
+				</div>
+				<br><br>
+			</div>
+
+			<div class="row">
+				<div class="col-md-6">
+					<label><span class="alert-danger">*</span>Label Current</label>
+					<input type="text" name="SubLink_LabelCurrent" id="SubLink_LabelCurrent" value="<?php echo $SubLink_LabelCurrent;?>" placeholder="Enter Label Text" required>
+				</div>
+
+				<div class="col-md-6">
+					<label><span class="alert-danger">*</span>Label Last</label>
+					<input type="text" name="SubLink_LabelLast" id="SubLink_LabelLast" value="<?php echo $SubLink_LabelLast;?>" placeholder="Enter Label Text" required>
+				</div>
+			</div>	
+			<br>
+
+			<div class="row">	
+
+				<div class="col-md-2">
+					<label>Label Order</label> 
+				</div>
+
+				<div class="col-md-4">
+					<select class="form-control" name="SubLink_InputFieldOrder" id="SubLink_InputFieldOrder">
+						<option value="">-- SELECT --</option>
+						<option value="1" <?php echo ($SubLink_InputFieldOrder == 1?'selected':'');?>>Label(C) <?php echo $SubLink_LabelCurrent;?> - Label(L) <?php echo $SubLink_LabelLast;?></option>
+						<option value="2" <?php echo ($SubLink_InputFieldOrder == 2?'selected':'');?>>Label(L) <?php echo $SubLink_LabelLast;?> - Label(C) <?php echo $SubLink_LabelCurrent;?></option>
+						<option value="3" <?php echo ($SubLink_InputFieldOrder == 3?'selected':'');?>>Label(C) <?php echo $SubLink_LabelCurrent;?></option>
+						<option value="4" <?php echo ($SubLink_InputFieldOrder == 4?'selected':'');?>>Label(L) <?php echo $SubLink_LabelLast;?></option>
+					</select>
+				</div>
+				<br><br>
+			</div>
+
+			<div class="row">
+				<div class="col-md-6">
+					<label>Background Color</label>
+					<input type="color" name="SubLink_BackgroundColor" id="SubLink_BackgroundColor" value="<?php echo ($SubLink_BackgroundColor == NULL)?'#ffffff':$SubLink_BackgroundColor;?>">
+				</div>
+
+				<div class="col-md-6">
+					<label>Text Color</label>
+					<input type="color" name="SubLink_TextColor" id="SubLink_TextColor" value="<?php echo ($SubLink_TextColor == NULL)?'#000000':$SubLink_TextColor;?>">
+				</div>
+			</div>
 
 			<div class="row">
 				<div class="col-md-8">
@@ -582,6 +635,8 @@ span.alert-danger {
 							<th>Show/Hide</th>							
 							<th>Mode</th>
 							<th>Order</th>
+							<th>Background</th>
+							<th>Text Color</th>
 							<th class="no-sort">Action</th>
 						</tr>
 					</thead>
@@ -596,7 +651,8 @@ span.alert-danger {
 								<td><?php if($row->SubLink_ShowHide ==0 ) { echo "Show"; } else {echo "Hide";}?></td>
 								<td><?php echo $row->SubLink_InputMode;?></td>
 								<td><?php echo $row->SubLink_Order;?></td>
-
+								<td><input type="color" value="<?php echo $row->SubLink_BackgroundColor;?>" disabled></td>
+								<td><input type="color" value="<?php echo $row->SubLink_TextColor;?>" disabled></td>
 								<td class="text-center">
 									<?php if($row->SubLink_Status == 0){?>
 										<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->SubLink_ID; ?>"

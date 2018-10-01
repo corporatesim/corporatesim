@@ -2,6 +2,11 @@
 include_once 'includes/header.php'; 
 
 ?>
+<style>
+.DisplayNone{
+  display: none;
+}
+</style>
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.9.0/math.min.js"></script>-->
 <script src="js/jquery.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -12,7 +17,7 @@ include_once 'includes/header.php';
   <div class="container">
     <div class="row">
       <div class="col-sm-12 col-lg-6 pull-right">
-        <div class="timer text-center col-sm-1 pull-right" id="timer">0:00</div>
+        <div class="timer text-center col-sm-2 pull-right" id="timer">0:00</div>
       </div>
       <div class="col-sm-9 col-md-10 no_padding col-lg-6 pull-left">
         <h2 class="InnerPageHeader"><?php if(!empty($result)){ echo $result->Scenario ; }?> Decisions</h2>
@@ -33,7 +38,7 @@ include_once 'includes/header.php';
             <span style="margin-right:20px;"><a href="<?php echo $gameurl; ?>" target="_blank" class="innerPageLink">Game Description</a><i class="fa fa-window-restore" aria-hidden="true"></i>
             </span>
             <span style="margin-right:20px;"><a href="<?php echo $scenurl; ?>" target="_blank" class="innerPageLink">Scenario Description</a><i class="fa fa-window-restore" aria-hidden="true"></i></span>
-            <a href="chart.php?act=chart&ID=<?=$gameid?>" target="_blank" class="innerPageLink">Dashboard</a><i class="fa fa-window-restore" aria-hidden="true"></i>
+            <a href="chart.php?act=chart&ID=<?=$gameid?>" target="_blank" class="innerPageLink DisplayNone">Dashboard</a><i class="fa fa-window-restore" aria-hidden="true"></i>
           </div>
           <div class="col-sm-6  text-right">
             <div id="input_loader" style="float:left; color:#2A8037;"></div>
@@ -66,30 +71,39 @@ include_once 'includes/header.php';
                 {
                   $showhide = '';
                 }
+                // writing this condition to change the background color and text color of game area
+                if($row['TextColor'] || $row['BackgroundColor'])
+                {
+                  $showStyle = "style='background:".$row['BackgroundColor']."; color:".$row['TextColor']." !important;'";
+                }
+                else
+                {
+                  $showStyle = '';
+                }
 
                 if ($tab == 'NOTSET') 
                 {
                   if($i == 0)
                   {
-                    echo "<li role='presentation' class='active regular' ".$showhide."><a href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                    echo "<li role='presentation' class='active regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                     $activearea=$row['Area_Name'];
 
                   }
                   else
                   {
-                    echo "<li role='presentation' class='regular' ".$showhide."><a href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                    echo "<li role='presentation' class='regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                   }
 
                   $i++;
                 }
                 else if ($tab == $row['Area_Name'])
                 {
-                  echo "<li role='presentation' class='active regular' ".$showhide."><a href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                  echo "<li role='presentation' class='active regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                   $activearea=$row['Area_Name'];
                 }
                 else
                 {
-                  echo "<li role='presentation' class='regular' ".$showhide."><a href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                  echo "<li role='presentation' class='regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                 }
 
               }
@@ -132,7 +146,7 @@ include_once 'includes/header.php';
                 f.expression as exp , ls.SubLink_ID as SubLinkID,ls.Sublink_AdminCurrent as AdminCurrent, 
                 ls.Sublink_AdminLast as AdminLast, ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff,
                 ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
-                ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID  
+                ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder
                 FROM GAME_LINKAGE l 
                 INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
                 INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
@@ -150,14 +164,87 @@ include_once 'includes/header.php';
                 while($row1 = mysqli_fetch_array($component)){    
                       //echo "<form > ";
                   echo "<div class='col-sm-12 scenariaListingDiv'";
+                  switch ($row1['ViewingOrder']) {
+                    case 1:
+                    $SubcomponentName = "";
+                    $DetailsChart     = "";
+                    $InputFields      = "";
+                    break;
+
+                    case 2:
+                    $SubcomponentName = "";
+                    $DetailsChart     = "pull-right";
+                    $InputFields      = "";
+                    break;
+
+                    case 3:
+                    $SubcomponentName = "pull-right";
+                    $DetailsChart     = "";
+                    $InputFields      = "";
+                    break;
+
+                    case 4:
+                    $SubcomponentName = "DisplayNone";
+                    $DetailsChart     = "";
+                    $InputFields      = "";
+                    break;
+
+                    case 5:
+                    $SubcomponentName = "pull-right";
+                    $DetailsChart     = "pull-right";
+                    $InputFields      = "";
+                    break;
+
+                    case 6:
+                    $SubcomponentName = "DisplayNone";
+                    $DetailsChart     = "pull-right";
+                    $InputFields      = "";
+                    break;
+
+                    case 7:
+                    $SubcomponentName = "pull-right";
+                    $DetailsChart     = "DisplayNone";
+                    $InputFields      = "";
+                    break;
+
+                    case 8:
+                    $SubcomponentName = "DisplayNone";
+                    $DetailsChart     = "pull-right";
+                    $InputFields      = "";
+                    break;
+
+                    case 9:
+                    $SubcomponentName = "";
+                    $DetailsChart     = "";
+                    $InputFields      = "DisplayNone";
+                    break;
+
+                    case 10:
+                    $SubcomponentName = "";
+                    $DetailsChart     = "DisplayNone";
+                    $InputFields      = "";
+                    break;
+
+                    case 11:
+                    $SubcomponentName = "pull-right";
+                    $DetailsChart     = "";
+                    $InputFields      = "DisplayNone";
+                    break;
+
+                    case 12:
+                    $SubcomponentName = "DisplayNone";
+                    $DetailsChart     = "";
+                    $InputFields      = "";
+                    break;
+                  }
                   if ($row1['ShowHide']==1){
                     echo "style='display:none;'";
                   }
                   echo ">";             
-                  echo "<div class='col-sm-1 col-md-2 regular'>";
+                  echo "<div class='col-sm-1 col-md-2 regular ".$SubcomponentName."'>";
                   echo $row1['Comp_Name'];
                   echo "</div>";
-                  echo "<div class='col-sm-6 col-md-7 no_padding'>";
+                  echo "<div class='col-sm-6 col-md-7 no_padding ".$DetailsChart."''>";
 
                   if(empty($row1['ChartID']))
                   {
@@ -174,11 +261,20 @@ include_once 'includes/header.php';
                     <?php
                   }
                   echo "</div>";
+                  // writing this to show only for alignmenet of viewing order to show component name in middle
+                  if($row1['ViewingOrder'] == 4)
+                  {
+                    echo "<div class='col-sm-1 col-md-2 regular'>";
+                    echo $row1['Comp_Name'];
+                    echo "</div>";
+                  }
+
                   if ($row1['Mode']!="none")
                   {
-                    echo "<div class=' col-sm-5 col-md-3 text-right'>";
+                    echo "<div class=' col-sm-5 col-md-3 text-right ".$InputFields."''>";
                     echo "<div class='InlineBox'>";
-                    echo "<label class='scenariaLabel'>Current</label>";
+                    echo "<div class='InlineBox ".(($row1['InputFieldOrder']==2)?'pull-right':'')." ".(($row1['InputFieldOrder']==4)?'DisplayNone':'')."'>";
+                    echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
                     echo "<input type='hidden' id='".$areaname."_linkcomp_".$row1['CompID']."' name='".$areaname."_linkcomp_".$row1['CompID']."' value='".$row1['SubLinkID']."'></input>";
 
                     if($row1['Mode']=="formula")
@@ -250,6 +346,7 @@ include_once 'includes/header.php';
                   else
                   {
                     echo " required ";
+                    echo "style='background:#008000; color:#ffffff;'";
                   }
                   echo '></input>';
                   if ($row1['Mode']=="formula")
@@ -257,8 +354,8 @@ include_once 'includes/header.php';
                     echo "<input type='hidden' id='".$areaname."_expcomp_".$row1['CompID']."' name='".$areaname."_expcomp_".$row1['CompID']."' value='".$row1['exp']."'>";
                   }
                   echo "</div>";
-                  echo "<div class='InlineBox'>";
-                  echo "<label class='scenariaLabel'>Last</label>";
+                  echo "<div class='InlineBox ".(($row1['InputFieldOrder']==3)?'DisplayNone':'')."'>";
+                  echo "<label class='scenariaLabel'>".$row1['LabelLast']."</label>";
                   $sqllast = "SELECT * FROM `GAME_INPUT`
                   WHERE input_user=".$userid." AND input_sublinkid = 
                   (SELECT ls.SubLink_ID
@@ -281,11 +378,21 @@ include_once 'includes/header.php';
                   }
                   echo 'readonly></input>';
                   echo "</div>";
+                  echo "</div>";
 
-                  echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row1['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;">Save</div> </div>';
+                  echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row1['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
 
                   echo "</div>";
                 }
+
+                // writing this to show only for alignmenet of viewing order to show component name in middle
+                if($row1['ViewingOrder'] == 6)
+                {
+                  echo "<div class='col-sm-1 col-md-2 regular'>";
+                  echo $row1['Comp_Name'];
+                  echo "</div>";
+                }
+
                 echo "<div class='clearfix'></div>";
                 
                 //Get SubComponent for this Component, linkid
@@ -295,7 +402,7 @@ include_once 'includes/header.php';
                 ls.SubLink_ID as SubLinkID ,ls.Sublink_AdminCurrent as AdminCurrent, ls.Sublink_AdminLast as AdminLast, 
                 ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff , 
                 ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
-                ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID
+                ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder
                 FROM GAME_LINKAGE l 
                 INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
                 INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
@@ -311,15 +418,127 @@ include_once 'includes/header.php';
                 $subcomponent = $functionsObj->ExecuteQuery($sqlsubcomp);
                 //Get Component for this area for this linkid
                 while($row2 = mysqli_fetch_array($subcomponent)){
-                  echo "<div class='col-sm-12 subCompnent'";
-                  if ($row2['ShowHide']==1){
-                    echo "style='display:none;'";
+                  // hiding the subcomponent if mode = 1
+                  ($row2['ShowHide']==1)?$hide='DisplayNone':$hide='';
+
+                  switch ($row2['ViewingOrder']) {
+                    case 1:
+                    $SubcomponentName = "";
+                    $DetailsChart     = "";
+                    $InputFields      = "";
+                    $length           = "col-sm-12";
+                    break;
+
+                    case 2:
+                    $SubcomponentName = "";
+                    $DetailsChart     = "pull-right";
+                    $InputFields      = "";
+                    $length           = "col-sm-12";
+                    break;
+
+                    case 3:
+                    $SubcomponentName = "pull-right";
+                    $DetailsChart     = "";
+                    $InputFields      = "";
+                    $length           = "col-sm-12";
+                    break;
+
+                    case 4:
+                    $SubcomponentName = "DisplayNone";
+                    $DetailsChart     = "";
+                    $InputFields      = "";
+                    $length           = "col-sm-12";
+                    break;
+
+                    case 5:
+                    $SubcomponentName = "pull-right";
+                    $DetailsChart     = "pull-right";
+                    $InputFields      = "";
+                    $length           = "col-sm-12";
+                    break;
+
+                    case 6:
+                    $SubcomponentName = "DisplayNone";
+                    $DetailsChart     = "pull-right";
+                    $InputFields      = "";
+                    $length           = "col-sm-12";
+                    break;
+
+                    case 7:
+                    $SubcomponentName = "pull-right";
+                    $DetailsChart     = "DisplayNone";
+                    $InputFields      = "";
+                    $length           = "col-sm-12";
+                    break;
+
+                    case 8:
+                    $SubcomponentName = "DisplayNone";
+                    $DetailsChart     = "pull-right";
+                    $InputFields      = "";
+                    $length           = "col-sm-12";
+                    break;
+
+                    case 9:
+                    $SubcomponentName = "";
+                    $DetailsChart     = "";
+                    $InputFields      = "DisplayNone";
+                    $length           = "col-sm-12";
+                    break;
+
+                    case 10:
+                    $SubcomponentName = "";
+                    $DetailsChart     = "DisplayNone";
+                    $InputFields      = "";
+                    $length           = "col-sm-12";
+                    break;
+
+                    case 11:
+                    $SubcomponentName = "pull-right";
+                    $DetailsChart     = "";
+                    $InputFields      = "DisplayNone";
+                    $length           = "col-sm-12";
+                    break;
+
+                    case 12:
+                    $SubcomponentName = "DisplayNone";
+                    $DetailsChart     = "";
+                    $InputFields      = "";
+                    $length           = "col-sm-12";
+                    break;
+                    // for half length
+                    case 13:
+                    $SubcomponentName = "";
+                    $DetailsChart     = "DisplayNone";
+                    $InputFields      = "";
+                    $length           = "col-sm-6";
+                    break;
+
+                    case 14:
+                    $SubcomponentName = "pull-right";
+                    $DetailsChart     = "DisplayNone";
+                    $InputFields      = "";
+                    $length           = "col-sm-6";
+                    break;
                   }
+                  if($length == 'col-sm-6')
+                  {
+                    $input_lenght = 'col-md-6';
+                    $name_length  = 'col-md-6';
+                  }
+                  else
+                  {
+                    $input_lenght = 'col-md-3';
+                    $name_length  = 'col-md-2';
+                  }
+                  echo "<div class='".$length." subCompnent ".$hide."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor'].";'";
+                  // if ($row2['ShowHide']==1){
+                  //   echo "style='display:none;'";
+                  // }
                   echo ">";
-                  echo "<div class='col-sm-1 col-md-2 regular'>";
+                  echo "<div class='col-sm-1 ".$name_length." regular ".$SubcomponentName."'>";
                   echo $row2['SubComp_Name']; //." - Mode - ".$row2['Mode'] ;
                   echo "</div>";
-                  echo "<div class='col-sm-6 col-md-7 no_padding'>";
+                  echo "<div class='col-sm-6 col-md-7 no_padding ".$DetailsChart."'>";
 
                   if(empty($row2['ChartID']))
                   {
@@ -376,11 +595,20 @@ include_once 'includes/header.php';
             <?php
           }
           echo "</div>";
+          // writing this to show only for alignmenet of viewing order to show component name in middle
+          if($row2['ViewingOrder'] == 4)
+          {
+            echo "<div class='col-sm-1 col-md-2 regular'>";
+            echo $row2['SubComp_Name'];
+            echo "</div>";
+          }
           if ($row2['Mode']!="none")
           {
-            echo "<div class=' col-sm-5 col-md-3 text-right'>";
+            echo "<div class=' col-sm-5 ".$input_lenght." text-right ".$InputFields."'>";
+            // putting both current and last input field div inside a div having same class inlinebox to shift left/right
             echo "<div class='InlineBox'>";
-            echo "<label class='scenariaLabel'>Current</label>";
+            echo "<div class='InlineBox ".(($row2['InputFieldOrder']==2)?'pull-right':'')." ".(($row2['InputFieldOrder']==4)?'DisplayNone':'')."'>";
+            echo "<label class='scenariaLabel'>".$row2['LabelCurrent']."</label>";
             echo "<input type='hidden' id='".$areaname."_linksubc_".$row2['SubCompID']."' name='".$areaname."_linksubc_".$row2['SubCompID']."' value='".$row2['SubLinkID']."'></input>";
             if($row2['Mode']=="formula")
             {
@@ -450,6 +678,7 @@ include_once 'includes/header.php';
                           }
                           else{
                             echo " required ";
+                            echo "style='background:#008000; color:#ffffff;'";
                           }
                           
                           echo "></input>";
@@ -458,9 +687,9 @@ include_once 'includes/header.php';
                             echo "<input type='hidden' id='".$areaname."_expsubc_".$row2['SubCompID']."' name='".$areaname."_expsubc_".$row2['SubCompID']."' value='".$row2['exp']."'>";
                           }
                           echo "</div>";
-                          echo "<div class='InlineBox'>";
+                          echo "<div class='InlineBox ".(($row2['InputFieldOrder']==3)?'DisplayNone':'')."'>";
                           //echo "<label class='scenariaLabel'>Last</label>";
-                          echo "<label class='scenariaLabel'>Last</label>";
+                          echo "<label class='scenariaLabel'>".$row2['LabelLast']."</label>";
                           $sqllast = "SELECT * FROM `GAME_INPUT`
                           WHERE input_user=".$userid." AND input_sublinkid = 
                           (SELECT ls.SubLink_ID
@@ -486,12 +715,22 @@ include_once 'includes/header.php';
                           echo " readonly></input>";
                           //echo "<input type='text' class='scenariaInput' readonly></input>";
                           echo "</div>";
+                          echo "</div>";
 
-                          echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row2['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;">Save</div> </div>';
+                          echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row2['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
 
 
                           echo "</div>";
                         }
+                         // writing this to show only for alignmenet of viewing order to show component name in middle
+
+                        if($row2['ViewingOrder'] == 6)
+                        {
+                          echo "<div class='col-sm-1 col-md-2 regular'>";
+                          echo $row2['SubComp_Name'];
+                          echo "</div>";
+                        }
+
                         echo "<div class='clearfix'></div>";
 
                         echo "</div>";

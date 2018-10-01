@@ -8,6 +8,12 @@ $functionsObj = new Functions();
 include_once 'includes/lib/phpchartdir.php';
 
 $userid = $_SESSION['userid'];
+
+// if user is logout then redirect to login page as we're unsetting the username from session
+if($_SESSION['username'] == NULL)
+{
+	header("Location:".site_root."login.php");
+}
 //$gameid = $_SESSION['Game_ID'];
 //echo $userid."</br>";
 //$linkid = $_GET['Link'];
@@ -696,7 +702,7 @@ if($input->num_rows > 0)
 	//$url = site_root."scenario_description.php?Link=".$result->Link_ID;
 }
 
-$sqlarea="SELECT DISTINCT a.Area_ID as AreaID, a.Area_Name as Area_Name
+$sqlarea="SELECT DISTINCT a.Area_ID as AreaID, a.Area_Name as Area_Name, a.Area_BackgroundColor as BackgroundColor, a.Area_TextColor as TextColor
 , SUM(ls.SubLink_ShowHide) as ShowHide, COUNT(ls.SubLink_ShowHide) as countlnk 
 FROM GAME_LINKAGE l 
 INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
