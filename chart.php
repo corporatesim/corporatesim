@@ -3,6 +3,12 @@ include_once 'config/settings.php';
 include_once 'config/functions.php'; 
 set_time_limit(300);
 
+// if user is logout then redirect to login page as we're unsetting the username from session
+if($_SESSION['username'] == NULL)
+{
+	header("Location:".site_root."login.php");
+}
+
 $functionsObj = new Functions();
 
 $userid = $_SESSION['userid'];

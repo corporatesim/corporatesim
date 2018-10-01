@@ -9,7 +9,11 @@ if(isset($_SESSION['siteuser'])){
 	header("location:".site_root."my_profile.php");
 	exit(0);
 }
-
+// if user is loggedin then redirect to dashboard/selectgame page
+if($_SESSION['username'] != NULL)
+{
+	header("Location:".site_root."selectgame.php");
+}
 // Create object
 $funObj = new Functions();
 

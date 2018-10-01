@@ -8,6 +8,11 @@ $functionsObj = new Functions();
 include_once 'includes/lib/phpchartdir.php';
 
 $userid = $_SESSION['userid'];
+// if user is logout then redirect to login page as we're unsetting the username from session
+if($_SESSION['username'] == NULL)
+{
+	header("Location:".site_root."login.php");
+}
 //$gameid = $_SESSION['Game_ID'];
 //echo $userid."</br>";
 //$linkid = $_GET['Link'];

@@ -3,6 +3,11 @@ include_once 'config/settings.php';
 include_once 'config/functions.php'; 
 
 $functionsObj = new Functions();
+// if user is logout then redirect to login page as we're unsetting the username from session
+if($_SESSION['username'] == NULL)
+{
+	header("Location:".site_root."login.php");
+}
 //$_SESSION['userpage'] ='game_description';
 if(isset($_GET['Link']))
 {
