@@ -346,7 +346,7 @@ include_once 'includes/header.php';
                   else
                   {
                     echo " required ";
-                    echo "style='background:#008000; color:#ffffff;'";
+                    echo "style='background:#009aef; color:#ffffff;'";
                   }
                   echo '></input>';
                   if ($row1['Mode']=="formula")
@@ -678,7 +678,7 @@ include_once 'includes/header.php';
                           }
                           else{
                             echo " required ";
-                            echo "style='background:#008000; color:#ffffff;'";
+                            echo "style='background:#009aef; color:#ffffff;'";
                           }
                           
                           echo "></input>";
