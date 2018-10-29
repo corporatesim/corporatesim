@@ -14,9 +14,11 @@ $file     = 'list.php';
 //echo $_POST['chkround'];
 //exit();
 
-if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
+if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
+{
 	//echo "in submit";	
-	if(isset($_GET['link'])){
+	if(isset($_GET['link']))
+	{
 		$file   ='addeditlink.php';	
 		$linkid = $_GET['link'];		
 		$where  = "SubLink_LinkID=" . $linkid." AND SubLink_CompID=" . $_POST['comp_id'];
@@ -72,34 +74,61 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 		}
 		else{
 				//exit();
+			if($_POST['SubLink_InputModeType'] == 'range')
+			{
+				$SubLink_InputModeTypeValue = $_POST['SubLink_MinVal'].','.$_POST['SubLink_MaxVal'].','.$_POST['SubLink_RangeInterval'];
+			}
+			elseif($_POST['SubLink_InputModeType'] == 'mChoice')
+			{
+				$option                     = array_combine($_POST['option'],$_POST['option_value']);
+				$question                   = array(
+					'question' => $_POST['question'],
+				);
+				$SubLink_InputModeTypeValue = $question + $option;
+				if(count($option) > 1)
+				{
+					$SubLink_InputModeTypeValue = json_encode($SubLink_InputModeTypeValue);
+				}
+				else
+				{
+					$SubLink_InputModeTypeValue = '';
+				}
+			}
+			else
+			{
+				$SubLink_InputModeTypeValue = '';
+			}
+
 			$linkdetails = (object) array(
-				'SubLink_LinkID'          => $linkid,
-				'SubLink_AreaID'          => $_POST['area_id'],
-				'SubLink_CompID'          => $_POST['comp_id'],
-				'SubLink_SubCompID'       => isset($_POST['subcomp_id']) ? $_POST['subcomp_id'] : null,			
-				'SubLink_Type'            => isset($_POST['Type']) && $_POST['Type']=='input' ? 0 : 1,
-				'SubLink_Order'           => $_POST['order'],
-				'SubLink_ShowHide'        => $_POST['ShowHide'],
-				'SubLink_FormulaID'       => $_POST['inputType']=='formula' ? $_POST['formula_id']: null,
-				'SubLink_AdminCurrent'    => $_POST['inputType']=='admin' ? $_POST['current']: null,
-				'SubLink_AdminLast'       => $_POST['inputType']=='admin' ? $_POST['last']: null,
-				'SubLink_InputMode'       => $_POST['inputType'],
-				'SubLink_LinkIDcarry'     => $_POST['inputType']=='carry' ? $_POST['carry_linkid']: null,
-				'SubLink_CompIDcarry'     => $_POST['inputType']=='carry' ? $_POST['carry_compid']: null,
-				'SubLink_SubCompIDcarry'  => $_POST['inputType']=='carry' ? $_POST['carry_subcompid']: null,
-				'SubLink_Condition'       => $_POST['conditionformulaid'],
-				'SubLink_Roundoff'        => isset($_POST['chkround']) ? 1:0,
-				'SubLink_ChartID'         => $_POST['chart_id'],
-				'SubLink_ChartType'       => $_POST['chart_type'],
-				'SubLink_Details'         => $_POST['details'],
-				'SubLink_Status'          => 1,
-				'SubLink_ViewingOrder'    => (!empty($_POST['SubLink_ViewingOrder'])) ? $_POST['SubLink_ViewingOrder']:1,
-				'SubLink_BackgroundColor' => $_POST['SubLink_BackgroundColor'],
-				'SubLink_TextColor'       => $_POST['SubLink_TextColor'],
-				'SubLink_LabelCurrent'    => $_POST['SubLink_LabelCurrent'],
-				'SubLink_LabelLast'       => $_POST['SubLink_LabelLast'],
-				'SubLink_InputFieldOrder' => $_POST['SubLink_InputFieldOrder'],
-				'SubLink_CreateDate'      => date('Y-m-d H:i:s')
+				'SubLink_LinkID'             => $linkid,
+				'SubLink_AreaID'             => $_POST['area_id'],
+				'SubLink_CompID'             => $_POST['comp_id'],
+				'SubLink_SubCompID'          => isset($_POST['subcomp_id']) ? $_POST['subcomp_id'] : null,			
+				'SubLink_Type'               => isset($_POST['Type']) && $_POST['Type']=='input' ? 0 : 1,
+				'SubLink_Order'              => $_POST['order'],
+				'SubLink_ShowHide'           => $_POST['ShowHide'],
+				'SubLink_FormulaID'          => $_POST['inputType']=='formula' ? $_POST['formula_id']: null,
+				'SubLink_AdminCurrent'       => $_POST['inputType']=='admin' ? $_POST['current']: null,
+				'SubLink_AdminLast'          => $_POST['inputType']=='admin' ? $_POST['last']: null,
+				'SubLink_InputMode'          => $_POST['inputType'],
+				'SubLink_InputModeType'      => $_POST['SubLink_InputModeType'],
+				'SubLink_InputModeTypeValue' => $SubLink_InputModeTypeValue,
+				'SubLink_LinkIDcarry'        => $_POST['inputType']=='carry' ? $_POST['carry_linkid']: null,
+				'SubLink_CompIDcarry'        => $_POST['inputType']=='carry' ? $_POST['carry_compid']: null,
+				'SubLink_SubCompIDcarry'     => $_POST['inputType']=='carry' ? $_POST['carry_subcompid']: null,
+				'SubLink_Condition'          => $_POST['conditionformulaid'],
+				'SubLink_Roundoff'           => isset($_POST['chkround']) ? 1:0,
+				'SubLink_ChartID'            => $_POST['chart_id'],
+				'SubLink_ChartType'          => $_POST['chart_type'],
+				'SubLink_Details'            => $_POST['details'],
+				'SubLink_Status'             => 1,
+				'SubLink_ViewingOrder'       => (!empty($_POST['SubLink_ViewingOrder'])) ? $_POST['SubLink_ViewingOrder']:1,
+				'SubLink_BackgroundColor'    => $_POST['SubLink_BackgroundColor'],
+				'SubLink_TextColor'          => $_POST['SubLink_TextColor'],
+				'SubLink_LabelCurrent'       => $_POST['SubLink_LabelCurrent'],
+				'SubLink_LabelLast'          => $_POST['SubLink_LabelLast'],
+				'SubLink_InputFieldOrder'    => $_POST['SubLink_InputFieldOrder'],
+				'SubLink_CreateDate'         => date('Y-m-d H:i:s')
 			);
 			
 			$result = $functionsObj->InsertData('GAME_LINKAGE_SUB', $linkdetails, 0, 0);
@@ -271,32 +300,61 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 			$type[1] = "has-error";
 		}
 		else{
-			
+
+			if($_POST['SubLink_InputModeType'] == 'range')
+			{
+				$SubLink_InputModeTypeValue = $_POST['SubLink_MinVal'].','.$_POST['SubLink_MaxVal'].','.$_POST['SubLink_RangeInterval'];
+			}
+			elseif($_POST['SubLink_InputModeType'] == 'mChoice')
+			{
+				$option                     = array_combine($_POST['option'],$_POST['option_value']);
+				$question                   = array(
+					'question' => $_POST['question'],
+				);
+				$SubLink_InputModeTypeValue = $question + $option;
+				if(count($option) > 1)
+				{
+					$SubLink_InputModeTypeValue = json_encode($SubLink_InputModeTypeValue);
+				}
+				else
+				{
+					$SubLink_InputModeTypeValue = '';
+				}
+			}
+			else
+			{
+				$SubLink_InputModeTypeValue = '';
+			}
+
+			// print_r($SubLink_InputModeTypeValue); exit; 
+
 			$linkdetails = (object) array(
-				'SubLink_AreaID'          => $_POST['area_id'],
-				'SubLink_CompID'          => $_POST['comp_id'],
-				'SubLink_SubCompID'       => isset($_POST['subcomp_id']) ? $_POST['subcomp_id'] : null,
-				'SubLink_Type'            => isset($_POST['Type']) && $_POST['Type']=='input' ? 0 : 1,
-				'SubLink_Order'           => $_POST['order'],
-				'SubLink_ShowHide'        => $_POST['ShowHide'],
-				'SubLink_FormulaID'       => $_POST['inputType']=='formula' ? $_POST['formula_id']: null,
-				'SubLink_AdminCurrent'    => $_POST['inputType']=='admin' ? $_POST['current']: null,
-				'SubLink_AdminLast'       => $_POST['inputType']=='admin' ? $_POST['last']: null,
-				'SubLink_InputMode'       => $_POST['inputType'],
-				'SubLink_LinkIDcarry'     => $_POST['inputType']=='carry' ? $_POST['carry_linkid']: null,
-				'SubLink_CompIDcarry'     => $_POST['inputType']=='carry' ? $_POST['carry_compid']: null,
-				'SubLink_SubCompIDcarry'  => $_POST['inputType']=='carry' ? $_POST['carry_subcompid']: null,
-				'SubLink_Condition'       => $_POST['conditionformulaid'],
-				'SubLink_Roundoff'        => isset($_POST['chkround']) ? 1:0,
-				'SubLink_ChartID'         => $_POST['chart_id'],
-				'SubLink_ChartType'       => $_POST['chart_type'],
-				'SubLink_Details'         => $_POST['details'],
-				'SubLink_ViewingOrder'    => (!empty($_POST['SubLink_ViewingOrder'])) ? $_POST['SubLink_ViewingOrder']:1,
-				'SubLink_BackgroundColor' => $_POST['SubLink_BackgroundColor'],
-				'SubLink_TextColor'       => $_POST['SubLink_TextColor'],
-				'SubLink_LabelCurrent'    => $_POST['SubLink_LabelCurrent'],
-				'SubLink_LabelLast'       => $_POST['SubLink_LabelLast'],
-				'SubLink_InputFieldOrder' => $_POST['SubLink_InputFieldOrder'],
+				'SubLink_AreaID'             => $_POST['area_id'],
+				'SubLink_CompID'             => $_POST['comp_id'],
+				'SubLink_SubCompID'          => isset($_POST['subcomp_id']) ? $_POST['subcomp_id'] : null,
+				'SubLink_Type'               => isset($_POST['Type']) && $_POST['Type']=='input' ? 0 : 1,
+				'SubLink_Order'              => $_POST['order'],
+				'SubLink_ShowHide'           => $_POST['ShowHide'],
+				'SubLink_FormulaID'          => $_POST['inputType']=='formula' ? $_POST['formula_id']: null,
+				'SubLink_AdminCurrent'       => $_POST['inputType']=='admin' ? $_POST['current']: null,
+				'SubLink_AdminLast'          => $_POST['inputType']=='admin' ? $_POST['last']: null,
+				'SubLink_InputMode'          => $_POST['inputType'],
+				'SubLink_InputModeType'      => $_POST['SubLink_InputModeType'],
+				'SubLink_InputModeTypeValue' => $SubLink_InputModeTypeValue,
+				'SubLink_LinkIDcarry'        => $_POST['inputType']=='carry' ? $_POST['carry_linkid']: null,
+				'SubLink_CompIDcarry'        => $_POST['inputType']=='carry' ? $_POST['carry_compid']: null,
+				'SubLink_SubCompIDcarry'     => $_POST['inputType']=='carry' ? $_POST['carry_subcompid']: null,
+				'SubLink_Condition'          => $_POST['conditionformulaid'],
+				'SubLink_Roundoff'           => isset($_POST['chkround']) ? 1:0,
+				'SubLink_ChartID'            => $_POST['chart_id'],
+				'SubLink_ChartType'          => $_POST['chart_type'],
+				'SubLink_Details'            => $_POST['details'],
+				'SubLink_ViewingOrder'       => (!empty($_POST['SubLink_ViewingOrder'])) ? $_POST['SubLink_ViewingOrder']:1,
+				'SubLink_BackgroundColor'    => $_POST['SubLink_BackgroundColor'],
+				'SubLink_TextColor'          => $_POST['SubLink_TextColor'],
+				'SubLink_LabelCurrent'       => $_POST['SubLink_LabelCurrent'],
+				'SubLink_LabelLast'          => $_POST['SubLink_LabelLast'],
+				'SubLink_InputFieldOrder'    => $_POST['SubLink_InputFieldOrder'],
 					//'SubLink_Details'	=> $_POST['details']
 			);
 
@@ -700,8 +758,9 @@ if(isset($_GET['edit'])){
 elseif(isset($_GET['del'])){
 	// Delete Siteuser
 	$id = base64_decode($_GET['del']);
-	echo $id;
+	// echo $id;
 	//exit();
+
 	$result = $functionsObj->DeleteData('GAME_LINKAGE','Link_ID',$id,0);
 
 	$_SESSION['msg']     = "Link deleted successfully";
@@ -950,7 +1009,7 @@ elseif(isset($_GET['del'])){
 	FROM
 	`GAME_LINKAGE`as L";
 	$object = $functionsObj->ExecuteQuery($sql);
-	$file = 'list.php';
+	$file   = 'list.php';
 }
 
 
@@ -973,6 +1032,36 @@ if(isset($_GET['linkedit']))
 	$SubLink_LabelLast       = $result_object->SubLink_LabelLast;
 	// getting the input field order
 	$SubLink_InputFieldOrder = $result_object->SubLink_InputFieldOrder;
+	// if range then find the min max and range interval
+	if($result_object->SubLink_InputModeType == 'range')
+	{
+		$range                 = explode(',', $result_object->SubLink_InputModeTypeValue);
+		$SubLink_MinVal        = $range['0'];
+		$SubLink_MaxVal        = $range['1'];
+		$SubLink_RangeInterval = $range['2'];
+	}
+
+	// if multiple choice then getting the question and options with value
+	if($result_object->SubLink_InputModeType == 'mChoice')
+	{
+		$mChoice  = json_decode($result_object->SubLink_InputModeTypeValue);
+		$question = $mChoice->question;
+		// ignoring the question as earlier got it, so once skip
+		$count    = 0;
+		foreach ($mChoice as $key => $value)
+		{
+			if($count > 0)
+			{
+				$option[]       = $key;
+				$option_value[] = $value;
+			}
+			$count++; 
+		}
+		// echo count($option).'<br>'; print_r($option); echo '<br>'; print_r($option_value); exit; 
+		$options       = $option['0'];
+		$options_value = $option_value['0'];
+	}
+
 }
 $areaLink     = $functionsObj->SelectData(array(), 'GAME_AREA', array('Area_Delete=0'), '', '', '', '', 0);
 

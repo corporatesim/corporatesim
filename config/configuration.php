@@ -1,11 +1,16 @@
 <?php
 
 if($server == 'local'){
-	//local
+	//local db
 	define("HST", "localhost");
 	define("USR", "root");
 	define("PWD", "");
 	define("DBN", "uxconsul_game");
+	// live db
+	// define("HST", "kiit.corporatesim.com");
+	// define("USR", "organiza_game");
+	// define("PWD", "M^aAq&VLDt8Q");
+	// define("DBN", "organiza_game");
 }elseif($server == 'server'){
 	//server
 	define("HST", "simulation.uxconsultant.in");

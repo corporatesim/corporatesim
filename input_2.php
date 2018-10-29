@@ -792,11 +792,10 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 				
 				else if (in_array($compID, $arraysubcomp) && $allcompID[1]=='subc')
 				{
-					$sqlsubcompName = "SELECT SubComp_Name FROM GAME_SUBCOMPONENT WHERE SubComp_ID = ".$compID;
-					$subcompDetails = $functionsObj->ExecuteQuery($sqlsubcompName);
-					$subcompName    = $functionsObj->FetchObject($subcompDetails);
-					
-					$dataChart[$subcompName->SubComp_Name]  .= $row->input_current;
+					$sqlsubcompName                         = "SELECT SubComp_Name FROM GAME_SUBCOMPONENT WHERE SubComp_ID = ".$compID;
+					$subcompDetails                         = $functionsObj->ExecuteQuery($sqlsubcompName);
+					$subcompName                            = $functionsObj->FetchObject($subcompDetails);
+					$dataChart[$subcompName->SubComp_Name] .= $row->input_current;
 				}			
 			}
 		}

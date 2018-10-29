@@ -183,11 +183,15 @@
 }
 
 .InlineBox input{
-	width:90px!important;
+	/*width:90px!important;*/
 	padding: 0 0 0 2px!important;
 	text-align:right;
-	
 }
+
+.InlineBox input[type=text]{
+	width:90px!important;
+	color: #151515;
+	}
 
 .scenariaLabel{
 	display:block;

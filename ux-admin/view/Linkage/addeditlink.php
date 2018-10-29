@@ -440,164 +440,216 @@ span.alert-danger {
 						<?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'user'){ echo "checked"; } ?> > By User
 					</div>
 
-				</div>
-				<div class="clearfix"></div>
-				<div class="row">
-					<div class="col-md-4">
-						<input type="radio" name="inputType" value="none"
-						<?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'none'){ echo "checked"; } ?> > None
-					</div>
-
-				</div>
-				<div class="clearfix"></div>
-				<div class="row">
-					<div class="col-md-4">
-						<label>Order</label>
-					</div>
-					<div class="col-md-4">
-						<input type="text" name="order" id="order" value="<?php if(!empty($linkdetails->SubLink_Order)) echo $linkdetails->SubLink_Order; ?>"
-						class="form-control"	required>
-					</div>
-
-				</div>
-
-				<div class="row">
-					<div class="col-md-4">
-						<input type="radio" name="ShowHide" value="0"
-						<?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 0){ echo "checked"; } ?> > Show
-						<input type="radio" name="ShowHide" value="1"
-						<?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 1){ echo "checked"; } ?> > Hide
-					</div>
-					<div class="col-md-4">
-						<div class='checkbox'>
-							<input type='checkbox' <?php if(!empty($linkdetails) && $linkdetails->SubLink_Roundoff == 1) { ?> checked='checked' <?php } ?> name='chkround' id='chkround'> Roundoff
-						</div>
-					</div>		
-				</div>
-				<div class="row">
-					<div class="col-md-4">
-						<label>Replace</label>
-					</div>
-				</div>
-				<div class="row">
-					<input type="hidden" name="replaceid1" id="replaceid1" 
-					value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_ID; } ?>">
-					<div class="col-md-4">
-						<input type="text" name="start1" id="start1" 
-						value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Start; } ?>" 
-						placeholder = "Start" class="form-control">
-					</div>			
-					<div class="col-md-4">
-						<input type="text" name="end1" id="end1" 
-						value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_End; } ?>" 
-						placeholder = "End" class="form-control">
-					</div>			
-					<div class="col-md-4">
-						<input type="text" name="value1" id="value1" 
-						value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Value; }?>" 
-						placeholder = "Value" class="form-control">
-					</div>
-				</div>
-				<div class="row">
-					<input type="hidden" name="replaceid2" id="replaceid2" 
-					value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_ID; } ?>">
-					<div class="col-md-4">
-						<input type="text" name="start2" id="start2" 
-						value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Start; } ?>" 
-						placeholder = "Start" class="form-control">
-					</div>			
-					<div class="col-md-4">
-						<input type="text" name="end2" id="end2" 
-						value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_End; } ?>"
-						placeholder = "End" class="form-control">
-					</div>			
-					<div class="col-md-4">
-						<input type="text" name="value2" id="value2" 
-						value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Value; }?>"
-						placeholder = "Value" class="form-control">
-					</div>
-				</div>
-				<div class="row">
-					<input type="hidden" name="replaceid3" id="replaceid3" 
-					value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_ID; } ?>">		
-					<div class="col-md-4">
-						<input type="text" name="start3" id="start3" 
-						value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Start; } ?>"
-						placeholder = "Start" class="form-control">
-					</div>			
-					<div class="col-md-4">
-						<input type="text" name="end3" id="end3" 
-						value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_End; } ?>"
-						placeholder = "End" class="form-control">
-					</div>			
-					<div class="col-md-4">
-						<input type="text" name="value3" id="value3" 
-						value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Value; }?>"
-						placeholder = "Value" class="form-control">
-					</div>
-				</div>
-
-
-
-				<div class="row">	
-					<br><br>
-					<div class="col-md-2">
-						<label><span class="alert-danger"></span>Select Chart</label> 
-					</div>
-
-					<div class="col-md-4">
-						<select class="form-control" name="chart_id" id="chart_id">
-							<option value="">-- SELECT --</option>
-							<?php 
-							$sqlchart = "SELECT * FROM `GAME_CHART` WHERE `Chart_GameID`=".$result->Link_GameID;
-							$chart    =  $functionsObj->ExecuteQuery($sqlchart);
-							while($row = $chart->fetch_object()){ ?>
-								<option value="<?php echo $row->Chart_ID; ?>"
-									<?php if(isset($linkdetails->SubLink_ChartID) && $linkdetails->SubLink_ChartID == $row->Chart_ID){echo 'selected'; } ?>>
-									<?php echo $row->Chart_Name; ?></option>
-								<?php } ?>
-							</select>
-						</div>
-					</div>
-					<br>OR<br><br>
-					<div class="row">
-						<div class="col-sm-12">
-							<label><span class="alert-danger">*</span>Details</label>
-							<div class="form-group">
-								<!--<div class="input-group">-->
-									<textarea id="details" name="details" class="form-control"><?php if(!empty($linkdetails->SubLink_Details)){ echo $linkdetails->SubLink_Details; } ?></textarea>
-									<!--</div>-->
-									<div class="contact_error"></div>
+					<!-- adding multiple choice and range type here -->
+					<div class="row col-md-8 <?php echo ($linkdetails->SubLink_InputMode == 'user')?'':'hidden'; ?>" id="user" name="user">
+						<!-- <div class="col-md-4 <?php // echo ($linkdetails->SubLink_InputMode == 'user')?'':'hidden'; ?>"> -->
+							<div class="col-md-4">
+								<select name="SubLink_InputModeType" id="SubLink_InputModeType" class="form-control">
+									<!-- <option value="">-- Select Input --</option> -->
+									<option value="user" <?php echo ($linkdetails->SubLink_InputMode == 'user')?'selected':''; ?>>Default/Text</option>
+									<option value="mChoice" <?php echo ($linkdetails->SubLink_InputModeType == 'mChoice')?'selected':''; ?>>Multiple Choice</option>
+									<option value="range" <?php echo ($linkdetails->SubLink_InputModeType == 'range')?'selected':''; ?>>Range/Button</option>
+								</select>
+							</div>
+							<!-- for multiple choice -->
+							<div class="col-md-12 <?php echo ($linkdetails->SubLink_InputModeType == 'mChoice')?'':'hidden'; ?>" id="mChoice">
+								<div class="form-group col-md-4">
+									<label for="No of questions">Enter Question:</label>
+									<input name="question" id="question" type="text" value="<?php echo $question;?>" class="form-control" placeholder="Enter Question">
 								</div>
-							</div>			
-						</div>
-						<div class="row">
-							<div class="col-sm-12">
-								<div class="form-group text-center">				
-									<?php if(isset($_GET['linkedit']) && !empty($_GET['linkedit'])){?>
-										<button type="button" id="siteuser_btn_update" class="btn btn-primary"
-										> Update </button>
-										<button type="submit" name="submit" id="siteuser_update" class="btn btn-primary hidden"
-										value="Update"> Update </button>
-										<button type="button" class="btn btn-primary"
-										onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
-									<?php }else{?>
-										<button type="button" id="siteuser_btn" class="btn btn-primary"
-										value="Submit"> Submit </button>
-										<button type="submit" name="submit" id="siteuser_sbmit"
-										class="btn btn-primary hidden" value="Submit"> Submit </button>
-										<button type="button" class="btn btn-primary"
-										onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
-									<?php }?>
+								<div class="form-group col-md-4">
+									<label for="No of questions">Text:</label>
+									<input name="option[]" id="option[]" type="text" value="<?php echo $options;?>" class="form-control" placeholder="Enter Text">
+								</div>
+								<div class="form-group col-md-2">
+									<label for="No of questions">Value:</label>
+									<input name="option_value[]" id="option_value[]" type="text" value="<?php echo $options_value;?>" class="form-control" placeholder="Enter Value">
+								</div>
+								<div class="form-group col-md-2">
+									<button class="btn-primary" type="button" id="add_options" title="Add Options">+</button>
+								</div>
+								<?php if(count($option) > 1 && count($option_value) > 1){
+									for($i=1; $i < count($option); $i++) { ?>
+										<div class="col-md-12"><div class="form-group col-md-6"><input name="option[]" type="text" value="<?php echo $option[$i];?>" placeholder="Text" class="form-control"></div> <div class="form-group col-md-4"><input name="option_value[]" type="text" value="<?php echo $option_value[$i];?>" placeholder="Value" class="form-control"></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" title="Remove Option">-</button></div></div>
+									<?php }	} ?>
+								<div id="add_here"></div>
+							</div>
+							<!-- for range -->
+							<div class="col-md-12 <?php echo ($linkdetails->SubLink_InputModeType == 'range')?'':'hidden'; ?>" id="range">
+								<div class="form-group col-md-4">
+									<label for="Min Value">Min:</label>
+									<input name="SubLink_MinVal" id="SubLink_MinVal" type="number" value="<?php echo ($SubLink_MinVal)?$SubLink_MinVal:'0';?>" class="form-control" placeholder="Enter Min Range">
+								</div>
+								<div class="form-group col-md-4">
+									<label for="Max Value">Max:</label>
+									<input name="SubLink_MaxVal" id="SubLink_MaxVal" type="number" value="<?php echo ($SubLink_MaxVal)?$SubLink_MaxVal:'0';?>" class="form-control" placeholder="Enter Min Range">
+								</div>
+								<div class="form-group col-md-4">
+									<label for="Interval Value">Interval:</label>
+									<input name="SubLink_RangeInterval" id="SubLink_RangeInterval" type="number" value="<?php echo ($SubLink_RangeInterval)?$SubLink_RangeInterval:'0';?>" class="form-control" placeholder="Enter Interval">
 								</div>
 							</div>
 						</div>
-					</form>
+						<!-- end of multiple choice and range type -->
+
+					</div>
+					<div class="clearfix"></div>
+					<div class="row">
+						<div class="col-md-4">
+							<input type="radio" name="inputType" value="none"
+							<?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'none'){ echo "checked"; } ?> > None
+						</div>
+
+					</div>
+					<div class="clearfix"></div>
+					<div class="row">
+						<div class="col-md-4">
+							<label>Order</label>
+						</div>
+						<div class="col-md-4">
+							<input type="text" name="order" id="order" value="<?php if(!empty($linkdetails->SubLink_Order)) echo $linkdetails->SubLink_Order; ?>"
+							class="form-control"	required>
+						</div>
+
+					</div>
+
+					<div class="row">
+						<div class="col-md-4">
+							<input type="radio" name="ShowHide" value="0"
+							<?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 0){ echo "checked"; } ?> > Show
+							<input type="radio" name="ShowHide" value="1"
+							<?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 1){ echo "checked"; } ?> > Hide
+						</div>
+						<div class="col-md-4">
+							<div class='checkbox'>
+								<input type='checkbox' <?php if(!empty($linkdetails) && $linkdetails->SubLink_Roundoff == 1) { ?> checked='checked' <?php } ?> name='chkround' id='chkround'> Roundoff
+							</div>
+						</div>		
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<label>Replace</label>
+						</div>
+					</div>
+					<div class="row">
+						<input type="hidden" name="replaceid1" id="replaceid1" 
+						value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_ID; } ?>">
+						<div class="col-md-4">
+							<input type="text" name="start1" id="start1" 
+							value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Start; } ?>" 
+							placeholder = "Start" class="form-control">
+						</div>			
+						<div class="col-md-4">
+							<input type="text" name="end1" id="end1" 
+							value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_End; } ?>" 
+							placeholder = "End" class="form-control">
+						</div>			
+						<div class="col-md-4">
+							<input type="text" name="value1" id="value1" 
+							value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Value; }?>" 
+							placeholder = "Value" class="form-control">
+						</div>
+					</div>
+					<div class="row">
+						<input type="hidden" name="replaceid2" id="replaceid2" 
+						value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_ID; } ?>">
+						<div class="col-md-4">
+							<input type="text" name="start2" id="start2" 
+							value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Start; } ?>" 
+							placeholder = "Start" class="form-control">
+						</div>			
+						<div class="col-md-4">
+							<input type="text" name="end2" id="end2" 
+							value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_End; } ?>"
+							placeholder = "End" class="form-control">
+						</div>			
+						<div class="col-md-4">
+							<input type="text" name="value2" id="value2" 
+							value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Value; }?>"
+							placeholder = "Value" class="form-control">
+						</div>
+					</div>
+					<div class="row">
+						<input type="hidden" name="replaceid3" id="replaceid3" 
+						value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_ID; } ?>">		
+						<div class="col-md-4">
+							<input type="text" name="start3" id="start3" 
+							value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Start; } ?>"
+							placeholder = "Start" class="form-control">
+						</div>			
+						<div class="col-md-4">
+							<input type="text" name="end3" id="end3" 
+							value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_End; } ?>"
+							placeholder = "End" class="form-control">
+						</div>			
+						<div class="col-md-4">
+							<input type="text" name="value3" id="value3" 
+							value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Value; }?>"
+							placeholder = "Value" class="form-control">
+						</div>
+					</div>
+
+
+
+					<div class="row">	
+						<br><br>
+						<div class="col-md-2">
+							<label><span class="alert-danger"></span>Select Chart</label> 
+						</div>
+
+						<div class="col-md-4">
+							<select class="form-control" name="chart_id" id="chart_id">
+								<option value="">-- SELECT --</option>
+								<?php 
+								$sqlchart = "SELECT * FROM `GAME_CHART` WHERE `Chart_GameID`=".$result->Link_GameID;
+								$chart    =  $functionsObj->ExecuteQuery($sqlchart);
+								while($row = $chart->fetch_object()){ ?>
+									<option value="<?php echo $row->Chart_ID; ?>"
+										<?php if(isset($linkdetails->SubLink_ChartID) && $linkdetails->SubLink_ChartID == $row->Chart_ID){echo 'selected'; } ?>>
+										<?php echo $row->Chart_Name; ?></option>
+									<?php } ?>
+								</select>
+							</div>
+						</div>
+						<br>OR<br><br>
+						<div class="row">
+							<div class="col-sm-12">
+								<label><span class="alert-danger">*</span>Details</label>
+								<div class="form-group">
+									<!--<div class="input-group">-->
+										<textarea id="details" name="details" class="form-control"><?php if(!empty($linkdetails->SubLink_Details)){ echo $linkdetails->SubLink_Details; } ?></textarea>
+										<!--</div>-->
+										<div class="contact_error"></div>
+									</div>
+								</div>			
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="form-group text-center">				
+										<?php if(isset($_GET['linkedit']) && !empty($_GET['linkedit'])){?>
+											<button type="button" id="siteuser_btn_update" class="btn btn-primary"
+											> Update </button>
+											<button type="submit" name="submit" id="siteuser_update" class="btn btn-primary hidden"
+											value="Update"> Update </button>
+											<button type="button" class="btn btn-primary"
+											onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
+										<?php }else{?>
+											<button type="button" id="siteuser_btn" class="btn btn-primary"
+											value="Submit"> Submit </button>
+											<button type="submit" name="submit" id="siteuser_sbmit"
+											class="btn btn-primary hidden" value="Submit"> Submit </button>
+											<button type="button" class="btn btn-primary"
+											onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
+										<?php }?>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="clearfix"></div>
+		<div class="clearfix"></div>
 <!--
 <?php if(isset($msg)){echo "<div class=\"form-group ". $type[1] ." \"><div align=\"center\" class=\"form-control\" id=". $type[0] ."><label class=\"control-label\" for=". $type[0] .">". $msg ."</label></div></div>";} ?>
 -->
@@ -651,8 +703,8 @@ span.alert-danger {
 								<td><?php if($row->SubLink_ShowHide ==0 ) { echo "Show"; } else {echo "Hide";}?></td>
 								<td><?php echo $row->SubLink_InputMode;?></td>
 								<td><?php echo $row->SubLink_Order;?></td>
-								<td><input type="color" value="<?php echo $row->SubLink_BackgroundColor;?>" disabled></td>
-								<td><input type="color" value="<?php echo $row->SubLink_TextColor;?>" disabled></td>
+								<td><input type="color" value="<?php echo $row->SubLink_BackgroundColor;?>" disabled><code><?php echo $row->SubLink_BackgroundColor;?></code></td>
+								<td><input type="color" value="<?php echo $row->SubLink_TextColor;?>" disabled><code><?php echo $row->SubLink_TextColor;?></code></td>
 								<td class="text-center">
 									<?php if($row->SubLink_Status == 0){?>
 										<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->SubLink_ID; ?>"
@@ -716,6 +768,54 @@ span.alert-danger {
 </script>
 
 <script type="text/javascript">
+	// adding options and value on button click
+	$(document).ready(function(){
+		removeDiv();
+	});
+
+	$('#add_options').on('click',function(){
+		$('#add_here').append('<div class="col-md-12"><div class="form-group col-md-6"><input name="option[]" type="text" placeholder="Text" class="form-control"></div> <div class="form-group col-md-4"><input name="option_value[]" type="text" placeholder="Value" class="form-control"></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" title="Remove Option">-</button></div></div>');
+		removeDiv();
+	});
+
+	function removeDiv()
+	{
+		$('.removeDiv').on('click',function(){
+			// alert('clicked');
+			$(this).parent().parent().remove();
+		});
+	}
+
+	$('input[name=inputType]').on('change',function(){
+		if($(this).val() != 'user')
+		{
+			$('#user').addClass('hidden');
+		}
+		else
+		{
+			$('#user').removeClass('hidden');
+		}
+	});
+
+	$('#SubLink_InputModeType').on('change',function(){
+		var input_type = $(this).val();
+		if(input_type == 'user')
+		{
+			$('#mChoice').addClass('hidden');
+			$('#range').addClass('hidden');
+		}
+		if(input_type == 'mChoice')
+		{
+			$('#mChoice').removeClass('hidden');
+			$('#range').addClass('hidden');
+		}
+		if(input_type == 'range')
+		{
+			$('#range').removeClass('hidden');
+			$('#mChoice').addClass('hidden');
+		}
+	});
+
 	$('#formula_id').change( function(){
 		var formula_id = $(this).val();
 		//alert(comp_id);
@@ -809,6 +909,11 @@ span.alert-danger {
 		var link_id = $('#linkid').val();
 		var game_id = $('#gameid').val();
 		var scen_id = $('#scenid').val();
+		if($('#scen_id').val() == '')
+		{
+			alert('Please Select Scenario');
+			return false;
+		}
 		//alert(link_id);
 		//alert(site_root + "ux-admin/model/ajax/update_game_link.php");
 		$.ajax({			
