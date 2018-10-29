@@ -85,9 +85,10 @@ if($_POST['action']=='updateFormula')
 	$formula_json_expsubc = $_POST['formula_json_expsubc'];
 	$input_field_values   = $_POST['input_field_values'];
 	$query                = "INSERT into `GAME_INPUT`(input_id,input_user,input_sublinkid,input_key,input_current) VALUES ";
-	// print_r($input_field_values);
 	// print_r($formula_json_expcomp);
-
+	// print_r($formula_json_expsubc);
+	// print_r($input_field_values);
+	// die('here');
 	// creating component array
 	foreach ($formula_json_expcomp as $expcomp_key => $expcomp_value)
 	{
@@ -167,12 +168,39 @@ if($_POST['action']=='updateFormula')
 	{
 		if(!empty($query_value['input_sublinkid']))
 		{
+			if($query_value['input_id'] == '')
+			{
+				$query_value['input_id'] = 0;
+				$inserted_input_key[]    = "'".$query_value['input_key']."'";
+			}
 			$query_field_value [] = "(".$query_value['input_id'].",".$userid.",".$query_value['input_sublinkid'].",'".$query_value['input_key']."',".$query_value['values'].")";
 		}
 	}
 	
 	$query  .= implode(',',$query_field_value);
 	$query  .= "ON DUPLICATE KEY UPDATE input_current=VALUES(input_current)";
+	// making query to update input_id in the json of inserted record
+	if(count($inserted_input_key) > 0)
+	{
+		$input_key_in      = implode(',', $inserted_input_key);
+		$sql_query         = "SELECT input_id,input_key FROM GAME_INPUT WHERE input_user=$userid AND input_key IN ($input_key_in)";
+		$update_json_query = $funObj->ExecuteQuery($sql_query); 
+		// $res_update        = $funObj->mysqli_fetch_array($update_json_query);
+		while ($res_update = mysqli_fetch_assoc($update_json_query))
+		{
+			// echo $res_update['input_id'].'<br>';
+			foreach ($input_field_values as $update_key_json => $update_value_json)
+			{
+				if($update_value_json['input_key'] == $res_update['input_key'])
+				{
+					$input_field_values[$update_key_json]['input_id'] = $res_update['input_id'];
+				}
+			}
+		}
+
+	}
+	
+// print_r($input_field_values); exit;
 	$object  = $funObj->ExecuteQuery($query);
 	// echo $query;
 	echo json_encode($input_field_values);

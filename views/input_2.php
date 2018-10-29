@@ -288,7 +288,7 @@ include_once 'includes/header.php';
                     }
                     else
                     {
-                      $comp_data_id_key = '';
+                      $comp_data_id_key = "class='data_element'";
                     }
 
                     echo "<label class='scenariaLabel ".$hide_label."'>".$row1['LabelCurrent']."</label>";
@@ -684,7 +684,7 @@ include_once 'includes/header.php';
             }
             else
             {
-              $subcomp_data_id_key = '';
+              $subcomp_data_id_key = "class='data_element'";
             }
             ?>
             <input type="hidden" <?php echo $subcomp_data_id_key;?> id="<?php echo $areaname.'_linksubc_'.$row2['SubCompID'];?>" name="<?php echo $areaname.'_linksubc_'.$row2['SubCompID'];?>" value="<?php echo $row2['SubLinkID'];?>">
@@ -1152,11 +1152,12 @@ include_once 'includes/header.php';
     input_field_keys     = {};
     create_json_input_field();
     create_json_input_field_keys();
-    create_json_expcomp_onload();
     create_json_expsubc_onload();
+    create_json_expcomp_onload();
     // console.log(formula_json_expcomp);
     // console.log(formula_json_expsubc);
     // console.log(input_field_values);
+    // console.log(input_field_keys);
   });
   function create_json_input_field_keys(key)
   {
@@ -1384,7 +1385,8 @@ include_once 'includes/header.php';
             // trigger ajax if that component or subcomponent doesn't exist
             var new_id = element_not_found(expression[i]);
             new_id     = new_id.split('_');
-            if($('#'+new_id[0]+'_link'+new_id[1]+'_'+new_id[2]).parent('div').find('input.json_expcomp').length > 0)
+            // console.log(new_id[0]+'_link'+new_id[1]+'_'+new_id[2]);
+            if($('#'+new_id[0]+'_link'+new_id[1]+'_'+new_id[2]).parent('div').find('input.json_expsubc').length > 0)
             {
               expression[i] = find_function_expression(new_id[0]+'_exp'+new_id[1]+'_'+new_id[2]);
             }
@@ -1443,13 +1445,30 @@ include_once 'includes/header.php';
       {
         if($(this).attr('id'))
         {
+          // console.log($(this).attr('id'));
           // input_field_values[$(this).attr('id')] = $(this).val();
           // // console.log($(this).prev().attr('id'));
           var value        = $(this).val();
           var data_element = $(this).parent('div.InlineBox').find('input.data_element');
-          var key_input    = data_element.attr('data-input_key');
           var sublink_id   = data_element.val();
+          var genenrate_id = $(this).attr('id').split('_');
           var id_input     = data_element.attr('data-input_id');
+
+          if(data_element.attr('data-input_key'))
+          {
+            var key_input    = data_element.attr('data-input_key');
+          }
+          else
+          {
+            if(genenrate_id[1].indexOf('comp') != -1)
+            {
+              var key_input = genenrate_id[0]+'_comp_'+genenrate_id[2];
+            }
+            if(genenrate_id[1].indexOf('subc') != -1)
+            {
+              var key_input = genenrate_id[0]+'_subc_'+genenrate_id[2];
+            }
+          }
 
           input_field_values[$(this).attr('id')] = {
             values         :value,
@@ -1460,7 +1479,7 @@ include_once 'includes/header.php';
         }
       }
     });
-    // console.log(input_field_values['Channel-Mix_fsubc_244'].values);
+    // console.log(input_field_values);
   }
 
 
@@ -1489,7 +1508,8 @@ include_once 'includes/header.php';
         if(result != 'no')
         {
           $.each(result, function (index, val){
-            input_field_values[index].values = result[index].values;
+            input_field_values[index].values   = result[index].values;
+            input_field_values[index].input_id = result[index].input_id;
             // console.log(parseFloat(result[index].values).toFixed(2));
             // $('#'+index).val(parseFloat(result[index].values).toFixed(2));
             $('#'+index).val(parseInt(result[index].values));
