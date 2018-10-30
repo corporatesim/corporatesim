@@ -24,6 +24,7 @@ if (!isset($_SESSION['userid']))
 }
 
 if( !empty($_POST) ){
+	// print_r($_POST); exit;
 	$data   = array();
 	$active = $_POST['active'];
 

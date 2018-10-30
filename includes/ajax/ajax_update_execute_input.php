@@ -168,7 +168,7 @@ if($_POST['action']=='updateFormula')
 	{
 		if(!empty($query_value['input_sublinkid']))
 		{
-			if($query_value['input_id'] == '')
+			if($query_value['input_id'] < 1)
 			{
 				$query_value['input_id'] = 0;
 				$inserted_input_key[]    = "'".$query_value['input_key']."'";
@@ -194,6 +194,7 @@ if($_POST['action']=='updateFormula')
 				if($update_value_json['input_key'] == $res_update['input_key'])
 				{
 					$input_field_values[$update_key_json]['input_id'] = $res_update['input_id'];
+					// echo "json_key => $update_key_json ___ query_key => ".$res_update['input_key']." ___ input_id => ".$res_update['input_id']."<br>";
 				}
 			}
 		}

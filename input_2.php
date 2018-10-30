@@ -174,16 +174,17 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 //}
 //exit;
 
-	$sql = "SELECT * FROM GAME_LINKAGE WHERE Link_ID = ".$linkid;
+	$sql    = "SELECT * FROM GAME_LINKAGE WHERE Link_ID = ".$linkid;
 	$object = $functionsObj->ExecuteQuery($sql);
+
 	if($object->num_rows > 0){
 		$link    = $functionsObj->FetchObject($object);
 		$gameid  = $link->Link_GameID;
 		$scenid  = $link->Link_ScenarioID;
 		$gameurl = site_root."game_description.php?Game=".$gameid;
 		$scenurl = site_root."scenario_description.php?Link=".$linkid;
-
-		$where = array (
+		
+		$where   = array (
 			"US_GameID = " . $gameid,
 			"US_ScenID = " . $scenid,
 			"US_UserID = " . $userid
@@ -219,7 +220,7 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 	{
 //	echo "IN SUBMIT";
-//	exit();
+//	print_r($_POST);exit();
 		if( !empty($_POST) )
 		{
 			$data =array();
@@ -792,10 +793,11 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 				
 				else if (in_array($compID, $arraysubcomp) && $allcompID[1]=='subc')
 				{
-					$sqlsubcompName                         = "SELECT SubComp_Name FROM GAME_SUBCOMPONENT WHERE SubComp_ID = ".$compID;
-					$subcompDetails                         = $functionsObj->ExecuteQuery($sqlsubcompName);
-					$subcompName                            = $functionsObj->FetchObject($subcompDetails);
-					$dataChart[$subcompName->SubComp_Name] .= $row->input_current;
+					$sqlsubcompName = "SELECT SubComp_Name FROM GAME_SUBCOMPONENT WHERE SubComp_ID = ".$compID;
+					$subcompDetails = $functionsObj->ExecuteQuery($sqlsubcompName);
+					$subcompName    = $functionsObj->FetchObject($subcompDetails);
+					
+					$dataChart[$subcompName->SubComp_Name]  .= $row->input_current;
 				}			
 			}
 		}

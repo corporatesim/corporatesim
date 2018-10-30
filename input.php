@@ -174,16 +174,17 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 //}
 //exit;
 
-	$sql = "SELECT * FROM GAME_LINKAGE WHERE Link_ID = ".$linkid;
+	$sql    = "SELECT * FROM GAME_LINKAGE WHERE Link_ID = ".$linkid;
 	$object = $functionsObj->ExecuteQuery($sql);
+
 	if($object->num_rows > 0){
 		$link    = $functionsObj->FetchObject($object);
 		$gameid  = $link->Link_GameID;
 		$scenid  = $link->Link_ScenarioID;
 		$gameurl = site_root."game_description.php?Game=".$gameid;
 		$scenurl = site_root."scenario_description.php?Link=".$linkid;
-
-		$where = array (
+		
+		$where   = array (
 			"US_GameID = " . $gameid,
 			"US_ScenID = " . $scenid,
 			"US_UserID = " . $userid
@@ -219,7 +220,7 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 	{
 //	echo "IN SUBMIT";
-//	exit();
+//	print_r($_POST);exit();
 		if( !empty($_POST) )
 		{
 			$data =array();

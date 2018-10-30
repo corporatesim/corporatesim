@@ -1,6 +1,5 @@
 <?php 
 include_once 'includes/header.php'; 
-
 ?>
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.9.0/math.min.js"></script>-->
 <script src="js/jquery.js"></script>
@@ -30,14 +29,15 @@ include_once 'includes/header.php';
       <form method="POST" action="" id="game_frm" name="game_frm">
         <div class="col-sm-12 no_padding shadow">
           <div class="col-sm-6 ">
-            <span style="margin-right:20px;"><a href="<?php echo $gameurl; ?>" target="_blank" class="innerPageLink">Game Description</a><i class="fa fa-window-restore" aria-hidden="true"></i>
+            <span style="margin-right:20px;"><a href="<?php echo $gameurl; ?>" target="_blank" class="innerPageLink">Introduction</a><i class="fa fa-window-restore" aria-hidden="true"></i>
             </span>
-            <span style="margin-right:20px;"><a href="<?php echo $scenurl; ?>" target="_blank" class="innerPageLink">Scenario Description</a><i class="fa fa-window-restore" aria-hidden="true"></i></span>
+            <span style="margin-right:20px;"><a href="<?php echo $scenurl; ?>" target="_blank" class="innerPageLink">Description</a><i class="fa fa-window-restore" aria-hidden="true"></i></span>
             <a href="chart.php?act=chart&ID=<?=$gameid?>" target="_blank" class="innerPageLink hidden">Dashboard</a><i class="fa fa-window-restore" aria-hidden="true"></i>
           </div>
-          <div class="col-sm-6  text-right">
+          <div class="col-sm-6  text-right" style="padding: 2px 2px 5px 0px;">
             <div id="input_loader" style="float:left; color:#2A8037;"></div>
             <button type="button" class="btn innerBtns" name="execute_input" id="execute_input">Execute</button>
+            <button type="button" class="btn innerBtns hidden" name="execute_input_2" id="execute_input_2">Execute 2</button>
             <button type="submit" name="submit" id="submit" class="btn innerBtns" value="Submit">Submit</button>
             <!--<button class="btn innerBtns">Save</button>
               <button class="btn innerBtns">Submit</button>-->
@@ -142,7 +142,7 @@ include_once 'includes/header.php';
                 f.expression as exp , ls.SubLink_ID as SubLinkID,ls.Sublink_AdminCurrent as AdminCurrent, 
                 ls.Sublink_AdminLast as AdminLast, ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff,
                 ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
-                ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder
+                ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue
                 FROM GAME_LINKAGE l 
                 INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
                 INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
@@ -158,111 +158,89 @@ include_once 'includes/header.php';
                 $component = $functionsObj->ExecuteQuery($sqlcomp);
                   //Get Component for this area for this linkid
                 while($row1 = mysqli_fetch_array($component)){    
-                  if($row1['TextColor'] || $row1['BackgroundColor'])
-                  {
-                    $component_style = "style=";
-
-                    if($row1['TextColor'])
-                    {
-                      $component_style .= "color:".$row1['TextColor'].";";
-                    }
-
-                    if($row1['BackgroundColor'])
-                    {
-                      $component_style .= "background:".$row1['BackgroundColor'].";";
-                    }
-                  }
-                  else
-                  {
-                    $component_style = '';
-                  }
-                  if($row1['ShowHide']==1)
-                  {
-                    $hide_component = 'hidden';
-                  }
-                  else
-                  {
-                    $hide_component = '';
-                  }
                       //echo "<form > ";
-                  echo "<div ".$component_style." class='col-sm-12 scenariaListingDiv ".$hide_component."'>";
+                  echo "<div class='col-sm-12 scenariaListingDiv ".(($row1['ShowHide']==1)?'hidden':'')."' style='background:".$row1['BackgroundColor']."; color:".$row1['TextColor'].";'";
                   switch ($row1['ViewingOrder']) {
                     case 1:
-                    $SubcomponentName = "";
-                    $DetailsChart     = "";
-                    $InputFields      = "";
+                    $ComponentName = "";
+                    $DetailsChart  = "";
+                    $InputFields   = "";
                     break;
 
                     case 2:
-                    $SubcomponentName = "";
-                    $DetailsChart     = "pull-right";
-                    $InputFields      = "";
+                    $ComponentName = "";
+                    $DetailsChart  = "pull-right";
+                    $InputFields   = "";
                     break;
 
                     case 3:
-                    $SubcomponentName = "pull-right";
-                    $DetailsChart     = "";
-                    $InputFields      = "";
+                    $ComponentName = "pull-right";
+                    $DetailsChart  = "";
+                    $InputFields   = "";
                     break;
 
                     case 4:
-                    $SubcomponentName = "hidden";
-                    $DetailsChart     = "";
-                    $InputFields      = "";
+                    $ComponentName = "hidden";
+                    $DetailsChart  = "";
+                    $InputFields   = "";
                     break;
 
                     case 5:
-                    $SubcomponentName = "pull-right";
-                    $DetailsChart     = "pull-right";
-                    $InputFields      = "";
+                    $ComponentName = "pull-right";
+                    $DetailsChart  = "pull-right";
+                    $InputFields   = "";
                     break;
 
                     case 6:
-                    $SubcomponentName = "hidden";
-                    $DetailsChart     = "pull-right";
-                    $InputFields      = "";
+                    $ComponentName = "hidden";
+                    $DetailsChart  = "pull-right";
+                    $InputFields   = "";
                     break;
 
                     case 7:
-                    $SubcomponentName = "pull-right";
-                    $DetailsChart     = "hidden";
-                    $InputFields      = "";
+                    $ComponentName = "pull-right";
+                    $DetailsChart  = "hidden";
+                    $InputFields   = "";
                     break;
 
                     case 8:
-                    $SubcomponentName = "hidden";
-                    $DetailsChart     = "pull-right";
-                    $InputFields      = "";
+                    $ComponentName = "hidden";
+                    $DetailsChart  = "pull-right";
+                    $InputFields   = "";
                     break;
 
                     case 9:
-                    $SubcomponentName = "";
-                    $DetailsChart     = "";
-                    $InputFields      = "hidden";
+                    $ComponentName = "";
+                    $DetailsChart  = "";
+                    $InputFields   = "hidden";
                     break;
 
                     case 10:
-                    $SubcomponentName = "";
-                    $DetailsChart     = "hidden";
-                    $InputFields      = "";
+                    $ComponentName = "";
+                    $DetailsChart  = "hidden";
+                    $InputFields   = "";
                     break;
 
                     case 11:
-                    $SubcomponentName = "pull-right";
-                    $DetailsChart     = "";
-                    $InputFields      = "hidden";
+                    $ComponentName = "pull-right";
+                    $DetailsChart  = "";
+                    $InputFields   = "hidden";
                     break;
 
                     case 12:
-                    $SubcomponentName = "hidden";
-                    $DetailsChart     = "";
-                    $InputFields      = "";
+                    $ComponentName = "hidden";
+                    $DetailsChart  = "";
+                    $InputFields   = "";
                     break;
                   }
-                  echo "<div class='col-sm-1 col-md-2 regular ".$SubcomponentName."'>";
+                  // if ($row1['ShowHide']==1){
+                  //   echo "style='display:none;'";
+                  // }
+                  echo ">";             
+                  echo "<div class='col-sm-1 col-md-2 regular ".$ComponentName."'>";
                   echo $row1['Comp_Name'];
                   echo "</div>";
-                  echo "<div class='col-sm-6 col-md-7 no_padding ".$DetailsChart."''>";
+                  echo "<div class='col-sm-6 col-md-6 no_padding ".$DetailsChart."'>";
 
                   if(empty($row1['ChartID']))
                   {
@@ -289,24 +267,34 @@ include_once 'includes/header.php';
 
                   if ($row1['Mode']!="none")
                   {
-                    echo "<div class=' col-sm-5 col-md-3 text-right ".$InputFields."''>";
+                    echo "<div class=' col-sm-5 col-md-4 text-right ".$InputFields."'>";
                     echo "<div class='InlineBox'>";
                     echo "<div class='InlineBox ".(($row1['InputFieldOrder']==2)?'pull-right':'')." ".(($row1['InputFieldOrder']==4)?'hidden':'')."'>";
-                    echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
-                    echo "<input type='hidden' id='".$areaname."_linkcomp_".$row1['CompID']."' name='".$areaname."_linkcomp_".$row1['CompID']."' value='".$row1['SubLinkID']."'></input>";
-
-                    if($row1['Mode']=="formula")
+                    if($row1['Mode']=="user" && $row1['InputModeType'] == "mChoice")
                     {
-                      echo "<input type='text' id='".$areaname."_fcomp_".$row1['CompID']."' name='".$areaname."_fcomp_".$row1['CompID']."' ";
-                      $sankey_val1 = '"'.$areaname."_fcomp_".$row1['CompID'].'"';
-                      echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);'";
+                      $hide_label = 'hidden';
                     }
                     else
                     {
-                      echo "<input type='text' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' ";
-                      $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
-                      echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);'";
+                      $hide_label = '';
                     }
+
+                    $comp_query = "SELECT * FROM GAME_INPUT WHERE input_user=$userid AND input_sublinkid='".$row1['SubLinkID']."' AND input_key LIKE '%comp_".$row1['CompID']."'";
+                    $query_result = $functionsObj->ExecuteQuery($comp_query);
+                    if($query_result->num_rows > 0)
+                    {
+                      $query_result = mysqli_fetch_assoc($query_result);
+                      $comp_data_id_key  = "class='data_element' data-input_id='".$query_result['input_id']."' data-input_key='".$query_result['input_key']."'";
+                    }
+                    else
+                    {
+                      $comp_data_id_key = "class='data_element'";
+                    }
+
+                    echo "<label class='scenariaLabel ".$hide_label."'>".$row1['LabelCurrent']."</label>";
+                    echo "<input $comp_data_id_key type='hidden' id='".$areaname."_linkcomp_".$row1['CompID']."' name='".$areaname."_linkcomp_".$row1['CompID']."' value='".$row1['SubLinkID']."'></input>";
+
+                    // getting the value here for iput field
                     if($addedit=='Edit')
                     {
                     //if($data[$areaname."_comp_".$row1['CompID']]>=0)
@@ -314,266 +302,303 @@ include_once 'includes/header.php';
                       { 
                        if($row1['RoundOff'] == 0)
                        {
-                        echo " value ='".$data[$areaname."_comp_".$row1['CompID']]."' ";
+                        $value = $data[$areaname."_comp_".$row1['CompID']];
                       }
                       else
                       {
-                        echo " value ='".round($data[$areaname."_comp_".$row1['CompID']])."' ";
+                        $value = round($data[$areaname."_comp_".$row1['CompID']]);
                       }
                     }
                     elseif($row1['Mode']=="admin")
                     {
-                     echo " value ='".$row1['AdminCurrent']."' ";
-                   }
-                   elseif($row1['Mode']=="formula")
-                   {
-                     echo " value = 0 ";
-                   }
-                 }
-                 elseif($row1['Mode']=="admin")
-                 {
-                  echo " value ='".$row1['AdminCurrent']."' ";
-                }
-                elseif($row1['Mode']=="formula")
-                {
-                  echo " value = 0 ";
-                }
-                elseif($row1['Mode']=="carry")
-                {
+                      $value = $row1['AdminCurrent'];
+                    }
+                    elseif($row1['Mode']=="formula")
+                    {
+                      $value = 0;
+                    }
+                  }
+                  elseif($row1['Mode']=="admin")
+                  {
+                    $value = $row1['AdminCurrent'];
+                  }
+                  elseif($row1['Mode']=="formula")
+                  {
+                    $value = 0;
+                  }
+                  elseif($row1['Mode']=="carry")
+                  {
                     //get input value from link, comp, subcomp
 
-                  $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` 
-                  WHERE input_user=".$userid." AND input_sublinkid = 
-                  (SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` 
-                  WHERE SubLink_LinkID=".$row1['CarryLinkID']." and SubLink_CompID=".$row1['CarryCompID'];
-                  if($row1['CarrySubCompID']>0)         
-                  {
-                   $sqlcurrent .=   " AND SubLink_SubCompID = ".$row1['CarrySubCompID'];
-                 }          
-                 $sqlcurrent .= ")";
+                    $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` 
+                    WHERE input_user=".$userid." AND input_sublinkid = 
+                    (SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` 
+                    WHERE SubLink_LinkID=".$row1['CarryLinkID']." and SubLink_CompID=".$row1['CarryCompID'];
+                    if($row1['CarrySubCompID']>0)         
+                    {
+                     $sqlcurrent .=   " AND SubLink_SubCompID = ".$row1['CarrySubCompID'];
+                   }          
+                   $sqlcurrent .= ")";
 
-                 $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);
-                 $rescarry        = $functionsObj->FetchObject($objcarrycurrent);
-                 echo " value = ".$rescarry->input_current;
-               }
-                  echo " class='scenariaInput current'  ";  //onChange='showUser(this);'
-                  if ($row1['Mode']!="user")
+                   $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);
+                   $rescarry        = $functionsObj->FetchObject($objcarrycurrent);
+                   $value           = $rescarry->input_current;
+                 }
+                    // end of getting value
+
+                 if($row1['Mode']=="formula")
+                 {
+                  echo "<input type='hidden' id='".$areaname."_expcomp_".$row1['CompID']."' name='".$areaname."_expcomp_".$row1['CompID']."' value='".$row1['exp']."' class='json_expcomp'>";
+
+                  $sankey_val1 = '"'.$areaname."_fcomp_".$row1['CompID'].'"';
+
+                  echo "<input value='".$value."' type ='text' class='scenariaInput current' id='".$areaname."_fcomp_".$row1['CompID']."' name='".$areaname."_fcomp_".$row1['CompID']."' readonly></input>";
+                  // echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' readonly ></input>";
+                }
+                else
+                {
+                  $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
+                  if(($row1['Mode']=="user"))
                   {
-                    echo " readonly ";
+
+                    if($row1['InputModeType'] == "range")
+                    {
+                      $range                 = explode(',', $row1['InputModeTypeValue']);
+                      $SubLink_MinVal        = $range['0'];
+                      $SubLink_MaxVal        = $range['1'];
+                      $SubLink_RangeInterval = $range['2'];
+                      $type                  = "type='range' min='".$SubLink_MinVal."' max='".$SubLink_MaxVal."' step='".$SubLink_RangeInterval."'";
+
+
+                      echo "<input value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required $type $style_text ";
+
+                      echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>";
+                      ?>
+                      <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%;"></span>
+                      <?php
+                    }
+
+                    elseif($row1['InputModeType'] == "mChoice")
+                    {
+                      $mChoice_details = json_decode($row1['InputModeTypeValue'],TRUE);
+                      echo "<div class='row text-center'>".$mChoice_details['question']."</div>";
+                      array_shift($mChoice_details);
+                      ?>
+                      <div class="row">
+                        <?php
+                        foreach ($mChoice_details as $wrow => $wrow_value)
+                        {
+                          echo "<div class='radio-inline'><label><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required";
+                          echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input> ".$wrow."</label></div>";
+                        }
+                        ?>
+                      </div>
+                      <?php
+                    }
+
+                    else
+                    {
+                    // $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
+                      echo "<input type='text' value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' ";
+                      echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $style_text></input>";
+                    }
+
                   }
                   else
                   {
-                    echo " required ". $style_text;
+                    $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
+                    echo "<input type='text' value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' readonly></input>";
+                    // echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' readonly></input>";
                   }
-                  echo '></input>';
-                  if ($row1['Mode']=="formula")
-                  {
-                    echo "<input type='hidden' id='".$areaname."_expcomp_".$row1['CompID']."' name='".$areaname."_expcomp_".$row1['CompID']."' value='".$row1['exp']."'>";
-                  }
-                  echo "</div>";
-                  echo "<div class='InlineBox ".(($row1['InputFieldOrder']==3)?'hidden':'')."'>";
-                  echo "<label class='scenariaLabel'>".$row1['LabelLast']."</label>";
-                  $sqllast = "SELECT * FROM `GAME_INPUT`
-                  WHERE input_user=".$userid." AND input_sublinkid = 
-                  (SELECT ls.SubLink_ID
-                  FROM GAME_LINKAGE_SUB ls 
-                  WHERE SubLink_SubCompID = 0 AND SubLink_CompID=".$row1['CompID']." AND ls.SubLink_LinkID =
-                  (
-                  SELECT Link_ID FROM `GAME_LINKAGE`
-                  WHERE Link_GameID=".$row1['GameID']." AND Link_ScenarioID != ".$row1['ScenID']." 
-                  AND Link_Order < ".$row1['Order']." 
-                  ORDER BY Link_Order DESC LIMIT 1))";
-                    //echo $sqllast;
-                  echo "<input type='text' class='scenariaInput' ";
-                  if($row1['Mode']=="admin"){
-                    echo " value ='".$row1['AdminLast']."' ";                         
-                  }
-                  else{                         
-                    $objlast = $functionsObj->ExecuteQuery($sqllast);
-                    $reslast = $functionsObj->FetchObject($objlast);
-                    echo " value ='".$reslast->input_current."' ";
-                  }
-                  echo 'readonly></input>';
-                  echo "</div>";
-                  echo "</div>";
-
-                  echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row1['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
-
-                  echo "</div>";
                 }
+
+
+                echo "</div>";
+                echo "<div class='InlineBox ".(($row1['InputFieldOrder']==3)?'hidden':'')."'>";
+                echo "<label class='scenariaLabel'>".$row1['LabelLast']."</label>";
+                $sqllast = "SELECT * FROM `GAME_INPUT`
+                WHERE input_user=".$userid." AND input_sublinkid = 
+                (SELECT ls.SubLink_ID
+                FROM GAME_LINKAGE_SUB ls 
+                WHERE SubLink_SubCompID = 0 AND SubLink_CompID=".$row1['CompID']." AND ls.SubLink_LinkID =
+                (
+                SELECT Link_ID FROM `GAME_LINKAGE`
+                WHERE Link_GameID=".$row1['GameID']." AND Link_ScenarioID != ".$row1['ScenID']." 
+                AND Link_Order < ".$row1['Order']." 
+                ORDER BY Link_Order DESC LIMIT 1))";
+                    //echo $sqllast;
+                echo "<input type='text' class='scenariaInput' ";
+                if($row1['Mode']=="admin"){
+                  echo " value ='".$row1['AdminLast']."' ";                         
+                }
+                else{                         
+                  $objlast = $functionsObj->ExecuteQuery($sqllast);
+                  $reslast = $functionsObj->FetchObject($objlast);
+                  echo " value ='".$reslast->input_current."' ";
+                }
+                echo 'readonly></input>';
+                echo "</div>";
+                echo "</div>";
+
+                echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row1['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
+
+                echo "</div>";
+              }
 
                 // writing this to show only for alignmenet of viewing order to show component name in middle
-                if($row1['ViewingOrder'] == 6)
-                {
-                  echo "<div class='col-sm-1 col-md-2 regular'>";
-                  echo $row1['Comp_Name'];
-                  echo "</div>";
-                }
+              if($row1['ViewingOrder'] == 6)
+              {
+                echo "<div class='col-sm-1 col-md-2 regular'>";
+                echo $row1['Comp_Name'];
+                echo "</div>";
+              }
 
-                echo "<div class='clearfix'></div>";
-                
+              echo "<div class='clearfix'></div>";
+
                 //Get SubComponent for this Component, linkid
-                $sqlsubcomp = "SELECT distinct a.Area_ID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_SubCompID as SubCompID,  
-                a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, s.SubComp_Name as SubComp_Name, l.Link_Order AS 'Order', 
-                ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode , f.expression as exp, 
-                ls.SubLink_ID as SubLinkID ,ls.Sublink_AdminCurrent as AdminCurrent, ls.Sublink_AdminLast as AdminLast, 
-                ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff , 
-                ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
-                ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder
-                FROM GAME_LINKAGE l 
-                INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
-                INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-                INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
-                INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-                LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
-                INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
-                LEFT OUTER JOIN GAME_FORMULAS f on ls.SubLink_FormulaID=f.f_id 
-                WHERE ls.SubLink_Type=0 AND ls.SubLink_SubCompID>0 and l.Link_ID=".$linkid
-                ." AND ls.SubLink_CompID =".$row1['CompID']." ORDER BY ls.SubLink_Order";
+              $sqlsubcomp = "SELECT distinct a.Area_ID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_SubCompID as SubCompID,  
+              a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, s.SubComp_Name as SubComp_Name, l.Link_Order AS 'Order', 
+              ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode , f.expression as exp, 
+              ls.SubLink_ID as SubLinkID ,ls.Sublink_AdminCurrent as AdminCurrent, ls.Sublink_AdminLast as AdminLast, 
+              ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff , 
+              ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
+              ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue
+              FROM GAME_LINKAGE l 
+              INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
+              INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
+              INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
+              INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+              LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+              INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
+              LEFT OUTER JOIN GAME_FORMULAS f on ls.SubLink_FormulaID=f.f_id 
+              WHERE ls.SubLink_Type=0 AND ls.SubLink_SubCompID>0 and l.Link_ID=".$linkid
+              ." AND ls.SubLink_CompID =".$row1['CompID']." ORDER BY ls.SubLink_Order";
                 //echo "SubComponent - ".$sqlsubcomp;
                 //echo "</br> addedit - ".$addedit;
-                $subcomponent = $functionsObj->ExecuteQuery($sqlsubcomp);
+              $subcomponent = $functionsObj->ExecuteQuery($sqlsubcomp);
                 //Get Component for this area for this linkid
-                while($row2 = mysqli_fetch_array($subcomponent)){
+              while($row2 = mysqli_fetch_array($subcomponent)){
                   // hiding the subcomponent if mode = 1
-                  ($row2['ShowHide']==1)?$hide='hidden':$hide='';
+                ($row2['ShowHide']==1)?$hide='hidden':$hide='';
 
-                  switch ($row2['ViewingOrder']) {
-                    case 1:
-                    $SubcomponentName = "";
-                    $DetailsChart     = "";
-                    $InputFields      = "";
-                    $length           = "col-sm-12";
-                    break;
+                switch ($row2['ViewingOrder']) {
+                  case 1:
+                  $SubcomponentName = "";
+                  $DetailsChart     = "";
+                  $InputFields      = "";
+                  $length           = "col-sm-12";
+                  break;
 
-                    case 2:
-                    $SubcomponentName = "";
-                    $DetailsChart     = "pull-right";
-                    $InputFields      = "";
-                    $length           = "col-sm-12";
-                    break;
+                  case 2:
+                  $SubcomponentName = "";
+                  $DetailsChart     = "pull-right";
+                  $InputFields      = "";
+                  $length           = "col-sm-12";
+                  break;
 
-                    case 3:
-                    $SubcomponentName = "pull-right";
-                    $DetailsChart     = "";
-                    $InputFields      = "";
-                    $length           = "col-sm-12";
-                    break;
+                  case 3:
+                  $SubcomponentName = "pull-right";
+                  $DetailsChart     = "";
+                  $InputFields      = "";
+                  $length           = "col-sm-12";
+                  break;
 
-                    case 4:
-                    $SubcomponentName = "hidden";
-                    $DetailsChart     = "";
-                    $InputFields      = "";
-                    $length           = "col-sm-12";
-                    break;
+                  case 4:
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "";
+                  $InputFields      = "";
+                  $length           = "col-sm-12";
+                  break;
 
-                    case 5:
-                    $SubcomponentName = "pull-right";
-                    $DetailsChart     = "pull-right";
-                    $InputFields      = "";
-                    $length           = "col-sm-12";
-                    break;
+                  case 5:
+                  $SubcomponentName = "pull-right";
+                  $DetailsChart     = "pull-right";
+                  $InputFields      = "";
+                  $length           = "col-sm-12";
+                  break;
 
-                    case 6:
-                    $SubcomponentName = "hidden";
-                    $DetailsChart     = "pull-right";
-                    $InputFields      = "";
-                    $length           = "col-sm-12";
-                    break;
+                  case 6:
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "pull-right";
+                  $InputFields      = "";
+                  $length           = "col-sm-12";
+                  break;
 
-                    case 7:
-                    $SubcomponentName = "pull-right";
-                    $DetailsChart     = "hidden";
-                    $InputFields      = "";
-                    $length           = "col-sm-12";
-                    break;
+                  case 7:
+                  $SubcomponentName = "pull-right";
+                  $DetailsChart     = "hidden";
+                  $InputFields      = "";
+                  $length           = "col-sm-12";
+                  break;
 
-                    case 8:
-                    $SubcomponentName = "hidden";
-                    $DetailsChart     = "pull-right";
-                    $InputFields      = "";
-                    $length           = "col-sm-12";
-                    break;
+                  case 8:
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "pull-right";
+                  $InputFields      = "";
+                  $length           = "col-sm-12";
+                  break;
 
-                    case 9:
-                    $SubcomponentName = "";
-                    $DetailsChart     = "";
-                    $InputFields      = "hidden";
-                    $length           = "col-sm-12";
-                    break;
+                  case 9:
+                  $SubcomponentName = "";
+                  $DetailsChart     = "";
+                  $InputFields      = "hidden";
+                  $length           = "col-sm-12";
+                  break;
 
-                    case 10:
-                    $SubcomponentName = "";
-                    $DetailsChart     = "hidden";
-                    $InputFields      = "";
-                    $length           = "col-sm-12";
-                    break;
+                  case 10:
+                  $SubcomponentName = "";
+                  $DetailsChart     = "hidden";
+                  $InputFields      = "";
+                  $length           = "col-sm-12";
+                  break;
 
-                    case 11:
-                    $SubcomponentName = "pull-right";
-                    $DetailsChart     = "";
-                    $InputFields      = "hidden";
-                    $length           = "col-sm-12";
-                    break;
+                  case 11:
+                  $SubcomponentName = "pull-right";
+                  $DetailsChart     = "";
+                  $InputFields      = "hidden";
+                  $length           = "col-sm-12";
+                  break;
 
-                    case 12:
-                    $SubcomponentName = "hidden";
-                    $DetailsChart     = "";
-                    $InputFields      = "";
-                    $length           = "col-sm-12";
-                    break;
+                  case 12:
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "";
+                  $InputFields      = "";
+                  $length           = "col-sm-12";
+                  break;
                     // for half length
-                    case 13:
-                    $SubcomponentName = "";
-                    $DetailsChart     = "hidden";
-                    $InputFields      = "";
-                    $length           = "col-sm-6";
-                    break;
+                  case 13:
+                  $SubcomponentName = "";
+                  $DetailsChart     = "hidden";
+                  $InputFields      = "";
+                  $length           = "col-sm-6";
+                  break;
 
-                    case 14:
-                    $SubcomponentName = "pull-right";
-                    $DetailsChart     = "hidden";
-                    $InputFields      = "";
-                    $length           = "col-sm-6";
-                    break;
-                  }
-                  if($length == 'col-sm-6')
-                  {
-                    $input_lenght = 'col-md-6';
-                    $name_length  = 'col-md-6';
-                  }
-                  else
-                  {
-                    $input_lenght = 'col-md-3';
-                    $name_length  = 'col-md-2';
-                  }
-                  if($row2['TextColor'] || $row2['BackgroundColor'])
-                  {
-                    $sub_component_style = "style=";
-
-                    if($row2['TextColor'])
-                    {
-                      $sub_component_style .= "color:".$row2['TextColor'].";";
-                    }
-
-                    if($row2['BackgroundColor'])
-                    {
-                      $sub_component_style .= "background:".$row2['BackgroundColor'].";";
-                    }
-                  }
-                  else
-                  {
-                    $sub_component_style = '';
-                  }
-                  echo "<div class='".$length." subCompnent ".$hide."' ".$sub_component_style;
+                  case 14:
+                  $SubcomponentName = "pull-right";
+                  $DetailsChart     = "hidden";
+                  $InputFields      = "";
+                  $length           = "col-sm-6";
+                  break;
+                }
+                if($length == 'col-sm-6')
+                {
+                  $input_lenght = 'col-md-6';
+                  $name_length  = 'col-md-6';
+                }
+                else
+                {
+                  $input_lenght = 'col-md-4';
+                  $name_length  = 'col-md-2';
+                }
+                echo "<div class='".$length." subCompnent ".$hide."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor'].";'";
                   // if ($row2['ShowHide']==1){
                   //   echo "style='display:none;'";
                   // }
-                  echo ">";
-                  echo "<div class='col-sm-1 ".$name_length." regular ".$SubcomponentName."'>";
+                echo ">";
+                echo "<div class='col-sm-1 ".$name_length." regular ".$SubcomponentName."'>";
                   echo $row2['SubComp_Name']; //." - Mode - ".$row2['Mode'] ;
                   echo "</div>";
-                  echo "<div class='col-sm-6 col-md-7 no_padding ".$DetailsChart."'>";
+                  echo "<div class='col-sm-6 col-md-6 no_padding ".$DetailsChart."'>";
 
                   if(empty($row2['ChartID']))
                   {
@@ -604,9 +629,9 @@ include_once 'includes/header.php';
                 var data = google.visualization.arrayToDataTable([
                   ['Components', 'Inputs'],
                 //     [role:  domain,   data,       data,      data,   domain,   data,     data],    --  hint for cols
-                <?php foreach($dataChart as $keyChart=>$valChart) { ?>
+                <?php if(count($dataChart) > 0) { foreach($dataChart as $keyChart=>$valChart) { ?>
                   ['<?=$keyChart?>',<?=$valChart?>],
-                <?php }?>
+                <?php } }?>
                 ]);
                 
                 var options = {
@@ -643,20 +668,30 @@ include_once 'includes/header.php';
             // putting both current and last input field div inside a div having same class inlinebox to shift left/right
             echo "<div class='InlineBox'>";
             echo "<div class='InlineBox ".(($row2['InputFieldOrder']==2)?'pull-right':'')." ".(($row2['InputFieldOrder']==4)?'hidden':'')."'>";
-            echo "<label class='scenariaLabel'>".$row2['LabelCurrent']."</label>";
-            echo "<input type='hidden' id='".$areaname."_linksubc_".$row2['SubCompID']."' name='".$areaname."_linksubc_".$row2['SubCompID']."' value='".$row2['SubLinkID']."'></input>";
-            if($row2['Mode']=="formula")
+            if($row2['Mode']=="user" && $row2['InputModeType'] == "mChoice")
             {
-              echo "<input type='text' id='".$areaname."_fsubc_".$row2['SubCompID']."' name='".$areaname."_fsubc_".$row2['SubCompID']."' ";
-              $sankey_val = '"'.$areaname."_fsubc_".$row2['SubCompID'].'"';
-              echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' "." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'";
+              $hide_label = 'hidden';
             }
             else
             {
-              echo "<input type='text' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
-              $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
-              echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'";
+              $hide_label = '';
             }
+            echo "<label class='scenariaLabel $hide_label'>".$row2['LabelCurrent']."</label>";
+            $subcomp_query = "SELECT * FROM GAME_INPUT WHERE input_user=$userid AND input_sublinkid='".$row2['SubLinkID']."' AND input_key LIKE '%subc_".$row2['SubCompID']."'";
+            // echo $subcomp_query;
+            $query_result = $functionsObj->ExecuteQuery($subcomp_query);
+            if($query_result->num_rows > 0)
+            {
+              $query_result = mysqli_fetch_assoc($query_result);
+              $subcomp_data_id_key  = "class='data_element' data-input_id='".$query_result['input_id']."' data-input_key='".$query_result['input_key']."'";
+            }
+            else
+            {
+              $subcomp_data_id_key = "class='data_element'";
+            }
+            ?>
+            <input type="hidden" <?php echo $subcomp_data_id_key;?> id="<?php echo $areaname.'_linksubc_'.$row2['SubCompID'];?>" name="<?php echo $areaname.'_linksubc_'.$row2['SubCompID'];?>" value="<?php echo $row2['SubLinkID'];?>">
+            <?php
             if($addedit == 'Edit')
             {
               //if(!empty($data[$areaname."_subc_".$row2['SubCompID']])){
@@ -664,29 +699,29 @@ include_once 'includes/header.php';
               {
                 if($row2['RoundOff'] == 0)
                 {
-                  echo " value ='".$data[$areaname."_subc_".$row2['SubCompID']]."'";
+                  $value = $data[$areaname."_subc_".$row2['SubCompID']];
                 }
                 else
                 {
-                  echo " value ='".round($data[$areaname."_subc_".$row2['SubCompID']])."'";
+                  $value = round($data[$areaname."_subc_".$row2['SubCompID']]);
                 }
               }
               elseif($row2['Mode']=="admin")
               {
-                echo " value ='".$row2['AdminCurrent']."' ";
+                $value = $row2['AdminCurrent'];
               }
               elseif($row2['Mode']=="formula")
               {
-                echo " value = 0 ";
+                $value = 0;
               }
             }
             elseif($row2['Mode']=="admin")
             {
-              echo " value ='".$row2['AdminCurrent']."' ";
+              $value = $row2['AdminCurrent'];
             }
             elseif($row2['Mode']=="formula")
             {
-              echo " value = 0 ";
+              $value = 0;
             }
             elseif($row2['Mode']=="carry")
             {
@@ -703,91 +738,146 @@ include_once 'includes/header.php';
               $sqlcurrent     .=  ")";
               $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);
               $rescarry        = $functionsObj->FetchObject($objcarrycurrent);
-              echo " value = ".$rescarry->input_current;
+              $value           = $rescarry->input_current;
 
             }
-                          echo " class='scenariaInput current'  ";  //onChange='showUser(this);'
-                          if ($row2['Mode'] != "user")
-                          {
-                            echo "readonly";
-                          }
-                          else{
-                            echo " required ".$style_text;
-                          }
-                          
-                          echo "></input>";
-                          if ($row2['Mode'] == "formula")
-                          {
-                            echo "<input type='hidden' id='".$areaname."_expsubc_".$row2['SubCompID']."' name='".$areaname."_expsubc_".$row2['SubCompID']."' value='".$row2['exp']."'>";
-                          }
-                          echo "</div>";
-                          echo "<div class='InlineBox ".(($row2['InputFieldOrder']==3)?'hidden':'')."'>";
+            if($row2['Mode']=="formula")
+            {
+              echo "<input type='text' value='".$value."' id='".$areaname."_fsubc_".$row2['SubCompID']."' name='".$areaname."_fsubc_".$row2['SubCompID']."' ";
+              $sankey_val = '"'.$areaname."_fsubc_".$row2['SubCompID'].'"';
+              echo " readonly></input>";
+              // echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' "." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' readonly></input>";
+              echo "<input type='hidden' class='json_expsubc' id='".$areaname."_expsubc_".$row2['SubCompID']."' name='".$areaname."_expsubc_".$row2['SubCompID']."' value='".$row2['exp']."'>";
+            }
+            else
+            {
+              $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
+              if ($row2['Mode']=="user")
+              {
+                if($data[$areaname."_subc_".$row2['SubCompID']])
+                {
+                  $value = $data[$areaname."_subc_".$row2['SubCompID']];
+                }
+                else
+                {
+                  $value = 0;
+                }
+                if($row2['InputModeType']=="range")
+                {
+                  $range                 = explode(',', $row2['InputModeTypeValue']);
+                  $SubLink_MinVal        = $range['0'];
+                  $SubLink_MaxVal        = $range['1'];
+                  $SubLink_RangeInterval = $range['2'];
+                  $type                  = "type='range' min='".$SubLink_MinVal."' max='".$SubLink_MaxVal."' step='".$SubLink_RangeInterval."'";
+
+
+                  echo "<input value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required $type ";
+
+                  echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
+                  ?>
+                  <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%;"></span>
+                  <?php
+                }
+                elseif($row2['InputModeType']=="mChoice")
+                {
+                  $mChoice_details = json_decode($row2['InputModeTypeValue'],TRUE);
+                  echo "<div class='row text-center'>".$mChoice_details['question']."</div>";
+                  array_shift($mChoice_details);
+                  ?>
+                  <div class="row">
+                    <?php
+                    foreach ($mChoice_details as $wrow => $wrow_value)
+                    {
+                      echo "<div class='radio-inline col-md-4 align_radio'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
+                      echo (($value == $wrow_value)?'checked':'');
+                      echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input><label>".$wrow."</label></div>";
+                    } ?>
+                  </div>
+                <?php }
+                else
+                {
+                  echo "<input type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
+                  echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
+                }
+              }
+              else
+              {
+                echo "<input type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
+                $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
+                echo " readonly></input>";
+                // echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' readonly></input>";
+              }
+            }
+            ?>
+          </div>
+          <?php
+          echo "<div class='InlineBox ".(($row2['InputFieldOrder']==3)?'hidden':'')."'>";
                           //echo "<label class='scenariaLabel'>Last</label>";
-                          echo "<label class='scenariaLabel'>".$row2['LabelLast']."</label>";
-                          $sqllast = "SELECT * FROM `GAME_INPUT`
-                          WHERE input_user=".$userid." AND input_sublinkid = 
-                          (SELECT ls.SubLink_ID
-                          FROM GAME_LINKAGE_SUB ls 
-                          WHERE SubLink_SubCompID = ".$row2['SubCompID']." AND SubLink_CompID=".$row2['CompID']." 
-                          AND ls.SubLink_LinkID =
-                          (
-                          SELECT Link_ID FROM `GAME_LINKAGE`
-                          WHERE Link_GameID=".$row2['GameID']." AND Link_ScenarioID != ".$row2['ScenID']."
-                          AND Link_Order < ".$row2['Order']." 
-                          ORDER BY Link_Order DESC LIMIT 1))";
+          echo "<label class='scenariaLabel'>".$row2['LabelLast']."</label>";
+          $sqllast = "SELECT * FROM `GAME_INPUT`
+          WHERE input_user=".$userid." AND input_sublinkid = 
+          (SELECT ls.SubLink_ID
+          FROM GAME_LINKAGE_SUB ls 
+          WHERE SubLink_SubCompID = ".$row2['SubCompID']." AND SubLink_CompID=".$row2['CompID']." 
+          AND ls.SubLink_LinkID =
+          (
+          SELECT Link_ID FROM `GAME_LINKAGE`
+          WHERE Link_GameID=".$row2['GameID']." AND Link_ScenarioID != ".$row2['ScenID']."
+          AND Link_Order < ".$row2['Order']." 
+          ORDER BY Link_Order DESC LIMIT 1))";
                               //echo $sqllast;
-                          echo "<input type='text' class='scenariaInput' ";
-                          if($row2['Mode']=="admin"){
-                            echo " value ='".$row2['AdminLast']."' ";                         
-                          }
-                          else{
+          echo "<input type='text' class='scenariaInput' ";
+          if($row2['Mode']=="admin"){
+            echo " value ='".$row2['AdminLast']."' ";                         
+          }
+          else{
 
-                            $objlast = $functionsObj->ExecuteQuery($sqllast);
-                            $reslast = $functionsObj->FetchObject($objlast);
-                            echo " value ='".$reslast->input_current."' ";
-                          }
-                          echo " readonly></input>";
+            $objlast = $functionsObj->ExecuteQuery($sqllast);
+            $reslast = $functionsObj->FetchObject($objlast);
+            echo " value ='".$reslast->input_current."' ";
+          }
+          echo " readonly></input>";
                           //echo "<input type='text' class='scenariaInput' readonly></input>";
-                          echo "</div>";
-                          echo "</div>";
+          echo "</div>";
+          echo "</div>";
 
-                          echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row2['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
+          echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row2['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
 
 
-                          echo "</div>";
-                        }
+          echo "</div>";
+        }
                          // writing this to show only for alignmenet of viewing order to show component name in middle
 
-                        if($row2['ViewingOrder'] == 6)
-                        {
-                          echo "<div class='col-sm-1 col-md-2 regular'>";
-                          echo $row2['SubComp_Name'];
-                          echo "</div>";
-                        }
+        if($row2['ViewingOrder'] == 6)
+        {
+          echo "<div class='col-sm-1 col-md-2 regular'>";
+          echo $row2['SubComp_Name'];
+          echo "</div>";
+        }
 
-                        echo "<div class='clearfix'></div>";
+        echo "<div class='clearfix'></div>";
 
-                        echo "</div>";
+        echo "</div>";
 
-                      }
-                      echo "</div>";  
+      }
+      echo "</div>";  
                 //}
                 //else{
 
                 //}
 
-                    }
+    }
                 //echo "</form>";
                 //<!--scenariaListingDiv-->
-                    echo "</div>";
+    echo "</div>";
 
-                  }
-                  ?>              
-                </form>
-              </div>
-            </div> <!--tab content -->
-            <div class="clearix"></div>
-          </div>
+  }
+  ?>              
+</form>
+</div>
+</div> <!--tab content -->
+<div class="clearix"></div>
+</div>
       <!--
         <div class="col-sm-12 text-right">
         <?php if($addedit=="Add") { ?>
@@ -850,9 +940,10 @@ include_once 'includes/header.php';
   <script type="text/javascript">
     setTimeout(function()
     {
-
-  //$('#save_input').click( function(){ 
-    //$("#save_input").attr('disabled',true);
+      // $('#execute_input').trigger('click');
+      // return false;
+      //$('#save_input').click( function(){ 
+      //$("#save_input").attr('disabled',true);
     var ref_tab = $("ul.nav-tabs li.active a").text(); //active tab slect
     var form    = $('#game_frm').get(0);
     $.ajax({
@@ -873,6 +964,8 @@ include_once 'includes/header.php';
           var response = JSON.parse( result );
           if( response.status == 1 ){
             //alert(response.msg);
+            $('#execute_input').trigger('click');
+            return false;
             alert('Your time has started. All the best!');
             window.location = "input.php?ID="+<?php echo $gameid; ?> +"&tab="+ref_tab;              
             
@@ -909,18 +1002,24 @@ include_once 'includes/header.php';
   {
     $(".closeSave").hide();
     $('#SaveInput_'+sublinkid).show();
-
     //$('#SaveInput_'+sublinkid).click('onclick="alert('+ sublinkid,key,value +')"');
     $('#SaveInput_'+sublinkid).attr('onclick','return SaveCurrent("'+sublinkid+'","'+key+'")');
-    
   }
-  
   
   function SaveCurrent(sublinkid,key)
   {
     //alert(key);
-    value = $("#"+key).val();
-    
+    start_time  = new Date();
+    if($('#'+key).parent('div').hasClass('radio-inline'))
+    {
+      value = $("input[name='"+key+"']:checked").val();
+      console.log(value);
+    }
+    else
+    {
+      value       = $("#"+key).val();
+    }
+
     var ref_tab = $("ul.nav-tabs li.active a").text(); //active tab slect
     $.ajax({
       type: "POST",
@@ -930,22 +1029,26 @@ include_once 'includes/header.php';
         $("#input_loader").html("<img src='images/loading.gif' height='30'> Inputs being updated, please wait.");
       },
       success: function(result) 
-      { //alert(result);
+      {
+        //alert(result);
         if(result.trim() == 'Yes')
         {
           //$('#step3').hide();
+          var save_button_id = "SaveInput_"+sublinkid;
+          $('#'+save_button_id).hide();
           $('#thanks').show();
-          alert('Inputs updated successfully.');
           $("#input_loader").html('');
-          $(".closeSave").hide();
-            //window.location = "input.php?ID="+<?php echo $gameid; ?> +"&tab="+ref_tab;
-          }
-
+          update_json_data(save_button_id,key,formula_json_expcomp,formula_json_expsubc,input_field_values);
+          // $(".closeSave").hide();
+          //window.location = "input.php?ID="+<?php // echo $gameid; ?> +"&tab="+ref_tab;
         }
-      });
-    
+        else
+        {
+          alert('Connection problem, Please try later.');
+        }
+      }
+    });
   }
-  
   
   $('#execute_input').click( function()
   {
@@ -962,7 +1065,7 @@ include_once 'includes/header.php';
         contentType: false,
         beforeSend: function(){
           //alert("beforeSend");
-          $("#input_loader").html("<img src='images/loading.gif' height='30'> Formulas being executed, please wait.");
+          $("#input_loader").html("<img src='images/loading.gif' height='30'> Saving inputs, please wait.");
           $('#loader').addClass( 'loader' );
         },
         success: function( result ){
@@ -971,7 +1074,7 @@ include_once 'includes/header.php';
             var response = JSON.parse( result );
             if( response.status == 1 ){
               //alert(response.msg);
-              alert('Formulas executed successfully.');
+              alert('Saved successfully.');
               window.location = "input.php?ID="+<?php echo $gameid; ?>+"&tab="+ref_tab;
               //$('#Modal_Success').modal('show', { backdrop: "static" } );
             } else {
@@ -983,6 +1086,7 @@ include_once 'includes/header.php';
             alert(e + "\n" + result);
             alert('Formulas could not be executed, please try again.');
             console.log( e + "\n" + result );
+            window.location = "input.php?ID="+<?php echo $gameid; ?>+"&tab="+ref_tab;
             $("#execute_input").attr('disabled',false);
             $("#input_loader").html('');
           }         
@@ -991,42 +1095,46 @@ include_once 'includes/header.php';
         error: function(jqXHR, exception){
           alert('error'+ jqXHR.status +" - "+exception);
           alert('Formulas could not be executed, please try again.');
+          window.location = "input.php?ID="+<?php echo $gameid; ?>+"&tab="+ref_tab;
           $("#execute_input").attr('disabled',false);
           $("#input_loader").html('');
         }
       });
     });
-  
-  
-  </script>
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12 text-center">
-          <span> </span>
-        </div>
+
+  // writing code for execute 2 button start here
+  $('#execute_input_2').click( function()
+  {
+    //
+  });
+  //  execute 2 button code ends here
+
+</script>
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <span> </span>
       </div>
     </div>
-  </footer>
-  <script src="js/jquery.min.js"></script>  
-  <script src="js/bootstrap.min.js"></script>   
-  <script src="js/function.js"></script>  
-  <script type="text/javascript">
-    <?php
-    $sql_timer    = "SELECT timer FROM `GAME_LINKAGE_TIMER` WHERE linkid= ".$linkid." and userid = ".$userid;
-    $objsql_timer = $functionsObj->ExecuteQuery($sql_timer);  
-    if($objsql_timer->num_rows > 0) 
-    {
-
-      $ressql_timer = $functionsObj->FetchObject($objsql_timer);
-      $min          = $ressql_timer->timer; 
-
+  </div>
+</footer>
+<script src="js/jquery.min.js"></script>  
+<script src="js/bootstrap.min.js"></script>   
+<script src="js/function.js"></script>  
+<script type="text/javascript">
+  <?php
+  $sql_timer    = "SELECT timer FROM `GAME_LINKAGE_TIMER` WHERE linkid= ".$linkid." and userid = ".$userid;
+  $objsql_timer = $functionsObj->ExecuteQuery($sql_timer);  
+  if($objsql_timer->num_rows > 0) 
+  {
+    $ressql_timer = $functionsObj->FetchObject($objsql_timer);
+    $min          = $ressql_timer->timer; 
     /* echo "if (".$linkid." == getCookie('linkid')){} else {";
     echo "setCookie('linkid',".$linkid.",10);";
     echo "setCookie('minutes',".$min.",10);";
     //echo "setCookie('seconds',".$linkid.",10);";
     echo "}"; */
-    
     if($min > 0)
     {
       echo "countdown(".$linkid.",".$userid.",".$min.",true);";
@@ -1034,7 +1142,6 @@ include_once 'includes/header.php';
   }
   else
   {
-
     $sql    = "SELECT Link_Hour,Link_Min FROM `GAME_LINKAGE` WHERE Link_ID= ".$linkid;
     $objsql = $functionsObj->ExecuteQuery($sql);
     $ressql = $functionsObj->FetchObject($objsql);
@@ -1046,11 +1153,417 @@ include_once 'includes/header.php';
     echo "setCookie('minutes',".$min.",10);";
     //echo "setCookie('seconds',".$linkid.",10);";
     echo "}"; */
-    
     echo "countdown(".$linkid.",".$userid.",".$min.",true);";
   }
-
   ?>
+  $('input[type=range]').on('change',function(){
+    var range_value = $(this).val();
+    // console.log($(this).parent().attr('class') + ' and ' + range_value);
+    $(this).parent('div.InlineBox').find('span.range').text(range_value);
+  });
+
+  $('.range').each(function(i,e){
+    if($(e).parent().find('input[type=range]'))
+    {
+      $(e).text($(e).parent().find('input[type=range]').val());
+    }
+  });
+
+  // if($('.range').parent().find('input[type=range]')){
+  //   $(this).text($(this).parent().find('input[type=range]').val())
+  // }
+  $(document).ready(function(){
+    formula_json_expcomp = {};
+    formula_json_expsubc = {};
+    input_field_values   = {};
+    input_field_keys     = {};
+    create_json_input_field();
+    create_json_input_field_keys();
+    create_json_expsubc_onload();
+    create_json_expcomp_onload();
+    // console.log(formula_json_expcomp);
+    // console.log(formula_json_expsubc);
+    // console.log(input_field_values);
+    // console.log(input_field_keys);
+  });
+  function create_json_input_field_keys(key)
+  {
+    // comp,expcomp,fcomp and subc,expsubc,fsubc
+    $('input[type="hidden"]').each(function(i,e){
+      var value = $(this).val();
+      // console.log($(this).attr('id'));
+      // console.log(value);
+      if(($(this).attr('id')).indexOf('link') != -1)
+      {
+        var key_key = $(this).attr('id').split('_');
+        input_field_keys[key_key[1]+'_'+key_key[2]] = $(this).attr('id');
+      }
+    });
+    // console.log(input_field_keys);
+  }
+  function create_json_expcomp_onload()
+  {
+    $('.json_expcomp').each(function(index, el) 
+    {
+      var id         = $(el).attr('id');
+      var str        = id.split('_');
+      var expression = $(el).val().split(' ');
+      $(expression).each(function(i,e)
+      {
+        if((expression[i]).indexOf('comp') != -1)
+        {
+          // finding wheather it is depending to any other comp or subcomp
+          if($('#'+str[0]+'_link'+expression[i]).parent('div').find('input.json_expcomp').length > 0)
+          {
+            expression[i] = find_function_expression(str[0]+'_exp'+expression[i]);
+          }
+          else
+          {
+            // find wheater this component or subcomponent exist or not
+            if($('#'+str[0]+'_'+expression[i]).length > 0)
+            {
+              expression[i] = str[0]+'_'+expression[i];
+            }
+            else
+            {
+              // trigger ajax if that component or subcomponent doesn't exist
+              var new_id = element_not_found(expression[i]);
+              new_id     = new_id.split('_');
+              if($('#'+new_id[0]+'_link'+new_id[1]+'_'+new_id[2]).parent('div').find('input.json_expcomp').length > 0)
+              {
+                expression[i] = find_function_expression(new_id[0]+'_exp'+new_id[1]+'_'+new_id[2]);
+              }
+              else
+              {
+                expression[i] = new_id.join('_');
+              }
+            }
+          }
+        }
+        else if((expression[i]).indexOf('subc') != -1)
+        {
+          // finding wheather it is depending to any other comp or subcomp
+          if($('#'+str[0]+'_link'+expression[i]).parent('div').find('input.json_expsubc').length > 0)
+          {
+            expression[i] = find_function_expression(str[0]+'_exp'+expression[i]);
+          }
+          else
+          {
+            // find wheater this component or subcomponent exist or not
+            if($('#'+str[0]+'_'+expression[i]).length > 0)
+            {
+              expression[i] = str[0]+'_'+expression[i];
+            }
+            else
+            {
+              // trigger ajax if that component or subcomponent doesn't exist
+              var new_id = element_not_found(expression[i]);
+              new_id     = new_id.split('_');
+              if($('#'+new_id[0]+'_link'+new_id[1]+'_'+new_id[2]).parent('div').find('input.json_expsubc').length > 0)
+              {
+                expression[i] = find_function_expression(new_id[0]+'_exp'+new_id[1]+'_'+new_id[2]);
+              }
+              else
+              {
+                expression[i] = new_id.join('_');
+              }
+            }
+          }
+        }
+        else
+        {
+          expression[i] = expression[i];
+        }
+      });
+      formula_json_expcomp[str[0]+'_fcomp_'+str[2]] = expression.join(' ');
+    });
+  }
+
+  function create_json_expsubc_onload()
+  {
+    $('.json_expsubc').each(function(index, el) 
+    {
+      var id         = $(el).attr('id');
+      var str        = id.split('_');
+      var expression = $(el).val().split(' ');
+      $(expression).each(function(i,e)
+      {
+        if((expression[i]).indexOf('comp') != -1)
+        {
+          // finding wheather it is depending to any other comp or subcomp
+          if($('#'+str[0]+'_link'+expression[i]).parent('div').find('input.json_expcomp').length > 0)
+          {
+            expression[i] = find_function_expression(str[0]+'_exp'+expression[i]);
+          }
+          else
+          {
+            // find wheater this component or subcomponent exist or not
+            if($('#'+str[0]+'_'+expression[i]).length > 0)
+            {
+              expression[i] = str[0]+'_'+expression[i];
+            }
+            else
+            {
+              // trigger ajax if that component or subcomponent doesn't exist
+              var new_id = element_not_found(expression[i]);
+              new_id     = new_id.split('_');
+              if($('#'+new_id[0]+'_link'+new_id[1]+'_'+new_id[2]).parent('div').find('input.json_expcomp').length > 0)
+              {
+                expression[i] = find_function_expression(new_id[0]+'_exp'+new_id[1]+'_'+new_id[2]);
+              }
+              else
+              {
+                expression[i] = new_id.join('_');
+              }
+            }
+          }
+        }
+        else if((expression[i]).indexOf('subc') != -1)
+        {
+          // finding wheather it is depending to any other comp or subcomp
+          if($('#'+str[0]+'_link'+expression[i]).parent('div').find('input.json_expsubc').length > 0)
+          {
+            expression[i] = find_function_expression(str[0]+'_exp'+expression[i]);
+          }
+          else
+          {
+            // find wheater this component or subcomponent exist or not
+            if($('#'+str[0]+'_'+expression[i]).length > 0)
+            {
+              expression[i] = str[0]+'_'+expression[i];
+            }
+            else
+            {
+              // trigger ajax if that component or subcomponent doesn't exist
+              var new_id = element_not_found(expression[i]);
+              new_id     = new_id.split('_');
+              if($('#'+new_id[0]+'_link'+new_id[1]+'_'+new_id[2]).parent('div').find('input.json_expsubc').length > 0)
+              {
+                expression[i] = find_function_expression(new_id[0]+'_exp'+new_id[1]+'_'+new_id[2]);
+              }
+              else
+              {
+                expression[i] = new_id.join('_');
+              }
+            }
+          }
+        }
+        else
+        {
+          expression[i] = expression[i];
+        }
+      });
+      formula_json_expsubc[str[0]+'_fsubc_'+str[2]] = expression.join(' ');
+    });
+  }
+
+  function find_function_expression(id)
+  {
+    // getting id like expcomp or expsubc and exp is the last part of id like subc_123, comp_232
+    var formula_expansion = new Array();
+    var str               = id.split('_');
+    var expression        = $('#'+id).val().split(' ');
+    $(expression).each(function(i,e)
+    {
+      if((expression[i]).indexOf('comp') != -1)
+      {
+        if($('#'+str[0]+'_link'+expression[i]).parent('div').find('input.json_expcomp').length > 0)
+        {
+          expression[i] = find_function_expression(str[0]+'_exp'+expression[i]);
+        }
+        else
+        {
+          // find wheater this component or subcomponent exist or not
+          if($('#'+str[0]+'_'+expression[i]).length > 0)
+          {
+            expression[i] = str[0]+'_'+expression[i];
+          }
+          else
+          {
+            // trigger ajax if that component or subcomponent doesn't exist
+            var new_id = element_not_found(expression[i]);
+            new_id     = new_id.split('_');
+            if($('#'+new_id[0]+'_link'+new_id[1]+'_'+new_id[2]).parent('div').find('input.json_expcomp').length > 0)
+            {
+              expression[i] = find_function_expression(new_id[0]+'_exp'+new_id[1]+'_'+new_id[2]);
+            }
+            else
+            {
+              expression[i] = new_id.join('_');
+            }
+          }
+        }
+      }
+      else if((expression[i]).indexOf('subc') != -1)
+      {
+        if($('#'+str[0]+'_link'+expression[i]).parent('div').find('input.json_expsubc').length > 0)
+        {
+          expression[i] = find_function_expression(str[0]+'_exp'+expression[i]);
+        }
+        else
+        {
+          // find wheater this component or subcomponent exist or not
+          if($('#'+str[0]+'_'+expression[i]).length > 0)
+          {
+            expression[i] = str[0]+'_'+expression[i];
+          }
+          else
+          {
+            // trigger ajax if that component or subcomponent doesn't exist
+            var new_id = element_not_found(expression[i]);
+            new_id     = new_id.split('_');
+            // console.log(new_id[0]+'_link'+new_id[1]+'_'+new_id[2]);
+            if($('#'+new_id[0]+'_link'+new_id[1]+'_'+new_id[2]).parent('div').find('input.json_expsubc').length > 0)
+            {
+              expression[i] = find_function_expression(new_id[0]+'_exp'+new_id[1]+'_'+new_id[2]);
+            }
+            else
+            {
+              expression[i] = new_id.join('_');
+            }
+          }
+        }
+      }
+      else
+      {
+        expression[i] = expression[i];
+      }
+    });
+    // formula_expansion.push(expression);
+    expression.unshift('(');
+    expression.push(')');
+    expression_string = expression.join(' ');
+    return expression_string;
+  }
+
+  function element_not_found(key)
+  {
+    var exp       = '';
+    var find      = 'link'+key;
+    var ret_value = input_field_keys[find].split('_');
+    return ret_value[0]+'_'+key;
+    // trigger ajax if that component or subcomponent doesn't exist
+    // $.ajax({
+    //   type : "POST",
+    //   url  : "includes/ajax/ajax_update_execute_input.php",
+    //   async: false,
+    //   data : '&action=element_not_found&key='+key,
+    //   success: function(result) 
+    //   {
+    //     if(result != 'no')
+    //     {
+    //       // console.log(result);
+    //       var result = result.split(',');
+    //       exp        = result[1];  // normal exp
+    //       // var id      = result[0];  // linkcomp or linksubc
+    //       // var tmp     = exp.split('_');
+    //       // var tmp_key = tmp[1]+'_'+tmp[2]; // subc_125
+    //       // console.log(exp);
+    //     }
+    //   }
+    // });
+    // console.log(input_field_keys[find]);
+    // return exp;
+  }
+  function create_json_input_field()
+  {
+    $('input').each(function(i,e){
+      if($(e).attr('required') || $(e).attr('readonly'))
+      {
+        if($(this).attr('id'))
+        {
+          // console.log($(this).attr('id'));
+          // input_field_values[$(this).attr('id')] = $(this).val();
+          // // console.log($(this).prev().attr('id'));
+          var value        = $(this).val();
+          var data_element = $(this).parent('div.InlineBox').find('input.data_element');
+          var sublink_id   = data_element.val();
+          var genenrate_id = $(this).attr('id').split('_');
+
+          if(data_element.attr('data-input_key') || data_element.attr('data-input_id'))
+          {
+            var key_input = data_element.attr('data-input_key');
+            var id_input  = data_element.attr('data-input_id');
+          }
+          else
+          {
+            if(genenrate_id[1].indexOf('comp') != -1)
+            {
+              var key_input = genenrate_id[0]+'_comp_'+genenrate_id[2];
+              var id_input  = 0;
+            }
+            if(genenrate_id[1].indexOf('subc') != -1)
+            {
+              var key_input = genenrate_id[0]+'_subc_'+genenrate_id[2];
+              var id_input  = 0;
+            }
+          }
+
+          input_field_values[$(this).attr('id')] = {
+            values         :value,
+            input_id       :id_input,
+            input_sublinkid:sublink_id,
+            input_key      :key_input,
+          };
+        }
+      }
+    });
+    // console.log(input_field_values);
+  }
+
+
+  function update_json_data(id,key,formula_json_expcomp,formula_json_expsubc,input_field_values)
+  {
+    // console.log($('#'+key).val());
+    $.each(input_field_values, function (index, val) {
+      if(index == key)
+      {
+        input_field_values[index].values = $('#'+key).val();
+      }
+    });
+
+    $.ajax({
+      // contentType: "application/json; charset=utf-8",
+      type    : "POST",
+      dataType: "json",
+      data    :{'action':'updateFormula',formula_json_expcomp:formula_json_expcomp,formula_json_expsubc:formula_json_expsubc,input_field_values:input_field_values},
+      // data    :{'action':'updateFormula',formula_json_expcomp:formula_json_expcomp},
+      url     : "includes/ajax/ajax_update_execute_input.php",
+      // data       : '&action=updateFormula&formula_json_expcomp='+formula_expcomp+'&formula_json_expsubc='+formusubc+'&input_field_values='+input_values,
+      beforeSend: function() {
+        $("#input_loader").html("<img src='images/loading.gif' height='30'> Executing Formula, please wait.");
+      },
+      success: function(result) 
+      {
+        if(result != 'no')
+        {
+          $.each(result, function (index, val){
+            input_field_values[index].values   = result[index].values;
+            input_field_values[index].input_id = result[index].input_id;
+            // console.log(parseFloat(result[index].values).toFixed(2));
+            // $('#'+index).val(parseFloat(result[index].values).toFixed(2));
+            $('#'+index).val(parseInt(result[index].values));
+            // input_field_values[index] = result[index];
+          });
+          end_time   = new Date();
+          final_time = (start_time.getTime() - end_time.getTime())/1000;
+          $("#"+id).show();
+          $("#input_loader").html('');
+          alert('Saved Successfully.');
+          // $(".closeSave").hide();
+          // console.log(input_field_values);
+        }
+      },
+      error: function(jqXHR, exception){
+        {
+          alert(jqXHR.responseText);
+          // console.log(exception);
+          $("#"+id).show();
+          $("#input_loader").html('');
+        }
+      }
+    });
+  }
 </script>
 </body>
 </html>

@@ -373,6 +373,9 @@ include_once 'includes/header.php';
                       echo "<input value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required $type $style_text ";
 
                       echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>";
+                      ?>
+                      <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%;"></span>
+                      <?php
                     }
 
                     elseif($row1['InputModeType'] == "mChoice")
@@ -437,7 +440,7 @@ include_once 'includes/header.php';
                 echo "</div>";
                 echo "</div>";
 
-                echo "<span class='range' style='position: absolute; background:#009aef; color:#ffffff'></span> ".'<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row1['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
+                echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row1['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
 
                 echo "</div>";
               }
@@ -626,9 +629,9 @@ include_once 'includes/header.php';
                 var data = google.visualization.arrayToDataTable([
                   ['Components', 'Inputs'],
                 //     [role:  domain,   data,       data,      data,   domain,   data,     data],    --  hint for cols
-                <?php foreach($dataChart as $keyChart=>$valChart) { ?>
+                <?php if(count($dataChart) > 0) { foreach($dataChart as $keyChart=>$valChart) { ?>
                   ['<?=$keyChart?>',<?=$valChart?>],
-                <?php }?>
+                <?php } }?>
                 ]);
                 
                 var options = {
@@ -751,6 +754,14 @@ include_once 'includes/header.php';
               $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
               if ($row2['Mode']=="user")
               {
+                if($data[$areaname."_subc_".$row2['SubCompID']])
+                {
+                  $value = $data[$areaname."_subc_".$row2['SubCompID']];
+                }
+                else
+                {
+                  $value = 0;
+                }
                 if($row2['InputModeType']=="range")
                 {
                   $range                 = explode(',', $row2['InputModeTypeValue']);
@@ -760,9 +771,12 @@ include_once 'includes/header.php';
                   $type                  = "type='range' min='".$SubLink_MinVal."' max='".$SubLink_MaxVal."' step='".$SubLink_RangeInterval."'";
 
 
-                  echo "<input value='".$value."' id='".$areaname."_subc_".$row2['CompID']."' name='".$areaname."_subc_".$row2['CompID']."' required $type ";
+                  echo "<input value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required $type ";
 
                   echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
+                  ?>
+                  <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%;"></span>
+                  <?php
                 }
                 elseif($row2['InputModeType']=="mChoice")
                 {
@@ -774,7 +788,7 @@ include_once 'includes/header.php';
                     <?php
                     foreach ($mChoice_details as $wrow => $wrow_value)
                     {
-                      echo "<div class='radio-inline col-md-4 align_radio'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['CompID']."' name='".$areaname."_subc_".$row2['CompID']."' required ";
+                      echo "<div class='radio-inline col-md-4 align_radio'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
                       echo (($value == $wrow_value)?'checked':'');
                       echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input><label>".$wrow."</label></div>";
                     } ?>
@@ -827,7 +841,7 @@ include_once 'includes/header.php';
           echo "</div>";
           echo "</div>";
 
-          echo "<span class='range' style='position: absolute; background:#009aef; color:#ffffff'></span> ".'<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row2['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
+          echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row2['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
 
 
           echo "</div>";
@@ -926,9 +940,10 @@ include_once 'includes/header.php';
   <script type="text/javascript">
     setTimeout(function()
     {
-
-  //$('#save_input').click( function(){ 
-    //$("#save_input").attr('disabled',true);
+      // $('#execute_input').trigger('click');
+      // return false;
+      //$('#save_input').click( function(){ 
+      //$("#save_input").attr('disabled',true);
     var ref_tab = $("ul.nav-tabs li.active a").text(); //active tab slect
     var form    = $('#game_frm').get(0);
     $.ajax({
@@ -950,6 +965,7 @@ include_once 'includes/header.php';
           if( response.status == 1 ){
             //alert(response.msg);
             $('#execute_input').trigger('click');
+            return false;
             alert('Your time has started. All the best!');
             window.location = "input.php?ID="+<?php echo $gameid; ?> +"&tab="+ref_tab;              
             
@@ -1061,6 +1077,7 @@ include_once 'includes/header.php';
             alert(e + "\n" + result);
             alert('Formulas could not be executed, please try again.');
             console.log( e + "\n" + result );
+            window.location = "input.php?ID="+<?php echo $gameid; ?>+"&tab="+ref_tab;
             $("#execute_input").attr('disabled',false);
             $("#input_loader").html('');
           }         
@@ -1069,6 +1086,7 @@ include_once 'includes/header.php';
         error: function(jqXHR, exception){
           alert('error'+ jqXHR.status +" - "+exception);
           alert('Formulas could not be executed, please try again.');
+          window.location = "input.php?ID="+<?php echo $gameid; ?>+"&tab="+ref_tab;
           $("#execute_input").attr('disabled',false);
           $("#input_loader").html('');
         }
@@ -1132,7 +1150,7 @@ include_once 'includes/header.php';
   $('input[type=range]').on('change',function(){
     var range_value = $(this).val();
     // console.log($(this).parent().attr('class') + ' and ' + range_value);
-    $(this).parent().parent().next().text(range_value);
+    $(this).parent('div.InlineBox').find('span.range').text(range_value);
   });
 
   $('.range').each(function(i,e){
@@ -1452,21 +1470,23 @@ include_once 'includes/header.php';
           var data_element = $(this).parent('div.InlineBox').find('input.data_element');
           var sublink_id   = data_element.val();
           var genenrate_id = $(this).attr('id').split('_');
-          var id_input     = data_element.attr('data-input_id');
 
-          if(data_element.attr('data-input_key'))
+          if(data_element.attr('data-input_key') || data_element.attr('data-input_id'))
           {
-            var key_input    = data_element.attr('data-input_key');
+            var key_input = data_element.attr('data-input_key');
+            var id_input  = data_element.attr('data-input_id');
           }
           else
           {
             if(genenrate_id[1].indexOf('comp') != -1)
             {
               var key_input = genenrate_id[0]+'_comp_'+genenrate_id[2];
+              var id_input  = 0;
             }
             if(genenrate_id[1].indexOf('subc') != -1)
             {
               var key_input = genenrate_id[0]+'_subc_'+genenrate_id[2];
+              var id_input  = 0;
             }
           }
 
