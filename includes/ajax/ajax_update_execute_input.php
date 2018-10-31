@@ -198,7 +198,6 @@ if($_POST['action']=='updateFormula')
 				}
 			}
 		}
-
 	}
 	
 // print_r($input_field_values); exit;
