@@ -550,7 +550,7 @@ $(document).ready(function(){
 										<input name="option_value[]" id="option_value[]" type="text" value="<?php echo $options_value;?>" class="form-control" placeholder="Enter Value">
 									</div>
 									<div class="form-group col-md-3">
-										<button class="btn-primary" type="button" id="add_options" title="Add Options">+</button>
+										<button class="btn-primary" type="button" id="add_options" title="Add Options" style="margin-top: 16%;">+</button>
 									</div>
 									<?php if(count($option) > 1 && count($option_value) > 1){
 										for($i=1; $i < count($option); $i++) { ?>
@@ -566,15 +566,15 @@ $(document).ready(function(){
 								<div class="row">
 									<!-- <div class="col-md-12 <?php echo ($linkdetails->SubLink_InputModeType == 'range')?'':'hidden'; ?>" id="range" onchange="label_choice(this.value)"><br> -->
 										<div class="col-md-12 <?php echo ($linkdetails->SubLink_InputModeType == 'range')?'':'hidden'; ?>" id="range">
-											<div class="form-group col-md-4">
+											<div class="form-group col-md-2">
 												<label for="Min Value">Min:</label>
 												<input name="SubLink_MinVal" id="SubLink_MinVal" type="number" value="<?php echo ($SubLink_MinVal)?$SubLink_MinVal:'0';?>" class="form-control" placeholder="Enter Min Range">
 											</div>
-											<div class="form-group col-md-4">
+											<div class="form-group col-md-2">
 												<label for="Max Value">Max:</label>
 												<input name="SubLink_MaxVal" id="SubLink_MaxVal" type="number" value="<?php echo ($SubLink_MaxVal)?$SubLink_MaxVal:'0';?>" class="form-control" placeholder="Enter Min Range">
 											</div>
-											<div class="form-group col-md-4">
+											<div class="form-group col-md-2">
 												<label for="Interval Value">Interval:</label>
 												<input name="SubLink_RangeInterval" id="SubLink_RangeInterval" type="number" value="<?php echo ($SubLink_RangeInterval)?$SubLink_RangeInterval:'0';?>" class="form-control" placeholder="Enter Interval">
 											</div>
