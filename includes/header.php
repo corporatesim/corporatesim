@@ -18,78 +18,78 @@
 
 
 	.dbl-spinner {
-		margin: 20% 0 0 50%;
-		position: absolute;
-		width: 75px;
-		height: 75px;
-		border-radius: 50%;
-		background-color: transparent;
-		border: 4px solid transparent;
-		border-top: 4px solid #222;
-		border-left: 4px solid #222;
+		margin           : 20% 0 0 50%;
+		position         : absolute;
+		width            : 75px;
+		height           : 75px;
+		border-radius    : 50%;
+		background-color : transparent;
+		border           : 4px solid transparent;
+		border-top       : 4px solid #222;
+		border-left      : 4px solid #222;
 		-webkit-animation: 2s spin linear infinite;
-		animation: 2s spin linear infinite;
+		animation        : 2s spin linear infinite;
 	}
 
 	.dbl-spinner:nth-child(2) {
-		border: 4px solid transparent;
-		border-right: 4px solid #03A9F4;
-		border-bottom: 4px solid #03A9F4;
+		border           : 4px solid transparent;
+		border-right     : 4px solid #03A9F4;
+		border-bottom    : 4px solid #03A9F4;
 		-webkit-animation: 1s spin linear infinite;
-		animation: 1s spin linear infinite;
+		animation        : 1s spin linear infinite;
 	}
 
 	@-webkit-keyframes spin {
 		from {
 			-webkit-transform: rotate(0deg);
-			transform: rotate(0deg);
+			transform        : rotate(0deg);
 		}
 		to {
 			-webkit-transform: rotate(360deg);
-			transform: rotate(360deg);
+			transform        : rotate(360deg);
 		}
 	}
 
 	@keyframes spin {
 		from {
 			-webkit-transform: rotate(0deg);
-			transform: rotate(0deg);
+			transform        : rotate(0deg);
 		}
 		to {
 			-webkit-transform: rotate(360deg);
-			transform: rotate(360deg);
+			transform        : rotate(360deg);
 		}
 	}
 
 
 	/*css for overlay div*/
 	.overlay {
-		height: 100%;
-		width: 100%;
-		display: none;
-		position: fixed;
-		z-index: 1;
-		top: 0;
-		left: 0;
+		height          : 100%;
+		width           : 100%;
+		display         : none;
+		position        : fixed;
+		z-index         : 1;
+		top             : 0;
+		left            : 0;
 		background-color: rgb(0,0,0);
 		background-color: rgba(0,0,0, 0.9);
 	}
 
 	.overlay-content {
-		position: relative;
-		top: 25%;
-		width: 100%;
+		position  : relative;
+		top       : 25%;
+		width     : 100%;
 		text-align: center;
 		margin-top: 30px;
 	}
 
 	.overlay span {
-		padding: 8px;
+		padding        : 8px;
 		text-decoration: none;
-		font-size: 36px;
-		color: #818181;
-		display: block;
-		transition: 0.3s;
+		font-size      : 36px;
+		color          : #818181;
+		display        : block;
+		transition     : 0.3s;
 	}
 
 	.overlay span:hover, .overlay span:focus {
@@ -97,9 +97,9 @@
 	}
 
 	.overlay .closebtn {
-		position: absolute;
-		top: 20px;
-		right: 45px;
+		position : absolute;
+		top      : 20px;
+		right    : 45px;
 		font-size: 60px;
 	}
 
@@ -107,8 +107,8 @@
 		.overlay span {font-size: 20px}
 		.overlay .closebtn {
 			font-size: 40px;
-			top: 15px;
-			right: 35px;
+			top      : 15px;
+			right    : 35px;
 		}
 	}
 </style>
