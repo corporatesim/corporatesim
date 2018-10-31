@@ -584,11 +584,13 @@ include_once 'includes/header.php';
                 {
                   $input_lenght = 'col-md-6';
                   $name_length  = 'col-md-6';
+                  $limit_char   = 6;
                 }
                 else
                 {
                   $input_lenght = 'col-md-4';
                   $name_length  = 'col-md-2';
+                  $limit_char   = 10;
                 }
                 echo "<div class='".$length." subCompnent ".$hide."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor'].";'";
                   // if ($row2['ShowHide']==1){
@@ -788,9 +790,9 @@ include_once 'includes/header.php';
                     <?php
                     foreach ($mChoice_details as $wrow => $wrow_value)
                     {
-                      echo "<div class='radio-inline col-md-4 align_radio'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
+                      echo "<div class='radio-inline col-md-3 align_radio' title='".$wrow."'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
                       echo (($value == $wrow_value)?'checked':'');
-                      echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input><label>".$wrow."</label></div>";
+                      echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input><label>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
                     } ?>
                   </div>
                 <?php }
@@ -1010,16 +1012,7 @@ include_once 'includes/header.php';
   {
     //alert(key);
     start_time  = new Date();
-    if($('#'+key).parent('div').hasClass('radio-inline'))
-    {
-      value = $("input[name='"+key+"']:checked").val();
-      console.log(value);
-    }
-    else
-    {
-      value       = $("#"+key).val();
-    }
-
+    var value   = $("#"+key).val();
     var ref_tab = $("ul.nav-tabs li.active a").text(); //active tab slect
     $.ajax({
       type: "POST",
@@ -1442,29 +1435,8 @@ include_once 'includes/header.php';
     var find      = 'link'+key;
     var ret_value = input_field_keys[find].split('_');
     return ret_value[0]+'_'+key;
-    // trigger ajax if that component or subcomponent doesn't exist
-    // $.ajax({
-    //   type : "POST",
-    //   url  : "includes/ajax/ajax_update_execute_input.php",
-    //   async: false,
-    //   data : '&action=element_not_found&key='+key,
-    //   success: function(result) 
-    //   {
-    //     if(result != 'no')
-    //     {
-    //       // console.log(result);
-    //       var result = result.split(',');
-    //       exp        = result[1];  // normal exp
-    //       // var id      = result[0];  // linkcomp or linksubc
-    //       // var tmp     = exp.split('_');
-    //       // var tmp_key = tmp[1]+'_'+tmp[2]; // subc_125
-    //       // console.log(exp);
-    //     }
-    //   }
-    // });
-    // console.log(input_field_keys[find]);
-    // return exp;
   }
+
   function create_json_input_field()
   {
     $('input').each(function(i,e){
@@ -1475,10 +1447,28 @@ include_once 'includes/header.php';
           // console.log($(this).attr('id'));
           // input_field_values[$(this).attr('id')] = $(this).val();
           // // console.log($(this).prev().attr('id'));
-          var value        = $(this).val();
-          var data_element = $(this).parent('div.InlineBox').find('input.data_element');
-          var sublink_id   = data_element.val();
-          var genenrate_id = $(this).attr('id').split('_');
+          if($(this).parent('div').hasClass('radio-inline'))
+          {
+            var value = $("input[type='radio']:checked").val();
+          }
+          else
+          {
+            var value = $(this).val();
+          }
+
+          if($(this).parent('div').hasClass('radio-inline'))
+          {
+            // if multiple choice or radio button
+            var data_element = $(this).parents('div.InlineBox').find('input.data_element');
+            var sublink_id   = data_element.val();
+            var genenrate_id = $(this).attr('id').split('_');
+          }
+          else
+          {
+            var data_element = $(this).parent('div.InlineBox').find('input.data_element');
+            var sublink_id   = data_element.val();
+            var genenrate_id = $(this).attr('id').split('_');
+          }
 
           if(data_element.attr('data-input_key') || data_element.attr('data-input_id'))
           {
@@ -1515,10 +1505,19 @@ include_once 'includes/header.php';
   function update_json_data(id,key,formula_json_expcomp,formula_json_expsubc,input_field_values)
   {
     // console.log($('#'+key).val());
+    if($('#'+key).parent('div').hasClass('radio-inline'))
+    {
+      var value = $("input[type='radio']:checked").val();
+    }
+    else
+    {
+      var value = $("#"+key).val();
+    }
+
     $.each(input_field_values, function (index, val) {
       if(index == key)
       {
-        input_field_values[index].values = $('#'+key).val();
+        input_field_values[index].values = value;
       }
     });
 
