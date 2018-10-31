@@ -554,7 +554,7 @@ $(document).ready(function(){
 									</div>
 									<?php if(count($option) > 1 && count($option_value) > 1){
 										for($i=1; $i < count($option); $i++) { ?>
-											<div class="col-md-12"><div class="form-group col-md-6"><input name="option[]" type="text" value="<?php echo $option[$i];?>" placeholder="Text" class="form-control"></div> <div class="form-group col-md-4"><input name="option_value[]" type="text" value="<?php echo $option_value[$i];?>" placeholder="Value" class="form-control"></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" title="Remove Option">-</button></div></div>
+											<div class="col-md-12"><div class="form-group col-md-6"><input name="option[]" type="text" value="<?php echo $option[$i];?>" placeholder="Text" class="form-control"></div> <div class="form-group col-md-3"><input name="option_value[]" type="text" value="<?php echo $option_value[$i];?>" placeholder="Value" class="form-control"></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" title="Remove Option">-</button></div></div>
 										<?php }	} ?>
 										<div class="row">
 											<div id="add_here"></div>
