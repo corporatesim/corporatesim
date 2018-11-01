@@ -291,7 +291,7 @@ include_once 'includes/header.php';
                     $ResultchartDetailsComp = $functionsObj->FetchObject($chartDetailscomp);
                     $charttypeComp          = $ResultchartDetailsComp->Chart_Type; 
                     ?>  
-                    <img src="chart/<?=$charttypeComp?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>">
+                    <img class="comp_chart" src="chart/<?=$charttypeComp?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>">
                     <?php
                   }
                   echo "</div>";
@@ -1589,9 +1589,16 @@ include_once 'includes/header.php';
           end_time   = new Date();
           final_time = (start_time.getTime() - end_time.getTime())/1000;
           // $("#"+id).show();
+          
+          // refreshing charts
+          $('.comp_chart').each(function(index, el) {
+            var new_src    = $(this).attr('src');
+            $(this).attr('src',new_src);
+          });
+          
           $("#input_loader").html('');
           $('.overlay').hide();
-          alert('Saved Successfully.');
+          // alert('Saved Successfully.');
           // $(".closeSave").hide();
           // console.log(input_field_values);
         }

@@ -4,10 +4,9 @@ include_once 'config/functions.php';
 set_time_limit(300);
 
 $functionsObj = new Functions();
+$userid       = $_SESSION['userid'];
 
 include_once 'includes/lib/phpchartdir.php';
-
-$userid = $_SESSION['userid'];
 
 // if user is logout then redirect to login page as we're unsetting the username from session
 if($_SESSION['username'] == NULL)
@@ -17,11 +16,8 @@ if($_SESSION['username'] == NULL)
 //$gameid = $_SESSION['Game_ID'];
 //echo $userid."</br>";
 //$linkid = $_GET['Link'];
-
 $gameid = $_GET['ID'];
-
 //echo $gameid."</br>";
-
 if (isset($_GET['ID']) && !empty($_GET['ID']))
 {
 	//get the actual link
@@ -48,7 +44,7 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 			else
 			{
 				//get linkid				
-				$sqllink = "SELECT * FROM `GAME_LINKAGE` WHERE `Link_GameID`=".$gameid." AND Link_ScenarioID= ".$result1->US_ScenID;
+				$sqllink    = "SELECT * FROM `GAME_LINKAGE` WHERE `Link_GameID`=".$gameid." AND Link_ScenarioID= ".$result1->US_ScenID;
 				
 				//echo $sqllink;
 				$link       = $functionsObj->ExecuteQuery($sqllink);
@@ -101,7 +97,6 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 	else
 	{
 		//goto game_description page
-		
 		header("Location:".site_root."game_description.php?Game=".$gameid);
 		exit();
 	}
@@ -117,7 +112,6 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'NOTSET';
 if (!isset($_SESSION['userid']))
 {
 	//go to login page.
-	
 	unset($_SESSION['username']);
 	//setcookie($cookie_name, "", 1);
 	header("Location:".site_root."login.php");
@@ -237,13 +231,14 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 
 			//if($str[0] == $_POST['active'])
 			//{
-				if($str[1] == 'comp'){
+				if($str[1] == 'comp')
+				{
 					$sublinkid = $data[$str[0].'_linkcomp_'.$str[2]];
 					$compid    = $str[2];
 					$subcompid = 0;
 					$current   = $x_value;	//check for REPLACE condition
 					$key       = $x;
-				//echo "Comp".$compid."--".$current.",";
+					//echo "Comp".$compid."--".$current.",";
 					if(!empty($current))
 					{
 						$sqlreplace = "SELECT * FROM `GAME_LINK_REPLACE` 
@@ -259,10 +254,10 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 							$current    = $resreplace->Rep_Value;
 						}
 					}
-				//check if already exists				
+					//check if already exists				
 					$sql = "SELECT * FROM `GAME_INPUT` WHERE input_user=".$userid." and input_sublinkid=".$sublinkid." and input_key='".$key."'";
-				//echo $sql;
-				//exit();
+					//echo $sql;
+					//exit();
 					$object = $functionsObj->ExecuteQuery($sql);
 
 					if ($object->num_rows > 0) 
@@ -271,7 +266,7 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 						$array = array (
 							'input_current' => $current
 						);
-					//check for REPLACE condition
+						//check for REPLACE condition
 						$result = $functionsObj->UpdateData ( 'GAME_INPUT', $array, 'input_id', $res->input_id );
 					}
 					else
@@ -292,7 +287,7 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 					$subcompid = $str[2];
 					$current   = $x_value;	//check for REPLACE condition
 					$key       = $x;
-				//echo "SubComp".$subcompid."--".$current.",";
+					//echo "SubComp".$subcompid."--".$current.",";
 					if(!empty($current) && isset($current))
 					{
 						$sqlreplace = "SELECT * FROM `GAME_LINK_REPLACE` 
@@ -309,7 +304,7 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 							$current    = $resreplace->Rep_Value;
 						}
 					}
-				//update if already exists
+					//update if already exists
 					$sql    = "SELECT * FROM `GAME_INPUT` WHERE input_user=".$userid." and input_sublinkid=".$sublinkid." and input_key='".$key."'";
 					$object = $functionsObj->ExecuteQuery($sql);						
 					
@@ -331,7 +326,7 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 						$functionsObj->InsertData('GAME_INPUT', $array, 0, 0);
 					}
 				}
-		//}		
+			//}		
 			}
 			
 			$flag = false;
@@ -339,13 +334,14 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 
 			while(!$flag)
 			{
-				$flag=true;
+				$flag = true;
 				foreach($data as $x=>$x_value)
 				{
 					$str = explode("_",$x);
 
-					if($str[1] == 'expcomp'){
-					//$strkey = explode("_",$x);
+					if($str[1] == 'expcomp')
+					{
+						//$strkey = explode("_",$x);
 						$strvalue = explode(" ",$x_value);
 						$tmp      = $str[0]."_linkcomp_".$str[2];
 						foreach($strvalue as $y=>$y_value)
@@ -581,14 +577,14 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 							WHERE input_user=".$userid." AND input_sublinkid IN
 							(SELECT ls.SubLink_ID FROM GAME_LINKAGE_SUB ls 
 							WHERE SubLink_SubCompId=".$strkey[1]." and SubLink_LinkID=".$linkid." )";
-						//AND SubLink_type=0
+							//AND SubLink_type=0
 							
-						//echo "sqlvalue- ".$sqlvalue."</br>";
+							//echo "sqlvalue- ".$sqlvalue."</br>";
 							
-							$value       = $functionsObj->ExecuteQuery($sqlvalue);
-							$resultvalue = $functionsObj->FetchObject($value);
-						//echo "y - ".$y."  strvalue[y] - ".$strvalue[$y]."</br>";
-						//echo $resultvalue->input_current."</br>";
+							$value        = $functionsObj->ExecuteQuery($sqlvalue);
+							$resultvalue  = $functionsObj->FetchObject($value);
+							//echo "y - ".$y."  strvalue[y] - ".$strvalue[$y]."</br>";
+							//echo $resultvalue->input_current."</br>";
 							
 							$strvalue[$y] = $resultvalue->input_current;
 							
@@ -600,12 +596,12 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 							(SELECT ls.SubLink_ID FROM GAME_LINKAGE_SUB ls 
 							WHERE SubLink_CompId=".$strkey[1]." AND SubLink_SubCompId=0 AND SubLink_type=0 and SubLink_LinkID=".$linkid." )";
 
-						//echo "sqlvalue- ".$sqlvalue."</br>";
+							//echo "sqlvalue- ".$sqlvalue."</br>";
 							
-							$value       = $functionsObj->ExecuteQuery($sqlvalue);
-							$resultvalue = $functionsObj->FetchObject($value);
-						//echo "y - ".$y."  strvalue[y] - ".$strvalue[$y]."</br>";
-						//echo $resultvalue->input_current."</br>";
+							$value        = $functionsObj->ExecuteQuery($sqlvalue);
+							$resultvalue  = $functionsObj->FetchObject($value);
+							//echo "y - ".$y."  strvalue[y] - ".$strvalue[$y]."</br>";
+							//echo $resultvalue->input_current."</br>";
 							
 							$strvalue[$y] = $resultvalue->input_current;
 							
@@ -613,16 +609,16 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 					}
 					
 					$streval = implode(" ",$strvalue);
-				//echo "sublinkid - ".$sublinkid."</br>";
-				//echo "streval - ".$streval."</br>";
-				//exit();
+					//echo "sublinkid - ".$sublinkid."</br>";
+					//echo "streval - ".$streval."</br>";
+					//exit();
 					$current = eval('return '.$streval.';');
 					
-					$sql = "SELECT * FROM `GAME_OUTPUT` WHERE output_user=".$userid." and output_sublinkid=".$sublinkid;
-				//echo $sql;
-				//exit();
-					$object = $functionsObj->ExecuteQuery($sql);
-				//echo $object->num_rows;
+					$sql     = "SELECT * FROM `GAME_OUTPUT` WHERE output_user=".$userid." and output_sublinkid=".$sublinkid;
+					//echo $sql;
+					//exit();
+					$object  = $functionsObj->ExecuteQuery($sql);
+					//echo $object->num_rows;
 					
 					if ($object->num_rows > 0)
 					{
@@ -715,9 +711,7 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	WHERE ls.SubLink_Type=0 AND l.Link_ID=".$linkid." GROUP BY a.Area_ID,a.Area_Name 
 	ORDER BY a.Area_Sequencing";
 //echo $sqlarea;
-	$area = $functionsObj->ExecuteQuery($sqlarea);
-
-
+	$area          = $functionsObj->ExecuteQuery($sqlarea);	
 	$sqlcompSanNew =  "SELECT distinct a.Area_ID as AreaID, c.Comp_ID as CompID, ls.SubLink_SubCompID as SubCompID, 
 	a.Area_Name as Area_Name, s.SubComp_Name as SubComp_Name, l.Link_Order as 'Order',  
 	c.Comp_Name as Comp_Name, ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode, 
@@ -734,9 +728,6 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
 	LEFT OUTER JOIN GAME_FORMULAS f on ls.SubLink_FormulaID=f.f_id 
 	WHERE ls.SubLink_Type=0 AND ls.SubLink_SubCompID>0 and l.Link_ID=".$linkid." ORDER BY a.Area_Sequencing";
-
-
-
 
 	$sqlcomp = "SELECT distinct a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, ls.SubLink_Details as Description 
 	FROM GAME_LINKAGE l 
@@ -755,25 +746,20 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 		$sqlchart           = "SELECT * FROM GAME_CHART WHERE Chart_Status=1 and Chart_ID =".$ChartID;
 		$chartDetails       = $functionsObj->ExecuteQuery($sqlchart);
 		$ResultchartDetails = $functionsObj->FetchObject($chartDetails);
-
-
-		$sqllink = "SELECT * FROM `GAME_LINKAGE` WHERE `Link_GameID`=".$gameid." AND Link_ScenarioID= ".$ResultchartDetails->Chart_ScenarioID;
-		$LinkId       =  $functionsObj->ExecuteQuery($sqllink);
-		$ResultLinkId = $functionsObj->FetchObject($LinkId);
-
-		$sqlexist = "SELECT * FROM `GAME_INPUT` i WHERE i.input_user=".$userid." and i.input_sublinkid in 
+		$sqllink            = "SELECT * FROM `GAME_LINKAGE` WHERE `Link_GameID`=".$gameid." AND Link_ScenarioID= ".$ResultchartDetails->Chart_ScenarioID;
+		$LinkId             =  $functionsObj->ExecuteQuery($sqllink);
+		$ResultLinkId       = $functionsObj->FetchObject($LinkId);
+		$sqlexist           = "SELECT * FROM `GAME_INPUT` i WHERE i.input_user=".$userid." and i.input_sublinkid in 
 		(SELECT s.SubLink_ID FROM GAME_LINKAGE_SUB s WHERE s.SubLink_LinkID=".$ResultLinkId->Link_ID.") group by i.input_sublinkid";
-		$object = $functionsObj->ExecuteQuery($sqlexist);
-
-	//chart_component and subcomponent
-
+		$object       = $functionsObj->ExecuteQuery($sqlexist);
+		//chart_component and subcomponent
 		$comp         = $ResultchartDetails->Chart_Components;
 		$subcomp      = $ResultchartDetails->Chart_Subcomponents;
 		$arrayComp    = explode(',',$comp);
 		$arraysubcomp = explode(',',$subcomp);
-	//print_r($arrayComp);
+		//print_r($arrayComp);
 
-	//echo $object->num_rows;
+		//echo $object->num_rows;
 		if($object->num_rows > 0)
 		{
 			while($row = $object->fetch_object())
