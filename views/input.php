@@ -428,7 +428,7 @@ include_once 'includes/header.php';
                         {
                           echo "<div class='radio-inline col-md-3 align_radio' title='".$wrow."'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
                           echo (($value == $wrow_value)?'checked':'');
-                          echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input><label>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
+                          echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input><label>".(strlen($wrow) > $comp_limit_char?substr($wrow,0,$comp_limit_char).'...':$wrow)."</label></div>";
                         }
                         ?>
                       </div>
@@ -1050,6 +1050,21 @@ include_once 'includes/header.php';
   function SaveCurrent(sublinkid,key)
   {
     //alert(key);
+    // checking if user has logged out or not in another tab
+    $.ajax({
+      type: "POST",
+      url : "<?php echo site_root;?>selectgame.php",
+      data: '&action=check_loggedIn_status&key='+key,
+      success: function(result) 
+      {
+        if(result.trim() == 'no')
+        {
+          location.reload();
+          return false;
+        }
+      }
+    });
+
     start_time         = new Date();
     var save_button_id = "SaveInput_"+sublinkid;
     var value          = $("#"+key).val();
