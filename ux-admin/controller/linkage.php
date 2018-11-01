@@ -301,29 +301,33 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 		}
 		else{
 
-			if($_POST['SubLink_InputModeType'] == 'range')
+			if($_POST['inputType'] == 'user')
 			{
-				$SubLink_InputModeTypeValue = $_POST['SubLink_MinVal'].','.$_POST['SubLink_MaxVal'].','.$_POST['SubLink_RangeInterval'];
-			}
-			elseif($_POST['SubLink_InputModeType'] == 'mChoice')
-			{
-				$option                     = array_combine($_POST['option'],$_POST['option_value']);
-				$question                   = array(
-					'question' => $_POST['question'],
-				);
-				$SubLink_InputModeTypeValue = $question + $option;
-				if(count($option) > 1)
+				if($_POST['SubLink_InputModeType'] == 'range')
 				{
-					$SubLink_InputModeTypeValue = json_encode($SubLink_InputModeTypeValue);
+					$SubLink_InputModeTypeValue = $_POST['SubLink_MinVal'].','.$_POST['SubLink_MaxVal'].','.$_POST['SubLink_RangeInterval'];
 				}
-				else
+				elseif($_POST['SubLink_InputModeType'] == 'mChoice')
 				{
-					$SubLink_InputModeTypeValue = '';
+					$option                     = array_combine($_POST['option'],$_POST['option_value']);
+					$question                   = array(
+						'question' => $_POST['question'],
+					);
+					$SubLink_InputModeTypeValue = $question + $option;
+					if(count($option) > 1)
+					{
+						$SubLink_InputModeTypeValue = json_encode($SubLink_InputModeTypeValue);
+					}
+					else
+					{
+						$SubLink_InputModeTypeValue = '';
+					}
 				}
 			}
 			else
 			{
-				$SubLink_InputModeTypeValue = '';
+				$SubLink_InputModeTypeValue     = '';
+				$_POST['SubLink_InputModeType'] = '';
 			}
 
 			// print_r($SubLink_InputModeTypeValue); exit; 

@@ -159,85 +159,123 @@ include_once 'includes/header.php';
                   //Get Component for this area for this linkid
                 while($row1 = mysqli_fetch_array($component)){    
                       //echo "<form > ";
-                  echo "<div class='col-sm-12 scenariaListingDiv ".(($row1['ShowHide']==1)?'hidden':'')."' style='background:".$row1['BackgroundColor']."; color:".$row1['TextColor'].";'";
                   switch ($row1['ViewingOrder']) {
                     case 1:
                     $ComponentName = "";
                     $DetailsChart  = "";
                     $InputFields   = "";
+                    $comp_length   = 'col-md-12';
                     break;
 
                     case 2:
                     $ComponentName = "";
                     $DetailsChart  = "pull-right";
                     $InputFields   = "";
+                    $comp_length   = 'col-md-12';
                     break;
 
                     case 3:
                     $ComponentName = "pull-right";
                     $DetailsChart  = "";
                     $InputFields   = "";
+                    $comp_length   = 'col-md-12';
                     break;
 
                     case 4:
                     $ComponentName = "hidden";
                     $DetailsChart  = "";
                     $InputFields   = "";
+                    $comp_length   = 'col-md-12';
                     break;
 
                     case 5:
                     $ComponentName = "pull-right";
                     $DetailsChart  = "pull-right";
                     $InputFields   = "";
+                    $comp_length   = 'col-md-12';
                     break;
 
                     case 6:
                     $ComponentName = "hidden";
                     $DetailsChart  = "pull-right";
                     $InputFields   = "";
+                    $comp_length   = 'col-md-12';
                     break;
 
                     case 7:
                     $ComponentName = "pull-right";
                     $DetailsChart  = "hidden";
                     $InputFields   = "";
+                    $comp_length   = 'col-md-12';
                     break;
 
                     case 8:
                     $ComponentName = "hidden";
                     $DetailsChart  = "pull-right";
                     $InputFields   = "";
+                    $comp_length   = 'col-md-12';
                     break;
 
                     case 9:
                     $ComponentName = "";
                     $DetailsChart  = "";
                     $InputFields   = "hidden";
+                    $comp_length   = 'col-md-12';
                     break;
 
                     case 10:
                     $ComponentName = "";
                     $DetailsChart  = "hidden";
                     $InputFields   = "";
+                    $comp_length   = 'col-md-12';
                     break;
 
                     case 11:
                     $ComponentName = "pull-right";
                     $DetailsChart  = "";
                     $InputFields   = "hidden";
+                    $comp_length   = 'col-md-12';
                     break;
 
                     case 12:
                     $ComponentName = "hidden";
                     $DetailsChart  = "";
                     $InputFields   = "";
+                    $comp_length   = 'col-md-12';
                     break;
+
+                    case 13:
+                    $ComponentName = "";
+                    $DetailsChart  = "hidden";
+                    $InputFields   = "";
+                    $comp_length   = "col-sm-6";
+                    break;
+
+                    case 14:
+                    $ComponentName = "pull-right";
+                    $DetailsChart  = "hidden";
+                    $InputFields   = "";
+                    $comp_length   = "col-sm-6";
+                    break;
+                  }
+                  if($comp_length == 'col-sm-6')
+                  {
+                    $comp_input_lenght = 'col-md-6';
+                    $comp_name_length  = 'col-md-6';
+                    $comp_limit_char   = 6;
+                  }
+                  else
+                  {
+                    $comp_input_lenght = 'col-md-4';
+                    $comp_name_length  = 'col-md-2';
+                    $comp_limit_char   = 10;
                   }
                   // if ($row1['ShowHide']==1){
                   //   echo "style='display:none;'";
                   // }
-                  echo ">";             
-                  echo "<div class='col-sm-1 col-md-2 regular ".$ComponentName."'>";
+                  echo "<div class='".$comp_length." scenariaListingDiv ".(($row1['ShowHide']==1)?'hidden':'')."' style='background:".$row1['BackgroundColor']."; color:".$row1['TextColor'].";' >";
+
+                  echo "<div class='col-sm-1 ".$comp_name_length." regular ".$ComponentName."'>";
                   echo $row1['Comp_Name'];
                   echo "</div>";
                   echo "<div class='col-sm-6 col-md-6 no_padding ".$DetailsChart."'>";
@@ -267,7 +305,7 @@ include_once 'includes/header.php';
 
                   if ($row1['Mode']!="none")
                   {
-                    echo "<div class=' col-sm-5 col-md-4 text-right ".$InputFields."'>";
+                    echo "<div class=' col-sm-5 ".$comp_input_lenght." text-right ".$InputFields."'>";
                     echo "<div class='InlineBox'>";
                     echo "<div class='InlineBox ".(($row1['InputFieldOrder']==2)?'pull-right':'')." ".(($row1['InputFieldOrder']==4)?'hidden':'')."'>";
                     if($row1['Mode']=="user" && $row1['InputModeType'] == "mChoice")
@@ -388,8 +426,9 @@ include_once 'includes/header.php';
                         <?php
                         foreach ($mChoice_details as $wrow => $wrow_value)
                         {
-                          echo "<div class='radio-inline'><label><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required";
-                          echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input> ".$wrow."</label></div>";
+                          echo "<div class='radio-inline'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
+                          echo (($value == $wrow_value)?'checked':'');
+                          echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input><label>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
                         }
                         ?>
                       </div>

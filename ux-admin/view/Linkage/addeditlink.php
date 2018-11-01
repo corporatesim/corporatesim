@@ -479,7 +479,7 @@
                 <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'user'){ echo "checked"; } ?>/> By User
             </div>
             <!-- adding multiple choice and range type here -->
-            <div class="row col-md-8 <?php echo ($linkdetails->SubLink_InputMode == 'user')?'':'show'; ?>" id="user" name="user">
+            <div class="row col-md-8 <?php echo ($linkdetails->SubLink_InputMode == 'user')?'':'hidden'; ?>" id="user" name="user">
               <!--  <div class="col-md-4 <?php // echo ($linkdetails->SubLink_InputMode == 'user')?'':'hidden'; ?>">  -->
               <div class="col-md-6">
                 <select name="SubLink_InputModeType" id="SubLink_InputModeType" class="form-control">
