@@ -222,6 +222,10 @@ span.alert-danger {
               <button type="submit" name="submit" id="User_request" class="btn btn-primary"
               value="RequestDownload"> Request User Report</button>
             </div>
+            <div class="col-sm-3">
+              <button type="submit" name="submit" id="User_download" class="btn btn-primary"
+              value="UserDownloadNew">Download User Report New</button>
+            </div>
           <?php }?>
         </div>
       </form>

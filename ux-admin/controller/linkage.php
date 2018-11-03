@@ -642,6 +642,104 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'RequestDownload'){
 
 }
 
+// adding this code to download data from game_site_user_report_new table
+if(isset($_POST['submit']) && $_POST['submit'] == 'UserDownloadNew'){
+
+	if (isset($_POST['Link_ID']))
+	{
+		$linkid = $_POST['Link_ID'];
+	}
+	
+	$reportDate = $_POST['reportDate'];
+	if(isset($_REQUEST['reportDate']) && $_REQUEST['reportDate']!='')
+	{
+		$str = ($_REQUEST['reportDate']);
+		
+		$dateStr = "AND DATE_FORMAT(date_time, '%Y-%m-%d') = '$str' ";
+	}
+
+	$objPHPExcel = new PHPExcel;
+	$objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
+	$objPHPExcel->getDefaultStyle()->getFont()->setSize(10);
+	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+	ob_end_clean();
+	$currencyFormat = '#,#0.## \€;[Red]-#,#0.## \€';
+	$numberFormat   = '#,#0.##;[Red]-#,#0.##';	
+	$objSheet       = $objPHPExcel->getActiveSheet();
+	
+	$objSheet->setTitle('Linkage');
+	$objSheet->getStyle('A2:L2')->getFont()->setBold(true)->setSize(12);
+
+	$sql ="SELECT g.Game_Name, s.Scen_Name FROM `GAME_LINKAGE` 
+	INNER JOIN GAME_GAME g on Link_GameID= g.Game_ID
+	INNER JOIN GAME_SCENARIO s on Link_ScenarioID = s.Scen_ID
+	WHERE Link_ID=".$linkid;
+	
+	$object = $functionsObj->ExecuteQuery($sql);
+	$result = $object->fetch_object();
+	
+	$objSheet->getCell('A1')->setValue($result->Game_Name);
+	$objSheet->getCell('D1')->setValue($result->Scen_Name);
+	$objSheet->getStyle('A1:L1')->getFont()->setBold(true)->setSize(16);
+	
+	$objSheet->getCell('A2')->setValue('Sr. No.');
+	$objSheet->getCell('B2')->setValue('Name of User');
+
+	$sqlComp = "SELECT ls.SubLink_ID, CONCAT(c.Comp_Name, '/', COALESCE(s.SubComp_Name,'')) AS Comp_Subcomp 
+	FROM `GAME_LINKAGE_SUB` ls 
+	LEFT OUTER JOIN GAME_SUBCOMPONENT s ON SubLink_SubCompID=s.SubComp_ID
+	LEFT OUTER JOIN GAME_COMPONENT c on SubLink_CompID=c.Comp_ID
+	WHERE SubLink_LinkID=".$linkid ." 
+	ORDER BY SubLink_ID";
+	
+	$objcomp = $functionsObj->ExecuteQuery($sqlComp);	
+	$letter  = "C";
+	
+	if($objcomp->num_rows > 0){
+		while($rowcomp = $objcomp->fetch_object()){			
+			$s     = $letter . '2';
+			$first = $letter . '1';
+
+			$objSheet->setCellValue($s, strip_tags($rowcomp->Comp_Subcomp));
+			$objSheet->getColumnDimension($s)->setWidth(20);	
+
+			$letter++;
+		}
+	}
+	
+	$objSheet->getStyle('A2:'.$letter.'2')->getFont()->setBold(true)->setSize(12);
+
+	$sql     = "SELECT * FROM GAME_SITE_USER_REPORT WHERE linkid=".$linkid." $dateStr  order by id desc";
+	$objlink = $functionsObj->ExecuteQuery($sql);
+	if($objlink->num_rows > 0){
+		$i=3;
+		while($row = $objlink->fetch_object()){
+			$objSheet->getCell('A'.$i)->setValue($i-2);
+			$objSheet->getCell('B'.$i)->setValue($row->user_name);
+
+			$userdata = json_decode($row->user_data, true);
+			$letter   = "C";
+			foreach($userdata as $keydata=>$valdata){
+				$s = $letter . $i;
+				$objSheet->setCellValue($s, $valdata);
+				$objSheet->getColumnDimension($letter)->setAutoSize(true);
+				$letter++;
+			}
+			$i++;
+		}
+	}
+	
+	$objSheet->getColumnDimension('A')->setAutoSize(true);
+	$objSheet->getColumnDimension('B')->setAutoSize(true);
+	
+	//exit();
+	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	header('Content-Disposition: attachment;filename="UserData.xlsx"');
+	header('Cache-Control: max-age=0');
+	$objWriter->save('php://output');
+}
+// end of report modification code
+
 if(isset($_POST['submit']) && $_POST['submit'] == 'UserDownload'){
 	if (isset($_POST['Link_ID']))
 	{
