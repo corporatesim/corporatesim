@@ -36,8 +36,7 @@ include_once 'includes/header.php';
           </div>
           <div class="col-sm-6  text-right" style="padding: 2px 2px 5px 0px;">
             <div id="input_loader" style="float:left; color:#2A8037;"></div>
-            <button type="button" class="btn innerBtns" name="execute_input" id="execute_input">Execute</button>
-            <button type="button" class="btn innerBtns hidden" name="execute_input_2" id="execute_input_2">Execute 2</button>
+            <button type="button" class="btn innerBtns hidden" name="execute_input" id="execute_input">Execute</button>
             <button type="submit" name="submit" id="submit" class="btn innerBtns" value="Submit">Submit</button>
             <!--<button class="btn innerBtns">Save</button>
               <button class="btn innerBtns">Submit</button>-->
@@ -260,15 +259,19 @@ include_once 'includes/header.php';
                   }
                   if($comp_length == 'col-sm-6')
                   {
-                    $comp_input_lenght = 'col-md-6';
-                    $comp_name_length  = 'col-md-6';
-                    $comp_limit_char   = 6;
+                    $comp_input_lenght      = 'col-md-6';
+                    $comp_name_length       = 'col-md-6';
+                    $comp_limit_char        = 10;
+                    $comp_label_min_width   = '92px';
+                    // $comp_save_button_align = 'top: 50%; position: absolute;';
                   }
                   else
                   {
-                    $comp_input_lenght = 'col-md-4';
-                    $comp_name_length  = 'col-md-2';
-                    $comp_limit_char   = 10;
+                    $comp_input_lenght      = 'col-md-4';
+                    $comp_name_length       = 'col-md-2';
+                    $comp_limit_char        = 13;
+                    $comp_label_min_width   = '122px';
+                    // $comp_save_button_align = 'top: 50%; position: absolute;';
                   }
                   // if ($row1['ShowHide']==1){
                   //   echo "style='display:none;'";
@@ -412,23 +415,23 @@ include_once 'includes/header.php';
 
                       echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>";
                       ?>
-                      <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%;"></span>
+                      <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%; padding: 0 4px;"></span>
                       <?php
                     }
 
                     elseif($row1['InputModeType'] == "mChoice")
                     {
                       $mChoice_details = json_decode($row1['InputModeTypeValue'],TRUE);
-                      echo "<div class='row text-center'>".$mChoice_details['question']."</div>";
+                      echo "<div class='row text-center' style='font-weight: 700;'>".$mChoice_details['question']."</div>";
                       array_shift($mChoice_details);
                       ?>
-                      <div class="row">
+                      <div class="col-md-12">
                         <?php
                         foreach ($mChoice_details as $wrow => $wrow_value)
                         {
-                          echo "<div class='radio-inline col-md-3 align_radio' title='".$wrow."'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
+                          echo "<div class='col-md-6 align_radio' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
                           echo (($value == $wrow_value)?'checked':'');
-                          echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input><label>".(strlen($wrow) > $comp_limit_char?substr($wrow,0,$comp_limit_char).'...':$wrow)."</label></div>";
+                          echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>".(strlen($wrow) > $comp_limit_char?substr($wrow,0,$comp_limit_char).'...':$wrow)."</label></div>";
                         }
                         ?>
                       </div>
@@ -621,15 +624,19 @@ include_once 'includes/header.php';
                 }
                 if($length == 'col-sm-6')
                 {
-                  $input_lenght = 'col-md-6';
-                  $name_length  = 'col-md-6';
-                  $limit_char   = 6;
+                  $input_lenght              = 'col-md-6';
+                  $name_length               = 'col-md-6';
+                  $limit_char                = 10;
+                  $subcomp_label_min_width   = '92px';
+                  // $subcomp_save_button_align = '';
                 }
                 else
                 {
-                  $input_lenght = 'col-md-4';
-                  $name_length  = 'col-md-2';
-                  $limit_char   = 10;
+                  $input_lenght              = 'col-md-4';
+                  $name_length               = 'col-md-2';
+                  $limit_char                = 13;
+                  $subcomp_label_min_width   = '122px';
+                  // $subcomp_save_button_align = 'top: 50%; position: absolute;';
                 }
                 echo "<div class='".$length." subCompnent ".$hide."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor'].";'";
                   // if ($row2['ShowHide']==1){
@@ -816,22 +823,22 @@ include_once 'includes/header.php';
 
                   echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
                   ?>
-                  <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%;"></span>
+                  <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%; padding: 0 4px;"></span>
                   <?php
                 }
                 elseif($row2['InputModeType']=="mChoice")
                 {
                   $mChoice_details = json_decode($row2['InputModeTypeValue'],TRUE);
-                  echo "<div class='row text-center'>".$mChoice_details['question']."</div>";
+                  echo "<div class='row text-center' style='font-weight: 700;'>".$mChoice_details['question']."</div>";
                   array_shift($mChoice_details);
                   ?>
-                  <div class="row">
+                  <div class="col-md-12">
                     <?php
                     foreach ($mChoice_details as $wrow => $wrow_value)
                     {
-                      echo "<div class='radio-inline col-md-3 align_radio' title='".$wrow."'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
+                      echo "<div class='col-md-6 align_radio' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
                       echo (($value == $wrow_value)?'checked':'');
-                      echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input><label>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
+                      echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
                     } ?>
                   </div>
                 <?php }
@@ -1223,6 +1230,7 @@ include_once 'includes/header.php';
   //   $(this).text($(this).parent().find('input[type=range]').val())
   // }
   $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
     formula_json_expcomp = {};
     formula_json_expsubc = {};
     input_field_values   = {};
@@ -1497,6 +1505,11 @@ include_once 'includes/header.php';
   function create_json_input_field()
   {
     $('input').each(function(i,e){
+      if($(this).attr('type') == 'range')
+      {
+        $(this).parent('div.InlineBox').css({'padding':'0px 5px 0px 0px'});
+      }
+
       if($(e).attr('required') || $(e).attr('readonly'))
       {
         if($(this).attr('id'))
@@ -1504,24 +1517,17 @@ include_once 'includes/header.php';
           // console.log($(this).attr('id'));
           // input_field_values[$(this).attr('id')] = $(this).val();
           // // console.log($(this).prev().attr('id'));
-          if($(this).parent('div').hasClass('radio-inline'))
-          {
-            var value = $("input[type='radio']:checked").val();
-          }
-          else
-          {
-            var value = $(this).val();
-          }
-
-          if($(this).parent('div').hasClass('radio-inline'))
+          if($(this).parent('div').hasClass('align_radio'))
           {
             // if multiple choice or radio button
             var data_element = $(this).parents('div.InlineBox').find('input.data_element');
             var sublink_id   = data_element.val();
             var genenrate_id = $(this).attr('id').split('_');
+            var value        = $("input[type='radio']:checked").val();
           }
           else
           {
+            var value        = $(this).val();
             var data_element = $(this).parent('div.InlineBox').find('input.data_element');
             var sublink_id   = data_element.val();
             var genenrate_id = $(this).attr('id').split('_');
@@ -1562,7 +1568,7 @@ include_once 'includes/header.php';
   function update_json_data(id,key,formula_json_expcomp,formula_json_expsubc,input_field_values)
   {
     // console.log($('#'+key).val());
-    if($('#'+key).parent('div').hasClass('radio-inline'))
+    if($('#'+key).parent('div').hasClass('align_radio'))
     {
       var value = $("input[type='radio']:checked").val();
     }
