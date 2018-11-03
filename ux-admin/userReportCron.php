@@ -15,15 +15,13 @@ if($reqdaat->num_rows > 0)
 	////DeleteData
 	$result = $functionsObj->DeleteDataCron('GAME_SITE_USER_REPORT','linkid',$linkid,0);
 	
-	
-	$sql = "SELECT g.Game_Name,g.Game_ID, s.Scen_Name FROM `GAME_LINKAGE` 
+	$sql    = "SELECT g.Game_Name,g.Game_ID, s.Scen_Name FROM `GAME_LINKAGE` 
 	INNER JOIN GAME_GAME g on Link_GameID= g.Game_ID
 	INNER JOIN GAME_SCENARIO s on Link_ScenarioID = s.Scen_ID
 	WHERE Link_ID=".$linkid;
 	
 	$object       = $functionsObj->ExecuteQuery($sql);
 	$result       = $object->fetch_object();
-
 	$gameID       = $result->Game_ID;
 	$gameName     = $result->Game_Name;
 	$ScenarioName = $result->Scen_Name;
@@ -55,13 +53,11 @@ if($reqdaat->num_rows > 0)
 
 				if($check->num_rows > 0)
 				{
-					$result = $functionsObj->FetchObject($check);
-					$userdate [$title]= $result->input_current;
-
+					$result            = $functionsObj->FetchObject($check);
+					$userdate [$title] = $result->input_current;
 				}
 				elseif($check1->num_rows > 0)
 				{
-
 					$result1           = $functionsObj->FetchObject($check1);
 					$userdate [$title] = $result1->output_current;
 				}
@@ -88,7 +84,5 @@ if($reqdaat->num_rows > 0)
 		'status'	=>	2
 	);	
 	$result = $functionsObj->UpdateData('GAME_SITE_USER_REPORT_REQUEST', $status, 'id', $req->id, 0);
-	
 }
-
 //print_r($userreportdetails);	
