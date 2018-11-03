@@ -8,6 +8,7 @@ include_once doc_root.'config/functions.php';
 
 if(isset($_GET['q']) && $_GET['q'] == "Logout"){
 	unset($_SESSION['username']);
+	unset($_SESSION['user_report']);
 	//setcookie($cookie_name, "", 1);
 	header("Location:".site_root."login.php");
 }

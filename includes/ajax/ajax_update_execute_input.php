@@ -3,8 +3,12 @@ include_once '../../config/settings.php';
 include_once '../../config/functions.php';
 set_time_limit(30000);
 
-$funObj = new Functions();
-$userid = $_SESSION['userid'];
+$funObj       = new Functions();
+$userid       = $_SESSION['userid'];
+$linkid       = $_SESSION['user_report']['LinkId'];
+$userName     = $_SESSION['user_report']['userName'];
+$gameName     = $_SESSION['user_report']['gameName'];
+$ScenarioName = $_SESSION['user_report']['ScenarioName'];
 
 	// print_r($_POST); exit;
 
@@ -122,8 +126,8 @@ if($_POST['action']=='updateFormula')
 		// echo $expcomp_key.' and '.implode('', $cvalue).'<br>';
 		if(eval('return '.implode('',$cvalue).';'))
 		{
-			$expcomp_array_values[$expcomp_key]         = eval('return '.implode('',$cvalue).';');
-			$input_field_values[$expcomp_key]['values'] = eval('return '.implode('',$cvalue).';');
+			$expcomp_array_values[$expcomp_key]         = round(eval('return '.implode('',$cvalue).';'),2);
+			$input_field_values[$expcomp_key]['values'] = round(eval('return '.implode('',$cvalue).';'),2);
 		}
 		// echo $expcomp_key.'<br>';
 	}
@@ -159,8 +163,8 @@ if($_POST['action']=='updateFormula')
 		}
 		if(eval('return '.implode('',$cvalue).';'))
 		{
-			$expsubc_array_values[$expsubc_key]         = eval('return '.implode('',$cvalue).';');
-			$input_field_values[$expsubc_key]['values'] = eval('return '.implode('',$cvalue).';');
+			$expsubc_array_values[$expsubc_key]         = round(eval('return '.implode('',$cvalue).';'),2);
+			$input_field_values[$expsubc_key]['values'] = round(eval('return '.implode('',$cvalue).';'),2);
 		}
 	}
 
@@ -203,6 +207,53 @@ if($_POST['action']=='updateFormula')
 // print_r($input_field_values); exit;
 	$object  = $funObj->ExecuteQuery($query);
 	// echo $query;
+	// when everything updated then modify user report
+	// delete the existing data for that particular user
+	$delete_sql = "DELETE FROM GAME_SITE_USER_REPORT_NEW WHERE uid=$userid AND linkid=$linkid";
+	$delete     = $funObj->ExecuteQuery($delete_sql);
+	$sqlComp12  = "SELECT ls.SubLink_ID,  CONCAT(c.Comp_Name, '/', COALESCE(s.SubComp_Name,'')) AS Comp_Subcomp 
+	FROM `GAME_LINKAGE_SUB` ls 
+	LEFT OUTER JOIN GAME_SUBCOMPONENT s ON SubLink_SubCompID=s.SubComp_ID
+	LEFT OUTER JOIN GAME_COMPONENT c on SubLink_CompID=c.Comp_ID
+	WHERE SubLink_LinkID=".$linkid ." 
+	ORDER BY SubLink_ID";
+
+	$objcomp12 = $funObj->ExecuteQuery($sqlComp12);
+
+	while($rowinput = $objcomp12->fetch_object())
+	{
+		$title  = $rowinput->Comp_Subcomp;					
+		$check  = $funObj->SelectData(array(), 'GAME_INPUT', array("input_user='".$userid."' AND  input_sublinkid='".$rowinput->SubLink_ID."'"), '', '', '', '', 0);
+
+		$check1 = $funObj->SelectData(array(), 'GAME_OUTPUT', array("output_user='".$userid."' AND  output_sublinkid='".$rowinput->SubLink_ID."'"), '', '', '', '', 0);
+
+		if($check->num_rows > 0)
+		{
+			$result            = $funObj->FetchObject($check);
+			$userdate [$title] = $result->input_current;
+		}
+		elseif($check1->num_rows > 0)
+		{
+			$result1           = $funObj->FetchObject($check1);
+			$userdate [$title] = $result1->output_current;
+		}
+		else
+		{
+			$userdate [$title] = '';
+		}
+	}
+
+	$userreportdetails = (object) array(
+		'uid'            =>	$userid,
+		'user_name'      =>	$userName,
+		'game_name'      =>	$gameName,
+		'secenario_name' =>	$ScenarioName,
+		'linkid'         =>	$linkid,
+		'user_data'      =>	json_encode($userdate),
+		'date_time'      =>	date('Y-m-d H:i:s')
+	);
+	$result = $funObj->InsertData('GAME_SITE_USER_REPORT_NEW', $userreportdetails);
+	// report modification done
 	echo json_encode($input_field_values);
 }
 
@@ -226,162 +277,4 @@ if($_POST['action']=='element_not_found')
 		echo 'no';
 	}
 }
-
-// on page load creating json 
-// if($_POST['action']=='fetchInput')
-// {
-// 	// print_r($_POST); 
-
-// 	$sql = "SELECT input_current FROM `GAME_INPUT` WHERE input_user=".$userid;
-
-// 	if (!empty($_POST['input_sublinkid']) && $_POST['input_sublinkid'] != 'undefined')	
-// 	{
-// 		$sql .= " and input_sublinkid=".$_POST['input_sublinkid'];
-// 	}
-
-// 	$sql     .= " and input_key like ('%_".$_POST['key']."%')";
-// 		// echo $sql.'<br>';
-// 	$formula = $funObj->ExecuteQuery($sql);
-// 	if($formula->num_rows > 0)
-// 	{
-// 		$result       = $funObj->FetchObject($formula);
-// 			// $strvalue[$y] = $result->input_current;
-// 		echo $result->input_current;
-// 	}
-// 	else
-// 	{
-// 		echo 'no';
-// 	}
-// }
-
-// after each loop while replacing the current value
-// if($_POST['action']=='fetchInput_tmp')
-// {
-// 	// print_r($_POST); 
-// 	$current    = $_POST['current'];
-// 	if($current == 'NaN')
-// 	{
-// 		echo 'no';
-// 	}
-
-// 	else
-// 	{
-// 		$sqlreplace = "SELECT * FROM `GAME_LINK_REPLACE` 
-// 		INNER JOIN GAME_LINKAGE_SUB ls on Rep_SublinkID =ls.SubLink_ID 
-// 		WHERE Rep_SublinkID=".$_POST['input_sublinkid']." AND Rep_Start <= '".$current."'
-// 		AND Rep_End >='".$current."' AND 
-// 		(ls.SubLink_InputMode ='user' OR ls.SubLink_InputMode ='formula')";
-
-// 		$array = array(
-// 			'main_input_key'  => $_POST['main_input_key'],
-// 			'input_id'        => '',
-// 			'input_user'      => $userid,
-// 			'input_sublinkid' => $_POST['input_sublinkid'],
-// 			'input_key'       => $_POST['key'],
-// 			'input_current'   => $_POST['current']
-// 		);
-
-// 		$object = $funObj->SelectData ( array (), 'GAME_INPUT', array (
-// 			"input_sublinkid=".$_POST['input_sublinkid'],
-// 			"input_key='" .$_POST['key']."'",
-// 			"input_user =" . $userid 
-// 		), '', '', '', '', 0 );
-// 		// echo $sql.'<br>'; if(!empty($_POST['current']) && !empty($_POST['input_sublinkid']))
-// 		if ($object->num_rows > 0)
-// 		{
-// 			$res      = $funObj->FetchObject($object);
-// 			$input_id = $res->input_id;
-
-// 			if(!empty($_POST['current']) && !empty($_POST['input_sublinkid']))
-// 			{
-// 				$objreplace  = $funObj->ExecuteQuery($sqlreplace);
-// 				if ($objreplace->num_rows > 0) 
-// 				{
-// 					$resreplace = $funObj->FetchObject($objreplace);
-// 					$current    = $resreplace->Rep_Value;
-// 				}
-// 			}
-// 			$array['input_id']      = $input_id;
-// 			$array['input_current'] = $current;
-// 		}
-// 		else
-// 		{
-// 			$input_id = '';
-// 			if(!empty($_POST['current']) && !empty($_POST['input_sublinkid']))
-// 			{
-// 				$objreplace  = $funObj->ExecuteQuery($sqlreplace);
-// 				if ($objreplace->num_rows > 0) 
-// 				{
-// 					$resreplace = $funObj->FetchObject($objreplace);
-// 					$current    = $resreplace->Rep_Value;
-// 				}
-// 			}
-// 			$array['input_id']      = $input_id;
-// 			$array['input_current'] = $current;
-// 		}
-// 		if(count($array)<1)
-// 		{
-// 			echo 'no';
-// 		}
-// 		else
-// 		{
-// 			echo json_encode($array);
-// 		}
-// 	}
-// }
-
-//  run query for execution
-// if($_POST['action']=='runQuery')
-// {
-// 	// print_r($_POST);
-// 	// print_r(json_decode($_POST['expcomp'],true));
-// 	// print_r(json_decode($_POST['expsubc'],true));
-// 	$query = "INSERT into `GAME_INPUT` (input_id,input_user,input_sublinkid,input_key,input_current) VALUES ";
-// 	// for expcomp
-// 	foreach (json_decode($_POST['expcomp'],true) as $row)
-// 	{
-// 		if(!empty($row))
-// 		{
-// 			$update_expcomp[] = "(".(($row['input_id'] == '')?0:$row['input_id']).','.$row['input_user'].','.$row['input_sublinkid'].',"'.$row['input_key'].'",'.$row['input_current'].")";
-// 		}
-// 	}
-
-// 	// foreach ($result_expcomp as $update_key)
-// 	// {
-// 	// 	$update_expcomp[] = "(".$update_key['input_id'].','.$update_key['input_user'].','.$update_key['input_sublinkid'].',"'.$update_key['input_key'].'",'.$update_key['input_current'].")";
-// 	// }
-
-// 	$query .= implode(',',$update_expcomp).',';
-
-// // for expsubc
-// 	foreach (json_decode($_POST['expsubc'],true) as $wrow)
-// 	{
-// 		if(!empty($wrow))
-// 		{
-// 			$update_expsubc[] = "(".(($wrow['input_id'] == '')?0:$wrow['input_id']).','.$wrow['input_user'].','.$wrow['input_sublinkid'].',"'.$wrow['input_key'].'",'.$wrow['input_current'].")";
-// 		}
-// 	}
-
-// 	// foreach ($result_expsubc as $update_key)
-// 	// {
-// 	// 	$update_expsubc[] = "(".$update_key['input_id'].','.$update_key['input_user'].','.$update_key['input_sublinkid'].',"'.$update_key['input_key'].'",'.$update_key['input_current'].")";
-// 	// }
-// 	// print_r($result_expsubc);
-
-// 	$query .= implode(',',$update_expsubc);
-// 	$query .= "ON DUPLICATE KEY UPDATE input_current=VALUES(input_current)";
-// 	// print_r($_POST);
-// 	// echo $query;
-// 	// die($query);
-// 	$objectUpdate  = $funObj->ExecuteQuery($query);
-// 	// print_r($objectUpdate);
-// 	if($objectUpdate > 0)
-// 	{
-// 		echo 'yes';
-// 	}
-// 	else
-// 	{
-// 		echo 'no';
-// 	}
-// }
 

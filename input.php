@@ -5,6 +5,7 @@ set_time_limit(300);
 
 $functionsObj = new Functions();
 $userid       = $_SESSION['userid'];
+$userName     = $_SESSION['username'];
 
 include_once 'includes/lib/phpchartdir.php';
 
@@ -44,12 +45,23 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 			else
 			{
 				//get linkid				
-				$sqllink    = "SELECT * FROM `GAME_LINKAGE` WHERE `Link_GameID`=".$gameid." AND Link_ScenarioID= ".$result1->US_ScenID;
-				
-				//echo $sqllink;
-				$link       = $functionsObj->ExecuteQuery($sqllink);
-				$resultlink = $functionsObj->FetchObject($link);				
-				$linkid     = $resultlink->Link_ID;
+				// $sqllink    = "SELECT * FROM `GAME_LINKAGE` WHERE `Link_GameID`=".$gameid." AND Link_ScenarioID= ".$result1->US_ScenID;
+				$sqllink = "SELECT gl.*, gm.Game_Name, gs.Scen_Name FROM `GAME_LINKAGE` gl LEFT JOIN GAME_GAME gm ON gm.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Link_ScenarioID WHERE gl.`Link_GameID` = $gameid AND gl.Link_ScenarioID=$result1->US_ScenID";
+				// die($sqllink);
+				$link         = $functionsObj->ExecuteQuery($sqllink);
+				$resultlink   = $functionsObj->FetchObject($link);				
+				$linkid       = $resultlink->Link_ID;
+				// modified above query and adding these 2 vars for updating user reports, so that we don't need to run extra query there
+				$gameName     = $resultlink->Game_Name;
+				$ScenarioName = $resultlink->Scen_Name;
+				$reports_var  = array(
+					'LinkId'       => $linkid,
+					'userid'       => $userid,
+					'userName'     => $userName,
+					'gameName'     => $gameName,
+					'ScenarioName' => $ScenarioName,
+				);
+				$_SESSION['user_report'] = $reports_var;
 				//echo "LinkID=>".$linkid."</br>";
 				//echo $result1->US_Input ." ". $result1->US_Output."</br>";
 				//exit();
