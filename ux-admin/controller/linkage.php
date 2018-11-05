@@ -643,7 +643,17 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'RequestDownload'){
 }
 
 // adding this code to download data from game_site_user_report_new table
-if(isset($_POST['submit']) && $_POST['submit'] == 'UserDownloadNew'){
+if(isset($_POST['submit']) && $_POST['submit'] == 'UserDownloadNew')
+{
+
+	$reportDateFrom = $_POST['reportDateFrom'];
+	$reportDateTo   = $_POST['reportDateTo'];
+	$reportDate     = array(
+		'reportDateFrom' => $reportDateFrom,
+		'reportDateTo'   => $reportDateTo,
+	);
+	
+	// echo "<pre>"; print_r($_POST); die('<br>here');
 
 	if (isset($_POST['Link_ID']))
 	{
@@ -653,8 +663,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'UserDownloadNew'){
 	$reportDate = $_POST['reportDate'];
 	if(isset($_REQUEST['reportDate']) && $_REQUEST['reportDate']!='')
 	{
-		$str = ($_REQUEST['reportDate']);
-		
+		$str     = ($_REQUEST['reportDate']);
 		$dateStr = "AND DATE_FORMAT(date_time, '%Y-%m-%d') = '$str' ";
 	}
 
@@ -709,7 +718,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'UserDownloadNew'){
 	
 	$objSheet->getStyle('A2:'.$letter.'2')->getFont()->setBold(true)->setSize(12);
 
-	$sql     = "SELECT * FROM GAME_SITE_USER_REPORT WHERE linkid=".$linkid." $dateStr  order by id desc";
+	$sql     = "SELECT * FROM GAME_SITE_USER_REPORT_NEW WHERE linkid=".$linkid." $dateStr  order by id desc";
+	// die($sql);
 	$objlink = $functionsObj->ExecuteQuery($sql);
 	if($objlink->num_rows > 0){
 		$i=3;
@@ -734,7 +744,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'UserDownloadNew'){
 	
 	//exit();
 	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-	header('Content-Disposition: attachment;filename="UserData.xlsx"');
+	header('Content-Disposition: attachment;filename="UserDataNew.xlsx"');
 	header('Cache-Control: max-age=0');
 	$objWriter->save('php://output');
 }

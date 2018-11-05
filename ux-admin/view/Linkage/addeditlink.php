@@ -182,8 +182,27 @@ span.alert-danger {
                 <button type="submit" name="submit" id="Link_download" class="btn btn-primary"
                 value="Download"> Download </button>
               </div>
-              <br><br>
-              <hr />
+              <br>
+              <hr/>
+
+              <!-- adding new functionality for downloading user report -->
+              <div class="row" id="sandbox-container">
+                <div class="col-md-4">
+                  <label>Date :</label>From <br>
+                  <input type="text" class="form-control"  name="reportDateFrom" id="reportDateFrom" placeholder="yyyy-mm-dd" readonly >
+                </div>
+                <div class="col-md-4">
+                  <label>Date :</label>To <br>
+                  <input type="text" class="form-control"  name="reportDateTo" id="reportDateTo" placeholder="yyyy-mm-dd" readonly >
+                </div>
+                <div class="col-sm-4" style="margin-top: 2%;">
+                  <button type="submit" name="submit" id="User_download" class="btn btn-primary"
+                  value="UserDownloadNew">Download User Report New</button>
+                </div>
+              </div>
+              <!-- end of user download report -->
+
+              <hr>
               <label>Request/Download User Report -</label> <br>
               <div class="col-sm-12" id="sandbox-container">
                 <?php  
@@ -221,10 +240,6 @@ span.alert-danger {
             <div class="col-sm-3">
               <button type="submit" name="submit" id="User_request" class="btn btn-primary"
               value="RequestDownload"> Request User Report</button>
-            </div>
-            <div class="col-sm-3">
-              <button type="submit" name="submit" id="User_download" class="btn btn-primary"
-              value="UserDownloadNew">Download User Report New</button>
             </div>
           <?php }?>
         </div>

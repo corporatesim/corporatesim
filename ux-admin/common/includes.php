@@ -115,6 +115,11 @@
 		case 'MyProfile':
 			$showfile = 'myProfile.php';
 			break;
+
+			// Report
+		case 'UserReport':
+			$showfile = 'UserReport.php';
+			break;
 		
 		// Logout
 		case 'Logout':
