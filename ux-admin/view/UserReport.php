@@ -62,38 +62,64 @@ span.alert-danger {
           </div>
           <div class="col-md-2">
             <label for="All Users">
-              <input type="radio"  name="user_filter" id="all_users" checked="">All Users
+              <input type="radio"  name="user_filter" id="all_users" checked="" value="all_users">All Users
             </label>
           </div>
           <div class="col-md-2">
             <label for="Select Users">
-              <input type="radio" name="user_filter" id="select_users">Select Users
+              <input type="radio" name="user_filter" id="select_users" value="select_users">Select Users
             </label>
           </div>
           <div class="col-md-2 hidden" style="float: right;" id="select_all_div">
-            <input type="checkbox" name="select_all" id="select_all"> Select All
+            <label for="Select All Data" data-toggle="tooltip" title="Select All Users">
+              <input type="checkbox" name="select_all" id="select_all" > Select All
+            </label>
           </div>
         </div>
         <br>
         <!-- if user select for filter then show this -->
         <div class="row hidden" style="margin-left: 1px;" id="users_data">
           <div class="col-md-2">
-            <input type="checkbox" name="" id=""> mohit123
+            <label for="User Details" data-toggle="tooltip" title="Name and Email">
+              <input type="checkbox" name="" id=""> mohit123
+            </label>
           </div>
           <div class="col-md-2">
-            <input type="checkbox" name="" id=""> mohit1
+            <label for="User Details" data-toggle="tooltip" title="Name and Email">
+              <input type="checkbox" name="" id=""> mohit1
+            </label>
           </div>
           <div class="col-md-2">
-            <input type="checkbox" name="" id=""> mohit258741147
+            <label for="User Details" data-toggle="tooltip" title="Name and Email">
+              <input type="checkbox" name="" id=""> mohit258741147
+            </label>
           </div>
           <div class="col-md-2">
-            <input type="checkbox" name="" id=""> mk
+            <label for="User Details" data-toggle="tooltip" title="Name and Email">
+              <input type="checkbox" name="" id=""> mk
+            </label>
           </div>
           <div class="col-md-2">
-            <input type="checkbox" name="" id=""> sahu
+            <label for="User Details" data-toggle="tooltip" title="Name and Email">
+              <input type="checkbox" name="" id=""> sahu
+            </label>
           </div>
           <div class="col-md-2">
-            <input type="checkbox" name="" id=""> 5874125598878747
+            <label for="User Details" data-toggle="tooltip" title="Name and Email">
+              <input type="checkbox" name="" id=""> 5874125598878747
+            </label>
+          </div>
+        </div>
+        <br>
+        <div class="row" id="sandbox-container">
+          <div class="col-md-4">
+            <input type="text" name="StartDate" id="StartDate" class="form-control" readonly="" placeholder="Select Start Date">
+          </div>
+          <div class="col-md-4">
+            <input type="text" name="EndDate" id="EndDate" class="form-control" readonly="" placeholder="Select End Date">
+          </div>
+          <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Download Report</button>
           </div>
         </div>
       </div>
@@ -103,11 +129,15 @@ span.alert-danger {
   <script>
     $(document).ready(function(){
       $('#game_game').on('change',function(){
+        if(!($('#user_section').hasClass('hidden')))
+        {
+          $('#user_section').addClass('hidden');
+        }
+
         if($(this).val())
         {
           $('#scenario_section').removeClass('hidden');
-          // $('#user_section').removeClass('hidden');
-          // triggering ajax to show the scenario and users linked with this game
+          // triggering ajax to show the scenario linked with this game
         }
         else
         {
@@ -115,11 +145,6 @@ span.alert-danger {
           {
             $('#scenario_section').addClass('hidden');
           }
-
-          // if(!($('#user_section').hasClass('hidden')))
-          // {
-          //   $('#user_section').addClass('hidden');
-          // }
           alert('Please Select Game...');
           return false;
         }
@@ -128,7 +153,6 @@ span.alert-danger {
       $('#game_scenario').on('change',function(){
         if($(this).val())
         {
-          // $('#scenario_section').removeClass('hidden');
           $('#user_section').removeClass('hidden');
           // triggering ajax to show the scenario and users linked with this game
         }
@@ -138,13 +162,37 @@ span.alert-danger {
           {
             $('#user_section').addClass('hidden');
           }
-
-          // if(!($('#user_section').hasClass('hidden')))
-          // {
-          //   $('#user_section').addClass('hidden');
-          // }
           alert('Please Select Scenario...');
           return false;
+        }
+      });
+
+      $('input[type=radio]').on('change',function(){
+        // alert($(this).val());
+        if($(this).val() == 'select_users')
+        {
+          $('#select_all_div').removeClass('hidden');
+          $('#users_data').removeClass('hidden');
+        }
+        else
+        {
+          $('#users_data').addClass('hidden');
+          $('#select_all_div').addClass('hidden');
+        }
+      });
+
+      $('#select_all').on('click',function(){
+        if($(this).is(':checked'))
+        {
+          $('input[type=checkbox]').each(function(i,e){
+            $(this).prop('checked',true);
+          });
+        }
+        else
+        {
+          $('input[type=checkbox]').each(function(i,e){
+            $(this).prop('checked',false);
+          });
         }
       });
 
