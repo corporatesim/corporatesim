@@ -281,7 +281,7 @@ include_once 'includes/header.php';
                   echo "<div class='col-sm-1 ".$comp_name_length." regular ".$ComponentName."'>";
                   echo $row1['Comp_Name'];
                   echo "</div>";
-                  echo "<div class='col-sm-6 col-md-6 no_padding ".$DetailsChart."'>";
+                  echo "<div class='col-sm-6 col-md-12 no_padding ".$DetailsChart."'>";
 
                   if(empty($row1['ChartID']))
                   {
@@ -294,7 +294,7 @@ include_once 'includes/header.php';
                     $ResultchartDetailsComp = $functionsObj->FetchObject($chartDetailscomp);
                     $charttypeComp          = $ResultchartDetailsComp->Chart_Type; 
                     ?>  
-                    <img class="comp_chart" src="chart/<?=$charttypeComp?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>">
+                    <img class="comp_chart" src="chart/<?=$charttypeComp?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>" style="width: 85%;">
                     <?php
                   }
                   echo "</div>";
