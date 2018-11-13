@@ -88,102 +88,134 @@ if($_POST['action']=='updateFormula')
 	$formula_json_expcomp = $_POST['formula_json_expcomp'];
 	$formula_json_expsubc = $_POST['formula_json_expsubc'];
 	$input_field_values   = $_POST['input_field_values'];
+	$inserted_input_key   = array();
 	$query                = "INSERT into `GAME_INPUT`(input_id,input_user,input_sublinkid,input_key,input_current) VALUES ";
 	// print_r($formula_json_expcomp);
 	// print_r($formula_json_expsubc);
 	// print_r($input_field_values);
 	// die('here');
 	// creating component array
-	foreach ($formula_json_expcomp as $expcomp_key => $expcomp_value)
+	if(count($formula_json_expcomp) > 0)
 	{
-		// breaking the express from space and getting the value from inputs
-		$cvalue        = [];
-		$expcomp_array = explode(' ',$expcomp_value);
-		// print_r($expcomp_array);
-		foreach ($expcomp_array as $crow)
+		foreach ($formula_json_expcomp as $expcomp_key => $expcomp_value)
 		{
-			if((strpos($crow,'comp')!== false) || (strpos($crow,'subc')!== false))
+			// breaking the express from space and getting the value from inputs
+			$cvalue        = [];
+			$expcomp_array = explode(' ',$expcomp_value);
+			// print_r($expcomp_array);
+			foreach ($expcomp_array as $crow)
 			{
-				// putting if input_key doesn't contain that value then find from database using the key
-				if(array_key_exists($crow, $input_field_values))
+				if((strpos($crow,'comp')!== false) || (strpos($crow,'subc')!== false))
 				{
-					$cvalue[]  = $input_field_values[$crow]['values'];
+					// putting if input_key doesn't contain that value then find from database using the key
+					if(array_key_exists($crow, $input_field_values))
+					{
+						$cvalue[]  = $input_field_values[$crow]['values'];
+					}
+					else
+					{
+						$tmp_key  = explode('_',$crow);
+						$sql      = "select * from GAME_INPUT WHERE input_user=$userid and input_key like '%_".$tmp_key[1].'_'.$tmp_key[2]."%'";
+						$object   = $funObj->ExecuteQuery($sql);
+						$res      = $funObj->FetchObject($object);
+						$cvalue[] = $res->input_current;
+					}
 				}
 				else
 				{
-					$tmp_key  = explode('_',$crow);
-					$sql      = "select * from GAME_INPUT WHERE input_user=$userid and input_key like '%_".$tmp_key[1].'_'.$tmp_key[2]."%'";
-					$object   = $funObj->ExecuteQuery($sql);
-					$res      = $funObj->FetchObject($object);
-					$cvalue[] = $res->input_current;
+					$cvalue[]  = $crow;
 				}
 			}
-			else
+			// echo $expcomp_key.' and '.implode('', $cvalue).'<br>';
+			if(eval('return '.implode('',$cvalue).';'))
 			{
-				$cvalue[]  = $crow;
+				$expcomp_array_values[$expcomp_key]         = round(eval('return '.implode('',$cvalue).';'),2);
+				$input_field_values[$expcomp_key]['values'] = round(eval('return '.implode('',$cvalue).';'),2);
 			}
+			// echo $expcomp_key.'<br>';
 		}
-		// echo $expcomp_key.' and '.implode('', $cvalue).'<br>';
-		if(eval('return '.implode('',$cvalue).';'))
-		{
-			$expcomp_array_values[$expcomp_key]         = round(eval('return '.implode('',$cvalue).';'),2);
-			$input_field_values[$expcomp_key]['values'] = round(eval('return '.implode('',$cvalue).';'),2);
-		}
-		// echo $expcomp_key.'<br>';
 	}
 	// creating for subcomponent
-	foreach ($formula_json_expsubc as $expsubc_key => $expsubc_value)
+	if(count($formula_json_expsubc) > 0)
 	{
-		// breaking the express from space and getting the value from inputs
-		$cvalue        = [];
-		$expsubc_array = explode(' ',$expsubc_value);
-		// print_r($expsubc_array);
-		foreach ($expsubc_array as $srow)
+		foreach ($formula_json_expsubc as $expsubc_key => $expsubc_value)
 		{
-			if((strpos($srow,'comp')!== false) || (strpos($srow,'subc')!== false))
+			// breaking the express from space and getting the value from inputs
+			$cvalue        = [];
+			$expsubc_array = explode(' ',$expsubc_value);
+			// print_r($expsubc_array);
+			foreach ($expsubc_array as $srow)
 			{
-				// putting if input_key doesn't contain that value then find from database using the key
-				if(array_key_exists($srow, $input_field_values))
+				if((strpos($srow,'comp')!== false) || (strpos($srow,'subc')!== false))
 				{
-					$cvalue[]  = $input_field_values[$srow]['values'];
+					// putting if input_key doesn't contain that value then find from database using the key
+					if(array_key_exists($srow, $input_field_values))
+					{
+						$cvalue[]  = $input_field_values[$srow]['values'];
+					}
+					else
+					{
+						$tmp_key  = explode('_',$srow);
+						$sql      = "select * from GAME_INPUT WHERE input_user=$userid and input_key like '%_".$tmp_key[1].'_'.$tmp_key[2]."%'";
+						$object   = $funObj->ExecuteQuery($sql);
+						$res      = $funObj->FetchObject($object);
+						$cvalue[] = $res->input_current;
+					}
 				}
 				else
 				{
-					$tmp_key  = explode('_',$srow);
-					$sql      = "select * from GAME_INPUT WHERE input_user=$userid and input_key like '%_".$tmp_key[1].'_'.$tmp_key[2]."%'";
-					$object   = $funObj->ExecuteQuery($sql);
-					$res      = $funObj->FetchObject($object);
-					$cvalue[] = $res->input_current;
+					$cvalue[]  = $srow;
 				}
 			}
-			else
+			if(eval('return '.implode('',$cvalue).';'))
 			{
-				$cvalue[]  = $srow;
+				$expsubc_array_values[$expsubc_key]         = round(eval('return '.implode('',$cvalue).';'),2);
+				$input_field_values[$expsubc_key]['values'] = round(eval('return '.implode('',$cvalue).';'),2);
 			}
-		}
-		if(eval('return '.implode('',$cvalue).';'))
-		{
-			$expsubc_array_values[$expsubc_key]         = round(eval('return '.implode('',$cvalue).';'),2);
-			$input_field_values[$expsubc_key]['values'] = round(eval('return '.implode('',$cvalue).';'),2);
 		}
 	}
 
-	foreach ($input_field_values as $query_key => $query_value)
+	if(count($input_field_values) > 0)
 	{
-		if(!empty($query_value['input_sublinkid']))
+		foreach ($input_field_values as $query_key => $query_value)
 		{
-			if($query_value['input_id'] < 1)
+			if(!empty($query_value['input_sublinkid']))
 			{
-				$query_value['input_id'] = 0;
-				$inserted_input_key[]    = "'".$query_value['input_key']."'";
+				// start of replacing value from game_link_replace table
+				$sqlreplace = "SELECT Rep_Value FROM `GAME_LINK_REPLACE` 
+				INNER JOIN GAME_LINKAGE_SUB ls on Rep_SublinkID =ls.SubLink_ID 
+				WHERE Rep_SublinkID=".$query_value['input_sublinkid']." AND Rep_Start<= ".$query_value['values']."
+				AND Rep_End>=".$query_value['values']." AND 
+				(ls.SubLink_InputMode ='user' OR ls.SubLink_InputMode ='formula')";
+				$objreplace  = $funObj->ExecuteQuery($sqlreplace);
+				if ($objreplace->num_rows > 0) 
+				{
+					$resreplace = $funObj->FetchObject($objreplace);
+					$current    = $resreplace->Rep_Value;
+				}
+				else
+				{
+					$current = $query_value['values'];
+				}
+				// end of replacing value
+
+				if($query_value['input_id'] < 1)
+				{
+					$query_value['input_id'] = 0;
+					$inserted_input_key[]    = "'".$query_value['input_key']."'";
+				}
+				$query_field_value [] = "(".$query_value['input_id'].",".$userid.",".$query_value['input_sublinkid'].",'".$query_value['input_key']."',".$current.")";
+				$input_field_values[$query_key]['values'] = $current;
 			}
-			$query_field_value [] = "(".$query_value['input_id'].",".$userid.",".$query_value['input_sublinkid'].",'".$query_value['input_key']."',".$query_value['values'].")";
 		}
+
+		$query  .= implode(',',$query_field_value);
+		$query  .= "ON DUPLICATE KEY UPDATE input_current=VALUES(input_current)";
+		// making query to update input_id in the json of inserted record
+		$object  = $funObj->ExecuteQuery($query);
 	}
 	
-	$query  .= implode(',',$query_field_value);
-	$query  .= "ON DUPLICATE KEY UPDATE input_current=VALUES(input_current)";
-	// making query to update input_id in the json of inserted record
+
 	if(count($inserted_input_key) > 0)
 	{
 		$input_key_in      = implode(',', $inserted_input_key);
@@ -205,7 +237,7 @@ if($_POST['action']=='updateFormula')
 	}
 	
 // print_r($input_field_values); exit;
-	$object  = $funObj->ExecuteQuery($query);
+	// $object  = $funObj->ExecuteQuery($query);
 	// echo $query;
 	// when everything updated then modify user report
 	// delete the existing data for that particular user

@@ -324,6 +324,8 @@ span.alert-danger {
                   </select>
                 </div>
               </div>
+              <!-- taking this field to put the data to game views table for key -->
+              <input type="hidden" name="input_key" id="input_key" value="">
               <!-- adding this to adjust viewing order at the user end -->
               <div class="row">
                 <div class="col-md-4">
@@ -842,10 +844,32 @@ span.alert-danger {
           <script>
             <!--
 
-             $('#siteuser_btn').click( function(){
-              $( "#siteuser_sbmit" ).trigger( "click" );
+             $('#siteuser_btn').click( function()
+             {
+              if($('input[name=Mode]:checked').val() == 'comp')
+              {
+                var key = 'comp_'+$('#comp_id').val();
+              }
+              else
+              {
+                var key = 'subc_'+$('#subcomp_id').val();
+              }
+              $('#input_key').val(($('#area_id option:selected').text()).trim()+'_'+key);
+              $("#siteuser_sbmit").trigger( "click" );
             });
-             $('#siteuser_btn_update').click( function(){
+
+             $('#siteuser_btn_update').click( function()
+             {
+              if($('input[name=Mode]:checked').val() == 'comp')
+              {
+                var key = 'comp_'+$('#comp_id').val();
+              }
+              else
+              {
+                var key = 'subc_'+$('#subcomp_id').val();
+              }
+              // alert($('#area_id option:selected').text().trim()+'_'+key);
+              $('#input_key').val(($('#area_id option:selected').text()).trim()+'_'+key);
               $( "#siteuser_update" ).trigger( "click" );
             });
 

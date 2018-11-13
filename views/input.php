@@ -415,7 +415,7 @@ include_once 'includes/header.php';
 
                       echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>";
                       ?>
-                      <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%; padding: 0 4px;"></span>
+                      <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%; padding: 0.6px 4px;"></span>
                       <?php
                     }
 
@@ -823,7 +823,7 @@ include_once 'includes/header.php';
 
                   echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
                   ?>
-                  <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%; padding: 0 4px;"></span>
+                  <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%; padding: 0.6px 4px;"></span>
                   <?php
                 }
                 elseif($row2['InputModeType']=="mChoice")
@@ -986,65 +986,61 @@ include_once 'includes/header.php';
 </div>
 <?php if($addedit=="Add") { ?>
   <script type="text/javascript">
+    // var ref_tab     = $("ul.nav-tabs li.active a").text(); //active tab slect
+    // window.location = "input.php?ID="+<?php echo $gameid; ?> +"&tab="+ref_tab;              
     setTimeout(function()
     {
-      // $('#execute_input').trigger('click');
-      // return false;
-      //$('#save_input').click( function(){ 
+    //$('#save_input').click( function(){ 
       //$("#save_input").attr('disabled',true);
-    var ref_tab = $("ul.nav-tabs li.active a").text(); //active tab slect
-    var form    = $('#game_frm').get(0);
-    $.ajax({
-      url        :  "includes/ajax/ajax_addedit_input.php",
-      type       : "POST",
-      data       : new FormData(form),
-      processData: false,
-      cache      : false,
-      contentType: false,
-      beforeSend: function(){
-        //alert("beforeSend");
-        $("#input_loader").html("<img src='images/loading.gif' height='30'> Inputs being saved, please wait.");
-        $('#loader').addClass( 'loader' );
-      },
-      success: function( result ){
-        try{
-          //alert (result);
-          var response = JSON.parse( result );
-          if( response.status == 1 ){
-            //alert(response.msg);
-            $('#execute_input').trigger('click');
-            return false;
-            alert('Your time has started. All the best!');
-            window.location = "input.php?ID="+<?php echo $gameid; ?> +"&tab="+ref_tab;              
-            
-            //$('#Modal_Success').modal('show', { backdrop: "static" } );
-          } else {
-            $('.option_err').html( result.msg );
-            //$("#save_input").attr('disabled',false);
+      var ref_tab = $("ul.nav-tabs li.active a").text(); //active tab slect
+      var form    = $('#game_frm').get(0);
+      $.ajax({
+        url:  "includes/ajax/ajax_addedit_input.php",
+        type: "POST",
+        data: new FormData(form),
+        processData: false,
+        cache: false,
+        contentType: false,
+        beforeSend: function(){
+          //alert("beforeSend");
+          $("#input_loader").html("<img src='images/loading.gif' height='30'> Inputs being saved, please wait.");
+          $('#loader').addClass( 'loader' );
+        },
+        success: function( result ){
+          try{
+            //alert (result);
+            var response = JSON.parse( result );
+            if( response.status == 1 ){
+              //alert(response.msg);
+              alert('Inputs saved successfully.');
+              window.location = "input.php?ID="+<?php echo $gameid; ?> +"&tab="+ref_tab;              
+              
+              //$('#Modal_Success').modal('show', { backdrop: "static" } );
+            } else {
+              $('.option_err').html( result.msg );
+              //$("#save_input").attr('disabled',false);
+              $("#input_loader").html('');
+            }
+          } catch ( e ) {
+            alert(e + "\n" + result);
+            alert('Inputs could not be saved, please try again.');
+            console.log( e + "\n" + result );
+            $("#save_input").attr('disabled',false);
             $("#input_loader").html('');
-          }
-        } catch ( e ) {
-          alert(e + "\n" + result);
+          }         
+          $('#loader').removeClass( 'loader' );
+        },
+        error: function(jqXHR, exception){
+          //alert('error'+ jqXHR.status +" - "+exception);
           alert('Inputs could not be saved, please try again.');
-          console.log( e + "\n" + result );
-          $("#save_input").attr('disabled',false);
+          //$("#save_input").attr('disabled',false);
           $("#input_loader").html('');
-        }         
-        $('#loader').removeClass( 'loader' );
-      },
-      error: function(jqXHR, exception){
-        //alert('error'+ jqXHR.status +" - "+exception);
-        alert('Inputs could not be saved, please try again.');
-        //$("#save_input").attr('disabled',false);
-        $("#input_loader").html('');
-      }
-    });
-
-
-  }, 3000);
-
-</script>
+        }
+      });    
+    }, 3000);
+  </script>
 <?php } ?>
+
 <script type="text/javascript">
   function lookupCurrent(sublinkid,key,value)
   {
@@ -1230,6 +1226,10 @@ include_once 'includes/header.php';
   //   $(this).text($(this).parent().find('input[type=range]').val())
   // }
   $(document).ready(function(){
+    // removing inlinebox class from button div if input type=range to align button down
+    $('input[type="range"]').each(function(i,e){
+      $(this).parents('div.text-right').find('div.closeSave').css({'top':'16px'});
+    });
     $('[data-toggle="tooltip"]').tooltip();
     formula_json_expcomp = {};
     formula_json_expsubc = {};
@@ -1243,6 +1243,7 @@ include_once 'includes/header.php';
     // console.log(formula_json_expsubc);
     // console.log(input_field_values);
     // console.log(input_field_keys);
+
   });
   function create_json_input_field_keys(key)
   {
@@ -1517,7 +1518,7 @@ include_once 'includes/header.php';
           // console.log($(this).attr('id'));
           // input_field_values[$(this).attr('id')] = $(this).val();
           // // console.log($(this).prev().attr('id'));
-          if($(this).parent('div').hasClass('align_radio'))
+          if($(this).parents('div').hasClass('align_radio'))
           {
             // if multiple choice or radio button
             var data_element = $(this).parents('div.InlineBox').find('input.data_element');
@@ -1568,7 +1569,7 @@ include_once 'includes/header.php';
   function update_json_data(id,key,formula_json_expcomp,formula_json_expsubc,input_field_values)
   {
     // console.log($('#'+key).val());
-    if($('#'+key).parent('div').hasClass('align_radio'))
+    if($('#'+key).parents('div').hasClass('align_radio'))
     {
       var value = $("input[type='radio']:checked").val();
     }

@@ -165,14 +165,57 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	if($object->num_rows > 0)
 	{
 		$addedit = "Edit";
+
+		// if admin update any comp or subcom for the area that changes the key then update after login
+		$updateQuery  = "SELECT * FROM GAME_VIEWS WHERE views_Game_ID = $gameid AND is_updated=1";
+		$updateObject = $functionsObj->ExecuteQuery($updateQuery);
+		if($updateObject->num_rows > 0)
+		{
+			while($updateRow = $updateObject->fetch_object())
+			{
+				$sqlUpdate = "UPDATE GAME_INPUT SET input_key = '".$updateRow->views_key."' WHERE input_sublinkid=$updateRow->views_sublinkid AND input_user=$userid";
+				$rowUpdate = $functionsObj->UpdateData('GAME_INPUT', array('input_key' => $updateRow->views_key), 'input_sublinkid', $updateRow->views_sublinkid, 0);
+				if($rowUpdate > 0)
+				{
+					// update the game_views table is_updated field to 0
+					$update_update = $functionsObj->UpdateData('GAME_VIEWS', array('is_updated' => 0), 'views_id', $updateRow->views_id, 0);
+				}
+			}
+		}
+
 		while($row = $object->fetch_object())
 		{
 			$data[$row->input_key]  = $row->input_current;
-		//echo $row->key."-".$row->current.",";
+			//echo $row->key."-".$row->current.",";
 		}
 	}
-	else{
-		$addedit="Add";
+	else
+	{
+		$sql = "SELECT views_sublinkid AS input_sublinkid, views_current AS input_current, views_key AS input_key FROM GAME_VIEWS WHERE views_Game_ID = $gameid";
+
+		$view_object = $functionsObj->ExecuteQuery($sql);
+		while($snap_view = mysqli_fetch_object($view_object))
+		{
+			$insertArr = array(
+				'input_user'      => $userid,
+				'input_sublinkid' => $snap_view->input_sublinkid,
+				'input_current'   => $snap_view->input_current,
+				'input_key'       => $snap_view->input_key,
+			);
+			$bulkInsertArray[] = "($userid,$snap_view->input_sublinkid,$snap_view->input_current,'".$snap_view->input_key."')";
+			// $insert_data       = $functionsObj->InsertData ( 'GAME_INPUT', $insertArr, 0, 0 );
+		}
+		// print_r($bulkInsertArray); echo "<br>";
+		if(count($bulkInsertArray) > 0)
+		{
+			$bulkValues      = implode(',',$bulkInsertArray);
+			$bulkInsertQuery = "INSERT INTO GAME_INPUT (input_user,input_sublinkid,input_current,input_key) VALUES $bulkValues";
+			$functionsObj->ExecuteQuery($bulkInsertQuery);
+		}
+		else
+		{
+			$addedit = "Add";
+		}
 	}
 //echo $addedit;
 //foreach($data as $x=>$x_value)

@@ -34,11 +34,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 		$object = $functionsObj->SelectData ( array (), 'GAME_LINKAGE_SUB', array ($where), 
 			'', '', '', '', 0 );
 
-		if ($object->num_rows > 0) {
+		if ($object->num_rows > 0)
+		{
 			$msg      = 'Entered Link already present';
 			$type [0] = 'inputError';
 			$type [1] = 'has-error';
-		} else 
+		}
+		else 
 		{
 			if($_POST['inputType']=='formula')
 			{
@@ -80,8 +82,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 			}
 			elseif($_POST['SubLink_InputModeType'] == 'mChoice')
 			{
-				$option                     = array_combine($_POST['option'],$_POST['option_value']);
-				$question                   = array(
+				$option   = array_combine($_POST['option'],$_POST['option_value']);
+				$question = array(
 					'question' => $_POST['question'],
 				);
 				$SubLink_InputModeTypeValue = $question + $option;
@@ -134,10 +136,21 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 			$result = $functionsObj->InsertData('GAME_LINKAGE_SUB', $linkdetails, 0, 0);
 			if($result)
 			{
-				$id = $functionsObj->InsertID();
-
-					//exit();
-					//check if any value exist for replace
+				$id            = $functionsObj->InsertID();
+				// filling data in game_views table for snapshot
+				$query         = "SELECT Link_GameID FROM GAME_LINKAGE WHERE Link_ID=$linkid";
+				$game_object   = $functionsObj->ExecuteQuery($query);
+				$views_Game_ID = mysqli_fetch_object($game_object);
+				// $views_Game_ID $linkid
+				$game_views_array = array(
+					'views_sublinkid' => $id,
+					'views_key'       => $_POST['input_key'],
+					'views_Game_ID'   => $views_Game_ID->Link_GameID,
+				);
+				$snap_view = $functionsObj->InsertData('GAME_VIEWS', $game_views_array, 0, 0);
+				// filling data to snap view end here for game views table
+				//exit();
+				//check if any value exist for replace
 				if(isset($_POST['start1']) && isset($_POST['end1']) && isset($_POST['value1']))
 				{
 						//echo empty($_POST['replaceid1']);
@@ -264,9 +277,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 			$msg      = 'Entered Link already present';
 			$type [0] = 'inputError';
 			$type [1] = 'has-error';
-		} else 
+		}
+		else 
 		{
-			
 			if($_POST['inputType']=='formula')
 			{
 				$object  = $functionsObj->SelectData(array(), 'GAME_FORMULAS', array('f_id='.$_POST['formula_id']), '', '', '', '', 0);
@@ -477,12 +490,19 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 				else{
 						//else delete all if exist
 				}
+				$game_views_key = array(
+					'views_key'  => $_POST['input_key'],
+					'is_updated' => 1,
+				);
+				$updtae_table        = $functionsObj->UpdateData('GAME_VIEWS', $game_views_key, 'views_sublinkid', $sublinkid, 0);
 				$_SESSION['msg']     = "Link updated successfully";
 				$_SESSION['type[0]'] = "inputSuccess";
 				$_SESSION['type[1]'] = "has-success";
 				header("Location: ".site_root."ux-admin/linkage/link/".$linkid);
 				exit(0);
-			}else{
+			}
+			else
+			{
 				$msg = "Error: ".$result;
 				$type[0] = "inputError";
 				$type[1] = "has-error";
@@ -992,7 +1012,7 @@ elseif(isset($_GET['del'])){
 	
 }elseif(isset($_GET['linkedit'])){
 	$header = 'Add Links';
-	$file   ='addeditlink.php';
+	$file   = 'addeditlink.php';
 	
 	$linkid = $_GET['linkedit'];
 	
