@@ -80,25 +80,25 @@ include_once 'includes/header.php';
                 {
                   if($i == 0)
                   {
-                    echo "<li role='presentation' class='active regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                    echo "<li role='presentation' id='".$row['Area_Name']."' class='active regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                     $activearea=$row['Area_Name'];
 
                   }
                   else
                   {
-                    echo "<li role='presentation' class='regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                    echo "<li role='presentation' id='".$row['Area_Name']."' class='regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                   }
 
                   $i++;
                 }
                 else if ($tab == $row['Area_Name'])
                 {
-                  echo "<li role='presentation' class='active regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                  echo "<li role='presentation' id='".$row['Area_Name']."' class='active regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                   $activearea=$row['Area_Name'];
                 }
                 else
                 {
-                  echo "<li role='presentation' class='regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                  echo "<li role='presentation' id='".$row['Area_Name']."' class='regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                 }
 
               }
@@ -119,21 +119,21 @@ include_once 'includes/header.php';
                 {
                   if($i == 0)
                   {
-                    echo "<div role='tabpanel' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
+                    echo "<div role='tabpanel' data-TabId='".$row['Area_Name']."' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
                   }
                   else
                   {
-                    echo "<div role='tabpanel' class='tab-pane' id='".$row['Area_Name']."Tab'>";
+                    echo "<div role='tabpanel' data-TabId='".$row['Area_Name']."' class='tab-pane' id='".$row['Area_Name']."Tab'>";
                   }
                   $i++;
                 }
                 else if ($tab == $row['Area_Name'])
                 {
-                  echo "<div role='tabpanel' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
+                  echo "<div role='tabpanel' data-TabId='".$row['Area_Name']."' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
                 }
                 else              
                 {
-                  echo "<div role='tabpanel' class='tab-pane' id='".$row['Area_Name']."Tab'>";
+                  echo "<div role='tabpanel' data-TabId='".$row['Area_Name']."' class='tab-pane' id='".$row['Area_Name']."Tab'>";
                 }
 
                 $sqlcomp = "SELECT distinct a.Area_ID as AreaID, c.Comp_ID as CompID, a.Area_Name as Area_Name, l.Link_Order as 'Order',  
@@ -1232,6 +1232,32 @@ include_once 'includes/header.php';
       $(this).parents('div.text-right').find('div.closeSave').css({'margin-top':'-11%'});
     });
     $('[data-toggle="tooltip"]').tooltip();
+
+    // hide area if there is no component or all of them are hidden
+    $('.tab-pane').each(function(i,e)
+    {
+      var tabId   = $(this).attr('data-tabId');
+      var hidden  = 0;
+      var element = $(e).find('div.scenariaListingDiv').length;
+      if(element > 0)
+      {
+        $(e).children('div.scenariaListingDiv').each(function(){
+          if($(this).hasClass('hidden'))
+          {
+            hidden++;
+          }
+        });
+        if(element == hidden)
+        {
+          $('#'+tabId).addClass('hidden');
+        }
+      }
+      else
+      {
+        $('#'+tabId).addClass('hidden');
+      }
+    });
+
     formula_json_expcomp = {};
     formula_json_expsubc = {};
     input_field_values   = {};
@@ -1633,6 +1659,7 @@ include_once 'includes/header.php';
           // console.log(exception);
           // $("#"+id).show();
           $("#input_loader").html('');
+          $('.overlay').hide();
         }
       }
     });
