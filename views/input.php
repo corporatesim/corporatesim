@@ -415,7 +415,7 @@ include_once 'includes/header.php';
 
                       echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>";
                       ?>
-                      <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%; padding: 0.6px 4px;"></span>
+                      <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 30%; margin-top: 1%; padding: 0.6px 4px;"></span>
                       <?php
                     }
 
@@ -823,7 +823,7 @@ include_once 'includes/header.php';
 
                   echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
                   ?>
-                  <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 35%; margin-top: 1%; padding: 0.6px 4px;"></span>
+                  <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 30%; margin-top: 1%; padding: 0.6px 4px;"></span>
                   <?php
                 }
                 elseif($row2['InputModeType']=="mChoice")
@@ -1228,7 +1228,8 @@ include_once 'includes/header.php';
   $(document).ready(function(){
     // removing inlinebox class from button div if input type=range to align button down
     $('input[type="range"]').each(function(i,e){
-      $(this).parents('div.text-right').find('div.closeSave').css({'top':'16px'});
+      $(this).parents('div.text-right').find('div.closeSave').parent('div').removeClass('InlineBox').css({'margin':'1% 1% 0% 2%'});
+      $(this).parents('div.text-right').find('div.closeSave').css({'margin-top':'-11%'});
     });
     $('[data-toggle="tooltip"]').tooltip();
     formula_json_expcomp = {};
