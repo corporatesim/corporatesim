@@ -160,104 +160,135 @@ include_once 'includes/header.php';
                       //echo "<form > ";
                   switch ($row1['ViewingOrder']) {
                     case 1:
-                    $ComponentName = "";
-                    $DetailsChart  = "";
-                    $InputFields   = "";
-                    $comp_length   = 'col-md-12';
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "";
+                    $DetailsChart   = "";
+                    $InputFields    = "";
+                    $comp_length    = 'col-md-12';
                     break;
 
                     case 2:
-                    $ComponentName = "";
-                    $DetailsChart  = "pull-right";
-                    $InputFields   = "";
-                    $comp_length   = 'col-md-12';
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "";
+                    $DetailsChart   = "pull-right";
+                    $InputFields    = "";
+                    $comp_length    = 'col-md-12';
                     break;
 
                     case 3:
-                    $ComponentName = "pull-right";
-                    $DetailsChart  = "";
-                    $InputFields   = "";
-                    $comp_length   = 'col-md-12';
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "pull-right";
+                    $DetailsChart   = "";
+                    $InputFields    = "";
+                    $comp_length    = 'col-md-12';
                     break;
 
                     case 4:
-                    $ComponentName = "hidden";
-                    $DetailsChart  = "";
-                    $InputFields   = "";
-                    $comp_length   = 'col-md-12';
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "hidden";
+                    $DetailsChart   = "";
+                    $InputFields    = "";
+                    $comp_length    = 'col-md-12';
                     break;
 
                     case 5:
-                    $ComponentName = "pull-right";
-                    $DetailsChart  = "pull-right";
-                    $InputFields   = "";
-                    $comp_length   = 'col-md-12';
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "pull-right";
+                    $DetailsChart   = "pull-right";
+                    $InputFields    = "";
+                    $comp_length    = 'col-md-12';
                     break;
 
                     case 6:
-                    $ComponentName = "hidden";
-                    $DetailsChart  = "pull-right";
-                    $InputFields   = "";
-                    $comp_length   = 'col-md-12';
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "hidden";
+                    $DetailsChart   = "pull-right";
+                    $InputFields    = "";
+                    $comp_length    = 'col-md-12';
                     break;
 
                     case 7:
-                    $ComponentName = "pull-right";
-                    $DetailsChart  = "hidden";
-                    $InputFields   = "";
-                    $comp_length   = 'col-md-12';
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "pull-right";
+                    $DetailsChart   = "hidden";
+                    $InputFields    = "";
+                    $comp_length    = 'col-md-12';
                     break;
 
                     case 8:
-                    $ComponentName = "hidden";
-                    $DetailsChart  = "pull-right";
-                    $InputFields   = "";
-                    $comp_length   = 'col-md-12';
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "hidden";
+                    $DetailsChart   = "pull-right";
+                    $InputFields    = "";
+                    $comp_length    = 'col-md-12';
                     break;
 
                     case 9:
-                    $ComponentName = "";
-                    $DetailsChart  = "";
-                    $InputFields   = "hidden";
-                    $comp_length   = 'col-md-12';
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "";
+                    $DetailsChart   = "";
+                    $InputFields    = "hidden";
+                    $comp_length    = 'col-md-12';
                     break;
 
                     case 10:
-                    $ComponentName = "";
-                    $DetailsChart  = "hidden";
-                    $InputFields   = "";
-                    $comp_length   = 'col-md-12';
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "";
+                    $DetailsChart   = "hidden";
+                    $InputFields    = "";
+                    $comp_length    = 'col-md-12';
                     break;
 
                     case 11:
-                    $ComponentName = "pull-right";
-                    $DetailsChart  = "";
-                    $InputFields   = "hidden";
-                    $comp_length   = 'col-md-12';
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "pull-right";
+                    $DetailsChart   = "";
+                    $InputFields    = "hidden";
+                    $comp_length    = 'col-md-12';
                     break;
 
                     case 12:
-                    $ComponentName = "hidden";
-                    $DetailsChart  = "";
-                    $InputFields   = "";
-                    $comp_length   = 'col-md-12';
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "hidden";
+                    $DetailsChart   = "";
+                    $InputFields    = "";
+                    $comp_length    = 'col-md-12';
                     break;
 
                     case 13:
-                    $ComponentName = "";
-                    $DetailsChart  = "hidden";
-                    $InputFields   = "";
-                    $comp_length   = "col-sm-6";
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "";
+                    $DetailsChart   = "hidden";
+                    $InputFields    = "";
+                    $comp_length    = "col-sm-6";
                     break;
 
                     case 14:
-                    $ComponentName = "pull-right";
-                    $DetailsChart  = "hidden";
-                    $InputFields   = "";
-                    $comp_length   = "col-sm-6";
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "pull-right";
+                    $DetailsChart   = "hidden";
+                    $InputFields    = "";
+                    $comp_length    = "col-sm-6";
+                    break;
+
+                    case 15:
+                    $ckEditorLength = "col-md-12";
+                    $ComponentName  = "hidden";
+                    $DetailsChart   = "";
+                    $InputFields    = "hidden";
+                    $comp_length    = "col-md-12";
+                    break;
+
+                    case 16:
+                    $ckEditorLength = "col-md-12";
+                    $ComponentName  = "hidden";
+                    $DetailsChart   = "";
+                    $InputFields    = "hidden";
+                    $comp_length    = "col-md-6";
                     break;
                   }
-                  if($comp_length == 'col-sm-6')
+
+                  if($comp_length == 'col-md-6')
                   {
                     $comp_input_lenght      = 'col-md-6';
                     $comp_name_length       = 'col-md-6';
@@ -281,7 +312,7 @@ include_once 'includes/header.php';
                   echo "<div class='col-sm-1 ".$comp_name_length." regular ".$ComponentName."'>";
                   echo $row1['Comp_Name'];
                   echo "</div>";
-                  echo "<div class='col-sm-6 col-md-6 no_padding ".$DetailsChart."'>";
+                  echo "<div class='col-sm-6 ".$ckEditorLength." no_padding ".$DetailsChart."'>";
 
                   if(empty($row1['ChartID']))
                   {

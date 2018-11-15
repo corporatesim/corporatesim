@@ -30,8 +30,18 @@ if($_POST['action'] == 'game_scenario')
 // to get the users linked with the game with scenario
 if($_POST['action'] == 'game_users')
 {
-	$linkid  = $_POST['linkid'];
-	$sql     = "SELECT gu.User_id,concat(gu.User_fname,' ',gu.User_lname) AS Name,gu.User_username AS UserName,gu.User_email AS Email FROM GAME_SITE_USERS gu LEFT JOIN GAME_SITE_USER_REPORT_NEW gr ON gr.uid = gu.User_id WHERE gr.linkid=$linkid";
+	if($_POST['email_value'])
+	{
+		$searchEmail = $_POST['email_value'];
+		$filterSql   = " AND gu.User_email LIKE '%".$searchEmail."%' ";
+	}
+	else
+	{
+		$filterSql = '';
+	}
+	$linkid = $_POST['linkid'];
+	$sql    = "SELECT gu.User_id,concat(gu.User_fname,' ',gu.User_lname) AS Name,gu.User_username AS UserName,gu.User_email AS Email FROM GAME_SITE_USERS gu LEFT JOIN GAME_SITE_USER_REPORT_NEW gr ON gr.uid = gu.User_id WHERE gr.linkid=$linkid";
+	$sql .= $filterSql;
 	// die($sql);
 	$Object = $funObj->ExecuteQuery($sql);
 	if($Object->num_rows > 0)
