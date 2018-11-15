@@ -186,7 +186,6 @@ span.alert-danger {
                 $(result).each(function(index,e)
                 {
                   count++;
-                  // checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="UserName: '+result[index].UserName+' and Email: '+result[index].Email+'"><input type="checkbox" name="user_id[]" id="user'+result[index].User_id+' value='+result[index].User_id+'"> '+result[index].Name+'</label></div>';
                   checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="'+result[index].Email+'"><input type="checkbox" value="'+result[index].User_id+'" name="user_id[]"> '+result[index].Name+'</label></div>'
                 });
                 // alert(count);
