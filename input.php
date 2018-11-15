@@ -633,17 +633,15 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 							(SELECT ls.SubLink_ID FROM GAME_LINKAGE_SUB ls 
 							WHERE SubLink_SubCompId=".$strkey[1]." and SubLink_LinkID=".$linkid." )";
 							//AND SubLink_type=0
-							
 							//echo "sqlvalue- ".$sqlvalue."</br>";
-							
 							$value        = $functionsObj->ExecuteQuery($sqlvalue);
 							$resultvalue  = $functionsObj->FetchObject($value);
 							//echo "y - ".$y."  strvalue[y] - ".$strvalue[$y]."</br>";
 							//echo $resultvalue->input_current."</br>";
 							
 							$strvalue[$y] = $resultvalue->input_current;
-							
 						}
+
 						elseif($strkey[0]=='comp')
 						{
 							$sqlvalue = "SELECT input_current FROM GAME_INPUT 
