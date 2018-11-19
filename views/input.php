@@ -64,7 +64,7 @@ include_once 'includes/header.php';
                 }
                 else
                 {
-                  $showhide = "style='padding:0px; padding-bottom:3px;'";
+                  $showhide = "style='padding-bottom:3px;'";
                 }
                 // writing this condition to change the background color and text color of game area
                 if($row['TextColor'] || $row['BackgroundColor'])
@@ -76,26 +76,26 @@ include_once 'includes/header.php';
                   $showStyle = '';
                 }
                 // to set the area classes according to its name laength
-                if(strlen($row['Area_Name']) <= 8)
-                {
-                  $area_length = 'col-md-1';
-                }
-                elseif(strlen($row['Area_Name']) > 8 && strlen($row['Area_Name']) <= 20)
-                {
-                  $area_length = 'col-md-2';
-                }
-                elseif(strlen($row['Area_Name']) > 20 && strlen($row['Area_Name']) <= 36)
-                {
-                  $area_length = 'col-md-3';
-                }
-                elseif(strlen($row['Area_Name']) > 36 && strlen($row['Area_Name']) <= 46)
-                {
-                  $area_length = 'col-md-4';
-                }
-                else
-                {
-                  $area_length = 'col-md-6';
-                }
+                // if(strlen($row['Area_Name']) <= 8)
+                // {
+                //   $area_length = 'col-md-1';
+                // }
+                // elseif(strlen($row['Area_Name']) > 8 && strlen($row['Area_Name']) <= 20)
+                // {
+                //   $area_length = 'col-md-2';
+                // }
+                // elseif(strlen($row['Area_Name']) > 20 && strlen($row['Area_Name']) <= 36)
+                // {
+                //   $area_length = 'col-md-3';
+                // }
+                // elseif(strlen($row['Area_Name']) > 36 && strlen($row['Area_Name']) <= 46)
+                // {
+                //   $area_length = 'col-md-4';
+                // }
+                // else
+                // {
+                //   $area_length = 'col-md-6';
+                // }
 
                 if ($tab == 'NOTSET') 
                 {
