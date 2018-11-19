@@ -16,7 +16,18 @@ include_once 'includes/header.php';
 							</div>
 							<div class="col-sm-10 col-sm-offset-1 text-right">
 								View Game Report <img src="images/reportIcon.png" alt="Report">
+								<?php
+								if($companyid==999)
+													{
+														//goto Input page
+														$url = site_root."input.php?ID=".$gameid;
+														echo "<a href='".$url."'><img src='images/startGameIcon.png' alt='Start/Resume Game' class=''></a>";
+													} 
+								?>
+               
+
 							</div>
+
 							<div class="clearfix"></div>
 							<div class="col-sm-12">
 								<hr></hr>
@@ -25,6 +36,7 @@ include_once 'includes/header.php';
 								<h4 class="innerh4">Other Unplayed Game</h4>
 							</div>	
 							<div class="col-sm-10 col-sm-offset-1 no_padding" style="padding-bottom:20px;">	
+
 							<?php 
 							//echo $str;
 							foreach($strgames as $y=>$y_value) 

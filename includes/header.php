@@ -111,20 +111,48 @@
 			right    : 35px;
 		}
 	}
+	@media only screen and (max-width: 768px) {
+		.dashboardList
+		{
+			margin-top : 25px;
+		}
+ @media only screen and (max-width:290px){
+ 		.dashboardList ul li 
+ 		{ 
+ 		       margin-top:9%;
+ 		}
+ 	}
+		[class*="col-"] 
+		{
+			width : 100%;
+			margin-top:3%;
+		}
 
+	}
+	@media only screen and (max-width: 300px){
+		.timer {
+			width: 100%;
+			margin-top: 27%;
+		}
+	}
 
-@media only screen and (max-width: 768px) {
-    /* For mobile phones: */
-    [class*="col-"] {
-        width: 100%;
-    }
-}
+	@media (max-width:317px) and (min-width:300px) {
 
-@media only screen and (max-width:768px){
-	.nav{ position:fixed;
-	
-	width:100%; }
-}
+   .timer{
+   width:100%;
+   	margin-top:12%;
+   }
+	}
+
+	@media only screen and (max-width:768px){
+		#nav
+		{
+			/* width   : 100%; */
+			background: #ffffff;
+			margin-top: 0px;
+			
+		}
+	}
 </style>
 </head>
 <body>	
@@ -147,7 +175,7 @@
 					<img src="<?php echo site_root."images/logo-main.png";?>"  width="40px" />
 					<!--/a-->
 				</div>
-				<ul class="nav navbar-nav navbar-right headerNav">
+				<ul class="nav navbar-nav navbar-right headerNav" id="nav">
 					<?php 
 					if($_REQUEST['act']!='chart')
 					{

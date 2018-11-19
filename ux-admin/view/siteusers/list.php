@@ -227,7 +227,8 @@
     		<table class="table table-striped table-bordered table-hover" id="dataTables-example">
     			<thead>
     				<tr>
-    					<th>#</th>
+    					<th>Sr. No</th>
+    					<th>User Id</th>
     					<th>Name</th>
     					<th>E-mail</th>
     					<th>Password</th>
@@ -243,6 +244,7 @@
     				$i=1; while($row = $object->fetch_object()){ ?>
     					<tr>
     						<th><?php echo $i;?></th>
+    						<th><?php echo $row->User_id;?></th>
     						<td><?php echo ucfirst($row->User_fname)." ".ucfirst($row->User_lname); ?></td>
     						<td><?php echo $row->User_email;?></td>
     						<td><?php echo $row->pwd;?></td>
