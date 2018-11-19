@@ -64,7 +64,7 @@ include_once 'includes/header.php';
                 }
                 else
                 {
-                  $showhide = '';
+                  $showhide = "style='padding:0px; padding-bottom:3px;'";
                 }
                 // writing this condition to change the background color and text color of game area
                 if($row['TextColor'] || $row['BackgroundColor'])
@@ -75,30 +75,51 @@ include_once 'includes/header.php';
                 {
                   $showStyle = '';
                 }
+                // to set the area classes according to its name laength
+                if(strlen($row['Area_Name']) <= 8)
+                {
+                  $area_length = 'col-md-1';
+                }
+                elseif(strlen($row['Area_Name']) > 8 && strlen($row['Area_Name']) <= 20)
+                {
+                  $area_length = 'col-md-2';
+                }
+                elseif(strlen($row['Area_Name']) > 20 && strlen($row['Area_Name']) <= 36)
+                {
+                  $area_length = 'col-md-3';
+                }
+                elseif(strlen($row['Area_Name']) > 36 && strlen($row['Area_Name']) <= 46)
+                {
+                  $area_length = 'col-md-4';
+                }
+                else
+                {
+                  $area_length = 'col-md-6';
+                }
 
                 if ($tab == 'NOTSET') 
                 {
                   if($i == 0)
                   {
-                    echo "<li role='presentation' id='".$row['Area_Name']."' class='active regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                    echo "<li role='presentation' class='".$area_length."' id='".$row['Area_Name']."' class='active regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                     $activearea=$row['Area_Name'];
 
                   }
                   else
                   {
-                    echo "<li role='presentation' id='".$row['Area_Name']."' class='regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                    echo "<li role='presentation' class='".$area_length."' id='".$row['Area_Name']."' class='regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                   }
 
                   $i++;
                 }
                 else if ($tab == $row['Area_Name'])
                 {
-                  echo "<li role='presentation' id='".$row['Area_Name']."' class='active regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                  echo "<li role='presentation' class='".$area_length."' id='".$row['Area_Name']."' class='active regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                   $activearea=$row['Area_Name'];
                 }
                 else
                 {
-                  echo "<li role='presentation' id='".$row['Area_Name']."' class='regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                  echo "<li role='presentation' class='".$area_length."' id='".$row['Area_Name']."' class='regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                 }
 
               }
@@ -444,7 +465,8 @@ include_once 'includes/header.php';
 
                       echo "<input value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required $type $style_text ";
 
-                      echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>";
+                      echo "onchange='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' ";
+                      echo " onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>";
                       ?>
                       <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 30%; margin-top: 1%; padding: 0.6px 4px;"></span>
                       <?php
@@ -852,7 +874,9 @@ include_once 'includes/header.php';
 
                   echo "<input value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required $type ";
 
-                  echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
+                  echo "onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'";
+
+                  echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
                   ?>
                   <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 30%; margin-top: 1%; padding: 0.6px 4px;"></span>
                   <?php
