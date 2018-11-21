@@ -72,7 +72,7 @@ span.alert-danger {
           </label>
         </div>
 
-        <div class="col-md-2 hidden" id="count">
+        <div class="col-md-2 hidden" name= "count" id="count">
           <!-- <label> Total Users </label> -->
         </div>
 
@@ -84,7 +84,7 @@ span.alert-danger {
 
         <div class="col-md-2 hidden" id="select_all_div">
           <label for="Select All Data" data-toggle="tooltip" title="Select All Users">
-            <input type="checkbox" name="select_all" id="select_all" > Select All
+            <input type="checkbox" name="select_all" id="select_all" value=select_all > Select All
           </label>
         </div>
       </div>
@@ -142,15 +142,15 @@ span.alert-danger {
                   //console.log(index);
                   option += ('<option value='+result.Scen_ID+' data-linkid='+result.linkid+' data-scenarioname="'+result.Scen_Name+'">'+result.Scen_Name+'</option>');
                 });
-                console.log(option);
-                $('#game_scenario').html(option);
-              }
-              else
-              {
-                $('#game_scenario').html(option);
-              }
-            },
-          });          
+               // console.log(option);
+               $('#game_scenario').html(option);
+             }
+             else
+             {
+              $('#game_scenario').html(option);
+            }
+          },
+        });          
         }
         else
         {
@@ -186,7 +186,8 @@ span.alert-danger {
                 $(result).each(function(index,e)
                 {
                   count++;
-                  checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="'+result[index].Email+'"><input type="checkbox" value="'+result[index].User_id+'" name="user_id[]"> '+result[index].Name+'</label></div>'
+                  // checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="UserName: '+result[index].UserName+' and Email: '+result[index].Email+'"><input type="checkbox" name="user_id[]" id="user'+result[index].User_id+' value='+result[index].User_id+'"> '+result[index].Name+'</label></div>';
+                  checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="'+result[index].Email+'"><input type="checkbox" class="user_id" value="'+result[index].User_id+'" name="user_id[]"> '+result[index].Name+'</label></div>'
                 });
                 // alert(count);
                 $('#count').html('<label class="alert-success">Total Users: '+count+'</label>');
@@ -216,6 +217,7 @@ span.alert-danger {
         // alert($(this).val());
         if($(this).val() == 'select_users')
         {
+
           $('#select_all_div').removeClass('hidden');
           $('#search').removeClass('hidden');
           $('#count').removeClass('hidden');
@@ -229,6 +231,7 @@ span.alert-danger {
           $('#count').addClass('hidden');
         }
       });
+
 
     $('#select_all').on('click',function(){
       if($(this).is(':checked'))
@@ -245,10 +248,11 @@ span.alert-danger {
       }
     });
 
+
     $('#searchBox').on('keyup',function(){
       var search = $(this).val().toLowerCase();
       $.ajax({
-        url :  "model/ajax/UserReport.php",
+        url : "model/ajax/UserReport.php",
         type: "POST",
         data: "action=game_users&linkid="+linkid+'&email_value='+search,
         success: function( result )
@@ -261,11 +265,14 @@ span.alert-danger {
             $(result).each(function(index,e)
             {
               count++;
-              checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="'+result[index].Email+'"><input type="checkbox" value="'+result[index].User_id+'" name="user_id[]"> '+result[index].Name+'</label></div>';
+              checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="'+result[index].Email+'"><input type="checkbox" class="user_id" value="'+result[index].User_id+'" name="user_id[]"> '+result[index].Name+'</label></div>';
             });
+
             $('#count').html('<label class="alert-success">Total Users: '+count+'</label>');
             $('#linkid').attr('value',linkid);
             $('#users_data').html(checkbox);
+            
+
           }
           else
           {
@@ -274,6 +281,29 @@ span.alert-danger {
           }
         },
       });
+    });
+
+    $('#downloadReport').on('click',function(){
+      // if user selects filter option not the all users
+     if($('input[name=user_filter]:checked').val() != 'all_users')
+     {
+        // check if there is any checkbox is not checked
+        var total_checkboxes = $('#users_data').find('input.user_id').length;
+        var limit            = 0;
+
+        $('.user_id').each(function(index, el)
+        {
+          if($(this).is(':checked'))
+          {
+            limit++;
+          }
+        });
+        if(limit < 1)
+        {
+          alert('Please Select At Least One User To Download.');
+          return false;
+        }
+      }
     });
   });
 </script>

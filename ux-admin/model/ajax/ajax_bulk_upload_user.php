@@ -43,10 +43,18 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 		
 		if(move_uploaded_file($_FILES['upload_csv']['tmp_name'], $path)) 
 		{	
-			$file       = fopen($path, "r");
-			
-			//$filename = $_SERVER["DOCUMENT_ROOT"].'/organizationgames/sim/ux-admin/model/ajax/usercsvfile/'.$filename_chh;
-			$filename   = $_SERVER["DOCUMENT_ROOT"].'/ux-admin/model/ajax/usercsvfile/'.$filename_chh;
+			$file = fopen($path, "r");
+
+			if($_SERVER["DOCUMENT_ROOT"] == 'C:/xampp/htdocs')
+			{
+				// for local server
+				$filename = doc_root.'/ux-admin/model/ajax/usercsvfile/'.$filename_chh;
+			}
+			else
+			{
+				//$filename = $_SERVER["DOCUMENT_ROOT"].'/organizationgames/sim/ux-admin/model/ajax/usercsvfile/'.$filename_chh;
+				$filename = $_SERVER["DOCUMENT_ROOT"].'/ux-admin/model/ajax/usercsvfile/'.$filename_chh;
+			}
 
 			/* $sql =	"LOAD DATA INFILE '".$filename."'
 					INTO TABLE `GAME_SITE_USERS`
@@ -58,9 +66,10 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 				   ;"; */
 				   
 				   $sql = "LOAD DATA LOCAL INFILE '".$filename."'
-				   INTO TABLE GAME_SITE_USERS COLUMNS TERMINATED BY ',' (User_fname,User_lname,User_username,User_mobile,User_email);";
+				   INTO TABLE GAME_SITE_USERS COLUMNS TERMINATED BY ',' IGNORE 1 LINES (User_fname,User_lname,User_username,User_mobile,User_email);";
 				   
 				   $res = $funObj->ExecuteQuery($sql);
+				   print_r($res); exit;
 				   if($res)
 				   {
 				   	$password = $funObj->randomPassword(); 	

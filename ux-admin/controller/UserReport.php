@@ -45,30 +45,36 @@ if(isset($_POST['downloadReport']) && $_POST['downloadReport'] == 'DownloadUserR
 	$add_user_filter = $_POST['user_filter'];
 	$linkid          = $_POST['linkid'];
 	$user_id         = $_POST['user_id'];
-	
+
 	if(empty($EndDate))
 	{
-		$EndDate = date('Y-m-d');
+		$EndDate = date('Y-m-d H:i:s');
 	}
 
 	$sql = "SELECT * FROM GAME_SITE_USER_REPORT_NEW WHERE linkid=".$linkid." AND (date_time BETWEEN '".$StartDate."' AND '".$EndDate."')";
 
-	if($add_user_filter == 'select_users')
+
+	if($add_user_filter == 'select_users' )
 	{
-		$user_id = implode(',',$user_id);
-		// echo "apply filter";
-		$sql .= " AND uid IN ($user_id) ";
+
+		if(count($user_id) > 0)
+		{
+			$user_id = implode(',',$user_id);
+			// echo "apply filter";
+			$sql .= " AND uid IN ($user_id)  ";
+		}
+
 	}
-	
+
 	// $dateStr for date filter (date_time BETWEEN '2010-01-30 14:15:55' AND '2010-09-29 10:15:55')
 	$sql .= " order by id desc";
 
-	// die($sql);
+	//die($sql);
 
 	$objPHPExcel = new PHPExcel;
 	$objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
 	$objPHPExcel->getDefaultStyle()->getFont()->setSize(10);
-	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+	$objWriter   = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
 	ob_end_clean();
 	$currencyFormat = '#,#0.## \€;[Red]-#,#0.## \€';
 	$numberFormat   = '#,#0.##;[Red]-#,#0.##';	

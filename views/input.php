@@ -64,7 +64,7 @@ include_once 'includes/header.php';
                 }
                 else
                 {
-                  $showhide = "style='padding:0px; padding-bottom:3px;'";
+                  $showhide = "style='padding-bottom:3px;'";
                 }
                 // writing this condition to change the background color and text color of game area
                 if($row['TextColor'] || $row['BackgroundColor'])
@@ -76,26 +76,26 @@ include_once 'includes/header.php';
                   $showStyle = '';
                 }
                 // to set the area classes according to its name laength
-                if(strlen($row['Area_Name']) <= 8)
-                {
-                  $area_length = 'col-md-1';
-                }
-                elseif(strlen($row['Area_Name']) > 8 && strlen($row['Area_Name']) <= 20)
-                {
-                  $area_length = 'col-md-2';
-                }
-                elseif(strlen($row['Area_Name']) > 20 && strlen($row['Area_Name']) <= 36)
-                {
-                  $area_length = 'col-md-3';
-                }
-                elseif(strlen($row['Area_Name']) > 36 && strlen($row['Area_Name']) <= 46)
-                {
-                  $area_length = 'col-md-4';
-                }
-                else
-                {
-                  $area_length = 'col-md-6';
-                }
+                // if(strlen($row['Area_Name']) <= 8)
+                // {
+                //   $area_length = 'col-md-1';
+                // }
+                // elseif(strlen($row['Area_Name']) > 8 && strlen($row['Area_Name']) <= 20)
+                // {
+                //   $area_length = 'col-md-2';
+                // }
+                // elseif(strlen($row['Area_Name']) > 20 && strlen($row['Area_Name']) <= 36)
+                // {
+                //   $area_length = 'col-md-3';
+                // }
+                // elseif(strlen($row['Area_Name']) > 36 && strlen($row['Area_Name']) <= 46)
+                // {
+                //   $area_length = 'col-md-4';
+                // }
+                // else
+                // {
+                //   $area_length = 'col-md-6';
+                // }
 
                 if ($tab == 'NOTSET') 
                 {
@@ -578,104 +578,143 @@ include_once 'includes/header.php';
 
                 switch ($row2['ViewingOrder']) {
                   case 1:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "";
                   $DetailsChart     = "";
                   $InputFields      = "";
-                  $length           = "col-sm-12";
+                  $length           = "col-md-12";
                   break;
 
                   case 2:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "";
                   $DetailsChart     = "pull-right";
                   $InputFields      = "";
-                  $length           = "col-sm-12";
+                  $length           = "col-md-12";
                   break;
 
                   case 3:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "pull-right";
                   $DetailsChart     = "";
                   $InputFields      = "";
-                  $length           = "col-sm-12";
+                  $length           = "col-md-12";
                   break;
 
                   case 4:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "hidden";
                   $DetailsChart     = "";
                   $InputFields      = "";
-                  $length           = "col-sm-12";
+                  $length           = "col-md-12";
                   break;
 
                   case 5:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "pull-right";
                   $DetailsChart     = "pull-right";
                   $InputFields      = "";
-                  $length           = "col-sm-12";
+                  $length           = "col-md-12";
                   break;
 
                   case 6:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "hidden";
                   $DetailsChart     = "pull-right";
                   $InputFields      = "";
-                  $length           = "col-sm-12";
+                  $length           = "col-md-12";
                   break;
 
                   case 7:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "pull-right";
                   $DetailsChart     = "hidden";
                   $InputFields      = "";
-                  $length           = "col-sm-12";
+                  $length           = "col-md-12";
                   break;
 
                   case 8:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "hidden";
                   $DetailsChart     = "pull-right";
                   $InputFields      = "";
-                  $length           = "col-sm-12";
+                  $length           = "col-md-12";
                   break;
 
                   case 9:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "";
                   $DetailsChart     = "";
                   $InputFields      = "hidden";
-                  $length           = "col-sm-12";
+                  $length           = "col-md-12";
                   break;
 
                   case 10:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "";
                   $DetailsChart     = "hidden";
                   $InputFields      = "";
-                  $length           = "col-sm-12";
+                  $length           = "col-md-12";
                   break;
 
                   case 11:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "pull-right";
                   $DetailsChart     = "";
                   $InputFields      = "hidden";
-                  $length           = "col-sm-12";
+                  $length           = "col-md-12";
                   break;
 
                   case 12:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "hidden";
                   $DetailsChart     = "";
                   $InputFields      = "";
-                  $length           = "col-sm-12";
+                  $length           = "col-md-12";
                   break;
                     // for half length
                   case 13:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "";
                   $DetailsChart     = "hidden";
                   $InputFields      = "";
-                  $length           = "col-sm-6";
+                  $length           = "col-md-6";
                   break;
 
                   case 14:
+                  $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "pull-right";
                   $DetailsChart     = "hidden";
                   $InputFields      = "";
-                  $length           = "col-sm-6";
+                  $length           = "col-md-6";
+                  break;
+                  // CK EDITOR FULL LENGTH
+                  case 15:
+                  $SubCkEditor      = 'col-md-12';
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "";
+                  $InputFields      = "hidden";
+                  $length           = "col-md-12";
+                  break;
+                  // CK EDITOR HALF LENGTH
+                  case 16:
+                  $SubCkEditor      = 'col-md-12';
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "";
+                  $InputFields      = "hidden";
+                  $length           = "col-md-6";
                   break;
                 }
-                if($length == 'col-sm-6')
+
+                // if component div is half length then make subcomponent div col-md-12
+                if($comp_length == 'col-md-6')
+                {
+                  $length       = 'col-md-12';
+                  $input_lenght = 'col-md-6';
+                  $name_length  = 'col-md-6';
+                }
+
+                elseif($length == 'col-md-6')
                 {
                   $input_lenght              = 'col-md-6';
                   $name_length               = 'col-md-6';
@@ -699,7 +738,7 @@ include_once 'includes/header.php';
                 echo "<div class='col-sm-1 ".$name_length." regular ".$SubcomponentName."'>";
                   echo $row2['SubComp_Name']; //." - Mode - ".$row2['Mode'] ;
                   echo "</div>";
-                  echo "<div class='col-sm-6 col-md-6 no_padding ".$DetailsChart."'>";
+                  echo "<div class='col-sm-6 ".$SubCkEditor." no_padding ".$DetailsChart."'>";
 
                   if(empty($row2['ChartID']))
                   {
@@ -1288,6 +1327,18 @@ include_once 'includes/header.php';
     });
     $('[data-toggle="tooltip"]').tooltip();
 
+    // fixing the width of table in details/chart
+    $('.subCompnent').each(function(i,e){
+      // .css({'width':'auto'});
+      if($(this).hasClass('col-md-6'))
+      {
+        if($(e).find('table').length)
+        {
+          $(e).find('table').css({'width':'auto'});
+        }
+      }        
+    });
+
     // hide area if there is no component or all of them are hidden
     $('.tab-pane').each(function(i,e)
     {
@@ -1310,6 +1361,15 @@ include_once 'includes/header.php';
       else
       {
         $('#'+tabId).addClass('hidden');
+      }
+    });
+
+    // stopping form submission while user press enter key
+    $('form').on('keyup keypress', function(e) {
+      var keyCode = e.keyCode || e.which;
+      if (keyCode === 13) { 
+        e.preventDefault();
+        return false;
       }
     });
 
