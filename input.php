@@ -6,6 +6,7 @@ set_time_limit(300);
 $functionsObj = new Functions();
 $userid       = $_SESSION['userid'];
 $userName     = $_SESSION['username'];
+$gameid       = $_GET['ID'];
 
 include_once 'includes/lib/phpchartdir.php';
 
@@ -14,11 +15,18 @@ if($_SESSION['username'] == NULL)
 {
 	header("Location:".site_root."login.php");
 }
-//$gameid = $_SESSION['Game_ID'];
-//echo $userid."</br>";
-//$linkid = $_GET['Link'];
-$gameid = $_GET['ID'];
-//echo $gameid."</br>";
+
+// if user is not assigned the game then redirect to home page ,game_site_users
+$game_sql = "SELECT * FROM GAME_SITE_USERS WHERE LOCATE($gameid, User_games) AND User_id=$userid";
+$res_game = $functionsObj->ExecuteQuery($game_sql);
+// echo "<pre>"; print_r($res_game); exit;
+
+if($res_game->num_rows < 1)
+{
+	// die($game_sql);
+	header("Location:".site_root."selectgame.php");
+}
+
 if (isset($_GET['ID']) && !empty($_GET['ID']))
 {
 	//get the actual link
@@ -633,15 +641,17 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 							(SELECT ls.SubLink_ID FROM GAME_LINKAGE_SUB ls 
 							WHERE SubLink_SubCompId=".$strkey[1]." and SubLink_LinkID=".$linkid." )";
 							//AND SubLink_type=0
+							
 							//echo "sqlvalue- ".$sqlvalue."</br>";
+							
 							$value        = $functionsObj->ExecuteQuery($sqlvalue);
 							$resultvalue  = $functionsObj->FetchObject($value);
 							//echo "y - ".$y."  strvalue[y] - ".$strvalue[$y]."</br>";
 							//echo $resultvalue->input_current."</br>";
 							
 							$strvalue[$y] = $resultvalue->input_current;
+							
 						}
-
 						elseif($strkey[0]=='comp')
 						{
 							$sqlvalue = "SELECT input_current FROM GAME_INPUT 
@@ -773,7 +783,7 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
 	ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID  
 	FROM GAME_LINKAGE l 
-	INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
+	INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID $charttypeComp
 	INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
 	INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
 	INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
@@ -841,6 +851,8 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 			}
 		}
 		return $dataChart;
+		header("Content-type: image/png");
+		print($c->makeChart2(PNG));
 	}
 	$url = site_root."input.php?Scenario=".$result->Link_ScenarioID;
 	include_once doc_root.'views/input.php';
