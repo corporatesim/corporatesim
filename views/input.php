@@ -1364,6 +1364,15 @@ include_once 'includes/header.php';
       }
     });
 
+    // stopping form submission while user press enter key
+    $('form').on('keyup keypress', function(e) {
+      var keyCode = e.keyCode || e.which;
+      if (keyCode === 13) { 
+        e.preventDefault();
+        return false;
+      }
+    });
+
     formula_json_expcomp = {};
     formula_json_expsubc = {};
     input_field_values   = {};
