@@ -11,9 +11,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 {
+	// echo "<pre>"; print_r($_POST);	exit();	
 	//$uid = $_POST['id'];
 	//var_dump($_POST['usergame']);
-	$id = $_POST['usergame'];
+	$User_GameStartDate = $_POST['User_GameStartDate'];
+	$User_GameEndDate   = $_POST['User_GameEndDate'];
+	$id                 = $_POST['usergame'];
+
 	if(isset($_GET['edit']))
 	{
 		$uid = base64_decode($_GET['edit']);
@@ -35,8 +39,21 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 	}
 	
 	//exit();
+	if($User_GameEndDate > date('Y-m-d'))
+	{
+		$User_gameStatus = '0';
+	}
+	else
+	{
+		$User_gameStatus = '1';
+	}
+
+
 	$gamedetails = (object) array(
-		'User_games' =>	$gameid
+		'User_games'         =>	$gameid,
+		'User_GameStartDate' => $User_GameStartDate,
+		'User_GameEndDate'   => $User_GameEndDate,
+		'User_gameStatus'    => $User_gameStatus,
 	);
 
 	$result = $functionsObj->UpdateData('GAME_SITE_USERS', $gamedetails, 'User_id', $uid, 0);
@@ -53,5 +70,14 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 $id     = base64_decode($_GET['edit']);
 $object = $functionsObj->SelectData(array(), 'GAME_USERGAMES', array('UG_UserID='.$id), '', '', '', '', 0);
 $file   = 'addGame.php';
+// this is to enable showing the end date after today
+if($file == 'addGame.php')
+{
+	$enableEndDate = 'enableEndDate';
+}
+else
+{
+	$enableEndDate = '';
+}
 
 include_once doc_root.'ux-admin/view/siteusers/'.$file;

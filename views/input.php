@@ -1322,7 +1322,7 @@ include_once 'includes/header.php';
   $(document).ready(function(){
     // removing inlinebox class from button div if input type=range to align button down
     $('input[type="range"]').each(function(i,e){
-      $(this).parents('div.text-right').find('div.closeSave').parent('div').removeClass('InlineBox').css({'margin':'1% 1% 0% 2%'});
+      $(this).parents('div.text-right').find('div.closeSave').parent('div').removeClass('InlineBox').css({'margin':'4% 1% 0% 2%'});
       $(this).parents('div.text-right').find('div.closeSave').css({'margin-top':'-11%'});
     });
     $('[data-toggle="tooltip"]').tooltip();
