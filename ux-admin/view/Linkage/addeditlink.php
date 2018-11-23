@@ -397,9 +397,9 @@ span.alert-danger {
                   <!--	<div class="form-group">-->
                     <label><span class="alert-danger">*</span>Type - </label>
                     <input type="radio" name="Type" value="input"
-                    <?php if(!empty($linkdetails) && $linkdetails->Link_Mode == 0){ echo "checked"; } ?> checked/> Input
+                    <?php if(!empty($linkdetails) && $linkdetails->SubLink_Type == 0){ echo "checked"; } ?> checked/> Input
                     <input type="radio" name="Type" value="output"
-                    <?php if(!empty($linkdetails) && $linkdetails->Link_Mode == 1){ echo "checked"; } ?> > Output
+                    <?php if(!empty($linkdetails) && $linkdetails->SubLink_Type == 1){ echo "checked"; } ?> > Output
                     <!--	</div>-->
                   </div>
                 </div>
