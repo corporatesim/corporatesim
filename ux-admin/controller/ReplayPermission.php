@@ -57,7 +57,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'submit')
 			{ 
 				if($_POST['reset'])
 				{
-					$deleteSql = "DELETE FROM GAME_INPUT WHERE input_user = $User_ID[$i] AND input_sublinkid IN (SELECT SubLink_Id FROM game_linkage_sub  WHERE SubLink_LinkID = (SELECT Link_ID FROM game_linkage where Link_GameID = $Game_ID And Link_ScenarioID = $Scen_ID))";
+					$deleteSql = "DELETE FROM GAME_INPUT WHERE input_user = $User_ID[$i] AND input_sublinkid IN (SELECT SubLink_Id FROM GAME_LINKAGE_SUB  WHERE SubLink_LinkID = (SELECT Link_ID FROM GAME_LINKAGE where Link_GameID = $Game_ID And Link_ScenarioID = $Scen_ID))";
 					$object    = $functionsObj->ExecuteQuery($deleteSql);
 					// updating user status of game
 					$updateArr = array(
@@ -65,7 +65,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'submit')
 						'US_Output' => 0,
 					);
 					// altering where condition as per the defined updaetdata function
-					$FieldName = " US_GameID=$Game_ID AND US_ScenID=$Scen_ID AND US_UserID=";
+					$FieldName = " US_GameID=$Game_ID AND US_ScenID=$Scen_ID AND US_UserID";
 					$functionsObj->UpdateData('GAME_USERSTATUS',$updateArr,$FieldName,$User_ID[$i],0);
 
 					if($object)
@@ -99,7 +99,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'submit')
 	{
 		if($_POST['reset'])
 		{
-			$sql = "DELETE FROM GAME_INPUT WHERE input_sublinkid IN (SELECT SubLink_Id FROM game_linkage_sub  WHERE SubLink_LinkID = (SELECT Link_ID FROM game_linkage where Link_GameID = $Game_ID And Link_ScenarioID = $Scen_ID))";
+			$sql = "DELETE FROM GAME_INPUT WHERE input_sublinkid IN (SELECT SubLink_Id FROM GAME_LINKAGE_SUB  WHERE SubLink_LinkID = (SELECT Link_ID FROM GAME_LINKAGE where Link_GameID = $Game_ID And Link_ScenarioID = $Scen_ID))";
 			$object = $functionsObj->ExecuteQuery($sql);
 
 			$updateArr = array(
@@ -107,7 +107,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'submit')
 				'US_Output' => 0,
 			);
 			// altering where condition as per the defined updaetdata function
-			$FieldName = " US_GameID=$Game_ID AND US_ScenID=";
+			$FieldName = " US_GameID=$Game_ID AND US_ScenID";
 			$functionsObj->UpdateData('GAME_USERSTATUS',$updateArr,$FieldName,$Scen_ID,0);
 
 			if($object)
