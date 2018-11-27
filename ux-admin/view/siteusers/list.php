@@ -15,6 +15,18 @@
 	color      : #ffffff;
 	white-space: nowrap;
 }
+#contact
+{
+	width: auto!important;
+}
+#password
+{
+	width: auto!important;
+}
+#action
+{
+	width: 70px!important;
+}
 .drop_down{
 	padding: 0 5px !important;
 }
@@ -70,6 +82,8 @@
 					<li> <span class="glyphicon glyphicon-search">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can View the Record"> View		</a></li>
 					<li> <span class="glyphicon glyphicon-pencil">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Edit the Record"> Edit		</a></li>
 					<li> <span class="glyphicon glyphicon-trash">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Delete the Record"> Delete	</a></li>
+					<li> <span class="glyphicon glyphicon-refresh">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User can replay the Game"> Replay	</a></li>
+					<li> <span class="glyphicon glyphicon-ban-circle">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User games have been disabled"> Disable	</a></li>
 				</ul>
 			</div>
 		</div>
@@ -231,12 +245,12 @@
     					<th>User Id</th>
     					<th>Name</th>
     					<th>E-mail</th>
-    					<th>Password</th>
-    					<th>Contact</th>
+    					<th id="password">Password</th>
+    					<th id="contact">Contact</th>
     					<!--<th>Last Login</th>-->
     					<th>Date</th>
-    					<th class="no-sort">Games </th>
-    					<th class="no-sort">Action</th>
+    					<th class="no-sort">Games</th>
+    					<th class="no-sort" id="action">Action</th>
     				</tr>
     			</thead>
     			<tbody>
@@ -267,6 +281,37 @@
     											title="Edit"><span class="fa fa-pencil"></span></a>
     											<a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->User_id; ?>"
     												title="Delete"><span class="fa fa-trash"></span></a>
+    												<!-- for replay status -->
+    												<?php
+    												$statusSql = "SELECT Game_Name FROM GAME_USERSTATUS LEFT JOIN GAME_GAME ON Game_ID=US_GameID WHERE US_UserID=$row->User_id AND US_ReplayStatus=1";
+
+														$resObject = $functionsObj->ExecuteQuery($statusSql);
+														$count     = $resObject->num_rows;
+    												if($resObject->num_rows > 0) { ?>
+    													<?php
+    														$gameName = [];
+    														while($nameGame = $resObject->fetch_object())
+    														{
+    															$gameName[] = $nameGame->Game_Name;
+    														}
+    														// print_r($gameName);
+    														if(count($gameName) > 1)
+    														{
+																	$userGames = implode(', ',$gameName);
+																	$title     = 'Replay allowed for '.$userGames.' games';
+    														}
+    														else
+    														{
+																	$userGames = $gameName[0];
+																	$title     = 'Replay allowed only for '.$userGames;
+    														}
+    													?>
+    													<a href="javascript:void(0)" data-toggle="tooltip" title="<?php echo $title; ?>" id="replay_<?php echo $row->User_id; ?>"><span class="glyphicon glyphicon-refresh"></span></a>
+    												<?php } ?>
+    												<!-- for game enable/disable status -->
+    												<?php if($row->User_gameStatus == 1) { ?>
+    													<a href="javascript:void(0)" title="Disable" id="disable_<?php echo $row->User_id; ?>"><span class="glyphicon glyphicon-ban-circle"></span></a>
+    												<?php } ?>
     											</td>
     										</tr>
     										<?php $i++; } ?>

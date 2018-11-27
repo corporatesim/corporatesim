@@ -18,7 +18,6 @@ if($_SESSION['username'] == NULL)
 $functionsObj         = new Functions();
 $_SESSION['userpage'] = 'game';
 $uid                  = $_SESSION['userid'];
-$companyid            = $_SESSION['companyid'];
 $check_endDate        = "SELECT User_GameEndDate FROM GAME_SITE_USERS WHERE User_id=$uid";
 $res_check            = $functionsObj->ExecuteQuery($check_endDate);
 $check_status         = $functionsObj->FetchObject($res_check);
@@ -42,11 +41,11 @@ if($res_status->User_gameStatus == 1 || $res_status->User_GameStartDate > date('
 	$disable = 'disabled';
 	if($res_status->User_GameStartDate > date('Y-m-d'))
 	{
-		$game_status = 'You can play assigned games between <span style="color:#3c763d;">'.date('d-m-Y',strtotime($res_status->User_GameStartDate)).'</span> to <span style="color:#3c763d;">'.date('d-m-Y',strtotime($res_status->User_GameEndDate)).'</span>';
+		$game_status = 'You are allowed to play assigned simulations/games between <span style="color:#3c763d;">'.date('d-m-Y',strtotime($res_status->User_GameStartDate)).'</span> TO <span style="color:#3c763d;">'.date('d-m-Y',strtotime($res_status->User_GameEndDate)).'</span>';
 	}
 	else
 	{
-		$game_status = 'Assigned game\'s have been disabled. Pleaes contact admin.';
+		$game_status = 'Assigned simulations/games have been disabled or not assigned yet. If required, please contact the administration.';
 	}
 }
 
@@ -63,7 +62,8 @@ else
 // echo $sql;
 // exit();
 	$result      = $functionsObj->ExecuteQuery($sql);
-	$game_status = 'You have not been assigned any game. Please contact admin.';
+	$game_status = 'Assigned simulations/games have been disabled or not assigned yet. If required, please contact the administration.';
 }
+
 
 include_once doc_root.'views/selectgame.php';
