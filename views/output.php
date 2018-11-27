@@ -64,7 +64,7 @@ include_once 'includes/header.php';
 									$i++;
 
 									$sqlcomp = "SELECT distinct a.Area_ID as AreaID, c.Comp_ID as CompID, a.Area_Name as Area_Name, 
-									c.Comp_Name as Comp_Name, ls.SubLink_Details as Description , o.output_current as Current 
+									c.Comp_Name as Comp_Name, ls.SubLink_Details as Description ,ls.SubLink_ViewingOrder as ViewingOrder, o.output_current as Current 
 									FROM GAME_LINKAGE l 
 									INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID= ls.SubLink_LinkID 
 									INNER JOIN GAME_OUTPUT o on ls.SubLink_ID = o.output_sublinkid
@@ -74,21 +74,122 @@ include_once 'includes/header.php';
 									LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
 									INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
 									WHERE ls.SubLink_Type=1 AND o.output_user=".$userid." AND ls.SubLink_SubCompID=0 and l.Link_ID=".$linkid." and a.Area_ID=".$row['AreaID']." ORDER BY ls.SubLink_Order";
-							//echo $sqlcomp;
+							//echo $sqlcomp; exit;
 									$component = $functionsObj->ExecuteQuery($sqlcomp);
 							//Get Component for this area for this linkid
-									while($row1 = mysqli_fetch_array($component)){
+									while($row1 = mysqli_fetch_array($component)){ 
+										switch ($row1['ViewingOrder']) {
+											case 1:
+											$ComponentName  = "";
+											$DetailsChart   = "";
+											$InputFields    = "";
+											break;
+
+											case 2:
+											$ComponentName  = "";
+											$InputFields    = "";
+											$DetailsChart   = "pull-right";
+											break;
+
+											case 3:
+											$DetailsChart   = "";
+											$InputFields    = "";
+											$ComponentName  = "pull-right";
+											break;
+
+											case 4:
+											$ComponentName  = "hidden removeThis";
+											$DetailsChart   = "pull-left";
+											$InputFields    = "pull-right";
+											break;
+
+											case 5:
+											$ComponentName  = "pull-right";
+											$DetailsChart   = "pull-right";
+											$InputFields    = "";
+											break;
+
+											case 6:
+											$InputFields    = "pull-left";
+											$ComponentName  = "hidden";
+											$DetailsChart   = "pull-right";
+											break;
+
+											case 7:
+											$ComponentName  = "pull-right";
+											$DetailsChart   = "hidden";
+											$InputFields    = "";
+											break;
+
+											case 8:
+											$ComponentName  = "hidden";
+											$DetailsChart   = "pull-right";
+											$InputFields    = "";
+											break;
+
+											case 9:
+											$ComponentName  = "";
+											$DetailsChart   = "pull-right";
+											$InputFields    = "hidden";
+											break;
+  
+											case 10:
+											$ComponentName  = "";
+											$DetailsChart   = "hidden";
+											$InputFields    = "pull-right";
+											break;
+
+											case 11:
+											$ComponentName  = "pull-right";
+											$DetailsChart   = "";
+											$InputFields    = "hidden";
+											break;
+
+											case 12:
+											$ComponentName  = "hidden";
+											$DetailsChart   = "";
+											$InputFields    = "";
+											break;
+
+											case 13:
+											$ComponentName  = "";
+											$DetailsChart   = "hidden";
+											$InputFields    = "";
+											break;
+
+											case 14:
+											$InputFields    = "";
+											$ComponentName  = "pull-right";
+											$DetailsChart   = "hidden";
+											break;
+
+											case 15:
+											$ComponentName  = "hidden";
+											$DetailsChart   = "hidden";
+											$InputFields    = "hidden";
+											break;
+
+											case 16:
+											$ComponentName  = "hidden";
+											$DetailsChart   = "";
+											$InputFields    = "hidden";
+											break;
+										}
+
 								//if ($row1['Area_Name']==$areaname)
 								//{
 									//echo $row1['Area_Name']." - ".$areaname;
 									//echo $row1['Comp_Name'];
-										echo "<div class='col-sm-12 scenariaListingDiv'>";							
-										echo "<div class='col-sm-2 col-md-2 regular'>";
+										echo "<div class='col-sm-12 scenariaListingDiv'>";
+
+										echo "<div class='col-sm-2 col-md-4 regular text-center ".$ComponentName."'>";
+
 										echo $row1['Comp_Name'];
 										echo "</div>";
-										echo "<div class='col-sm-4 col-md-7 no_padding'>".$row1['Description']."</div>";
+										echo "<div class='col-sm-4 col-md-4 no_padding ".$DetailsChart."'>".$row1['Description']."</div>";
 
-										echo "<div class=' col-sm-6 col-md-3 text-right'>";
+										echo "<div class=' col-sm-6 col-md-4 text-center ".$InputFields."'>";
+
 										echo "<div class='InlineBox'>";
 										echo "<label class='scenariaLabel'>Current</label>";
 										echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value=".$row1['Current']." readonly></input>";
@@ -96,14 +197,27 @@ include_once 'includes/header.php';
 										echo "<div class='InlineBox'>";
 										echo "<label class='scenariaLabel'>Last</label>";
 										echo "<input type='text' class='scenariaInput' readonly></input>";
+
 										echo "</div>";
-										
+
 										echo "</div>";
+										if($row1['ViewingOrder'] == 4)
+										{
+											echo "<div class='col-sm-2 col-md-4 text-center regular'>".$row1['Comp_Name']." </div>";
+										}
+										if($row1['ViewingOrder'] == 6)
+										{
+											echo "<div class='col-sm-2 col-md-4 text-center regular'>".$row1['Comp_Name']." </div>";
+										}
+										if($row1['ViewingOrder'] == 15)
+										{
+											echo "<div class='col-md-12'>".$row1['Description']."	</div>";
+										}
 										echo "<div class='clearfix'></div>";
 
 									//Get SubComponent for this Component, linkid
 										$sqlsubcomp = "SELECT distinct a.Area_ID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_SubCompID as SubCompID,  
-										a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, s.SubComp_Name as SubComp_Name, 
+										a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, s.SubComp_Name as SubComp_Name,ls.SubLink_ViewingOrder as ViewingOrder,
 										ls.SubLink_Details as Description 
 										FROM GAME_LINKAGE l 
 										INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
@@ -113,18 +227,119 @@ include_once 'includes/header.php';
 										LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
 										INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
 										WHERE ls.SubLink_Type=1 AND ls.SubLink_SubCompID>0 and ls.SubLink_CompID=".$row1['CompID']." ORDER BY ls.SubLink_Order";
+										//echo $sqlsubcomp;exit;
 
 										$subcomponent = $functionsObj->ExecuteQuery($sqlsubcomp);
 									//Get Component for this area for this linkid
 										while($row2 = mysqli_fetch_array($subcomponent)){
+											switch ($row2['ViewingOrder']) {
+												case 1:
+											$SubcomponentName  = "";
+											$DetailsChart    =  "";
+											$InputFields    =    "";
+											break;
+
+											case 2:
+										$SubcomponentName  = "";
+											$InputFields    = "";
+											$DetailsChart   = "pull-right";
+											break;
+
+											case 3:
+											$DetailsChart   = "";
+											$InputFields    = "";
+											$SubcomponentName = "pull-right";
+											break;
+
+											case 4:
+										$SubcomponentName = "hidden removeThis";
+											$DetailsChart   = "pull-left";
+											$InputFields    = "pull-right";
+											break;
+
+											case 5:
+										$SubcomponentName  = "pull-right";
+											$DetailsChart   = "pull-right";
+											$InputFields    = "";
+											break;
+
+											case 6:
+											$InputFields    = "pull-left";
+											$SubcomponentName  = "hidden";
+											$DetailsChart   = "pull-right";
+											break;
+
+											case 7:
+											$SubcomponentName = "pull-right";
+											$DetailsChart   = "hidden";
+											$InputFields    = "";
+											break;
+
+											case 8:
+											$SubcomponentName  = "hidden";
+											$DetailsChart   = "pull-right";
+											$InputFields    = "";
+											break;
+
+											case 9:
+											$SubcomponentName = "";
+											$DetailsChart   = "pull-right";
+											$InputFields    = "hidden";
+											break;
+  
+											case 10:
+											$SubcomponentName  = "";
+											$DetailsChart   = "hidden";
+											$InputFields    = "pull-right";
+											break;
+
+											case 11:
+											$SubcomponentName= "pull-right";
+											$DetailsChart   = "";
+											$InputFields    = "hidden";
+											break;
+
+											case 12:
+											$SubcomponentName  = "hidden";
+											$DetailsChart   = "";
+											$InputFields    = "";
+											break;
+
+											case 13:
+											$SubcomponentName  = "";
+											$DetailsChart   = "hidden";
+											$InputFields    = "";
+											break;
+
+											case 14:
+											$InputFields    = "";
+											$SubcomponentName  = "pull-right";
+											$DetailsChart   = "hidden";
+											break;
+
+											case 15:
+											$SubcomponentName  = "hidden";
+											$DetailsChart   = "hidden";
+											$InputFields    = "hidden";
+											break;
+
+											case 16:
+											$SubcomponentName = "hidden";
+											$DetailsChart   = "";
+											$InputFields    = "hidden";
+											break;
+										}
+
+                // if component div is half length then make subcomponent div col-md-12
+
 											echo "<div class='col-sm-12 subCompnent'>";
-											echo "<div class='col-sm-2 col-md-2 regular'>";
+											echo "<div class='col-sm-2 col-md-4 regular text-center".$SubcomponentName."'>";
 											echo $row2['SubComp_Name'];
 											echo "</div>";
-											echo "<div class='col-sm-4 col-md-7 no_padding'>";
+											echo "<div class='col-sm-4 col-md-4 no_padding".$DetailsChart."'>";
 											echo $row2['Description'];
 											echo "</div>";
-											echo "<div class=' col-sm-6 col-md-3 text-right'>";
+											echo "<div class=' col-sm-6 col-md-4 text-center".$InputFields."'>";
 											echo "<div class='InlineBox'>";
 											echo "<label class='scenariaLabel'>Current</label>";
 											echo "<input type='text' id='subcomp_".$row2['SubCompID']."' name='".$row2['Area_Name']."_subc_".$row2['SubCompID']."' class='scenariaInput' readonly></input>";
@@ -142,6 +357,18 @@ include_once 'includes/header.php';
 												//echo "<input type='text' class='scenariaInput' readonly></input>";
 											//echo "</div>";
 											echo "</div>";
+											if($row2['ViewingOrder'] == 4)
+										{
+											echo "<div class='col-sm-2 col-md-4 text-center regular'>".$row1['SubComp_Name']." </div>";
+										}
+										if($row2['ViewingOrder'] == 6)
+										{
+											echo "<div class='col-sm-2 col-md-4 text-center regular'>".$row1['SubComp_Name']." </div>";
+										}
+										if($row2['ViewingOrder'] == 15)
+										{
+											echo "<div class='col-md-12'>".$row1['Description']."	</div>";
+										}
 											echo "<div class='clearfix'></div>";
 											echo "</div>";
 

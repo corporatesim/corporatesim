@@ -123,17 +123,22 @@ src="<?php echo site_root."images/logo.png";?>" />
 										href="<?php echo site_root."ux-admin/chartComp";?>">
 									Chart Component</a></li>
 
-								<?php } if($functionsObj->checkModuleAuth('chartComp','enable')){ ?>
+								<?php } if($functionsObj->checkModuleAuth('UserReport','enable')){ ?>
 
 									<li><a 
 										href="<?php echo site_root."ux-admin/UserReport";?>">
 									User Report</a></li>
 
-								<?php }?>
 
-						<!--<li><a 
-							href="<?php //echo site_root."ux-admin/ManageProducts";?>">
-						Formula</a></li>-->
+								<?php } if($functionsObj->checkModuleAuth('ReplayPermission','enable')){ ?>
+
+                 <li><a 
+										href="<?php echo site_root."ux-admin/ReplayPermission";?>">
+									Replay Permission</a></li>
+
+								<?php } ?>
+
+						
 
 					</ul>
 				</li>

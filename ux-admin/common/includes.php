@@ -120,6 +120,10 @@
 		case 'UserReport':
 			$showfile = 'UserReport.php';
 			break;
+
+			case 'ReplayPermission':
+			$showfile = 'ReplayPermission.php';
+			break;
 		
 		// Logout
 		case 'Logout':

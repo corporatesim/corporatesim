@@ -1,10 +1,10 @@
 
-    var timeoutHandle;
+var timeoutHandle;
 function countdown(linkid,userid,minutes,stat) {
 	
 	//alert('In countdown function');
-    var seconds = 60;
-    var mins = minutes;
+	var seconds = 60;
+	var mins    = minutes;
 	//alert(getCookie("linkid"));
 	/* if(getCookie("minutes")&&getCookie("seconds")&&stat)
 	{
@@ -12,17 +12,17 @@ function countdown(linkid,userid,minutes,stat) {
     	 var mins = getCookie("minutes");
 		 //alert('seconds'+seconds);
 		 //alert('min'+mins);
-	} */
-	 
-    function tick() {
-		
-        var counter = document.getElementById("timer");
-		//setCookie("minutes",mins,10)
-		//setCookie("seconds",seconds,10)
-        var current_minutes = mins-1
-        seconds--;
-        counter.innerHTML = 
-		current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+		} */
+
+		function tick()
+		{
+
+			var counter = document.getElementById("timer");
+			//setCookie("minutes",mins,10)
+			//setCookie("seconds",seconds,10)
+			var current_minutes = mins-1
+			seconds--;
+			counter.innerHTML   = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
 		//save the time in cookie
 		//alert(mins);
 		//alert(seconds);
@@ -37,46 +37,46 @@ function countdown(linkid,userid,minutes,stat) {
 		{
 			if(seconds == 0)
 			{
-				
 				$("#execute_input").hide();
+				$('.overlay').show();
+				$('#submit').trigger('click');
 				alert('You have compeleted yor time. Please submit your changes.');
 				//document.forms["game_frm"].submit();
-				
 			}
-			
 		}
-        if( seconds > 0 ) {
-            timeoutHandle=setTimeout(tick, 1000);
-        } else {
-             
-				if(mins > 1){
-					 
-				   // countdown(mins-1);   never reach “00? issue solved:Contributed by Victor Streithorst    
-				   setTimeout(function () { countdown(linkid,userid,parseInt(mins)-1,false); }, 1000);
-						 
-				}
-				
+
+		if( seconds > 0 )
+		{
+			timeoutHandle=setTimeout(tick, 1000);
+		}
+		else
+		{
+			if(mins > 1)
+			{
+				// countdown(mins-1);   never reach “00? issue solved:Contributed by Victor Streithorst    
+				setTimeout(function () { countdown(linkid,userid,parseInt(mins)-1,false); }, 1000);
+			}
 				//Add or Update timer in link and user wise....
 					//alert(mins);
 					$.ajax({
-					type: "POST",
-					url: "includes/ajax/ajax_update_execute_input.php",
-					data: '&action=SaveTimer&linkid='+linkid+'&userid='+userid+'&timer='+mins,
-					beforeSend: function() {
-						
-					  },
-					success: function(result) 
+						type: "POST",
+						url : "includes/ajax/ajax_update_execute_input.php",
+						data: '&action=SaveTimer&linkid='+linkid+'&userid='+userid+'&timer='+mins,
+						beforeSend: function() {
+
+						},
+						success: function(result) 
 					{ //alert(result);
 						//return true;
 					}
 				});
-        }
-    }
-    tick();
-}
-function deletecookie(cname) {
+				}
+			}
+			tick();
+		}
+		function deletecookie(cname) {
 	//alert(cname);
-  document.cookie = cname +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+	document.cookie = cname +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 /* function setCookie(cname,cvalue,exdays) {
     var d = new Date();
@@ -96,4 +96,4 @@ function deletecookie(cname) {
         }
     }
     return "";
-} */
+  } */

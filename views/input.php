@@ -1286,6 +1286,12 @@ include_once 'includes/header.php';
     {
       echo "countdown(".$linkid.",".$userid.",".$min.",true);";
     }
+    else
+    {
+      // trigger submit if time is up and show overlay
+      echo "$('.overlay').show();";
+      echo "$('#submit').trigger('click');";
+    }
   }
   else
   {

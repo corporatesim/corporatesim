@@ -52,6 +52,7 @@ if(isset($_POST['action']) && $_POST['action']=='updateInput')
 	}
 }
 
+// calling this function from js\function.js file
 if(isset($_POST['action']) && $_POST['action']=='SaveTimer')
 {
 	$linkid   = ($_POST['linkid']);

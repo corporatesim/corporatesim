@@ -66,10 +66,10 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 				   ;"; */
 				   
 				   $sql = "LOAD DATA LOCAL INFILE '".$filename."'
-				   INTO TABLE GAME_SITE_USERS COLUMNS TERMINATED BY ',' IGNORE 1 LINES (User_fname,User_lname,User_username,User_mobile,User_email);";
+				   INTO TABLE GAME_SITE_USERS COLUMNS TERMINATED BY ',' IGNORE 1 LINES (User_fname,User_lname,User_username,User_mobile,User_email,User_companyid,@User_GameStartDate,@User_GameEndDate) SET User_GameStartDate = STR_TO_DATE(@User_GameStartDate, '%m/%d/%Y'), User_GameEndDate = STR_TO_DATE(@User_GameEndDate, '%m/%d/%Y');";
 				   
 				   $res = $funObj->ExecuteQuery($sql);
-				   print_r($res); exit;
+				   // print_r($res); exit;
 				   if($res)
 				   {
 				   	$password = $funObj->randomPassword(); 	
