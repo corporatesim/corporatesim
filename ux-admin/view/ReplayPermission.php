@@ -113,11 +113,11 @@ span.alert-danger {
     <!-- adding users details to this div via jquery after selection of scenario -->
   </div>
   <br>
-  <div class="row" id="sandbox-container" style="margin-left: 35%">
-    <div class="col-md-2 text-center">
+  <div class="row" id="sandbox-container" style="margin-left: 25%">
+    <div class="col-md-3 text-center">
       <button type="submit" class="btn btn-primary btn-lg btn-block" name="submit" value="submit" id="submit">SUBMIT</button>
     </div>
-    <div class="col-md-2 text-center">
+    <div class="col-md-3 text-center">
       <a href="<?php echo site_root.'ux-admin/ReplayPermission'; ?>" class="btn btn-primary btn-lg btn-block">CANCEL</a>
     </div>
   </div>
