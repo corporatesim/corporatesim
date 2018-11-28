@@ -1,20 +1,37 @@
 <?php
 
-phpinfo();
+// phpinfo();
 include_once 'config/settings.php'; 
 include_once 'config/functions.php'; 
+// using domPdf library
+require_once 'dompdf/autoload.inc.php';
 set_time_limit(300);
-
 $functionsObj = new Functions();
-$userid       = $_SESSION['userid'];
-$userName     = $_SESSION['username'];
-$gameid       = $_GET['ID'];
+$sql          = 'SELECT * FROM GAME_SITE_USERS LIMIT 0,1000';
+$resObject    = $functionsObj->ExecuteQuery($sql);
+// create table format to download in pdf format
+// echo "<pre>";
+$data    = '';
+$header  = "<table border='1'><tr><th>User_id</th><th>Name</th><th>UserName</th><th>Email</th><th>MobileNo</th></tr>";
 
-$sql    = "SELECT Link_ID,Link_GameID,Link_ScenarioID,Link_Hour,Link_Min FROM `game_linkage`";
-$object = $functionsObj->ExecuteQuery($sql);
-echo "<pre>";
-while ($res = $functionsObj->FetchObject($object))
-{
-	print_r($res);
-	echo ($res->Link_Hour*60)+$res->Link_Min.' min<br>';
+while ($result = $resObject->Fetch_Object()) {
+    // $html[] = $result->User_username;
+    // print_r($result);
+	$data .= "<tr><td>$result->User_id</td>	<td>$result->User_fname $result->User_lname</td>	<td>$result->User_username</td>	<td>$result->User_email</td>	<td>$result->User_mobile</td></tr>";
 }
+
+$html = $header.$data.'</tbody></table>';
+
+echo $html;
+// reference the Dompdf namespace
+use Dompdf\Dompdf;
+// instantiate and use the dompdf class
+$dompdf = new Dompdf();
+$dompdf->loadHtml($html);
+// (Optional) Setup the paper size and orientation
+$dompdf->setPaper('A4', 'landscape');
+// Render the HTML as PDF
+$dompdf->render();
+// Output the generated PDF to Browser
+// $dompdf->stream();
+// $dompdf->stream("table", array("Attachment" =>0));

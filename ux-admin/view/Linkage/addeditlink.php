@@ -186,7 +186,7 @@ span.alert-danger {
               <hr/>
 
               <!-- adding new functionality for downloading user report -->
-              <div class="row" id="sandbox-container">
+             <!--  <div class="row" id="sandbox-container">
                 <div class="col-md-4">
                   <label>Date :</label>From <br>
                   <input type="text" class="form-control"  name="reportDateFrom" id="reportDateFrom" placeholder="yyyy-mm-dd" readonly >
@@ -199,7 +199,7 @@ span.alert-danger {
                   <button type="submit" name="submit" id="User_download" class="btn btn-primary"
                   value="UserDownloadNew">Download User Report New</button>
                 </div>
-              </div>
+              </div> -->
               <!-- end of user download report -->
 
               <hr>
