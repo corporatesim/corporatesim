@@ -87,7 +87,7 @@
 		padding        : 8px;
 		text-decoration: none;
 		font-size      : 36px;
-		color          : #470505;
+		color          : #ffff00;
 		display        : block;
 		transition     : 0.3s;
 	}

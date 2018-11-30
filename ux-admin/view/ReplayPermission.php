@@ -39,15 +39,20 @@ span.alert-danger {
   <form action="" method="post" id="game_report" name="game_report">
     <!-- game and scenario drop down -->
     <div class="row" id="check">
-     <div class="col-md-6" >
-      <input type="checkbox" name="reset" id="reset" class="reset" value="0">  <label for="Reset Values">Reset Values</label>
+     <div class="col-md-4" >
+      <input type="checkbox" name="reset" id="reset" class="reset" value="0">  <label for="Reset Values">Reset Values(Only One Time)</label>
     </div>
-    <div class="col-md-6">
-     <input type="checkbox" name="replay" id="replay" class="replay" value="0">  <label for="Replay">Replay</label>
+    <div class="col-md-4">
+     <input type="radio" name="radio" id="replay" class="replay" value="replay">  <label for="Replay">Replay
+     (More than One)</label>
    </div>
- </div>
- <br>
- <div class="row">
+   <div class="col-md-4">
+    <input type="radio" name="radio" id="stop" class="stop" value="stopReplay">  <label for="stop"> StopReplay
+    (Never) </label>
+  </div>
+</div>
+<br>
+<div class="row">
   <div class="col-md-6" id="game_section">
     <label for="Select Game"><span class="alert-danger">*</span>Select Game</label>
     <select name="game_game" id="game_game" class="form-control">
@@ -152,10 +157,10 @@ span.alert-danger {
               if(result.trim() != 'no link')
               {
                 result = JSON.parse(result)
-                $(result).each(function(index,e)
+                $(result).each(function(i,e)
                 {
-                  //console.log(index);
-                  option += ('<option value='+result.Scen_ID+' data-linkid='+result.linkid+' data-scenarioname="'+result.Scen_Name+'">'+result.Scen_Name+'</option>');
+                  //console.log(i);
+                  option += ('<option value='+result[i].Scen_ID+' data-linkid='+result[i].linkid+' data-scenarioname="'+result[i].Scen_Name+'">'+result[i].Scen_Name+'</option>');
                 });
                // console.log(option);
                $('#game_scenario').html(option);
@@ -320,10 +325,21 @@ $('#replay').on('click',function(){
   }
 });
 
+$('#stop').on('click',function(){
+  if($(this).is(':checked'))
+  {
+    $(this).attr('value',0);
+  }
+  else
+  {
+    $(this).attr('value',1);
+  }
+});
+
 
 //Alert generate for Select user when click on submit button
 $('#submit').on('click',function(){
-  if($('input[name=reset]').is(':checked') || $('input[name=replay]').is(':checked'))
+  if($('input[name=reset]').is(':checked') || $('input[name=radio]').is(':checked'))
   {
     // if user selects filter option not the all users
     if($('input[name=user_filter]:checked').val() != 'all_users')
@@ -347,9 +363,10 @@ $('#submit').on('click',function(){
   }
   else
   {
-    alert('Please Select Permision Type Replay/Reset');
+    alert('Please Select Permision Type Replay/Reset/StopPlay');
     return false;
   }
 });
+
 });
 </script>

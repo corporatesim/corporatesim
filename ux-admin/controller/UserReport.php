@@ -8,8 +8,10 @@ $functionsObj = new Model();
 
 // $object   = $functionsObj->SelectData(array(), 'GAME_SITESETTINGS', array('id=1'), '', '', '', '', 0);
 // $sitename = $functionsObj->FetchObject($object);
-$file   = 'UserReport.php';
-$header = 'User Report';
+$file          = 'UserReport.php';
+$header        = 'User Report';
+// adding this variable to enable date range for end date
+$enableEndDate = 'enableEndDate';
 
 // selcting all games for dropdown
 $object   = $functionsObj->SelectData(array('Game_ID','Game_Name'), 'GAME_GAME', array('Game_Delete=0'), 'Game_Name', '', '', '', 0);

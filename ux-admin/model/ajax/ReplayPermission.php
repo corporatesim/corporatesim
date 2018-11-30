@@ -18,8 +18,13 @@ if($_POST['action'] == 'game_scenario')
 	$Object = $funObj->ExecuteQuery($sql);
 	if($Object->num_rows > 0)
 	{
-		$result = mysqli_fetch_object($Object);
-		echo json_encode($result);
+		$resultScenario = array();
+		while($result = mysqli_fetch_object($Object))
+		{
+			$resultScenario[] = $result;
+		}
+		// print_r($resultScenario);
+		echo json_encode($resultScenario);
 	}
 	else
 	{

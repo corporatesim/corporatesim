@@ -132,18 +132,22 @@ src="<?php echo site_root."images/logo.png";?>" />
 
 								<?php } if($functionsObj->checkModuleAuth('ReplayPermission','enable')){ ?>
 
-                 <li><a 
+									<li><a 
 										href="<?php echo site_root."ux-admin/ReplayPermission";?>">
 									Replay Permission</a></li>
 
-								<?php } ?>
+								<?php } if($functionsObj->checkModuleAuth('ReplayPermission','enable')){ ?>
 
-						
+									<li><a 
+										href="<?php echo site_root."ux-admin/ScenarioBranching";?>">
+									Scenario Branching</a></li>
+
+								<?php } ?>					
+
+							</ul>
+						</li>
 
 					</ul>
-				</li>
-
-			</ul>
-		</div>
-	</div>
-</nav>
+				</div>
+			</div>
+		</nav>

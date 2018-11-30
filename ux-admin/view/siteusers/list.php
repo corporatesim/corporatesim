@@ -310,7 +310,7 @@
     												<?php } ?>
     												<!-- for game enable/disable status -->
     												<?php if($row->User_gameStatus == 1) { ?>
-    													<a href="javascript:void(0)" title="Disable" id="disable_<?php echo $row->User_id; ?>"><span class="glyphicon glyphicon-ban-circle"></span></a>
+    													<a href="javascript:void(0)" title="Disabled" id="disable_<?php echo $row->User_id; ?>"><span class="glyphicon glyphicon-ban-circle"></span></a>
     												<?php } ?>
     											</td>
     										</tr>
