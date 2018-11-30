@@ -24,7 +24,8 @@ include_once 'includes/header2.php';
 			$obj       = $functionsObj->SelectData ( array (), 'GAME_USERSTATUS', $where, 'US_CreateDate desc', '', '1', '', 0 );
 			$gamestrip = "StartGameStrip";
 			if ($obj->num_rows > 0)
-			{								
+			{		
+				// if there are morethan 1 scen id for single users, check in future reference
 				$result1 = $functionsObj->FetchObject ( $obj );
 				$ScenID  = $result1->US_ScenID;
 				//echo $ScenID .'<br>';
@@ -39,11 +40,12 @@ include_once 'includes/header2.php';
 					{
 									//get linkid
 									//	if scenario exists get last scenario
-
 						$sqllink    = "SELECT * FROM `GAME_LINKAGE` WHERE `Link_GameID`=".$row['Game_ID']." AND Link_ScenarioID= ".$result1->US_ScenID;
 
 						$link       = $functionsObj->ExecuteQuery($sqllink);
 						$resultlink = $functionsObj->FetchObject($link);
+						$linkid     = $resultlink->Link_ID;
+						// echo $linkid;
 
 						if ($result1->US_Input == 0 && $result1->US_Output == 0 )
 						{
@@ -79,6 +81,12 @@ include_once 'includes/header2.php';
 							}
 							else
 							{
+								$sqllink    = "SELECT * FROM `GAME_LINKAGE` WHERE `Link_GameID`=".$row['Game_ID']." AND Link_ScenarioID= ".$result1->US_ScenID;
+
+								$link       = $functionsObj->ExecuteQuery($sqllink);
+								$resultlink = $functionsObj->FetchObject($link);
+								$linkid     = $resultlink->Link_ID;
+								
 								$gamestrip = "EndGameStrip";
 								//result
 								$url       = site_root."result.php?ID=".$row['Game_ID'];
@@ -86,7 +94,7 @@ include_once 'includes/header2.php';
 								
 								if($result1->US_ReplayStatus==1)
 								{
-									$urlstr .= " <a id='restart' href='#' data-GameID='".$row['Game_ID']."' data-ScenID='".$ScenID."'><img src='images/restartGameIcon.png' alt='ReStart/Resume Game' class=''></a>";
+									$urlstr .= " <a id='restart' href='#' data-GameID='".$row['Game_ID']."' data-ScenID='".$ScenID."' data-LinkID='".$linkid."'><img src='images/restartGameIcon.png' alt='ReStart/Resume Game' class=''></a>";
 								}
 
 							}
@@ -138,27 +146,29 @@ include_once 'includes/header2.php';
 	<script src="js/bootstrap.min.js"></script>			
 	<script type="text/javascript">
 		$(document).ready(function() {
-		
+
 			$('a#restart').on('click',function(e){
 				e.preventDefault();
 				var GameID = $(this).attr('data-GameID');
 				// alert(GameID);
 				var ScenID = $(this).attr('data-ScenID');
 			  // alert(ScenID);
-				var c = confirm('You really want to play again.Press Ok For Replay');
-				if(c == true)
-				{
-					$.ajax({
-						url : "includes/ajax/ajax_replay.php",
-						type: "POST",
-						data: "action=replay&GameID="+GameID+'&ScenID='+ScenID,
-						beforeSend: function(){
-							$('.overlay').show();
-						},
-						success:function(result)
-						{
-							if(result == 'redirect')
-							{
+			  var LinkID = $(this).attr('data-LinkID');
+			  //alert(LinkID);
+			  var c = confirm('You really want to play again.Press Ok For Replay');
+			  if(c == true)
+			  {
+			  	$.ajax({
+			  		url : "includes/ajax/ajax_replay.php",
+			  		type: "POST",
+			  		data: "action=replay&GameID="+GameID+'&ScenID='+ScenID+'&LinkID='+LinkID,
+			  		beforeSend: function(){
+			  			$('.overlay').show();
+			  		},
+			  		success:function(result)
+			  		{
+			  			if(result == 'redirect')
+			  			{
 								// alert('Redirect User to input page');
 								window.location = "<?php echo site_root.'input.php?ID='?>"+GameID;
 							}	
@@ -170,11 +180,11 @@ include_once 'includes/header2.php';
 							}
 						}
 					});
-				}
-				else
-				{
-					return false;
-				}
+			  }
+			  else
+			  {
+			  	return false;
+			  }
 
 			});	
 
