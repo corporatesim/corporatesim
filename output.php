@@ -4,29 +4,38 @@ include_once 'config/functions.php';
 
 // include PHPExcel
 require('includes/PHPExcel.php');
-
 //echo "Output";
 // create new PHPExcel object
 $objPHPExcel   = new PHPExcel;
 $functionsObj  = new Functions();
 //$linkid      =$_GET['Link'];
 //$scenid      =$_GET['Scenario'];
+// if user is logout then redirect to login page as we're unsetting the username from session
+if($_SESSION['username'] == NULL)
+{
+	header("Location:".site_root."login.php");
+}
 $userid        = $_SESSION['userid'];
 //echo $userid;
-$gameid        =  $_GET['ID'];
-$userName      = $_SESSION['user_report']['userName'];
-$gameName      = $_SESSION['user_report']['gameName'];
-$ScenarioName  = $_SESSION['user_report']['ScenarioName'];
-$linkidSession = $_SESSION['user_report']['LinkId'];
+$gameid        = $_GET['ID'];
+$query         = " SELECT gl.Link_ID,gg.Game_Name,gc.Scen_Name FROM GAME_LINKAGE gl LEFT JOIN GAME_GAME gg ON gg.Game_ID=gl.Link_GameID LEFT JOIN GAME_SCENARIO gc ON gc.Scen_ID=gl.Link_ScenarioID WHERE gl.Link_GameID=".$gameid." AND gl.Link_ScenarioID=( SELECT gu.US_ScenID FROM GAME_USERSTATUS gu WHERE gu.US_UserID=".$userid." AND gu.US_GameID=".$gameid.")";
+
+$queryExecute = $functionsObj->ExecuteQuery($query);
+$resultObject = $queryExecute->fetch_object();
+// print_r($resultObject); exit; 
+$userName      = $_SESSION['userName'];
+$gameName      = $resultObject->Game_Name;
+$ScenarioName  = $resultObject->Scen_Name;
+$linkidSession = $resultObject->Link_ID;
 
 		// delete the existing data for that particular user
-$delete_sql = "DELETE FROM GAME_SITE_USER_REPORT_NEW WHERE uid=$userid AND linkid=".$_SESSION['user_report']['LinkId'];
+$delete_sql = "DELETE FROM GAME_SITE_USER_REPORT_NEW WHERE uid=$userid AND linkid=".$linkidSession;
 $delete     = $functionsObj->ExecuteQuery($delete_sql);
 $sqlComp12  = "SELECT ls.SubLink_ID,  CONCAT(c.Comp_Name, '/', COALESCE(s.SubComp_Name,'')) AS Comp_Subcomp 
 FROM `GAME_LINKAGE_SUB` ls 
 LEFT OUTER JOIN GAME_SUBCOMPONENT s ON SubLink_SubCompID=s.SubComp_ID
 LEFT OUTER JOIN GAME_COMPONENT c on SubLink_CompID=c.Comp_ID
-WHERE SubLink_LinkID=".$_SESSION['user_report']['LinkId'] ." 
+WHERE SubLink_LinkID=".$linkidSession." 
 ORDER BY SubLink_ID";
 
 $objcomp12 = $functionsObj->ExecuteQuery($sqlComp12);
@@ -215,7 +224,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 			// find sublinkid from GAME_LINKAGE_SUB regarding comp or subc
 			$SubLink_CompID =  explode('_',$input_key);
 			$CompID         = $SubLink_CompID[2];
-			$find_sublinkId = "SELECT SubLink_ID FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID=".$_SESSION['user_report']['LinkId'];
+			$find_sublinkId = "SELECT SubLink_ID FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID=".$linkidSession;
 			if($SubLink_CompID[1] == 'comp')
 			{
 				$find_sublinkId .= " AND SubLink_CompID=$CompID";
