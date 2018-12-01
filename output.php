@@ -312,13 +312,34 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 	
 	//Update UserStatus
 	
-	if($input->num_rows > 0){
-		$result = $functionsObj->FetchObject($input);
-		header("Location: ".site_root."scenario_description.php?Link=".$result->Link_ID);
-		exit(0);
+	if($input->num_rows > 0)
+	{
+		// scenario branching $gameid $scenid $userid
+		$sublinkSql = "SELECT gl.SubLink_ID,gb.*,gi.input_key,gi.input_current FROM game_branching_scenario gb LEFT JOIN game_linkage_sub gl ON gl.SubLink_CompID=gb.Branch_CompId AND gl.SubLink_LinkID=gb.Branch_LinkId LEFT JOIN game_input gi ON gi.input_sublinkid=gl.SubLink_ID WHERE gb.Branch_GameId=$gameid AND gb.Branch_ScenId=$scenid AND gi.input_user=$userid AND gl.SubLink_Type=1 AND gl.SubLink_SubCompID=0 AND gb.Branch_IsActive=0 ORDER BY gb.Branch_Order";
+		$subRes = $functionsObj->ExecuteQuery($sublinkSql);
+		if($subRes->num_rows > 0)
+		{
+			while ($subObj = $functionsObj->FetchObject($subRes))
+			{
+				if($subObj->input_current > $subObj->Branch_MinVal && $subObj->input_current < $subObj->Branch_MaxVal)
+				{
+					// die('jupmed');
+					header("Location: ".site_root."scenario_description.php?Link=".$subObj->Branch_LinkId);
+					exit(0);
+				}
+			}
+		}
+		else
+		{
+			// die('no result');
+			$result = $functionsObj->FetchObject($input);
+			header("Location: ".site_root."scenario_description.php?Link=".$result->Link_ID);
+			exit(0);
+		}
 	}
 	else
 	{
+		// die('result');
 		header("Location: ".site_root."result.php?ID=".$gameid);
 		exit(0);
 	}

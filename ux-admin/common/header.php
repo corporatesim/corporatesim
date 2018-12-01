@@ -54,100 +54,106 @@ src="<?php echo site_root."images/logo.png";?>" />
 					<?php if($_SESSION['admin_usertype']=='superadmin') {?>
 						<li>
 							<a href="<?php echo site_root."ux-admin/adminlist";?>">
-								<i class="fa fa-dashboard fa-fw"></i> Manage Admin User
+								<i class="fa fa-user fa-fw"></i> Manage Admin User
 							</a>
 						</li>
 					<?php }?>
 
+					<li id="manageUser"><a href="#"><i class="fa fa-users fa-fw"></i> Manage User
+						<span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level">
+							<?php if($functionsObj->checkModuleAuth('SiteUsers','enable')){ ?>
+								<li><a href="<?php echo site_root."ux-admin/siteusers";?>">
+								Site Users</a></li>
 
+							<?php } if($functionsObj->checkModuleAuth('UserReport','enable')){ ?>
 
-					<li><a href="<?php echo site_root."ux-admin/siteusers";?>"><i
+								<li><a 
+									href="<?php echo site_root."ux-admin/UserReport";?>">
+								User Report</a></li>
+
+							<?php } if($functionsObj->checkModuleAuth('ReplayPermission','enable')){ ?>
+
+								<li><a 
+									href="<?php echo site_root."ux-admin/ReplayPermission";?>">
+								Replay Permission</a></li>
+							<?php } ?>
+						</ul>
+					</li>
+
+					<!-- <li><a href="<?php //echo site_root."ux-admin/siteusers";?>"><i
 						class="fa fa-dashboard fa-fw"></i> Manage User</a></li>
-						
+					-->
 
-						<li id="manageCMS"><a href="#"><i class="fa fa-wrench fa-fw"></i> Master 
-							Management<span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level">
-								<?php if($functionsObj->checkModuleAuth('area','enable')){ ?>
-									<li><a
-										href="<?php echo site_root."ux-admin/ManageArea";?>">
-									Area</a></li>
+					<li id="manageCMS"><a href="#"><i class="fa fa-wrench fa-fw"></i> Master 
+						Management<span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level">
+							<?php if($functionsObj->checkModuleAuth('area','enable')){ ?>
+								<li><a
+									href="<?php echo site_root."ux-admin/ManageArea";?>">
+								Area</a></li>
 
-								<?php } if($functionsObj->checkModuleAuth('component','enable')){ ?>
+							<?php } if($functionsObj->checkModuleAuth('component','enable')){ ?>
 
-									<li><a
-										href="<?php echo site_root."ux-admin/ManageComponent";?>">
-									Component</a></li>
+								<li><a
+									href="<?php echo site_root."ux-admin/ManageComponent";?>">
+								Component</a></li>
 
-								<?php } if($functionsObj->checkModuleAuth('sub component','enable')){ ?>
+							<?php } if($functionsObj->checkModuleAuth('sub component','enable')){ ?>
 
-									<li><a 
-										href="<?php echo site_root."ux-admin/ManageSubComponent";?>">
-									Sub Component</a></li>
+								<li><a 
+									href="<?php echo site_root."ux-admin/ManageSubComponent";?>">
+								Sub Component</a></li>
 
-								<?php } if($functionsObj->checkModuleAuth('game','enable')){ ?>
+							<?php } if($functionsObj->checkModuleAuth('game','enable')){ ?>
 
-									<li><a 
-										href="<?php echo site_root."ux-admin/ManageGame";?>">
-									Game</a></li>
+								<li><a 
+									href="<?php echo site_root."ux-admin/ManageGame";?>">
+								Game</a></li>
 
-								<?php } if($functionsObj->checkModuleAuth('scenario','enable')){ ?>
+							<?php } if($functionsObj->checkModuleAuth('scenario','enable')){ ?>
 
-									<li><a 
-										href="<?php echo site_root."ux-admin/ManageScenario";?>">
-									Scenario</a></li>
+								<li><a 
+									href="<?php echo site_root."ux-admin/ManageScenario";?>">
+								Scenario</a></li>
 
-								<?php } if($functionsObj->checkModuleAuth('formulas','enable')){ ?>
+							<?php } if($functionsObj->checkModuleAuth('formulas','enable')){ ?>
 
-									<li>
-										<a href="<?php echo site_root."ux-admin/Formulas";?>">
-											Formulas
-										</a>
-									</li>	
+								<li>
+									<a href="<?php echo site_root."ux-admin/Formulas";?>">
+										Formulas
+									</a>
+								</li>	
 
-								<?php } if($functionsObj->checkModuleAuth('linkage','enable')){ ?>
+							<?php } if($functionsObj->checkModuleAuth('linkage','enable')){ ?>
 
-									<li><a 
-										href="<?php echo site_root."ux-admin/linkage";?>">
-									Linkage</a></li>
+								<li><a 
+									href="<?php echo site_root."ux-admin/linkage";?>">
+								Linkage</a></li>
 
-								<?php  } if($functionsObj->checkModuleAuth('chart','enable')){ ?>
+							<?php } if($functionsObj->checkModuleAuth('ScenarioBranching','enable')){ ?>
 
-									<li><a 
-										href="<?php echo site_root."ux-admin/chart";?>">
-									Chart</a></li>
+								<li><a 
+									href="<?php echo site_root."ux-admin/ScenarioBranching";?>">
+								Scenario Branching</a></li>
 
-								<?php } if($functionsObj->checkModuleAuth('chartComp','enable')){ ?>
+							<?php  } if($functionsObj->checkModuleAuth('chart','enable')){ ?>
 
-									<li><a 
-										href="<?php echo site_root."ux-admin/chartComp";?>">
-									Chart Component</a></li>
+								<li><a 
+									href="<?php echo site_root."ux-admin/chart";?>">
+								Chart</a></li>
 
-								<?php } if($functionsObj->checkModuleAuth('UserReport','enable')){ ?>
+							<?php } if($functionsObj->checkModuleAuth('chartComp','enable')){ ?>
 
-									<li><a 
-										href="<?php echo site_root."ux-admin/UserReport";?>">
-									User Report</a></li>
+								<li><a 
+									href="<?php echo site_root."ux-admin/chartComp";?>">
+								Chart Component</a></li>
+							<?php } ?>					
 
+						</ul>
+					</li>
 
-								<?php } if($functionsObj->checkModuleAuth('ReplayPermission','enable')){ ?>
-
-									<li><a 
-										href="<?php echo site_root."ux-admin/ReplayPermission";?>">
-									Replay Permission</a></li>
-
-								<?php } if($functionsObj->checkModuleAuth('ReplayPermission','enable')){ ?>
-
-									<li><a 
-										href="<?php echo site_root."ux-admin/ScenarioBranching";?>">
-									Scenario Branching</a></li>
-
-								<?php } ?>					
-
-							</ul>
-						</li>
-
-					</ul>
-				</div>
+				</ul>
 			</div>
-		</nav>
+		</div>
+	</nav>

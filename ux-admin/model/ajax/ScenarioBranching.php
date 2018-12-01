@@ -14,17 +14,17 @@ if($_POST['action'] == 'game_scenario')
 {
 	$Game_ID = $_POST['Game_ID'];
 	$sql     = "SELECT gl.Link_ID AS linkid, gl.Link_ScenarioID AS Scen_ID, gc.Scen_Name FROM `GAME_LINKAGE` gl LEFT JOIN GAME_GAME gm ON gm.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gc ON gc.Scen_ID = gl.Link_ScenarioID WHERE gl.Link_GameID = $Game_ID";
-	// die($sql);
+	// echo $sql;
 	$Object = $funObj->ExecuteQuery($sql);
 	if($Object->num_rows > 0)
 	{
-		$resultScenario = array();
-		while($result = mysqli_fetch_object($Object))
+		$resultJson = [];
+		while ($result = mysqli_fetch_object($Object))
 		{
-			$resultScenario[] = $result;
+			$resultJson[] = $result;		    
 		}
-		// print_r($resultScenario);
-		echo json_encode($resultScenario);
+		// print_r($resultJson);
+		echo json_encode($resultJson);
 	}
 	else
 	{
@@ -33,31 +33,21 @@ if($_POST['action'] == 'game_scenario')
 }
 
 // to get the users linked with the game with scenario
-if($_POST['action'] == 'game_users')
+if($_POST['action'] == 'outputComponent')
 {
-	if($_POST['email_value'])
-	{
-		$searchEmail = $_POST['email_value'];
-		$filterSql   = " AND gu.User_email LIKE '%".$searchEmail."%' ";
-	}
-	else
-	{
-		$filterSql = '';
-	}
-	
-	$Game_ID = $_POST['Game_ID'];
-	$sql    = "SELECT gu.User_id,concat(gu.User_fname,' ',gu.User_lname) AS Name,gu.User_username AS UserName,gu.User_email AS Email FROM GAME_SITE_USERS gu LEFT JOIN GAME_USERGAMES ga ON ga.UG_UserID = gu.User_id WHERE ga.UG_GameID=$Game_ID";
-	$sql .= $filterSql;
-	 //die($sql);
+	// print_r($_POST);
+	$linkid = $_POST['linkid'];
+	$sql    = "SELECT SubLink_CompID,Comp_Name,SubLink_ID FROM `GAME_LINKAGE_SUB` LEFT JOIN GAME_COMPONENT ON Comp_ID=SubLink_CompID WHERE SubLink_LinkID = $linkid AND SubLink_Type = 1 AND SubLink_SubCompID=0";
+	// die($sql);
 	$Object = $funObj->ExecuteQuery($sql);
 	if($Object->num_rows > 0)
 	{
 		while($result = mysqli_fetch_object($Object))
 		{
-			$userData[] = $result;
+			$outputComponent[] = $result;
 		}
-		// print_r($userData);
-		echo json_encode($userData);
+		// print_r($outputComponent);
+		echo json_encode($outputComponent);
 	}
 	else
 	{
