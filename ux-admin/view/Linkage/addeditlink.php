@@ -348,8 +348,10 @@ span.alert-danger {
                     <option value="12" <?php echo ($SubLink_ViewingOrder == 12?'selected':''); ?>>Details/Chart - Input Fields</option>
                     <option value="13" <?php echo ($SubLink_ViewingOrder == 13?'selected':''); ?>>Name - Input Fields - Half Length</option>
                     <option value="14" <?php echo ($SubLink_ViewingOrder == 14?'selected':''); ?>>Input Fields - Name - Half Length</option>
-                     <option value="15" <?php  echo ($SubLink_ViewingOrder == 15?'selected':''); ?>> CK Editor - Full Length</option> 
-                     <option value="16" <?php  echo ($SubLink_ViewingOrder == 16?'selected':''); ?>> CK Editor - Half Length</option> 
+                    <option value="15" <?php  echo ($SubLink_ViewingOrder == 15?'selected':''); ?>> CK Editor - Full Length</option> 
+                    <option value="16" <?php  echo ($SubLink_ViewingOrder == 16?'selected':''); ?>> CK Editor - Half Length</option> 
+                    <option value="17" <?php  echo ($SubLink_ViewingOrder == 17?'selected':''); ?>> CK Editor - Input Fields - Half Length</option> 
+                    <option value="18" <?php  echo ($SubLink_ViewingOrder == 18?'selected':''); ?>> Input Fields - CK Editor - Half Length</option> 
                   </select>
                 </div>
                 <br><br>

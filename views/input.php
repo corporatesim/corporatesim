@@ -180,6 +180,7 @@ include_once 'includes/header.php';
                 while($row1 = mysqli_fetch_array($component)){    
                       //echo "<form > ";
                   switch ($row1['ViewingOrder']) {
+                    // Name - Details/Chart - InputFields
                     case 1:
                     $ckEditorLength = 'col-md-6';
                     $ComponentName  = "";
@@ -188,6 +189,7 @@ include_once 'includes/header.php';
                     $comp_length    = 'col-md-12';
                     break;
 
+                    // Name - InputFields - Details/Chart 
                     case 2:
                     $ckEditorLength = 'col-md-6';
                     $ComponentName  = "";
@@ -196,6 +198,7 @@ include_once 'includes/header.php';
                     $comp_length    = 'col-md-12';
                     break;
 
+                    // Details/Chart - InputFields - Name
                     case 3:
                     $ckEditorLength = 'col-md-6';
                     $ComponentName  = "pull-right";
@@ -204,14 +207,17 @@ include_once 'includes/header.php';
                     $comp_length    = 'col-md-12';
                     break;
 
+                    // Details/Chart - Name - InputFields
                     case 4:
                     $ckEditorLength = 'col-md-6';
-                    $ComponentName  = "hidden";
+                    // adding removeThis class to remove the div to prevent duplicacy, coz showing this below to show the component name in the middle
+                    $ComponentName  = "hidden removeThis"; 
                     $DetailsChart   = "";
                     $InputFields    = "";
                     $comp_length    = 'col-md-12';
                     break;
 
+                    // InputFields - Details/Chart - Name
                     case 5:
                     $ckEditorLength = 'col-md-6';
                     $ComponentName  = "pull-right";
@@ -220,14 +226,17 @@ include_once 'includes/header.php';
                     $comp_length    = 'col-md-12';
                     break;
 
+                    // InputFields - Name - Details/Chart
                     case 6:
                     $ckEditorLength = 'col-md-6';
-                    $ComponentName  = "hidden";
+                    // adding removeThis class to remove the div to prevent duplicacy, coz showing this below to show the component name in the middle
+                    $ComponentName  = "hidden removeThis"; 
                     $DetailsChart   = "pull-right";
                     $InputFields    = "";
                     $comp_length    = 'col-md-12';
                     break;
 
+                    // InputFields - Name - FullLength
                     case 7:
                     $ckEditorLength = 'col-md-6';
                     $ComponentName  = "pull-right";
@@ -236,6 +245,7 @@ include_once 'includes/header.php';
                     $comp_length    = 'col-md-12';
                     break;
 
+                    // InputFields - Details/Chart
                     case 8:
                     $ckEditorLength = 'col-md-6';
                     $ComponentName  = "hidden";
@@ -244,6 +254,7 @@ include_once 'includes/header.php';
                     $comp_length    = 'col-md-12';
                     break;
 
+                    // Name - Details/Chart
                     case 9:
                     $ckEditorLength = 'col-md-6';
                     $ComponentName  = "";
@@ -252,6 +263,7 @@ include_once 'includes/header.php';
                     $comp_length    = 'col-md-12';
                     break;
 
+                    // Name - InputFields - FullLength
                     case 10:
                     $ckEditorLength = 'col-md-6';
                     $ComponentName  = "";
@@ -260,6 +272,7 @@ include_once 'includes/header.php';
                     $comp_length    = 'col-md-12';
                     break;
 
+                    // Details/Chart - Name
                     case 11:
                     $ckEditorLength = 'col-md-6';
                     $ComponentName  = "pull-right";
@@ -268,6 +281,7 @@ include_once 'includes/header.php';
                     $comp_length    = 'col-md-12';
                     break;
 
+                    // Details/Chart - InputFields
                     case 12:
                     $ckEditorLength = 'col-md-6';
                     $ComponentName  = "hidden";
@@ -276,6 +290,7 @@ include_once 'includes/header.php';
                     $comp_length    = 'col-md-12';
                     break;
 
+                    // Name - InputFields - HalfLength
                     case 13:
                     $ckEditorLength = 'col-md-6';
                     $ComponentName  = "";
@@ -284,6 +299,7 @@ include_once 'includes/header.php';
                     $comp_length    = "col-sm-6";
                     break;
 
+                    // InputFields - Name - HalfLength
                     case 14:
                     $ckEditorLength = 'col-md-6';
                     $ComponentName  = "pull-right";
@@ -292,6 +308,7 @@ include_once 'includes/header.php';
                     $comp_length    = "col-sm-6";
                     break;
 
+                    // CkEditor - FullLength
                     case 15:
                     $ckEditorLength = "col-md-12";
                     $ComponentName  = "hidden";
@@ -300,11 +317,30 @@ include_once 'includes/header.php';
                     $comp_length    = "col-md-12";
                     break;
 
+                    // CkEditor - HalfLength
                     case 16:
                     $ckEditorLength = "col-md-12";
                     $ComponentName  = "hidden";
                     $DetailsChart   = "";
                     $InputFields    = "hidden";
+                    $comp_length    = "col-md-6";
+                    break;
+
+                    // ckEditor - InputFields - HalfLength
+                    case 17:
+                    $ckEditorLength = "col-md-6";
+                    $ComponentName  = "hidden";
+                    $DetailsChart   = "";
+                    $InputFields    = "";
+                    $comp_length    = "col-md-6";
+                    break;
+
+                    // InputFields - ckEditor - HalfLength
+                    case 18:
+                    $ckEditorLength = "col-md-6";
+                    $ComponentName  = "hidden";
+                    $DetailsChart   = "pull-right";
+                    $InputFields    = "";
                     $comp_length    = "col-md-6";
                     break;
                   }
@@ -577,6 +613,7 @@ include_once 'includes/header.php';
                 ($row2['ShowHide']==1)?$hide='hidden':$hide='';
 
                 switch ($row2['ViewingOrder']) {
+                  // Name - Details/Chart - InputFields
                   case 1:
                   $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "";
@@ -585,6 +622,7 @@ include_once 'includes/header.php';
                   $length           = "col-md-12";
                   break;
 
+                  // Name - InputFields - Details/Chart
                   case 2:
                   $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "";
@@ -593,6 +631,7 @@ include_once 'includes/header.php';
                   $length           = "col-md-12";
                   break;
 
+                  // Details/Chart - InputFields - Name
                   case 3:
                   $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "pull-right";
@@ -601,14 +640,17 @@ include_once 'includes/header.php';
                   $length           = "col-md-12";
                   break;
 
+                  // Details/Chart - Name - InputFields
                   case 4:
                   $SubCkEditor      = 'col-md-6';
-                  $SubcomponentName = "hidden";
+                  // adding removeThis class to remove the div to prevent duplicacy, coz showing this below to show the component name in the middle
+                  $SubcomponentName = "hidden removeThis";
                   $DetailsChart     = "";
                   $InputFields      = "";
                   $length           = "col-md-12";
                   break;
 
+                  // InputFields - Details/Chart - Name
                   case 5:
                   $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "pull-right";
@@ -617,14 +659,17 @@ include_once 'includes/header.php';
                   $length           = "col-md-12";
                   break;
 
+                  // InputFields - Name - Details/Chart
                   case 6:
                   $SubCkEditor      = 'col-md-6';
-                  $SubcomponentName = "hidden";
+                  // adding removeThis class to remove the div to prevent duplicacy, coz showing this below to show the component name in the middle
+                  $SubcomponentName = "hidden removeThis";
                   $DetailsChart     = "pull-right";
                   $InputFields      = "";
                   $length           = "col-md-12";
                   break;
 
+                  // InputFields - Name - FullLength
                   case 7:
                   $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "pull-right";
@@ -633,6 +678,7 @@ include_once 'includes/header.php';
                   $length           = "col-md-12";
                   break;
 
+                  // InputFields - Details/Chart
                   case 8:
                   $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "hidden";
@@ -641,6 +687,7 @@ include_once 'includes/header.php';
                   $length           = "col-md-12";
                   break;
 
+                  // Name - Details/Chart
                   case 9:
                   $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "";
@@ -649,6 +696,7 @@ include_once 'includes/header.php';
                   $length           = "col-md-12";
                   break;
 
+                  // Name - InputFields - FullLength
                   case 10:
                   $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "";
@@ -657,6 +705,7 @@ include_once 'includes/header.php';
                   $length           = "col-md-12";
                   break;
 
+                  // Details/Chart - Name
                   case 11:
                   $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "pull-right";
@@ -665,6 +714,7 @@ include_once 'includes/header.php';
                   $length           = "col-md-12";
                   break;
 
+                  // Details/Chart - InputFields
                   case 12:
                   $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "hidden";
@@ -672,7 +722,8 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-12";
                   break;
-                    // for half length
+
+                  // Name - InputFields - HalfLength
                   case 13:
                   $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "";
@@ -681,6 +732,7 @@ include_once 'includes/header.php';
                   $length           = "col-md-6";
                   break;
 
+                  // InputFields - Name - HalfLength
                   case 14:
                   $SubCkEditor      = 'col-md-6';
                   $SubcomponentName = "pull-right";
@@ -688,7 +740,8 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-6";
                   break;
-                  // CK EDITOR FULL LENGTH
+
+                  // CkEditor - FullLength
                   case 15:
                   $SubCkEditor      = 'col-md-12';
                   $SubcomponentName = "hidden";
@@ -696,12 +749,31 @@ include_once 'includes/header.php';
                   $InputFields      = "hidden";
                   $length           = "col-md-12";
                   break;
-                  // CK EDITOR HALF LENGTH
+
+                  // CkEditor - HalfLength
                   case 16:
                   $SubCkEditor      = 'col-md-12';
                   $SubcomponentName = "hidden";
                   $DetailsChart     = "";
                   $InputFields      = "hidden";
+                  $length           = "col-md-6";
+                  break;
+
+                  // ckEditor - InputFields - HalfLength
+                  case 17:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "";
+                  $InputFields      = "";
+                  $length           = "col-md-6";
+                  break;
+
+                  // InputFields - ckEditor - HalfLength
+                  case 18:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "pull-right";
+                  $InputFields      = "";
                   $length           = "col-md-6";
                   break;
                 }
@@ -1377,6 +1449,11 @@ include_once 'includes/header.php';
         e.preventDefault();
         return false;
       }
+    });
+
+    // removing the element which are twice
+    $(".removeThis").each(function(){
+      $(this).remove();
     });
 
     formula_json_expcomp = {};
