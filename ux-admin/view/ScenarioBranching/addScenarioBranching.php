@@ -124,11 +124,11 @@ span.alert-danger {
         </select>
       </div>
       <div class="col-md-1" id="minValDiv">
-        <label for="Minimum Value"><span class="alert-danger">*</span>Min Value</label>
+        <label for="Minimum Value"><span class="alert-danger">*</span>Min</label>
         <input type="text" id="minVal" name="minVal[]" class="form-control" placeholder="Min Val" required="">
       </div>
       <div class="col-md-1" id="maxValDiv">
-        <label for="Maximum Value"><span class="alert-danger">*</span>Max Value</label>
+        <label for="Maximum Value"><span class="alert-danger">*</span>Max</label>
         <input type="text" id="" name="maxVal[]" class="form-control" placeholder="Max Val" required="">
       </div>
       <div class="col-md-1" id="orderDiv">
@@ -144,7 +144,7 @@ span.alert-danger {
           <?php } ?>
         </select>
       </div>
-      <div class="col-md-1 hidden" id="buttonDiv" style="padding-top: 2.2%;">
+      <div class="col-md-1 hidden" id="buttonDiv" style="padding-top: 3%;">
         <button type="button" class="btn-primary btn" id="addMore" title="Add New"><b>+</b></button>
       </div>
       <div id="addHere"></div>
@@ -299,7 +299,7 @@ span.alert-danger {
         $(e).html(ScenarioOption);
       });
 
-      $('#addHere').append('<div class="removeThis"><div class="col-md-4" id="componentDiv"><label for="Select Component"><span class="alert-danger">*</span>Select Output Component</label><select required name="ComponentName[]" id="ComponentName" class="form-control ComponentName"><option value="">--Select Output Component--</option></select></div><div class="col-md-1" id=""><label for="Minimum Value"><span class="alert-danger">*</span>Min Value</label><input required type="text" id="minVal" name="minVal[]" class="form-control" placeholder="Min Val"></div><div class="col-md-1" id=""><label for="Maximum Value"><span class="alert-danger">*</span>Max Value</label><input required type="text" id="maxVal" name="maxVal[]" class="form-control" placeholder="Max Val"></div><div class="col-md-1" id=""><label for="Order Number"><span class="alert-danger">*</span>Order</label><input required type="number" id="order" name="order[]" class="form-control" placeholder="Order Of Comparison"></div><div class="col-md-4" id="scenarioDiv"><label for="Select Component"><span class="alert-danger">*</span>Next Scenario</label><select required name="NextScenario[]" id="NextScenario" class="form-control NextScenario"><option value="">--Select Scenario--</option></select></div><div class="col-md-1" id="" style="padding-top: 2.2%;" title="Remove"><button type="button" class="btn-danger btn" id="removeThis"><b>-</b></button></div></div>');
+      $('#addHere').append('<div class="removeThis"><div class="col-md-4" id="componentDiv"><label for="Select Component"><span class="alert-danger">*</span>Select Output Component</label><select required name="ComponentName[]" id="ComponentName" class="form-control ComponentName"><option value="">--Select Output Component--</option></select></div><div class="col-md-1" id=""><label for="Minimum Value"><span class="alert-danger">*</span>Min</label><input required type="text" id="minVal" name="minVal[]" class="form-control" placeholder="Min Val"></div><div class="col-md-1" id=""><label for="Maximum Value"><span class="alert-danger">*</span>Max</label><input required type="text" id="maxVal" name="maxVal[]" class="form-control" placeholder="Max Val"></div><div class="col-md-1" id=""><label for="Order Number"><span class="alert-danger">*</span>Order</label><input required type="number" id="order" name="order[]" class="form-control" placeholder="Order Of Comparison"></div><div class="col-md-4" id="scenarioDiv"><label for="Select Component"><span class="alert-danger">*</span>Next Scenario</label><select required name="NextScenario[]" id="NextScenario" class="form-control NextScenario"><option value="">--Select Scenario--</option></select></div><div class="col-md-1" id="" style="padding-top:3%;" title="Remove"><button type="button" class="btn-danger btn" id="removeThis"><b>-</b></button></div></div>');
       removeDiv();
     });
   });
