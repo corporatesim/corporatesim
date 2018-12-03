@@ -315,7 +315,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 	if($input->num_rows > 0)
 	{
 		// scenario branching $gameid $scenid $userid
-		$sublinkSql = "SELECT gl.SubLink_ID,gb.*,gi.input_key,gi.input_current FROM game_branching_scenario gb LEFT JOIN game_linkage_sub gl ON gl.SubLink_CompID=gb.Branch_CompId AND gl.SubLink_LinkID=gb.Branch_LinkId LEFT JOIN game_input gi ON gi.input_sublinkid=gl.SubLink_ID WHERE gb.Branch_GameId=$gameid AND gb.Branch_ScenId=$scenid AND gi.input_user=$userid AND gl.SubLink_Type=1 AND gl.SubLink_SubCompID=0 AND gb.Branch_IsActive=0 ORDER BY gb.Branch_Order";
+		$sublinkSql = "SELECT gl.SubLink_ID,gb.*,gi.input_key,gi.input_current FROM GAME_BRANCHING_SCENARIO gb LEFT JOIN GAME_LINKAGE_SUB gl ON gl.SubLink_CompID=gb.Branch_CompId AND gl.SubLink_LinkID=gb.Branch_LinkId LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gl.SubLink_ID WHERE gb.Branch_GameId=$gameid AND gb.Branch_ScenId=$scenid AND gi.input_user=$userid AND gl.SubLink_Type=1 AND gl.SubLink_SubCompID=0 AND gb.Branch_IsActive=0 ORDER BY gb.Branch_Order";
 		$subRes = $functionsObj->ExecuteQuery($sublinkSql);
 		if($subRes->num_rows > 0)
 		{
