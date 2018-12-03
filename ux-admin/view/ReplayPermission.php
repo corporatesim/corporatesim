@@ -47,7 +47,7 @@ span.alert-danger {
      (More than One)</label>
    </div>
    <div class="col-md-4">
-    <input type="radio" name="radio" id="stop" class="stop" value="stopReplay">  <label for="stop"> StopReplay
+    <input type="radio" name="radio" id="stop" class="stop" value="stopReplay" checked="checked">  <label for="stop"> StopReplay
     (Never) </label>
   </div>
 </div>
@@ -64,15 +64,15 @@ span.alert-danger {
   </div>
   <input type="hidden" name="gamename" id="gamename">
 
-  <div class="col-md-6 hidden" id="scenario_section">
+  <!-- <div class="col-md-6 hidden" id="scenario_section">
     <label for="Select Scenario"><span class="alert-danger">*</span>Select Scenario</label>
     <select name="game_scenario" id="game_scenario" class="form-control">
-      <option value="">--Select Scenario--</option>
+      <option value="">--Select Scenario--</option> -->
       <!-- <option value="1">Test Scenario</option> -->
       <!-- <option value="<?php // echo $gameScenario->Game_ID; ?>"><?php // echo $gameScenario->Game_Name; ?></option> -->
-    </select>
+   <!--  </select>
   </div>
-  <input type="hidden" name="scenarioname" id="scenarioname">
+  <input type="hidden" name="scenarioname" id="scenarioname"> -->
 </div>
 
 <div class="clearfix"></div>
@@ -133,7 +133,56 @@ span.alert-danger {
 <script>
   $(document).ready(function(){
 
-    $('#game_game').on('change',function(){
+   //on game change select the users
+   $('#game_game').on('change',function(){
+    var Game_ID  = $(this).val();
+    var gamename = $(this).find(':selected').data('gamename');
+    $('#gamename').attr('value',gamename); 
+    if($(this).val())
+    {
+      $('#user_section').removeClass('hidden');
+          // triggering ajax to show users linked with this game 
+          $.ajax({
+            url :  "model/ajax/ReplayPermission.php",
+            type: "POST",
+            data: "action=game_users&Game_ID="+Game_ID,
+            success: function( result )
+            {
+              var checkbox = '';
+              var count    = 0;
+              if(result.trim() != 'no link')
+              {
+                result = JSON.parse(result)
+                $(result).each(function(index,e)
+                {
+                  count++;
+                  // checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="UserName: '+result[index].UserName+' and Email: '+result[index].Email+'"><input type="checkbox" name="user_id[]" id="user'+result[index].User_id+' value='+result[index].User_id+'"> '+result[index].Name+'</label></div>';
+                  checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="'+result[index].Email+'"><input type="checkbox" class="user_id" value="'+result[index].User_id+'" name="user_id[]"> '+result[index].Name+'</label></div>'
+                });
+                // alert(count);
+                $('#count').html('<label class="alert-success">Total Users: '+count+'</label>');
+                // $('#count').html('<label>Total Users: '+count+'</label>');
+                $('#users_data').html(checkbox);
+              }
+              else
+              {
+                $('#users_data').html(checkbox);
+              }
+            },
+          });
+        }
+        else
+        {
+          if(!($('#user_section').hasClass('hidden')))
+          {
+            $('#user_section').addClass('hidden');
+          }
+          alert('Please Select game...');
+          return false;
+        }
+      });
+   
+   /* $('#game_game').on('change',function(){
       var Game_ID  = $(this).val();
       var gamename = $(this).find(':selected').data('gamename');
       $('#gamename').attr('value',gamename);
@@ -231,75 +280,78 @@ span.alert-danger {
           alert('Please Select Scenario...');
           return false;
         }
-      });
+      });*/
 
-    $('input[type=radio]').on('change',function(){
+      $('input[type=radio]').on('change',function(){
         // alert($(this).val());
-        if($(this).val() == 'select_users')
+        if($(this).attr('id') == 'all_users' || $(this).attr('id') == 'select_users')
         {
-          $('#select_all_div').removeClass('hidden');
-          $('#search').removeClass('hidden');
-          $('#count').removeClass('hidden');
-          $('#users_data').removeClass('hidden');
-        }
-        else
-        {
-          $('#users_data').addClass('hidden');
-          $('#select_all_div').addClass('hidden');
-          $('#search').addClass('hidden');
-          $('#count').addClass('hidden');
-        }
-      });
-
-    $('#select_all').on('click',function(){
-      if($(this).is(':checked'))
-      {
-        $('input[type=checkbox]').each(function(i,e){
-          $(this).prop('checked',true);
-        });
-      }
-      else
-      {
-        $('input[type=checkbox]').each(function(i,e){
-          $(this).prop('checked',false);
-        });
-      }
-    });
-
-
-    $('#searchBox').on('keyup',function(){
-      var search = $(this).val().toLowerCase();
-      $.ajax({
-        url : "model/ajax/ReplayPermission.php",
-        type: "POST",
-        data: "action=game_users&linkid="+linkid+'&email_value='+search,
-        success: function( result )
-        {
-          var checkbox = '';
-          var count    = 0;
-          if(result.trim() != 'no link')
+          if($(this).val() == 'select_users')
           {
-            result = JSON.parse(result)
-            $(result).each(function(index,e)
-            {
-              count++;
-              checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="'+result[index].Email+'"><input type="checkbox" class="user_id" value="'+result[index].User_id+'" name="user_id[]"> '+result[index].Name+'</label></div>';
-            });
-
-            $('#count').html('<label class="alert-success">Total Users: '+count+'</label>');
-            $('#linkid').attr('value',linkid);
-            $('#users_data').html(checkbox);
-            
-
+            $('#select_all_div').removeClass('hidden');
+            $('#search').removeClass('hidden');
+            $('#count').removeClass('hidden');
+            $('#users_data').removeClass('hidden');
           }
           else
           {
-            $('#count').html('<label class="alert-danger">No Record Found</label>');
-            $('#users_data').html(checkbox);
+            $('#users_data').addClass('hidden');
+            $('#select_all_div').addClass('hidden');
+            $('#search').addClass('hidden');
+            $('#count').addClass('hidden');
           }
-        },
+        }
       });
-    });
+
+      $('#select_all').on('click',function(){
+        if($(this).is(':checked'))
+        {
+          $('input[type=checkbox]').each(function(i,e){
+            $(this).prop('checked',true);
+          });
+        }
+        else
+        {
+          $('input[type=checkbox]').each(function(i,e){
+            $(this).prop('checked',false);
+          });
+        }
+      });
+
+
+      $('#searchBox').on('keyup',function(){
+        var search = $(this).val().toLowerCase();
+        var Game_ID  = $('#game_game').val();
+        $.ajax({
+          url : "model/ajax/ReplayPermission.php",
+          type: "POST",
+          data: "action=game_users&Game_ID="+Game_ID+'&email_value='+search,
+          success: function( result )
+          {
+            var checkbox = '';
+            var count    = 0;
+            if(result.trim() != 'no link')
+            {
+              result = JSON.parse(result)
+              $(result).each(function(index,e)
+              {
+                count++;
+                checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="'+result[index].Email+'"><input type="checkbox" class="user_id" value="'+result[index].User_id+'" name="user_id[]"> '+result[index].Name+'</label></div>';
+              });
+
+              $('#count').html('<label class="alert-success">Total Users: '+count+'</label>');
+              $('#users_data').html(checkbox);
+              
+
+            }
+            else
+            {
+              $('#count').html('<label class="alert-danger">No Record Found</label>');
+              $('#users_data').html(checkbox);
+            }
+          },
+        });
+      });
 
 // Set the value 0 & 1 for check and Unchecked 
 
