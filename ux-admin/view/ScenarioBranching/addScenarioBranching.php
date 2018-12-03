@@ -133,7 +133,7 @@ span.alert-danger {
       </div>
       <div class="col-md-1" id="orderDiv">
         <label for="Order Number"><span class="alert-danger">*</span>Order</label>
-        <input type="number" id="" name="order[]" class="form-control" placeholder="Order Of Comparison" required="">
+        <input type="number" id="" name="order[]" class="form-control" placeholder="Order Of Comparison" required="" min="1">
       </div>
       <div class="col-md-4" id="scenarioDiv">
         <label for="Select Component"><span class="alert-danger">*</span>Next Scenario</label>
@@ -190,7 +190,7 @@ span.alert-danger {
           data: "action=game_scenario&Game_ID="+Game_ID,
           success: function( result )
           {
-            ScenarioOption = '<option value="">--Select Scenario--</option>';
+            ScenarioOption = '<option value="">--Select Next Scenario--</option>';
             if(result.trim() != 'no link')
             {
               result = JSON.parse(result)
@@ -241,14 +241,16 @@ span.alert-danger {
           data: "action=outputComponent&linkid="+linkid,
           success: function( result )
           {
-            CompOption = '<option value="">--Select Scenario--</option>';
+            CompOption = '<option value="">--Select Component--</option>';
             if(result.trim() != 'no link')
             {
-              result = JSON.parse(result)
+              compCount = 0;
+              result    = JSON.parse(result)
               // console.log(result);
               $(result).each(function(i,e)
               {
                 //console.log(i);
+                compCount++;
                 CompOption += ('<option value='+result[i].SubLink_CompID+' data-SubLink_ID='+result[i].SubLink_ID+'>'+result[i].Comp_Name+'</option>');
               });
               $('.ComponentName').each(function(i,e){
@@ -282,6 +284,13 @@ span.alert-danger {
     });
     // adding more div
     $('#addMore').on('click', function(){
+      var addedDiv = $('#addHere').children().length;
+      if(addedDiv >= compCount-1)
+      {
+        // alert('compCount: '+compCount+' and addedDiv: '+addedDiv);
+        alert('You can add max '+compCount+' rows. As there are '+compCount+' components');
+        return false;
+      }
       $('.ComponentName').each(function(i,e){
         $(e).html(CompOption);
       });
