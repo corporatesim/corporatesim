@@ -389,7 +389,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Download'){
 	INNER JOIN `GAME_LINKAGE_SUB` ls ON o.output_sublinkid = ls.SubLink_ID
 	INNER JOIN GAME_COMPONENT c ON ls.SubLink_CompID= c.Comp_ID
 	LEFT OUTER JOIN GAME_SUBCOMPONENT s ON ls.SubLink_SubCompID=s.SubComp_ID
-	WHERE output_user=".$userid." AND ls.SubLink_LinkID=".$linkid." AND ls.SubLink_Type=1";
+	WHERE output_user=".$userid." AND ls.SubLink_LinkID=".$linkid." AND ls.SubLink_Type=1 AND ls.SubLink_ShowHide=0";
 	//echo $sql;
 	//exit();
 	$objoutput = $functionsObj->ExecuteQuery($sql);
