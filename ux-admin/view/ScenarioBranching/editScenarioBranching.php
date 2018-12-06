@@ -122,11 +122,11 @@ span.alert-danger {
         </select>
       </div>
       <div class="col-md-1" id="minValDiv">
-        <label for="Minimum Value"><span class="alert-danger">*</span>Min Value</label>
+        <label for="Minimum Value"><span class="alert-danger">*</span>Min</label>
         <input type="text" id="minVal" name="minVal" class="form-control" placeholder="Min Val" required="" value="<?php echo $editResObject->Branch_MinVal;?>">
       </div>
       <div class="col-md-1" id="maxValDiv">
-        <label for="Maximum Value"><span class="alert-danger">*</span>Max Value</label>
+        <label for="Maximum Value"><span class="alert-danger">*</span>Max</label>
         <input type="text" id="" name="maxVal" class="form-control" placeholder="Max Val" required="" value="<?php echo $editResObject->Branch_MaxVal;?>">
       </div>
       <div class="col-md-1" id="orderDiv">
@@ -156,7 +156,7 @@ span.alert-danger {
         <button type="submit" class="btn btn-primary btn-lg btn-block" name="editBranching" value="editBranching" id="editBranching">UPDATE</button>
       </div>
       <div class="col-md-3 text-center">
-        <a href="http://localhost/corp_sim/ux-admin/ScenarioBranching" class="btn btn-primary btn-lg btn-block">CANCEL</a>
+        <a href="<?php echo site_root;?>ux-admin/ScenarioBranching" class="btn btn-primary btn-lg btn-block">CANCEL</a>
       </div>
     </div>
   </div>

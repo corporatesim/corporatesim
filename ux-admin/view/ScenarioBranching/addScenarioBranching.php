@@ -157,7 +157,7 @@ span.alert-danger {
           <button type="submit" class="btn btn-primary btn-lg btn-block" name="addBranching" value="addBranching" id="addBranching">SAVE</button>
         </div>
         <div class="col-md-3 text-center">
-          <a href="http://localhost/corp_sim/ux-admin/ScenarioBranching" class="btn btn-primary btn-lg btn-block">CANCEL</a>
+          <a href="<?php echo site_root;?>ux-admin/ScenarioBranching" class="btn btn-primary btn-lg btn-block">CANCEL</a>
         </div>
       </div>
     </div>
@@ -166,6 +166,7 @@ span.alert-danger {
 <div class="clearfix"></div>
 <script>
   $(document).ready(function(){
+    classCount     = 0;
     CompOption     = '<option value="">--Select Scenario--</option>';
     ScenarioOption = '<option value="">--Select Scenario--</option>';
 
@@ -230,6 +231,8 @@ span.alert-danger {
       var element      = $(this);
       var scenarioname = $(this).find(':selected').data('scenarioname');
       $('#scenarioname').attr('value',scenarioname);
+      // remove all added div via add button
+      removeAllAddedDiv();
       if($(this).val())
       {
         linkid = $(this).find(':selected').data('linkid');
@@ -284,6 +287,7 @@ span.alert-danger {
     });
     // adding more div
     $('#addMore').on('click', function(){
+      classCount++;
       var addedDiv = $('#addHere').children().length;
       if(addedDiv >= compCount-1)
       {
@@ -291,15 +295,12 @@ span.alert-danger {
         alert('You can add max '+compCount+' rows. As there are '+compCount+' components');
         return false;
       }
-      $('.ComponentName').each(function(i,e){
-        $(e).html(CompOption);
-      });
 
-      $('.NextScenario').each(function(i,e){
-        $(e).html(ScenarioOption);
-      });
+      $('#addHere').append('<div class="removeThis"><div class="col-md-4" id="componentDiv"><label for="Select Component"><span class="alert-danger">*</span>Select Output Component</label><select required name="ComponentName[]" id="ComponentName" class="form-control ComponentName'+classCount+'"><option value="">--Select Output Component--</option></select></div><div class="col-md-1" id=""><label for="Minimum Value"><span class="alert-danger">*</span>Min</label><input required type="text" id="minVal" name="minVal[]" class="form-control" placeholder="Min Val"></div><div class="col-md-1" id=""><label for="Maximum Value"><span class="alert-danger">*</span>Max</label><input required type="text" id="maxVal" name="maxVal[]" class="form-control" placeholder="Max Val"></div><div class="col-md-1" id=""><label for="Order Number"><span class="alert-danger">*</span>Order</label><input required type="number" min="1" id="order" name="order[]" class="form-control" placeholder="Order Of Comparison"></div><div class="col-md-4" id="scenarioDiv"><label for="Select Component"><span class="alert-danger">*</span>Next Scenario</label><select required name="NextScenario[]" id="NextScenario" class="form-control NextScenario'+classCount+'"><option value="">--Select Scenario--</option></select></div><div class="col-md-1" id="" style="padding-top:3%;" title="Remove"><button type="button" class="btn-danger btn" id="removeThis"><b>-</b></button></div></div>');
 
-      $('#addHere').append('<div class="removeThis"><div class="col-md-4" id="componentDiv"><label for="Select Component"><span class="alert-danger">*</span>Select Output Component</label><select required name="ComponentName[]" id="ComponentName" class="form-control ComponentName"><option value="">--Select Output Component--</option></select></div><div class="col-md-1" id=""><label for="Minimum Value"><span class="alert-danger">*</span>Min</label><input required type="text" id="minVal" name="minVal[]" class="form-control" placeholder="Min Val"></div><div class="col-md-1" id=""><label for="Maximum Value"><span class="alert-danger">*</span>Max</label><input required type="text" id="maxVal" name="maxVal[]" class="form-control" placeholder="Max Val"></div><div class="col-md-1" id=""><label for="Order Number"><span class="alert-danger">*</span>Order</label><input required type="number" id="order" name="order[]" class="form-control" placeholder="Order Of Comparison"></div><div class="col-md-4" id="scenarioDiv"><label for="Select Component"><span class="alert-danger">*</span>Next Scenario</label><select required name="NextScenario[]" id="NextScenario" class="form-control NextScenario"><option value="">--Select Scenario--</option></select></div><div class="col-md-1" id="" style="padding-top:3%;" title="Remove"><button type="button" class="btn-danger btn" id="removeThis"><b>-</b></button></div></div>');
+      $('.ComponentName'+classCount).html(CompOption);
+
+      $('.NextScenario'+classCount).html(ScenarioOption);
       removeDiv();
     });
   });
@@ -309,14 +310,6 @@ function removeDiv()
     $(e).on('click',function(){
       // alert($(this).attr('id'));
       $(this).parents('div.removeThis').remove();
-    });
-
-    $('.ComponentName').each(function(i,e){
-      $(e).html(CompOption);
-    });
-
-    $('.NextScenario').each(function(i,e){
-      $(e).html(ScenarioOption);
     });
   });
 }

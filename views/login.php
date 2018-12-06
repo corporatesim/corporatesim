@@ -1,5 +1,6 @@
 <?php 
 include_once 'includes/header.php'; 
+
 ?>
 <?php if(isset($msg)){
 		//echo "<div class=\"form-group ". $type[1] ." \"><div align=\"center\" class=\"form-control\" id=". $type[0] ."><label class=\"control-label\" for=". $type[0] .">". $msg ."</label></div></div>";

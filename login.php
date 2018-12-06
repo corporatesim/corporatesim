@@ -51,8 +51,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login"){
 			if($res->User_Delete == 0){
 				if($res->User_status == 1){
 					
-					$_SESSION['userid'] = (int) $res->User_id;
-					$_SESSION['username'] = $res->User_username;
+					$_SESSION['userid']    = (int) $res->User_id;
+					$_SESSION['username']  = $res->User_username;
+					$_SESSION['companyid'] = $res->User_companyid;
 					
 					//header("Location:".site_root."my_profile.php");
 					//echo '<script>window.location = "http://simulation.uxconsultant.in/my_profile.php"; </script>';
