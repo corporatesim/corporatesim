@@ -13,11 +13,15 @@ print_r($gameid);*/
 
 if($_POST['action'] == 'replay')
 {
-	$GameID    = $_POST['GameID'];
-	$ScenID    = $_POST['ScenID'];
-	$LinkID    = $_POST['LinkID'];
+	$GameID  = $_POST['GameID'];
+	$ScenID  = $_POST['ScenID'];
+	$LinkID  = $_POST['LinkID'];
+	// taking this query to set the default scenario which is the first scenario of the game
+	$scenSql = " SELECT Link_ScenarioID FROM GAME_LINKAGE WHERE Link_GameID=$GameID ORDER BY Link_Order ASC";
+	$resObj  = $funObj->ExecuteQuery($scenSql);
+	$result  = $funObj->FetchObject($resObj);
 
-	$updateSql = "UPDATE GAME_USERSTATUS SET US_LinkID = 0, US_Output = 0 WHERE US_UserID = $UserID AND US_GameID = $GameID AND US_ScenID = $ScenID ";
+	$updateSql = "UPDATE GAME_USERSTATUS SET US_LinkID=0, US_Output=0, US_Input=0, US_ScenID=$result->Link_ScenarioID WHERE US_UserID = $UserID AND US_GameID = $GameID AND US_ScenID = $ScenID ";
 	// echo $sql.'<br>';
 	$resultUpdate = $funObj->ExecuteQuery($updateSql);
 

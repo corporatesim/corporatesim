@@ -155,7 +155,7 @@ include_once 'includes/header2.php';
 			  // alert(ScenID);
 			  var LinkID = $(this).attr('data-LinkID');
 			  //alert(LinkID);
-			  var c = confirm('You really want to play again.Press Ok For Replay');
+			  var c = confirm('Are you sure want to replay');
 			  if(c == true)
 			  {
 			  	$.ajax({
@@ -170,7 +170,7 @@ include_once 'includes/header2.php';
 			  			if(result == 'redirect')
 			  			{
 								// alert('Redirect User to input page');
-								window.location = "<?php echo site_root.'input.php?ID='?>"+GameID;
+								window.location = "<?php echo site_root.'selectgame.php'?>";
 							}	
 							else
 							{

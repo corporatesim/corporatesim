@@ -317,6 +317,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 		// scenario branching $gameid $scenid $userid
 		$sublinkSql = "SELECT gl.SubLink_ID,gb.*,gi.input_key,gi.input_current FROM GAME_BRANCHING_SCENARIO gb LEFT JOIN GAME_LINKAGE_SUB gl ON gl.SubLink_CompID=gb.Branch_CompId AND gl.SubLink_LinkID=gb.Branch_LinkId LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gl.SubLink_ID WHERE gb.Branch_GameId=$gameid AND gb.Branch_ScenId=$scenid AND gi.input_user=$userid AND gl.SubLink_Type=1 AND gl.SubLink_SubCompID=0 AND gb.Branch_IsActive=0 ORDER BY gb.Branch_Order";
 		$subRes = $functionsObj->ExecuteQuery($sublinkSql);
+		// 	$result = $functionsObj->FetchObject($input);
+		// 	$subObj = $functionsObj->FetchObject($subRes);
+		// 	echo '<pre>previously moving here '.$result->Link_ID.' and now moving here '.$subObj->Branch_NextLinkId.' '; print_r($subObj);
+		// echo $sublinkSql; exit;
 		if($subRes->num_rows > 0)
 		{
 			while ($subObj = $functionsObj->FetchObject($subRes))
@@ -324,7 +328,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 				if($subObj->input_current > $subObj->Branch_MinVal && $subObj->input_current < $subObj->Branch_MaxVal)
 				{
 					// die('jupmed');
-					header("Location: ".site_root."scenario_description.php?Link=".$subObj->Branch_LinkId);
+					header("Location: ".site_root."scenario_description.php?Link=".$subObj->Branch_NextLinkId);
 					exit(0);
 				}
 			}
