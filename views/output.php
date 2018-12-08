@@ -11,6 +11,8 @@ include_once 'includes/header.php';
 					<div class="clearfix"></div>
 
 					<form method="POST" action="" id="game_frm" name="game_frm">
+						<input type="hidden" name="ScenarioId" id="ScenarioId" value="<?php echo $result->Link_ScenarioID; ?>">
+						<input type="hidden" name="LinkId" id="LinkId" value="<?php echo $result->Link_ID; ?>">
 						<div class="col-sm-12 no_padding shadow">
 					<!--
 						<div class="col-sm-6 ">
@@ -64,7 +66,7 @@ include_once 'includes/header.php';
 									$i++;
 
 									$sqlcomp = "SELECT distinct a.Area_ID as AreaID, c.Comp_ID as CompID, a.Area_Name as Area_Name, 
-									c.Comp_Name as Comp_Name, ls.SubLink_Details as Description ,ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast,ls.Sublink_ShowHide as ShowHide , o.output_current as Current 
+									c.Comp_Name as Comp_Name, ls.SubLink_Details as Description ,ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder,ls.Sublink_ShowHide as ShowHide , o.output_current as Current 
 									FROM GAME_LINKAGE l 
 									INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID= ls.SubLink_LinkID 
 									INNER JOIN GAME_OUTPUT o on ls.SubLink_ID = o.output_sublinkid
@@ -74,7 +76,7 @@ include_once 'includes/header.php';
 									LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
 									INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
 									WHERE ls.SubLink_Type=1 AND o.output_user=".$userid." AND ls.SubLink_SubCompID=0 and l.Link_ID=".$linkid." and a.Area_ID=".$row['AreaID']." ORDER BY ls.SubLink_Order";
-						//echo $sqlcomp; exit;
+					//	echo $sqlcomp; exit;
 									$component = $functionsObj->ExecuteQuery($sqlcomp);
 							//Get Component for this area for this linkid
 									while($row1 = mysqli_fetch_array($component)){ 
@@ -248,6 +250,48 @@ include_once 'includes/header.php';
 
                      }
 
+                     switch ($row1['InputFieldOrder']) {
+                     	case 1:
+
+                     	$labelC="";
+                     	$labelL="pull-right";
+                     	break;
+
+                     	case 2:
+
+                     	$labelL="";
+                     	$labelC="pull-right";
+                     	break;
+
+                     	case 3:
+
+                     	$labelC="";
+                     	$labelL="hidden";
+                     	break;
+
+                     	case 4:
+
+                     	$labelC="hidden";
+                     	$labelL="";
+                     	break;
+                     }
+
+                   /* if($row1['Current'] == 1){
+                    	$labelhide="";
+                    	$lblhide="";
+                    }
+                    elseif($row1['InputFieldOrder'] == 2){
+                    	$labelhide="";
+                    	$lblhide="";
+                    }
+                    elseif($row1['InputFieldOrder'] == 3){
+                    		$labelhide="hidden";
+                    		$lblhide="";
+                    }
+                    else{
+                    		$labelhide="";
+                    		$lblhide="hidden";
+                    }*/
 									
                  
 
@@ -265,11 +309,11 @@ include_once 'includes/header.php';
 
 										echo "<div class=' col-sm-6 ".$width1." text-center ".$InputFields."'>";
 
-										echo "<div class='InlineBox'>";
+										echo "<div class='InlineBox ".$labelC."'>";
 										echo "<label class='scenariaLabel'>Label Current</label>";
 										echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value=".$row1['Current']." readonly></input>";
 										echo "</div>";
-										echo "<div class='InlineBox'>";
+										echo "<div class='InlineBox ".$labelL."'>";
 										echo "<label class='scenariaLabel'>Label Last</label>";
 										echo "<input type='text' class='scenariaInput' readonly></input>";
 										echo "</div>";
@@ -288,7 +332,7 @@ include_once 'includes/header.php';
 									//Get SubComponent for this Component, linkid
 										$sqlsubcomp = "SELECT distinct a.Area_ID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_SubCompID as SubCompID,  
 										a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, s.SubComp_Name as SubComp_Name,ls.SubLink_ViewingOrder as ViewingOrder,
-										 ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast,
+										 ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast,ls.SubLink_InputFieldOrder as InputFieldOrder,
 										 ls.subLink_ShowHide as ShowHide,
 										ls.SubLink_Details as Description 
 										FROM GAME_LINKAGE l 
@@ -433,7 +477,7 @@ include_once 'includes/header.php';
 											$cklength          = "col-md-12";
 											break;
 
-												case 17:
+											case 17:
 											$SubcomponentName  = "hidden";
 											$DetailsChart      = "";
 											$InputFields       = "pull-right";
@@ -450,6 +494,17 @@ include_once 'includes/header.php';
 											break;
 										}
 
+										if($length=='col-sm-6')
+										{
+											$width="col-md-6";
+											$width1="col-md-6";
+										}
+										else
+										{
+                       $width="col-md-2";
+                       $width1="col-md-4";
+										}
+
 										 if ($row2['ShowHide'] == 0)
 									    {
 
@@ -464,6 +519,33 @@ include_once 'includes/header.php';
 
                      }
 
+                      switch ($row2['InputFieldOrder']) {
+                     	case 1:
+
+                     	$labelC="";
+                     	$labelL="pull-right";
+                     	break;
+
+                     	case 2:
+
+                     	$labelL="";
+                     	$labelC="pull-right";
+                     	break;
+
+                     	case 3:
+
+                     	$labelC="";
+                     	$labelL="hidden";
+                     	break;
+
+                     	case 4:
+
+                     	$labelC="hidden";
+                     	$labelL="";
+                     	break;
+                     }
+
+
                  /* if($row2['ShowHide'] == 0)
                   {
 
@@ -471,18 +553,18 @@ include_once 'includes/header.php';
                 // if component div is half length then make subcomponent div col-md-12
 
 											echo "<div class='".$length." subCompnent".$hidden."'>";
-											echo "<div class='col-sm-2 col-md-2 regular text-center".$SubcomponentName."'>";
+											echo "<div class='col-sm-2 ".$width." regular text-center".$SubcomponentName."'>";
 											echo $row2['SubComp_Name'];
 											echo "</div>";
 											echo "<div class='col-sm-4 ".$cklength." no_padding".$DetailsChart."'>";
 											echo $row2['Description'];
 											echo "</div>";
-											echo "<div class=' col-sm-6 col-md-4 text-center".$InputFields."'>";
-											echo "<div class='InlineBox'>";
+											echo "<div class=' col-sm-6 ".$width1." text-center".$InputFields."'>";
+											echo "<div class='InlineBox ".$labelC."'>";
 											echo "<label class='scenariaLabel'>Label Current</label>";
 											echo "<input type='text' id='subcomp_".$row2['SubCompID']."' name='".$row2['Area_Name']."_subc_".$row2['SubCompID']."' class='scenariaInput' readonly></input>";
 											echo "</div>";
-											echo "<div class='InlineBox'>";
+											echo "<div class='InlineBox ".$labelL."'>";
 											echo "<label class='scenariaLabel'>Label Last</label>";
 											echo "<input type='text' class='scenariaInput' readonly></input>";
 											echo "</div>";
@@ -497,11 +579,11 @@ include_once 'includes/header.php';
 											echo "</div>";
 											if($row2['ViewingOrder'] == 4)
 										{
-											echo "<div class='col-sm-2 col-md-4 text-center regular'>".$row1['SubComp_Name']." </div>";
+											echo "<div class='col-sm-2 ".$width." text-center regular'>".$row1['SubComp_Name']." </div>";
 										}
 										if($row2['ViewingOrder'] == 6)
 										{
-											echo "<div class='col-sm-2 col-md-4 text-center regular'>".$row1['SubComp_Name']." </div>";
+											echo "<div class='col-sm-2 ".$width." text-center regular'>".$row1['SubComp_Name']." </div>";
 										}
 											echo "<div class='clearfix'></div>";
 											echo "</div>";

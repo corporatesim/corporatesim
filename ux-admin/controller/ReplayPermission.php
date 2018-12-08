@@ -49,7 +49,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'submit')
 	$reset           = $_POST['reset'];
 	$linkid          = $_POST['linkid']; 
 
-	// if user select some users
+	// if admin select some users
 	if($add_user_filter == 'select_users' )
 	{
 		if(count($User_ID) > 0)
@@ -58,14 +58,17 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'submit')
 			{ 
 				if($_POST['reset'])
 				{
-					$deleteSql = "DELETE FROM GAME_INPUT WHERE input_user = $User_ID[$i] AND input_sublinkid IN (SELECT SubLink_ID FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID IN (SELECT LInk_ID FROM GAME_LINKAGE WHERE Link_GameID = $Game_ID ) GROUP BY SubLink_LinkID) ";
-
-					$object    = $functionsObj->ExecuteQuery($deleteSql);
+					$deleteSql    = "DELETE FROM GAME_INPUT WHERE input_user = $User_ID[$i] AND input_sublinkid IN (SELECT SubLink_ID FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID IN (SELECT LInk_ID FROM GAME_LINKAGE WHERE Link_GameID = $Game_ID ) GROUP BY SubLink_LinkID) ";
+					
+					$object       = $functionsObj->ExecuteQuery($deleteSql);
+					// also make game_linkage_users table unplayed
+					$unplay       = " UPDATE GAME_LINKAGE_USERS SET UsScen_Status=0 WHERE  UsScen_GameId =$Game_ID AND UsScen_UserId=".$User_ID[$i];
+					$objectUnplay = $functionsObj->ExecuteQuery($unplay);
 					// taking this query to set the default scenario which is the first scenario of the game
-					$scenSql   = " SELECT Link_ScenarioID FROM GAME_LINKAGE WHERE Link_GameID=$Game_ID ORDER BY Link_Order ASC";
-					$resObj    = $functionsObj->ExecuteQuery($scenSql);
-					$result    = $functionsObj->FetchObject($resObj);
-					$updateArr = array(
+					$scenSql      = " SELECT Link_ScenarioID FROM GAME_LINKAGE WHERE Link_GameID=$Game_ID ORDER BY Link_Order ASC LIMIT 1";
+					$resObj       = $functionsObj->ExecuteQuery($scenSql);
+					$result       = $functionsObj->FetchObject($resObj);
+					$updateArr    = array(
 						'US_LinkID' => 0,
 						'US_Output' => 0,
 						'US_Input'  => 0,
@@ -127,27 +130,32 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'submit')
 			}
 		}
 	}
-	// if user select all users
+	// if admin select all users
 	else
 	{
 		if($_POST['reset'])
 		{
-			$sql       = "DELETE FROM GAME_INPUT WHERE input_sublinkid IN (SELECT SubLink_Id FROM GAME_LINKAGE_SUB  WHERE SubLink_LinkID IN (SELECT Link_ID FROM GAME_LINKAGE where Link_GameID = $Game_ID ) GROUP BY SubLink_LinkID )";
-			$object    = $functionsObj->ExecuteQuery($sql);
+			$sql          = "DELETE FROM GAME_INPUT WHERE input_sublinkid IN (SELECT SubLink_Id FROM GAME_LINKAGE_SUB  WHERE SubLink_LinkID IN (SELECT Link_ID FROM GAME_LINKAGE where Link_GameID = $Game_ID ) GROUP BY SubLink_LinkID )";
+			$sql1         = "DELETE FROM GAME_INPUT gi WHERE gi.input_sublinkid IN( SELECT gl.SubLink_ID FROM GAME_LINKAGE_SUB gl WHERE gl.SubLink_LinkID = IN (SELECT Link_ID FROM GAME_LINKAGE where Link_GameID = $Game_ID ) )";
+			// echo $sql .'<br>'. $sql1; die();
+			$object       = $functionsObj->ExecuteQuery($sql);
+			// also make game_linkage_users table unplayed
+			$unplay       = " UPDATE GAME_LINKAGE_USERS SET UsScen_Status=0 WHERE  UsScen_GameId =".$Game_ID;
+			$objectUnplay = $functionsObj->ExecuteQuery($unplay);
 			// taking this query to set the default scenario which is the first scenario of the game
-			$scenSql   = " SELECT Link_ScenarioID FROM GAME_LINKAGE WHERE Link_GameID=$Game_ID ORDER BY Link_Order ASC";
-			$resObj    = $functionsObj->ExecuteQuery($scenSql);
-			$result    = $functionsObj->FetchObject($resObj);
-			$updateArr = array(
+			$scenSql      = " SELECT Link_ScenarioID FROM GAME_LINKAGE WHERE Link_GameID=$Game_ID ORDER BY Link_Order ASC LIMIT 1";
+			$resObj       = $functionsObj->ExecuteQuery($scenSql);
+			$result       = $functionsObj->FetchObject($resObj);
+			$updateArr    = array(
 				'US_LinkID' => 0,
 				'US_Output' => 0,
 				'US_Input'  => 0,
 				'US_ScenID' => $result->Link_ScenarioID,
 			);
 			// altering where condition as per the defined updaetdata function
-			$FieldName = " US_GameID=$Game_ID ";
-			$functionsObj->UpdateData('GAME_USERSTATUS',$updateArr,$FieldName,0);
-
+			$FieldName = " US_GameID";
+			$updateRes = $functionsObj->UpdateData('GAME_USERSTATUS',$updateArr,$FieldName,$Game_ID);
+			// print_r($updateRes); exit;
 			$updTimer = " UPDATE  GAME_LINKAGE_TIMER  gt  SET  gt.timer = (
 			SELECT SUM( (gl.Link_Hour * 60) + gl.Link_Min) FROM GAME_LINKAGE gl
 			WHERE gl.Link_GameID = $Game_ID )";

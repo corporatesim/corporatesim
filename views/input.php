@@ -350,7 +350,7 @@ include_once 'includes/header.php';
                     $comp_input_lenght      = 'col-md-6';
                     $comp_name_length       = 'col-md-6';
                     $comp_limit_char        = 10;
-                    $comp_label_min_width   = '92px';
+                    $comp_label_min_width   = '110px';
                     // $comp_save_button_align = 'top: 50%; position: absolute;';
                   }
                   else
@@ -511,10 +511,10 @@ include_once 'includes/header.php';
                     elseif($row1['InputModeType'] == "mChoice")
                     {
                       $mChoice_details = json_decode($row1['InputModeTypeValue'],TRUE);
-                      echo "<div class='row text-center' style='font-weight: 700;'>".$mChoice_details['question']."</div>";
+                      echo "<div class='row text-center pull-left' style='font-weight: 700; margin-left:1px;font-size:17px;'>".$mChoice_details['question']."</div>";
                       array_shift($mChoice_details);
                       ?>
-                      <div class="col-md-12">
+                      <div class="col-md-12" style="margin-top:7px;margin-left:-30px;font-size:14px;">
                         <?php
                         foreach ($mChoice_details as $wrow => $wrow_value)
                         {
@@ -571,7 +571,7 @@ include_once 'includes/header.php';
                 echo "</div>";
                 echo "</div>";
 
-                echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row1['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
+                echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row1['SubLinkID'].'" style="width:40px; margin-bottom: -11px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
 
                 echo "</div>";
               }
@@ -791,7 +791,7 @@ include_once 'includes/header.php';
                   $input_lenght              = 'col-md-6';
                   $name_length               = 'col-md-6';
                   $limit_char                = 10;
-                  $subcomp_label_min_width   = '92px';
+                  $subcomp_label_min_width   = '110px';
                   // $subcomp_save_button_align = '';
                 }
                 else
@@ -995,7 +995,7 @@ include_once 'includes/header.php';
                 elseif($row2['InputModeType']=="mChoice")
                 {
                   $mChoice_details = json_decode($row2['InputModeTypeValue'],TRUE);
-                  echo "<div class='row text-center' style='font-weight: 700;'>".$mChoice_details['question']."</div>";
+                  echo "<div class='row text-center' style='font-weight: 700;margin-left:28px;float:left;'>".$mChoice_details['question']."</div>";
                   array_shift($mChoice_details);
                   ?>
                   <div class="col-md-12">

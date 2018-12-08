@@ -129,6 +129,10 @@ switch($_GET['q']){
 	$showfile = 'ScenarioBranching.php';
 	break;
 
+	case 'personalizeOutcome':
+	$showfile = 'personalizeOutcome.php';
+	break;
+
 		// Logout
 	case 'Logout':
 	$showfile = 'logout.php';

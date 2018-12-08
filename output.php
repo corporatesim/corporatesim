@@ -90,7 +90,8 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 	{							
 		$result1 = $functionsObj->FetchObject ( $obj );
 		if ($result1->US_LinkID == 0)
-		{						
+		{
+			// else finish the game and go to result.php
 			if($result1->US_ScenID == 0)
 			{
 				//goto game_description page
@@ -128,6 +129,7 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 				}
 				else
 				{
+					// die('here');
 					//goto output page
 					//$url = site_root."output.php?Link=".$resultlink->Link_ID;		
 					//header("Location:".site_root."output.php?Link=".$resultlink->Link_ID);
@@ -200,8 +202,22 @@ else
 	);
 	$result = $functionsObj->InsertData ( 'GAME_USERSTATUS', $array, 0, 0 );
 }
-
+// when user submit page from next button
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
+	// echo "<pre>$userid,$gameid,".$_POST['ScenarioId'].",".$_POST['LinkId']; exit;
+	// writing this query to update status of played scenario by user for scenario branching, deleting the row instead of updating
+	$updateStatus = array(
+		'UsScen_Status' => 1,
+	);
+	// $deleteSql = "DELETE FROM GAME_LINKAGE_USERS WHERE UsScen_UserId=$userid AND UsScen_LinkId=".$_POST['LinkId'];
+	$whereCol = " UsScen_UserId=$userid AND UsScen_LinkId ";
+	$unplay = "UPDATE GAME_LINKAGE_USERS SET UsScen_Status=1 WHERE  UsScen_UserId=$userid AND UsScen_LinkId =".$_POST['LinkId'];
+	$functionsObj->ExecuteQuery($unplay);
+	$functionsObj->UpdateData( 'GAME_LINKAGE_USERS', $updateStatus, $whereCol, $_POST['LinkId']);
+	
+	// removing newly added link and scenario id at the first of the array
+	array_shift($_POST);
+	array_shift($_POST);
 	// removing last element of array i.e. submit
 	array_pop($_POST);
 	// echo "<pre>"; print_r($_POST);
@@ -216,8 +232,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 				'input_current' => $input_current,
 			);
 
-			$where          = " input_user=$userid AND input_key";
-			$update_res     = $functionsObj->UpdateData( 'GAME_INPUT', $update_array, $where, $input_key  );
+			$where      = " input_user=$userid AND input_key";
+			$update_res = $functionsObj->UpdateData( 'GAME_INPUT', $update_array, $where, $input_key  );
 		}
 		else
 		{
@@ -247,63 +263,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 			$insert_res = $functionsObj->InsertData( 'GAME_INPUT', $insert_array, 0, 0 );
 		}
 	} 
-		// delete the existing data for that particular user
-	// $delete_sql = "DELETE FROM GAME_SITE_USER_REPORT_NEW WHERE uid=$userid AND linkid=".$_SESSION['user_report']['LinkId'];
-	// $delete     = $functionsObj->ExecuteQuery($delete_sql);
-	// $sqlComp12  = "SELECT ls.SubLink_ID,  CONCAT(c.Comp_Name, '/', COALESCE(s.SubComp_Name,'')) AS Comp_Subcomp 
-	// FROM `GAME_LINKAGE_SUB` ls 
-	// LEFT OUTER JOIN GAME_SUBCOMPONENT s ON SubLink_SubCompID=s.SubComp_ID
-	// LEFT OUTER JOIN GAME_COMPONENT c on SubLink_CompID=c.Comp_ID
-	// WHERE SubLink_LinkID=".$_SESSION['user_report']['LinkId'] ." 
-	// ORDER BY SubLink_ID";
+	// $sql = "SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$gameid." and Link_Order>
+	// (SELECT Link_Order FROM `GAME_LINKAGE`
+	// WHERE Link_GameID = ".$gameid." and Link_ScenarioID=".$scenid.")
+	// ORDER BY Link_Order LIMIT 1";
 
-	// $objcomp12 = $functionsObj->ExecuteQuery($sqlComp12);
-
-	// while($rowinput = $objcomp12->fetch_object())
-	// {
-	// 	$title  = $rowinput->Comp_Subcomp;					
-	// 	$check  = $functionsObj->SelectData(array(), 'GAME_INPUT', array("input_user='".$userid."' AND  input_sublinkid='".$rowinput->SubLink_ID."'"), '', '', '', '', 0);
-
-	// 	$check1 = $functionsObj->SelectData(array(), 'GAME_OUTPUT', array("output_user='".$userid."' AND  output_sublinkid='".$rowinput->SubLink_ID."'"), '', '', '', '', 0);
-
-	// 	if($check->num_rows > 0)
-	// 	{
-	// 		$result            = $functionsObj->FetchObject($check);
-	// 		$userdate [$title] = $result->input_current;
-	// 	}
-	// 	elseif($check1->num_rows > 0)
-	// 	{
-	// 		$result1           = $functionsObj->FetchObject($check1);
-	// 		$userdate [$title] = $result1->output_current;
-	// 	}
-	// 	else
-	// 	{
-	// 		$userdate [$title] = '';
-	// 	}
-	// }
-
-	// $userreportdetails = (object) array(
-	// 	'uid'            =>	$userid,
-	// 	'user_name'      =>	$userName,
-	// 	'game_name'      =>	$gameName,
-	// 	'secenario_name' =>	$ScenarioName,
-	// 	'linkid'         =>	$linkid,
-	// 	'user_data'      =>	json_encode($userdate),
-	// 	'date_time'      =>	date('Y-m-d H:i:s')
-	// );
-	// $result = $functionsObj->InsertData('GAME_SITE_USER_REPORT_NEW', $userreportdetails);
-	// report modification done
-	
-//	echo $linkid;
-//	echo " -- ".$gameid;
-//	echo " -- ".$scenid;
-	//exit();
-	$sql = "SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$gameid." and Link_Order>
-	(SELECT Link_Order FROM `GAME_LINKAGE`
-	WHERE Link_GameID = ".$gameid." and Link_ScenarioID=".$scenid.")
-	ORDER BY Link_Order LIMIT 1";
-
-
+	// replacing upper query from this one coz this give the unplayed scenarios and upper sql gives the nex scenario only, if we will get the next then branching is not possible to redirect user into the previous scenarios
+	$sql = "SELECT gl.Link_ID FROM GAME_LINKAGE gl LEFT JOIN GAME_LINKAGE_USERS gu ON gu.UsScen_GameId=gl.Link_GameID AND gu.UsScen_ScenId=gl.Link_ScenarioID WHERE gl.Link_GameID = ".$gameid." AND (gl.Link_Order >( SELECT Link_Order FROM `GAME_LINKAGE` WHERE Link_GameID = ".$gameid." AND Link_ScenarioID = ".$scenid." ) OR gu.UsScen_Status=0) ORDER BY Link_Order LIMIT 1";
 	//exit();
 	$input = $functionsObj->ExecuteQuery($sql);
 	//echo $input->num_rows;
@@ -333,13 +299,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 				}
 			}
 		}
-		else
-		{
+		// else
+		// {
 			// die('no result');
 			$result = $functionsObj->FetchObject($input);
 			header("Location: ".site_root."scenario_description.php?Link=".$result->Link_ID);
 			exit(0);
-		}
+		// }
 	}
 	else
 	{
