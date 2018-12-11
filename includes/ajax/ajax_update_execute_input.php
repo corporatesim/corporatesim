@@ -180,7 +180,7 @@ if($_POST['action']=='updateFormula')
 	{
 		foreach ($input_field_values as $query_key => $query_value)
 		{
-			if(!empty($query_value['input_sublinkid']))
+			if(!empty($query_value['input_sublinkid']) && !empty($query_value['values']))
 			{
 				// start of replacing value from game_link_replace table
 				$sqlreplace = "SELECT Rep_Value FROM `GAME_LINK_REPLACE` 
