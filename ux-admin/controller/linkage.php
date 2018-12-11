@@ -893,7 +893,9 @@ elseif(isset($_GET['del'])){
 	// echo $id;
 	//exit();
 
-	$result = $functionsObj->DeleteData('GAME_LINKAGE','Link_ID',$id,0);
+	$result          = $functionsObj->DeleteData('GAME_LINKAGE','Link_ID',$id,0);
+	$resultLinkUsers = $functionsObj->DeleteData('GAME_LINKAGE_USERS','UsScen_LinkId',$id,0);
+	// print_r($resultLinkUsers); echo "<br>"; print_r($result); exit;
 
 	$_SESSION['msg']     = "Link deleted successfully";
 	$_SESSION['type[0]'] = "inputSuccess";

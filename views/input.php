@@ -408,16 +408,18 @@ include_once 'includes/header.php';
                       $hide_label = '';
                     }
 
-                    $comp_query = "SELECT * FROM GAME_INPUT WHERE input_user=$userid AND input_sublinkid='".$row1['SubLinkID']."' AND input_key LIKE '%comp_".$row1['CompID']."'";
+                    $comp_query   = "SELECT * FROM GAME_INPUT WHERE input_user=$userid AND input_sublinkid='".$row1['SubLinkID']."' AND input_key LIKE '%comp_".$row1['CompID']."'";
                     $query_result = $functionsObj->ExecuteQuery($comp_query);
                     if($query_result->num_rows > 0)
                     {
-                      $query_result = mysqli_fetch_assoc($query_result);
-                      $comp_data_id_key  = "class='data_element' data-input_id='".$query_result['input_id']."' data-input_key='".$query_result['input_key']."'";
+                      $query_result     = mysqli_fetch_assoc($query_result);
+                      $comp_data_id_key = "class='data_element' data-input_id='".$query_result['input_id']."' data-input_key='".$query_result['input_key']."'";
+                      $formulaValue     = $query_result['input_current'];
                     }
                     else
                     {
                       $comp_data_id_key = "class='data_element'";
+                      $formulaValue     = 0;
                     }
 
                     echo "<label class='scenariaLabel ".$hide_label."'>".$row1['LabelCurrent']."</label>";
@@ -426,9 +428,27 @@ include_once 'includes/header.php';
                     // getting the value here for iput field
                     if($addedit=='Edit')
                     {
-                    //if($data[$areaname."_comp_".$row1['CompID']]>=0)
-                      if(isset($data[$areaname."_comp_".$row1['CompID']]) || (!empty($data[$areaname."_comp_".$row1['CompID']])))
-                      { 
+                      if($row1['Mode']=="carry")
+                      {
+                        //get input value from link, comp, subcomp
+
+                        $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` 
+                        WHERE input_user=".$userid." AND input_sublinkid = 
+                        (SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` 
+                        WHERE SubLink_LinkID=".$row1['CarryLinkID']." and SubLink_CompID=".$row1['CarryCompID'];
+                        if($row1['CarrySubCompID']>0)         
+                        {
+                         $sqlcurrent .=   " AND SubLink_SubCompID = ".$row1['CarrySubCompID'];
+                       }          
+                       $sqlcurrent .= ")";
+
+                       $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);
+                       $rescarry        = $functionsObj->FetchObject($objcarrycurrent);
+                       $value           = $rescarry->input_current;
+                     }
+                      //if($data[$areaname."_comp_".$row1['CompID']]>=0)
+                     elseif(isset($data[$areaname."_comp_".$row1['CompID']]) || (!empty($data[$areaname."_comp_".$row1['CompID']])))
+                     { 
                        if($row1['RoundOff'] == 0)
                        {
                         $value = $data[$areaname."_comp_".$row1['CompID']];
@@ -481,7 +501,7 @@ include_once 'includes/header.php';
 
                   $sankey_val1 = '"'.$areaname."_fcomp_".$row1['CompID'].'"';
 
-                  echo "<input value='".$value."' type ='text' class='scenariaInput current' id='".$areaname."_fcomp_".$row1['CompID']."' name='".$areaname."_fcomp_".$row1['CompID']."' readonly></input>";
+                  echo "<input value='".$formulaValue."' type ='text' class='scenariaInput current' id='".$areaname."_fcomp_".$row1['CompID']."' name='".$areaname."_fcomp_".$row1['CompID']."' readonly></input>";
                   // echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' readonly ></input>";
                 }
                 else
@@ -906,8 +926,24 @@ include_once 'includes/header.php';
             <?php
             if($addedit == 'Edit')
             {
+              if($row2['Mode']=="carry")
+              {
+                //get input value from link, comp, subcomp
+                $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` 
+                WHERE input_user=".$userid." AND input_sublinkid = 
+                (SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` 
+                WHERE SubLink_LinkID=".$row2['CarryLinkID']." and SubLink_CompID=".$row2['CarryCompID'];
+                if($row2['CarrySubCompID']>0)
+                {
+                  $sqlcurrent .=  " AND SubLink_SubCompID = ".$row2['CarrySubCompID'];
+                }
+                $sqlcurrent     .=  ")";
+                $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);
+                $rescarry        = $functionsObj->FetchObject($objcarrycurrent);
+                $value           = $rescarry->input_current;
+              }
               //if(!empty($data[$areaname."_subc_".$row2['SubCompID']])){
-              if(isset($data[$areaname."_subc_".$row2['SubCompID']]) || !empty($data[$areaname."_subc_".$row2['SubCompID']]))
+              elseif(isset($data[$areaname."_subc_".$row2['SubCompID']]) || !empty($data[$areaname."_subc_".$row2['SubCompID']]))
               {
                 if($row2['RoundOff'] == 0)
                 {
@@ -937,11 +973,10 @@ include_once 'includes/header.php';
             }
             elseif($row2['Mode']=="carry")
             {
-                            //get input value from link, comp, subcomp
-
-              $sqlcurrent = "SELECT input_current FROM `game_input` 
+              //get input value from link, comp, subcomp
+              $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` 
               WHERE input_user=".$userid." AND input_sublinkid = 
-              (SELECT SubLink_ID FROM `game_linkage_sub` 
+              (SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` 
               WHERE SubLink_LinkID=".$row2['CarryLinkID']." and SubLink_CompID=".$row2['CarryCompID'];
               if($row2['CarrySubCompID']>0)
               {
@@ -1796,7 +1831,7 @@ include_once 'includes/header.php';
     // console.log($('#'+key).val());
     if($('#'+key).parents('div').hasClass('align_radio'))
     {
-      var value = $("input[type='radio']:checked").val();
+      var value = $("input[name='"+key+"']:checked").val();
     }
     else
     {

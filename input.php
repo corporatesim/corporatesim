@@ -32,30 +32,33 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 // creating game linkage for users depending upon the scenario for scenario branching
 	$updateValues   = array();
 	$updateSql      = " INSERT INTO GAME_LINKAGE_USERS (UsScen_UserId,UsScen_GameId,UsScen_ScenId,UsScen_LinkId) VALUES";
-	$sqlQuery       = "SELECT gl.Link_ID, gl.Link_GameID, gl.Link_ScenarioID, gl.Link_Order, gu.UsScen_Id, gu.UsScen_GameId, gu.UsScen_ScenId,gu.UsScen_LinkId, gu.UsScen_UserId FROM GAME_LINKAGE gl LEFT JOIN GAME_LINKAGE_USERS gu ON gu.UsScen_LinkId = gl.Link_ID AND gu.UsScen_Status = 0 AND gu.UsScen_UserId=".$userid." WHERE gl.Link_GameID =".$gameid." ORDER BY gl.Link_Order ASC";
-	$sqlQuerObject  = $functionsObj->ExecuteQuery($sqlQuery);
+	$sqlQuery       = "SELECT gl.Link_ID, gl.Link_GameID, gl.Link_ScenarioID, gl.Link_Order, gu.UsScen_Id, gu.UsScen_GameId, gu.UsScen_ScenId,gu.UsScen_LinkId, gu.UsScen_UserId FROM GAME_LINKAGE gl LEFT JOIN GAME_LINKAGE_USERS gu ON gu.UsScen_LinkId = gl.Link_ID AND gu.UsScen_UserId=".$userid." WHERE gl.Link_GameID =".$gameid." ORDER BY gl.Link_Order ASC";
 	// die($sqlQuery);
+	$sqlQuerObject  = $functionsObj->ExecuteQuery($sqlQuery);
 	while ($sqlQueryResult = $sqlQuerObject->Fetch_object() )
 	{
 		// print_r($sqlQueryResult);
-		if(empty($sqlQueryResult->UsScen_Id))
+		if(empty($sqlQueryResult->UsScen_Status))
 		{
-			$countRows = 1;
-			$updateValues[] = "($userid,$sqlQueryResult->Link_GameID,$sqlQueryResult->Link_ScenarioID,$sqlQueryResult->Link_ID)";
+			$checkSql = "SELECT * FROM GAME_LINKAGE_USERS WHERE UsScen_UserId=".$userid." AND UsScen_LinkId=".$sqlQueryResult->Link_ID;
+			$checkObj = $functionsObj->ExecuteQuery($checkSql);
+			if($checkObj->num_rows < 1)
+			{
+				$updateValues[]  = "($userid,$sqlQueryResult->Link_GameID,$sqlQueryResult->Link_ScenarioID,$sqlQueryResult->Link_ID)";
+			}
 		}
-		else
-		{
-			$countRows = 0;
-		}
+			// $updateSql      .= implode(',',$updateValues);
+		// $updateValue  = "($userid,$sqlQueryResult->Link_GameID,$sqlQueryResult->Link_ScenarioID,$sqlQueryResult->Link_ID)";
+		// $updateSql   .= $updateValue;
 	}
-	$values     = implode(',',$updateValues);
-	$updateSql .= $values;
-	if($countRows)
+	if(count($updateValues) > 0)
 	{
+		// echo "<pre>"; print_r($updateValues); exit;
+		$updateValue  = implode(',',$updateValues);
+		$updateSql   .= $updateValue;
 		$functionsObj->ExecuteQuery($updateSql);
 	}
-	// echo $updateSql;
-	// exit();
+	// echo $updateSql; exit();
 	//get the actual link
 	$where = array (
 		"US_GameID = " . $gameid,

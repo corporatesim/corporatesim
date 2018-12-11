@@ -12,7 +12,7 @@ include_once 'includes/header.php';
 
 					<form method="POST" action="" id="game_frm" name="game_frm">
 						<input type="hidden" name="ScenarioId" id="ScenarioId" value="<?php echo $result->Link_ScenarioID; ?>">
-						<input type="hidden" name="LinkId" id="LinkId" value="<?php echo $result->Link_ID; ?>">
+						<input type="hidden" name="LinkId" id="LinkId" value="<?php echo ($result->Link_ID)?$result->Link_ID:$linkid; ?>">
 						<div class="col-sm-12 no_padding shadow">
 					<!--
 						<div class="col-sm-6 ">
