@@ -133,7 +133,7 @@ span.alert-danger {
         <label for="Order Number"><span class="alert-danger">*</span>Order</label>
         <input type="number" id="" name="order" class="form-control" placeholder="Order Of Comparison" required="" value="<?php echo $editResObject->Branch_Order;?>">
       </div>
-      <div class="col-md-5" id="scenarioDiv">
+      <div class="col-md-4" id="scenarioDiv">
         <label for="Select Component"><span class="alert-danger">*</span>Next Scenario</label>
         <select name="NextScenario" id="NextScenario" class="form-control NextScenario">
           <?php 
@@ -146,6 +146,11 @@ span.alert-danger {
             <option value="<?php echo $scenRes->Scen_ID;?>" <?php echo ($scenRes->Scen_ID==$editResObject->Branch_NextScen)?"selected":''; ?>><?php echo $scenRes->Scen_Name;?></option>
           <?php } ?>
         </select>
+      </div>
+      <div class="col-md-1">
+        <label for="Select End Scenario" title="If selected then last">End
+          <input type="checkbox" value="1" class="form-control" name="end" id="end" <?php echo ($editResObject->Branch_IsEndScenario)?"checked":'';?>>
+        </label>
       </div>
     </div>
     <div class="clearfix"></div>

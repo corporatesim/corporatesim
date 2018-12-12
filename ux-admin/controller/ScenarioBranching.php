@@ -41,7 +41,8 @@ if(isset($_POST['addBranching']) && $_POST['addBranching'] == 'addBranching')
 {
 	// remove last element of post variable
 	array_pop($_POST);
-	$sql = "INSERT INTO GAME_BRANCHING_SCENARIO (Branch_NextLinkId,Branch_GameId,Branch_ScenId,Branch_CompId,Branch_MinVal,Branch_MaxVal,Branch_Order,Branch_NextScen,Branch_LinkId) values ";
+	// echo "<pre>"; print_r($_POST); // exit;
+	$sql = "INSERT INTO GAME_BRANCHING_SCENARIO (Branch_IsEndScenario,Branch_NextLinkId,Branch_GameId,Branch_ScenId,Branch_CompId,Branch_MinVal,Branch_MaxVal,Branch_Order,Branch_NextScen,Branch_LinkId) values ";
 
 	$arr           = explode(',',$_POST['game_scenario']);
 	$count         = count($_POST['ComponentName']);
@@ -57,6 +58,7 @@ if(isset($_POST['addBranching']) && $_POST['addBranching'] == 'addBranching')
 	$maxVal        = $_POST['maxVal'];
 	$order         = $_POST['order'];
 	$NextScenario  = $_POST['NextScenario'];
+	$lastScenario  = $_POST['end'];
 
 	if($count > 1)
 	{
@@ -65,7 +67,7 @@ if(isset($_POST['addBranching']) && $_POST['addBranching'] == 'addBranching')
 			$nextSql       = " SELECT Link_ID FROM GAME_LINKAGE WHERE Link_ScenarioID=$NextScenario[$i] AND Link_GameID=$gameId ";
 			$NextScenId    = $functionsObj->ExecuteQuery($nextSql);
 			$NextScenIdObj = $functionsObj->FetchObject($NextScenId);
-			$values[]      = "($NextScenIdObj->Link_ID,$gameId,$scenarioId,$ComponentName[$i],$minVal[$i],$maxVal[$i],$order[$i],$NextScenario[$i],$linkId)";
+			$values[]      = "($lastScenario[$i],$NextScenIdObj->Link_ID,$gameId,$scenarioId,$ComponentName[$i],$minVal[$i],$maxVal[$i],$order[$i],$NextScenario[$i],$linkId)";
 		}
 		$queryValue = implode(',',$values);
 	}	
@@ -75,7 +77,7 @@ if(isset($_POST['addBranching']) && $_POST['addBranching'] == 'addBranching')
 		$NextScenId    = $functionsObj->ExecuteQuery($nextSql);
 		$NextScenIdObj = $functionsObj->FetchObject($NextScenId);
 		// echo "<pre>"; print_r($NextScenIdObj); exit;
-		$values[]      = "($NextScenIdObj->Link_ID,$gameId,$scenarioId,$ComponentName[0],$minVal[0],$maxVal[0],$order[0],$NextScenario[0],$linkId)";
+		$values[]      = "($lastScenario[0],$NextScenIdObj->Link_ID,$gameId,$scenarioId,$ComponentName[0],$minVal[0],$maxVal[0],$order[0],$NextScenario[0],$linkId)";
 		$queryValue    = implode(',',$values);
 	}
 	
@@ -134,6 +136,7 @@ if(isset($_GET['edit']) && !empty($_GET['edit']))
 		$nextSql       = " SELECT Link_ID FROM GAME_LINKAGE WHERE Link_ScenarioID=$ScenId AND Link_GameID=$Link_GameID ";
 		$NextScenId    = $functionsObj->ExecuteQuery($nextSql);
 		$NextScenIdObj = $functionsObj->FetchObject($NextScenId);
+		$lastScenario  = $_POST['end'];
 		// die($nextSql); $NextScenIdObj->Link_ID
 		$updateArr     = array(
 			'Branch_CompId'     => $_POST['ComponentName'],
@@ -143,6 +146,14 @@ if(isset($_GET['edit']) && !empty($_GET['edit']))
 			'Branch_MaxVal	'   => $_POST['maxVal'],
 			'Branch_Order'      => $_POST['order'],
 		);
+		if($lastScenario == 1)
+		{
+			$updateArr['Branch_IsEndScenario'] = $lastScenario;
+		}
+		else
+		{
+			$updateArr['Branch_IsEndScenario'] = 0;
+		}
 		$updateData = $functionsObj->UpdateData ( 'GAME_BRANCHING_SCENARIO', $updateArr, 'Branch_Id', $_POST['Branch_Id']  );
 		if($updateData)
 		{

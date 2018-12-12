@@ -100,6 +100,7 @@ span.alert-danger {
         <!-- <li> <span class="glyphicon glyphicon-search">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can View the Record"> View   </a></li> -->
         <li> <span class="glyphicon glyphicon-pencil">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Edit the Record"> Edit   </a></li>
         <li> <span class="glyphicon glyphicon-trash"> </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Delete the Record"> Delete </a></li>
+        <li> <span class="fa fa-ban"> </span><a href="javascript:void(0);" data-toggle="tooltip" title="Final/End Scenario"> End Scenario </a></li>
         <!-- <li> <span class="glyphicon glyphicon-refresh"> </span><a href="javascript:void(0);" data-toggle="tooltip" title="User can replay the Game"> Replay </a></li> -->
         <!-- <li> <span class="glyphicon glyphicon-ban-circle">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="User games have been disabled"> Disable </a></li> -->
       </ul>
@@ -149,8 +150,13 @@ span.alert-danger {
                   <td><?php echo $row->Branch_MaxVal;?></td>
                   <td><?php echo $row->Branch_Order;?></td>
                   <td>
-                    <a href="<?php echo site_root."ux-admin/ScenarioBranching/edit/".$row->Branch_Id;?>" title="Edit"><span class="fa fa-pencil"></span></a> &nbsp;
+                    <a href="<?php echo site_root."ux-admin/ScenarioBranching/edit/".$row->Branch_Id;?>" title="Edit"><span class="fa fa-pencil"></span></a> 
+                    &nbsp;
                     <a href="<?php echo site_root."ux-admin/ScenarioBranching/delete/".$row->Branch_Id;?>" title="Delete"><span class="fa fa-trash"></span></a>
+                    &nbsp;
+                    <?php if($row->Branch_IsEndScenario == 1){ ;?>
+                      <a href="javascript:void(0);" title="End Scenario"><span class="fa fa-ban"></span></a>
+                    <?php } ?>
                   </td>
                 </tr>
                 <?php $i++; } ?>

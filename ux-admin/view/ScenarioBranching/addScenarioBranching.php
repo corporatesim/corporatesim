@@ -115,7 +115,7 @@ span.alert-danger {
       <input type="hidden" name="scenarioname" id="scenarioname">
     </div>
     <div class="clearfix"></div>
-    <!-- users checkboxes -->
+    <!-- Users rows -->
     <br>
     <div class="row hidden" id="compSubcomp">
       <div class="col-md-4" id="componentDiv">
@@ -135,7 +135,7 @@ span.alert-danger {
         <label for="Order Number"><span class="alert-danger">*</span>Order</label>
         <input type="number" id="" name="order[]" class="form-control" placeholder="Order Of Comparison" required="" min="1">
       </div>
-      <div class="col-md-4" id="scenarioDiv">
+      <div class="col-md-3" id="scenarioDiv">
         <label for="Select Component"><span class="alert-danger">*</span>Next Scenario</label>
         <select name="NextScenario[]" id="NextScenario" class="form-control NextScenario">
           <option value="">--Select Next Scenario--</option>
@@ -143,6 +143,12 @@ span.alert-danger {
             <option value="<?php echo $gameData->Game_ID; ?>" data-gamename="<?php echo $gameData->Game_Name; ?>"><?php echo $gameData->Game_Name; ?></option>
           <?php } ?>
         </select>
+      </div>
+      <div class="col-md-1">
+        <label for="Select End Scenario" title="If selected then last">End
+          <input type="checkbox" value="1" class="form-control checkbox">
+          <input type="hidden" value="0" name="end[]">
+        </label>
       </div>
       <div class="col-md-1 hidden" id="buttonDiv" style="padding-top: 3%;">
         <button type="button" class="btn-primary btn" id="addMore" title="Add New"><b>+</b></button>
@@ -169,11 +175,12 @@ span.alert-danger {
     classCount     = 0;
     CompOption     = '<option value="">--Select Scenario--</option>';
     ScenarioOption = '<option value="">--Select Scenario--</option>';
+    setCheckboxValue();
 
     $('#game_game').on('change',function(){
       var Game_ID      = $(this).val();
       var scenarioLink = '<option value="">--Select Scenario--</option>';
-      var gamename = $(this).find(':selected').data('gamename');
+      var gamename     = $(this).find(':selected').data('gamename');
       $('#gamename').attr('value',gamename);
       $('#scenarioname').attr('value','');
       if(!($('#compSubcomp').hasClass('hidden')))
@@ -296,12 +303,13 @@ span.alert-danger {
         return false;
       }
 
-      $('#addHere').append('<div class="removeThis"><div class="col-md-4" id="componentDiv"><label for="Select Component"><span class="alert-danger">*</span>Select Output Component</label><select required name="ComponentName[]" id="ComponentName" class="form-control ComponentName'+classCount+'"><option value="">--Select Output Component--</option></select></div><div class="col-md-1" id=""><label for="Minimum Value"><span class="alert-danger">*</span>Min</label><input required type="text" id="minVal" name="minVal[]" class="form-control" placeholder="Min Val"></div><div class="col-md-1" id=""><label for="Maximum Value"><span class="alert-danger">*</span>Max</label><input required type="text" id="maxVal" name="maxVal[]" class="form-control" placeholder="Max Val"></div><div class="col-md-1" id=""><label for="Order Number"><span class="alert-danger">*</span>Order</label><input required type="number" min="1" id="order" name="order[]" class="form-control" placeholder="Order Of Comparison"></div><div class="col-md-4" id="scenarioDiv"><label for="Select Component"><span class="alert-danger">*</span>Next Scenario</label><select required name="NextScenario[]" id="NextScenario" class="form-control NextScenario'+classCount+'"><option value="">--Select Scenario--</option></select></div><div class="col-md-1" id="" style="padding-top:3%;" title="Remove"><button type="button" class="btn-danger btn" id="removeThis"><b>-</b></button></div></div>');
+      $('#addHere').append('<div class="removeThis"><div class="col-md-4" id="componentDiv"><label for="Select Component"><span class="alert-danger">*</span>Select Output Component</label><select required name="ComponentName[]" id="ComponentName" class="form-control ComponentName'+classCount+'"><option value="">--Select Output Component--</option></select></div><div class="col-md-1" id=""><label for="Minimum Value"><span class="alert-danger">*</span>Min</label><input required type="text" id="minVal" name="minVal[]" class="form-control" placeholder="Min Val"></div><div class="col-md-1" id=""><label for="Maximum Value"><span class="alert-danger">*</span>Max</label><input required type="text" id="maxVal" name="maxVal[]" class="form-control" placeholder="Max Val"></div><div class="col-md-1" id=""><label for="Order Number"><span class="alert-danger">*</span>Order</label><input required type="number" min="1" id="order" name="order[]" class="form-control" placeholder="Order Of Comparison"></div><div class="col-md-3" id="scenarioDiv"><label for="Select Component"><span class="alert-danger">*</span>Next Scenario</label><select required name="NextScenario[]" id="NextScenario" class="form-control NextScenario'+classCount+'"><option value="">--Select Scenario--</option></select></div><div class="col-md-1"><label for="Select End Scenario" date-toggle="tooltip" title="If selected then last">End<input type="checkbox" value="1" class="form-control checkbox"><input type="hidden" value="0" name="end[]"></label></div><div class="col-md-1" id="" style="padding-top:3%;" title="Remove"><button type="button" class="btn-danger btn" id="removeThis"><b>-</b></button></div></div>');
 
       $('.ComponentName'+classCount).html(CompOption);
 
       $('.NextScenario'+classCount).html(ScenarioOption);
       removeDiv();
+      setCheckboxValue();
     });
   });
 function removeDiv()
@@ -320,4 +328,22 @@ function removeAllAddedDiv()
     $(this).remove();
   });
 }
+
+function setCheckboxValue()
+{
+  $('input[type="checkbox"]').on('click',function(i,e){
+    var checkbox = $(this);
+    if($(this).is(':checked'))
+    {
+      $(this).next('input[type="hidden"]').val('1');
+      // alert(checkbox.next('input').val());
+    }
+    else
+    {
+      $(this).next('input[type="hidden"]').val('0');
+      // alert(checkbox.next('input').val());
+    }
+  });
+}
+
 </script>
