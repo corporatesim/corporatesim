@@ -62,7 +62,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'submit')
 					
 					$object       = $functionsObj->ExecuteQuery($deleteSql);
 					// also make game_linkage_users table unplayed
-					$unplay       = " UPDATE GAME_LINKAGE_USERS SET UsScen_Status=0 WHERE  UsScen_GameId =$Game_ID AND UsScen_UserId=".$User_ID[$i];
+					$unplay       = " UPDATE GAME_LINKAGE_USERS SET UsScen_IsEndScenario=0, UsScen_Status=0 WHERE  UsScen_GameId =$Game_ID AND UsScen_UserId=".$User_ID[$i];
 					$objectUnplay = $functionsObj->ExecuteQuery($unplay);
 					// taking this query to set the default scenario which is the first scenario of the game
 					$scenSql      = " SELECT Link_ScenarioID FROM GAME_LINKAGE WHERE Link_GameID=$Game_ID ORDER BY Link_Order ASC LIMIT 1";
@@ -140,7 +140,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'submit')
 			// echo $sql .'<br>'. $sql1; die();
 			$object       = $functionsObj->ExecuteQuery($sql);
 			// also make game_linkage_users table unplayed
-			$unplay       = " UPDATE GAME_LINKAGE_USERS SET UsScen_Status=0 WHERE  UsScen_GameId =".$Game_ID;
+			$unplay       = " UPDATE GAME_LINKAGE_USERS SET UsScen_IsEndScenario=0, UsScen_Status=0 WHERE  UsScen_GameId =".$Game_ID;
 			$objectUnplay = $functionsObj->ExecuteQuery($unplay);
 			// taking this query to set the default scenario which is the first scenario of the game
 			$scenSql      = " SELECT Link_ScenarioID FROM GAME_LINKAGE WHERE Link_GameID=$Game_ID ORDER BY Link_Order ASC LIMIT 1";

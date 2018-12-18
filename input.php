@@ -230,7 +230,7 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	else
 	{
 		$sql = "SELECT views_sublinkid AS input_sublinkid, views_current AS input_current, views_key AS input_key FROM GAME_VIEWS WHERE views_Game_ID = $gameid";
-
+		// $sql = "SELECT * FROM GAME_VIEWS gv INNER JOIN GAME_INPUT gi ON gi.input_sublinkid=gv.views_sublinkid WHERE views_Game_ID = $gameid AND gi.input_user=$userid";
 		$view_object = $functionsObj->ExecuteQuery($sql);
 		while($snap_view = mysqli_fetch_object($view_object))
 		{
@@ -240,7 +240,13 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 				'input_current'   => $snap_view->input_current,
 				'input_key'       => $snap_view->input_key,
 			);
-			$bulkInsertArray[] = "($userid,$snap_view->input_sublinkid,$snap_view->input_current,'".$snap_view->input_key."')";
+			// to cross check wheather record exist or not, to prevent duplicacy
+			$chkSql    = "SELECT * FROM GAME_INPUT WHERE input_sublinkid=".$snap_view->input_sublinkid." AND input_user=".$userid;
+			$chekExist = $functionsObj->ExecuteQuery($chkSql);
+			if($chekExist->num_rows < 1)
+			{
+				$bulkInsertArray[] = "($userid,$snap_view->input_sublinkid,$snap_view->input_current,'".$snap_view->input_key."')";
+			}
 			// $insert_data       = $functionsObj->InsertData ( 'GAME_INPUT', $insertArr, 0, 0 );
 		}
 		// print_r($bulkInsertArray); echo "<br>";
@@ -252,7 +258,10 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 		}
 		else
 		{
-			$addedit = "Add";
+			if($chekExist->num_rows < 1)
+			{
+				$addedit = "Add";
+			}
 		}
 	}
 //echo $addedit;

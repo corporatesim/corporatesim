@@ -205,10 +205,8 @@ else
 // when user submit page from next button
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 	// echo "<pre>$userid,$gameid,".$_POST['ScenarioId'].",".$_POST['LinkId']; exit;
-	// writing this query to update status of played scenario by user for scenario branching, deleting the row instead of updating
 	// $deleteSql = "DELETE FROM GAME_LINKAGE_USERS WHERE UsScen_UserId=$userid AND UsScen_LinkId=".$_POST['LinkId'];
-	$unplay       = "UPDATE GAME_LINKAGE_USERS SET UsScen_Status=1 WHERE  UsScen_UserId=$userid AND UsScen_LinkId =".$_POST['LinkId'];
-	$functionsObj->ExecuteQuery($unplay);
+	$updateLinkId = $_POST['LinkId'];
 	
 	// removing newly added link and scenario id at the first of the array
 	array_shift($_POST);
@@ -263,52 +261,62 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 	// WHERE Link_GameID = ".$gameid." and Link_ScenarioID=".$scenid.")
 	// ORDER BY Link_Order LIMIT 1";
 
-	// replacing upper query from this one coz this give the unplayed scenarios and upper sql gives the nex scenario only, if we will get the next then branching is not possible to redirect user into the previous scenarios
-	$sql = "SELECT gl.Link_ID FROM GAME_LINKAGE gl LEFT JOIN GAME_LINKAGE_USERS gu ON gu.UsScen_GameId=gl.Link_GameID AND gu.UsScen_ScenId=gl.Link_ScenarioID AND gu.UsScen_UserId=".$userid." WHERE gl.Link_GameID = ".$gameid." AND (gl.Link_Order >( SELECT Link_Order FROM `GAME_LINKAGE` WHERE Link_GameID = ".$gameid." AND Link_ScenarioID = ".$scenid." ) AND gu.UsScen_Status=0) ORDER BY Link_Order LIMIT 1";
-	// echo $sql; exit();
-	$input = $functionsObj->ExecuteQuery($sql);
-	//echo $input->num_rows;
-	
-//		exit();
-	
-	//Update UserStatus
-	
-	if($input->num_rows > 0)
+	// check that this is end scenario or not
+	$checkEndSql = "SELECT * FROM `GAME_LINKAGE_USERS` WHERE UsScen_UserId=".$userid." AND UsScen_GameId=".$gameid." AND UsScen_ScenId=".$scenid." AND UsScen_IsEndScenario=0";
+	$checkEndObj = $functionsObj->ExecuteQuery($checkEndSql);
+	if($checkEndObj->num_rows > 0)
 	{
-		// scenario branching $gameid $scenid $userid
-		$sublinkSql = "SELECT gu.UsScen_Status, gl.SubLink_ID,gb.*,gi.input_key,gi.input_current FROM GAME_BRANCHING_SCENARIO gb LEFT JOIN GAME_LINKAGE_SUB gl ON gl.SubLink_CompID=gb.Branch_CompId AND gl.SubLink_LinkID=gb.Branch_LinkId LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gl.SubLink_ID LEFT JOIN GAME_LINKAGE_USERS gu ON gu.UsScen_LinkId=gb.Branch_LinkId WHERE gb.Branch_GameId=$gameid AND gb.Branch_ScenId=$scenid AND gi.input_user=$userid AND gl.SubLink_Type=1 AND gl.SubLink_SubCompID=0 AND gb.Branch_IsActive=0 ORDER BY gb.Branch_Order";
-		$subRes = $functionsObj->ExecuteQuery($sublinkSql);
-		// 	$result = $functionsObj->FetchObject($input);
-		// 	$subObj = $functionsObj->FetchObject($subRes);
-		// 	echo '<pre>previously moving here '.$result->Link_ID.' and now moving here '.$subObj->Branch_NextLinkId.' '; print_r($subObj);
-		// echo $sublinkSql; exit;
-		if($subRes->num_rows > 0)
+		// replacing upper query from this one coz this give the unplayed scenarios and upper sql gives the nex scenario only, if we will get the next then branching is not possible to redirect user into the previous scenarios
+		$sql      = "SELECT gl.Link_ID, gu.UsScen_IsEndScenario FROM GAME_LINKAGE gl LEFT JOIN GAME_LINKAGE_USERS gu ON gu.UsScen_GameId=gl.Link_GameID AND gu.UsScen_ScenId=gl.Link_ScenarioID AND gu.UsScen_UserId=".$userid." WHERE gl.Link_GameID = ".$gameid." AND (gl.Link_Order >( SELECT Link_Order FROM `GAME_LINKAGE` WHERE Link_GameID = ".$gameid." AND Link_ScenarioID = ".$scenid." ) AND gu.UsScen_Status=0) ORDER BY Link_Order LIMIT 1";
+		$input    = $functionsObj->ExecuteQuery($sql);
+		$inputObj = $functionsObj->FetchObject($input);
+		//echo $input->num_rows;
+		
+	//		exit();
+		
+		//Update UserStatus
+		
+		if($input->num_rows > 0 && $inputObj->UsScen_IsEndScenario == 0)
 		{
-			while ($subObj = $functionsObj->FetchObject($subRes))
+			// scenario branching $gameid $scenid $userid
+			$sublinkSql = "SELECT gu.UsScen_Status, gl.SubLink_ID,gb.*,gi.input_key,gi.input_current FROM GAME_BRANCHING_SCENARIO gb LEFT JOIN GAME_LINKAGE_SUB gl ON gl.SubLink_CompID=gb.Branch_CompId AND gl.SubLink_LinkID=gb.Branch_LinkId LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gl.SubLink_ID LEFT JOIN GAME_LINKAGE_USERS gu ON gu.UsScen_LinkId=gb.Branch_LinkId AND gu.UsScen_UserId=$userid WHERE gb.Branch_GameId=$gameid AND gb.Branch_ScenId=$scenid AND gi.input_user=$userid AND gl.SubLink_Type=1 AND gl.SubLink_SubCompID=0 AND gb.Branch_IsActive=0 GROUP BY gb.Branch_Id ORDER BY gb.Branch_Order";
+			// die($sublinkSql);
+			$subRes = $functionsObj->ExecuteQuery($sublinkSql);
+
+			if($subRes->num_rows > 0)
 			{
-				if($subObj->input_current > $subObj->Branch_MinVal && $subObj->input_current < $subObj->Branch_MaxVal && $subObj->UsScen_Status<1)
+				while ($subObj = $functionsObj->FetchObject($subRes))
 				{
-					// die('jupmed ');
-					header("Location: ".site_root."scenario_description.php?Link=".$subObj->Branch_NextLinkId);
-					exit(0);
-				}
-				else
-				{
-					// die('no result');
-					$result = $functionsObj->FetchObject($input);
-					header("Location: ".site_root."scenario_description.php?Link=".$result->Link_ID);
-					exit(0);
+					// echo "<pre>"; print_r($subObj);
+					if($subObj->input_current >= $subObj->Branch_MinVal && $subObj->input_current < $subObj->Branch_MaxVal && $subObj->UsScen_Status<1)
+					{
+						// die('jupmed ');
+						// writing this query to update status of played scenario by user for scenario branching, deleting the row instead of updating
+						$unplayScen = "UPDATE GAME_LINKAGE_USERS SET UsScen_Status=1 WHERE  UsScen_UserId=$userid AND UsScen_LinkId =".$updateLinkId;
+						$functionsObj->ExecuteQuery($unplayScen);
+
+						// updating end scenario 
+						$unplayScenario = "UPDATE GAME_LINKAGE_USERS SET UsScen_IsEndScenario=".$subObj->Branch_IsEndScenario." WHERE  UsScen_UserId=$userid AND UsScen_LinkId =".$subObj->Branch_NextLinkId;
+						$functionsObj->ExecuteQuery($unplayScenario);
+						// echo $unplayScen.'<br>'.$unplayScenario; exit;
+						header("Location: ".site_root."scenario_description.php?Link=".$subObj->Branch_NextLinkId);
+						exit(0);
+					}
 				}
 			}
+			else
+			{
+				// die('no result');
+				$unplay = "UPDATE GAME_LINKAGE_USERS SET UsScen_Status=1 WHERE  UsScen_UserId=$userid AND UsScen_LinkId =".$updateLinkId;
+				$functionsObj->ExecuteQuery($unplay);
+				// $result = $functionsObj->FetchObject($input);
+				header("Location: ".site_root."scenario_description.php?Link=".$inputObj->Link_ID);
+				// header("Location: ".site_root."result.php?ID=".$gameid);
+				exit(0);
+			}
 		}
-		// else
-		// {
-		// die('no result');
-		$result = $functionsObj->FetchObject($input);
-		header("Location: ".site_root."scenario_description.php?Link=".$result->Link_ID);
-		exit(0);
-		// }
 	}
+	
 	else
 	{
 		// die('result');
