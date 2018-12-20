@@ -315,6 +315,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 				exit(0);
 			}
 		}
+		else
+		{
+			// die('result');
+			header("Location: ".site_root."result.php?ID=".$gameid);
+			exit(0);
+		}
 	}
 	
 	else
