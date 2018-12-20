@@ -44,6 +44,11 @@ switch($_GET['q']){
 	$showfile = 'linkage.php';
 	break;
 
+	// to test the component branching, once the functionality completed then remove this section after merging it into linkage
+	case 'linkageBranching':
+	$showfile = 'linkageBranching.php';
+	break;
+
 	case 'chart':
 	$showfile = 'chart.php';
 	break;
