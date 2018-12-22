@@ -69,7 +69,7 @@
   <div class="col-sm-12">
     <ul class="breadcrumb">
       <li class="completed"><a href="<?php echo site_root."ux-admin/Dashboard"; ?>">Home</a></li>
-      <li class="active"><a href="<?php echo site_root."ux-admin/personalizeOutcome"; ?>">Manage Personalize Outcome</a></li>
+      <li class="active"><a href="<?php echo site_root."ux-admin/personalizeOutcome"; ?>">Manage Personalized Outcome</a></li>
       <li class="active"><?php echo $header; ?></li>
     </ul>
   </div>
@@ -90,7 +90,7 @@ span.alert-danger {
 </style>
 <!-- scenario branching -->
 <div id="container">
-  <form action="" method="post" id="game_report" name="game_report">
+  <form action="" method="post" id="game_report" name="game_report"  enctype="multipart/form-data">
     <input type="hidden" id="Outcome_Id" name="Outcome_Id" value="<?php echo $editResObject->OutcomeID;?>">
     <div class="row">
       <div class="col-md-6">
@@ -132,19 +132,27 @@ span.alert-danger {
         <label for="Order Number"><span class="alert-danger">*</span>Order</label>
         <input type="number" id="" name="order" class="form-control" placeholder="Order Of Comparison" required="" value="<?php echo $editResObject->Outcome_Order;?>">
       </div>
-      <div class="col-md-4" id="Outcome">
-        <label for="Select Component"><span class="alert-danger">*</span>Select Outcome</label>
-        <select name="outcome" id="outcome" class="form-control Outcome" required="">
+      <div class="col-md-3" id="Outcome">
+        <label for="Select Outcome"><span class="alert-danger">*</span>Select Outcome</label>
+        <select name="Outcome" id="outcome" class="form-control Outcome" required="">
           <?php
           $sql="SELECT * FROM `game_outcome_result`";
           $outcomeResult = $functionsObj->ExecuteQuery($sql);
           ?>
-        <option value="">--Select Outcome--</option>
-         <?php while ($outcome = $outcomeResult->Fetch_Object()) { ?>
-            <option value="<?php echo $outcome->Outcome_ResultID;?>" <?php echo ($outcome->Outcome_ResultID == $editResObject->Outcome_Result)?"selected":''; ?>> <?php echo $outcome->Outcome_Name;?> </option>
+          <option value="">--Select Outcome--</option>
+          <?php while ($outcome = $outcomeResult->Fetch_Object()) { ?>
+            <option value="<?php echo $outcome->Outcome_ResultID;?>" <?php echo ($outcome->Outcome_ResultID == $editResObject->Outcome_FileType)?"selected":''; ?>> <?php echo $outcome->Outcome_Name;?> </option>
           <?php } ?>
         </select>
       </div>
+      <div class="col-md-2 " id="OutcomeType">
+        <label for="Select File"><span class="alert-danger">*</span>Upoload File</label>
+        <input type="file" name="image" accept="image/*" id="image" value="<?php echo $editResObject->Outcome_FileName;?>">
+      </div>
+    </div>
+    <div class="row col-md-3">
+       <label for="Selected Image"><span class="alert-danger">*</span>Current Selected Image</label>
+      <img src="<?php echo site_root."ux-admin/upload/"?><?php echo $editResObject->Outcome_FileName;?>" name="img" width="50px" height="50px" alt="You don't have any image">
     </div>
     <div class="clearfix"></div>
     <br><br>

@@ -811,7 +811,7 @@ span.alert-danger {
                       <a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->SubLink_ID; ?>"
                         title="Active"><span class="fa fa-check"></span></a>
                       <?php }?>
-                      <a href="<?php echo site_root."ux-admin/linkage/linkedit/".$row->SubLink_ID; ?>"
+                      <a href="<?php echo site_root."ux-admin/linkageBranching/linkedit/".$row->SubLink_ID; ?>"
                         title="Edit"><span class="fa fa-pencil"></span></a>
                         <a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->SubLink_ID; ?>"
                           title="Delete"><span class="fa fa-trash"></span></a>
@@ -831,14 +831,14 @@ span.alert-danger {
               <!-- Modal content-->
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" onclick="window.location = '<?php echo site_root."ux-admin/linkage/link/".$result->Link_ID; ?>';">&times;</button>
+                  <button type="button" class="close" onclick="window.location = '<?php echo site_root."ux-admin/linkageBranching/link/".$result->Link_ID; ?>';">&times;</button>
                   <h4 class="modal-title"> Linkage Added Successfully</h4>
                 </div>
                 <div class="modal-body">
                   <p> Linkage Added Successfully.</p>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-default" onclick="window.location = '<?php echo site_root."ux-admin/linkage/link/".$result->Link_ID; ?>';">Ok</button>
+                  <button type="button" class="btn btn-default" onclick="window.location = '<?php echo site_root."ux-admin/linkageBranching/link/".$result->Link_ID; ?>';">Ok</button>
                 </div>
               </div>
             </div>

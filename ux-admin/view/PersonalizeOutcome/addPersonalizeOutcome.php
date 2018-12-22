@@ -5,7 +5,6 @@
      var loc_url_stat = "ux-admin/personalizeOutcome/linkstat/";
   //-->
 </script>
-<!-- scenario branching Data table CSS -->
 <style>
 <!--
 .dropdown-menu > li > button {
@@ -59,7 +58,7 @@
   display:none;
 }
 </style>
-<!-- scenario branching Data table CSS ends -->
+
 <div class="row">
   <div class="col-lg-12">
     <h1 class="page-header"><?php echo 'Add '.$header; ?></h1>
@@ -69,7 +68,7 @@
   <div class="col-sm-12">
     <ul class="breadcrumb">
       <li class="completed"><a href="<?php echo site_root."ux-admin/Dashboard"; ?>">Home</a></li>
-      <li class="active"><a href="<?php echo site_root."ux-admin/personalizeOutcome"; ?>">Manage Personalize Outcome</a></li>
+      <li class="active"><a href="<?php echo site_root."ux-admin/personalizeOutcome"; ?>">Manage Personalized Outcome</a></li>
       <li class="active"><?php echo $header; ?></li>
     </ul>
   </div>
@@ -88,9 +87,9 @@ span.alert-danger {
   font-size       : 18px;
 }
 </style>
-<!-- scenario branching -->
+<!-- Personalise Outcome  -->
 <div id="container">
-  <form action="" method="post" id="game_report" name="game_report">
+  <form action="" method="post" id="game_report" name="game_report" enctype="multipart/form-data">
     <!-- game and scenario drop down -->
     <div class="row">
       <div class="col-md-6" id="game_section">
@@ -117,7 +116,7 @@ span.alert-danger {
     <!-- users checkboxes -->
     <br>
     <div class="row hidden" id="compSubcomp">
-      <div class="col-md-4" id="componentDiv">
+      <div class="col-md-3" id="componentDiv">
         <label for="Select Component"><span class="alert-danger">*</span>Select Output Component</label>
         <select name="ComponentName[]" id="ComponentName" class="form-control ComponentName" required="">
         </select>
@@ -134,16 +133,19 @@ span.alert-danger {
         <label for="Order Number"><span class="alert-danger">*</span>Order</label>
         <input type="number" id="" name="order[]" class="form-control" placeholder="Order Of Comparison" required="" min="1">
       </div>
-      <div class="col-md-4" id="OutcomeResult">
-        <label for="Select Component"><span class="alert-danger">*</span>Select Outcome</label>
-        <select name="Outcome" id="Outcome" class="form-control Outcome" required="">
+      <div class="col-md-2" id="OutcomeResult">
+        <label for="Select Outcome"><span class="alert-danger">*</span>Select Outcome</label>
+        <select name="Outcome[]" id="Outcome" class="form-control Outcome" required="">
           <option value="">--Select Outcome--</option>
-
           <?php foreach ($outcomeName as $OutcomeData) { ?>
             <option value="<?php echo $OutcomeData->Outcome_ResultID; ?>" data-gamename="<?php echo $OutcomeData->Outcome_Name; ?>"><?php echo $OutcomeData->Outcome_Name; ?></option>
           <?php } ?>
         </select>
       </div>
+        <div class="col-md-3" id="OutcomeType">
+          <label for="Select File"><span class="alert-danger">*</span>Upoload File</label>
+          <input type="file" name="image[]" multiple="multiple" accept="image/*" id="image" value="">
+        </div>
       <div class="col-md-1 hidden" id="buttonDiv" style="padding-top: 3%;">
         <button type="button" class="btn-primary btn" id="addMore" title="Add New"><b>+</b></button>
       </div>
@@ -272,6 +274,14 @@ span.alert-danger {
       }
     });
 
+    //add choose file type
+    $('#Outcome').on('change',function(){
+      if($(this).val())
+      {    
+       $('#OutcomeType').removeClass('hidden');
+      }
+    });
+
     // adding more div
     $('#addMore').on('click', function(){
       var addedDiv = $('#addHere').children().length;
@@ -285,11 +295,7 @@ span.alert-danger {
         $(e).html(CompOption);
       });
 
-      $('.NextScenario').each(function(i,e){
-        $(e).html(ScenarioOption);
-      });
-
-      $('#addHere').append('<div class="removeThis"><div class="col-md-4" id="componentDiv"><label for="Select Component"><span class="alert-danger">*</span>Select Output Component</label><select required name="ComponentName[]" id="ComponentName" class="form-control ComponentName"><option value="">--Select Output Component--</option></select></div><div class="col-md-1" id=""><label for="Minimum Value"><span class="alert-danger">*</span>Min</label><input required type="text" id="minVal" name="minVal[]" class="form-control" placeholder="Min Val"></div><div class="col-md-1" id=""><label for="Maximum Value"><span class="alert-danger">*</span>Max</label><input required type="text" id="maxVal" name="maxVal[]" class="form-control" placeholder="Max Val"></div><div class="col-md-1" id=""><label for="Order Number"><span class="alert-danger">*</span>Order</label><input required type="number" id="order" name="order[]" class="form-control" placeholder="Order Of Comparison"></div> <div class="col-md-4" id="Outcome"><label for="Select Component"><span class="alert-danger">*</span>Select Outcome</label><select name="Outcome" id="Outcome" class="form-control Outcome" required=""><option value="">--Select Outcome--</option><?php foreach ($outcomeName as $OutcomeData) { ?><option value="<?php echo $OutcomeData->Outcome_ResultID; ?>" data-gamename="<?php echo $OutcomeData->Outcome_Name; ?>"><?php echo $OutcomeData->Outcome_Name; ?></option><?php } ?></select></div><div class="col-md-1" id="" style="padding-top:3%;" title="Remove"><button type="button" class="btn-danger btn" id="removeThis"><b>-</b></button></div></div>');
+      $('#addHere').append('<div class="removeThis"><br><br><div class="col-md-3" id="componentDiv"><label for="Select Component"><span class="alert-danger">*</span>Select Output Component</label><select required name="ComponentName[]" id="ComponentName" class="form-control ComponentName"><option value="">--Select Output Component--</option></select></div><div class="col-md-1" id=""><label for="Minimum Value"><span class="alert-danger">*</span>Min</label><input required type="text" id="minVal" name="minVal[]" class="form-control" placeholder="Min Val"></div><div class="col-md-1" id=""><label for="Maximum Value"><span class="alert-danger">*</span>Max</label><input required type="text" id="maxVal" name="maxVal[]" class="form-control" placeholder="Max Val"></div><div class="col-md-1" id=""><label for="Order Number"><span class="alert-danger">*</span>Order</label><input required type="number" id="order" name="order[]" class="form-control" placeholder="Order Of Comparison"></div> <div class="col-md-2" id="Outcome"><label for="Select Component"><span class="alert-danger">*</span>Select Outcome</label><select name="Outcome[]" id="Outcome" class="form-control Outcome" required=""><option value="">--Select Outcome--</option><?php foreach ($outcomeName as $OutcomeData) { ?><option value="<?php echo $OutcomeData->Outcome_ResultID; ?>" data-gamename="<?php echo $OutcomeData->Outcome_Name; ?>"><?php echo $OutcomeData->Outcome_Name; ?></option><?php } ?></select></div> <div class="col-md-3" id="OutcomeType"><label for="Select File"><span class="alert-danger">*</span>Upoload File</label><input type="file" name="image[]" accept="image/*"></div><div class="col-md-1" id="" style="padding-top:3%;" title="Remove"><button type="button" class="btn-danger btn" id="removeThis"><b>-</b></button></div></div>');
       removeDiv();
     });
   });

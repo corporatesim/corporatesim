@@ -5,7 +5,7 @@
      var loc_url_stat = "ux-admin/personalizeOutcome/linkstat/";
   //-->
 </script>
-<!-- scenario branching Data table CSS -->
+
 <style>
 <!--
 .dropdown-menu > li > button {
@@ -59,7 +59,6 @@
   display:none;
 }
 </style>
-<!-- scenario branching Data table CSS ends -->
 <div class="row">
   <div class="col-lg-12">
     <h1 class="page-header"><?php echo $header; ?></h1>
@@ -69,7 +68,7 @@
   <div class="col-sm-12">
     <ul class="breadcrumb">
       <li class="completed"><a href="<?php echo site_root."ux-admin/Dashboard"; ?>">Home</a></li>
-      <li class="active"><a href="javascript:void(0);">Manage Personalize Outcome</a></li>
+      <li class="active"><a href="javascript:void(0);">Manage Personalized Outcome</a></li>
       <!-- <li class="active"><?php echo $header; ?></li> -->
     </ul>
   </div>
@@ -128,7 +127,8 @@ span.alert-danger {
                 <th class="no-sort" >MinValue</th>
                 <th class="no-sort" >MaxValue</th>
                 <th class="no-sort" >Order</th>
-                <th class="no-sort" >Outcome</th>
+                <th class="no-sort" >OutcomeType</th>
+                <th class="no-sort" >OutcomeName</th>
                 <th class="no-sort" id="action">Action</th>
               </tr>
             </thead>
@@ -144,6 +144,7 @@ span.alert-danger {
                   <td><?php echo $row->Outcome_MaxVal;?></td>
                   <td><?php echo $row->Outcome_Order;?></td>
                   <td><?php echo $row->Outcome_Name;?></td>
+                  <td><?php echo $row->Outcome_FileName;?></td>
                   <td>
                     <a href="<?php echo site_root."ux-admin/personalizeOutcome/edit/".$row->OutcomeID;?>" title="Edit"><span class="fa fa-pencil"></span></a> &nbsp;
                     <a href="<?php echo site_root."ux-admin/personalizeOutcome/delete/".$row->OutcomeID;?>" title="Delete"><span class="fa fa-trash"></span></a>

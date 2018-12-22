@@ -134,6 +134,10 @@ switch($_GET['q']){
 	$showfile = 'ScenarioBranching.php';
 	break;
 
+  case 'outcomeBadges':
+	$showfile = 'outcomeBadges.php';
+	break;
+
 	case 'personalizeOutcome':
 	$showfile = 'personalizeOutcome.php';
 	break;

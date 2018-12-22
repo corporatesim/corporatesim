@@ -149,11 +149,17 @@ src="<?php echo site_root."images/logo.png";?>" />
 									href="<?php echo site_root."ux-admin/chartComp";?>">
 								Chart Component</a></li>
 
+							<?php } if($functionsObj->checkModuleAuth('outcomeBadges','enable')){ ?>
+
+								<li><a 
+									href="<?php echo site_root."ux-admin/outcomeBadges";?>">
+								Outcome Badges</a></li>
+
 							<?php } if($functionsObj->checkModuleAuth('personalizeOutcome','enable')){ ?>
 
 								<li><a 
 									href="<?php echo site_root."ux-admin/personalizeOutcome";?>">
-								Personalize Outcome</a></li>
+								Personalized Outcome</a></li>
 							<?php } ?>					
 
 						</ul>
