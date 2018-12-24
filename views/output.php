@@ -35,11 +35,19 @@ include_once 'includes/header.php';
 								$i=0;
 								while($row = mysqli_fetch_array($area)) {
 										//echo $row->Area_Name;
+									if($row['BackgroundColor'] || $row['TextColor'])
+									{
+										$areaStyle = "style='background:".$row['BackgroundColor']."; color:".$row['TextColor']." !important;'";
+									}
+									else
+									{
+										$areaStyle = '';
+									}
 									if($i==0)
 									{
-										echo "<li role='presentation' class='active regular'><a href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+										echo "<li role='presentation' class='active regular'><a href='#".$row['Area_Name']."Tab' $areaStyle aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
 									}else{
-										echo "<li role='presentation' class='regular'><a href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+										echo "<li role='presentation' class='regular'><a href='#".$row['Area_Name']."Tab' $areaStyle aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
 									}
 									$i++;
 								}
@@ -291,10 +299,6 @@ include_once 'includes/header.php';
 								//{
 									//echo $row1['Area_Name']." - ".$areaname; 
 									//echo $row1['Comp_Name'];
-                    	$sql1 ="SELECT gl.SubLink_ID,gp.*,gr.Outcome_Name,gcomp.Comp_Name FROM GAME_PERSONALIZE_OUTCOME gp LEFT JOIN GAME_LINKAGE_SUB gl ON gl.SubLink_CompID=gp.Outcome_CompId AND gl.SubLink_LinkID=gp.Outcome_LinkId LEFT JOIN GAME_OUTCOME_RESULT gr ON gr.Outcome_ResultID = gp.Outcome_FileType LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gl.SubLink_ID LEFT JOIN GAME_COMPONENT gcomp ON gcomp.Comp_ID = gp.Outcome_CompId  WHERE gi.input_user=$userid AND gp.Outcome_GameId=$gameid AND gl.SubLink_Type=1 AND gl.SubLink_SubCompID=0  AND ".$row1['Current']." >= gp.Outcome_MinVal AND ".$row1['Current']."<=gp.Outcome_Maxval AND gp.Outcome_IsActive=0 ORDER BY gp.Outcome_Order";
-                       //print_r( $sql1);
-
-											$object2 = $functionsObj->ExecuteQuery($sql1);
 
                     	echo "<div class='".$length." scenariaListingDiv ".$hidden."'>";
 
@@ -306,36 +310,33 @@ include_once 'includes/header.php';
 
                     	echo "<div class=' col-sm-6 ".$width1." text-center ".$InputFields."'>";
 
-                    	if($object2->num_rows>0)
+                    	$sqlOutcome ="SELECT gl.SubLink_ID,gp.*,gr.Outcome_Name,gcomp.Comp_Name FROM GAME_PERSONALIZE_OUTCOME gp LEFT JOIN GAME_LINKAGE_SUB gl ON gl.SubLink_CompID=gp.Outcome_CompId AND gl.SubLink_LinkID=gp.Outcome_LinkId LEFT JOIN GAME_OUTCOME_RESULT gr ON gr.Outcome_ResultID = gp.Outcome_FileType LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gl.SubLink_ID LEFT JOIN GAME_COMPONENT gcomp ON gcomp.Comp_ID = gp.Outcome_CompId  WHERE gp.Outcome_GameId=$gameid AND gl.SubLink_Type=1 AND gl.SubLink_SubCompID=0  AND ".$row1['Current']." >= gp.Outcome_MinVal AND ".$row1['Current']."<=gp.Outcome_Maxval AND Outcome_CompId=".$row1['CompID']." AND gp.Outcome_IsActive=0 ORDER BY gp.Outcome_Order";
+                     // print_r( $sqlOutcome);
+
+                    	$objRes = $functionsObj->ExecuteQuery($sqlOutcome);
+                    	/*print_r($objRes);
+                    	echo $objRes->num_rows;*/
+                    	$objectResult = mysqli_fetch_assoc($objRes);
+
+                    	if($row1['CompID']==$objectResult['Outcome_CompId'])
                     	{
-
-                    		$objectRes[] = array();
-                    		$i=0;
-                    		while($objectResult = mysqli_fetch_assoc($object2))
-                    		{
-                    			$i++;
-                    			$objectRes[$i] =$objectResult['Outcome_FileName'];
-                    			if($row1['CompID']==$objectResult['Outcome_CompId'])
-                    			{
-
-                    				echo "<div class   ='InlineBox'>";       
-                    				echo "<label class ='scenariaLabel'>OutcomeResult</label>";
-                    				echo "<img id      ='img' src='".site_root."ux-admin/upload/".$objectRes[$i]."' alt='Outcome_image' width=100 height=100 />";
-                    				echo "</div>";
-                    			}
-
-                    		}  
+                    		echo "<div class   ='InlineBox'>";       
+                    		echo "<label class ='scenariaLabel'>OutcomeResult</label>";
+                    		echo "<img id      ='img' src='".site_root."ux-admin/upload/".$objectResult['Outcome_FileName']."' alt='Outcome_image' width=100 height=100 />";
+                    		echo "</div>";
                     	}
-
-
-                    	echo "<div class='InlineBox ".$labelC."'>";
-                    	echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
-                    	echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value=".$row1['Current']." readonly></input>";
-                    	echo "</div>";
-                    	echo "<div class='InlineBox ".$labelL."'>";
-                    	echo "<label class='scenariaLabel'>".$row1['LabelLast']."</label>";
-                    	echo "<input type='text' class='scenariaInput' readonly></input>";
-                    	echo "</div>";
+                    	else
+                    	{
+                    		echo "<div class='InlineBox ".$labelC."'>";
+                    		echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
+                    		echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value=".$row1['Current']." readonly></input>";
+                    		echo "</div>";
+                    		echo "<div class='InlineBox ".$labelL."'>";
+                    		echo "<label class='scenariaLabel'>".$row1['LabelLast']."</label>";
+                    		echo "<input type='text' class='scenariaInput' readonly></input>";
+                    		echo "</div>";
+                    	}
+                    	
                     	echo "</div>";
                     	if($row1['ViewingOrder'] == 4)
                     	{

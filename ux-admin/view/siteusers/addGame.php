@@ -76,7 +76,7 @@ span.alert-danger {
 		</div>
 		<div class="row" id="sandbox-container">
 			<div class="col-md-4">
-				<label for="Game Duration"><span class="alert-danger">*</span>Select Game Duration</label>
+				<label for="Game Duration"><span class="alert-danger">*</span>Select Account Duration</label>
 			</div>
 				<!-- <div class="col-md-4">
 					<input type="text" name="User_GameStartDate" id="User_GameStartDate" class="form-control" placeholder="Select Start Date" required>
@@ -101,9 +101,9 @@ span.alert-danger {
 				}
 				?>
 				<div class="input-daterange input-group" id="datepicker">
-					<input type="text" class="input-sm form-control" id="User_GameStartDate" name="User_GameStartDate" value="<?php echo $User_GameStartDate; ?>" placeholder="Select Start Date" required/>
+					<input type="text" class="input-sm form-control" id="User_GameStartDate" name="User_GameStartDate" value="<?php echo $User_GameStartDate; ?>" placeholder="Select Start Date" required readonly/>
 					<span class="input-group-addon">to</span>
-					<input type="text" class="input-sm form-control" id="User_GameEndDate" name="User_GameEndDate" value="<?php echo $User_GameEndDate; ?>" placeholder="Select End Date" required/>
+					<input type="text" class="input-sm form-control" id="User_GameEndDate" name="User_GameEndDate" value="<?php echo $User_GameEndDate; ?>" placeholder="Select End Date" required readonly/>
 				</div>
 			</div>
 			<br>

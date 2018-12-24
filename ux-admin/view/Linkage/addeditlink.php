@@ -15,17 +15,70 @@ span.alert-danger {
 <script src="<?php echo site_root; ?>assets/components/ckeditor/ckeditor.js" type="text/javascript"></script>
 <!-- Generate alert box when select range & mChoice by user -->
 <script type="text/javascript">
-  $(document).ready(function(){
-  	$('#SubLink_InputModeType').change(function() {
-  		if( $("#SubLink_InputModeType option:selected").attr('id') == 3 || $("#SubLink_InputModeType  option:selected").attr('id') == 4)
-  		{
-  			if($('#SubLink_InputFieldOrder').val()== 1 || $('#SubLink_InputFieldOrder').val()== 2)
-  			{
-  			//console.log('here');
-  			alert("You have seleted both the labels");
-  		}
-  	}
+  $(document).ready(function()
+  {
+    // adding options and value on button click
+    removeDiv();
+    // writing this line to get the comp on change of scen while page load
+    $('#carry_linkid').trigger('change');
+
+    $('#SubLink_InputModeType').change(function() {
+      if( $("#SubLink_InputModeType option:selected").attr('id') == 3 || $("#SubLink_InputModeType  option:selected").attr('id') == 4)
+      {
+       if($('#SubLink_InputFieldOrder').val()== 1 || $('#SubLink_InputFieldOrder').val()== 2)
+       {
+         alert("You have seleted both the labels");
+       }
+     }
+   });
+
+    $('input[type="radio"]').click(function(){
+     if($(this).attr("value")=="subcomp"){
+      $("#subcomponent").show();
+    }
+    if($(this).attr("value")=="comp"){
+      $("#subcomponent").hide();
+    }
+
+    if($(this).attr("value")=="formula"){ 
+      $("#formula").show();
+      $("#admin").hide();
+      $("#carry").hide();     
+    }
+
+    if($(this).attr("value")=="admin"){ 
+      $("#admin").show();
+      $("#formula").hide();
+      $("#carry").hide();
+    }
+
+    if($(this).attr("value")=="carry"){ 
+      $("#carry").show();
+      $("#formula").hide();
+      $("#admin").hide();
+    }
+
+    if($(this).attr("value")=="user"){  
+      $("#carry").hide();
+      $("#formula").hide();
+      $("#admin").hide();
+    }
   });
+    setTimeout(function()
+    {
+      $('#carry_compid [value='+<?php echo $linkdetails->SubLink_CompIDcarry; ?>+']').prop('selected', true);
+      // writing this line to get the comp on change of scen while page load
+      $('#carry_compid').trigger('change');
+    },1);
+
+    setTimeout(function()
+    {
+      if(<?php echo $linkdetails->SubLink_SubCompIDcarry; ?>)
+      {
+        $('#carry_subcompid [value='+<?php echo $linkdetails->SubLink_SubCompIDcarry; ?>+']').prop('selected', true);
+      }
+    },1000);
+
   });
   /*function label_choice(select){
   
@@ -45,43 +98,6 @@ span.alert-danger {
   
 </script>
 <!-- <script src="js/jscolor.js"></script> -->
-<script type="text/javascript">
-  $(document).ready(function(){
-  	$('input[type="radio"]').click(function(){
-         if($(this).attr("value")=="subcomp"){	//
-         	$("#subcomponent").show();
-         }
-         if($(this).attr("value")=="comp"){
-         	$("#subcomponent").hide();
-         }
-
-         if($(this).attr("value")=="formula"){	
-         	$("#formula").show();
-         	$("#admin").hide();
-         	$("#carry").hide();			
-         }
-
-         if($(this).attr("value")=="admin"){	
-         	$("#admin").show();
-         	$("#formula").hide();
-         	$("#carry").hide();
-         }
-
-         if($(this).attr("value")=="carry"){	
-         	$("#carry").show();
-         	$("#formula").hide();
-         	$("#admin").hide();
-         }
-
-         if($(this).attr("value")=="user"){	
-         	$("#carry").hide();
-         	$("#formula").hide();
-         	$("#admin").hide();
-         }
-
-       });
-  });
-</script>
 <!-- change color code hex to rgb -->
 <!-- <script type="text/javascript">
   function hexToRgb(hex) {
@@ -878,11 +894,7 @@ span.alert-danger {
   // -->
 </script>
 <script type="text/javascript">
-  // adding options and value on button click
-  $(document).ready(function(){
-  	removeDiv();
-  });
-  
+
   $('#add_options').on('click',function(){
   	$('#add_here').append('<div class="col-md-12"><div class="form-group col-md-6"><input name="option[]" type="text" placeholder="Enter Option Text" class="form-control" value="Option-"></div> <div class="form-group col-md-3"><input name="option_value[]" type="text" placeholder="Value" class="form-control"></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" title="Remove Option">-</button></div></div>');
   	removeDiv();
@@ -935,7 +947,7 @@ span.alert-danger {
   	}
   });
   
-  $('#formula_id').change( function(){
+  $('#formula_id').on('change', function(){
   	var formula_id = $(this).val();
   	//alert(comp_id);
   	//$('#subcomp_id').html('<option value="">-- SELECT --</option>');
@@ -952,7 +964,7 @@ span.alert-danger {
   });
   
   
-  $('#area_id').change( function(){
+  $('#area_id').on('change', function(){
   	var area_id = $(this).val();
   	//alert(area_id);
   	$('#comp_id').html('<option value="">-- SELECT --</option>');
@@ -967,7 +979,7 @@ span.alert-danger {
   	});
   });	
   
-  $('#comp_id').change( function(){
+  $('#comp_id').on('change', function(){
   	var comp_id = $(this).val();
   	//alert(comp_id);
   	$('#subcomp_id').html('<option value="">-- SELECT --</option>');
@@ -982,7 +994,7 @@ span.alert-danger {
   	});
   });
   
-  $('#carry_compid').change( function(){
+  $('#carry_compid').on('change', function(){
   	var comp_id = $(this).val();
   	var link_id = $('#carry_linkid').val();
   	
@@ -998,7 +1010,7 @@ span.alert-danger {
   	});
   });
   
-  $('#carry_linkid').change( function(){
+  $('#carry_linkid').on('change',function(){
   	var link_id = $(this).val();
   	//alert(comp_id);
   	$('#carry_compid').html('<option value="">-- SELECT --</option>');
@@ -1014,7 +1026,7 @@ span.alert-danger {
   	});
   });
   
-  $('#scen_id').change( function(){
+  $('#scen_id').on('change', function(){
   	var thisVal = $(this).val();
   	//alert(thisVal);
   	$("input[id=scenid]").val(thisVal);		

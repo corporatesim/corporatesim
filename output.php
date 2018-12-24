@@ -318,6 +318,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 		else
 		{
 			// die('result');
+			$unplay = "UPDATE GAME_LINKAGE_USERS SET UsScen_Status=1 WHERE  UsScen_UserId=$userid AND UsScen_LinkId =".$updateLinkId;
+			$functionsObj->ExecuteQuery($unplay);
 			header("Location: ".site_root."result.php?ID=".$gameid);
 			exit(0);
 		}
@@ -421,7 +423,7 @@ if($input->num_rows > 0){
 	//$url = site_root."scenario_description.php?Link=".$result->Link_ID;
 }
 
-$sqlarea = "SELECT distinct a.Area_ID as AreaID, a.Area_Name as Area_Name
+$sqlarea = "SELECT distinct a.Area_ID as AreaID, a.Area_Name as Area_Name, a.Area_BackgroundColor as BackgroundColor, a.Area_TextColor as TextColor
 FROM GAME_LINKAGE l 
 INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
 INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 

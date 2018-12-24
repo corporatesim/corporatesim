@@ -1075,9 +1075,9 @@ elseif(isset($_GET['del'])){
 	$result   = $functionsObj->FetchObject($object);
 	$sqlcarry = "SELECT l.Link_ID, s.Scen_ID,s.Scen_Name
 	FROM `GAME_LINKAGE` l INNER JOIN GAME_SCENARIO s on l.Link_ScenarioID=s.Scen_ID
-	WHERE Link_GameID=".$result->Link_GameID." AND Link_Order < 
+	WHERE Link_GameID=".$result->Link_GameID." AND Link_Order <= 
 	(SELECT Link_Order FROM GAME_LINKAGE WHERE Link_ID = ".$id.")";
-
+	// echo $sqlcarry;
 	$objcarry = $functionsObj->ExecuteQuery($sqlcarry);
 
 }elseif(isset($_GET['linkdel'])){
@@ -1213,5 +1213,5 @@ if($linkid!='')
 	$userRequest = $functionsObj->SelectData(array(), 'GAME_SITE_USER_REPORT_REQUEST', array('linkid='.$linkid.' order by id desc limit 1'), '', '', '', '', 0);
 	
 }
-
+// echo "<pre>"; print_r($component); print_r($subcomponent); print_r($linkdetails); exit;
 include_once doc_root.'ux-admin/view/Linkage/'.$file;
