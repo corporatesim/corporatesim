@@ -49,7 +49,7 @@ include_once 'includes/header.php';
 					<?php if(!empty($scen)){ echo $scen->Scen_Name; } ?> </h2>	
 				</div>
 				<div class="col-sm-2  text-right pull-right <?php echo ($scen->Scen_InputButton == 0)?'DisplayNone':'';?>" style="margin-top:-6px;">
-					<button class="btn innerBtns" onclick="window.location='<?php echo $url; ?>';">Input</button>
+					<button class="btn innerBtns" onclick="window.location='<?php echo $url; ?>';">Proceed</button>
 						<!--<button class="btn innerBtns">Save</button>
 							<button class="btn innerBtns">Submit</button>-->
 						</div>
@@ -67,7 +67,7 @@ include_once 'includes/header.php';
 							<div class="shadow TabMain col-sm-12">
 
 								<ul class="nav nav-tabs" role="tablist">
-									<li role="presentation" class="active regular"><a href="#generalTab" aria-controls="generalTab" role="tab" data-toggle="tab">General</a></li>
+									<li role="presentation" class="active regular"><a href="#generalTab" aria-controls="generalTab" role="tab" data-toggle="tab">Storyline</a></li>
 									<li role="presentation" class="regular"><a href="#videosTab" aria-controls="videosTab" role="tab" data-toggle="tab">Videos</a></li>
 									<li role="presentation" class="regular"><a href="#imagesTab" aria-controls="imagesTab" role="tab" data-toggle="tab">Images</a></li>
 									<li role="presentation" class="regular"><a href="#documentsTab" aria-controls="documentsTab" role="tab" data-toggle="tab">Documents</a></li>

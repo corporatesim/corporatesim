@@ -14,7 +14,7 @@ include_once 'includes/header.php';
         <div class="timer text-center col-sm-2 pull-right" id="timer">0:00</div>
       </div>
       <div class="col-sm-9 col-md-10 no_padding col-lg-6 pull-left">
-        <h2 class="InnerPageHeader"><?php if(!empty($result)){ echo $result->Scenario ; }?> Decisions</h2>
+        <h2 class="InnerPageHeader"><?php if(!empty($result)){ echo $result->Scenario ; }?> <!-- Decisions --></h2>
       </div>
     </div>
   </div>
@@ -101,25 +101,25 @@ include_once 'includes/header.php';
                 {
                   if($i == 0)
                   {
-                    echo "<li role='presentation' class='".$area_length."' id='".$row['Area_Name']."' class='active regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                    echo "<li role='presentation' id='".$row['Area_Name']."' class='active ".$area_length." regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                     $activearea=$row['Area_Name'];
 
                   }
                   else
                   {
-                    echo "<li role='presentation' class='".$area_length."' id='".$row['Area_Name']."' class='regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                    echo "<li role='presentation' id='".$row['Area_Name']."' class='regular ".$area_length."' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                   }
 
                   $i++;
                 }
                 else if ($tab == $row['Area_Name'])
                 {
-                  echo "<li role='presentation' class='".$area_length."' id='".$row['Area_Name']."' class='active regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                  echo "<li role='presentation' id='".$row['Area_Name']."' class='active ".$area_length." regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                   $activearea=$row['Area_Name'];
                 }
                 else
                 {
-                  echo "<li role='presentation' class='".$area_length."' id='".$row['Area_Name']."' class='regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                  echo "<li role='presentation' id='".$row['Area_Name']."' class='regular ".$area_length."' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                 }
 
               }
@@ -1194,6 +1194,7 @@ include_once 'includes/header.php';
     //$('#save_input').click( function(){ 
       //$("#save_input").attr('disabled',true);
       var ref_tab = $("ul.nav-tabs li.active a").text(); //active tab slect
+      // alert(ref_tab); return false;
       var form    = $('#game_frm').get(0);
       $.ajax({
         url:  "includes/ajax/ajax_addedit_input.php",

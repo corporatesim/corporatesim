@@ -4,7 +4,7 @@ include_once 'includes/header.php';
 <section>
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-9 col-md-10 no_padding"><h2 class="InnerPageHeader"><?php if(!empty($result)){ echo $result->Scenario ; }?> - Outcome</h2></div>
+			<div class="col-sm-9 col-md-10 no_padding"><h2 class="InnerPageHeader"><?php if(!empty($result)){ echo $result->Scenario ; }?> <!-- - Outcome --></h2></div>
 				<!--<div class="col-sm-9 col-md-10 no_padding"><h2 class="InnerPageHeader"><?php if(!empty($result)){ echo $result->Game." | ".$result->Scenario ; }?> Your Output</h2></div>
 					<div class="col-sm-3 col-md-2 text-center timer">hh:mm:ss</div>-->
 
