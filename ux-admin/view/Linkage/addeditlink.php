@@ -66,16 +66,18 @@ span.alert-danger {
   });
     setTimeout(function()
     {
-      $('#carry_compid [value='+<?php echo $linkdetails->SubLink_CompIDcarry; ?>+']').prop('selected', true);
+      // if there is no carry forward or we are adding it first time then using 2 instead of SubLink_CompIDcarry
+      $('#carry_compid [value='+<?php echo ($linkdetails->SubLink_CompIDcarry)?$linkdetails->SubLink_CompIDcarry:'2'; ?>+']').prop('selected', true);
       // writing this line to get the comp on change of scen while page load
       $('#carry_compid').trigger('change');
     },1);
 
     setTimeout(function()
     {
-      if(<?php echo $linkdetails->SubLink_SubCompIDcarry; ?>)
+      // if there is no carry forward or we are adding it first time then using 2 instead of SubLink_SubCompIDcarry
+      if(<?php echo ($linkdetails->SubLink_SubCompIDcarry)?$linkdetails->SubLink_SubCompIDcarry:'2'; ?>)
       {
-        $('#carry_subcompid [value='+<?php echo $linkdetails->SubLink_SubCompIDcarry; ?>+']').prop('selected', true);
+        $('#carry_subcompid [value='+<?php echo ($linkdetails->SubLink_SubCompIDcarry)?$linkdetails->SubLink_SubCompIDcarry:'2'; ?>+']').prop('selected', true);
       }
     },1000);
 
