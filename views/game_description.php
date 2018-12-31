@@ -116,15 +116,17 @@ include_once 'includes/header.php';
 								<div role="tabpanel" class="tab-pane" id="videosTab">
 									<?php 
 									while($row = mysqli_fetch_array($video)) {
-										echo "<div class='col-sm-6 videoDiv'>";
-										
-										//echo "<iframe width='100%' height='240' src='";
-										//echo $row['GameVdo_Name']."?autoplay=0";
-										//echo "'></iframe> ";
-										
-										echo "<video width='100%' height='240' controls><source src='";
-										echo $row['GameVdo_Name'];
-										echo "' type='video/mp4'></video>";
+										echo "<div class='col-sm-6 videoDiv' data-type='".$row['GameVdo_Type']."'>";
+										if($row['GameVdo_Type'] == 1)
+										{
+											echo $row['GameVdo_Name'];
+										}
+										else
+										{
+											echo "<video width='100%' height='240' controls><source src='";
+											echo $row['GameVdo_Name'];
+											echo "' type='video/mp4'></video>";
+										}
 
 										echo "<div class='col-sm-12 no_padding videoName'>";
 										echo "<h4 class=''>";
