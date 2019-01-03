@@ -317,8 +317,8 @@ include_once 'includes/header.php';
                     	/*print_r($objRes);
                     	echo $objRes->num_rows;*/
                     	$objectResult = mysqli_fetch_assoc($objRes);
-
-                    	if($row1['CompID']==$objectResult['Outcome_CompId'])
+                      //echo $objectResult['Outcome_FileType'];
+                    	if($row1['CompID']==$objectResult['Outcome_CompId'] && $objectResult['Outcome_FileType']<3)
                     	{
                     		echo "<div class   ='InlineBox'>";       
                     		echo "<label class ='scenariaLabel'>OutcomeResult</label>";

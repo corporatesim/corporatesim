@@ -1,8 +1,8 @@
 <!-- <?php // echo "<pre>"; print_r($object->fetch_object()); exit; ?> -->
   <script type="text/javascript">
     <!--
-     var loc_url_del  = "ux-admin/ScenarioBranching/linkdel/";
-     var loc_url_stat = "ux-admin/ScenarioBranching/linkstat/";
+     var loc_url_del  = "ux-admin/ScenarioBranching/delete/";
+     //var loc_url_stat = "ux-admin/ScenarioBranching/linkstat/";
   //-->
 </script>
 <!-- scenario branching Data table CSS -->
@@ -152,7 +152,8 @@ span.alert-danger {
                   <td>
                     <a href="<?php echo site_root."ux-admin/ScenarioBranching/edit/".$row->Branch_Id;?>" title="Edit"><span class="fa fa-pencil"></span></a> 
                     &nbsp;
-                    <a href="<?php echo site_root."ux-admin/ScenarioBranching/delete/".$row->Branch_Id;?>" title="Delete"><span class="fa fa-trash"></span></a>
+                   <!--  <a href="<?php //echo site_root."ux-admin/ScenarioBranching/delete/".$row->Branch_Id;?>" title="Delete"><span class="fa fa-trash"></span></a> -->
+                    <a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->Branch_Id;?>" title="Delete"><span class="fa fa-trash"></span></a></a>
                     &nbsp;
                     <?php if($row->Branch_IsEndScenario == 1){ ;?>
                       <a href="javascript:void(0);" title="End Scenario"><span class="fa fa-ban"></span></a>

@@ -77,6 +77,10 @@ include_once 'includes/header2.php';
 										$urlstr    = "<a href='".$url."'><img src='images/startGameIcon.png' alt='Start/Resume Game' class=''></a>";
 
 									}
+									if($result1->US_ReplayStatus==1 || $result1->US_ReplayStatus==0)
+									{
+										$urlstr .= " <a id='restart' href='#' data-GameID='".$row['Game_ID']."' data-ScenID='".$ScenID."' data-LinkID='".$linkid."'><img src='images/restartGameIcon.png' alt='ReStart/Resume Game' class=''></a>";
+									}
 								}
 							}
 							else
@@ -115,9 +119,9 @@ include_once 'includes/header2.php';
 						echo "<input type='hidden' name='id' value='{$row['Game_ID']}'>";					
 						echo "<div class='col-sm-2  col-xs-2 regular no_padding '>";
 						echo $row['Game_Name'];
-						echo "</div><div class=' col-md-8 col-xs8 light'>";
+						echo "</div><div class=' col-md-6 col-xs8 light'>";
 						echo $row['Game_Comments'];
-						echo "</div><div class='col-sm-2 col-xs-2 regular no_padding  text-right'>";					
+						echo "</div><div class='col-sm-4 col-xs-2 regular no_padding  text-right'>";					
 						//check status of user for this game
 						
 						//if record exist for Userid and GameID in Game_Userstatus

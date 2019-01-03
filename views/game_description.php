@@ -48,7 +48,7 @@ include_once 'includes/header.php';
 				<div class="shadow TabMain col-sm-12">
 
 					<ul class="nav nav-tabs" role="tablist">
-						<li role="presentation" class="active regular"><a href="#generalTab" aria-controls="generalTab" role="tab" data-toggle="tab">General</a></li>
+						<li role="presentation" class="active regular"><a href="#generalTab" aria-controls="generalTab" role="tab" data-toggle="tab">Introduction</a></li>
 						<li role="presentation" class="regular"><a href="#videosTab" aria-controls="videosTab" role="tab" data-toggle="tab">Videos</a></li>
 						<li role="presentation" class="regular"><a href="#imagesTab" aria-controls="imagesTab" role="tab" data-toggle="tab">Images</a></li>
 						<li role="presentation" class="regular"><a href="#documentsTab" aria-controls="documentsTab" role="tab" data-toggle="tab">Documents</a></li>
@@ -116,7 +116,7 @@ include_once 'includes/header.php';
 								<div role="tabpanel" class="tab-pane" id="videosTab">
 									<?php 
 									while($row = mysqli_fetch_array($video)) {
-										echo "<div class='col-sm-6 videoDiv' data-type='".$row['GameVdo_Type']."'>";
+										echo "<div class='col-sm-6 videoDiv'>";
 										if($row['GameVdo_Type'] == 1)
 										{
 											echo $row['GameVdo_Name'];

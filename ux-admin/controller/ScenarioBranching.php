@@ -173,7 +173,7 @@ if(isset($_GET['edit']) && !empty($_GET['edit']))
 // for deleting table records
 if(isset($_GET['delete']) && !empty($_GET['delete']))
 {
-	$deleteId = $_GET['delete'];
+	$deleteId = base64_decode($_GET['delete']);
 	// echo "<pre>"; print_r($_POST);
 	$deleteSql = "UPDATE GAME_BRANCHING_SCENARIO SET Branch_IsActive=1 WHERE Branch_Id=$deleteId";
 	$deleteRes = $functionsObj->ExecuteQuery($deleteSql);

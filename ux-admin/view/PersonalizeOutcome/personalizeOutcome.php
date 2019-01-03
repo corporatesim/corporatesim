@@ -1,8 +1,8 @@
 <!-- <?php // echo "<pre>"; print_r($object->fetch_object()); exit; ?> -->
   <script type="text/javascript">
     <!--
-     var loc_url_del  = "ux-admin/personalizeOutcome/linkdel/";
-     var loc_url_stat = "ux-admin/personalizeOutcome/linkstat/";
+     var loc_url_del  = "ux-admin/personalizeOutcome/delete/";
+     //var loc_url_stat = "ux-admin/personalizeOutcome/linkstat/";
   //-->
 </script>
 
@@ -147,7 +147,8 @@ span.alert-danger {
                   <td><?php echo $row->Outcome_FileName;?></td>
                   <td>
                     <a href="<?php echo site_root."ux-admin/personalizeOutcome/edit/".$row->OutcomeID;?>" title="Edit"><span class="fa fa-pencil"></span></a> &nbsp;
-                    <a href="<?php echo site_root."ux-admin/personalizeOutcome/delete/".$row->OutcomeID;?>" title="Delete"><span class="fa fa-trash"></span></a>
+                   <!--  <a href="<?php //echo site_root."ux-admin/personalizeOutcome/delete/".$row->OutcomeID;?>" title="Delete"><span class="fa fa-trash"></span></a> -->
+                    <a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->OutcomeID;?>" title="Delete"><span class="fa fa-trash"></span></a></a>
                   </td>
                 </tr>
                 <?php $i++; } ?>

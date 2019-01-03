@@ -1554,6 +1554,10 @@ include_once 'includes/header.php';
       }
     });
   }
+$('#submit').on('click',function(){
+  window.location.href('corp_simulation/views/input_2.php');
+}
+
 </script>
 </body>
 </html>

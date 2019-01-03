@@ -136,7 +136,7 @@ span.alert-danger {
         <label for="Select Outcome"><span class="alert-danger">*</span>Select Outcome</label>
         <select name="Outcome" id="outcome" class="form-control Outcome" required="">
           <?php
-          $sql="SELECT * FROM `game_outcome_result`";
+          $sql="SELECT * FROM `GAME_OUTCOME_RESULT`";
           $outcomeResult = $functionsObj->ExecuteQuery($sql);
           ?>
           <option value="">--Select Outcome--</option>

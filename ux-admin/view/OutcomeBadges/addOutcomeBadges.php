@@ -4,6 +4,7 @@
      var loc_url_del  = "ux-admin/outcomeBadges/linkdel/";
      var loc_url_stat = "ux-admin/outcomeBadges/linkstat/";
   //-->
+ 
 </script>
 <style>
 
@@ -73,26 +74,26 @@ span.alert-danger {
       <label for="Value"><span class="alert-danger">*</span>Select Value</label>
     </div>
       <div class="row col-md-6" id="FixValue">
-        <input type="radio" name="rangeVal" id="FixValue" value="fixvalue" >
+        <input type="radio" name="rangeVal" id="FixValue" value="0" >
         <label for="Value">Fix Value</label>
          <div class="row hidden " id="fixVal">
           <div class="col-md-3" id="FixValDiv">
            <label for="Fix Value"><span class="alert-danger">*</span>Value</label>
-           <input type="number" name="fixvalue" class="fixvalue" value="" required="">
+           <input type="number" name="fixvalue" id="fixvalue" class="form-control" value="">
          </div>
         </div>
       </div>
       <div class="row col-md-6" id="RangeValue">
-        <input type="radio" name="rangeVal"  id="RangeValue" value="RangeValue">
+        <input type="radio" name="rangeVal"  id="RangeValue" value="1">
         <label for="Value">Range</label>
-        <div class="row hidden" id="RangeVal">
+        <div class="row hidden" id="RangeVal" name="RangeVal" value="">
          <div class="col-md-3" id="minValDiv">
           <label for="Minimum Value"><span class="alert-danger">*</span>Min</label>
-          <input type="text" id="minVal" name="minVal[]" class="form-control" placeholder="Min Val" required="">
+          <input type="number" id="minVal" name="minVal" class="form-control" placeholder="Min Val" >
         </div>
         <div class="col-md-3" id="maxValDiv">
           <label for="Maximum Value"><span class="alert-danger">*</span>Max</label>
-          <input type="text" id="" name="maxVal[]" class="form-control" placeholder="Max Val" required="">
+          <input type="number" id="" name="maxVal" class="form-control" placeholder="Max Val" >
         </div>
       </div>
     </div>
@@ -117,18 +118,31 @@ span.alert-danger {
         //alert($(this).val());
         if($(this).attr('id') == 'FixValue' || $(this).attr('id') == 'RangeValue')
         {
-          if($(this).val() == 'RangeValue')
+          if($(this).val() == 0)
           {
-             $('#RangeVal').removeClass('hidden');
-            $('#fixVal').addClass('hidden');
+            $('#fixVal').removeClass('hidden');
+            $('#RangeVal').addClass('hidden');
           }
           else
           {
-            $('#RangeVal').addClass('hidden');
-            $('#fixVal').removeClass('hidden');
+            $('#RangeVal').removeClass('hidden');
+            $('#fixVal').addClass('hidden');
           }
         }
       });
+
+   //check which value is selected
+   $('#FixValue').on('click',function(){
+     if($(this).is(':checked'))
+     {
+      console.log('here');
+      $(this).prop('value', 1);
+     }
+    else
+    {
+     $(this).prop('value', 0);
+    }
+  });
 
    $('#RangeValue').on('click',function(){
     if($(this).is(':checked'))
@@ -141,16 +155,29 @@ span.alert-danger {
     }
   });
 
-   $('#FixValue').on('click',function(){
-     if($(this).is(':checked'))
-     {
-      $(this).attr('value',1);
-    }
-    else
-    {
-      $(this).attr('value',0);
-    }
-  });
 
-  });
+/*
+$('#addBadges').on('click',function(){
+  if($('input[name=rangeVal]').is(':checked'))
+  {
+    //alert('here');
+    if(":input[type=number]")
+    {    
+    $(this).bind('keyup mouseup', function () {
+     $("#fixvalue").val();
+    })
+    }
+   else
+    {
+      return false;
+    }
+  }
+  else
+  {
+    alert('Please Select Anyone for give value');
+    return false;
+  }
+});
+*/
+});
 </script>

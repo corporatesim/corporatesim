@@ -65,10 +65,16 @@ span.alert-danger {
           <label for="All Users">
             <input type="radio"  name="user_filter" id="all_users" checked="" value="all_users">All Users
           </label>
-        </div>
-        <div class="col-md-2">
           <label for="Select Users">
             <input type="radio" name="user_filter" id="select_users" value="select_users">Select Users
+          </label>
+        </div>
+        <div class="col-md-2">
+           <label for="All Users">
+            <input type="checkbox"  name="outputComponentFilter" id="outputComponent" value="1">Output
+          </label>
+          <label for="Select Users">
+            <input type="checkbox" name="inputComponentFilter" id="editableInput" value="1">Users Input
           </label>
         </div>
 

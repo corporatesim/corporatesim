@@ -144,7 +144,7 @@ span.alert-danger {
       </div>
         <div class="col-md-3" id="OutcomeType">
           <label for="Select File"><span class="alert-danger">*</span>Upoload File</label>
-          <input type="file" name="image[]" multiple="multiple" accept="image/*" id="image" value="">
+          <input type="file" name="image[]" multiple="multiple" accept="image/*" id="image" value="" <?php echo site_root."ux-admin\upload\Badges"; ?>>
         </div>
       <div class="col-md-1 hidden" id="buttonDiv" style="padding-top: 3%;">
         <button type="button" class="btn-primary btn" id="addMore" title="Add New"><b>+</b></button>

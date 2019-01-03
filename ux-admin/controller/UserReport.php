@@ -37,7 +37,7 @@ if($object->num_rows > 0)
 
 if(isset($_POST['downloadReport']) && $_POST['downloadReport'] == 'DownloadUserReport')
 {
-	// echo "<pre>";	print_r($_POST);	echo "<br> $EndDate";
+	// echo "<pre>";	print_r($_POST);	echo "<br> $EndDate"; exit;
 	$gamename        = $_POST['gamename'];
 	$scenarioname    = $_POST['scenarioname'];
 	$gameId          = $_POST['game_game'];
@@ -96,14 +96,32 @@ if(isset($_POST['downloadReport']) && $_POST['downloadReport'] == 'DownloadUserR
 	FROM `GAME_LINKAGE_SUB` ls 
 	LEFT OUTER JOIN GAME_SUBCOMPONENT s ON SubLink_SubCompID=s.SubComp_ID
 	LEFT OUTER JOIN GAME_COMPONENT c on SubLink_CompID=c.Comp_ID
-	WHERE SubLink_LinkID=".$linkid ." 
-	ORDER BY SubLink_ID";
-	
-	$objcomp = $functionsObj->ExecuteQuery($sqlComp);	
-	$letter  = "C";
-	
+	WHERE SubLink_LinkID=".$linkid;
+	if(isset($_POST['inputComponentFilter']) && isset($_POST['outputComponentFilter']))
+	{
+		$sqlComp .=" AND (SubLink_InputMode='user' OR SubLink_Type=1) ";
+	}
+	elseif(isset($_POST['inputComponentFilter']) && $_POST['inputComponentFilter'] == 1)
+	{
+		$sqlComp .=" AND SubLink_InputMode='user' ";
+	}
+	elseif(isset($_POST['outputComponentFilter']) && $_POST['outputComponentFilter'] == 1)
+	{
+		$sqlComp .=" AND SubLink_Type=1 ";
+	}
+	$sqlComp  .= " ORDER BY SubLink_ID";
+
+	// die($sqlComp);
+
+	$objcomp   = $functionsObj->ExecuteQuery($sqlComp);	
+	$letter    = "C";
+	$outputArr = array();
 	if($objcomp->num_rows > 0){
 		while($rowcomp = $objcomp->fetch_object()){			
+			if((isset($_POST['outputComponentFilter']) && $_POST['outputComponentFilter'] == 1) || (isset($_POST['inputComponentFilter']) && $_POST['inputComponentFilter'] == 1))
+			{
+				$outputArr[] = $rowcomp->Comp_Subcomp;
+			}
 			$s     = $letter . '2';
 			$first = $letter . '1';
 
@@ -128,15 +146,29 @@ if(isset($_POST['downloadReport']) && $_POST['downloadReport'] == 'DownloadUserR
 			$userdata = json_decode($row->user_data, true);
 			$letter   = "C";
 			foreach($userdata as $keydata=>$valdata){
-				$s = $letter . $i;
-				$objSheet->setCellValue($s, $valdata);
-				$objSheet->getColumnDimension($letter)->setAutoSize(true);
-				$letter++;
+				// write here for existance in_array($outputArr)
+				if(count($outputArr) > 0)
+				{
+					if(in_array($keydata, $outputArr))
+					{
+						$s = $letter . $i;
+						$objSheet->setCellValue($s, $valdata);
+						$objSheet->getColumnDimension($letter)->setAutoSize(true);
+						$letter++;
+					}
+				}
+				else
+				{
+					$s = $letter . $i;
+					$objSheet->setCellValue($s, $valdata);
+					$objSheet->getColumnDimension($letter)->setAutoSize(true);
+					$letter++;
+				}
 			}
 			$i++;
 		}
 	}
-	
+	// exit();
 	$objSheet->getColumnDimension('A')->setAutoSize(true);
 	$objSheet->getColumnDimension('B')->setAutoSize(true);
 	
