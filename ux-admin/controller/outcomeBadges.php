@@ -111,24 +111,26 @@ if(isset($_GET['edit']) && !empty($_GET['edit']))
 			//echo "<pre>"; print_r($_POST); print_r($_FILES); 
 				if(isset($_FILES['image']))
 				{
-					$errors    = array();
-					$file_name = $_FILES['image']['name'];
-					$file_size = $_FILES['image']['size'];
-					$file_tmp  = $_FILES['image']['tmp_name'];
-					$fixvalue  = $_POST['fixvalue'];
-					$minVal    = $_POST['minVal'];
-					$maxVal    = $_POST['maxVal'];
-					$value     = $_POST['rangeVal'];
+					$errors      = array();
+					$file_name   = $_FILES['image']['name'];
+					$file_size   = $_FILES['image']['size'];
+					$file_tmp    = $_FILES['image']['tmp_name'];
+					$fixvalue    = $_POST['fixvalue'];
+					$minVal      = $_POST['minVal'];
+					$maxVal      = $_POST['maxVal'];
+					$Range_Value = $minVal . ','.$maxVal;
+					$value       = $_POST['rangeVal'];
 					//echo $Badges_Value = $minVal . ','.$maxVal;
-						if($fixvalue)
+					//check value is range value and fixvalue
+						if($value==0)
 						{
 							$Badges_Val = $value. ','.$fixvalue;
 						}
-						else
+						else 
 						{
-
-						$Badges_Val = $value. ','.$minVal . ','.$maxVal;	
+						  $Badges_Val = $value. ',' .$Range_Value;	
 						}
+				//update data when file name is selected or not
 					if(empty($file_name))
 					{
 						$updateArr = array(
@@ -137,8 +139,8 @@ if(isset($_GET['edit']) && !empty($_GET['edit']))
 						'Badges_Description	' => $_POST['description'],
 						'Badges_Value'        => $Badges_Val,    
 						);
-						//print_r($_POST);print_r($_FILES);
-						//print_r($updateArr);exit();
+						/*print_r($_POST);print_r($_FILES);
+						print_r($updateArr);exit();*/
 						$updateData = $functionsObj->UpdateData ( 'GAME_OUTCOME_BADGES', $updateArr,  'Badges_ID', $BadgesID);
 					  //print_r($updateData);exit();
 					}
@@ -148,11 +150,11 @@ if(isset($_GET['edit']) && !empty($_GET['edit']))
 						'Badges_ID'           => $BadgesID,
 						'Badges_ImageName'    => $file_name,
 						'Badges_ShortName'    => $_POST['shortname'],
-						'Badges_Description	' => $_POST['description'],
-						'Badges_Value'        => $Badges_Value,
+						'Badges_Description'  => $_POST['description'],
+						'Badges_Value'        => $Badges_Val,
 
 						);
-						//print_r($_POST);print_r($_FILES);//exit();
+						//print_r($_POST);print_r($_FILES); print_r($updateArr);exit();
 						$move = move_uploaded_file($file_tmp,doc_root."/ux-admin/upload/Badges/".$file_name);
 						//var_dump($move);
 						if($move)

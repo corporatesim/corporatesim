@@ -76,8 +76,8 @@
         <?php  if(!empty($_SESSION['tr_msg'])) { ?>
           <div class="alert-success alert"><?php echo $_SESSION['tr_msg']; ?></div>
         <?php } ?>
-        <?php  if(!empty($_SESSION['er_msg'])) { ?>
-          <div class="alert-danger alert"><?php echo $_SESSION['er_msg']; ?></div>
+        <?php  if(!empty($er_msg)) { ?>
+          <div class="alert-danger alert"><?php echo $er_msg; ?></div>
         <?php } ?>
         <!-- DISPLAY ERROR MESSAGE END -->
         <style>
