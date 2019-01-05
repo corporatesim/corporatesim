@@ -194,6 +194,11 @@
 									Login
 								</a>
 							</li>
+							<li>
+								<a href="<?php echo site_root;?>registration.php">
+									Register
+								</a>
+							</li>
 						<?php } }?>
 						<li>&nbsp; &nbsp;&nbsp;</li>
 						<!--li><img src="<?php echo site_root."images/logo-ksom.png";?>" style="margin-top:-3%"  /></li-->

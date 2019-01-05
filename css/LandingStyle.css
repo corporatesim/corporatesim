@@ -1,0 +1,94 @@
+/*Style.css*/
+<style>
+
+body, html{
+	height:100%;
+	
+}
+
+body{
+	
+}
+
+.row{
+	margin-left:50px;
+}
+
+.bg-gradient {
+background: #C9D6FF;
+background: -webkit-linear-gradient(to right, #E2E2E2, #C9D6FF); 
+background: linear-gradient(to right, #E2E2E2, #C9D6FF);
+} 
+ul li {
+  margin-bottom:1.4rem;
+}
+.games {
+border-radius: 20px;
+background: #C64545;
+padding: 1em 0 4em;
+position: relative;
+}
+.blue .games{
+background: #2D5772; 
+}
+.green .games {
+background: #1AA85C; 
+}
+.red b {
+  color:#C64545
+}
+.blue b {
+  color:#2D5772
+}
+.green b {
+  color:#1AA85C
+}
+.games-img {
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	width: 100%;
+	height: 80px;
+}
+.deco-layer {
+	-webkit-transition: -webkit-transform 0.5s;
+  -moz-transition: -moz-transform 0.5s;
+   transition: transform 0.5s;
+}
+.btn-custom  {
+  background:#C64545; color:#fff; border-radius:20px
+}
+
+.img-float {
+  width:50px; position:absolute;top:-3.5rem;right:1rem
+}
+
+.game-item {
+  transition: all 150ms ease-out;
+}
+.game-item:hover {
+  transform: scale(1.05);
+}
+.game-item:hover .deco-layer--1 {
+  -webkit-transform: translate3d(15px, 0, 0);
+  -moz-transform: translate3d(15px, 0, 0);
+  transform: translate3d(15px, 0, 0);
+}
+.game-item:hover .deco-layer--2 {
+  -webkit-transform: translate3d(-15px, 0, 0);
+  -moz-transform: translate3d(-15px, 0, 0);
+  transform: translate3d(-15px, 0, 0);
+}
+
+@media (max-width: 768px) {
+  .col-xs-12 {
+    -webkit-margin-top: 12px;
+    -moz-margin-top:12px;
+    margin-top: 12px;
+  }
+}
+
+
+
+
+</style>

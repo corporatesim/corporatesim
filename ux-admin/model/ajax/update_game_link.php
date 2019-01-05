@@ -10,8 +10,7 @@ if(isset($_POST['Link_id']) && isset($_POST['Game_id']) && isset($_POST['Scen_id
 	
 	$sql = "SELECT * FROM `GAME_LINKAGE_SUB` WHERE Sublink_linkid in 
 	(SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID= ".$_POST['Game_id']." and Link_ScenarioID=".$_POST['Scen_id'].")";
-		//echo $sql;
-		//exit();
+		//echo $sql; exit();
 	$object = $funObj->ExecuteQuery($sql);
 //	$result1 = $functionsObj->FetchObject($object);
 	
@@ -50,6 +49,9 @@ if(isset($_POST['Link_id']) && isset($_POST['Game_id']) && isset($_POST['Scen_id
 				'SubLink_BackgroundColor' => $row->SubLink_BackgroundColor,
 				'SubLink_TextColor'       => $row->SubLink_TextColor,
 				'SubLink_ViewingOrder'    => $row->SubLink_ViewingOrder,
+				'SubLink_LabelCurrent'    => $row->SubLink_LabelCurrent,
+				'SubLink_LabelLast'       => $row->SubLink_LabelLast,
+				'SubLink_InputFieldOrder' => $row->SubLink_InputFieldOrder,
 				'SubLink_Status'          => 1,
 				'SubLink_CreateDate'      => date('Y-m-d H:i:s')
 			);

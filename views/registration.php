@@ -24,7 +24,7 @@
         <!--/a-->
       </div>
       <div>
-        <button name="login" value="login" class="btn btn-lg btn-primary  pull-right" style="margin-top: 2px; margin-right: -10%;" onclick="window.location='login.php'">Login</button>
+        <button name="login" value="login" class="btn btn-lg btn-primary  pull-right" style="margin-top: 2px; margin-right: -4%;" onclick="window.location='login.php'">Login</button>
       </div>
     </div>
   </nav>

@@ -532,12 +532,18 @@ include_once 'includes/header.php';
                     {
                       $mChoice_details = json_decode($row1['InputModeTypeValue'],TRUE);
                       echo "<div class='row text-center pull-left' style='font-weight: 700; margin-left:1px;font-size:17px;'>".$mChoice_details['question']."</div>";
-                      array_shift($mChoice_details);
+                      // array_shift($mChoice_details);
                       ?>
                       <div class="col-md-12" style="margin-top:7px;margin-left:-30px;font-size:14px;">
                         <?php
+                        $continue = 0;
                         foreach ($mChoice_details as $wrow => $wrow_value)
                         {
+                          if($continue < 1)
+                          {
+                            $continue++;
+                            continue;
+                          }
                           echo "<div class='col-md-6 align_radio' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
                           echo (($value == $wrow_value)?'checked':'');
                           echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>".(strlen($wrow) > $comp_limit_char?substr($wrow,0,$comp_limit_char).'...':$wrow)."</label></div>";
@@ -1031,12 +1037,18 @@ include_once 'includes/header.php';
                 {
                   $mChoice_details = json_decode($row2['InputModeTypeValue'],TRUE);
                   echo "<div class='row text-center' style='font-weight: 700;margin-left:28px;float:left;'>".$mChoice_details['question']."</div>";
-                  array_shift($mChoice_details);
+                  // array_shift($mChoice_details);
                   ?>
                   <div class="col-md-12">
                     <?php
+                    $continue = 0;
                     foreach ($mChoice_details as $wrow => $wrow_value)
                     {
+                      if($continue < 1)
+                      {
+                        $continue++;
+                        continue;
+                      }
                       echo "<div class='col-md-6 align_radio' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
                       echo (($value == $wrow_value)?'checked':'');
                       echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
