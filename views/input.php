@@ -382,7 +382,7 @@ include_once 'includes/header.php';
                     $ResultchartDetailsComp = $functionsObj->FetchObject($chartDetailscomp);
                     $charttypeComp          = $ResultchartDetailsComp->Chart_Type; 
                     ?>  
-                    <img class="comp_chart" src="chart/<?=$charttypeComp?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>">
+                    <img class="comp_chart col-md-12" src="chart/<?=$charttypeComp?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>">
                     <?php
                   }
                   echo "</div>";
