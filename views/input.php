@@ -856,7 +856,8 @@ include_once 'includes/header.php';
                     ?>
                     <!-- -----------------------------       Chart Section    ----------------------------------------------->
                     <br><br>
-                    <div id="chart_div_<?=$row2['SubCompID']?>" style="width: 800px; height: 400px;"></div>
+                    <!-- <div id="chart_div_<?// =$row2['SubCompID']?>" style="width: 800px; height: 400px;"></div> -->
+                    <div id="chart_div_<?=$row2['SubCompID']?>"></div>
                     <script type="text/javascript">
                       google.load('visualization', '1', {packages: ['corechart']});
                     </script>
@@ -875,11 +876,11 @@ include_once 'includes/header.php';
                 var options = {
                   title           :  '<?=ucfirst($chartname)?> : ', 
                   is3D            : true,
-                  width           :800,
-                  height          :400,
+                  // width           : 800,
+                  // height          : 400,
                   interpolateNulls: true,
                   vAxis           : {titleTextStyle:{ fontName: 'Chango'}},
-                  hAxis           : {title: "---- Components/Subcomponents ---- -> ",titleTextStyle:{ fontName: 'Chango'},textStyle: {color: '#000', fontSize: 12},textPosition:"out",textPosition: 'none',slantedText:true},
+                  hAxis           : {title: "---- X-Axis ---- -> ",titleTextStyle:{ fontName: 'Chango'},textStyle: {color: '#000', fontSize: 12},textPosition:"out",textPosition: 'none',slantedText:true},
                   seriesType: "bars",
                 };
                 
