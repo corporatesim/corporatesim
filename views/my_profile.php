@@ -56,16 +56,6 @@ include_once 'includes/header2.php';
 
 			<div class="form-group col-sm-12">
 				<div class="col-sm-3 text-right">
-					<label>Profile Video</label>
-				</div>
-				<div class="col-sm-6">
-					<input type="text" id="User_profile_video" class="form-control" name="User_profile_video" value='<?php echo base64_decode($userdetails->User_profile_video); ?>'></input>
-				</div>
-				<div class="clearfix"></div>
-			</div>
-
-			<div class="form-group col-sm-12">
-				<div class="col-sm-3 text-right">
 					<label>Profile Picture</label>
 				</div>
 				<div class="col-sm-6">
@@ -98,6 +88,16 @@ include_once 'includes/header2.php';
 					<?php } else { ?>
 						<code>No File Choosen Yet</code>
 					<?php } ?>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+
+			<div class="form-group col-sm-12">
+				<div class="col-sm-3 text-right">
+					<label>Profile Video</label>
+				</div>
+				<div class="col-sm-6">
+					<input type="text" id="User_profile_video" class="form-control" name="User_profile_video" value='<?php echo base64_decode($userdetails->User_profile_video); ?>'></input>
 				</div>
 				<div class="clearfix"></div>
 			</div>
