@@ -112,12 +112,6 @@
 															href="<?php echo site_root."ux-admin/ManageScenario";?>">
 														Scenario</a></li>
 
-													<?php } if($functionsObj->checkModuleAuth('chartComp','enable')){ ?>
-
-														<li><a 
-															href="<?php echo site_root."ux-admin/chartComp";?>">
-														Chart Component</a></li>
-
 													<?php } ?>					
 
 												</ul>
@@ -127,12 +121,7 @@
 											<li id="manageCMS"><a href="#"><i class="fa fa-link fa-fw"></i> Link
 												Management<span class="fa arrow"></span></a>
 												<ul class="nav nav-second-level">
-													<?php if($functionsObj->checkModuleAuth('ScenarioBranching','enable')){ ?>
-														<li><a 
-															href="<?php echo site_root."ux-admin/ScenarioBranching";?>">
-														Scenario Branching</a></li>
-
-													<?php } if($functionsObj->checkModuleAuth('formulas','enable')){ ?>
+													<?php if($functionsObj->checkModuleAuth('formulas','enable')){ ?>
 														<li>
 															<a href="<?php echo site_root."ux-admin/Formulas";?>">
 																Formulas
@@ -144,20 +133,31 @@
 															href="<?php echo site_root."ux-admin/linkage";?>">
 														Linkage</a></li>
 
+													<?php } if($functionsObj->checkModuleAuth('chartComp','enable')){ ?>
+
+														<li><a 
+															href="<?php echo site_root."ux-admin/chartComp";?>">
+														Chart Component</a></li>
+
+
 													<?php  } if($functionsObj->checkModuleAuth('chart','enable')){ ?>
 														<li><a 
 															href="<?php echo site_root."ux-admin/chart";?>">
-														Chart</a></li>
+														Chart Subcomponent</a></li>
 
 													<?php } ?>					
 												</ul>
 											</li>
-											
+
 											<!--  Outcome management -->
 											<li id="manageCMS"><a href="#"><i class="fa fa-tasks fa-fw"></i> Outcome 
-												Management<span class="fa arrow"></span></a>
+												Management <span class="fa arrow"></span></a>
 												<ul class="nav nav-second-level">
-													<?php if($functionsObj->checkModuleAuth('outcomeBadges','enable')){ ?>
+													<?php if($functionsObj->checkModuleAuth('ScenarioBranching','enable')){ ?>
+														<li><a 
+															href="<?php echo site_root."ux-admin/ScenarioBranching";?>">
+														Scenario Branching</a></li>
+													<?php } if($functionsObj->checkModuleAuth('outcomeBadges','enable')){ ?>
 														<li><a 
 															href="<?php echo site_root."ux-admin/outcomeBadges";?>">
 														Outcome Badges</a></li>
@@ -168,11 +168,24 @@
 														Personalized Outcome</a></li>
 														
 													<?php } ?>					
-
-
 												</ul>
 											</li>
 
+											<!-- Enteprize/SubEnterprize Management -->
+											<li id="manageCMS"><a href="#"><i class="fa fa-institution"></i> Enterprize/SubEnterprize<span class="fa arrow"></span></a>
+												<ul class="nav nav-second-level">
+													<?php if($functionsObj->checkModuleAuth('ManageEnterprize','enable')){ ?>
+														<li><a 
+															href="<?php echo site_root."ux-admin/ManageEnterprize";?>">
+														Manage Enterprize</a></li>
+													<?php } if($functionsObj->checkModuleAuth('ManageSubEnterprize','enable')){ ?>
+														<li><a 
+															href="<?php echo site_root."ux-admin/ManageSubEnterprize";?>">
+														Manage SubEnterprize</a></li>
+														
+													<?php } ?>					
+												</ul>
+											</li>
 										</ul>
 									</div>
 								</div>

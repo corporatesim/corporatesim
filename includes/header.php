@@ -14,9 +14,9 @@
 	
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,100,300,500,700' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,600,700" rel="stylesheet"> 
+	<script src="js/jquery.min.js"></script>	
+	<script src="js/bootstrap.min.js"></script>			
 	<style>
-
-
 	.dbl-spinner {
 		margin           : 20% 0 0 50%;
 		position         : absolute;

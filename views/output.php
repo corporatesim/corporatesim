@@ -74,7 +74,7 @@ include_once 'includes/header.php';
 									$i++;
 
 									$sqlcomp = "SELECT distinct a.Area_ID as AreaID, c.Comp_ID as CompID, a.Area_Name as Area_Name, 
-									c.Comp_Name as Comp_Name, ls.SubLink_Details as Description ,ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder,ls.Sublink_ShowHide as ShowHide , o.output_current as Current 
+									c.Comp_Name as Comp_Name, ls.SubLink_Details as Description ,ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder,ls.Sublink_ShowHide as ShowHide , o.output_current as Current ,ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor
 									FROM GAME_LINKAGE l 
 									INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID= ls.SubLink_LinkID 
 									INNER JOIN GAME_OUTPUT o on ls.SubLink_ID = o.output_sublinkid
@@ -300,7 +300,7 @@ include_once 'includes/header.php';
 									//echo $row1['Area_Name']." - ".$areaname; 
 									//echo $row1['Comp_Name'];
 
-                    	echo "<div class='".$length." scenariaListingDiv ".$hidden."'>";
+                    	echo "<div class='".$length." scenariaListingDiv ".$hidden."' style='background:".$row1['BackgroundColor']."; color:".$row1['TextColor'].";'>";
 
                     	echo "<div class='col-sm-2 ".$width." regular text-center ".$ComponentName."'>";
 
@@ -354,7 +354,7 @@ include_once 'includes/header.php';
                     	a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, s.SubComp_Name as SubComp_Name,ls.SubLink_ViewingOrder as ViewingOrder,
                     	ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast,ls.SubLink_InputFieldOrder as InputFieldOrder,
                     	ls.subLink_ShowHide as ShowHide,
-                    	ls.SubLink_Details as Description 
+                    	ls.SubLink_Details as Description ,ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor
                     	FROM GAME_LINKAGE l 
                     	INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
                     	INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
@@ -572,7 +572,7 @@ include_once 'includes/header.php';
                   }*/
                 // if component div is half length then make subcomponent div col-md-12
 
-                  echo "<div class='".$length." subCompnent ".$hidden."'>";
+                  echo "<div class='".$length." subCompnent ".$hidden."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor'].";'>";
                   echo "<div class='col-sm-2 ".$width." regular text-center".$SubcomponentName."'>";
                   echo $row2['SubComp_Name'];
                   echo "</div>";

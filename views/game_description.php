@@ -188,7 +188,11 @@ include_once 'includes/header.php';
 
 		<script src="js/jquery.min.js"></script>	
 		<script src="js/bootstrap.min.js"></script>			
-
+		<script>
+			$('img').on('contextmenu', function() {
+				return false;
+			})
+		</script>
 
 	</body>
 	</html>
