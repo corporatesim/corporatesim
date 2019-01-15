@@ -49,25 +49,6 @@ if(isset($_POST['addOutcome']) && $_POST['addOutcome'] == 'addOutcome')
 {
 	// remove last element of post variable
 	array_pop($_POST);
-  // upload file
-	if(isset($_FILES['image'])){
-		$errors= array();
-		$file_name  = $_FILES['image']['name'];
-		$file_size  = $_FILES['image']['size'];
-		$file_tmp   = $_FILES['image']['tmp_name'];
-		
-		//$file_ext   = strtolower(end(explode('.',$_FILES['image']['name'])));
-		//echo $file_name .'<br>'.$file_size.'<br>'.$file_tmp.'<br>'.$file_tmp.'<br>'.$file_ext;
-		$expensions = array("jpeg","jpg","png");
-
-		if(in_array($file_ext,$expensions)=== false){
-			$errors[]="extension not allowed, please choose a JPEG or PNG file.";
-		}	
-	}	
-
-	//insert data
-	//echo "<pre>"; print_r($_POST); print_r($_FILES);
-	//exit();
 	$sql = "INSERT INTO GAME_PERSONALIZE_OUTCOME (Outcome_GameId,Outcome_ScenId,Outcome_CompId,Outcome_MinVal,Outcome_MaxVal,Outcome_Order,Outcome_FileType,Outcome_LinkId,Outcome_FileName) values ";
 
 	$arr             = explode(',',$_POST['game_scenario']);
@@ -84,8 +65,8 @@ if(isset($_POST['addOutcome']) && $_POST['addOutcome'] == 'addOutcome')
 	$maxVal          = $_POST['maxVal'];
 	$order           = $_POST['order'];
 	$outcome         = $_POST['Outcome'];
-	$outcomeFileName = $file_name;
-  //echo "<pre>"; print_r($_POST); exit;
+	$outcomeFileName = $_POST['choosenImageName'];
+  // echo "<pre>"; print_r($_POST); exit();
 
 	if($count > 1 )
 	{
@@ -101,15 +82,9 @@ if(isset($_POST['addOutcome']) && $_POST['addOutcome'] == 'addOutcome')
 		$queryValue = implode(',',$values);
 	}
 
-	for ($i=0; $i < count($file_tmp) ; $i++) 
-	{ 
-		move_uploaded_file($file_tmp[$i],doc_root."/ux-admin/upload/".$file_name[$i]);
-	}
-	// var_dump($move); exit; 
-	$sql          .= $queryValue;
-  //print_r($sql);exit();
-	//die($sql);
-	$queryExecute  =  $functionsObj->ExecuteQuery($sql);
+	$sql .= $queryValue;
+	// die($sql);
+	$queryExecute = $functionsObj->ExecuteQuery($sql);
 
 	if($queryExecute)
 	{
@@ -168,15 +143,17 @@ if(isset($_GET['edit']) && !empty($_GET['edit']))
 			$file_tmp  = $_FILES['image']['tmp_name'];
 			if(empty($file_name))
 			{
+				$file_name = $_POST['choosenImageName'];
 				$updateArr = array(
 					'OutcomeID'        => $_POST['Outcome_Id'],
 					'Outcome_CompId'   => $_POST['ComponentName'],
 					'Outcome_MinVal'   => $_POST['minVal'],
 					'Outcome_MaxVal'   => $_POST['maxVal'],
 					'Outcome_Order'    => $_POST['order'],
+					'Outcome_FileName' => $file_name,
 					//'Outcome_FileType' => $_POST['outcome'],	
 				);
-        //print_r($_POST);print_r($_FILES);exit();
+        // echo "<pre>"; print_r($updateArr);print_r($_FILES);exit();
 				$updateData = $functionsObj->UpdateData ( 'GAME_PERSONALIZE_OUTCOME', $updateArr, 'OutcomeID', $_POST['Outcome_Id'] );
 				//print_r($updateData);exit();
 			}

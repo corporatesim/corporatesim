@@ -5,6 +5,28 @@
      var loc_url_stat = "ux-admin/personalizeOutcome/linkstat/";
   //-->
 </script>
+<!-- css for overlay div -->
+<style>
+#overlay {
+  position        : fixed;
+  display         : none;
+  width           : 100%;
+  height          : 100%;
+  top             : 0;
+  left            : 250px;
+  right           : 0;
+  bottom          : 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index         : 2;
+  cursor          : pointer;
+}
+
+.divImages img{
+  margin-top: 52px;
+  width     : 100px;
+  height    : 100px;
+}
+</style>
 <style>
 <!--
 .dropdown-menu > li > button {
@@ -142,10 +164,12 @@ span.alert-danger {
           <?php } ?>
         </select>
       </div>
-        <div class="col-md-3" id="OutcomeType">
-          <label for="Select File"><span class="alert-danger">*</span>Upoload File</label>
-          <input type="file" name="image[]" multiple="multiple" accept="image/*" id="image" value="" <?php echo site_root."ux-admin\upload\Badges"; ?>>
-        </div>
+      <div class="col-md-3" id="OutcomeType">
+        <label for="Select File"><span class="alert-danger">*</span>Upoload File</label>
+        <input type="file" name="image[]" multiple="multiple" accept="image/*" id="image" class="showOverlay" value="" <?php echo site_root."ux-admin\upload\Badges"; ?>>
+        <input type="hidden" name="choosenImageName[]" id="choosenImageName">
+        <img src="" alt="tmp_img" name="choosenImage[]" id="choosenImage" width="100px" height="100px" class="hidden">
+      </div>
       <div class="col-md-1 hidden" id="buttonDiv" style="padding-top: 3%;">
         <button type="button" class="btn-primary btn" id="addMore" title="Add New"><b>+</b></button>
       </div>
@@ -166,10 +190,23 @@ span.alert-danger {
   </form>
 </div>
 <div class="clearfix"></div>
+<!-- creating this for choosing the images from server instead of local server -->
+<div id="overlay">
+  <?php 
+  $imageSql = "SELECT Badges_ImageName FROM `GAME_OUTCOME_BADGES` WHERE Badges_Is_Active=0 GROUP BY Badges_ImageName";
+  $imageObj = $functionsObj->ExecuteQuery($imageSql);
+  while($images = $imageObj->Fetch_Object()) { ?>
+    <div class="col-md-1 divImages"><img src="<?php echo site_root.'ux-admin/upload/Badges/'.$images->Badges_ImageName;?>" alt="<?php $images->Badges_ImageName;?>" id="<?php echo $images->Badges_ImageName;?>" class="selectImages"></div>
+  <?php } ?>
+</div>
 <script>
   $(document).ready(function(){
     CompOption     = '<option value="">--Select Scenario--</option>';
     ScenarioOption = '<option value="">--Select Scenario--</option>';
+    $('#overlay').on('click',function(){
+      $('#overlay').hide();
+    });
+    showOutcomeImages();
 
     $('#game_game').on('change',function(){
       var Game_ID      = $(this).val();
@@ -279,8 +316,8 @@ span.alert-danger {
       if($(this).val())
       {    
        $('#OutcomeType').removeClass('hidden');
-      }
-    });
+     }
+   });
 
     // adding more div
     $('#addMore').on('click', function(){
@@ -295,13 +332,14 @@ span.alert-danger {
         $(e).html(CompOption);
       });
 
-      $('#addHere').append('<div class="removeThis"><br><br><div class="col-md-3" id="componentDiv"><label for="Select Component"><span class="alert-danger">*</span>Select Output Component</label><select required name="ComponentName[]" id="ComponentName" class="form-control ComponentName"><option value="">--Select Output Component--</option></select></div><div class="col-md-1" id=""><label for="Minimum Value"><span class="alert-danger">*</span>Min</label><input required type="text" id="minVal" name="minVal[]" class="form-control" placeholder="Min Val"></div><div class="col-md-1" id=""><label for="Maximum Value"><span class="alert-danger">*</span>Max</label><input required type="text" id="maxVal" name="maxVal[]" class="form-control" placeholder="Max Val"></div><div class="col-md-1" id=""><label for="Order Number"><span class="alert-danger">*</span>Order</label><input required type="number" id="order" name="order[]" class="form-control" placeholder="Order Of Comparison"></div> <div class="col-md-2" id="Outcome"><label for="Select Component"><span class="alert-danger">*</span>Select Outcome</label><select name="Outcome[]" id="Outcome" class="form-control Outcome" required=""><option value="">--Select Outcome--</option><?php foreach ($outcomeName as $OutcomeData) { ?><option value="<?php echo $OutcomeData->Outcome_ResultID; ?>" data-gamename="<?php echo $OutcomeData->Outcome_Name; ?>"><?php echo $OutcomeData->Outcome_Name; ?></option><?php } ?></select></div> <div class="col-md-3" id="OutcomeType"><label for="Select File"><span class="alert-danger">*</span>Upoload File</label><input type="file" name="image[]" accept="image/*"></div><div class="col-md-1" id="" style="padding-top:3%;" title="Remove"><button type="button" class="btn-danger btn" id="removeThis"><b>-</b></button></div></div>');
+      $('#addHere').append('<div class="removeThis"><br><br><div class="col-md-3" id="componentDiv"><label for="Select Component"><span class="alert-danger">*</span>Select Output Component</label><select required name="ComponentName[]" id="ComponentName" class="form-control ComponentName"><option value="">--Select Output Component--</option></select></div><div class="col-md-1" id=""><label for="Minimum Value"><span class="alert-danger">*</span>Min</label><input required type="text" id="minVal" name="minVal[]" class="form-control" placeholder="Min Val"></div><div class="col-md-1" id=""><label for="Maximum Value"><span class="alert-danger">*</span>Max</label><input required type="text" id="maxVal" name="maxVal[]" class="form-control" placeholder="Max Val"></div><div class="col-md-1" id=""><label for="Order Number"><span class="alert-danger">*</span>Order</label><input required type="number" id="order" name="order[]" class="form-control" placeholder="Order Of Comparison"></div> <div class="col-md-2" id="Outcome"><label for="Select Component"><span class="alert-danger">*</span>Select Outcome</label><select name="Outcome[]" id="Outcome" class="form-control Outcome" required=""><option value="">--Select Outcome--</option><?php foreach ($outcomeName as $OutcomeData) { ?><option value="<?php echo $OutcomeData->Outcome_ResultID; ?>" data-gamename="<?php echo $OutcomeData->Outcome_Name; ?>"><?php echo $OutcomeData->Outcome_Name; ?></option><?php } ?></select></div> <div class="col-md-3" id="OutcomeType"><label for="Select File"><span class="alert-danger">*</span>Upoload File</label><input type="file" class="showOverlay" name="image[]" accept="image/*"><input type="hidden" name="choosenImageName[]" id="choosenImageName"><img src="" alt="tmp_img" name="choosenImage[]" id="choosenImage" width="100px" height="100px" class="hidden"></div><div class="col-md-1" id="" style="padding-top:3%;" title="Remove"><button type="button" class="btn-danger btn removeParentDiv" id="removeThis"><b>-</b></button></div></div>');
       removeDiv();
+      showOutcomeImages();
     });
   });
 function removeDiv()
 {
-  $('.btn-danger').each(function(i,e){
+  $('.removeParentDiv').each(function(i,e){
     $(e).on('click',function(){
       // alert($(this).attr('id'));
       $(this).parents('div.removeThis').remove();
@@ -317,6 +355,27 @@ function removeAllAddedDiv()
 {
   $('.removeThis').each(function(){
     $(this).remove();
+  });
+}
+function showOutcomeImages()
+{
+  $('.showOverlay').each(function(){
+    $(this).on('click',function(){
+      fileElement = $(this);
+      $('#overlay').show();
+      return false;
+    });      
+  });
+  $('.selectImages').each(function(i,e){
+    $(this).on('click',function(){
+      var selectedImage = $(this).attr('id');
+      var imageUrl      = "<?php echo site_root.'ux-admin/upload/Badges/';?>"+selectedImage;
+      // $('#image').hide(); alert(imageUrl);
+      // $('#choosenImage').attr('src',imageUrl).removeClass('hidden');
+      $(fileElement).next().next().removeClass('hidden').attr('src',imageUrl);
+      $(fileElement).next().val(selectedImage);
+      // getting the next img tag of clicked element of file type
+    });
   });
 }
 </script>

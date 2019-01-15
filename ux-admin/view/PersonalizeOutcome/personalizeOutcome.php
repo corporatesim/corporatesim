@@ -124,11 +124,11 @@ span.alert-danger {
                 <th>Game</th>
                 <th>Scenario</th>
                 <th id="password">OutputComponent</th>
-                <th class="no-sort" >MinValue</th>
-                <th class="no-sort" >MaxValue</th>
-                <th class="no-sort" >Order</th>
-                <th class="no-sort" >OutcomeType</th>
-                <th class="no-sort" >OutcomeName</th>
+                <th>MinValue</th>
+                <th>MaxValue</th>
+                <th>Order</th>
+                <th>OutcomeType</th>
+                <th>OutcomeName</th>
                 <th class="no-sort" id="action">Action</th>
               </tr>
             </thead>

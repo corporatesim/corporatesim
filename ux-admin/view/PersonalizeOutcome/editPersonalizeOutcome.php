@@ -5,7 +5,29 @@
      var loc_url_stat = "ux-admin/personalizeOutcome/linkstat/";
   //-->
 </script>
-<!-- scenario branching Data table CSS -->
+<!-- css for overlay div -->
+<style>
+#overlay {
+  position        : fixed;
+  display         : none;
+  width           : 100%;
+  height          : 100%;
+  top             : 0;
+  left            : 250px;
+  right           : 0;
+  bottom          : 0;
+  background-color: rgba(0,0,0,0.8);
+  z-index         : 2;
+  cursor          : pointer;
+}
+
+.divImages img{
+  margin-top: 52px;
+  width     : 100px;
+  height    : 100px;
+}
+</style>
+<!-- personalise outcome  Data table CSS -->
 <style>
 <!--
 .dropdown-menu > li > button {
@@ -59,7 +81,7 @@
   display:none;
 }
 </style>
-<!-- scenario branching Data table CSS ends -->
+<!-- personalise outcome  Data table CSS ends -->
 <div class="row">
   <div class="col-lg-12">
     <h1 class="page-header"><?php echo 'Edit '.$header; ?></h1>
@@ -88,7 +110,7 @@ span.alert-danger {
   font-size       : 18px;
 }
 </style>
-<!-- scenario branching -->
+<!-- edit personalise outcome -->
 <div id="container">
   <form action="" method="post" id="game_report" name="game_report"  enctype="multipart/form-data">
     <input type="hidden" id="Outcome_Id" name="Outcome_Id" value="<?php echo $editResObject->OutcomeID;?>">
@@ -148,24 +170,58 @@ span.alert-danger {
       <div class="col-md-2 " id="OutcomeType">
         <label for="Select File"><span class="alert-danger">*</span>Upoload File</label>
         <input type="file" name="image" accept="image/*" id="image" value="<?php echo $editResObject->Outcome_FileName;?>">
+        <input type="hidden" name="choosenImageName" id="choosenImageName">
+        <img src="" alt="tmp_img" name="choosenImage" id="choosenImage" width="100px" height="100px" class="hidden">
       </div>
     </div>
     <div class="row col-md-3">
-       <label for="Selected Image"><span class="alert-danger">*</span>Current Selected Image</label>
-      <img src="<?php echo site_root."ux-admin/upload/"?><?php echo $editResObject->Outcome_FileName;?>" name="img" width="50px" height="50px" alt="You don't have any image">
+     <label for="Selected Image"><span class="alert-danger">*</span>Current Selected Image</label>
+     <img src="<?php echo site_root."ux-admin/upload/Badges/".$editResObject->Outcome_FileName;?>" name="img" width="50px" height="50px" alt="You don't have any image" style="padding-top: 5px;">
+   </div>
+   <div class="clearfix"></div>
+   <br><br>
+   <br><br>
+   <div class="row" id="sandbox-container" style="margin-left: 25%">
+    <div class="col-md-3 text-center">
+      <button type="submit" class="btn btn-primary btn-lg btn-block" name="editOutcome" value="editOutcome" id="editOutcome">UPDATE</button>
     </div>
-    <div class="clearfix"></div>
-    <br><br>
-    <br><br>
-    <div class="row" id="sandbox-container" style="margin-left: 25%">
-      <div class="col-md-3 text-center">
-        <button type="submit" class="btn btn-primary btn-lg btn-block" name="editOutcome" value="editOutcome" id="editOutcome">UPDATE</button>
-      </div>
-      <div class="col-md-3 text-center">
-        <a href="<?php echo site_root."ux-admin/personalizeOutcome"; ?>" class="btn btn-primary btn-lg btn-block">CANCEL</a>
-      </div>
+    <div class="col-md-3 text-center">
+      <a href="<?php echo site_root."ux-admin/personalizeOutcome"; ?>" class="btn btn-primary btn-lg btn-block">CANCEL</a>
     </div>
   </div>
+</div>
 </form>
 </div>
 <div class="clearfix"></div>
+<!-- creating this for choosing the images from server instead of local server -->
+<div id="overlay">
+  <?php 
+  $imageSql = "SELECT Badges_ImageName FROM `GAME_OUTCOME_BADGES` WHERE Badges_Is_Active=0 GROUP BY Badges_ImageName";
+  $imageObj = $functionsObj->ExecuteQuery($imageSql);
+  while($images = $imageObj->Fetch_Object()) { ?>
+    <div class="col-md-1 divImages"><img src="<?php echo site_root.'ux-admin/upload/Badges/'.$images->Badges_ImageName;?>" alt="<?php $images->Badges_ImageName;?>" id="<?php echo $images->Badges_ImageName;?>" class="selectImages"  width="100px" height="100px"></div>
+  <?php } ?>
+</div>
+<script>
+  $(document).ready(function(){
+    $('#overlay').on('click',function(){
+      $('#overlay').hide();
+    });
+    $('#image').on('click',function(){
+      $('#overlay').show();
+      return false;
+    });
+    $('.selectImages').each(function(i,e){
+      $(this).on('click',function(){
+        var selectedImage = $(this).attr('id');
+        var imageUrl = "<?php echo site_root.'ux-admin/upload/Badges/';?>"+selectedImage;
+        // $('#image').hide();
+        // alert(imageUrl);
+        $('#choosenImage').attr('src',imageUrl).removeClass('hidden');
+        $('#choosenImageName').val(selectedImage);
+      });
+    });
+  });
+</script>
+
+

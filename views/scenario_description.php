@@ -132,11 +132,17 @@ include_once 'includes/header.php';
 										//echo "<iframe width='100%' height='240' autoplay='false' src='";
 										//echo $row['ScenVdo_Name']."?autoplay=1";
 										//echo "'></iframe> ";
-
-											echo "<video width='100%' height='240' controls><source src='";
-											echo $row['ScenVdo_Name'];
-										//videos/example.mp4
-											echo "' type='video/mp4'></video>";
+											if($row['ScenVdo_Type'] < 1)
+											{
+												echo "<video width='100%' height='240' controls><source src='";
+												echo $row['ScenVdo_Name'];
+												//videos/example.mp4
+												echo "' type='video/mp4'></video>";
+											}
+											else
+											{
+												echo base64_decode($row['ScenVdo_Name']);
+											}
 
 											echo "<div class='col-sm-12 no_padding videoName'>";
 											echo "<h4 class=''>";
