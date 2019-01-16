@@ -127,11 +127,11 @@ span.alert-danger {
                 <th>Game</th>
                 <th>Scenario</th>
                 <th id="password">Component</th>
-                <th id="contact">Next Scenario</th>
                 <!--<th>Last Login</th>-->
                 <th>Minimum Value</th>
                 <th class="no-sort">Maximum Value</th>
                 <th class="no-sort">Order</th>
+                <th id="contact">Next Scenario</th>
                 <th class="no-sort" id="action">Action</th>
               </tr>
             </thead>
@@ -145,10 +145,10 @@ span.alert-danger {
                   <td><?php echo $row->Game_Name;?></td>
                   <td><?php echo $row->Scen_Name;?></td>
                   <td><?php echo $row->Comp_Name;?></td>
-                  <td><?php echo $row->NextSceneName;?></td>
                   <td><?php echo $row->Branch_MinVal;?></td>
                   <td><?php echo $row->Branch_MaxVal;?></td>
                   <td><?php echo $row->Branch_Order;?></td>
+                  <td><?php echo $row->NextSceneName;?></td>
                   <td>
                     <a href="<?php echo site_root."ux-admin/ScenarioBranching/edit/".$row->Branch_Id;?>" title="Edit"><span class="fa fa-pencil"></span></a> 
                     &nbsp;

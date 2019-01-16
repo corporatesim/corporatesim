@@ -187,17 +187,17 @@ include_once 'includes/header.php';
 					{
 						if(result == 'redirect')
 						{
-								// alert('Redirect User to input page');
-								window.location = "<?php echo site_root.'selectgame.php'?>";
-							}	
-							else
-							{
-								$('.overlay').hide();
-								alert('Connection Problem');
-								console.log(result);
-							}
+							// alert('Redirect User to input page');
+							window.location = "<?php echo site_root.'selectgame.php'?>";
+						}	
+						else
+						{
+							$('.overlay').hide();
+							alert('Connection Problem');
+							console.log(result);
 						}
-					});
+					}
+				});
 			}
 			else
 			{

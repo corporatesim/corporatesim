@@ -322,7 +322,7 @@ include_once 'includes/header.php';
                     	{
                     		echo "<div class   ='InlineBox'>";       
                     		echo "<label class ='scenariaLabel'>OutcomeResult</label>";
-                    		echo "<img id      ='img' src='".site_root."ux-admin/upload/".$objectResult['Outcome_FileName']."' alt='Outcome_image' width=100 height=100 />";
+                    		echo "<img id='".$objectResult['Outcome_FileName']."' src='".site_root."ux-admin/upload/Badges/".$objectResult['Outcome_FileName']."' alt='Outcome_image' width=100 height=100 />";
                     		echo "</div>";
                     	}
                     	else

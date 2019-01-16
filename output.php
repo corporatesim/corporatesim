@@ -28,7 +28,7 @@ $gameName      = $resultObject->Game_Name;
 $ScenarioName  = $resultObject->Scen_Name;
 $linkidSession = $resultObject->Link_ID;
 
-		// delete the existing data for that particular user
+// delete the existing data for that particular user
 $delete_sql = "DELETE FROM GAME_SITE_USER_REPORT_NEW WHERE uid=$userid AND linkid=".$linkidSession;
 $delete     = $functionsObj->ExecuteQuery($delete_sql);
 $sqlComp12  = "SELECT ls.SubLink_ID,  CONCAT(c.Comp_Name, '/', COALESCE(s.SubComp_Name,'')) AS Comp_Subcomp 
@@ -267,7 +267,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 	if($checkEndObj->num_rows > 0)
 	{
 		// replacing upper query from this one coz this give the unplayed scenarios and upper sql gives the nex scenario only, if we will get the next then branching is not possible to redirect user into the previous scenarios
-		$sql      = "SELECT gl.Link_ID, gu.UsScen_IsEndScenario FROM GAME_LINKAGE gl LEFT JOIN GAME_LINKAGE_USERS gu ON gu.UsScen_GameId=gl.Link_GameID AND gu.UsScen_ScenId=gl.Link_ScenarioID AND gu.UsScen_UserId=".$userid." WHERE gl.Link_GameID = ".$gameid." AND (gl.Link_Order >( SELECT Link_Order FROM `GAME_LINKAGE` WHERE Link_GameID = ".$gameid." AND Link_ScenarioID = ".$scenid." ) AND gu.UsScen_Status=0) ORDER BY Link_Order LIMIT 1";
+		$sql = "SELECT gl.Link_ID, gu.UsScen_IsEndScenario FROM GAME_LINKAGE gl LEFT JOIN GAME_LINKAGE_USERS gu ON gu.UsScen_GameId=gl.Link_GameID AND gu.UsScen_ScenId=gl.Link_ScenarioID AND gu.UsScen_UserId=".$userid." WHERE gl.Link_GameID = ".$gameid." AND (gl.Link_Order >( SELECT Link_Order FROM `GAME_LINKAGE` WHERE Link_GameID = ".$gameid." AND Link_ScenarioID = ".$scenid." ) AND gu.UsScen_Status=0) ORDER BY Link_Order LIMIT 1";
 		$input    = $functionsObj->ExecuteQuery($sql);
 		$inputObj = $functionsObj->FetchObject($input);
 		//echo $input->num_rows;
