@@ -15,7 +15,12 @@
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,100,300,500,700' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,600,700" rel="stylesheet"> 
 	<script src="js/jquery.min.js"></script>	
-	<script src="js/bootstrap.min.js"></script>			
+	<script src="js/bootstrap.min.js"></script>		
+	<script>
+		$(document).bind("contextmenu",function(e){
+			return false;
+		});
+	</script>	
 	<style>
 	.dbl-spinner {
 		margin           : 20% 0 0 50%;
@@ -116,12 +121,12 @@
 		{
 			margin-top : 25px;
 		}
- @media only screen and (max-width:290px){
- 		.dashboardList ul li 
- 		{ 
- 		       margin-top:9%;
- 		}
- 	}
+		@media only screen and (max-width:290px){
+			.dashboardList ul li 
+			{ 
+				margin-top:9%;
+			}
+		}
 		[class*="col-"] 
 		{
 			width : 100%;
@@ -138,10 +143,10 @@
 
 	@media (max-width:317px) and (min-width:300px) {
 
-   .timer{
-   width:100%;
-   	margin-top:12%;
-   }
+		.timer{
+			width:100%;
+			margin-top:12%;
+		}
 	}
 
 	@media only screen and (max-width:768px){

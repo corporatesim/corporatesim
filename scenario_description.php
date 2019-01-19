@@ -11,9 +11,24 @@ if($_SESSION['username'] == NULL)
 //$_SESSION['userpage'] ='game_description';
 if(isset($_GET['Link']))
 {
-	$linkid   = $_GET['Link'];
+	$linkid = $_GET['Link'];
+	$uid    = $_SESSION['userid'];	
+	// if user is not assigned this game then move to select game page
+	$gameidSql    = "SELECT Link_GameID FROM GAME_LINKAGE WHERE Link_ID=$linkid";
+	$gameidObj    = $functionsObj->ExecuteQuery($gameidSql);
+	$checkGame    = $functionsObj->FetchObject($gameidObj);
+	$gameidChk    = $checkGame->Link_GameID;
+	$checkGameSql = "SELECT * FROM GAME_SITE_USERS WHERE LOCATE($gameidChk,User_games) AND User_id=$uid";
+	// die($checkGameSql);
+	$checkGameObj = $functionsObj->ExecuteQuery($checkGameSql);
+	if($checkGameObj->num_rows < 1)
+	{
+		$_SESSION['er_msg'] = "You do not have permission to access that scenario description.";
+		// echo "<pre>"; print_r($_SESSION); exit();
+		header("Location:".site_root."selectgame.php");
+	}
+
 	//$scenid =$_GET['Scenario'];	
-	$uid      = $_SESSION['userid'];	
 	$sql      = "SELECT * FROM GAME_LINKAGE WHERE Link_ID = ".$linkid;
 	$object   = $functionsObj->ExecuteQuery($sql);
 	//echo $sql. " -- ".$object->num_rows;

@@ -86,17 +86,26 @@ include_once 'includes/header2.php';
 				else
 				{
 					$sqllink    = "SELECT * FROM `GAME_LINKAGE` WHERE `Link_GameID`=".$row['Game_ID']." AND Link_ScenarioID= ".$result1->US_ScenID;
-
 					$link       = $functionsObj->ExecuteQuery($sqllink);
 					$resultlink = $functionsObj->FetchObject($link);
 					$linkid     = $resultlink->Link_ID;
-					
-					$gamestrip = "EndGameStrip";
+					$gamestrip  = "EndGameStrip";
 					//result
-					$url       = site_root."result.php?ID=".$row['Game_ID'];
-					$urlstr    = "<a href='".$url."'><img src='images/reportIcon.png' alt='Start/Resume Game' class=''></a>";
-					
-					if($result1->US_ReplayStatus==1)
+					$url        = site_root."result.php?ID=".$row['Game_ID'];
+					$urlstr     = "<a href='".$url."'><img src='images/reportIcon.png' alt='Start/Resume Game' class=''></a>";
+					// echo "<pre>"; print_r($result1); echo "</pre>";
+					// finding user company id if it is 21 then allow replay $result1->US_UserID
+					$compSql = "SELECT User_companyid FROM GAME_SITE_USERS WHERE User_companyid = '21' AND User_id=".$result1->US_UserID;
+					$compObj = $functionsObj->ExecuteQuery($compSql);
+					if($compObj->num_rows > 0)
+					{
+						$allowReplay = true;
+					}
+					else
+					{
+						$allowReplay = false;
+					}
+					if($result1->US_ReplayStatus==1 || $allowReplay)
 					{
 						$urlstr .= " <a id='restart' href='#' data-GameID='".$row['Game_ID']."' data-ScenID='".$ScenID."' data-LinkID='".$linkid."'><img src='images/restartGameIcon.png' alt='ReStart/Resume Game' class=''></a>";
 					}

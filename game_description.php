@@ -11,12 +11,19 @@ if($_SESSION['username'] == NULL)
 {
 	header("Location:".site_root."login.php");
 }
-
 $functionsObj = new Functions();
 //$_SESSION['userpage'] ='game_description';
 $gameid = $_GET['Game'];
 $userid = $_SESSION['userid'];
-
+// if user is not assigned this game then move to select game page
+$checkGameSql = "SELECT * FROM GAME_SITE_USERS WHERE LOCATE($gameid,User_games) AND User_id=$userid";
+$checkGameObj = $functionsObj->ExecuteQuery($checkGameSql);
+if($checkGameObj->num_rows < 1)
+{
+	$_SESSION['er_msg'] = "You do not have permission to access that game description.";
+	// echo "<pre>"; print_r($_SESSION); exit();
+	header("Location:".site_root."selectgame.php");
+}
 
 if(isset($_GET['File'])){
 	$fileid     = $_GET['File'];

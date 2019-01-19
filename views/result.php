@@ -8,7 +8,6 @@ include_once 'includes/header.php';
 			<div class="clearfix"></div>
 			<div class="col-sm-12 no_padding ">
 				<div class="shadow col-sm-12">
-
 					<div class="col-sm-10 col-sm-offset-1 mssgeforUser">
 						<!--Message for User... -->
 						<?php echo $gamedetails->Game_Message; ?>
@@ -16,15 +15,25 @@ include_once 'includes/header.php';
 					<div class="col-sm-10 col-sm-offset-1 text-right">
 						View Game Report <img src="images/reportIcon.png" alt="Report">
 						<?php 
-						if($result1->US_ReplayStatus == 1)
+						// echo "<pre>"; print_r($result1); echo "</pre>";
+					// finding user company id if it is 21 then allow replay $result1->US_UserID
+						$compSql = "SELECT User_companyid FROM GAME_SITE_USERS WHERE User_companyid = '21' AND User_id=".$result1->US_UserID;
+						$compObj = $functionsObj->ExecuteQuery($compSql);
+						if($compObj->num_rows > 0)
+						{
+							$allowReplay = true;
+						}
+						else
+						{
+							$allowReplay = false;
+						}
+						if($result1->US_ReplayStatus == 1 || $allowReplay)
 						{
 							$urlstr .= "<a id='restart' href='#' data-LinkID='".$linkid."'><img src='images/restartGameIcon.png' alt='ReStart/Resume Game' class='restart'></a>";
 							echo $urlstr;
 						}
 						?>						
-
 					</div>
-
 					<div class="clearfix"></div>
 					<div class="col-sm-12">
 						<hr></hr>
@@ -33,7 +42,6 @@ include_once 'includes/header.php';
 						<h4 class="innerh4">Other Unplayed Game</h4>
 					</div>	
 					<div class="col-sm-10 col-sm-offset-1 no_padding" style="padding-bottom:20px;">	
-
 						<?php 
 							//echo $str;
 						if(count($strgames) > 0)
@@ -59,11 +67,9 @@ include_once 'includes/header.php';
 										GAME_GAME G ON UG.`UG_GameID` = G.Game_ID
 										WHERE
 										G.Game_Status = 1 and G.Game_ID =".$y_value." AND G.Game_Delete = 0 AND UG.`UG_UserID` = ".$userid;
-
 										//echo $sql;
 										// exit();
 										$result = $functionsObj->ExecuteQuery($sql);
-
 										while($row = mysqli_fetch_array($result)) 
 										{
 											echo "<div class='col-sm-12'>";
@@ -75,7 +81,6 @@ include_once 'includes/header.php';
 											echo "</div><div class=' col-md-8 col-xs8 light'>";
 											echo $row['Game_Comments'];
 											echo "</div><div class='col-sm-2 col-xs-2 regular no_padding  text-right'>";
-
 											//check status of user for this game
 											//if record exist for Userid and GameID in Game_Userstatus
 											$where = array (
@@ -83,7 +88,6 @@ include_once 'includes/header.php';
 												"US_UserID = " . $userid
 											);
 											$obj = $functionsObj->SelectData ( array (), 'GAME_USERSTATUS', $where, 'US_CreateDate desc', '', '1', '', 0 );
-
 											if ($obj->num_rows > 0)
 											{							
 												$result1 = $functionsObj->FetchObject ( $obj );
@@ -92,13 +96,11 @@ include_once 'includes/header.php';
 												{
 													//get linkid
 													$sqllink = "SELECT * FROM `GAME_LINKAGE` WHERE `Link_GameID`=".$row['Game_ID']." AND Link_ScenarioID= ".$result1->US_ScenID;
-
 													//echo $sqllink;
 													$link       = $functionsObj->ExecuteQuery($sqllink);
 													$resultlink = $functionsObj->FetchObject($link);
 													$linkid     = $resultlink->Link_ID;
 												//echo $linkid;
-
 													if ($result1->US_Input == 0 && $result1->US_Output == 0 )
 													{							
 														if($link->num_rows > 0){									
@@ -106,7 +108,6 @@ include_once 'includes/header.php';
 															//echo $url;
 														}
 														//exit();
-
 														//scenario_description.php?Link=".$result->Link_ID;
 														echo "<a href='".$url."'><img src='images/startGameIcon.png' alt='Start/Resume Game' class=''></a>";
 													}
@@ -120,9 +121,7 @@ include_once 'includes/header.php';
 													{
 														$url = site_root."output.php?ID=".$row['Game_ID'];
 														echo "<a href='".$url."'><img src='images/startGameIcon.png' alt='Start/Resume Game' class=''></a>";
-
 														//Goto next scenario
-
 													}
 												}
 												else{
@@ -135,14 +134,12 @@ include_once 'includes/header.php';
 											{
 												echo "<a href='game_description.php?Game=".$row['Game_ID']."'><img src='images/startGameIcon.png' alt='Start/Resume Game' class=''></a>";
 											}					
-
 											echo "</div><div class='clearfix'></div></div></div>";
 										}
 									}
 								}
 							} 
 						} ?>
-
 					</div>
 				</div><!--shadow-->
 				<div class="clearfix"></div>
@@ -167,7 +164,6 @@ include_once 'includes/header.php';
 	$(document).ready(function() {
 		var GameID = "<?php echo $_GET['ID']; ?>";
 		var ScenID = "<?php echo $ScenID; ?>";
-
 		//alert(ScenID);
 		$('a#restart').on('click',function(e){
 			e.preventDefault();
@@ -203,12 +199,8 @@ include_once 'includes/header.php';
 			{
 				return false;
 			}
-
 		});	
-
 	});
-
 </script>	
-
 </body>
 </html>

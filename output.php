@@ -6,10 +6,10 @@ include_once 'config/functions.php';
 require('includes/PHPExcel.php');
 //echo "Output";
 // create new PHPExcel object
-$objPHPExcel   = new PHPExcel;
-$functionsObj  = new Functions();
-//$linkid      =$_GET['Link'];
-//$scenid      =$_GET['Scenario'];
+$objPHPExcel  = new PHPExcel;
+$functionsObj = new Functions();
+//$linkid     = $_GET['Link'];
+//$scenid     = $_GET['Scenario'];
 // if user is logout then redirect to login page as we're unsetting the username from session
 if($_SESSION['username'] == NULL)
 {
