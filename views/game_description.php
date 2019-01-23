@@ -143,9 +143,9 @@ include_once 'includes/header.php';
 									while($row = mysqli_fetch_array($image)) {
 										echo "<div class='col-sm-6 ImageDiv gallery'>";
 										echo "<div class='img-container '>";
-										echo "<a target='_blank' href='ux-admin/upload/".$row['GameImg_Name']."' ><img src='";
+										echo "<img src='";
 										echo "ux-admin/upload/".$row['GameImg_Name'];
-										echo "' alt='Image' class='img-cntr'></img></a>";
+										echo "' alt='Image' class='img-cntr showImageModal'></img>";
 										echo "</div><div class='col-sm-12 no_padding ImageName'><h4 class=''>";
 										echo $row['GameImg_Title'];
 										echo "</h4><span class='videoDiscription'>";
@@ -188,11 +188,104 @@ include_once 'includes/header.php';
 
 		<script src="js/jquery.min.js"></script>	
 		<script src="js/bootstrap.min.js"></script>			
-		<script>
+		<!-- creating pop up for image modal -->
+		<style>
+		#showImageModal {
+			border-radius: 5px;
+			cursor       : pointer;
+			transition   : 0.3s;
+		}
+
+		#showImageModal:hover {opacity: 0.7;}
+
+		/* The Modal (background) */
+		.modal {
+			display         : none; /* Hidden by default */
+			position        : fixed; /* Stay in place */
+			z-index         : 1; /* Sit on top */
+			padding-top     : 100px; /* Location of the box */
+			left            : 0;
+			top             : 0;
+			width           : 100%; /* Full width */
+			height          : 100%; /* Full height */
+			overflow        : auto; /* Enable scroll if needed */
+			background-color: rgb(0,0,0); /* Fallback color */
+			background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+		}
+
+		/* Modal Content (image) */
+		.modal-content {
+			margin   : auto;
+			display  : block;
+			width    : 80%;
+			max-width: 700px;
+			top      : 5%;
+		}
+
+		/* Caption of Modal Image */
+		#caption {
+			margin    : auto;
+			display   : block;
+			width     : 80%;
+			max-width : 700px;
+			text-align: center;
+			color     : #ccc;
+			padding   : 10px 0;
+			height    : 150px;
+		}
+
+		/* Add Animation */
+		.modal-content, #caption {  
+			-webkit-animation-name    : zoom;
+			-webkit-animation-duration: 0.6s;
+			animation-name            : zoom;
+			animation-duration        : 0.6s;
+		}
+
+		@-webkit-keyframes zoom {
+			from {-webkit-transform:scale(0)} 
+			to {-webkit-transform:scale(1)}
+		}
+
+		@keyframes zoom {
+			from {transform:scale(0)} 
+			to {transform:scale(1)}
+		}
+
+		/* 100% Image Width on Smaller Screens */
+		@media only screen and (max-width: 700px){
+			.modal-content {
+				width: 100%;
+			}
+		}
+	</style>
+
+	<!-- The Modal -->
+	<center>
+		<div id="imageModal" class="modal">
+			<span class="close" id="close" style="font-size: 50px; opacity: 1; color:#f00;">
+				&times;
+			</span>
+			<img class="modal-content" id="showImageHere">
+			<div id="caption"></div>
+		</div>
+	</center>
+	<script>
+		$(document).ready(function(){
+			$('.showImageModal').each(function(){
+				$(this).on('click',function(){
+					$('#imageModal').show();
+					$('#showImageHere').attr('src',$(this).attr('src'));
+				});
+			});
+			$('#close').on('click',function(){
+					// $('#imageModal').hide('slow');
+					$('#imageModal').slideUp(1000);
+				});
 			$('img').on('contextmenu', function() {
 				return false;
 			})
-		</script>
-
-	</body>
-	</html>
+		});
+	</script>
+</body>
+</html>
