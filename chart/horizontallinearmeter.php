@@ -6,45 +6,34 @@ set_time_limit(300);
 $functionsObj = new Functions();
 
 include_once '../includes/lib/phpchartdir.php';
-
 $ChartID            = $_GET['ChartID'];
 $gameid             = $_GET['gameid'];
 $userid             = $_GET['userid'];
-
 $sqlchart           = "SELECT * FROM GAME_CHART WHERE Chart_Status=1 and Chart_ID =".$ChartID;
 $chartDetails       = $functionsObj->ExecuteQuery($sqlchart);
 $ResultchartDetails = $functionsObj->FetchObject($chartDetails);
-
 $sqllink            = "SELECT * FROM `GAME_LINKAGE` WHERE `Link_GameID`=".$gameid." AND Link_ScenarioID= ".$ResultchartDetails->Chart_ScenarioID;
 $LinkId             =  $functionsObj->ExecuteQuery($sqllink);
 $ResultLinkId       = $functionsObj->FetchObject($LinkId);
-
-
-$sqlexist = "SELECT * FROM `GAME_INPUT` i WHERE i.input_user=".$userid." and i.input_sublinkid in 
+$sqlexist           = "SELECT * FROM `GAME_INPUT` i WHERE i.input_user=".$userid." and i.input_sublinkid in 
 (SELECT s.SubLink_ID FROM GAME_LINKAGE_SUB s WHERE s.SubLink_LinkID=".$ResultLinkId->Link_ID.") group by i.input_sublinkid";
-$object = $functionsObj->ExecuteQuery($sqlexist);
-
+$object       = $functionsObj->ExecuteQuery($sqlexist);
 	//chart_component and subcomponent
-
-$comp      = $ResultchartDetails->Chart_Components;
-$subcomp   = $ResultchartDetails->Chart_Subcomponents;
-$chartname = $ResultchartDetails->Chart_Name;
-$charttype = $ResultchartDetails->Chart_Type;
-
-
+$comp         = $ResultchartDetails->Chart_Components;
+$subcomp      = $ResultchartDetails->Chart_Subcomponents;
+$chartname    = $ResultchartDetails->Chart_Name;
+$charttype    = $ResultchartDetails->Chart_Type;
 $arrayComp    = explode(',',$comp);
 $arraysubcomp = explode(',',$subcomp);
 	//print_r($arrayComp);
-
 	//echo $object->num_rows;
-if($object->num_rows > 0){
-
-	while($row = $object->fetch_object()){
-
+if($object->num_rows > 0)
+{
+	while($row = $object->fetch_object())
+	{
 		$compdata  = $row->input_key;
 		$allcompID = explode('_',$compdata);
 		$compID    = $allcompID[2];
-
 		if (in_array($compID, $arrayComp) && $allcompID[1]=='comp')
 		{
 			$sqlcompName                     = "SELECT Comp_Name FROM GAME_COMPONENT WHERE Comp_ID = ".$compID;
@@ -61,43 +50,40 @@ if($object->num_rows > 0){
 		}
 	}
 }
-// echo "<pre>"; print_r($dataChart); exit;
+
 foreach($dataChart as $key=>$val)
 {
 	$labels [] = $key;
 	$data []   = $val;
 }
 
-# The data for the pie chart
-//$data = array(72, 18, 15, 12);
+# The value to display on the meter
+$value = 74.25;
 
-# The labels for the pie chart
-//$labels = array("Labor", "Machinery", "Facilities", "Computers");
+# Create an LinearMeter object of size 250 x 65 pixels with a very light grey (0xeeeeee) background,
+# and a rounded 3-pixel thick light grey (0xcccccc) border
+$m = new LinearMeter(250, 65, 0xeeeeee, 0xcccccc);
+$m->setRoundedFrame(Transparent);
+$m->setThickFrame(3);
 
-# The depths for the sectors
-$depths = array(30, 20, 10, 10);
-# Create a PieChart object of size 360 x 300 pixels, with a light blue (DDDDFF) background and a 1
-# pixel 3D border
-$c = new PieChart(800, 300, 0xddddff, -1, 1);
+# Set the scale region top-left corner at (14, 23), with size of 218 x 20 pixels. The scale labels
+# are located on the top (implies horizontal meter)
+$m->setMeter(14, 23, 218, 20, Top);
 
-# Set the center of the pie at (180, 175) and the radius to 100 pixels
-$c->setPieSize(380, 150, 120);
+# Set meter scale from 0 - 100, with a tick every 10 units
+$m->setScale(0, 100, 10);
 
-# Add a title box using 15pt Times Bold Italic font and blue (AAAAFF) as background color
-$textBoxObj = $c->addTitle($chartname, "timesbi.ttf", 15);
-$textBoxObj->setBackground(0xaaaaff);
+# Add a smooth color scale to the meter
+// $smoothColorScale = array(0, 0x6666ff, 25, 0x00bbbb, 50, 0x00ff00, 75, 0xffff00, 100, 0xff0000);
+// adding this line to make color revert
+$smoothColorScale = array(0, 0xff0000, 25, 0xffff00, 50, 0x00bbbb, 75, 0x6666ff, 100, 0x00ff00);
+$m->addColorScale($smoothColorScale);
 
-# Set the pie data and the pie labels
-$c->setData($data, $labels);
-
-# Draw the pie in 3D with variable 3D depths
-$c->set3D2($depths);
-
-# Set the start angle to 225 degrees may improve layout when the depths of the sector are sorted in
-# descending order, because it ensures the tallest sector is at the back.
-$c->setStartAngle(225);
+# Add a blue (0x0000cc) pointer at the specified value
+// $m->addPointer($value, 0x0000cc);
+$m->addPointer($data[0], 0x0000cc);
 
 # Output the chart
 header("Content-type: image/png");
-print($c->makeChart2(PNG));
+print($m->makeChart2(PNG));
 ?>

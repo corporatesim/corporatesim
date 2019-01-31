@@ -857,7 +857,7 @@ include_once 'includes/header.php';
                     <!-- -----------------------------       Chart Section    ----------------------------------------------->
                     <br><br>
                     <!-- <div id="chart_div_<?// =$row2['SubCompID']?>" style="width: 800px; height: 400px;"></div> -->
-                    <div id="chart_div_<?=$row2['SubCompID']?>"></div>
+                    <div id="chart_div_<?=$row2['SubCompID']?>" class="subcomp_chart"></div>
                     <script type="text/javascript">
                       google.load('visualization', '1', {packages: ['corechart']});
                     </script>

@@ -10,37 +10,29 @@ include_once '../includes/lib/phpchartdir.php';
 $ChartID            = $_GET['ChartID'];
 $gameid             = $_GET['gameid'];
 $userid             = $_GET['userid'];
-
 $sqlchart           = "SELECT * FROM GAME_CHART WHERE Chart_Status=1 and Chart_ID =".$ChartID;
 $chartDetails       = $functionsObj->ExecuteQuery($sqlchart);
 $ResultchartDetails = $functionsObj->FetchObject($chartDetails);
-
 $sqllink            = "SELECT * FROM `GAME_LINKAGE` WHERE `Link_GameID`=".$gameid." AND Link_ScenarioID= ".$ResultchartDetails->Chart_ScenarioID;
 $LinkId             =  $functionsObj->ExecuteQuery($sqllink);
 $ResultLinkId       = $functionsObj->FetchObject($LinkId);
-
-
-$sqlexist = "SELECT * FROM `GAME_INPUT` i WHERE i.input_user=".$userid." and i.input_sublinkid in 
+$sqlexist           = "SELECT * FROM `GAME_INPUT` i WHERE i.input_user=".$userid." and i.input_sublinkid in 
 (SELECT s.SubLink_ID FROM GAME_LINKAGE_SUB s WHERE s.SubLink_LinkID=".$ResultLinkId->Link_ID.") group by i.input_sublinkid";
-$object = $functionsObj->ExecuteQuery($sqlexist);
-
+$object       = $functionsObj->ExecuteQuery($sqlexist);
 	//chart_component and subcomponent
-
-$comp      = $ResultchartDetails->Chart_Components;
-$subcomp   = $ResultchartDetails->Chart_Subcomponents;
-$chartname = $ResultchartDetails->Chart_Name;
-$charttype = $ResultchartDetails->Chart_Type;
-
-
+$comp         = $ResultchartDetails->Chart_Components;
+$subcomp      = $ResultchartDetails->Chart_Subcomponents;
+$chartname    = $ResultchartDetails->Chart_Name;
+$charttype    = $ResultchartDetails->Chart_Type;
 $arrayComp    = explode(',',$comp);
 $arraysubcomp = explode(',',$subcomp);
 	//print_r($arrayComp);
 
 	//echo $object->num_rows;
-if($object->num_rows > 0){
-
-	while($row = $object->fetch_object()){
-
+if($object->num_rows > 0)
+{
+	while($row = $object->fetch_object())
+	{
 		$compdata  = $row->input_key;
 		$allcompID = explode('_',$compdata);
 		$compID    = $allcompID[2];
@@ -61,43 +53,51 @@ if($object->num_rows > 0){
 		}
 	}
 }
-// echo "<pre>"; print_r($dataChart); exit;
+
 foreach($dataChart as $key=>$val)
 {
 	$labels [] = $key;
 	$data []   = $val;
 }
 
-# The data for the pie chart
-//$data = array(72, 18, 15, 12);
+// echo "<pre>"; print_r($data[0]); exit();
+# The value to display on the meter
+$value = 72.3;
 
-# The labels for the pie chart
-//$labels = array("Labor", "Machinery", "Facilities", "Computers");
+# Create an AngularMeter object of size 250 x 250 pixels with transparent background
+$m = new AngularMeter(250, 250, Transparent);
 
-# The depths for the sectors
-$depths = array(30, 20, 10, 10);
-# Create a PieChart object of size 360 x 300 pixels, with a light blue (DDDDFF) background and a 1
-# pixel 3D border
-$c = new PieChart(800, 300, 0xddddff, -1, 1);
+# Center at (125, 125), scale radius = 111 pixels, scale angle -145 to +145 degrees
+$m->setMeter(125, 125, 111, -145, 145);
 
-# Set the center of the pie at (180, 175) and the radius to 100 pixels
-$c->setPieSize(380, 150, 120);
+# Add a very light grey (0xeeeeee) circle with radius 123 pixels as background
+$m->addRing(0, 123, 0xeeeeee);
+# Add a grey (0xcccccc) ring between radii 116 and 123 pixels as border
+$m->addRing(116, 123, 0xcccccc);
 
-# Add a title box using 15pt Times Bold Italic font and blue (AAAAFF) as background color
-$textBoxObj = $c->addTitle($chartname, "timesbi.ttf", 15);
-$textBoxObj->setBackground(0xaaaaff);
+# Meter scale is 0 - 100, with major/minor/micro ticks every 10/5/1 units
+$m->setScale(0, 100, 10, 5, 1);
 
-# Set the pie data and the pie labels
-$c->setData($data, $labels);
+# Set the scale label style to 15pt Arial Italic. Set the major/minor/micro tick lengths to 12/9/6
+# pixels pointing inwards, and their widths to 2/1/1 pixels.
+$m->setLabelStyle("ariali.ttf", 15);
+$m->setTickLength(-12, -9, -6);
+$m->setLineWidth(0, 2, 1, 1);
 
-# Draw the pie in 3D with variable 3D depths
-$c->set3D2($depths);
+# Add a smooth color scale to the meter
+// $smoothColorScale = array(0, 0x3333ff, 25, 0x0088ff, 50, 0x00ff00, 75, 0xdddd00, 100, 0xff0000);
+// adding this line to make color revert
+$smoothColorScale = array(0, 0xff0000, 25, 0xdddd00, 50, 0x0088ff, 75, 0x3333ff, 100, 0x00ff00);
+$m->addColorScale($smoothColorScale);
 
-# Set the start angle to 225 degrees may improve layout when the depths of the sector are sorted in
-# descending order, because it ensures the tallest sector is at the back.
-$c->setStartAngle(225);
+# Add a text label centered at (125, 175) with 15pt Arial Italic font
+$m->addText(125, 175, ".", "ariali.ttf", 15, TextColor, Center);
+
+# Add a red (0xff0000) pointer at the specified value
+// $m->addPointer2($value, 0xff0000);
+$m->addPointer2($data[0], 0xff0000);
 
 # Output the chart
 header("Content-type: image/png");
-print($c->makeChart2(PNG));
+print($m->makeChart2(PNG));
 ?>
