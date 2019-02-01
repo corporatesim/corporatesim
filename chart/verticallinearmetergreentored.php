@@ -84,7 +84,7 @@ $m->setMeter(28, 18, 20, 205);
 $m->setScale(0, 100, 10);
 
 # Add a smooth color scale to the meter
-$smoothColorScale = array(0, #006400, 25, #07FF00, 50, #FFA500, 75, #FF7373, 100, #FF0000);
+$smoothColorScale = array(0, 0x006400, 25, 0x07FF00, 50, 0xFFA500, 75, 0xFF7373, 100, 0xFF0000);
 // $smoothColorScale = array(0, 0x6666ff, 25, 0x00bbbb, 50, 0x00ff00, 75, 0xffff00, 100, 0xff0000);
 $m->addColorScale($smoothColorScale);
 

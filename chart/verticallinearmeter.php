@@ -86,7 +86,7 @@ $m->setScale(0, 100, 10);
 # Add a smooth color scale to the meter
 // $smoothColorScale = array(0, 0x6666ff, 25, 0x00bbbb, 50, 0x00ff00, 75, 0xffff00, 100, 0xff0000);
 // adding this line to make color revert
-$smoothColorScale = array(0, #FF0000, 25, #FF7373, 50, #FFA500, 75, #07FF00, 100, #006400);
+$smoothColorScale = array(0, 0xFF0000, 25, 0xFF7373, 50, 0xFFA500, 75, 0x07FF00, 100, 0x006400);
 $m->addColorScale($smoothColorScale);
 
 # Add a blue (0x0000cc) pointer at the specified value
