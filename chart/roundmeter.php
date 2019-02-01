@@ -87,7 +87,7 @@ $m->setLineWidth(0, 2, 1, 1);
 # Add a smooth color scale to the meter
 // $smoothColorScale = array(0, 0x3333ff, 25, 0x0088ff, 50, 0x00ff00, 75, 0xdddd00, 100, 0xff0000);
 // adding this line to make color revert
-$smoothColorScale = array(0, 0xff0000, 25, 0xdddd00, 50, 0x0088ff, 75, 0x3333ff, 100, 0x00ff00);
+$smoothColorScale = array(0, #FF0000, 25, #FF7373, 50, #FFA500, 75, #07FF00, 100, #006400);
 $m->addColorScale($smoothColorScale);
 
 # Add a text label centered at (125, 175) with 15pt Arial Italic font

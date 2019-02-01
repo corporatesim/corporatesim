@@ -85,7 +85,8 @@ $m->setTickLength(-12, -9, -6);
 $m->setLineWidth(0, 2, 1, 1);
 
 # Add a smooth color scale to the meter
-$smoothColorScale = array(0, 0x3333ff, 25, 0x0088ff, 50, 0x00ff00, 75, 0xdddd00, 100, 0xff0000);
+$smoothColorScale = array(0, #006400, 25, #07FF00, 50, #FFA500, 75, #FF7373, 100, #FF0000);
+// $smoothColorScale = array(0, 0x3333ff, 25, 0x0088ff, 50, 0x00ff00, 75, 0xdddd00, 100, 0xff0000);
 $m->addColorScale($smoothColorScale);
 
 # Add a text label centered at (125, 175) with 15pt Arial Italic font

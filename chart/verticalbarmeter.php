@@ -82,7 +82,7 @@ $m->setScale(0, 100, 10);
 # Add a 5-pixel thick smooth color scale to the meter at x = 54 (right of meter scale)
 // $smoothColorScale = array(0, 0x0000ff, 25, 0x0088ff, 50, 0x00ff00, 75, 0xffff00, 100, 0xff0000);
 // adding this line to make color revert
-$smoothColorScale = array(0, 0xff0000, 25, 0xffff00, 50, 0x0088ff, 75, 0x0000ff, 100, 0x00ff00);
+$smoothColorScale = array(0, #FF0000, 25, #FF7373, 50, #FFA500, 75, #07FF00, 100, #006400);
 $m->addColorScale($smoothColorScale, 54, 5);
 
 # Add a light blue (0x0088ff) bar from 0 to the data value with glass effect and 4 pixel rounded
