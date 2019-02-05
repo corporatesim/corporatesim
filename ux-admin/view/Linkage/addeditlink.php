@@ -1,4 +1,4 @@
-<!-- <?php // echo "<pre>"; print_r($linkdetails); exit; ?> -->
+<!-- <?php // echo "<pre>"; print_r($object1->fetch_object()); exit; ?> -->
   <script type="text/javascript">
     <!--
      var loc_url_del  = "ux-admin/linkage/linkdel/";
@@ -524,7 +524,7 @@ span.alert-danger {
                     <!--  <div class="col-md-4 <?php // echo ($linkdetails->SubLink_InputMode == 'user')?'':'hidden'; ?>">  -->
                       <div class="col-md-6">
                         <select name="SubLink_InputModeType" id="SubLink_InputModeType" class="form-control">
-                          <option value="select" id="1" <?php echo ($linkdetails->SubLink_InputModeType == 'select')?'selected':''; ?> >-- Select Input --</option>
+                          <!-- <option value="select" id="1" <?php echo ($linkdetails->SubLink_InputModeType == 'select')?'selected':''; ?> >-- Select Input --</option> -->
                           <option value="user" id="2" <?php echo ($linkdetails->SubLink_InputModeType == 'user')?'selected':''; ?> > Default/Text</option>
                           <option value="mChoice" id="3" <?php echo ($linkdetails->SubLink_InputModeType == 'mChoice')?'selected':''; ?>>Multiple Choice</option>
                           <option value="range" id="4" <?php echo ($linkdetails->SubLink_InputModeType == 'range')?'selected':''; ?> >Range/Button</option>
@@ -552,7 +552,7 @@ span.alert-danger {
                           </div>
                           <div class="form-group col-md-3">
                             <label for="No of questions">Value:</label>
-                            <input name="option_value[]" id="option_value[]" type="text" value="<?php echo $options_value;?>" class="form-control" placeholder="Enter Value">
+                            <input name="option_value[]" id="option_value[]" type="text" value="<?php echo $options_value;?>" class="form-control" placeholder="Value">
                           </div>
                           <?php if(count($option) > 1 && count($option_value) > 1){
                             for($i=1; $i < count($option); $i++) { ?>
@@ -754,7 +754,8 @@ span.alert-danger {
         <li> <span class="glyphicon glyphicon-remove">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="This Deactive Status"> Deactive	</a></li>
         <li> <span class="glyphicon glyphicon-search">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can View the Record"> View		</a></li>
         <li> <span class="glyphicon glyphicon-pencil">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Edit the Record"> Edit		</a></li>
-        <li> <span class="glyphicon glyphicon-trash">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Delete the Record"> Delete	</a></li>
+        <li> <span class="glyphicon glyphicon-trash"> </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Delete the Record"> Delete </a></li>
+        <li> <span class="fa fa-bolt">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="Start component for area"> Start Component	</a></li>
       </ul>
     </div>
   </div>
@@ -771,6 +772,7 @@ span.alert-danger {
           <thead>
             <tr>
               <th>#</th>
+              <th>Area</th>
               <th>Component</th>
               <th>Subcomponent</th>
               <th>Type</th>
@@ -787,6 +789,7 @@ span.alert-danger {
             $i=1; while($row = $object1->fetch_object()){ ?>
               <tr>
                 <th><?php echo $i;?></th>
+                <td><?php echo $row->AreaName; ?></td>
                 <td><?php echo $row->Component; ?></td>
                 <td><?php if($row->SubLink_SubCompID > 0) { echo $row->SubComponent; } else  echo "--"; ?></td>
                 <td><?php if($row->SubLink_Type ==0 ) { echo "Input"; } else {echo "Output";}?></td>
@@ -898,8 +901,8 @@ span.alert-danger {
 <script type="text/javascript">
 
   $('#add_options').on('click',function(){
-  	$('#add_here').append('<div class="col-md-12"><div class="form-group col-md-6"><input name="option[]" type="text" placeholder="Enter Option Text" class="form-control" value="Option-"></div> <div class="form-group col-md-3"><input name="option_value[]" type="text" placeholder="Value" class="form-control"></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" title="Remove Option">-</button></div></div>');
-  	removeDiv();
+    $('#add_here').append('<div class="col-md-12"><div class="form-group col-md-6"><input name="option[]" type="text" placeholder="Enter Option Text" class="form-control" value="Option-"></div> <div class="form-group col-md-3"><input name="option_value[]" type="text" placeholder="Value" class="form-control"></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" title="Remove Option">-</button></div></div>');
+    removeDiv();
   });
   
   function removeDiv()
@@ -931,7 +934,7 @@ span.alert-danger {
   	}
   	if(input_type == 'user')
   	{
-  		$('#user_default_value').removeClass('hidden');
+  		// $('#user_default_value').removeClass('hidden');
   		$('#mChoice').addClass('hidden');
   		$('#range').addClass('hidden');
   	}
