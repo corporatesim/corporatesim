@@ -3,13 +3,14 @@ $funObj = new Model();
 $f_list = $funObj->SelectData(array(), formulas, array(), '', '', '', '', 0);
 $file   = 'list.php';
 
+$head               = "Add Formula";
+$componentsQuery    = 'SELECT gc.*,ga.Area_Name AS AreaName FROM GAME_COMPONENT gc LEFT JOIN GAME_AREA ga ON ga.Area_ID= gc.Comp_AreaID WHERE gc.Comp_Delete=0 ORDER BY gc.Comp_Name';
+$subcomponentsQuery = 'SELECT gs.*,gc.Comp_Name AS ComponentName,ga.Area_Name AS AreaName FROM GAME_SUBCOMPONENT gs LEFT JOIN GAME_AREA ga ON ga.Area_ID = gs.SubComp_AreaID LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID=gs.SubComp_CompID WHERE gs.SubComp_Delete=0 ORDER BY gs.SubComp_Name';
+$areaComponents     = $funObj->ExecuteQuery($componentsQuery);
+$areaSubcomponents  = $funObj->ExecuteQuery($subcomponentsQuery);
+
 if( isset( $_GET['add'] ) && !empty( $_GET['add'] ) )
 {
-	$head               = "Add Formula";
-	$componentsQuery    = 'SELECT gc.*,ga.Area_Name AS AreaName FROM GAME_COMPONENT gc LEFT JOIN GAME_AREA ga ON ga.Area_ID= gc.Comp_AreaID WHERE gc.Comp_Delete=0 ORDER BY gc.Comp_Name';
-	$subcomponentsQuery = 'SELECT gs.*,gc.Comp_Name AS ComponentName,ga.Area_Name AS AreaName FROM GAME_SUBCOMPONENT gs LEFT JOIN GAME_AREA ga ON ga.Area_ID = gs.SubComp_AreaID LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID=gs.SubComp_CompID WHERE gs.SubComp_Delete=0 ORDER BY gs.SubComp_Name';
-	$areaComponents     = $funObj->ExecuteQuery($componentsQuery);
-	$areaSubcomponents  = $funObj->ExecuteQuery($subcomponentsQuery);
 	$components         = $funObj->SelectData(array(), component, array(), 'Comp_Name', '', '', '', 0);
 	$subcomponents      = $funObj->SelectData(array(), subcomponent, array(), 'SubComp_Name', '', '', '', 0);
 	$operators          = $funObj->SelectData(array(), math_operators, array(), '', '', '', '', 0);
@@ -18,7 +19,7 @@ if( isset( $_GET['add'] ) && !empty( $_GET['add'] ) )
 }
 elseif( isset( $_GET['edit'] ) && !empty( $_GET['edit'] ) )
 {
-	$head = "Add Formula";
+	// $head = "Add Formula";
 	$fid  = base64_decode($_GET['edit']);
 	
 	$components    = $funObj->SelectData(array(), component, array(), 'Comp_Name', '', '', '', 0);

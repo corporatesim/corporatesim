@@ -1,8 +1,8 @@
 <!-- <?php // echo "<pre>"; print_r($subcomponents->fetch_object()); exit; ?> -->
-<script type="text/javascript">
-	<!--
-		var loc_url_del = "ux-admin/ManageGame/del/";
-		var loc_url_stat = "ux-admin/ManageGame/stat/";
+	<script type="text/javascript">
+		<!--
+			var loc_url_del  = "ux-admin/ManageGame/del/";
+			var loc_url_stat = "ux-admin/ManageGame/stat/";
 //-->
 </script>
 
@@ -10,7 +10,7 @@
 <!--
 .undo_btn{
 	position: absolute;
-	bottom: 15px; 
+	bottom  : 15px; 
 }
 .formula_box{
 	display: flex;
@@ -18,15 +18,15 @@
 
 .components, .operators, .subcomponents{
 	list-style: none;
-	margin: 0;
-	padding: 0;
-	border: 1px solid #d8d8d8;
-	height: 300px;
+	margin    : 0;
+	padding   : 0;
+	border    : 1px solid #d8d8d8;
+	height    : 300px;
 	overflow-y: scroll;
 }
 
 .components li, .operators li, .subcomponents li{
-	cursor: pointer;
+	cursor : pointer;
 	padding: 2px 10px;
 }
 
@@ -37,7 +37,7 @@
 @media only screen and (max-width:360px){
 	.undo_btn{
 		position: unset;
-		bottom: auto;
+		bottom  : auto;
 	}
 	.formula_box{
 		display: unset;
@@ -127,7 +127,7 @@
 					<!-- END Games -->
 
 					<!-- Scenario -->
-					<div class="col-xs-12 col-sm-4 col-md-4 form-group">
+					<div class="col-xs-12 col-sm-4 col-md-4 form-group hidden" id="scenarioSelect">
 						<label><span class="alert-danger">*</span>Select Scenario</label> 
 						<select class="form-control" name="scen_id" id="scen_id">
 							<option value="">-- SELECT --</option>
@@ -200,7 +200,7 @@
 
 				<script type="text/javascript">
 // <!--
-var formula = [];
+var formula        = [];
 var formula_string = [];
 
 	//$('.components li, .subcomponents li, .operators li').click( function(){
@@ -219,7 +219,7 @@ var formula_string = [];
 	});
 
 		$('.undo_btn').click( function(){
-			var fpop = formula.pop();
+			var fpop  = formula.pop();
 			var fspop = formula_string.pop();
 		//alert(fpop);
 		//alert(fspop);
@@ -238,14 +238,14 @@ var formula_string = [];
 				$('.error_box label').removeClass('error');
 				$('.error_box label').html('');
 				var formula_title = $('#formula_title').val();
-				var formula_exp = formula.join(" ");
-				var formula_str = formula_string.join(" ");
-				var formula_id = $('#id').val();
+				var formula_exp   = formula.join(" ");
+				var formula_str   = formula_string.join(" ");
+				var formula_id    = $('#id').val();
 			//alert(formula_id); 
 			//alert("formula_exp "+formula_exp);
 			//alert("formula_str "+formula_str);
 			$.ajax({
-				url: site_root + "ux-admin/model/ajax/game_add_formula.php",
+				url : site_root + "ux-admin/model/ajax/game_add_formula.php",
 				type: "POST",
 				data: { formula_title: formula_title, formula: formula_exp, formula_string: formula_str, formula_id: formula_id },
 				beforeSend: function(){
@@ -281,10 +281,16 @@ var formula_string = [];
 		$('#game_id').change( function(){
 			var game_id = $(this).val();
 		//alert(comp_id);
+		if(game_id.length < 1)
+		{
+			alert('Please Select Game.');
+			$('#scenarioSelect').addClass('hidden');
+			return false;
+		}
 		$('#scen_id').html('<option value="">-- SELECT --</option>');
-
+		$('#scenarioSelect').removeClass('hidden');
 		$.ajax({
-			url: site_root + "ux-admin/model/ajax/populate_dropdown.php",
+			url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
 			type: "POST",
 			data: { game_id: game_id },
 			success: function(data){
@@ -296,9 +302,13 @@ var formula_string = [];
 		$('#scen_id').change( function(){
 			var scen_id = $(this).val();
 		//alert(scen_id);		
-
+		if(scen_id.length < 1)
+		{
+			alert('Please Select Scenario.');
+			return false;
+		}
 		$.ajax({
-			url: site_root + "ux-admin/model/ajax/populate_dropdown.php",
+			url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
 			type: "POST",
 			data: { comp_scen_id: scen_id },
 			success: function(data){
@@ -307,13 +317,16 @@ var formula_string = [];
 		});		
 
 		$.ajax({
-			url: site_root + "ux-admin/model/ajax/populate_dropdown.php",
+			url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
 			type: "POST",
 			data: { subcomp_scen_id: scen_id },
 			success: function(data){
 				$('#subcomp_id').html(data);
 			}
 		});		
+		setTimeout(function(){
+			$('[data-toggle="tooltip"]').tooltip();
+		},1000);
 	});
 
 //-->

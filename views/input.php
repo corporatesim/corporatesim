@@ -997,6 +997,14 @@ include_once 'includes/header.php';
             }
             if($row2['Mode']=="formula")
             {
+               $formulaSql = "SELECT input_current FROM GAME_INPUT WHERE input_sublinkid =".$row2['SubLinkID']." AND input_user=".$userid;
+              // die($formulaSql);
+              $formulaCurrent = $functionsObj->ExecuteQuery($formulaSql);
+              $formaulValue   = $functionsObj->FetchObject($formulaCurrent);
+              if($formaulValue->input_current)
+              {
+                $value = $formaulValue->input_current;
+              }
               echo "<input type='text' value='".$value."' id='".$areaname."_fsubc_".$row2['SubCompID']."' name='".$areaname."_fsubc_".$row2['SubCompID']."' ";
               $sankey_val = '"'.$areaname."_fsubc_".$row2['SubCompID'].'"';
               echo " readonly></input>";

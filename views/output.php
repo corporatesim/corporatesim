@@ -60,7 +60,7 @@ include_once 'includes/header.php';
 								<?php
 						//echo $area->num_rows;
 								$area = $functionsObj->ExecuteQuery($sqlarea);
-								$i=0;
+								$i = 0;
 								while($row = mysqli_fetch_array($area)) {
 									$areaname = $row['Area_Name'];
 							//echo $i." ".$row['Area_Name'];
@@ -243,12 +243,10 @@ include_once 'includes/header.php';
 											$width  = "col-md-2";
 											$width1 = "col-md-4";
 										}
-
 										if ($row1['ShowHide'] == 0)
 										{
 											$hidden = "";
 										}
-
 										else
 										{
 											$hidden = "hidden";
@@ -318,22 +316,26 @@ include_once 'includes/header.php';
                     	echo $objRes->num_rows;*/
                     	$objectResult = mysqli_fetch_assoc($objRes);
                       //echo $objectResult['Outcome_FileType'];
-                    	if($row1['CompID']==$objectResult['Outcome_CompId'] && $objectResult['Outcome_FileType']<3)
+                    	if($row1['CompID'] == $objectResult['Outcome_CompId'] && $objectResult['Outcome_FileType']<3)
                     	{
                     		echo "<div class   ='InlineBox'>";       
                     		echo "<label class ='scenariaLabel'>OutcomeResult</label>";
                     		echo "<img id='".$objectResult['Outcome_FileName']."' src='".site_root."ux-admin/upload/Badges/".$objectResult['Outcome_FileName']."' alt='Outcome_image' width=100 height=100 />";
+                    		echo "</div>";
+                    		echo "<div class='InlineBox hidden ".$labelC."'>";
+                    		echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
+                    		echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value='".$row1['Current']."' readonly></input>";
                     		echo "</div>";
                     	}
                     	else
                     	{
                     		echo "<div class='InlineBox ".$labelC."'>";
                     		echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
-                    		echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value=".$row1['Current']." readonly></input>";
+                    		echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value='".$row1['Current']."' readonly></input>";
                     		echo "</div>";
                     		echo "<div class='InlineBox ".$labelL."'>";
                     		echo "<label class='scenariaLabel'>".$row1['LabelLast']."</label>";
-                    		echo "<input type='text' class='scenariaInput' readonly></input>";
+                    		echo "<input type='text' class='scenariaInput' value='".$row1['Last']."' readonly></input>";
                     		echo "</div>";
                     	}
                     	
@@ -524,54 +526,42 @@ include_once 'includes/header.php';
                     			$width="col-md-2";
                     			$width1="col-md-4";
                     		}
-
                     		if ($row2['ShowHide'] == 0)
                     		{
-
                     			$hidden="";
-
                     		}
-
                     		else
                     		{
-
                     			$hidden= "hidden";
-
                     		}
 
-                    		switch ($row2['InputFieldOrder']) {
+                    		switch ($row2['InputFieldOrder'])
+                    		{
                     			case 1:
-
                     			$labelC="";
                     			$labelL="pull-right";
                     			break;
 
                     			case 2:
-
                     			$labelL="";
                     			$labelC="pull-right";
                     			break;
 
                     			case 3:
-
                     			$labelC="";
                     			$labelL="hidden";
                     			break;
 
                     			case 4:
-
                     			$labelC="hidden";
                     			$labelL="";
                     			break;
                     		}
-
-
                  /* if($row2['ShowHide'] == 0)
                   {
 
                   }*/
                 // if component div is half length then make subcomponent div col-md-12
-
                   echo "<div class='".$length." subCompnent ".$hidden."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor'].";'>";
                   echo "<div class='col-sm-2 ".$width." regular text-center".$SubcomponentName."'>";
                   echo $row2['SubComp_Name'];
