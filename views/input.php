@@ -37,7 +37,8 @@ include_once 'includes/header.php';
           <div class="col-sm-6  text-right" style="padding: 2px 2px 5px 0px;">
             <div id="input_loader" style="float:left; color:#2A8037;"></div>
             <button type="button" class="btn innerBtns hidden" name="execute_input" id="execute_input">Execute</button>
-            <button type="submit" name="submit" id="submit" class="btn innerBtns" value="Submit">Submit</button>
+            <button type="submit" name="submit" id="submit" class="btn innerBtns hidden" value="Submit">Submit</button>
+            <button type="button" name="submit" id="submitBtn" class="btn innerBtns" value="Submit">Submit</button>
             <!--<button class="btn innerBtns">Save</button>
               <button class="btn innerBtns">Submit</button>-->
             </div>
@@ -1455,6 +1456,14 @@ include_once 'includes/header.php';
   //   $(this).text($(this).parent().find('input[type=range]').val())
   // }
   $(document).ready(function(){
+    // adding alert box while submitting the form to submit the inputs
+    $('#submitBtn').on('click',function(){
+      var conf = confirm('Are you sure you want to submit? Have you provided all your decisions?');
+      if(conf)
+      {
+        $('#submit').trigger('click');
+      }
+    });
     // removing inlinebox class from button div if input type=range to align button down
     $('input[type="range"]').each(function(i,e){
       $(this).parents('div.text-right').find('div.closeSave').parent('div').removeClass('InlineBox').css({'margin':'4% 1% 0% 2%'});

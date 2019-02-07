@@ -241,13 +241,15 @@ var formula_string = [];
 				var formula_exp   = formula.join(" ");
 				var formula_str   = formula_string.join(" ");
 				var formula_id    = $('#id').val();
+				var game_id       = $("#game_id").val();
+				var scen_id       = $("#scen_id").val();
 			//alert(formula_id); 
 			//alert("formula_exp "+formula_exp);
 			//alert("formula_str "+formula_str);
 			$.ajax({
 				url : site_root + "ux-admin/model/ajax/game_add_formula.php",
 				type: "POST",
-				data: { formula_title: formula_title, formula: formula_exp, formula_string: formula_str, formula_id: formula_id },
+				data: { formula_title: formula_title, formula: formula_exp, formula_string: formula_str, formula_id: formula_id, game_id: game_id, scen_id: scen_id },
 				beforeSend: function(){
 					// Show loading Icon
 				},

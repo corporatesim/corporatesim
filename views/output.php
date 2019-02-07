@@ -318,8 +318,7 @@ include_once 'includes/header.php';
                       //echo $objectResult['Outcome_FileType'];
                     	if($row1['CompID'] == $objectResult['Outcome_CompId'] && $objectResult['Outcome_FileType']<3)
                     	{
-                    		echo "<div class   ='InlineBox'>";       
-                    		echo "<label class ='scenariaLabel'>OutcomeResult</label>";
+                    		echo "<div class   ='InlineBox'>";  
                     		echo "<img id='".$objectResult['Outcome_FileName']."' src='".site_root."ux-admin/upload/Badges/".$objectResult['Outcome_FileName']."' alt='Outcome_image' width=100 height=100 />";
                     		echo "</div>";
                     		echo "<div class='InlineBox hidden ".$labelC."'>";

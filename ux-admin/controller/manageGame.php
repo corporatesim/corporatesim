@@ -10,6 +10,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 	$gamedetails = (object) array(
 		'Game_Name'     => $_POST['name'],
 		'Game_Comments' => $_POST['comments'],
+		'Game_Header'   => $_POST['Game_Header'],
 		'Game_Message'  => $_POST['message'],
 		'Game_Datetime' => date('Y-m-d H:i:s'),
 		'Game_Status'   => 1
@@ -56,6 +57,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 	$gamedetails = (object) array(
 		'Game_Name'     => $_POST['name'],
 		'Game_Comments' => $_POST['comments'],
+		'Game_Header'   => $_POST['Game_Header'],
 		'Game_Message'  => $_POST['message'],
 		'Game_Datetime' => date('Y-m-d H:i:s'),
 		'Game_Status'   => 1

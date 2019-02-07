@@ -75,7 +75,15 @@ span.alert-danger {
 			<div class="col-sm-6">
 				<div class="form-group">
 					<label for="name"><span class="alert-danger">*</span>Comments</label>
-					<textarea id="comments" name="comments" class="form-control" placeholder="Comments"><?php if(!empty($gamedetails->Game_Comments)) echo $gamedetails->Game_Comments; ?></textarea>
+					<textarea id="comments" name="comments" class="form-control" placeholder="Comments" required=""><?php if(!empty($gamedetails->Game_Comments)) echo $gamedetails->Game_Comments; ?></textarea>
+				</div>
+			</div>					
+		</div>
+		<div class="row name" id="header">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="name"><span class="alert-danger">*</span>Header</label>
+					<textarea id="Game_Header" name="Game_Header" class="form-control" placeholder="Header" required=""><?php if(!empty($gamedetails->Game_Header)) echo $gamedetails->Game_Header; ?></textarea>
 				</div>
 			</div>					
 		</div>		

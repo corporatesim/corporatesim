@@ -44,12 +44,13 @@ include_once 'includes/header.php';
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-9 col-md-10 no_padding">
-				<h2 class="gamename"><a href="<?php echo $gameurl; ?>" target="_blank" class="innerPageLink">
-					<?php echo $game_description; ?></a> / 
-					<?php if(!empty($scen)){ echo $scen->Scen_Name; } ?> </h2>	
-				</div>
-				<div class="col-sm-2  text-right pull-right <?php echo ($scen->Scen_InputButton == 0)?'DisplayNone':'';?>" style="margin-top:-6px;">
-					<button class="btn innerBtns" onclick="window.location='<?php echo $url; ?>';">Proceed</button>
+				<h2 class="gamename">
+					<!-- <a href="<?php echo $gameurl; ?>" target="_blank" class="innerPageLink">
+						<?php // echo $game_description; ?></a> /  -->
+						<?php if(!empty($scen)){ echo $scen->Scen_Header; } ?> </h2>	
+					</div>
+					<div class="col-sm-2  text-right pull-right <?php echo ($scen->Scen_InputButton == 0)?'DisplayNone':'';?>" style="margin-top:-6px;">
+						<button class="btn innerBtns" id="proceedBtn" type="button">Proceed</button>
 						<!--<button class="btn innerBtns">Save</button>
 							<button class="btn innerBtns">Submit</button>-->
 						</div>
@@ -288,6 +289,14 @@ include_once 'includes/header.php';
 		</center>
 		<script>
 			$(document).ready(function(){
+				// adding a confirmation box while click on proceed
+				$('#proceedBtn').on('click',function(){
+					var conf = confirm('Have you gone through all the contents (including the Video, Image and Document sections)? Have you also been asked to click the PROCEED button ?');
+					if(conf)
+					{
+						window.location='<?php echo $url; ?>';
+					}
+				});
 				$('.showImageModal').each(function(){
 					$(this).on('click',function(){
 						$('#imageModal').show();

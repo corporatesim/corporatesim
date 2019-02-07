@@ -6,12 +6,22 @@ $file         = 'ScenarioList.php';
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 {
+	if($_POST['Scen_Branching'])
+	{
+		$Scen_Branching = $_POST['Scen_Branching'];
+	}
+	else
+	{
+		$Scen_Branching = 0;
+	}
 	$gamedetails = (object) array(
 		'Scen_Name'        => $_POST['name'],
 		'Scen_Comments'    => $_POST['comments'],
+		'Scen_Header'      => $_POST['Scen_Header'],
 		'Scen_Datetime'    => date('Y-m-d H:i:s'),
 		'Scen_Status'      => 1,
-		'Scen_InputButton' => $_POST['Scen_InputButton']
+		'Scen_InputButton' => $_POST['Scen_InputButton'],
+		'Scen_Branching'   => $Scen_Branching
 	);
 	
 	if( !empty($_POST['name']) && !empty($_POST['comments']))
@@ -25,7 +35,6 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 			$_SESSION['type[1]'] = "has-success";
 			header("Location: ".site_root."ux-admin/ManageScenario");			
 			exit(0);
-
 		}
 		else
 		{
@@ -45,18 +54,34 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 {
+	if($_POST['Scen_Branching'])
+	{
+		$Scen_Branching = $_POST['Scen_Branching'];
+	}
+	else
+	{
+		$Scen_Branching = 0;
+	}
 	$gamedetails = (object) array(
 		'Scen_Name'        => $_POST['name'],
 		'Scen_Comments'    => $_POST['comments'],
+		'Scen_Header'      => $_POST['Scen_Header'],
 		'Scen_Datetime'    => date('Y-m-d H:i:s'),
 		'Scen_Status'      => 1,
-		'Scen_InputButton' => $_POST['Scen_InputButton']
+		'Scen_InputButton' => $_POST['Scen_InputButton'],
+		'Scen_Branching'   => $Scen_Branching
 	);
 
 	if( !empty($_POST['name']) && !empty($_POST['comments']) )
 	{
-		$uid    = $_POST['id'];
+		$uid = $_POST['id'];
 		$result = $functionsObj->UpdateData('GAME_SCENARIO', $gamedetails, 'Scen_ID', $uid, 0);
+		// updating game_linkage table while updating sceanrio status of default/compBranching
+		// die('SELECT * FROM GAME_LINKAGE WHERE Link_ScenarioID='.$uid);
+		$linkageDetails = (object) array(
+			'Link_Branching' => $Scen_Branching,
+		);
+		$result = $functionsObj->UpdateData('GAME_LINKAGE', $linkageDetails, 'Link_ScenarioID', $uid, 0);
 		if($result === true)
 		{
 			$_SESSION['msg']     = "Scenario updated successfully";

@@ -35,7 +35,8 @@ include_once 'includes/header.php';
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-9 col-md-10 no_padding">
-				<h2 class="InnerPageHeader"><?php if(!empty($game)){ echo $game->Game_Name; } ?> </h2>
+				<!-- <h4 class="InnerPageHeader"><?php if(!empty($game)){ echo $game->Game_Header; } ?> </h4> -->
+				<h4 class=""><?php if(!empty($game)){ echo $game->Game_Header; } ?> </h4>
 			</div>
 			<div class="col-sm-3 col-md-2 text-center">
 				<input type="hidden" name="Scenid" value="<?php if(!empty($result)){ echo $result->Link_ScenarioID; } ?>" >
