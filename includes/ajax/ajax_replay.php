@@ -28,13 +28,9 @@ if($_POST['action'] == 'replay')
 	$unplay       = " DELETE FROM GAME_LINKAGE_USERS WHERE UsScen_GameId =$GameID AND UsScen_UserId=".$UserID;
 	$objectUnplay = $funObj->ExecuteQuery($unplay);
 	
-	$updTimer     = " UPDATE GAME_LINKAGE_TIMER gt SET gt.timer = (
-	SELECT SUM( (gl.Link_Hour * 60) + gl.Link_Min) FROM GAME_LINKAGE gl
-	WHERE gl.Link_GameID = $GameID AND gl.Link_ScenarioID = $ScenID) WHERE
-	gt.linkid = $LinkID AND gt.userid = $UserID ";
+	$updTimer     = "UPDATE GAME_LINKAGE_TIMER glt SET glt.timer =( SELECT SUM( (gl.Link_Hour * 60) + gl.Link_Min ) FROM GAME_LINKAGE gl WHERE gl.Link_ID = glt.linkid) WHERE glt.userid = $UserID AND glt.linkid IN(SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=$GameID)";
 	$funObj->ExecuteQuery($updTimer);
-  /*print_r($updTimer);
-  die();*/
+  // die($updTimer);
 	// print_r($resultUpdate);	print_r($resultDelete);	die('here');
 	//echo $updateSql.'<br>'.$deleteSql; die();
   if($resultUpdate && $resultDelete)

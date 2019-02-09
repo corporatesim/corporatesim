@@ -222,7 +222,16 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 }
 else
 {
-		//exit();
+	// echo "<pre>"; print_r($_REQUEST);	exit();
+	// if component branching enabled
+	if($_POST['Link_Branching'])
+	{
+		$Link_Branching = $_POST['Link_Branching'];
+	}
+	else
+	{
+		$Link_Branching = 0;
+	}
 	$linkdetails = (object) array(
 		'Link_GameID'     =>	$_POST['game_id'],
 		'Link_ScenarioID' =>	$_POST['scen_id'],
@@ -231,21 +240,37 @@ else
 		'Link_Order'      =>	$_POST['order'],
 		'Link_Mode'       =>	$_POST['Mode'],
 		'Link_Enabled'    =>	isset($_POST['enabled']) ? 1 : 0,
+		'Link_Branching'  =>	$Link_Branching,
 		'Link_Status'     =>	1,			
 		'Link_CreateDate' =>	date('Y-m-d H:i:s')
 	);		
 	if( !empty($_POST['game_id']) && !empty($_POST['scen_id']) && !empty($_POST['order']) )
 	{
-		$result = $functionsObj->InsertData('GAME_LINKAGE', $linkdetails, 0, 0);
-		if($result){
-			$_SESSION['msg']     = "Link created successfully";
-			$_SESSION['type[0]'] = "inputSuccess";
-			$_SESSION['type[1]'] = "has-success";
+		$where = "Link_GameID=".$_POST['game_id']."	AND Link_ScenarioID=".$_POST['scen_id']."	AND Link_Branching=".$Link_Branching;
+		$existSql = $functionsObj->SelectData( array (), 'GAME_LINKAGE', array ($where),'','','','',1);
+		if($existSql->num_rows > 0)
+		{
+			$_SESSION['msg']     = "Link for game and scenario already exist";
+			$_SESSION['type[0]'] = "inputError";
+			$_SESSION['type[1]'] = "has-error";
 			header("Location: ".site_root."ux-admin/linkage");
 			exit(0);	
 		}
+		else
+		{
+			$result = $functionsObj->InsertData('GAME_LINKAGE', $linkdetails, 0, 0);
+			if($result)
+			{
+				$_SESSION['msg']     = "Link created successfully";
+				$_SESSION['type[0]'] = "inputSuccess";
+				$_SESSION['type[1]'] = "has-success";
+				header("Location: ".site_root."ux-admin/linkage");
+				exit(0);	
+			}
+		}
 	}	
-	else{
+	else
+	{
 		$msg     = "Field(s) can not be empty";
 		$type[0] = "inputError";
 		$type[1] = "has-error";
@@ -511,6 +536,15 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 	}
 }
 else{
+	if($_POST['Link_Branching'])
+	{
+		$Link_Branching = $_POST['Link_Branching'];
+	}
+	else
+	{
+		$Link_Branching = 0;
+	}
+
 	$linkdetails = (object) array(
 		'Link_GameID'     =>	$_POST['game_id'],
 		'Link_ScenarioID' =>	$_POST['scen_id'],
@@ -518,6 +552,7 @@ else{
 		'Link_Min'        =>	$_POST['minute'],
 		'Link_Order'      =>	$_POST['order'],
 		'Link_Mode'       =>	$_POST['Mode'],
+		'Link_Branching'  =>	$_POST['Link_Branching'],
 		'Link_Enabled'    =>	isset($_POST['enabled']) ? 1 : 0,
 		'Link_Status'     =>	1,			
 		'Link_CreateDate' =>	date('Y-m-d H:i:s')
@@ -948,7 +983,6 @@ elseif(isset($_GET['del'])){
 	FROM `GAME_LINKAGE` INNER JOIN GAME_SCENARIO s on s.Scen_ID = Link_ScenarioID 
 	WHERE Link_GameID = ".$result->Link_GameID." and Link_ID in (SELECT Sublink_LinkID FROM GAME_LINKAGE_SUB) 
 	AND Link_ScenarioID!=".$result->Link_ScenarioID;
-
 	//echo $sqlscen;
 	$linkscenario = $functionsObj->ExecuteQuery($sqlscen);
 	// while($row = $scenario->fetch_object()){
@@ -959,14 +993,16 @@ elseif(isset($_GET['del'])){
 	(SELECT `Game_Name` FROM GAME_GAME  WHERE `Game_ID` = L.Link_GameID) AS Game,
 	(SELECT `Scen_Name` FROM GAME_SCENARIO WHERE `Scen_ID` = L.`Link_ScenarioID`) AS Scenario,
 	(SELECT `Comp_Name` FROM GAME_COMPONENT WHERE `Comp_ID` = LS.SubLink_CompID) AS Component,
-	(SELECT `SubComp_Name` FROM GAME_SUBCOMPONENT WHERE `SubComp_ID` = LS.SubLink_SubCompID) AS SubComponent
+	(SELECT `SubComp_Name` FROM GAME_SUBCOMPONENT WHERE `SubComp_ID` = LS.SubLink_SubCompID) AS SubComponent,
+	(SELECT `Area_Name` FROM GAME_AREA  WHERE `Area_ID` = LS.SubLink_AreaID) AS AreaName
 	FROM
 	`GAME_LINKAGE` L INNER JOIN GAME_LINKAGE_SUB LS 
 	ON L.`Link_ID` = LS.SubLink_LinkID
 	WHERE
 	`SubLink_LinkID`= ".$linkid;
 	//echo $linksql;
-	$object1 = $functionsObj->ExecuteQuery($linksql);
+	$object1       = $functionsObj->ExecuteQuery($linksql);
+	$nextComponent = $functionsObj->ExecuteQuery($linksql);
 	
 	$sqlcarry = "SELECT l.Link_ID, s.Scen_ID,s.Scen_Name
 	FROM `GAME_LINKAGE` l INNER JOIN GAME_SCENARIO s on l.Link_ScenarioID=s.Scen_ID
@@ -1063,7 +1099,8 @@ elseif(isset($_GET['del'])){
 	(SELECT `Game_Name` FROM GAME_GAME  WHERE `Game_ID` = L.Link_GameID) AS Game,
 	(SELECT `Scen_Name` FROM GAME_SCENARIO WHERE `Scen_ID` = L.`Link_ScenarioID`) AS Scenario,
 	(SELECT `Comp_Name` FROM GAME_COMPONENT WHERE `Comp_ID` = LS.SubLink_CompID) AS Component,
-	(SELECT `SubComp_Name` FROM GAME_SUBCOMPONENT WHERE `SubComp_ID` = LS.SubLink_SubCompID) AS SubComponent
+	(SELECT `SubComp_Name` FROM GAME_SUBCOMPONENT WHERE `SubComp_ID` = LS.SubLink_SubCompID) AS SubComponent,
+	(SELECT `Area_Name` FROM GAME_AREA  WHERE `Area_ID` = LS.SubLink_AreaID) AS AreaName
 	FROM
 	`GAME_LINKAGE` L INNER JOIN GAME_LINKAGE_SUB LS 
 	ON L.`Link_ID` = LS.SubLink_LinkID
@@ -1197,21 +1234,37 @@ if(isset($_GET['linkedit']))
 	}
 
 }
-$areaLink     = $functionsObj->SelectData(array(), 'GAME_AREA', array('Area_Delete=0'), '', '', '', '', 0);
+$areaLink       = $functionsObj->SelectData(array(), 'GAME_AREA', array('Area_Delete=0'), 'Area_Name', '', '', '', 0);
 
-$game         = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), '', '', '', '', 0);
+$game           = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), '', '', '', '', 0);
 
-$scenario     = $functionsObj->SelectData(array(), 'GAME_SCENARIO', array('Scen_Delete=0'), '', '', '', '', 0);
+$scenario       = $functionsObj->SelectData(array(), 'GAME_SCENARIO', array('Scen_Delete=0','Scen_Branching=0'), array('Scen_Name ASC'), '', '', '', 0);
+$BranchScenario = $functionsObj->SelectData(array(), 'GAME_SCENARIO', array('Scen_Delete=0','Scen_Branching=1'), array('Scen_Name ASC'), '', '', '', 0);
 
-$component    = $functionsObj->SelectData(array(), 'GAME_COMPONENT', array('Comp_Delete=0'), 'Comp_Name', '', '', '', 0);
+$component      = $functionsObj->SelectData(array(), 'GAME_COMPONENT', array('Comp_Delete=0'), 'Comp_Name', '', '', '', 0);
 
-$subcomponent = $functionsObj->SelectData(array(), 'GAME_SUBCOMPONENT', array('SubComp_Delete=0'), 'SubComp_Name', '', '', '', 0);
+$subcomponent   = $functionsObj->SelectData(array(), 'GAME_SUBCOMPONENT', array('SubComp_Delete=0'), 'SubComp_Name', '', '', '', 0);
 
-$formula      = $functionsObj->SelectData(array(), 'GAME_FORMULAS', array(), 'formula_title', '', '', '', 0);
+$formula        = $functionsObj->SelectData(array(), 'GAME_FORMULAS', array(), 'formula_title', '', '', '', 0);
 if($linkid!='')
 {
 	$userRequest = $functionsObj->SelectData(array(), 'GAME_SITE_USER_REPORT_REQUEST', array('linkid='.$linkid.' order by id desc limit 1'), '', '', '', '', 0);
 	
 }
-// echo "<pre>"; print_r($component); print_r($subcomponent); print_r($linkdetails); exit;
+$appendScenario       = array();
+$appendBranchScenario = array();
+if($linkdetails->Link_Branching == 1)
+{
+	while($row = $scenario->fetch_object()){
+		$appendScenario[] = $row;
+	}
+}
+else
+{
+	while($wrow = $BranchScenario->fetch_object()){
+		$appendBranchScenario[] = $wrow;
+	}
+}
+// echo count($appendScenario); echo ' and '.count($appendBranchScenario); exit;
+// echo "<pre>"; print_r($appendScenario);print_r($appendBranchScenario); exit;
 include_once doc_root.'ux-admin/view/Linkage/'.$file;

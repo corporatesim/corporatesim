@@ -25,7 +25,8 @@ include_once 'includes/header.php';
 							<button class="btn innerBtns">Submit</button>
 						</div>-->
 						<div class="col-sm-12  text-right pull-right"">
-							<button type="submit" name="submit" id="submit" class="btn innerBtns" value="Download">Download</button>
+							<!-- <button type="submit" name="submit" id="submit" class="btn innerBtns" value="Download">Download</button> -->
+							<button type="submit" name="submit" id="submit" class="btn innerBtns" value="Submit">Next</button>
 						</div>
 						
 						<!-- Nav tabs -->	
@@ -73,17 +74,40 @@ include_once 'includes/header.php';
 									}
 									$i++;
 
-									$sqlcomp = "SELECT distinct a.Area_ID as AreaID, c.Comp_ID as CompID, a.Area_Name as Area_Name, 
-									c.Comp_Name as Comp_Name, ls.SubLink_Details as Description ,ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder,ls.Sublink_ShowHide as ShowHide , o.output_current as Current ,ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor
-									FROM GAME_LINKAGE l 
-									INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID= ls.SubLink_LinkID 
-									INNER JOIN GAME_OUTPUT o on ls.SubLink_ID = o.output_sublinkid
-									INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-									INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
-									INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-									LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
-									INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
-									WHERE ls.SubLink_Type=1 AND o.output_user=".$userid." AND ls.SubLink_SubCompID=0 and l.Link_ID=".$linkid." and a.Area_ID=".$row['AreaID']." ORDER BY ls.SubLink_Order";
+									// $sqlcomp = "SELECT distinct a.Area_ID as AreaID, c.Comp_ID as CompID, a.Area_Name as Area_Name, 
+									// c.Comp_Name as Comp_Name, ls.SubLink_Details as Description ,ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder,ls.Sublink_ShowHide as ShowHide , o.output_current as Current ,ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor
+									// FROM GAME_LINKAGE l 
+									// INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID= ls.SubLink_LinkID 
+									// INNER JOIN GAME_OUTPUT o on ls.SubLink_ID = o.output_sublinkid
+									// INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
+									// INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
+									// INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+									// LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+									// INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
+									// WHERE ls.SubLink_Type=1 AND o.output_user=".$userid." AND ls.SubLink_SubCompID=0 and l.Link_ID=".$linkid." and a.Area_ID=".$row['AreaID']." ORDER BY ls.SubLink_Order";
+									$sqlcomp = "SELECT 
+									ga.Area_ID AS AreaID,
+									gc.Comp_ID AS CompID,
+									ga.Area_Name AS Area_Name,
+									gc.Comp_Name AS Comp_Name,
+									gls.SubLink_Details AS Description,
+									gls.SubLink_ViewingOrder AS ViewingOrder,
+									gls.SubLink_LabelCurrent AS LabelCurrent,
+									gls.SubLink_LabelLast AS LabelLast,
+									gls.SubLink_InputFieldOrder AS InputFieldOrder,
+									gls.Sublink_ShowHide AS ShowHide,
+									go.output_current AS CURRENT,
+									gls.SubLink_BackgroundColor AS BackgroundColor,
+									gls.SubLink_TextColor AS TextColor
+									FROM GAME_LINKAGE_SUB gls 
+									LEFT JOIN GAME_LINKAGE gl ON gl.Link_ID=gls.SubLink_LinkID
+									LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID=gls.SubLink_CompID
+									LEFT JOIN GAME_SUBCOMPONENT gsc ON gsc.SubComp_ID=gls.SubLink_SubCompID
+									LEFT JOIN GAME_AREA ga ON ga.Area_ID=gls.SubLink_AreaID
+									LEFT JOIN GAME_OUTPUT go ON go.output_sublinkid=gls.SubLink_ID
+									WHERE
+									gls.SubLink_Type = 1 AND gls.SubLink_SubCompID = 0 AND gls.SubLink_LinkID=".$linkid." AND gls.SubLink_AreaID=".$row['AreaID']." 
+									GROUP BY gls.SubLink_ID ORDER BY gls.SubLink_Order";
 									// echo $sqlcomp; exit;
 									$component = $functionsObj->ExecuteQuery($sqlcomp);
 							//Get Component for this area for this linkid
@@ -307,30 +331,29 @@ include_once 'includes/header.php';
                     	echo "<div class='col-sm-4 ".$cklength." no_padding ".$DetailsChart."'>".$row1['Description']."</div>";
 
                     	echo "<div class=' col-sm-6 ".$width1." text-center ".$InputFields."'>";
-
-                    	$sqlOutcome ="SELECT gl.SubLink_ID,gp.*,gr.Outcome_Name,gcomp.Comp_Name FROM GAME_PERSONALIZE_OUTCOME gp LEFT JOIN GAME_LINKAGE_SUB gl ON gl.SubLink_CompID=gp.Outcome_CompId AND gl.SubLink_LinkID=gp.Outcome_LinkId LEFT JOIN GAME_OUTCOME_RESULT gr ON gr.Outcome_ResultID = gp.Outcome_FileType LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gl.SubLink_ID LEFT JOIN GAME_COMPONENT gcomp ON gcomp.Comp_ID = gp.Outcome_CompId  WHERE gp.Outcome_GameId=$gameid AND gl.SubLink_Type=1 AND gl.SubLink_SubCompID=0  AND ".$row1['Current']." >= gp.Outcome_MinVal AND ".$row1['Current']."<=gp.Outcome_Maxval AND Outcome_CompId=".$row1['CompID']." AND gp.Outcome_IsActive=0 ORDER BY gp.Outcome_Order";
-                     // print_r( $sqlOutcome);
-
-                    	$objRes = $functionsObj->ExecuteQuery($sqlOutcome);
-                    	/*print_r($objRes);
-                    	echo $objRes->num_rows;*/
-                    	$objectResult = mysqli_fetch_assoc($objRes);
-                      //echo $objectResult['Outcome_FileType'];
-                    	if($row1['CompID'] == $objectResult['Outcome_CompId'] && $objectResult['Outcome_FileType']<3)
+                    	// if the value is null then make it 0
+                    	$row1['CURRENT'] = $row1['CURRENT']?$row1['CURRENT']:'0';
+                    	$sqlOutcome      = "SELECT * FROM GAME_PERSONALIZE_OUTCOME gpo WHERE gpo.Outcome_CompId=".$row1['CompID']." AND gpo.Outcome_LinkId=".$linkid." AND (gpo.Outcome_MinVal >=".$row1['CURRENT']." OR gpo.Outcome_MaxVal <=".$row1['CURRENT'].") AND gpo.Outcome_IsActive=0";
+                    	// echo $row1['CURRENT'].' mk';
+                    	$objRes       = $functionsObj->ExecuteQuery($sqlOutcome);
+                    	$objectResult = $functionsObj->FetchObject($objRes);
+                      // if same component and not the default outcome selected i.e. 3
+                    	if($row1['CompID'] == $objectResult->Outcome_CompId && $objectResult->Outcome_FileType != 3)
                     	{
-                    		echo "<div class   ='InlineBox'>";  
-                    		echo "<img id='".$objectResult['Outcome_FileName']."' src='".site_root."ux-admin/upload/Badges/".$objectResult['Outcome_FileName']."' alt='Outcome_image' width=100 height=100 />";
+                    		echo "<div class ='InlineBox'>";
+                    		// echo "<label class ='scenariaLabel'>OutcomeResult</label>";
+                    		echo "<img id='".$objectResult->Outcome_FileName."' src='".site_root."ux-admin/upload/Badges/".$objectResult->Outcome_FileName."' alt='Outcome_image' width=100 height=100 />";
                     		echo "</div>";
                     		echo "<div class='InlineBox hidden ".$labelC."'>";
                     		echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
-                    		echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value='".$row1['Current']."' readonly></input>";
+                    		echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value='".$row1['CURRENT']."' readonly></input>";
                     		echo "</div>";
                     	}
                     	else
                     	{
                     		echo "<div class='InlineBox ".$labelC."'>";
                     		echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
-                    		echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value='".$row1['Current']."' readonly></input>";
+                    		echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value='".$row1['CURRENT']."' readonly></input>";
                     		echo "</div>";
                     		echo "<div class='InlineBox ".$labelL."'>";
                     		echo "<label class='scenariaLabel'>".$row1['LabelLast']."</label>";
@@ -615,7 +638,8 @@ include_once 'includes/header.php';
 
       <div class="col-sm-12 text-right">
       	<!--<button class="btn innerBtns">Save</button>-->
-      	<button type="submit" name="submit" id="submit" class="btn innerBtns" value="Submit">Next</button>
+      	<button type="submit" name="submit" id="submit" class="btn innerBtns" value="Download">Download</button>
+      	<!-- <button type="submit" name="submit" id="submit" class="btn innerBtns" value="Submit">Next</button> -->
       </div>
 
     </div><!--row-->

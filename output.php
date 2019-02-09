@@ -211,8 +211,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 	// removing newly added link and scenario id at the first of the array
 	array_shift($_POST);
 	array_shift($_POST);
-	// removing last element of array i.e. submit
-	array_pop($_POST);
+	// removing element of array i.e. submit
+	array_shift($_POST);
 	// echo "<pre>"; print_r($_POST);
 	foreach ($_POST as $input_key => $input_current)
 	{

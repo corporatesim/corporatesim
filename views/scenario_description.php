@@ -72,6 +72,7 @@ include_once 'includes/header.php';
 									<li role="presentation" class="regular"><a href="#videosTab" aria-controls="videosTab" role="tab" data-toggle="tab">Videos</a></li>
 									<li role="presentation" class="regular"><a href="#imagesTab" aria-controls="imagesTab" role="tab" data-toggle="tab">Images</a></li>
 									<li role="presentation" class="regular"><a href="#documentsTab" aria-controls="documentsTab" role="tab" data-toggle="tab">Documents</a></li>
+									<li role="presentation" class="regular pull-right" style="margin-right: 40%;"><a href='<?php echo site_root."game_description.php?Game=".$gameidChk; ?>'>Go Back To Introduction</a></li>
 								</ul>
 
 								<!-- Tab panes -->
