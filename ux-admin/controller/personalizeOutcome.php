@@ -10,24 +10,13 @@ $file   = 'personalizeOutcome.php';
 $header = 'Personalized Outcome';
 
 // selcting all games for dropdown
-$object = $functionsObj->SelectData(array('Game_ID','Game_Name'), 'GAME_GAME', array('Game_Delete=0'), '', '', '', '', 0,'order by asc') ;
+$object = $functionsObj->SelectData(array('Game_ID','Game_Name'), 'GAME_GAME', array('Game_Delete=0'), 'Game_Name', '', '', '', 0);
 if($object->num_rows > 0);
 
 {
 	while($gameDetails = mysqli_fetch_object($object))
 	{
 		$gameName[] = $gameDetails;
-	}
-	// echo "<pre>"; print_r($gameName); exit;
-}
-
-// selcting all scenario linked with the games for dropdown
-$object = $functionsObj->SelectData(array('Game_ID','Game_Name'), 'GAME_GAME', array('Game_Delete=0'), '', '', '', '', 0,'order by asc');
-if($object->num_rows > 0)
-{
-	while($gameDetails = mysqli_fetch_object($object))
-	{
-		$gameScenario[] = $gameDetails;
 	}
 	// echo "<pre>"; print_r($gameName); exit;
 }

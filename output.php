@@ -272,31 +272,28 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 		$inputObj = $functionsObj->FetchObject($input);
 		//echo $input->num_rows;
 		
-	//		exit();
-		
-		//Update UserStatus
-		
+		// if this is not the end scenario then go to if		
 		if($input->num_rows > 0 && $inputObj->UsScen_IsEndScenario == 0)
 		{
 			// scenario branching $gameid $scenid $userid
 			$sublinkSql = "SELECT gu.UsScen_Status, gl.SubLink_ID,gb.*,gi.input_key,gi.input_current FROM GAME_BRANCHING_SCENARIO gb LEFT JOIN GAME_LINKAGE_SUB gl ON gl.SubLink_CompID=gb.Branch_CompId AND gl.SubLink_LinkID=gb.Branch_LinkId LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gl.SubLink_ID LEFT JOIN GAME_LINKAGE_USERS gu ON gu.UsScen_LinkId=gb.Branch_LinkId AND gu.UsScen_UserId=$userid WHERE gb.Branch_GameId=$gameid AND gb.Branch_ScenId=$scenid AND gi.input_user=$userid AND gl.SubLink_Type=1 AND gl.SubLink_SubCompID=0 AND gb.Branch_IsActive=0 GROUP BY gb.Branch_Id ORDER BY gb.Branch_Order";
 			// die($sublinkSql);
 			$subRes = $functionsObj->ExecuteQuery($sublinkSql);
-
+			// if scenario branching enabled
 			if($subRes->num_rows > 0)
 			{
 				while ($subObj = $functionsObj->FetchObject($subRes))
 				{
 					// echo "<pre>"; print_r($subObj);
-					if($subObj->input_current >= $subObj->Branch_MinVal && $subObj->input_current < $subObj->Branch_MaxVal && $subObj->UsScen_Status<1)
+					if($subObj->input_current >= $subObj->Branch_MinVal && $subObj->input_current <= $subObj->Branch_MaxVal && $subObj->UsScen_Status<1)
 					{
-						// die('jupmed ');
+						// die('jumped to next scen '.$subObj->Branch_NextScen);
 						// writing this query to update status of played scenario by user for scenario branching, deleting the row instead of updating
-						$unplayScen = "UPDATE GAME_LINKAGE_USERS SET UsScen_Status=1 WHERE  UsScen_UserId=$userid AND UsScen_LinkId =".$updateLinkId;
+						$unplayScen = " UPDATE GAME_LINKAGE_USERS SET UsScen_Status=1 WHERE  UsScen_UserId=$userid AND UsScen_LinkId =".$updateLinkId;
 						$functionsObj->ExecuteQuery($unplayScen);
 
 						// updating end scenario 
-						$unplayScenario = "UPDATE GAME_LINKAGE_USERS SET UsScen_IsEndScenario=".$subObj->Branch_IsEndScenario." WHERE  UsScen_UserId=$userid AND UsScen_LinkId =".$subObj->Branch_NextLinkId;
+						$unplayScenario = " UPDATE GAME_LINKAGE_USERS SET UsScen_IsEndScenario=".$subObj->Branch_IsEndScenario." WHERE  UsScen_UserId=$userid AND UsScen_LinkId =".$subObj->Branch_NextLinkId;
 						$functionsObj->ExecuteQuery($unplayScenario);
 						// echo $unplayScen.'<br>'.$unplayScenario; exit;
 						header("Location: ".site_root."scenario_description.php?Link=".$subObj->Branch_NextLinkId);
@@ -317,7 +314,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 		}
 		else
 		{
-			// die('result');
+			// die('end scenario');
 			$unplay = "UPDATE GAME_LINKAGE_USERS SET UsScen_Status=1 WHERE  UsScen_UserId=$userid AND UsScen_LinkId =".$updateLinkId;
 			$functionsObj->ExecuteQuery($unplay);
 			header("Location: ".site_root."result.php?ID=".$gameid);

@@ -13,7 +13,7 @@ $header = 'Scenario Branching';
 
 // selcting all games for dropdown
 // $object   = $functionsObj->SelectData(array('Game_ID','Game_Name'), 'GAME_GAME', array('Game_Delete=0'), 'Game_Name', '', '', '', 0);
-$sql = " SELECT * FROM GAME_GAME WHERE Game_ID IN (SELECT Link_GameID FROM GAME_LINKAGE GROUP BY Link_GameID HAVING COUNT(Link_GameID)>1 )";
+$sql = " SELECT * FROM GAME_GAME WHERE Game_ID IN (SELECT Link_GameID FROM GAME_LINKAGE GROUP BY Link_GameID HAVING COUNT(Link_GameID)>1 ) ORDER BY Game_Name";
 $object = $functionsObj->ExecuteQuery($sql);
 if($object->num_rows > 0);
 

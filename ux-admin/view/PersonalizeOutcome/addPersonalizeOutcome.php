@@ -129,7 +129,6 @@ span.alert-danger {
         <select name="game_scenario" id="game_scenario" class="form-control">
           <option value="">--Select Scenario--</option>
           <!-- <option value="1">Test Scenario</option> -->
-          <!-- <option value="<?php // echo $gameScenario->Game_ID; ?>"><?php // echo $gameScenario->Game_Name; ?></option> -->
         </select>
       </div>
       <input type="hidden" name="scenarioname" id="scenarioname">
