@@ -311,3 +311,47 @@ if($_POST['action']=='element_not_found')
 	}
 }
 
+// for component branching
+if($_POST['action']=='componentBranching')
+{
+	// print_r($_POST);
+	// Array
+	// (
+	// 	[action] => componentBranching
+	// 	[param]  => branchComp_6448
+	// 	[name]   => mohit
+	// )
+	$param      = $_POST['param'];
+	$idSublink  = explode('_',$param);
+	$SubLink_ID = $idSublink[1];
+	$branchSql = "SELECT gbc.*,gi.input_current FROM GAME_BRANCHING_COMPONENT gbc LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gbc.CompBranch_SublinkId AND input_user=".$userid." WHERE gbc.CompBranch_SublinkId=".$SubLink_ID." ORDER BY gbc.CompBranch_Order";
+	// die($branchSql);
+	$branchObj = $funObj->ExecuteQuery($branchSql);
+	if($branchObj->num_rows > 0)
+	{
+		while($row=$branchObj->fetch_object())
+		{
+			if(($row->input_current >= $row->CompBranch_MinVal) && ($row->input_current <= $row->CompBranch_MaxVal))
+			{
+				$nextVisibleComp = 'branchComp_'.$row->CompBranch_NextCompSublinkId;
+				$hideComp        = 'branchComp_'.$row->CompBranch_SublinkId;
+				$hideOverlyDiv   = 'overlay_'.$row->CompBranch_SublinkId;
+				// hiding the current component
+				$statusSql       = "UPDATE GAME_INPUT SET input_showComp=1 WHERE input_user=".$userid." AND input_sublinkid=".$row->CompBranch_SublinkId;
+				$statusObj       = $funObj->ExecuteQuery($statusSql);
+				// showing the next component, to keep the status, if page reload then show from this component
+				$statusSql       = "UPDATE GAME_INPUT SET input_showComp=2 WHERE input_user=".$userid." AND input_sublinkid=".$row->CompBranch_NextCompSublinkId;
+				$statusObj       = $funObj->ExecuteQuery($statusSql);
+				// echo $statusSql.'<br>';
+				break;
+			}
+		}
+		echo $hideComp.','.$hideOverlyDiv.','.$nextVisibleComp;
+	}
+	else
+	{
+		echo 'no';
+	}
+
+}
+

@@ -142,6 +142,22 @@ switch($_GET['q']){
 	$showfile = 'personalizeOutcome.php';
 	break;
 
+	case 'componentBranching':
+	$showfile = 'componentBranching.php';
+	break;
+
+	case 'ManageEnterprize':
+	$showfile = 'ManageEnterprize.php';
+	break;
+
+	case 'ManageSubEnterprize':
+	$showfile = 'ManageSubEnterprize.php';
+	break;
+
+	case 'ManageEntSubEntUsers':
+	$showfile = 'EntSubEnterprizeUsers.php';
+	break;
+
 		// Logout
 	case 'Logout':
 	$showfile = 'logout.php';

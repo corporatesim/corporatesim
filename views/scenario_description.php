@@ -2,11 +2,6 @@
 // echo "<pre>"; print_r($scen); exit;
 include_once 'includes/header.php'; 
 ?>
-<style>
-.DisplayNone{
-	display: none;
-}
-</style>
 <!--[if IE]>
   <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
@@ -49,7 +44,7 @@ include_once 'includes/header.php';
 						<?php // echo $game_description; ?></a> /  -->
 						<?php if(!empty($scen)){ echo $scen->Scen_Header; } ?> </h2>	
 					</div>
-					<div class="col-sm-2  text-right pull-right <?php echo ($scen->Scen_InputButton == 0)?'DisplayNone':'';?>" style="margin-top:-6px;">
+					<div class="col-sm-2  text-right pull-right <?php echo ($scen->Scen_InputButton == 0)?'hidden':'';?>" style="margin-top:-6px;">
 						<button class="btn innerBtns" id="proceedBtn" type="button">Proceed</button>
 						<!--<button class="btn innerBtns">Save</button>
 							<button class="btn innerBtns">Submit</button>-->

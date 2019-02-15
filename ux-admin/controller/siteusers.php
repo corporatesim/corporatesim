@@ -3,26 +3,88 @@ require_once doc_root.'ux-admin/model/model.php';
 require_once doc_root.'includes/PHPExcel.php';
 $functionsObj = new Model();
 
+// gameSite details
 $object   = $functionsObj->SelectData(array(), 'GAME_SITESETTINGS', array('id=1'), '', '', '', '', 0);
 $sitename = $functionsObj->FetchObject($object);
 
+// select Enterprize details
+$object = $functionsObj->SelectData(array('Enterprize_ID','Enterprize_Name'), 'GAME_ENTERPRIZE', array('Enterprize_Status=0'), '', '', '', '', 0);
+if($object->num_rows > 0);
+{
+	while($EnterprizeDetails = mysqli_fetch_object($object))
+	{
+		//$Enterprize_ID = $EnterprizeDetails->Enterprize_ID;
+		$EnterprizeName[] = $EnterprizeDetails;
+	}
+		//echo "<pre>"; print_r($Enterprize_ID); exit();
+}
+
+// select SubEnterprize details
+$object = $functionsObj->SelectData(array('SubEnterprize_ID','SubEnterprize_Name'), 'GAME_SUBENTERPRIZE', array('SubEnterprize_Status=0'), '', '', '', '', 0);
+if($object->num_rows > 0);
+{
+	while($SubEnterprizeDetails = mysqli_fetch_object($object))
+	{
+		//$Enterprize_ID = $EnterprizeDetails->Enterprize_ID;
+		$SubEnterprizeName[] = $SubEnterprizeDetails;
+	}
+		//echo "<pre>"; print_r($Enterprize_ID); exit();
+}
+
+// Add game site users
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 {
+	//For Showing User Role
+	if($_POST['Enterprize'] && $_POST['SubEnterprize'] )
+	{
+		$User_Role =2;
+	}
+	else if($_POST['Enterprize'])
+	{
+		$User_Role =1;
+	}
+	else
+	{
+		$User_Role =0;
+	}
+
+//For Enterprize And SubENterprize
+	if($_POST['Enterprize'])
+	{
+		$User_ParentId = $_POST['Enterprize'];
+	}
+	else
+	{
+		$User_ParentId = -1;
+	}
+
+ if($_POST['SubEnterprize'])
+	{
+		$User_SubParentId = $_POST['SubEnterprize'];
+	}
+	else
+	{
+		$User_SubParentId = -2;
+	}
+
 	$userdetails = (object) array(
-		'User_fname'      =>	$_POST['fname'],
-		'User_lname'      =>	$_POST['lname'],
-		'User_mobile'     =>	$_POST['mobile'],
-		'User_email'      =>	$_POST['email'],
-		'User_companyid'  =>	$_POST['company'],
-		'User_username'   =>	$_POST['username'],			
-		'User_csv_status' =>	2,			
-		'User_datetime'   =>	date('Y-m-d H:i:s')
+		'User_fname'       =>	$_POST['fname'],
+		'User_lname'       =>	$_POST['lname'],
+		'User_mobile'      =>	$_POST['mobile'],
+		'User_email'       =>	$_POST['email'],
+		'User_companyid'   =>	$_POST['company'],
+		'User_username'    =>	$_POST['username'],
+		'User_Role'        =>	$User_Role,
+		'User_ParentId'    =>	$User_ParentId,
+		'User_SubParentId' =>	$User_SubParentId,
+		'User_csv_status'  =>	2,			
+		'User_datetime'    =>	date('Y-m-d H:i:s')
 	);
-	
+	//print_r($userdetails); exit();
 	if( !empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['mobile'])	&& !empty($_POST['email']) )
 	{
 		$where  = array("`User_email` ='".$_POST['email']."' OR `User_username` ='".$_POST['username']."'");
-		$object = $functionsObj->SelectData(array(), 'GAME_SITE_USERS', $where, '', '', '', '', 1);
+		$object = $functionsObj->SelectData(array(), 'GAME_SITE_USERS', $where, '', '', '', '', 0);
 		//exit();
 		if($object->num_rows > 0)
 		{
@@ -30,9 +92,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 			$type[0] = "inputError";
 			$type[1] = "has-error";
 		}
+		
 		else
 		{
-			$result = $functionsObj->InsertData('GAME_SITE_USERS', $userdetails, 0, 0);
+			$result = $functionsObj->InsertData('GAME_SITE_USERS', $userdetails, 0, 1);
 			if($result)
 			{
 				$uid      = $functionsObj->InsertID();
@@ -100,19 +163,52 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 	}
 }
 
-
-
+//update user details
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 {
+	if($_POST['Enterprize'] && $_POST['SubEnterprize'] )
+	{
+		$User_Role =2;
+	}
+	else if($_POST['Enterprize'])
+	{
+		$User_Role =1;
+	}
+	else
+	{
+		$User_Role =0;
+	}
+	//For Enterprize And SubENterprize
+	if($_POST['Enterprize'])
+	{
+		$User_ParentId = $_POST['Enterprize'];
+	}
+	else
+	{
+		$User_ParentId = -1;
+	}
+
+ if($_POST['SubEnterprize'])
+	{
+		$User_SubParentId = $_POST['SubEnterprize'];
+	}
+	else
+	{
+		$User_SubParentId = -2;
+	}
 	$userdetails = (object) array(
-		'User_fname'     =>	$_POST['fname'],
-		'User_lname'     =>	$_POST['lname'],
-		'User_mobile'    =>	$_POST['mobile'],
-		'User_email'     =>	$_POST['email'],
-		'User_companyid' =>	$_POST['company'],
-		'User_username'  =>	$_POST['username'],			
-		'User_datetime'  =>	date('Y-m-d H:i:s')
-	);	
+		'User_fname'       =>	$_POST['fname'],
+		'User_lname'       =>	$_POST['lname'],
+		'User_mobile'      =>	$_POST['mobile'],
+		'User_email'       =>	$_POST['email'],
+		'User_companyid'   =>	$_POST['company'],
+		'User_username'    =>	$_POST['username'],
+		'User_Role'        =>	$User_Role,
+		'User_ParentId'    =>	$User_ParentId,
+		'User_SubParentId' =>	$User_SubParentId,			
+		'User_datetime'    =>	date('Y-m-d H:i:s')
+	);
+	//print_r($userdetails); exit();
 	if( !empty($_POST['fname']) && !empty($_POST['lname'])  && !empty($_POST['mobile'])	&& !empty($_POST['email']) && !empty($_POST['username']))
 	{
 		$uid = $_POST['id'];
@@ -160,8 +256,6 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		$type[1] = "has-error";
 	}
 }
-
-
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Download')
 {
@@ -235,6 +329,10 @@ if(isset($_GET['edit']))
 	
 	$object1     = $functionsObj->SelectData(array(), 'GAME_USER_AUTHENTICATION', array('Auth_userid='.$uid), '', '', '', '', 0);
 	$userauth    = $functionsObj->FetchObject($object1);
+
+	$sql         = " SELECT gu.*,gs.* FROM `GAME_SITE_USERS`gu LEFT JOIN GAME_SUBENTERPRIZE gs ON gs.SubEnterprize_ID=gu.User_SubParentId WHERE User_id = $uid ";
+	$subObj      = $functionsObj->ExecuteQuery($sql);
+  $subObjRes   = $functionsObj->FetchObject($subObj);
 	$url         = site_root."ux-admin/siteusers";
 	$file        = 'addedit.php';
 }
@@ -296,8 +394,8 @@ elseif(isset($_GET['stat']))
 else
 {
 	// fetch siteuser list from db
-	$sql="SELECT  u.*,ua.Auth_password as pwd, (SELECT count(*) FROM GAME_USERGAMES WHERE UG_UserID = u.User_id) as gamecount 
-	FROM `GAME_SITE_USERS` u INNER JOIN GAME_USER_AUTHENTICATION ua on u.User_id=ua.Auth_userid
+	$sql = "SELECT  u.*,ua.Auth_password as pwd, (SELECT count(*) FROM GAME_USERGAMES WHERE UG_UserID = u.User_id) as gamecount,ge.Enterprize_Name,gs.SubEnterprize_Name 
+	FROM `GAME_SITE_USERS` u INNER JOIN GAME_USER_AUTHENTICATION ua on u.User_id=ua.Auth_userid LEFT JOIN GAME_ENTERPRIZE ge ON ge.Enterprize_ID=u.User_ParentId LEFT JOIN GAME_SUBENTERPRIZE gs ON gs.SubEnterprize_ID=u.User_SubParentId
 	WHERE User_Delete = 0 
 	ORDER BY User_datetime DESC";
 	//$sql="SELECT  u.*, (SELECT count(*) FROM GAME_USERGAMES WHERE UG_UserID = u.User_id) as gamecount FROM `GAME_SITE_USERS` u WHERE User_Delete = 0 ORDER BY User_datetime DESC";

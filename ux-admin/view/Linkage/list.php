@@ -14,8 +14,7 @@
 <div class="row">
 	<div class="col-sm-12">
 		<ul class="breadcrumb">
-			<li class="completed"><a
-				href="<?php echo site_root."ux-admin/Dashboard"; ?>">Home</a></li>
+			<li class="completed"><a href="<?php echo site_root."ux-admin/Dashboard"; ?>">Home</a></li>
 				<li class="active">Manage Linkage</li>			
 			</ul>
 		</div>
@@ -33,6 +32,7 @@
 					<li> <span class="glyphicon glyphicon-search">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can View the Record"> View		</a></li>
 					<li> <span class="glyphicon glyphicon-pencil">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Edit the Record"> Edit		</a></li>
 					<li> <span class="glyphicon glyphicon-trash">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Delete the Record"> Delete	</a></li>
+					<li> <span class="fa fa-code-fork">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="Component Branching"> Branching	</a></li>
 				</ul>
 			</div>
 		</div>
@@ -74,20 +74,23 @@
 									
 									<td class="text-center">
 										<a href="<?php echo site_root."ux-admin/linkage/tab/".$row->Link_ID; ?>" 
-											title="Area Tab Sequencing"><span class="fa fa-gear fa-fw"></span></a>
+											data-toggle="tooltip" title="Area Tab Sequencing"><span class="fa fa-gear fa-fw"></span></a>
 											<a href="<?php echo site_root."ux-admin/linkage/link/".$row->Link_ID; ?>" 
-												title="Link Game - Comp/Subcomp"><span class="fa fa-link"></span></a>
+												data-toggle="tooltip" title="Link Game - Comp/Subcomp"><span class="fa fa-link"></span></a>
 												<?php if($row->Link_Status == 0){?>
 													<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Link_ID; ?>"
-														title="Deactive"><span class="fa fa-times"></span></a>
+														data-toggle="tooltip" title="Deactive"><span class="fa fa-times"></span></a>
 													<?php }else{?>
 														<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Link_ID; ?>"
-															title="Active"><span class="fa fa-check"></span></a>
+															data-toggle="tooltip" title="Active"><span class="fa fa-check"></span></a>
 														<?php }?>
 														<a href="<?php echo site_root."ux-admin/linkage/edit/".$row->Link_ID; ?>"
-															title="Edit"><span class="fa fa-pencil"></span></a>
+															data-toggle="tooltip" title="Edit"><span class="fa fa-pencil"></span></a>
 															<a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->Link_ID; ?>"
-																title="Delete"><span class="fa fa-trash"></span></a>
+																data-toggle="tooltip" title="Delete"><span class="fa fa-trash"></span></a>
+																<?php if($row->Link_Branching == 1){ ?>
+																	&nbsp;<a href="<?php echo site_root."ux-admin/componentBranching/link/".$row->Link_ID; ?>" data-toggle="tooltip" title="Component Branching"><span class="fa fa-code-fork"></span></a>
+																<?php } ?>
 															</td>
 														</tr>
 														<?php $i++; } ?>

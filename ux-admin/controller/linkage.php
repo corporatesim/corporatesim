@@ -298,8 +298,19 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 		$object = $functionsObj->SelectData ( array (), 'GAME_LINKAGE_SUB', array ($where), 
 			'', '', '', '', 0 );
 //exit();
-		if ($object->num_rows > 0) {
+		if ($object->num_rows > 0)
+		{
 			$msg      = 'Entered Link already present';
+			$type [0] = 'inputError';
+			$type [1] = 'has-error';
+		}
+
+		$compBranchSql = "SELECT * FROM GAME_BRANCHING_COMPONENT WHERE CompBranch_SublinkId=".$sublinkid." OR CompBranch_NextCompSublinkId=".$sublinkid;
+		$compBranchObj = $functionsObj->ExecuteQuery($compBranchSql);
+			// echo "<pre>"; print_r($compBranchObj); die('here');
+		if($compBranchObj->num_rows > 0)
+		{
+			$msg      = 'This linkage is used in component branching so show/hide status can not be changed';
 			$type [0] = 'inputError';
 			$type [1] = 'has-error';
 		}
@@ -535,7 +546,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 		}
 	}
 }
-else{
+else
+{
 	if($_POST['Link_Branching'])
 	{
 		$Link_Branching = $_POST['Link_Branching'];

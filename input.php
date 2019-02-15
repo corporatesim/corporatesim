@@ -782,7 +782,7 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 		exit(0);
 	}
 
-	$sql ="SELECT g.game_name as Game,sc.Scen_Name as Scenario,a.Area_Name as Area, 
+	$sql = "SELECT g.game_name as Game,sc.Scen_Name as Scenario, sc.Scen_Branching as Branching, a.Area_Name as Area, 
 	c.Comp_Name as Component, s.SubComp_Name as Subcomponent, l.*,ls.* 
 	FROM GAME_LINKAGE l 
 	INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 

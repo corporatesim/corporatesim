@@ -7,6 +7,25 @@ include_once 'includes/header.php';
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Chango">
+<!-- adding css for component branching componentBranching branchingOverlay -->
+<style>
+.addOverlay{
+  /**/
+}
+/*for active area highlighting*/
+.nav-tabs > li > a::after {
+  content   : "";
+  background: #009aef;
+  height    : 4px;
+  position  : absolute;
+  width     : 100%;
+  left      : 0px;
+  bottom    : -1px;
+  transition: all 250ms ease 0s;
+  transform : scale(0);
+}
+
+</style>
 <section id="video_player">
   <div class="container">
     <div class="row">
@@ -137,6 +156,8 @@ include_once 'includes/header.php';
               while($row = mysqli_fetch_array($area)) {
                 $areaname = $row['Area_Name'];
                   //echo row['Area_Name'];
+                // applicable only for scenario branching
+                $firstComponent = 0;
                 if ($tab == 'NOTSET') 
                 {
                   if($i == 0)
@@ -158,7 +179,7 @@ include_once 'includes/header.php';
                   echo "<div role='tabpanel' data-TabId='".$row['Area_Name']."' class='tab-pane' id='".$row['Area_Name']."Tab'>";
                 }
 
-                $sqlcomp = "SELECT distinct a.Area_ID as AreaID, c.Comp_ID as CompID, a.Area_Name as Area_Name, l.Link_Order as 'Order',  
+                $sqlcomp = "SELECT distinct gi.input_showComp, a.Area_ID as AreaID, c.Comp_ID as CompID, a.Area_Name as Area_Name, l.Link_Order as 'Order', l.Link_Branching as componentBranching,
                 c.Comp_Name as Comp_Name, ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode, 
                 f.expression as exp , ls.SubLink_ID as SubLinkID,ls.Sublink_AdminCurrent as AdminCurrent, 
                 ls.Sublink_AdminLast as AdminLast, ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff,
@@ -169,12 +190,13 @@ include_once 'includes/header.php';
                 INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
                 INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
                 INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-                LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
                 INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
+                LEFT JOIN GAME_INPUT gi on gi.input_sublinkid=ls.SubLink_ID and input_user=".$userid." 
+                LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
                 LEFT OUTER JOIN GAME_FORMULAS f on ls.SubLink_FormulaID=f.f_id 
                 WHERE ls.SubLink_Type=0 AND ls.SubLink_SubCompID=0 and l.Link_ID=".$linkid." 
                 and a.Area_ID=".$row['AreaID']." ORDER BY ls.SubLink_Order";
-                  //echo "Component - ".$sqlcomp;
+                  // echo "Component - ".$sqlcomp;
                   //echo $userid;
                 $component = $functionsObj->ExecuteQuery($sqlcomp);
                   //Get Component for this area for this linkid
@@ -365,7 +387,40 @@ include_once 'includes/header.php';
                   // if ($row1['ShowHide']==1){
                   //   echo "style='display:none;'";
                   // }
-                  echo "<div class='".$comp_length." scenariaListingDiv ".(($row1['ShowHide']==1)?'hidden':'')."' style='background:".$row1['BackgroundColor']."; color:".$row1['TextColor'].";' >";
+                  // component branching, if branching enabled then make the first component of the area visible and then as per the component branching conditions, show the next component
+                  
+                  if($row1['componentBranching'] > 0)
+                  {
+                    // for show hide-> 0-show and 1-hide, if component is visible from admin end
+                    if($row1['ShowHide'] < 1)
+                    {
+                      if($firstComponent < 1)
+                      {
+                        $showComp    = '';
+                        $hideByAdmin = '';
+                        $firstComponent++;
+                      }
+                      else
+                      {
+                        $showComp    = 'hidden';
+                        $hideByAdmin = '';
+                      }
+                    }
+                    else
+                    {
+                      // it means component is hide from admin end
+                      $showComp    = 'hidden';
+                      // add a class to component div, to find wheather we have to show the div after execute or not
+                      $hideByAdmin = 'hideByAdmin';
+                    }
+                    echo "<div class='".$comp_length." scenariaListingDiv componentBranching ".$showComp." ".$hideByAdmin."' style='background:".$row1['BackgroundColor']."; color:".$row1['TextColor'].";' id='branchComp_".$row1['SubLinkID']."'>";
+                    // adding div to create overlay, to prevent clicking after execute or click on save
+                    echo "<div class='branchingOverlay' id='overlay_".$row1['SubLinkID']."'>";
+                  }
+                  else
+                  {
+                    echo "<div class='".$comp_length." scenariaListingDiv ".(($row1['ShowHide']==1)?'hidden':'')."' style='background:".$row1['BackgroundColor']."; color:".$row1['TextColor'].";' >";
+                  }
 
                   echo "<div class='col-sm-1 ".$comp_name_length." regular ".$ComponentName."'>";
                   echo $row1['Comp_Name'];
@@ -382,6 +437,8 @@ include_once 'includes/header.php';
                     $chartDetailscomp       = $functionsObj->ExecuteQuery($sqlchartComp);
                     $ResultchartDetailsComp = $functionsObj->FetchObject($chartDetailscomp);
                     $charttypeComp          = $ResultchartDetailsComp->Chart_Type; 
+                    // adding a refresh icon
+                    echo '<a href="" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
                     ?>  
                     <img class="comp_chart col-md-12" src="chart/<?=$charttypeComp?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>">
                     <?php
@@ -853,12 +910,15 @@ include_once 'includes/header.php';
                     $chartname          = $ResultchartDetails->Chart_Name;
                     $charttype          = $ResultchartDetails->Chart_Type;
 
-                //print_r($dataChart);
+                    //print_r($dataChart);
+                    // adding a refresh icon
+                    echo '<a href="" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
                     ?>
                     <!-- -----------------------------       Chart Section    ----------------------------------------------->
                     <br><br>
                     <!-- <div id="chart_div_<?// =$row2['SubCompID']?>" style="width: 800px; height: 400px;"></div> -->
-                    <div id="chart_div_<?=$row2['SubCompID']?>" class="subcomp_chart"></div>
+                    <div id="chart_div_<?=$row2['SubCompID']?>" class="subcomp_chart">
+                    </div>
                     <script type="text/javascript">
                       google.load('visualization', '1', {packages: ['corechart']});
                     </script>
@@ -884,9 +944,11 @@ include_once 'includes/header.php';
                   hAxis           : {title: "---- X-Axis ---- -> ",titleTextStyle:{ fontName: 'Chango'},textStyle: {color: '#000', fontSize: 12},textPosition:"out",textPosition: 'none',slantedText:true},
                   seriesType: "bars",
                 };
-                
-                var chart = new google.visualization.<?=$charttype=='pie'?'PieChart':'ComboChart'?>(document.getElementById('chart_div_<?=$row2['SubCompID']?>'));
-                chart.draw(data, options);
+                <?php if(count($dataChart) > 0) { ?>
+                  // to prevent the error message if there is no data for chart
+                  var chart = new google.visualization.<?=$charttype=='pie'?'PieChart':'ComboChart'?>(document.getElementById('chart_div_<?=$row2['SubCompID']?>'));
+                  chart.draw(data, options);
+                <?php } ?>
                 
               }
               google.setOnLoadCallback(drawVisualization);
@@ -998,152 +1060,157 @@ include_once 'includes/header.php';
             }
             if($row2['Mode']=="formula")
             {
-               $formulaSql = "SELECT input_current FROM GAME_INPUT WHERE input_sublinkid =".$row2['SubLinkID']." AND input_user=".$userid;
+             $formulaSql = "SELECT input_current FROM GAME_INPUT WHERE input_sublinkid =".$row2['SubLinkID']." AND input_user=".$userid;
               // die($formulaSql);
-              $formulaCurrent = $functionsObj->ExecuteQuery($formulaSql);
-              $formaulValue   = $functionsObj->FetchObject($formulaCurrent);
-              if($formaulValue->input_current)
-              {
-                $value = $formaulValue->input_current;
-              }
-              echo "<input type='text' value='".$value."' id='".$areaname."_fsubc_".$row2['SubCompID']."' name='".$areaname."_fsubc_".$row2['SubCompID']."' ";
-              $sankey_val = '"'.$areaname."_fsubc_".$row2['SubCompID'].'"';
-              echo " readonly></input>";
-              // echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' "." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' readonly></input>";
-              echo "<input type='hidden' class='json_expsubc' id='".$areaname."_expsubc_".$row2['SubCompID']."' name='".$areaname."_expsubc_".$row2['SubCompID']."' value='".$row2['exp']."'>";
+             $formulaCurrent = $functionsObj->ExecuteQuery($formulaSql);
+             $formaulValue   = $functionsObj->FetchObject($formulaCurrent);
+             if($formaulValue->input_current)
+             {
+              $value = $formaulValue->input_current;
             }
-            else
+            echo "<input type='text' value='".$value."' id='".$areaname."_fsubc_".$row2['SubCompID']."' name='".$areaname."_fsubc_".$row2['SubCompID']."' ";
+            $sankey_val = '"'.$areaname."_fsubc_".$row2['SubCompID'].'"';
+            echo " readonly></input>";
+              // echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' "." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' readonly></input>";
+            echo "<input type='hidden' class='json_expsubc' id='".$areaname."_expsubc_".$row2['SubCompID']."' name='".$areaname."_expsubc_".$row2['SubCompID']."' value='".$row2['exp']."'>";
+          }
+          else
+          {
+            $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
+            if ($row2['Mode']=="user")
             {
-              $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
-              if ($row2['Mode']=="user")
+              if($data[$areaname."_subc_".$row2['SubCompID']])
               {
-                if($data[$areaname."_subc_".$row2['SubCompID']])
-                {
-                  $value = $data[$areaname."_subc_".$row2['SubCompID']];
-                }
-                else
-                {
-                  $value = 0;
-                }
-                if($row2['InputModeType']=="range")
-                {
-                  $range                 = explode(',', $row2['InputModeTypeValue']);
-                  $SubLink_MinVal        = $range['0'];
-                  $SubLink_MaxVal        = $range['1'];
-                  $SubLink_RangeInterval = $range['2'];
-                  $type                  = "type='range' min='".$SubLink_MinVal."' max='".$SubLink_MaxVal."' step='".$SubLink_RangeInterval."'";
-
-
-                  echo "<input value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required $type ";
-
-                  echo "onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'";
-
-                  echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
-                  ?>
-                  <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 30%; margin-top: 1%; padding: 0.6px 4px;"></span>
-                  <?php
-                }
-                elseif($row2['InputModeType']=="mChoice")
-                {
-                  $mChoice_details = json_decode($row2['InputModeTypeValue'],TRUE);
-                  echo "<div class='row text-center' style='font-weight: 700;margin-left:28px;float:left;'>".$mChoice_details['question']."</div>";
-                  // array_shift($mChoice_details);
-                  ?>
-                  <div class="col-md-12">
-                    <?php
-                    $continue = 0;
-                    foreach ($mChoice_details as $wrow => $wrow_value)
-                    {
-                      if($continue < 1)
-                      {
-                        $continue++;
-                        continue;
-                      }
-                      echo "<div class='col-md-6 align_radio' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
-                      echo (($value == $wrow_value)?'checked':'');
-                      echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
-                    } ?>
-                  </div>
-                <?php }
-                else
-                {
-                  echo "<input type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
-                  echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
-                }
+                $value = $data[$areaname."_subc_".$row2['SubCompID']];
               }
               else
               {
+                $value = 0;
+              }
+              if($row2['InputModeType']=="range")
+              {
+                $range                 = explode(',', $row2['InputModeTypeValue']);
+                $SubLink_MinVal        = $range['0'];
+                $SubLink_MaxVal        = $range['1'];
+                $SubLink_RangeInterval = $range['2'];
+                $type                  = "type='range' min='".$SubLink_MinVal."' max='".$SubLink_MaxVal."' step='".$SubLink_RangeInterval."'";
+
+
+                echo "<input value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required $type ";
+
+                echo "onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'";
+
+                echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
+                ?>
+                <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 30%; margin-top: 1%; padding: 0.6px 4px;"></span>
+                <?php
+              }
+              elseif($row2['InputModeType']=="mChoice")
+              {
+                $mChoice_details = json_decode($row2['InputModeTypeValue'],TRUE);
+                echo "<div class='row text-center' style='font-weight: 700;margin-left:28px;float:left;'>".$mChoice_details['question']."</div>";
+                  // array_shift($mChoice_details);
+                ?>
+                <div class="col-md-12">
+                  <?php
+                  $continue = 0;
+                  foreach ($mChoice_details as $wrow => $wrow_value)
+                  {
+                    if($continue < 1)
+                    {
+                      $continue++;
+                      continue;
+                    }
+                    echo "<div class='col-md-6 align_radio' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
+                    echo (($value == $wrow_value)?'checked':'');
+                    echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
+                  } ?>
+                </div>
+              <?php }
+              else
+              {
                 echo "<input type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
-                $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
-                echo " readonly></input>";
-                // echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' readonly></input>";
+                echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
               }
             }
-            ?>
-          </div>
-          <?php
-          echo "<div class='InlineBox ".(($row2['InputFieldOrder']==3)?'hidden':'')."'>";
+            else
+            {
+              echo "<input type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
+              $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
+              echo " readonly></input>";
+                // echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' readonly></input>";
+            }
+          }
+          ?>
+        </div>
+        <?php
+        echo "<div class='InlineBox ".(($row2['InputFieldOrder']==3)?'hidden':'')."'>";
                           //echo "<label class='scenariaLabel'>Last</label>";
-          echo "<label class='scenariaLabel'>".$row2['LabelLast']."</label>";
-          $sqllast = "SELECT * FROM `GAME_INPUT`
-          WHERE input_user=".$userid." AND input_sublinkid = 
-          (SELECT ls.SubLink_ID
-          FROM GAME_LINKAGE_SUB ls 
-          WHERE SubLink_SubCompID = ".$row2['SubCompID']." AND SubLink_CompID=".$row2['CompID']." 
-          AND ls.SubLink_LinkID =
-          (
-          SELECT Link_ID FROM `GAME_LINKAGE`
-          WHERE Link_GameID=".$row2['GameID']." AND Link_ScenarioID != ".$row2['ScenID']."
-          AND Link_Order < ".$row2['Order']." 
-          ORDER BY Link_Order DESC LIMIT 1))";
+        echo "<label class='scenariaLabel'>".$row2['LabelLast']."</label>";
+        $sqllast = "SELECT * FROM `GAME_INPUT`
+        WHERE input_user=".$userid." AND input_sublinkid = 
+        (SELECT ls.SubLink_ID
+        FROM GAME_LINKAGE_SUB ls 
+        WHERE SubLink_SubCompID = ".$row2['SubCompID']." AND SubLink_CompID=".$row2['CompID']." 
+        AND ls.SubLink_LinkID =
+        (
+        SELECT Link_ID FROM `GAME_LINKAGE`
+        WHERE Link_GameID=".$row2['GameID']." AND Link_ScenarioID != ".$row2['ScenID']."
+        AND Link_Order < ".$row2['Order']." 
+        ORDER BY Link_Order DESC LIMIT 1))";
                               //echo $sqllast;
-          echo "<input type='text' class='scenariaInput' ";
-          if($row2['Mode']=="admin"){
-            echo " value ='".$row2['AdminLast']."' ";                         
-          }
-          else{
+        echo "<input type='text' class='scenariaInput' ";
+        if($row2['Mode']=="admin"){
+          echo " value ='".$row2['AdminLast']."' ";                         
+        }
+        else{
 
-            $objlast = $functionsObj->ExecuteQuery($sqllast);
-            $reslast = $functionsObj->FetchObject($objlast);
-            echo " value ='".$reslast->input_current."' ";
-          }
-          echo " readonly></input>";
+          $objlast = $functionsObj->ExecuteQuery($sqllast);
+          $reslast = $functionsObj->FetchObject($objlast);
+          echo " value ='".$reslast->input_current."' ";
+        }
+        echo " readonly></input>";
                           //echo "<input type='text' class='scenariaInput' readonly></input>";
-          echo "</div>";
-          echo "</div>";
-
-          echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row2['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
-
-
-          echo "</div>";
-        }
-                         // writing this to show only for alignmenet of viewing order to show component name in middle
-
-        if($row2['ViewingOrder'] == 6)
-        {
-          echo "<div class='col-sm-1 col-md-2 regular'>";
-          echo $row2['SubComp_Name'];
-          echo "</div>";
-        }
-
-        echo "<div class='clearfix'></div>";
-
+        echo "</div>";
         echo "</div>";
 
-      }
-      echo "</div>";  
-                //}
-                //else{
+        echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row2['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
 
-                //}
+
+        echo "</div>";
+      }
+                         // writing this to show only for alignmenet of viewing order to show component name in middle
+
+      if($row2['ViewingOrder'] == 6)
+      {
+        echo "<div class='col-sm-1 col-md-2 regular'>";
+        echo $row2['SubComp_Name'];
+        echo "</div>";
+      }
+
+      echo "<div class='clearfix'></div>";
+
+      echo "</div>";
 
     }
-                //echo "</form>";
-                //<!--scenariaListingDiv-->
-    echo "</div>";
+    if($row1['componentBranching'] > 0)
+    {
+      // closing the branchingOverlay div here
+      echo '</div>';
+    }
+    echo "</div>";  
+    //<!--scenariaListingDiv-->
+    //}
+    //else{
+
+    //}
 
   }
-  ?>              
+                //echo "</form>";
+  echo "</div>";
+
+}
+?>              
 </form>
 </div>
 </div> <!--tab content -->
@@ -1272,6 +1339,9 @@ include_once 'includes/header.php';
     $('#SaveInput_'+sublinkid).show();
     //$('#SaveInput_'+sublinkid).click('onclick="alert('+ sublinkid,key,value +')"');
     $('#SaveInput_'+sublinkid).attr('onclick','return SaveCurrent("'+sublinkid+'","'+key+'")');
+    <?php if($result->Branching){ ?>
+      componentBranchingDivId = 'branchComp_'+sublinkid;
+    <?php } ?>
   }
   
   function SaveCurrent(sublinkid,key)
@@ -1456,6 +1526,24 @@ include_once 'includes/header.php';
   //   $(this).text($(this).parent().find('input[type=range]').val())
   // }
   $(document).ready(function(){
+    componentBranchingDivId = "";
+    // writing this to hide the already played component by user
+    <?php if($result->Branching){ 
+      $hideShowSql = "SELECT input_sublinkid,input_showComp FROM GAME_INPUT WHERE input_user=$userid AND input_showComp>0 AND input_sublinkid IN (SELECT SubLink_ID FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID=$linkid)";
+      $hideShowObj = $functionsObj->ExecuteQuery($hideShowSql);
+      while($row = $hideShowObj->fetch_object())
+      {
+        // hide component if value is 1 i.e. user already played it, and show if value is 2, i.e. then comp where user left
+        if($row->input_showComp < 2){ ?>
+          $("#branchComp_<?php echo $row->input_sublinkid;?>").addClass('hidden')
+        <?php } 
+        else { 
+          ?>
+          $("#branchComp_<?php echo $row->input_sublinkid;?>").removeClass('hidden');
+        <?php }
+      }
+      ?>
+    <?php } ?>
     // adding alert box while submitting the form to submit the inputs
     $('#submitBtn').on('click',function(){
       var conf = confirm('Are you sure you want to submit? Have you provided all your decisions?');
@@ -1880,7 +1968,17 @@ include_once 'includes/header.php';
       // contentType: "application/json; charset=utf-8",
       type    : "POST",
       dataType: "json",
-      data    :{'action':'updateFormula',formula_json_expcomp:formula_json_expcomp,formula_json_expsubc:formula_json_expsubc,input_field_values:input_field_values},
+      // if component branching is enabled for the current scenario then send an extra parameter to get the branching details
+      <?php if($result->Branching){ ?>
+
+        data:{'action':'updateFormula',formula_json_expcomp:formula_json_expcomp,formula_json_expsubc:formula_json_expsubc,input_field_values:input_field_values,'compBranching':'enabled'},
+
+      <?php } 
+      else{
+        ?>
+      // if component branching is not enabled then send this data
+      data:{'action':'updateFormula',formula_json_expcomp:formula_json_expcomp,formula_json_expsubc:formula_json_expsubc,input_field_values:input_field_values},
+    <?php } ?>
       // data    :{'action':'updateFormula',formula_json_expcomp:formula_json_expcomp},
       url     : "includes/ajax/ajax_update_execute_input.php",
       // data       : '&action=updateFormula&formula_json_expcomp='+formula_expcomp+'&formula_json_expsubc='+formusubc+'&input_field_values='+input_values,
@@ -1897,8 +1995,44 @@ include_once 'includes/header.php';
             // console.log(parseFloat(result[index].values).toFixed(2));
             // $('#'+index).val(parseFloat(result[index].values).toFixed(2));
             // $('#'+index).val(parseInt(result[index].values));
+
+
             $('#'+index).val(result[index].values);
             // input_field_values[index] = result[index];
+            
+            // red, if component branching enabled, if component main div has class 'hideByAdmin' then don't show this div. otherwise show div, having id=branchComp_sublinkId, if component branching is enabled and it's child div which is added to make the comp div unclickable so that user can not change prev comp value has the id overlay_sublinkId
+            <?php if($result->Branching){ ?>
+              // console.log('branchComp_'+result[index].input_sublinkid);
+              // console.log(componentBranchingDivId);
+              if('branchComp_'+result[index].input_sublinkid == componentBranchingDivId)
+              {
+                // trigger ajax for component branching
+                $.ajax({
+                  url    :  "includes/ajax/ajax_update_execute_input.php",
+                  type   : "POST",
+                  data   : 'action=componentBranching&param='+componentBranchingDivId+'&name=mohit',
+                  success: function( branchResult ){
+                    if(branchResult != 'no')
+                    {
+                      // result is=> (hide)branchComp_sublinkid,overlay_sublinkid,branchComp_sublinkid(show)
+                      var resultBranch = branchResult.split(',');
+                      var hideComp     = resultBranch[0];
+                      var overlayComp  = resultBranch[1];
+                      var showComp     = resultBranch[2];
+                      $('#'+hideComp).addClass('hidden');
+                      if(!($('#'+showComp).hasClass('hideByAdmin')))
+                      {
+                        $('#'+showComp).removeClass('hidden');
+                      }
+                    }
+                    else
+                    {
+                      console.log('No component branching found, for the selected component');
+                    }
+                  }
+                });
+              }
+            <?php } ?>
           });
           end_time   = new Date();
           final_time = (start_time.getTime() - end_time.getTime())/1000;
@@ -1928,7 +2062,7 @@ include_once 'includes/header.php';
         }
       }
     });
-  }
+}
 </script>
 </body>
 </html>
