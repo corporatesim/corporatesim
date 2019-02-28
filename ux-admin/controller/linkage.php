@@ -308,7 +308,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 		$compBranchSql = "SELECT * FROM GAME_BRANCHING_COMPONENT WHERE CompBranch_SublinkId=".$sublinkid." OR CompBranch_NextCompSublinkId=".$sublinkid;
 		$compBranchObj = $functionsObj->ExecuteQuery($compBranchSql);
 			// echo "<pre>"; print_r($compBranchObj); die('here');
-		if($compBranchObj->num_rows > 0)
+		if($compBranchObj->num_rows > 0 && $_POST['ShowHide']>0 )
 		{
 			$msg      = 'This linkage is used in component branching so show/hide status can not be changed';
 			$type [0] = 'inputError';
