@@ -438,7 +438,7 @@ include_once 'includes/header.php';
                     $ResultchartDetailsComp = $functionsObj->FetchObject($chartDetailscomp);
                     $charttypeComp          = $ResultchartDetailsComp->Chart_Type; 
                     // adding a refresh icon
-                    echo '<a href="" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
+                    echo '<a class="refreshChart" data-redirect="'.site_root.'input.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row1['SubLinkID'].'" id="ref_'.$row1['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
                     ?>  
                     <img class="comp_chart col-md-12" src="chart/<?=$charttypeComp?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>">
                     <?php
@@ -912,7 +912,7 @@ include_once 'includes/header.php';
 
                     //print_r($dataChart);
                     // adding a refresh icon
-                    echo '<a href="" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
+                    echo '<a class="refreshChart" data-redirect="'.site_root.'input.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row2['SubLinkID'].'" id="ref_'.$row2['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
                     ?>
                     <!-- -----------------------------       Chart Section    ----------------------------------------------->
                     <br><br>
@@ -1544,6 +1544,13 @@ include_once 'includes/header.php';
       }
       ?>
     <?php } ?>
+    // while pressing the refresh button then redirect to same page and same element
+    $('.refreshChart').each(function(){
+      var redirect = $(this).data('redirect');
+      $(this).on('click',function(){
+        $(location).attr('href',redirect);
+      });
+    });
     // adding alert box while submitting the form to submit the inputs
     $('#submitBtn').on('click',function(){
       var conf = confirm('Are you sure you want to submit? Have you provided all your decisions?');

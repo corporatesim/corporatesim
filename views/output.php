@@ -104,10 +104,9 @@ include_once 'includes/header.php';
             			LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID=gls.SubLink_CompID
             			LEFT JOIN GAME_SUBCOMPONENT gsc ON gsc.SubComp_ID=gls.SubLink_SubCompID
             			LEFT JOIN GAME_AREA ga ON ga.Area_ID=gls.SubLink_AreaID
-            			LEFT JOIN GAME_OUTPUT go ON go.output_sublinkid=gls.SubLink_ID
+            			LEFT JOIN GAME_OUTPUT go ON go.output_sublinkid=gls.SubLink_ID AND go.output_user=$userid
             			WHERE
-            			gls.SubLink_Type = 1 AND gls.SubLink_SubCompID = 0 AND gls.SubLink_LinkID=".$linkid." AND gls.SubLink_AreaID=".$row['AreaID']." 
-            			GROUP BY gls.SubLink_ID ORDER BY gls.SubLink_Order";
+            			gls.SubLink_Type = 1 AND gls.SubLink_SubCompID = 0 AND gls.SubLink_LinkID=".$linkid." AND gls.SubLink_AreaID=".$row['AreaID']."	GROUP BY gls.SubLink_ID ORDER BY gls.SubLink_Order";
                   // echo $sqlcomp; exit;
             			$component = $functionsObj->ExecuteQuery($sqlcomp);
               //Get Component for this area for this linkid
@@ -644,7 +643,7 @@ include_once 'includes/header.php';
 
       <div class="col-sm-12 text-right">
       	<!--<button class="btn innerBtns">Save</button>-->
-      	<button type="submit" name="submit" id="submit" class="btn innerBtns" value="Download">Download</button>
+      	<button type="submit" name="submit" id="submit" class="btn innerBtns hidden" value="Download">Download</button>
       	<!-- <button type="submit" name="submit" id="submit" class="btn innerBtns" value="Submit">Next</button> -->
       </div>
 

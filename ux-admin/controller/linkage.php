@@ -1018,7 +1018,7 @@ elseif(isset($_GET['del'])){
 	
 	$sqlcarry = "SELECT l.Link_ID, s.Scen_ID,s.Scen_Name
 	FROM `GAME_LINKAGE` l INNER JOIN GAME_SCENARIO s on l.Link_ScenarioID=s.Scen_ID
-	WHERE Link_GameID=".$result->Link_GameID." AND Link_Order < 
+	WHERE Link_GameID=".$result->Link_GameID." AND Link_Order <= 
 	(SELECT Link_Order FROM GAME_LINKAGE WHERE Link_ID = ".$linkid.")";
 //echo $sqlcarry;
 	$objcarry = $functionsObj->ExecuteQuery($sqlcarry);

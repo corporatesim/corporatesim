@@ -51,7 +51,7 @@ if(isset($_POST['link_id']))
 	
 	//$object = $funObj->SelectData(array(), 'GAME_SUBCOMPONENT', array('SubComp_CompID='.$comp_id, 'SubComp_Delete=0'), '', '', '', '', 1);
 	?>
-	<option value="">-- SELECT --</option>
+	<option value="">-- Select Component --</option>
 	<?php 
 	
 	if($object->num_rows > 0)
@@ -87,7 +87,7 @@ if(isset($_POST['comp_id']))
 	$comp_id = $_POST['comp_id'];
 	$object = $funObj->SelectData(array(), 'GAME_SUBCOMPONENT', array('SubComp_CompID='.$comp_id, 'SubComp_Delete=0'), '', '', '', '', 1);
 	?>
-	<option value="">-- SELECT --</option>
+	<option value="">-- Select Subcomponent --</option>
 	<?php 
 	
 	if($object->num_rows > 0)

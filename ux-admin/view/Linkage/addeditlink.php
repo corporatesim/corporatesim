@@ -20,8 +20,10 @@ span.alert-danger {
     // adding options and value on button click
     removeDiv();
     // writing this line to get the comp on change of scen while page load
-    $('#carry_linkid').trigger('change');
-
+    <?php if(isset($linkdetails->SubLink_LinkIDcarry)){ ?>
+      $('#carry_linkid').trigger('change');
+      console.log('trigger change in linkid');
+    <?php } ?>
     $('#SubLink_InputModeType').change(function() {
       if( $("#SubLink_InputModeType option:selected").attr('id') == 3 || $("#SubLink_InputModeType  option:selected").attr('id') == 4)
       {
@@ -64,23 +66,6 @@ span.alert-danger {
       $("#admin").hide();
     }
   });
-    setTimeout(function()
-    {
-      // if there is no carry forward or we are adding it first time then using 2 instead of SubLink_CompIDcarry
-      $('#carry_compid [value='+<?php echo ($linkdetails->SubLink_CompIDcarry)?$linkdetails->SubLink_CompIDcarry:'2'; ?>+']').prop('selected', true);
-      // writing this line to get the comp on change of scen while page load
-      $('#carry_compid').trigger('change');
-    },1);
-
-    setTimeout(function()
-    {
-      // if there is no carry forward or we are adding it first time then using 2 instead of SubLink_SubCompIDcarry
-      if(<?php echo ($linkdetails->SubLink_SubCompIDcarry)?$linkdetails->SubLink_SubCompIDcarry:'2'; ?>)
-      {
-        $('#carry_subcompid [value='+<?php echo ($linkdetails->SubLink_SubCompIDcarry)?$linkdetails->SubLink_SubCompIDcarry:'2'; ?>+']').prop('selected', true);
-      }
-    },1000);
-
   });
   /*function label_choice(select){
   
@@ -999,22 +984,6 @@ span.alert-danger {
   	});
   });
   
-  $('#carry_compid').on('change', function(){
-  	var comp_id = $(this).val();
-  	var link_id = $('#carry_linkid').val();
-  	
-  	$('#carry_subcompid').html('<option value="">-- SELECT --</option>');
-
-  	$.ajax({
-  		url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
-  		type: "POST",
-  		data: { carry_compid: comp_id , carry_linkid: link_id},
-  		success: function(data){
-  			$('#carry_subcompid').html(data);
-  		}
-  	});
-  });
-  
   $('#carry_linkid').on('change',function(){
   	var link_id = $(this).val();
   	//alert(comp_id);
@@ -1027,8 +996,44 @@ span.alert-danger {
   		success: function(data){
   			//alert(data);
   			$('#carry_compid').html(data);
-  		}
-  	});
+        <?php if(isset($linkdetails->SubLink_CompIDcarry)){ ?>
+          setTimeout(function()
+          {
+            // if there is no carry forward or we are adding it first time then using 2 instead of SubLink_CompIDcarry
+            $('#carry_compid [value=<?php echo $linkdetails->SubLink_CompIDcarry; ?>]').prop('selected', true);
+            // writing this line to get the comp on change of scen while page load
+            $('#carry_compid').trigger('change');
+            console.log('trigger change in comp_id');
+          },1);
+        <?php } ?>
+      }
+    });
+  });
+
+  $('#carry_compid').on('change', function(){
+    var comp_id = $(this).val();
+    var link_id = $('#carry_linkid').val();
+    
+    $('#carry_subcompid').html('<option value="">-- SELECT --</option>');
+
+    $.ajax({
+      url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
+      type: "POST",
+      data: { carry_compid: comp_id , carry_linkid: link_id},
+      success: function(data){
+        $('#carry_subcompid').html(data);
+        <?php if(isset($linkdetails->SubLink_SubCompIDcarry)){ ?>
+          setTimeout(function()
+          {
+            // if there is no carry forward or we are adding it first time then using 2 instead of SubLink_SubCompIDcarry
+            if(<?php echo ($linkdetails->SubLink_SubCompIDcarry)?$linkdetails->SubLink_SubCompIDcarry:'2'; ?>)
+            {
+              $('#carry_subcompid [value=<?php echo $linkdetails->SubLink_SubCompIDcarry; ?>]').prop('selected', true);
+            }
+          },1);
+        <?php } ?>
+      }
+    });
   });
   
   $('#scen_id').on('change', function(){

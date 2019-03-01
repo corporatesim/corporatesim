@@ -11,6 +11,11 @@ if($server == 'local'){
 	// define("USR", "organiza_game");
 	// define("PWD", "M^aAq&VLDt8Q");
 	// define("DBN", "organiza_game");
+	// for new server details
+	// define("HST", "live.corporatesim.com");
+	// define("USR", "organizationgame");
+	// define("PWD", "2GX7'_;rudyU");
+	// define("DBN", "organiza_game");
 }elseif($server == 'server'){
 	//server
 	define("HST", "simulation.uxconsultant.in");
