@@ -169,7 +169,7 @@ include_once 'includes/header.php';
 			e.preventDefault();
 			var LinkID = $(this).attr('data-LinkID');
 			//alert(LinkID);
-			var c = confirm('You really want to play again.Press Ok For Replay');
+			var c = confirm('Press OK to confirm your wish to play this simulation again else press Cancel');
 			if(c == true)
 			{
 				$.ajax({

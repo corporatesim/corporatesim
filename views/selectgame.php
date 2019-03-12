@@ -165,7 +165,7 @@ include_once 'includes/header2.php';
 			var GameID = $(this).attr('data-GameID');
 			var ScenID = $(this).attr('data-ScenID');
 			var LinkID = $(this).attr('data-LinkID');
-			var conf   = confirm('Are you sure want to replay');
+			var conf   = confirm('Press OK to confirm your wish to play this simulation again else press Cancel');
 			if(conf == true)
 			{
 				$.ajax({

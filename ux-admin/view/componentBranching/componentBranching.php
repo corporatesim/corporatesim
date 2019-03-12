@@ -80,13 +80,13 @@
 					</select>
 				</div>
 				<div class="col-md-1">
-					<input type="number" name="minVal[]" class="form-control" placeholder="Min Val" required="" value="<?php echo $row->CompBranch_MinVal?>">
+					<input type="text" name="minVal[]" class="form-control" placeholder="Min Val" required="" value="<?php echo $row->CompBranch_MinVal?>">
 				</div>
 				<div class="col-md-1">
-					<input type="number" name="maxVal[]" class="form-control" placeholder="Max Val" required="" value="<?php echo $row->CompBranch_MaxVal?>">
+					<input type="text" name="maxVal[]" class="form-control" placeholder="Max Val" required="" value="<?php echo $row->CompBranch_MaxVal?>">
 				</div>
 				<div class="col-md-1">
-					<input type="number" name="order[]" class="form-control" placeholder="Order" required="" value="<?php echo $row->CompBranch_Order?>">
+					<input type="number" name="order[]" class="form-control" placeholder="Order" required="" value="<?php echo $row->CompBranch_Order?>" min='1'>
 				</div>
 				<div class="col-md-4">
 					<select name="componentNextName[]" id="editComponentNextId" class="form-control" data-id="<?php echo $row->CompBranch_Id;?>" required="">
@@ -116,13 +116,13 @@
 				</select>
 			</div>
 			<div class="col-md-1">
-				<input type="number" name="minVal[]" class="form-control" placeholder="Min Val" required="">
+				<input type="text" name="minVal[]" class="form-control" placeholder="Min Val" required="">
 			</div>
 			<div class="col-md-1">
-				<input type="number" name="maxVal[]" class="form-control" placeholder="Max Val" required="">
+				<input type="text" name="maxVal[]" class="form-control" placeholder="Max Val" required="">
 			</div>
 			<div class="col-md-1">
-				<input type="number" name="order[]" class="form-control" placeholder="Order" required="">
+				<input type="number" name="order[]" class="form-control" placeholder="Order" required="" min="1">
 			</div>
 			<div class="col-md-4">
 				<select name="componentNextName[]" id="componentNextId" class="form-control" data-id="componentId" required="">
@@ -162,7 +162,7 @@
 			var time = date.getHours() + date.getMinutes() + date.getSeconds();
 			time     = time*Math.random();
 			// console.log(time);
-			$('#addHere').append('<div class="removeDiv" style="padding-bottom: 4%;"><div class="col-md-4"><select name="componentName[]" id="" data-class="'+time+'" class="form-control compClass" required="">'+options+'</select></div><div class="col-md-1"><input type="number" class="form-control" name="minVal[]" placeholder="Min Val" required=""></div><div class="col-md-1"><input type="number" class="form-control" name="maxVal[]" placeholder="Max Val" required=""></div><div class="col-md-1"><input type="number" class="form-control" name="order[]" placeholder="Order" required=""></div><div class="col-md-4"><select name="componentNextName[]" id="" data-id="'+time+'" class="form-control" required="">'+nextOptions+'</select></div><div class="col-md-1"><button class="btn btn-danger removeThis" type="button" data-toggle="tooltip" title="Remove"><b>-</b></button></div></div>');
+			$('#addHere').append('<div class="removeDiv" style="padding-bottom: 4%;"><div class="col-md-4"><select name="componentName[]" id="" data-class="'+time+'" class="form-control compClass" required="">'+options+'</select></div><div class="col-md-1"><input type="text" class="form-control" name="minVal[]" placeholder="Min Val" required=""></div><div class="col-md-1"><input type="text" class="form-control" name="maxVal[]" placeholder="Max Val" required=""></div><div class="col-md-1"><input type="number" class="form-control" name="order[]" placeholder="Order" required=""></div><div class="col-md-4"><select name="componentNextName[]" id="" data-id="'+time+'" class="form-control" required="">'+nextOptions+'</select></div><div class="col-md-1"><button class="btn btn-danger removeThis" type="button" data-toggle="tooltip" title="Remove"><b>-</b></button></div></div>');
 			removeDiv();
 			nextCompData();
 		});

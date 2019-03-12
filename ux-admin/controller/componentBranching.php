@@ -25,36 +25,20 @@ $queryObj = $functionsObj->ExecuteQuery($query);
 if(isset($_POST['submit']) && $_POST['submit'] == 'submit')
 {
 	// echo "<pre>"; print_r($_SESSION['id']); print_r($_POST); exit();
-	if($_POST['update'] == 'update')
-	{
-		$deleteSql = "DELETE FROM GAME_BRANCHING_COMPONENT WHERE CompBranch_LinkId=".$linkId;
-		$functionsObj->ExecuteQuery($deleteSql);
-	}
 	$count          = count($_POST['componentName']);
 	$tableDataArray = array ();
 	for($i=0; $i<$count; $i++)
 	{
-		$compDetail     = explode(',',$_POST['componentName'][$i]);
-		$compId         = $compDetail[0];
-		$sublinkId      = $compDetail[1];
-		$areaId         = $compDetail[2];
-		$nextCompDetail = explode(',',$_POST['componentNextName'][$i]);
-		$nextCompId     = $nextCompDetail[0];
-		$nextSublinkId  = $nextCompDetail[1];
-		$tableDataArray = array (
-			'CompBranch_CompId'            => $compId,
-			'CompBranch_LinkId'            => $linkId,
-			'CompBranch_SublinkId'         => $sublinkId,
-			'CompBranch_AreaId'            => $areaId,
-			'CompBranch_MinVal'            => $_POST['minVal'][$i],
-			'CompBranch_MaxVal'            => $_POST['maxVal'][$i],
-			'CompBranch_Order'             => $_POST['order'][$i],
-			'CompBranch_NextCompId'        => $nextCompId,
-			'CompBranch_NextCompSublinkId' => $nextSublinkId,
-			'CompBranch_CreatedOn'         => date('Y-m-d H:i:s'),
-			'CompBranch_CreatedBy'         => $uid,
-		);
-		if(empty($compId) || empty($_POST['minVal'][$i]) || empty($_POST['maxVal'][$i]) || empty($_POST['order'][$i]) || empty($nextCompId))
+		$compDetail       = explode(',',$_POST['componentName'][$i]);
+		$compId           = $compDetail[0];
+		$sublinkId        = $compDetail[1];
+		$areaId           = $compDetail[2];
+		$nextCompDetail   = explode(',',$_POST['componentNextName'][$i]);
+		$nextCompId       = $nextCompDetail[0];
+		$nextSublinkId    = $nextCompDetail[1];
+		$tableDataArray[] = "(".$compId.",".$linkId.",".$sublinkId.",".$areaId.",".$_POST['minVal'][$i].",".$_POST['maxVal'][$i].",".$_POST['order'][$i].",".$nextCompId.",".$nextSublinkId.",'".date('Y-m-d H:i:s')."',".$uid.")";
+
+		if(empty($compId) || $_POST['minVal'][$i]=='' || $_POST['maxVal'][$i]=='' || $_POST['order'][$i]=='' || empty($nextCompId))
 		{
 			$_SESSION['msg']     = "Fields can not be left blank";
 			$_SESSION['type[0]'] = "inputError";
@@ -62,8 +46,18 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'submit')
 			header("Location: ".site_root."ux-admin/componentBranching/link/".$linkId);
 			exit(0);
 		}
-		$functionsObj->InsertData('GAME_BRANCHING_COMPONENT',$tableDataArray);
+		// $functionsObj->InsertData('GAME_BRANCHING_COMPONENT',$tableDataArray);
+	
 	}
+	if($_POST['update'] == 'update')
+	{
+		$deleteSql = "DELETE FROM GAME_BRANCHING_COMPONENT WHERE CompBranch_LinkId=".$linkId;
+		$functionsObj->ExecuteQuery($deleteSql);
+	}
+	// after deleting the record updating
+	$insertQery = "INSERT INTO GAME_BRANCHING_COMPONENT(CompBranch_CompId,CompBranch_LinkId,CompBranch_SublinkId,CompBranch_AreaId,CompBranch_MinVal,CompBranch_MaxVal,CompBranch_Order,CompBranch_NextCompId,CompBranch_NextCompSublinkId,CompBranch_CreatedOn,CompBranch_CreatedBy) VALUES ";
+	$insertQery .= implode(',',$tableDataArray);
+	$functionsObj->ExecuteQuery($insertQery);
 	// echo "<pre>"; print_r($tableDataArray); exit();
 	$_SESSION['msg']     = "Branching Saved Successfully";
 	$_SESSION['type[0]'] = "inputSuccess";

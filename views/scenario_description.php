@@ -287,7 +287,7 @@ include_once 'includes/header.php';
 			$(document).ready(function(){
 				// adding a confirmation box while click on proceed
 				$('#proceedBtn').on('click',function(){
-					var conf = confirm('Have you gone through all the contents (including the Video, Image and Document sections)? Have you also been asked to click the PROCEED button ?');
+					var conf = confirm('Please confirm that you have gone through all the content by clicking OK else press Cancel');
 					if(conf)
 					{
 						window.location='<?php echo $url; ?>';
