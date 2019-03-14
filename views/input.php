@@ -486,23 +486,23 @@ include_once 'includes/header.php';
                     // getting the value here for iput field
                     if($addedit=='Edit')
                     {
+                      // to update carry forward value intant without page refresh
+                      $linkCarry = '';
+
                       if($row1['Mode']=="carry")
                       {
                         //get input value from link, comp, subcomp
-
-                        $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` 
-                        WHERE input_user=".$userid." AND input_sublinkid = 
-                        (SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` 
-                        WHERE SubLink_LinkID=".$row1['CarryLinkID']." and SubLink_CompID=".$row1['CarryCompID'];
+                        $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` WHERE input_user=".$userid." AND input_sublinkid =(SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` WHERE SubLink_LinkID=".$row1['CarryLinkID']." and SubLink_CompID=".$row1['CarryCompID'];
                         if($row1['CarrySubCompID']>0)         
                         {
-                         $sqlcurrent .=   " AND SubLink_SubCompID = ".$row1['CarrySubCompID'];
+                         $sqlcurrent .= " AND SubLink_SubCompID = ".$row1['CarrySubCompID'];
                        }          
-                       $sqlcurrent .= ")";
-
+                       $sqlcurrent     .= ")";
+                       // echo $sqlcurrent;
                        $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);
                        $rescarry        = $functionsObj->FetchObject($objcarrycurrent);
                        $value           = $rescarry->input_current;
+                       $linkCarry       = "<input type='hidden' class='linkCarry' data-id_name='".$areaname."_comp_".$row1['CompID']."' value='".$sqlcurrent."'/>";
                      }
                       //if($data[$areaname."_comp_".$row1['CompID']]>=0)
                      elseif($row1['Mode']=="admin")
@@ -535,363 +535,361 @@ include_once 'includes/header.php';
                 }
                 elseif($row1['Mode']=="carry")
                 {
-                    //get input value from link, comp, subcomp
-
-                  $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` 
-                  WHERE input_user=".$userid." AND input_sublinkid = 
-                  (SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` 
-                  WHERE SubLink_LinkID=".$row1['CarryLinkID']." and SubLink_CompID=".$row1['CarryCompID'];
+                  //get input value from link, comp, subcomp
+                  $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` WHERE input_user=".$userid." AND input_sublinkid =(SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` WHERE SubLink_LinkID=".$row1['CarryLinkID']." and SubLink_CompID=".$row1['CarryCompID'];
                   if($row1['CarrySubCompID']>0)         
                   {
-                   $sqlcurrent .=   " AND SubLink_SubCompID = ".$row1['CarrySubCompID'];
-                 }          
-                 $sqlcurrent .= ")";
-
-                 $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);
-                 $rescarry        = $functionsObj->FetchObject($objcarrycurrent);
-                 $value           = $rescarry->input_current;
-               }
+                    $sqlcurrent .= " AND SubLink_SubCompID = ".$row1['CarrySubCompID'];
+                  }          
+                  $sqlcurrent     .= ")";
+                  // echo $sqlcurrent;
+                  $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);
+                  $rescarry        = $functionsObj->FetchObject($objcarrycurrent);
+                  $value           = $rescarry->input_current;
+                  $linkCarry       = "<input type='hidden' class='linkCarry' data-id_name='".$areaname."_comp_".$row1['CompID']."' value='".$sqlcurrent."'/>";
+                }
                     // end of getting value
 
-               if($row1['Mode']=="formula")
-               {
-                echo "<input type='hidden' id='".$areaname."_expcomp_".$row1['CompID']."' name='".$areaname."_expcomp_".$row1['CompID']."' value='".$row1['exp']."' class='json_expcomp'>";
-
-                $sankey_val1 = '"'.$areaname."_fcomp_".$row1['CompID'].'"';
-
-                echo "<input value='".$formulaValue."' type ='text' class='scenariaInput current' id='".$areaname."_fcomp_".$row1['CompID']."' name='".$areaname."_fcomp_".$row1['CompID']."' readonly></input>";
-                  // echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' readonly ></input>";
-              }
-              else
-              {
-                $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
-                if(($row1['Mode']=="user"))
+                if($row1['Mode']=="formula")
                 {
+                  echo "<input type='hidden' id='".$areaname."_expcomp_".$row1['CompID']."' name='".$areaname."_expcomp_".$row1['CompID']."' value='".$row1['exp']."' class='json_expcomp'>";
 
-                  if($row1['InputModeType'] == "range")
-                  {
-                    $range                 = explode(',', $row1['InputModeTypeValue']);
-                    $SubLink_MinVal        = $range['0'];
-                    $SubLink_MaxVal        = $range['1'];
-                    $SubLink_RangeInterval = $range['2'];
-                    $type                  = "type='range' min='".$SubLink_MinVal."' max='".$SubLink_MaxVal."' step='".$SubLink_RangeInterval."'";
+                  $sankey_val1 = '"'.$areaname."_fcomp_".$row1['CompID'].'"';
 
-
-                    echo "<input value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required $type $style_text ";
-
-                    echo "onchange='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' ";
-                    echo " onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>";
-                    ?>
-                    <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 30%; margin-top: 1%; padding: 0.6px 4px;"></span>
-                    <?php
-                  }
-
-                  elseif($row1['InputModeType'] == "mChoice")
-                  {
-                    $mChoice_details = json_decode($row1['InputModeTypeValue'],TRUE);
-                    echo "<div class='row text-center pull-left' style='font-weight: 700; margin-left:1px;font-size:17px;'>".$mChoice_details['question']."</div>";
-                      // array_shift($mChoice_details);
-                    ?>
-                    <div class="col-md-12" style="margin-top:7px;margin-left:-30px;font-size:14px;">
-                      <?php
-                      $continue = 0;
-                      foreach ($mChoice_details as $wrow => $wrow_value)
-                      {
-                        if($continue < 1)
-                        {
-                          $continue++;
-                          continue;
-                        }
-                        echo "<div class='col-md-6 align_radio' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
-                        echo (($value == $wrow_value)?'checked':'');
-                        echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>".(strlen($wrow) > $comp_limit_char?substr($wrow,0,$comp_limit_char).'...':$wrow)."</label></div>";
-                      }
-                      ?>
-                    </div>
-                    <?php
-                  }
-
-                  else
-                  {
-                    // $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
-                    echo "<input type='text' value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' ";
-                    echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $style_text></input>";
-                  }
-
+                  echo "<input value='".$formulaValue."' type ='text' class='scenariaInput current' id='".$areaname."_fcomp_".$row1['CompID']."' name='".$areaname."_fcomp_".$row1['CompID']."' readonly></input>";
+                  // echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' readonly ></input>";
                 }
                 else
                 {
                   $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
-                  echo "<input type='text' value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' readonly></input>";
+                  if(($row1['Mode']=="user"))
+                  {
+
+                    if($row1['InputModeType'] == "range")
+                    {
+                      $range                 = explode(',', $row1['InputModeTypeValue']);
+                      $SubLink_MinVal        = $range['0'];
+                      $SubLink_MaxVal        = $range['1'];
+                      $SubLink_RangeInterval = $range['2'];
+                      $type                  = "type='range' min='".$SubLink_MinVal."' max='".$SubLink_MaxVal."' step='".$SubLink_RangeInterval."'";
+
+
+                      echo "<input value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required $type $style_text ";
+
+                      echo "onchange='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' ";
+                      echo " onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>";
+                      ?>
+                      <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 30%; margin-top: 1%; padding: 0.6px 4px;"></span>
+                      <?php
+                    }
+
+                    elseif($row1['InputModeType'] == "mChoice")
+                    {
+                      $mChoice_details = json_decode($row1['InputModeTypeValue'],TRUE);
+                      echo "<div class='row text-center pull-left' style='font-weight: 700; margin-left:1px;font-size:17px;'>".$mChoice_details['question']."</div>";
+                      // array_shift($mChoice_details);
+                      ?>
+                      <div class="col-md-12" style="margin-top:7px;margin-left:-30px;font-size:14px;">
+                        <?php
+                        $continue = 0;
+                        foreach ($mChoice_details as $wrow => $wrow_value)
+                        {
+                          if($continue < 1)
+                          {
+                            $continue++;
+                            continue;
+                          }
+                          echo "<div class='col-md-6 align_radio' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
+                          echo (($value == $wrow_value)?'checked':'');
+                          echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>".(strlen($wrow) > $comp_limit_char?substr($wrow,0,$comp_limit_char).'...':$wrow)."</label></div>";
+                        }
+                        ?>
+                      </div>
+                      <?php
+                    }
+
+                    else
+                    {
+                    // $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
+                      echo "<input type='text' value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' ";
+                      echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $style_text></input>";
+                    }
+
+                  }
+                  else
+                  {
+                    $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
+                    echo $linkCarry;
+                    echo "<input type='text' value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' readonly></input>";
                     // echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' readonly></input>";
+                  }
                 }
-              }
 
 
-              echo "</div>";
-              echo "<div class='InlineBox ".(($row1['InputFieldOrder']==3)?'hidden':'')."'>";
-              echo "<label class='scenariaLabel'>".$row1['LabelLast']."</label>";
-              $sqllast = "SELECT * FROM `GAME_INPUT`
-              WHERE input_user=".$userid." AND input_sublinkid = 
-              (SELECT ls.SubLink_ID
-              FROM GAME_LINKAGE_SUB ls 
-              WHERE SubLink_SubCompID = 0 AND SubLink_CompID=".$row1['CompID']." AND ls.SubLink_LinkID =
-              (
-              SELECT Link_ID FROM `GAME_LINKAGE`
-              WHERE Link_GameID=".$row1['GameID']." AND Link_ScenarioID != ".$row1['ScenID']." 
-              AND Link_Order < ".$row1['Order']." 
-              ORDER BY Link_Order DESC LIMIT 1))";
+                echo "</div>";
+                echo "<div class='InlineBox ".(($row1['InputFieldOrder']==3)?'hidden':'')."'>";
+                echo "<label class='scenariaLabel'>".$row1['LabelLast']."</label>";
+                $sqllast = "SELECT * FROM `GAME_INPUT`
+                WHERE input_user=".$userid." AND input_sublinkid = 
+                (SELECT ls.SubLink_ID
+                FROM GAME_LINKAGE_SUB ls 
+                WHERE SubLink_SubCompID = 0 AND SubLink_CompID=".$row1['CompID']." AND ls.SubLink_LinkID =
+                (
+                SELECT Link_ID FROM `GAME_LINKAGE`
+                WHERE Link_GameID=".$row1['GameID']." AND Link_ScenarioID != ".$row1['ScenID']." 
+                AND Link_Order < ".$row1['Order']." 
+                ORDER BY Link_Order DESC LIMIT 1))";
                     //echo $sqllast;
-              echo "<input type='text' class='scenariaInput' ";
-              if($row1['Mode']=="admin"){
-                echo " value ='".$row1['AdminLast']."' ";                         
-              }
-              else{                         
-                $objlast = $functionsObj->ExecuteQuery($sqllast);
-                $reslast = $functionsObj->FetchObject($objlast);
-                echo " value ='".$reslast->input_current."' ";
-              }
-              echo 'readonly></input>';
-              echo "</div>";
-              echo "</div>";
+                echo "<input type='text' class='scenariaInput' ";
+                if($row1['Mode']=="admin"){
+                  echo " value ='".$row1['AdminLast']."' ";                         
+                }
+                else{                         
+                  $objlast = $functionsObj->ExecuteQuery($sqllast);
+                  $reslast = $functionsObj->FetchObject($objlast);
+                  echo " value ='".$reslast->input_current."' ";
+                }
+                echo 'readonly></input>';
+                echo "</div>";
+                echo "</div>";
 
-              echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row1['SubLinkID'].'" style="width:40px; margin-bottom: -11px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
+                echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row1['SubLinkID'].'" style="width:40px; margin-bottom: -11px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
 
-              echo "</div>";
-            }
+                echo "</div>";
+              }
 
                 // writing this to show only for alignmenet of viewing order to show component name in middle
-            if($row1['ViewingOrder'] == 6)
-            {
-              echo "<div class='col-sm-1 col-md-2 regular'>";
-              echo $row1['Comp_Name'];
-              echo "</div>";
-            }
+              if($row1['ViewingOrder'] == 6)
+              {
+                echo "<div class='col-sm-1 col-md-2 regular'>";
+                echo $row1['Comp_Name'];
+                echo "</div>";
+              }
 
-            echo "<div class='clearfix'></div>";
+              echo "<div class='clearfix'></div>";
 
                 //Get SubComponent for this Component, linkid
-            $sqlsubcomp = "SELECT distinct a.Area_ID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_SubCompID as SubCompID,  
-            a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, s.SubComp_Name as SubComp_Name, l.Link_Order AS 'Order', 
-            ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode , f.expression as exp, 
-            ls.SubLink_ID as SubLinkID ,ls.Sublink_AdminCurrent as AdminCurrent, ls.Sublink_AdminLast as AdminLast, 
-            ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff , 
-            ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
-            ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue
-            FROM GAME_LINKAGE l 
-            INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
-            INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-            INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
-            INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-            LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
-            INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
-            LEFT OUTER JOIN GAME_FORMULAS f on ls.SubLink_FormulaID=f.f_id 
-            WHERE ls.SubLink_Type=0 AND ls.SubLink_SubCompID>0 and l.Link_ID=".$linkid
-            ." AND ls.SubLink_CompID =".$row1['CompID']." ORDER BY ls.SubLink_Order";
+              $sqlsubcomp = "SELECT distinct a.Area_ID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_SubCompID as SubCompID,  
+              a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, s.SubComp_Name as SubComp_Name, l.Link_Order AS 'Order', 
+              ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode , f.expression as exp, 
+              ls.SubLink_ID as SubLinkID ,ls.Sublink_AdminCurrent as AdminCurrent, ls.Sublink_AdminLast as AdminLast, 
+              ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff , 
+              ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
+              ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue
+              FROM GAME_LINKAGE l 
+              INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
+              INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
+              INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
+              INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+              LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+              INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
+              LEFT OUTER JOIN GAME_FORMULAS f on ls.SubLink_FormulaID=f.f_id 
+              WHERE ls.SubLink_Type=0 AND ls.SubLink_SubCompID>0 and l.Link_ID=".$linkid
+              ." AND ls.SubLink_CompID =".$row1['CompID']." ORDER BY ls.SubLink_Order";
                 //echo "SubComponent - ".$sqlsubcomp;
                 //echo "</br> addedit - ".$addedit;
-            $subcomponent = $functionsObj->ExecuteQuery($sqlsubcomp);
+              $subcomponent = $functionsObj->ExecuteQuery($sqlsubcomp);
                 //Get Component for this area for this linkid
-            while($row2 = mysqli_fetch_array($subcomponent)){
+              while($row2 = mysqli_fetch_array($subcomponent)){
                   // hiding the subcomponent if mode = 1
-              ($row2['ShowHide']==1)?$hide='hidden':$hide='';
+                ($row2['ShowHide']==1)?$hide='hidden':$hide='';
 
-              switch ($row2['ViewingOrder']) {
+                switch ($row2['ViewingOrder']) {
                   // Name - Details/Chart - InputFields
-                case 1:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "";
-                $DetailsChart     = "";
-                $InputFields      = "";
-                $length           = "col-md-12";
-                break;
+                  case 1:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "";
+                  $DetailsChart     = "";
+                  $InputFields      = "";
+                  $length           = "col-md-12";
+                  break;
 
                   // Name - InputFields - Details/Chart
-                case 2:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "";
-                $DetailsChart     = "pull-right";
-                $InputFields      = "";
-                $length           = "col-md-12";
-                break;
+                  case 2:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "";
+                  $DetailsChart     = "pull-right";
+                  $InputFields      = "";
+                  $length           = "col-md-12";
+                  break;
 
                   // Details/Chart - InputFields - Name
-                case 3:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "pull-right";
-                $DetailsChart     = "";
-                $InputFields      = "";
-                $length           = "col-md-12";
-                break;
+                  case 3:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "pull-right";
+                  $DetailsChart     = "";
+                  $InputFields      = "";
+                  $length           = "col-md-12";
+                  break;
 
                   // Details/Chart - Name - InputFields
-                case 4:
-                $SubCkEditor      = 'col-md-6';
+                  case 4:
+                  $SubCkEditor      = 'col-md-6';
                   // adding removeThis class to remove the div to prevent duplicacy, coz showing this below to show the component name in the middle
-                $SubcomponentName = "hidden removeThis";
-                $DetailsChart     = "";
-                $InputFields      = "";
-                $length           = "col-md-12";
-                break;
+                  $SubcomponentName = "hidden removeThis";
+                  $DetailsChart     = "";
+                  $InputFields      = "";
+                  $length           = "col-md-12";
+                  break;
 
                   // InputFields - Details/Chart - Name
-                case 5:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "pull-right";
-                $DetailsChart     = "pull-right";
-                $InputFields      = "";
-                $length           = "col-md-12";
-                break;
+                  case 5:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "pull-right";
+                  $DetailsChart     = "pull-right";
+                  $InputFields      = "";
+                  $length           = "col-md-12";
+                  break;
 
                   // InputFields - Name - Details/Chart
-                case 6:
-                $SubCkEditor      = 'col-md-6';
+                  case 6:
+                  $SubCkEditor      = 'col-md-6';
                   // adding removeThis class to remove the div to prevent duplicacy, coz showing this below to show the component name in the middle
-                $SubcomponentName = "hidden removeThis";
-                $DetailsChart     = "pull-right";
-                $InputFields      = "";
-                $length           = "col-md-12";
-                break;
+                  $SubcomponentName = "hidden removeThis";
+                  $DetailsChart     = "pull-right";
+                  $InputFields      = "";
+                  $length           = "col-md-12";
+                  break;
 
                   // InputFields - Name - FullLength
-                case 7:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "pull-right";
-                $DetailsChart     = "hidden";
-                $InputFields      = "";
-                $length           = "col-md-12";
-                break;
+                  case 7:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "pull-right";
+                  $DetailsChart     = "hidden";
+                  $InputFields      = "";
+                  $length           = "col-md-12";
+                  break;
 
                   // InputFields - Details/Chart
-                case 8:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "hidden";
-                $DetailsChart     = "pull-right";
-                $InputFields      = "";
-                $length           = "col-md-12";
-                break;
+                  case 8:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "pull-right";
+                  $InputFields      = "";
+                  $length           = "col-md-12";
+                  break;
 
                   // Name - Details/Chart
-                case 9:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "";
-                $DetailsChart     = "";
-                $InputFields      = "hidden";
-                $length           = "col-md-12";
-                break;
+                  case 9:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "";
+                  $DetailsChart     = "";
+                  $InputFields      = "hidden";
+                  $length           = "col-md-12";
+                  break;
 
                   // Name - InputFields - FullLength
-                case 10:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "";
-                $DetailsChart     = "hidden";
-                $InputFields      = "";
-                $length           = "col-md-12";
-                break;
+                  case 10:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "";
+                  $DetailsChart     = "hidden";
+                  $InputFields      = "";
+                  $length           = "col-md-12";
+                  break;
 
                   // Details/Chart - Name
-                case 11:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "pull-right";
-                $DetailsChart     = "";
-                $InputFields      = "hidden";
-                $length           = "col-md-12";
-                break;
+                  case 11:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "pull-right";
+                  $DetailsChart     = "";
+                  $InputFields      = "hidden";
+                  $length           = "col-md-12";
+                  break;
 
                   // Details/Chart - InputFields
-                case 12:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "hidden";
-                $DetailsChart     = "";
-                $InputFields      = "";
-                $length           = "col-md-12";
-                break;
+                  case 12:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "";
+                  $InputFields      = "";
+                  $length           = "col-md-12";
+                  break;
 
                   // Name - InputFields - HalfLength
-                case 13:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "";
-                $DetailsChart     = "hidden";
-                $InputFields      = "";
-                $length           = "col-md-6";
-                break;
+                  case 13:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "";
+                  $DetailsChart     = "hidden";
+                  $InputFields      = "";
+                  $length           = "col-md-6";
+                  break;
 
                   // InputFields - Name - HalfLength
-                case 14:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "pull-right";
-                $DetailsChart     = "hidden";
-                $InputFields      = "";
-                $length           = "col-md-6";
-                break;
+                  case 14:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "pull-right";
+                  $DetailsChart     = "hidden";
+                  $InputFields      = "";
+                  $length           = "col-md-6";
+                  break;
 
                   // CkEditor - FullLength
-                case 15:
-                $SubCkEditor      = 'col-md-12';
-                $SubcomponentName = "hidden";
-                $DetailsChart     = "";
-                $InputFields      = "hidden";
-                $length           = "col-md-12";
-                break;
+                  case 15:
+                  $SubCkEditor      = 'col-md-12';
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "";
+                  $InputFields      = "hidden";
+                  $length           = "col-md-12";
+                  break;
 
                   // CkEditor - HalfLength
-                case 16:
-                $SubCkEditor      = 'col-md-12';
-                $SubcomponentName = "hidden";
-                $DetailsChart     = "";
-                $InputFields      = "hidden";
-                $length           = "col-md-6";
-                break;
+                  case 16:
+                  $SubCkEditor      = 'col-md-12';
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "";
+                  $InputFields      = "hidden";
+                  $length           = "col-md-6";
+                  break;
 
                   // ckEditor - InputFields - HalfLength
-                case 17:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "hidden";
-                $DetailsChart     = "";
-                $InputFields      = "";
-                $length           = "col-md-6";
-                break;
+                  case 17:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "";
+                  $InputFields      = "";
+                  $length           = "col-md-6";
+                  break;
 
                   // InputFields - ckEditor - HalfLength
-                case 18:
-                $SubCkEditor      = 'col-md-6';
-                $SubcomponentName = "hidden";
-                $DetailsChart     = "pull-right";
-                $InputFields      = "";
-                $length           = "col-md-6";
-                break;
-              }
+                  case 18:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "pull-right";
+                  $InputFields      = "";
+                  $length           = "col-md-6";
+                  break;
+                }
 
                 // if component div is half length then make subcomponent div col-md-12
-              if($comp_length == 'col-md-6')
-              {
-                $length       = 'col-md-12';
-                $input_lenght = 'col-md-6';
-                $name_length  = 'col-md-6';
-              }
+                if($comp_length == 'col-md-6')
+                {
+                  $length       = 'col-md-12';
+                  $input_lenght = 'col-md-6';
+                  $name_length  = 'col-md-6';
+                }
 
-              elseif($length == 'col-md-6')
-              {
-                $input_lenght              = 'col-md-6';
-                $name_length               = 'col-md-6';
-                $limit_char                = 10;
-                $subcomp_label_min_width   = '110px';
+                elseif($length == 'col-md-6')
+                {
+                  $input_lenght              = 'col-md-6';
+                  $name_length               = 'col-md-6';
+                  $limit_char                = 10;
+                  $subcomp_label_min_width   = '110px';
                   // $subcomp_save_button_align = '';
-              }
-              else
-              {
-                $input_lenght              = 'col-md-4';
-                $name_length               = 'col-md-2';
-                $limit_char                = 13;
-                $subcomp_label_min_width   = '122px';
+                }
+                else
+                {
+                  $input_lenght              = 'col-md-4';
+                  $name_length               = 'col-md-2';
+                  $limit_char                = 13;
+                  $subcomp_label_min_width   = '122px';
                   // $subcomp_save_button_align = 'top: 50%; position: absolute;';
-              }
-              echo "<div class='".$length." subCompnent ".$hide."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor'].";'";
+                }
+                echo "<div class='".$length." subCompnent ".$hide."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor']."; border:none;'";
                   // if ($row2['ShowHide']==1){
                   //   echo "style='display:none;'";
                   // }
-              echo ">";
-              echo "<div class='col-sm-1 ".$name_length." regular ".$SubcomponentName."'>";
+                echo ">";
+                echo "<div class='col-sm-1 ".$name_length." regular ".$SubcomponentName."'>";
                   echo $row2['SubComp_Name']; //." - Mode - ".$row2['Mode'] ;
                   echo "</div>";
                   echo "<div class='col-sm-6 ".$SubCkEditor." no_padding ".$DetailsChart."'>";
@@ -1490,6 +1488,12 @@ include_once 'includes/header.php';
     {
       // trigger submit if time is up and show overlay
       echo "$('.overlay').show();";
+      // while auto submit then remove all required from inputs
+      ?>
+      $('input').each(function(){
+        $(this).prop('required',false);
+      });
+      <?php
       echo "$('#submit').trigger('click');";
     }
   }
@@ -1570,6 +1574,12 @@ include_once 'includes/header.php';
         $('#submit').trigger('click');
       }
     });
+    // trigger click on save button onchange if type=radio
+    $('input:radio').each(function(i,e){
+      $(this).click(function(e){
+        $(this).parents('div.text-right').find('div.closeSave').trigger('click');
+      });
+    });
     // removing inlinebox class from button div if input type=range to align button down
     $('input[type="range"]').each(function(i,e){
       $(this).parents('div.text-right').find('div.closeSave').parent('div').removeClass('InlineBox').css({'margin':'4% 1% 0% 2%'});
@@ -1632,6 +1642,8 @@ include_once 'includes/header.php';
     formula_json_expsubc = {};
     input_field_values   = {};
     input_field_keys     = {};
+    carry_field_data     = {};
+    create_json_carry_field_data();
     create_json_input_field();
     create_json_input_field_keys();
     create_json_expsubc_onload();
@@ -1642,6 +1654,17 @@ include_once 'includes/header.php';
     // console.log(input_field_keys);
 
   });
+function create_json_carry_field_data()
+{
+  // create carry forward json to update it without refresh
+  $('.linkCarry').each(function(){
+    var carryId    = $(this).data('id_name');
+    var carryQuery = $(this).val();
+    // console.log(carryId+' and '+carryQuery);
+    carry_field_data[carryId] = carryQuery;
+  });
+  // console.log(carry_field_data);
+}
 function create_json_input_field_keys(key)
 {
     // comp,expcomp,fcomp and subc,expsubc,fsubc
@@ -1649,10 +1672,14 @@ function create_json_input_field_keys(key)
       var value = $(this).val();
       // console.log($(this).attr('id'));
       // console.log(value);
-      if(($(this).attr('id')).indexOf('link') != -1)
+      if(($(this).attr('id')))
       {
-        var key_key = $(this).attr('id').split('_');
-        input_field_keys[key_key[1]+'_'+key_key[2]] = $(this).attr('id');
+
+        if(($(this).attr('id')).indexOf('link') != -1)
+        {
+          var key_key = $(this).attr('id').split('_');
+          input_field_keys[key_key[1]+'_'+key_key[2]] = $(this).attr('id');
+        }
       }
     });
     // console.log(input_field_keys);
@@ -1989,13 +2016,13 @@ function create_json_input_field_keys(key)
       // if component branching is enabled for the current scenario then send an extra parameter to get the branching details
       <?php if($result->Branching){ ?>
 
-        data:{'action':'updateFormula',formula_json_expcomp:formula_json_expcomp,formula_json_expsubc:formula_json_expsubc,input_field_values:input_field_values,'compBranching':'enabled'},
+        data:{'action':'updateFormula','carry_field_data':carry_field_data,formula_json_expcomp:formula_json_expcomp,formula_json_expsubc:formula_json_expsubc,input_field_values:input_field_values,'compBranching':'enabled'},
 
       <?php } 
       else{
         ?>
       // if component branching is not enabled then send this data
-      data:{'action':'updateFormula',formula_json_expcomp:formula_json_expcomp,formula_json_expsubc:formula_json_expsubc,input_field_values:input_field_values},
+      data:{'action':'updateFormula','carry_field_data':carry_field_data,formula_json_expcomp:formula_json_expcomp,formula_json_expsubc:formula_json_expsubc,input_field_values:input_field_values},
     <?php } ?>
       // data    :{'action':'updateFormula',formula_json_expcomp:formula_json_expcomp},
       url     : "includes/ajax/ajax_update_execute_input.php",
@@ -2069,6 +2096,9 @@ function create_json_input_field_keys(key)
           
           $("#input_loader").html('');
           $('.overlay').hide();
+          // var relocate = key.split('_');
+          // window.location.href = "<?php // echo site_root.'input.php?ID='.$gameid.'&tab=';?>"+relocate[0];
+          // console.log("<?php // echo site_root.'input.php?ID='.$gameid.'&tab=';?>"+);
           // alert('Saved Successfully.');
           // $(".closeSave").hide();
           // console.log(input_field_values);

@@ -89,12 +89,13 @@ if($_POST['action']=='updateFormula')
 	$formula_json_expcomp = $_POST['formula_json_expcomp'];
 	$formula_json_expsubc = $_POST['formula_json_expsubc'];
 	$input_field_values   = $_POST['input_field_values'];
+	$carry_field_data     = $_POST['carry_field_data'];
 	$inserted_input_key   = array();
-	$query                = "INSERT into `GAME_INPUT`(input_id,input_user,input_sublinkid,input_key,input_current) VALUES ";
+	$query                = "INSERT INTO `GAME_INPUT`(input_id,input_user,input_sublinkid,input_key,input_current) VALUES ";
 	// print_r($formula_json_expcomp);
 	// print_r($formula_json_expsubc);
 	// print_r($input_field_values);
-	// die('here');
+	// print_r($carry_field_data); die('here');
 	// creating component array
 	if(count($formula_json_expcomp) > 0)
 	{
@@ -180,7 +181,7 @@ if($_POST['action']=='updateFormula')
 	{
 		foreach ($input_field_values as $query_key => $query_value)
 		{
-			if(!empty($query_value['input_sublinkid']) && !empty($query_value['values']))
+			if(!empty($query_value['input_sublinkid']) && $query_value['values'] != '')
 			{
 				// start of replacing value from game_link_replace table
 				$sqlreplace = "SELECT Rep_Value FROM `GAME_LINK_REPLACE` 
@@ -287,6 +288,19 @@ if($_POST['action']=='updateFormula')
 	);
 	$result = $funObj->InsertData('GAME_SITE_USER_REPORT_NEW', $userreportdetails);
 	// report modification done
+
+	// to update the carry forward values
+	if(count($carry_field_data) > 0)
+	{
+		foreach ($carry_field_data as $id=>$query)
+		{
+			// echo $id.' and '.$query.'<br>';
+			$val        = $funObj->ExecuteQuery($query);
+			$rescarry   = $funObj->FetchObject($val);
+			$carryValue = $rescarry->input_current;
+			$input_field_values[$id]['values'] = $carryValue;
+		}
+	}
 	echo json_encode($input_field_values);
 }
 

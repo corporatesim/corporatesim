@@ -53,7 +53,7 @@ if(isset($_POST['downloadReport']) && $_POST['downloadReport'] == 'DownloadUserR
 		$EndDate = date('Y-m-d H:i:s');
 	}
 
-	$sql = "SELECT * FROM GAME_SITE_USER_REPORT_NEW WHERE linkid=".$linkid." AND (date_time BETWEEN '".$StartDate."' AND '".$EndDate."')";
+	$sql = "SELECT gr.*,gu.User_username as user_name FROM GAME_SITE_USER_REPORT_NEW gr LEFT JOIN GAME_SITE_USERS gu ON gu.User_id=gr.uid WHERE linkid=".$linkid." AND (date_time BETWEEN '".$StartDate."' AND '".$EndDate."')";
 
 
 	if($add_user_filter == 'select_users' )

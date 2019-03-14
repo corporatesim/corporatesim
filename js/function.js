@@ -38,9 +38,14 @@ function countdown(linkid,userid,minutes,stat) {
 			if(seconds == 0)
 			{
 				$("#execute_input").hide();
-				$('.overlay').show();
-				$('#submit').trigger('click');
 				alert('You have compeleted yor time. Please submit your changes.');
+				$('.overlay').show();
+      	// while auto submit then remove all required from inputs
+      	$('input').each(function(){
+      		$(this).prop('required',false);
+      	});
+      	$('#submit').trigger('click');
+      	// location.reload();
 				//document.forms["game_frm"].submit();
 			}
 		}
