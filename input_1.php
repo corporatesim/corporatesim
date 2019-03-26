@@ -50,17 +50,17 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 	if( !empty($_POST) )
 	{
 		$data =array();
-		
+	
 		foreach($_POST as $key => $value)
 		{
 			$strresult = $strresult.$key."->".$value." , ";
 			$data[$key]  = $value;		
 		}
-		
+	
 		foreach($data as $x=>$x_value)
 		{	  
-			$str = explode("_",$x);
-			
+		$str = explode("_",$x);
+	
 		//if($str[0] == $_POST['active'])
 		//{
 			if($str[1] == 'comp'){
@@ -75,7 +75,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 				//echo $sql;
 				//exit();
 				$object = $functionsObj->ExecuteQuery($sql);
-				
+						
 				if ($object->num_rows > 0) {
 					$res = $functionsObj->FetchObject($object);
 					$array = array (
@@ -123,7 +123,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 			}
 		//}		
 		}
-		
+	
 		foreach($data as $x=>$x_value)
 		{
 			$str = explode("_",$x);
@@ -264,7 +264,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 						WHERE input_user=".$userid." AND input_sublinkid IN
 						(SELECT ls.SubLink_ID FROM GAME_LINKAGE_SUB ls 
 						WHERE SubLink_CompId=".$strkey[1]." AND SubLink_SubCompId=0 AND SubLink_type=0 and SubLink_LinkID=".$linkid." )";
-						
+	
 						//echo $sqlvalue;
 						
 						$value = $functionsObj->ExecuteQuery($sqlvalue);
@@ -285,7 +285,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 				//echo $sql;
 				//exit();
 				$object = $functionsObj->ExecuteQuery($sql);
-				
+						
 				if ($object->num_rows > 0) {
 					$res = $functionsObj->FetchObject($object);
 					$array = array (
@@ -301,7 +301,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 					);				
 					$functionsObj->InsertData('GAME_OUTPUT', $array, 0, 0);
 				}
-				
+								
 				//echo(implode(" ",$strvalue));
 				//join implode
 			}
@@ -316,14 +316,14 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 
 
 $sql ="SELECT g.game_name as Game,sc.Scen_Name as Scenario,a.Area_Name as Area, 
-c.Comp_Name as Component, s.SubComp_Name as Subcomponent, l.*,ls.* 
-FROM GAME_LINKAGE l 
-INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
-INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
-INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
-INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
+		c.Comp_Name as Component, s.SubComp_Name as Subcomponent, l.*,ls.* 
+	FROM GAME_LINKAGE l 
+		INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
+		INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
+        INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
+        INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+        LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+        INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
 WHERE l.Link_ID=".$linkid;
 //" order by link_gameid,Link_ScenarioID,Link_Order";
 
@@ -335,12 +335,12 @@ if($input->num_rows > 0){
 
 $sqlarea="SELECT distinct a.Area_ID as AreaID, a.Area_Name as Area_Name
 FROM GAME_LINKAGE l 
-INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
-INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
-INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
-INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
+		INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
+		INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
+        INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
+        INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+        LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+        INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
 WHERE ls.SubLink_Type=0 AND l.Link_ID=".$linkid;
 //echo $sql;
 $area = $functionsObj->ExecuteQuery($sqlarea);
@@ -348,20 +348,21 @@ $area = $functionsObj->ExecuteQuery($sqlarea);
 
 $sqlcomp = "SELECT distinct a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, ls.SubLink_Details as Description 
 FROM GAME_LINKAGE l 
-INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
-INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
-INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
-INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
+		INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
+		INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
+        INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
+        INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+        LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+        INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
 WHERE ls.SubLink_SubCompID=0 and l.Link_ID=".$linkid;
 $component = $functionsObj->ExecuteQuery($sqlcomp);
 
 
-
+				
 $url = site_root."input.php?Scenario=".$result->Link_ScenarioID;
 
 include_once doc_root.'views/input.php';
 
 ?>
 
+				

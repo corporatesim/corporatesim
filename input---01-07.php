@@ -85,7 +85,7 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 			//goto result page
 			
 			$url = site_root."result.php?Link=".$result1->US_LinkID;
-						
+			
 			header("Location:".site_root."result.php?Game=".$gameid);
 			exit();
 		}
@@ -102,7 +102,7 @@ else{
 	header("Location:".site_root."selectgame.php");
 	exit();
 }
- 
+
 $tab = isset($_GET['tab']) ? $_GET['tab'] : 'NOTSET';
 
 if (!isset($_SESSION['userid']))
@@ -117,14 +117,14 @@ if (!isset($_SESSION['userid']))
 }
 
 if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
+{
+	if($_COOKIE['hours']>0 || $_COOKIE['minutes']>0)
 	{
-		if($_COOKIE['hours']>0 || $_COOKIE['minutes']>0)
-		{
-			$hour = $_COOKIE['hours'];
-			$min = $_COOKIE['minutes'];
-		}
-		else
-		{			
+		$hour = $_COOKIE['hours'];
+		$min = $_COOKIE['minutes'];
+	}
+	else
+	{			
 			/* $start = date('M d,y H:i:s');
 			$hour = $link->Link_Hour;
 			$min = $link->Link_Min;
@@ -142,103 +142,103 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 		}
 	}
 
-$sqlexist="SELECT * FROM `GAME_INPUT` i WHERE i.input_user=".$userid." and i.input_sublinkid in 
-(SELECT s.SubLink_ID FROM GAME_LINKAGE_SUB s WHERE s.SubLink_LinkID=".$linkid.")";
+	$sqlexist="SELECT * FROM `GAME_INPUT` i WHERE i.input_user=".$userid." and i.input_sublinkid in 
+	(SELECT s.SubLink_ID FROM GAME_LINKAGE_SUB s WHERE s.SubLink_LinkID=".$linkid.")";
 //echo $sqlexist;
-$object = $functionsObj->ExecuteQuery($sqlexist);
+	$object = $functionsObj->ExecuteQuery($sqlexist);
 //echo $object->num_rows;
-if($object->num_rows > 0){
-	$addedit="Edit";
-	while($row= $object->fetch_object()){
-		$data[$row->input_key]  = $row->input_current;
+	if($object->num_rows > 0){
+		$addedit="Edit";
+		while($row= $object->fetch_object()){
+			$data[$row->input_key]  = $row->input_current;
 		//echo $row->key."-".$row->current.",";
+		}
 	}
-}
-else{
-	$addedit="Add";
-}
+	else{
+		$addedit="Add";
+	}
 //echo $addedit;
 //foreach($data as $x=>$x_value)
 //{	echo $x."=>".$x_value." ";
 //}
 //exit;
 
-$sql = "SELECT * FROM GAME_LINKAGE WHERE Link_ID = ".$linkid;
-$object =$functionsObj->ExecuteQuery($sql);
-if($object->num_rows > 0){
-	$link = $functionsObj->FetchObject($object);
-	$gameid = $link->Link_GameID;
-	$scenid = $link->Link_ScenarioID;
-	$gameurl = site_root."game_description.php?Game=".$gameid;
-	$scenurl = site_root."scenario_description.php?Link=".$linkid;
+	$sql = "SELECT * FROM GAME_LINKAGE WHERE Link_ID = ".$linkid;
+	$object =$functionsObj->ExecuteQuery($sql);
+	if($object->num_rows > 0){
+		$link = $functionsObj->FetchObject($object);
+		$gameid = $link->Link_GameID;
+		$scenid = $link->Link_ScenarioID;
+		$gameurl = site_root."game_description.php?Game=".$gameid;
+		$scenurl = site_root."scenario_description.php?Link=".$linkid;
 
-	$where = array (
-		"US_GameID = " . $gameid,
-		"US_ScenID = " . $scenid,
-		"US_UserID = " . $userid
-	);
-	$obj = $functionsObj->SelectData ( array (), 'GAME_USERSTATUS', $where, '', '', '', '', 0 );
-	if ($obj->num_rows > 0)
-	{
-		$status = $functionsObj->FetchObject($obj);
-		$userstatusid = $status->US_ID;
+		$where = array (
+			"US_GameID = " . $gameid,
+			"US_ScenID = " . $scenid,
+			"US_UserID = " . $userid
+		);
+		$obj = $functionsObj->SelectData ( array (), 'GAME_USERSTATUS', $where, '', '', '', '', 0 );
+		if ($obj->num_rows > 0)
+		{
+			$status = $functionsObj->FetchObject($obj);
+			$userstatusid = $status->US_ID;
 		//exists
-		$array = array (			
-			'US_Input' => 1,
-			'US_Output' => 0
-		);
-		$result = $functionsObj->UpdateData ( 'GAME_USERSTATUS', $array, 'US_ID', $userstatusid  );
-	}
-	else
-	{
+			$array = array (			
+				'US_Input' => 1,
+				'US_Output' => 0
+			);
+			$result = $functionsObj->UpdateData ( 'GAME_USERSTATUS', $array, 'US_ID', $userstatusid  );
+		}
+		else
+		{
 		//insert
-		$array = array (
-			'US_GameID' => $gameid,
-			'US_ScenID' => $scenid,
-			'US_UserID' => $userid,
-			'US_Input' => 1,
-			'US_Output' => 0,
-			'US_CreateDate' => date ( 'Y-m-d H:i:s' ) 
-		);
-		$result = $functionsObj->InsertData ( 'GAME_USERSTATUS', $array, 0, 0 );
+			$array = array (
+				'US_GameID' => $gameid,
+				'US_ScenID' => $scenid,
+				'US_UserID' => $userid,
+				'US_Input' => 1,
+				'US_Output' => 0,
+				'US_CreateDate' => date ( 'Y-m-d H:i:s' ) 
+			);
+			$result = $functionsObj->InsertData ( 'GAME_USERSTATUS', $array, 0, 0 );
+		}
+		
 	}
-	
-}
 
-if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
-{
+	if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
+	{
 //	echo "IN SUBMIT";
 //	exit();
-	if( !empty($_POST) )
-	{
-		$data =array();
-	
-		foreach($_POST as $key => $value)
+		if( !empty($_POST) )
 		{
-			$strresult = $strresult.$key."->".$value." , ";
-			$data[$key]  = $value;		
-		}
-	
-		foreach($data as $x=>$x_value)
-		{	  
-			$str = explode("_",$x);
-	
+			$data =array();
+			
+			foreach($_POST as $key => $value)
+			{
+				$strresult = $strresult.$key."->".$value." , ";
+				$data[$key]  = $value;		
+			}
+			
+			foreach($data as $x=>$x_value)
+			{	  
+				$str = explode("_",$x);
+				
 			//if($str[0] == $_POST['active'])
 			//{
-			if($str[1] == 'comp'){
-				$sublinkid = $data[$str[0].'_linkcomp_'.$str[2]];
-				$compid = $str[2];
-				$subcompid=0;
+				if($str[1] == 'comp'){
+					$sublinkid = $data[$str[0].'_linkcomp_'.$str[2]];
+					$compid = $str[2];
+					$subcompid=0;
 				$current= $x_value;	//check for REPLACE condition
 				$key=$x;
 				//echo "Comp".$compid."--".$current.",";
 				if(!empty($current))
 				{
 					$sqlreplace = "SELECT * FROM `GAME_LINK_REPLACE` 
-									INNER JOIN GAME_LINKAGE_SUB ls on Rep_SublinkID =ls.SubLink_ID 
-								WHERE Rep_SublinkID=".$sublinkid." AND Rep_Start<= ".$current."
-									AND Rep_End>=".$current." AND 
-									(ls.SubLink_InputMode ='user' OR ls.SubLink_InputMode ='formula')";
+					INNER JOIN GAME_LINKAGE_SUB ls on Rep_SublinkID =ls.SubLink_ID 
+					WHERE Rep_SublinkID=".$sublinkid." AND Rep_Start<= ".$current."
+					AND Rep_End>=".$current." AND 
+					(ls.SubLink_InputMode ='user' OR ls.SubLink_InputMode ='formula')";
 									//echo $sqlreplace;
 					$objreplace  = $functionsObj->ExecuteQuery($sqlreplace);
 					if ($objreplace->num_rows > 0) 
@@ -252,7 +252,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 				//echo $sql;
 				//exit();
 				$object = $functionsObj->ExecuteQuery($sql);
-						
+				
 				if ($object->num_rows > 0) {
 					$res = $functionsObj->FetchObject($object);
 					$array = array (
@@ -280,10 +280,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 				if(!empty($current) && isset($current))
 				{
 					$sqlreplace = "SELECT * FROM `GAME_LINK_REPLACE` 
-									INNER JOIN GAME_LINKAGE_SUB ls on Rep_SublinkID =ls.SubLink_ID 
-								WHERE Rep_SublinkID=".$sublinkid." AND Rep_Start<= ".$current."
-									AND Rep_End>=".$current." AND 
-									(ls.SubLink_InputMode ='user' OR ls.SubLink_InputMode ='formula')";
+					INNER JOIN GAME_LINKAGE_SUB ls on Rep_SublinkID =ls.SubLink_ID 
+					WHERE Rep_SublinkID=".$sublinkid." AND Rep_Start<= ".$current."
+					AND Rep_End>=".$current." AND 
+					(ls.SubLink_InputMode ='user' OR ls.SubLink_InputMode ='formula')";
 					$objreplace  = $functionsObj->ExecuteQuery($sqlreplace);
 					if ($objreplace->num_rows > 0) 
 					{
@@ -379,10 +379,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 						if(!empty($current))
 						{
 							$sqlreplace = "SELECT * FROM `GAME_LINK_REPLACE` 
-											INNER JOIN GAME_LINKAGE_SUB ls on Rep_SublinkID =ls.SubLink_ID 
-										WHERE Rep_SublinkID=".$data[$tmp]." AND Rep_Start<= ".$current."
-											AND Rep_End>=".$current." AND 
-											(ls.SubLink_InputMode ='user' OR ls.SubLink_InputMode ='formula')";
+							INNER JOIN GAME_LINKAGE_SUB ls on Rep_SublinkID =ls.SubLink_ID 
+							WHERE Rep_SublinkID=".$data[$tmp]." AND Rep_Start<= ".$current."
+							AND Rep_End>=".$current." AND 
+							(ls.SubLink_InputMode ='user' OR ls.SubLink_InputMode ='formula')";
 							$objreplace  = $functionsObj->ExecuteQuery($sqlreplace);
 							if ($objreplace->num_rows > 0) 
 							{
@@ -475,10 +475,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 						if(!empty($current))
 						{
 							$sqlreplace = "SELECT * FROM `GAME_LINK_REPLACE` 
-											INNER JOIN GAME_LINKAGE_SUB ls on Rep_SublinkID =ls.SubLink_ID 
-										WHERE Rep_SublinkID=".$data[$tmp]." AND Rep_Start<= ".$current."
-											AND Rep_End>=".$current." AND 
-											(ls.SubLink_InputMode ='user' OR ls.SubLink_InputMode ='formula')";
+							INNER JOIN GAME_LINKAGE_SUB ls on Rep_SublinkID =ls.SubLink_ID 
+							WHERE Rep_SublinkID=".$data[$tmp]." AND Rep_Start<= ".$current."
+							AND Rep_End>=".$current." AND 
+							(ls.SubLink_InputMode ='user' OR ls.SubLink_InputMode ='formula')";
 							$objreplace  = $functionsObj->ExecuteQuery($sqlreplace);
 							if ($objreplace->num_rows > 0) 
 							{
@@ -571,7 +571,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 						WHERE input_user=".$userid." AND input_sublinkid IN
 						(SELECT ls.SubLink_ID FROM GAME_LINKAGE_SUB ls 
 						WHERE SubLink_CompId=".$strkey[1]." AND SubLink_SubCompId=0 AND SubLink_type=0 and SubLink_LinkID=".$linkid." )";
-	
+						
 						//echo "sqlvalue- ".$sqlvalue."</br>";
 						
 						$value = $functionsObj->ExecuteQuery($sqlvalue);
@@ -615,7 +615,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 					$functionsObj->InsertData('GAME_OUTPUT', $array, 0, 0);
 					echo "INSERT";
 				}
-								
+				
 				//echo(implode(" ",$strvalue));
 				//join implode
 			}
@@ -661,14 +661,14 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 
 
 $sql ="SELECT g.game_name as Game,sc.Scen_Name as Scenario,a.Area_Name as Area, 
-		c.Comp_Name as Component, s.SubComp_Name as Subcomponent, l.*,ls.* 
-	FROM GAME_LINKAGE l 
-		INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
-		INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-        INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
-        INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-        LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
-        INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
+c.Comp_Name as Component, s.SubComp_Name as Subcomponent, l.*,ls.* 
+FROM GAME_LINKAGE l 
+INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
+INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
+INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
+INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
 WHERE l.Link_ID=".$linkid;
 //" order by link_gameid,Link_ScenarioID,Link_Order";
 
@@ -679,14 +679,14 @@ if($input->num_rows > 0){
 }
 
 $sqlarea="SELECT DISTINCT a.Area_ID as AreaID, a.Area_Name as Area_Name
-	, SUM(ls.SubLink_ShowHide) as ShowHide, COUNT(ls.SubLink_ShowHide) as countlnk 
+, SUM(ls.SubLink_ShowHide) as ShowHide, COUNT(ls.SubLink_ShowHide) as countlnk 
 FROM GAME_LINKAGE l 
-		INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
-		INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-        INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
-        INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-        LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
-        INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
+INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
+INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
+INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
+INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
 WHERE ls.SubLink_Type=0 AND l.Link_ID=".$linkid." GROUP BY a.Area_ID,a.Area_Name 
 ORDER BY a.Area_Sequencing";
 //echo $sqlarea;
@@ -694,40 +694,39 @@ $area = $functionsObj->ExecuteQuery($sqlarea);
 
 
 $sqlcompSanNew =  "SELECT distinct a.Area_ID as AreaID, c.Comp_ID as CompID, ls.SubLink_SubCompID as SubCompID, 
-			a.Area_Name as Area_Name, s.SubComp_Name as SubComp_Name, l.Link_Order as 'Order',  
-			c.Comp_Name as Comp_Name, ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode, 
-			f.expression as exp , ls.SubLink_ID as SubLinkID,ls.Sublink_AdminCurrent as AdminCurrent, 
-			ls.Sublink_AdminLast as AdminLast, ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff,
-			ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
-			ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID  
-			FROM GAME_LINKAGE l 
-					INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
-					INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-					INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
-					INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-					LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
-					INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
-					LEFT OUTER JOIN GAME_FORMULAS f on ls.SubLink_FormulaID=f.f_id 
-			WHERE ls.SubLink_Type=0 AND ls.SubLink_SubCompID>0 and l.Link_ID=".$linkid." ORDER BY a.Area_Sequencing";
+a.Area_Name as Area_Name, s.SubComp_Name as SubComp_Name, l.Link_Order as 'Order',  
+c.Comp_Name as Comp_Name, ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode, 
+f.expression as exp , ls.SubLink_ID as SubLinkID,ls.Sublink_AdminCurrent as AdminCurrent, 
+ls.Sublink_AdminLast as AdminLast, ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff,
+ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
+ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID  
+FROM GAME_LINKAGE l 
+INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
+INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
+INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
+INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
+LEFT OUTER JOIN GAME_FORMULAS f on ls.SubLink_FormulaID=f.f_id 
+WHERE ls.SubLink_Type=0 AND ls.SubLink_SubCompID>0 and l.Link_ID=".$linkid." ORDER BY a.Area_Sequencing";
 
 
 
 
 $sqlcomp = "SELECT distinct a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, ls.SubLink_Details as Description 
 FROM GAME_LINKAGE l 
-		INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
-		INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-        INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
-        INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-        LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
-        INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
+INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
+INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
+INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
+INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
 WHERE ls.SubLink_SubCompID=0 and l.Link_ID=".$linkid;
 $component = $functionsObj->ExecuteQuery($sqlcomp);
-				
+
 $url = site_root."input.php?Scenario=".$result->Link_ScenarioID;
 
 include_once doc_root.'views/input.php';
 
 ?>
 
-				

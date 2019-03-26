@@ -7,7 +7,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Chart Comp</h1>
+		<h1 class="page-header">Chart Component</h1>
 	</div>
 </div>
 

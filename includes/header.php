@@ -8,159 +8,34 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/style.css">  
+	<link rel="stylesheet" href="css/selectgame.css">  
+
 	<link rel="stylesheet" href="css/inner_pages.css">  
+	<link rel="stylesheet" href="css/style.css">  
 	<link rel="shortcut icon" type="image/x-icon" href="images/faviconnew.ico">
 	
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,100,300,500,700' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,600,700" rel="stylesheet"> 
 	<script src="js/jquery.min.js"></script>	
 	<script src="js/bootstrap.min.js"></script>		
-	<script>
+	<!-- <script>
 		$(document).bind("contextmenu",function(e){
 			return false;
 		});
-	</script>	
-	<style>
-	.dbl-spinner {
-		margin           : 20% 0 0 50%;
-		position         : absolute;
-		width            : 75px;
-		height           : 75px;
-		border-radius    : 50%;
-		background-color : transparent;
-		border           : 4px solid transparent;
-		border-top       : 4px solid #222;
-		border-left      : 4px solid #222;
-		-webkit-animation: 2s spin linear infinite;
-		animation        : 2s spin linear infinite;
-	}
-
-	.dbl-spinner:nth-child(2) {
-		border           : 4px solid transparent;
-		border-right     : 4px solid #03A9F4;
-		border-bottom    : 4px solid #03A9F4;
-		-webkit-animation: 1s spin linear infinite;
-		animation        : 1s spin linear infinite;
-	}
-
-	@-webkit-keyframes spin {
-		from {
-			-webkit-transform: rotate(0deg);
-			transform        : rotate(0deg);
-		}
-		to {
-			-webkit-transform: rotate(360deg);
-			transform        : rotate(360deg);
-		}
-	}
-
-	@keyframes spin {
-		from {
-			-webkit-transform: rotate(0deg);
-			transform        : rotate(0deg);
-		}
-		to {
-			-webkit-transform: rotate(360deg);
-			transform        : rotate(360deg);
-		}
-	}
-
-
-	/*css for overlay div*/
-	.overlay {
-		height          : 100%;
-		width           : 100%;
-		display         : none;
-		position        : fixed;
-		z-index         : 1;
-		top             : 0;
-		left            : 0;
-		background-color: rgb(0,0,0);
-		background-color: rgba(0,0,0, 0.4);
-	}
-
-	.overlay-content {
-		position  : relative;
-		top       : 25%;
-		width     : 100%;
-		text-align: center;
-		margin-top: 30px;
-	}
-
-	.overlay span {
-		padding        : 8px;
-		text-decoration: none;
-		font-size      : 36px;
-		color          : #ffff00;
-		display        : block;
-		transition     : 0.3s;
-	}
-
-	.overlay span:hover, .overlay span:focus {
-		color: #f1f1f1;
-	}
-
-	.overlay .closebtn {
-		position : absolute;
-		top      : 20px;
-		right    : 45px;
-		font-size: 60px;
-	}
-
-	@media screen and (max-height: 450px) {
-		.overlay span {font-size: 20px}
-		.overlay .closebtn {
-			font-size: 40px;
-			top      : 15px;
-			right    : 35px;
-		}
-	}
-	@media only screen and (max-width: 768px) {
-		.dashboardList
-		{
-			margin-top : 25px;
-		}
-		@media only screen and (max-width:290px){
-			.dashboardList ul li 
-			{ 
-				margin-top:9%;
-			}
-		}
-		[class*="col-"] 
-		{
-			width : 100%;
-			margin-top:3%;
-		}
-
-	}
-	@media only screen and (max-width: 300px){
-		.timer {
-			width: 100%;
-			margin-top: 27%;
-		}
-	}
-
-	@media (max-width:317px) and (min-width:300px) {
-
-		.timer{
-			width:100%;
-			margin-top:12%;
-		}
-	}
-
-	@media only screen and (max-width:768px){
-		#nav
-		{
-			/* width   : 100%; */
-			background: #ffffff;
-			margin-top: 0px;
-			
-		}
-	}
-</style>
+	</script> -->
+	
+<!-- The Modal -->
+<center>
+	<div id="imageModal" class="modal">
+		<span class="close" id="close" style="font-size: 50px; opacity: 1; color:#f00;">
+			&times;
+		</span>
+		<img class="modal-content" id="showImageHere">
+		<div id="caption"></div>
+	</div>
+</center>
 </head>
-<body>	
+<body background="images/bg3.jpg">	
 	<!-- adding loader -->
 	<div id="loader" class="col-md-12 overlay">
 		<div class="dbl-spinner"></div>
@@ -172,9 +47,9 @@
 	</div>
 	<!-- end of adding loader -->
 	<header>	
-		<nav class="navbar navbar-fixed-top">
+		<nav class="navbar1 navbar-fixed-top">
 			<div class="container">
-				<div class="navbar-header">
+				<div class="navbar-header1">
 					<!--<a class="navbar-brand logo" href="#">Logo</a>-->
 					<!--a style="padding: 2px 15px;" class="navbar-brand" href="<?php echo site_root."index.php";?>"--> 
 					<img src="<?php echo site_root."images/logo-main.png";?>"  width="40px" />
@@ -188,21 +63,20 @@
 						if(isset($_SESSION['username']) && !empty($_SESSION['username'])){ 
 							?>
 
-
-							<li><a href="<?php echo site_root."selectgame.php";?>">Welcome <?php echo ucfirst(strtolower($_SESSION['username'])); ?></a></li>						
-							<li>
-								<a class="" href="<?php echo site_root."logout.php?q=Logout";?>">Logout</a>
+							<li class="hover" style="margin-top:-35px;"><a class="welcome btn btn-lg btn-primary pull-right" style="margin-right: 0%; padding: 6px 12px; color:#ffffff"  href="<?php echo site_root."selectgame.php";?>">Welcome <?php echo ucfirst(strtolower($_SESSION['username'])); ?></a></li>						
+							<li class="hover" style="margin-top:-35px;">
+								<a class="logout btn btn-lg btn-primary  pull-right" style="margin-right: -250%; padding: 6px 12px; color:#FFFFFF" href="<?php echo site_root."logout.php?q=Logout";?>">Logout</a>
 							</li>
 						<?php }else{ ?>
-							<li>
+							<!-- <li>
 								<a href="<?php echo site_root;?>login.php">
 									Login
 								</a>
-							</li>
+							</li> -->
 							<li>
-								<a href="<?php echo site_root;?>registration.php">
-									Register
-								</a>
+								<div>
+									<button name="login" value="login" class="btn btn-lg btn-primary  pull-right register" style="margin-right: -10%; padding: 6px 12px;" onclick="window.location='registration.php'">Register</button>
+								</div>
 							</li>
 						<?php } }?>
 						<li>&nbsp; &nbsp;&nbsp;</li>
@@ -211,4 +85,20 @@
 				</div>
 			</nav>
 		</header>	
-
+		<script>
+			$(document).ready(function(){
+				$('.showImageModal').each(function(){
+					$(this).on('click',function(){
+						$('#imageModal').show();
+						$('#showImageHere').attr('src',$(this).attr('src'));
+					});
+				});
+				$('#close').on('click',function(){
+					// $('#imageModal').hide('slow');
+					$('#imageModal').slideUp(1000);
+				});
+				$('img').on('contextmenu', function() {
+					return false;
+				})
+			});
+		</script>

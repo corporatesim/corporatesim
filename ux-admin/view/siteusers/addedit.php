@@ -47,35 +47,28 @@ span.alert-danger {
 					value="<?php if(isset($_GET['edit'])){ echo $userdetails->User_id; } ?>">
 					<div class="form-group">
 						<input type="text" name="fname"
-						value="<?php if(!empty($userdetails->User_fname)) echo $userdetails->User_fname; ?>"
-						class="form-control" title="Minimum 3 letters"
-						pattern="[a-zA-Z]{3,}" placeholder="First Name" required>
+						value="<?php if(!empty($userdetails->User_fname)) echo $userdetails->User_fname; ?>"class="form-control" 
+						placeholder="First Name" required>
 					</div>
 				</div>
 				<div class="col-sm-6">
 					<div class="form-group">
 						<input type="text" name="lname" class="form-control"
-						title="Minimum 3 letters" pattern="[a-zA-Z]{3,}"
-						placeholder="Last Name"
-						value="<?php if(!empty($userdetails->User_lname)) echo $userdetails->User_lname; ?>"
+						placeholder="Last Name" value="<?php if(!empty($userdetails->User_lname)) echo $userdetails->User_lname; ?>"
 						required>
 					</div>
 				</div>
 				<div class="col-sm-6">
 					<div class="form-group">
 						<input type="text" name="username" class="form-control"
-						title="Minimum 3 letters" pattern="[a-zA-Z]{3,}"
-						placeholder="User Name"
-						value="<?php if(!empty($userdetails->User_username)) echo $userdetails->User_username; ?>"
+						placeholder="User Name" value="<?php if(!empty($userdetails->User_username)) echo $userdetails->User_username; ?>"
 						required>
 					</div>
 				</div>
 				<div class="col-sm-6">
 					<div class="form-group">
 						<input type="text" name="company" class="form-control"
-						title="Minimum 3 letters" pattern="[a-zA-Z]{3,}"
-						placeholder="Company Name"
-						value="<?php if(!empty($userdetails->User_companyid)) echo $userdetails->User_companyid; ?>"
+						placeholder="Company Name" value="<?php if(!empty($userdetails->User_companyid)) echo $userdetails->User_companyid; ?>"
 						>
 					</div>
 				</div>			
@@ -88,9 +81,7 @@ span.alert-danger {
 						<div class="input-group">
 							<span class="input-group-addon">+91</span>
 							<input type="text" name="mobile" id="mobile" class="form-control"
-							title="Minimum 10 digits" pattern="[0-9]{10,}"
-							placeholder="Mobile Number"
-							value="<?php if(!empty($userdetails->User_mobile)) echo $userdetails->User_mobile; ?>"
+							placeholder="Mobile Number" value="<?php if(!empty($userdetails->User_mobile)) echo $userdetails->User_mobile; ?>"
 							required>
 						</div>
 						<div class="contact_error"></div>
@@ -105,47 +96,126 @@ span.alert-danger {
 						required>
 					</div>
 				</div>
-				<?php if(isset($_GET['edit'])){ ?>
-					<div class="col-sm-6">
-						<label for="password"><span class="alert-danger">*</span>Password</label>
-						<div class="form-group">
-							<input type="text" name="password" id="password" class="form-control"
-							placeholder="E-mail"
-							value="<?php  if(!empty($userauth->Auth_password)) echo $userauth->Auth_password; ?>"
-							required>
-						</div>
-					</div>
-				<?php } ?>
 			</div>
-
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="form-group text-center">
-						<?php if(isset($_GET['edit']) && !empty($_GET['edit'])){?>
-							<button type="button" id="siteuser_btn_update" class="btn btn-primary"
-							> Update </button>
-							<button type="submit" name="submit" id="siteuser_update" class="btn btn-primary hidden"
-							value="Update"> Update </button>
-							<button type="button" class="btn btn-primary"
-							onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
-						<?php }else{?>
-							<button type="button" id="siteuser_btn" class="btn btn-primary"
-							value="Submit"> Submit </button>
-							<button type="submit" name="submit" id="siteuser_sbmit"
-							class="btn btn-primary hidden" value="Submit"> Submit </button>
-							<button type="button" class="btn btn-primary"
-							onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
-						<?php }?>
+			<!-- Add dropDown for select Enterprise and SubEnterprise Users -->
+			<div class="form-group">
+				<div class="row">
+					<div class="col-md-6" id="Enterprise_Section">
+						<label for="Select Enterprise"><span class="alert-danger">*</span>Select Enterprise</label>
+						<select name="Enterprise" id="Enterprise" class="form-control">
+							<option value="">--Select Enterprise--</option>           
+							<?php foreach ($EnterpriseName as $EnterpriseData) { ?>
+								<option value="<?php echo $EnterpriseData->Enterprise_ID; ?>" <?php echo ($EnterpriseData->Enterprise_ID==$userdetails->User_ParentId)?"selected":''; ?>><?php echo $EnterpriseData->Enterprise_Name; ?></option>
+							<?php } ?>
+						</select>
 					</div>
+					<input type="hidden" name="Enterprisename" id="Enterprisename">
+					<div class="col-md-6 hidden" id="SubEnterprise_section">
+						<label for="Select SubEnterprise"><span class="alert-danger">*</span>Select SubEnterprise</label> 
+						<select name="SubEnterprise" id="SubEnterprise" class="form-control">	<?php if(isset($_GET['edit'])){ ?>
+							<option value="<?php echo $subObjRes->SubEnterprise_ID; ?>" <?php echo ($subObjRes->SubEnterprise_ID==$userdetails->User_SubParentId)?"selected":''; ?>><?php echo $subObjRes->SubEnterprise_Name; ?></option> 
+						<?php }else {?>
+							<option value="">--Select SubEnterprise--</option> 
+						<?php } ?>
+					</select>
+				</div>
+				<input type="hidden" name="SubEnterpriseName" id="SubEnterpriseName">
+			</div><br>
+		</div>
+		<?php if(isset($_GET['edit'])){ ?>
+			<div class="col-sm-6">
+				<label for="password"><span class="alert-danger">*</span>Password</label>
+				<div class="form-group">
+					<input type="text" name="password" id="password" class="form-control"
+					placeholder="E-mail"
+					value="<?php  if(!empty($userauth->Auth_password)) echo $userauth->Auth_password; ?>"
+					required>
 				</div>
 			</div>
-		</form>
+		<?php } ?>
 	</div>
-	<div class="clearfix"></div>
-
-	<script>
-		<!--
-
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="form-group text-center">
+				<?php if(isset($_GET['edit']) && !empty($_GET['edit'])){?>
+					<button type="button" id="siteuser_btn_update" class="btn btn-primary"
+					> Update </button>
+					<button type="submit" name="submit" id="siteuser_update" class="btn btn-primary hidden"
+					value="Update"> Update </button>
+					<button type="button" class="btn btn-primary"
+					onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
+				<?php }else{?>
+					<button type="button" id="siteuser_btn" class="btn btn-primary"
+					value="Submit"> Submit </button>
+					<button type="submit" name="submit" id="siteuser_sbmit"
+					class="btn btn-primary hidden" value="Submit"> Submit </button>
+					<button type="button" class="btn btn-primary"
+					onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
+				<?php }?>
+			</div>
+		</div>
+	</div>
+</form>
+</div>
+<div class="clearfix"></div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#Enterprise').on('change',function(){
+			var Enterprise_ID  = $(this).val();
+			var EnterpriseName = $(this).find(':selected').data('enterprisename');
+			$('#Enterprisename').attr('value',EnterpriseName);
+			$('#SubEnterpriseName').attr('value','');
+			if($(this).val())
+			{
+				$('#SubEnterprise_section').removeClass('hidden');
+          // triggering ajax to show the subenterprise linked with this enterprise
+          $.ajax({
+          	url : "<?php echo site_root;?>ux-admin/model/ajax/siteusers.php",
+          	type: "POST",
+          	data: "action=Subenterprise&Enterprise_ID="+Enterprise_ID,
+          	success: function( result )
+          	{
+            	//alert(result);
+            	var option = '<option value="">--Select SubEnterprise--</option>';
+            	if(result.trim() != 'no link')
+            	{
+            		result = JSON.parse(result)
+            		$(result).each(function(i,e)
+            		{
+                  //console.log(index);
+                  option += ('<option value='+result[i].SubEnterprise_ID+' data-subenterpriseid="'+result[i].SubEnterprise_ID+'" data-subenterprisename="'+result[i].SubEnterprise_Name+'">'+result[i].SubEnterprise_Name+'</option>');
+                });
+               // console.log(option);
+               $('#SubEnterprise').html(option);
+             }
+             else
+             {
+             	$('#SubEnterprise').html(option);
+             }
+           },
+         });          
+        }
+        else
+        {
+        	if(!($('#SubEnterprise_section').hasClass('hidden')))
+        	{
+        		$('#SubEnterprise_section').addClass('hidden');
+        	}
+        	alert('Please Select Enterprise...');
+        	return false;
+        }
+      });
+		//show selected Subenterprise
+		$('#Enterprise').trigger('change');
+		<?php if(isset($_GET['edit'])){ ?>
+			if(<?php echo $subObjRes->SubEnterprise_ID; ?>)
+			{
+			// alert(<?php // echo $subObjRes->SubEnterprise_ID; ?>);
+			setTimeout(function(){
+				$('#SubEnterprise [value="<?php echo $subObjRes->SubEnterprise_ID; ?>"]').prop('selected', true);
+			},100);
+		}
+	<?php }?>
 //$("#siteuser_frm").validate({
 //	rules: {
 //		fname: "required",
@@ -188,5 +258,6 @@ $('#siteuser_btn_update').click( function(){
 //	}
 });
 
+});
 // -->
 </script>

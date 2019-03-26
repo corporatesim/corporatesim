@@ -18,17 +18,22 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Enroll')
 	session_start();
 	$gameId         = $_POST['gameId'];
 	$_SESSION['id'] = $gameId;
-	
+
 	//$gameName=$_POST['gameName'];
 	//echo $gameId;exit;
-
-	// header("location:".site_root."user_registration.php?ID=$gameId");
-	echo "<script>window.location='".site_root."user_registration.php?ID=".$gameId."'</script>";
+	
+	header("location:".site_root."user_registration.php?ID=$gameId");
+	//echo "<script>window.location='".site_root."user_registration.php?ID=".$gameId."'</script>";
 }
 
-$sql    = "select Game_ID, Game_Name,Game_Comments from GAME_GAME where Game_Delete=0";
+$sql    = "SELECT Game_ID, Game_Name,Game_Comments,Game_shortDescription,Game_longDescription,Game_prise,Game_discount, Game_Image FROM GAME_GAME WHERE Game_Delete = 0";
+//$sql    = "select Game_ID, Game_Name, Game_Comments, Game_Image from GAME_GAME where Game_Delete=0";
 $sqlObj = $FunctionsObj->ExecuteQuery($sql);
-// $resultObj = $FunctionsObj->FetchObject($sqlObj);
+//$resultObj = $FunctionsObj->FetchObject($sqlObj);
 // print_r($resultObj);
-
-include_once doc_root.'views/registration.php';
+ /*$game_prise=$resultObj->Game_prise;
+ $game_discount=$resultObj->Game_discount;
+ $totalprize=$game_prise-$game_discount;
+ echo $totalprize;
+*/
+ include_once doc_root.'views/registration.php';

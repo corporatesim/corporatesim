@@ -16,12 +16,16 @@ if($_POST['action'] == 'replay')
 	$scenSql   = " SELECT Link_ScenarioID FROM GAME_LINKAGE WHERE Link_GameID=$GameID ORDER BY Link_Order ASC LIMIT 1";
 	$resObj    = $funObj->ExecuteQuery($scenSql);
 	$result    = $funObj->FetchObject($resObj);
-
+	// delete from game inputs
 	$deleteSql = " DELETE FROM GAME_INPUT WHERE input_user = $UserID AND input_sublinkid IN( SELECT SubLink_Id FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID IN ( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = $GameID))";
 	// die($deleteSql);
 	$resultDelete = $funObj->ExecuteQuery($deleteSql);
 
-	$updateSql    = "DELETE FROM GAME_USERSTATUS WHERE US_UserID = $UserID AND US_GameID = $GameID AND US_ScenID = $ScenID ";
+	// delete from game_output
+	$sqlOut = " DELETE FROM GAME_OUTPUT WHERE output_user =$UserID AND output_sublinkid IN(SELECT Sublink_ID FROM GAME_LINKAGE_SUB WHERE Sublink_LinkID IN (SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=$GameID) AND Sublink_Type=1)";
+	$sqlOutDel = $funObj->ExecuteQuery($sqlOut);
+
+	$updateSql = " DELETE FROM GAME_USERSTATUS WHERE US_UserID = $UserID AND US_GameID = $GameID AND US_ScenID = $ScenID ";
 	// echo $sql.'<br>';
 	$resultUpdate = $funObj->ExecuteQuery($updateSql);
 	// also make game_linkage_users table unplayed

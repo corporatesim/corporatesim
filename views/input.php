@@ -9,26 +9,26 @@ include_once 'includes/header.php';
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Chango">
 <!-- adding css for component branching componentBranching branchingOverlay -->
 <style>
-.addOverlay{
-  /**/
-}
-/*for active area highlighting*/
-.nav-tabs > li > a::after {
-  content   : "";
-  background: #009aef;
-  height    : 4px;
-  position  : absolute;
-  width     : 100%;
-  left      : 0px;
-  bottom    : -1px;
-  transition: all 250ms ease 0s;
-  transform : scale(0);
-}
+  .addOverlay{
+    /**/
+  }
+  /*for active area highlighting*/
+  .nav-tabs > li > a::after {
+    content   : "";
+    background: #009aef;
+    height    : 4px;
+    position  : absolute;
+    width     : 100%;
+    left      : 0px;
+    bottom    : -1px;
+    transition: all 250ms ease 0s;
+    transform : scale(0);
+  }
 
 </style>
 <section id="video_player">
   <div class="container">
-    <div class="row">
+    <div class="row scenario_name">
       <div class="col-sm-12 col-lg-6 pull-right">
         <div class="timer text-center col-sm-2 pull-right" id="timer">0:00</div>
       </div>
@@ -210,6 +210,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "";
                     $InputFields    = "";
                     $comp_length    = 'col-md-12';
+                    $ImageMaxWidth  = "60%";
                     break;
 
                     // Name - InputFields - Details/Chart 
@@ -219,6 +220,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "pull-right";
                     $InputFields    = "";
                     $comp_length    = 'col-md-12';
+                    $ImageMaxWidth  = "60%";
                     break;
 
                     // Details/Chart - InputFields - Name
@@ -228,6 +230,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "";
                     $InputFields    = "";
                     $comp_length    = 'col-md-12';
+                    $ImageMaxWidth  = "60%";
                     break;
 
                     // Details/Chart - Name - InputFields
@@ -238,6 +241,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "";
                     $InputFields    = "";
                     $comp_length    = 'col-md-12';
+                    $ImageMaxWidth  = "60%";
                     break;
 
                     // InputFields - Details/Chart - Name
@@ -247,6 +251,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "pull-right";
                     $InputFields    = "";
                     $comp_length    = 'col-md-12';
+                    $ImageMaxWidth  = "60%";
                     break;
 
                     // InputFields - Name - Details/Chart
@@ -257,6 +262,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "pull-right";
                     $InputFields    = "";
                     $comp_length    = 'col-md-12';
+                    $ImageMaxWidth  = "60%";
                     break;
 
                     // InputFields - Name - FullLength
@@ -266,6 +272,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "hidden";
                     $InputFields    = "";
                     $comp_length    = 'col-md-12';
+                    $ImageMaxWidth  = "60%";
                     break;
 
                     // InputFields - Details/Chart
@@ -275,6 +282,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "pull-right";
                     $InputFields    = "";
                     $comp_length    = 'col-md-12';
+                    $ImageMaxWidth  = "60%";
                     break;
 
                     // Name - Details/Chart
@@ -284,6 +292,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "";
                     $InputFields    = "hidden";
                     $comp_length    = 'col-md-12';
+                    $ImageMaxWidth  = "60%";
                     break;
 
                     // Name - InputFields - FullLength
@@ -293,6 +302,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "hidden";
                     $InputFields    = "";
                     $comp_length    = 'col-md-12';
+                    $ImageMaxWidth  = "90%";
                     break;
 
                     // Details/Chart - Name
@@ -302,6 +312,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "";
                     $InputFields    = "hidden";
                     $comp_length    = 'col-md-12';
+                    $ImageMaxWidth  = "60%";
                     break;
 
                     // Details/Chart - InputFields
@@ -311,6 +322,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "";
                     $InputFields    = "";
                     $comp_length    = 'col-md-12';
+                    $ImageMaxWidth  = "60%";
                     break;
 
                     // Name - InputFields - HalfLength
@@ -320,6 +332,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "hidden";
                     $InputFields    = "";
                     $comp_length    = "col-sm-6";
+                    $ImageMaxWidth  = "90%";
                     break;
 
                     // InputFields - Name - HalfLength
@@ -329,6 +342,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "hidden";
                     $InputFields    = "";
                     $comp_length    = "col-sm-6";
+                    $ImageMaxWidth  = "90%";
                     break;
 
                     // CkEditor - FullLength
@@ -338,6 +352,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "";
                     $InputFields    = "hidden";
                     $comp_length    = "col-md-12";
+                    $ImageMaxWidth  = "30%";
                     break;
 
                     // CkEditor - HalfLength
@@ -347,6 +362,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "";
                     $InputFields    = "hidden";
                     $comp_length    = "col-md-6";
+                    $ImageMaxWidth  = "90%";
                     break;
 
                     // ckEditor - InputFields - HalfLength
@@ -356,6 +372,7 @@ include_once 'includes/header.php';
                     $DetailsChart   = "";
                     $InputFields    = "";
                     $comp_length    = "col-md-6";
+                    $ImageMaxWidth  = "90%";
                     break;
 
                     // InputFields - ckEditor - HalfLength
@@ -365,6 +382,16 @@ include_once 'includes/header.php';
                     $DetailsChart   = "pull-right";
                     $InputFields    = "";
                     $comp_length    = "col-md-6";
+                    $ImageMaxWidth  = "90%";
+                    break;
+
+                    case 19:
+                    $ckEditorLength = 'col-md-6';
+                    $ComponentName  = "";
+                    $DetailsChart   = "";
+                    $InputFields    = "hidden";
+                    $comp_length    = "col-sm-6";
+                    $ImageMaxWidth  = "90%";
                     break;
                   }
 
@@ -372,7 +399,7 @@ include_once 'includes/header.php';
                   {
                     $comp_input_lenght      = 'col-md-6';
                     $comp_name_length       = 'col-md-6';
-                    $comp_limit_char        = 10;
+                    $comp_limit_char        = 30;
                     $comp_label_min_width   = '110px';
                     // $comp_save_button_align = 'top: 50%; position: absolute;';
                   }
@@ -380,7 +407,7 @@ include_once 'includes/header.php';
                   {
                     $comp_input_lenght      = 'col-md-4';
                     $comp_name_length       = 'col-md-2';
-                    $comp_limit_char        = 13;
+                    $comp_limit_char        = 55;
                     $comp_label_min_width   = '122px';
                     // $comp_save_button_align = 'top: 50%; position: absolute;';
                   }
@@ -440,7 +467,7 @@ include_once 'includes/header.php';
                     // adding a refresh icon
                     echo '<a class="refreshChart" data-redirect="'.site_root.'input.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row1['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
                     ?>  
-                    <img class="comp_chart col-md-12" src="chart/<?=$charttypeComp?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>" style="max-width:70%;">
+                    <img class="graph_chart showImageModal comp_chart col-md-12" src="chart/<?=$charttypeComp?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>" style="max-width:<?php echo $ImageMaxWidth; ?>;">
                     <?php
                   }
                   echo "</div>";
@@ -484,7 +511,7 @@ include_once 'includes/header.php';
                     echo "<input $comp_data_id_key type='hidden' id='".$areaname."_linkcomp_".$row1['CompID']."' name='".$areaname."_linkcomp_".$row1['CompID']."' value='".$row1['SubLinkID']."'></input>";
 
                     // getting the value here for iput field
-                    if($addedit=='Edit')
+                    if($addedit!='Add')
                     {
                       // to update carry forward value intant without page refresh
                       $linkCarry = '';
@@ -587,20 +614,55 @@ include_once 'includes/header.php';
                     {
                       $mChoice_details = json_decode($row1['InputModeTypeValue'],TRUE);
                       echo "<div class='row text-center pull-left' style='font-weight: 700; margin-left:1px;font-size:17px;'>".$mChoice_details['question']."</div>";
-                      // array_shift($mChoice_details);
+                      $makeDefaultChecked = $mChoice_details['makeDefaultChecked'];
+                      // removing the last element of the array, i.e. default selection from admin end, if exist
+                      if($makeDefaultChecked)
+                      {
+                        array_pop($mChoice_details);
+                      }
+                      $defSql = "SELECT * FROM GAME_INPUT WHERE input_user=$userid AND input_sublinkid=".$row1['SubLinkID'];
+                      $defObj = $functionsObj->ExecuteQuery($defSql);
+                      $defRes = $functionsObj->FetchObject($defObj);
+                      $value  = $defRes->input_current;
+                      // echo $makeDefaultChecked.' and '.$value;
                       ?>
                       <div class="col-md-12" style="margin-top:7px;margin-left:-30px;font-size:14px;">
                         <?php
                         $continue = 0;
+                        $flag     = true;
+                        // check value from database to make default radio button checked
                         foreach ($mChoice_details as $wrow => $wrow_value)
                         {
                           if($continue < 1)
                           {
+                            // skipping the question
                             $continue++;
                             continue;
                           }
-                          echo "<div class='col-md-6 align_radio' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
-                          echo (($value == $wrow_value)?'checked':'');
+                          // 'makeDefaultChecked' is the array key for default selection from admin and it's value is the text of the option for the particular question i.e. $wrow
+                          echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
+                          // if db value is matched from option value then checked that option, otherwise make admin choice selected
+                          if($flag)
+                          {
+                            // echo (($value == $wrow_value)?"checked":($makeDefaultChecked==$wrow)?"checked":($continue==1)?"checked":'');
+                            if($value == $wrow_value)
+                            {
+                              $flag = false;
+                              echo 'checked';
+                            }
+
+                            elseif($makeDefaultChecked == $wrow)
+                            { 
+                              $flag = false;
+                              echo 'checked';
+                            }
+
+                            // else
+                            // { 
+                            //   // $flag = false;
+                            //   echo 'checked';
+                            // }
+                          }
                           echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>".(strlen($wrow) > $comp_limit_char?substr($wrow,0,$comp_limit_char).'...':$wrow)."</label></div>";
                         }
                         ?>
@@ -702,6 +764,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "";
                   $InputFields      = "";
                   $length           = "col-md-12";
+                  $sImageMaxWidth   = "60%";
                   break;
 
                   // Name - InputFields - Details/Chart
@@ -711,6 +774,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "pull-right";
                   $InputFields      = "";
                   $length           = "col-md-12";
+                  $sImageMaxWidth   = "60%";
                   break;
 
                   // Details/Chart - InputFields - Name
@@ -720,6 +784,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "";
                   $InputFields      = "";
                   $length           = "col-md-12";
+                  $sImageMaxWidth   = "60%";
                   break;
 
                   // Details/Chart - Name - InputFields
@@ -730,6 +795,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "";
                   $InputFields      = "";
                   $length           = "col-md-12";
+                  $sImageMaxWidth   = "60%";
                   break;
 
                   // InputFields - Details/Chart - Name
@@ -739,6 +805,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "pull-right";
                   $InputFields      = "";
                   $length           = "col-md-12";
+                  $sImageMaxWidth   = "60%";
                   break;
 
                   // InputFields - Name - Details/Chart
@@ -749,6 +816,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "pull-right";
                   $InputFields      = "";
                   $length           = "col-md-12";
+                  $sImageMaxWidth   = "60%";
                   break;
 
                   // InputFields - Name - FullLength
@@ -758,6 +826,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "hidden";
                   $InputFields      = "";
                   $length           = "col-md-12";
+                  $sImageMaxWidth   = "60%";
                   break;
 
                   // InputFields - Details/Chart
@@ -767,6 +836,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "pull-right";
                   $InputFields      = "";
                   $length           = "col-md-12";
+                  $sImageMaxWidth   = "60%";
                   break;
 
                   // Name - Details/Chart
@@ -776,6 +846,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "";
                   $InputFields      = "hidden";
                   $length           = "col-md-12";
+                  $sImageMaxWidth   = "60%";
                   break;
 
                   // Name - InputFields - FullLength
@@ -785,6 +856,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "hidden";
                   $InputFields      = "";
                   $length           = "col-md-12";
+                  $sImageMaxWidth   = "90%";
                   break;
 
                   // Details/Chart - Name
@@ -794,6 +866,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "";
                   $InputFields      = "hidden";
                   $length           = "col-md-12";
+                  $sImageMaxWidth   = "60%";
                   break;
 
                   // Details/Chart - InputFields
@@ -803,6 +876,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "";
                   $InputFields      = "";
                   $length           = "col-md-12";
+                  $sImageMaxWidth   = "60%";
                   break;
 
                   // Name - InputFields - HalfLength
@@ -812,6 +886,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "hidden";
                   $InputFields      = "";
                   $length           = "col-md-6";
+                  $sImageMaxWidth   = "90%";
                   break;
 
                   // InputFields - Name - HalfLength
@@ -821,6 +896,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "hidden";
                   $InputFields      = "";
                   $length           = "col-md-6";
+                  $sImageMaxWidth   = "90%";
                   break;
 
                   // CkEditor - FullLength
@@ -830,6 +906,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "";
                   $InputFields      = "hidden";
                   $length           = "col-md-12";
+                  $sImageMaxWidth   = "30%";
                   break;
 
                   // CkEditor - HalfLength
@@ -839,6 +916,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "";
                   $InputFields      = "hidden";
                   $length           = "col-md-6";
+                  $sImageMaxWidth   = "90%";
                   break;
 
                   // ckEditor - InputFields - HalfLength
@@ -848,6 +926,7 @@ include_once 'includes/header.php';
                   $DetailsChart     = "";
                   $InputFields      = "";
                   $length           = "col-md-6";
+                  $sImageMaxWidth   = "90%";
                   break;
 
                   // InputFields - ckEditor - HalfLength
@@ -857,6 +936,17 @@ include_once 'includes/header.php';
                   $DetailsChart     = "pull-right";
                   $InputFields      = "";
                   $length           = "col-md-6";
+                  $sImageMaxWidth   = "90%";
+                  break;
+
+                  // Name - Details/Chart - HalfLength
+                  case 19:
+                  $SubCkEditor      = 'col-md-6';
+                  $SubcomponentName = "";
+                  $DetailsChart     = "";
+                  $InputFields      = "hidden";
+                  $length           = "col-md-6";
+                  $sImageMaxWidth   = "90%";
                   break;
                 }
 
@@ -872,7 +962,7 @@ include_once 'includes/header.php';
                 {
                   $input_lenght              = 'col-md-6';
                   $name_length               = 'col-md-6';
-                  $limit_char                = 10;
+                  $limit_char                = 30;
                   $subcomp_label_min_width   = '110px';
                   // $subcomp_save_button_align = '';
                 }
@@ -880,7 +970,7 @@ include_once 'includes/header.php';
                 {
                   $input_lenght              = 'col-md-4';
                   $name_length               = 'col-md-2';
-                  $limit_char                = 13;
+                  $limit_char                = 55;
                   $subcomp_label_min_width   = '122px';
                   // $subcomp_save_button_align = 'top: 50%; position: absolute;';
                 }
@@ -900,319 +990,305 @@ include_once 'includes/header.php';
                   }
                   else
                   {
-
                     $dataChart          = GetChartData($gameid,$userid,$row2['ChartID']);
                     $sqlchart           = "SELECT * FROM GAME_CHART WHERE Chart_Status=1 and Chart_ID =".$row2['ChartID'];
                     $chartDetails       = $functionsObj->ExecuteQuery($sqlchart);
                     $ResultchartDetails = $functionsObj->FetchObject($chartDetails);
                     $chartname          = $ResultchartDetails->Chart_Name;
                     $charttype          = $ResultchartDetails->Chart_Type;
-
                     //print_r($dataChart);
                     // adding a refresh icon
                     echo '<a class="refreshChart" data-redirect="'.site_root.'input.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row2['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
                     ?>
-                    <!-- -----------------------------       Chart Section    ----------------------------------------------->
-                    <br><br>
-                    <!-- <div id="chart_div_<?// =$row2['SubCompID']?>" style="width: 800px; height: 400px;"></div> -->
-                    <div id="chart_div_<?=$row2['SubCompID']?>" class="subcomp_chart">
-                    </div>
-                    <script type="text/javascript">
-                      google.load('visualization', '1', {packages: ['corechart']});
-                    </script>
-                    <script type="text/javascript">
-                      function drawVisualization() {
-                // Some raw data (not necessarily accurate)
-                
-                var data = google.visualization.arrayToDataTable([
-                  ['Components', 'Inputs'],
-                //     [role:  domain,   data,       data,      data,   domain,   data,     data],    --  hint for cols
-                <?php if(count($dataChart) > 0) { foreach($dataChart as $keyChart=>$valChart) { ?>
-                  ['<?=$keyChart?>',<?=$valChart?>],
-                <?php } }?>
-                ]);
-                
-                var options = {
-                  title           :  '<?=ucfirst($chartname)?> : ', 
-                  is3D            : true,
-                  // width           : 800,
-                  // height          : 400,
-                  interpolateNulls: true,
-                  vAxis           : {titleTextStyle:{ fontName: 'Chango'}},
-                  hAxis           : {title: "---- X-Axis ---- -> ",titleTextStyle:{ fontName: 'Chango'},textStyle: {color: '#000', fontSize: 12},textPosition:"out",textPosition: 'none',slantedText:true},
-                  seriesType: "bars",
-                };
-                <?php if(count($dataChart) > 0) { ?>
-                  // to prevent the error message if there is no data for chart
-                  var chart = new google.visualization.<?=$charttype=='pie'?'PieChart':'ComboChart'?>(document.getElementById('chart_div_<?=$row2['SubCompID']?>'));
-                  chart.draw(data, options);
-                <?php } ?>
-                
-              }
-              google.setOnLoadCallback(drawVisualization);
-            </script>
-            <!-- -----------------------------       Chart Section  end  ----------------------------------------------->
-            <?php
-          }
-          echo "</div>";
+                    <!-- adding this section to make comp chart insert into subcomp as discussed -->
+                    <img class="graph_chart showImageModal subcomp_chart col-md-12" src="chart/<?=$charttype?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row2['ChartID']?>" style="max-width:<?php echo $sImageMaxWidth; ?>;">
+                    <!-- Edn of adding section to make comp chart insert into subcomp as discussed -->
+                    <?php
+                  }
+                  echo "</div>";
           // writing this to show only for alignmenet of viewing order to show component name in middle
-          if($row2['ViewingOrder'] == 4)
-          {
-            echo "<div class='col-sm-1 col-md-2 regular'>";
-            echo $row2['SubComp_Name'];
-            echo "</div>";
-          }
-          if ($row2['Mode']!="none")
-          {
-            echo "<div class=' col-sm-5 ".$input_lenght." text-right ".$InputFields."'>";
-            // putting both current and last input field div inside a div having same class inlinebox to shift left/right
-            echo "<div class='InlineBox'>";
-            echo "<div class='InlineBox ".(($row2['InputFieldOrder']==2)?'pull-right':'')." ".(($row2['InputFieldOrder']==4)?'hidden':'')."'>";
-            if($row2['Mode']=="user" && $row2['InputModeType'] == "mChoice")
-            {
-              $hide_label = 'hidden';
-            }
-            else
-            {
-              $hide_label = '';
-            }
-            echo "<label class='scenariaLabel $hide_label'>".$row2['LabelCurrent']."</label>";
-            $subcomp_query = "SELECT * FROM GAME_INPUT WHERE input_user=$userid AND input_sublinkid='".$row2['SubLinkID']."' AND input_key LIKE '%subc_".$row2['SubCompID']."'";
-            // echo $subcomp_query;
-            $query_result = $functionsObj->ExecuteQuery($subcomp_query);
-            if($query_result->num_rows > 0)
-            {
-              $query_result = mysqli_fetch_assoc($query_result);
-              $subcomp_data_id_key  = "class='data_element' data-input_id='".$query_result['input_id']."' data-input_key='".$query_result['input_key']."'";
-            }
-            else
-            {
-              $subcomp_data_id_key = "class='data_element'";
-            }
-            ?>
-            <input type="hidden" <?php echo $subcomp_data_id_key;?> id="<?php echo $areaname.'_linksubc_'.$row2['SubCompID'];?>" name="<?php echo $areaname.'_linksubc_'.$row2['SubCompID'];?>" value="<?php echo $row2['SubLinkID'];?>">
-            <?php
-            if($addedit == 'Edit')
-            {
-              if($row2['Mode']=="carry")
-              {
-                //get input value from link, comp, subcomp
-                $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` 
-                WHERE input_user=".$userid." AND input_sublinkid = 
-                (SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` 
-                WHERE SubLink_LinkID=".$row2['CarryLinkID']." and SubLink_CompID=".$row2['CarryCompID'];
-                if($row2['CarrySubCompID']>0)
-                {
-                  $sqlcurrent .=  " AND SubLink_SubCompID = ".$row2['CarrySubCompID'];
-                }
-                $sqlcurrent     .=  ")";
-                $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);
-                $rescarry        = $functionsObj->FetchObject($objcarrycurrent);
-                $value           = $rescarry->input_current;
-              }
-              //if(!empty($data[$areaname."_subc_".$row2['SubCompID']])){
-              elseif($row2['Mode']=="admin")
-              {
-                $value = $row2['AdminCurrent'];
-              }
-              elseif($row2['Mode']=="formula")
-              {
-                $value = 0;
-              }
-              elseif(isset($data[$areaname."_subc_".$row2['SubCompID']]) || !empty($data[$areaname."_subc_".$row2['SubCompID']]))
-              {
-                if($row2['RoundOff'] == 0)
-                {
-                  $value = $data[$areaname."_subc_".$row2['SubCompID']];
-                }
-                else
-                {
-                  $value = round($data[$areaname."_subc_".$row2['SubCompID']]);
-                }
-              }
-            }
-            elseif($row2['Mode']=="admin")
-            {
-              $value = $row2['AdminCurrent'];
-            }
-            elseif($row2['Mode']=="formula")
-            {
-              $value = 0;
-            }
-            elseif($row2['Mode']=="carry")
-            {
-              //get input value from link, comp, subcomp
-              $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` 
-              WHERE input_user=".$userid." AND input_sublinkid = 
-              (SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` 
-              WHERE SubLink_LinkID=".$row2['CarryLinkID']." and SubLink_CompID=".$row2['CarryCompID'];
-              if($row2['CarrySubCompID']>0)
-              {
-                $sqlcurrent .=  " AND SubLink_SubCompID = ".$row2['CarrySubCompID'];
-              }
-              $sqlcurrent     .=  ")";
-              $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);
-              $rescarry        = $functionsObj->FetchObject($objcarrycurrent);
-              $value           = $rescarry->input_current;
-
-            }
-            if($row2['Mode']=="formula")
-            {
-             $formulaSql = "SELECT input_current FROM GAME_INPUT WHERE input_sublinkid =".$row2['SubLinkID']." AND input_user=".$userid;
-              // die($formulaSql);
-             $formulaCurrent = $functionsObj->ExecuteQuery($formulaSql);
-             $formaulValue   = $functionsObj->FetchObject($formulaCurrent);
-             if($formaulValue->input_current)
-             {
-              $value = $formaulValue->input_current;
-            }
-            echo "<input type='text' value='".$value."' id='".$areaname."_fsubc_".$row2['SubCompID']."' name='".$areaname."_fsubc_".$row2['SubCompID']."' ";
-            $sankey_val = '"'.$areaname."_fsubc_".$row2['SubCompID'].'"';
-            echo " readonly></input>";
-              // echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' "." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' readonly></input>";
-            echo "<input type='hidden' class='json_expsubc' id='".$areaname."_expsubc_".$row2['SubCompID']."' name='".$areaname."_expsubc_".$row2['SubCompID']."' value='".$row2['exp']."'>";
-          }
-          else
-          {
-            $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
-            if ($row2['Mode']=="user")
-            {
-              if($data[$areaname."_subc_".$row2['SubCompID']])
-              {
-                $value = $data[$areaname."_subc_".$row2['SubCompID']];
-              }
-              else
-              {
-                $value = 0;
-              }
-              if($row2['InputModeType']=="range")
-              {
-                $range                 = explode(',', $row2['InputModeTypeValue']);
-                $SubLink_MinVal        = $range['0'];
-                $SubLink_MaxVal        = $range['1'];
-                $SubLink_RangeInterval = $range['2'];
-                $type                  = "type='range' min='".$SubLink_MinVal."' max='".$SubLink_MaxVal."' step='".$SubLink_RangeInterval."'";
-
-
-                echo "<input value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required $type ";
-
-                echo "onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'";
-
-                echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
-                ?>
-                <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 30%; margin-top: 1%; padding: 0.6px 4px;"></span>
-                <?php
-              }
-              elseif($row2['InputModeType']=="mChoice")
-              {
-                $mChoice_details = json_decode($row2['InputModeTypeValue'],TRUE);
-                echo "<div class='row text-center' style='font-weight: 700;margin-left:28px;float:left;'>".$mChoice_details['question']."</div>";
-                  // array_shift($mChoice_details);
-                ?>
-                <div class="col-md-12">
-                  <?php
-                  $continue = 0;
-                  foreach ($mChoice_details as $wrow => $wrow_value)
+                  if($row2['ViewingOrder'] == 4)
                   {
-                    if($continue < 1)
+                    echo "<div class='col-sm-1 col-md-2 regular'>";
+                    echo $row2['SubComp_Name'];
+                    echo "</div>";
+                  }
+                  if ($row2['Mode']!="none")
+                  {
+                    echo "<div class=' col-sm-5 ".$input_lenght." text-right ".$InputFields."'>";
+                  // putting both current and last input field div inside a div having same class inlinebox to shift left/right
+                    echo "<div class='InlineBox'>";
+                    echo "<div class='InlineBox ".(($row2['InputFieldOrder']==2)?'pull-right':'')." ".(($row2['InputFieldOrder']==4)?'hidden':'')."'>";
+                    if($row2['Mode']=="user" && $row2['InputModeType'] == "mChoice")
                     {
-                      $continue++;
-                      continue;
+                      $hide_label = 'hidden';
                     }
-                    echo "<div class='col-md-6 align_radio' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
-                    echo (($value == $wrow_value)?'checked':'');
-                    echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
-                  } ?>
-                </div>
-              <?php }
-              else
-              {
-                echo "<input type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
-                echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
-              }
-            }
-            else
-            {
-              echo "<input type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
-              $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
-              echo " readonly></input>";
+                    else
+                    {
+                      $hide_label = '';
+                    }
+                    echo "<label class='scenariaLabel $hide_label'>".$row2['LabelCurrent']."</label>";
+                    $subcomp_query = "SELECT * FROM GAME_INPUT WHERE input_user=$userid AND input_sublinkid='".$row2['SubLinkID']."' AND input_key LIKE '%subc_".$row2['SubCompID']."'";
+                  // echo $subcomp_query;
+                    $query_result = $functionsObj->ExecuteQuery($subcomp_query);
+                    if($query_result->num_rows > 0)
+                    {
+                      $query_result = mysqli_fetch_assoc($query_result);
+                      $subcomp_data_id_key  = "class='data_element' data-input_id='".$query_result['input_id']."' data-input_key='".$query_result['input_key']."'";
+                    }
+                    else
+                    {
+                      $subcomp_data_id_key = "class='data_element'";
+                    }
+                    ?>
+                    <input type="hidden" <?php echo $subcomp_data_id_key;?> id="<?php echo $areaname.'_linksubc_'.$row2['SubCompID'];?>" name="<?php echo $areaname.'_linksubc_'.$row2['SubCompID'];?>" value="<?php echo $row2['SubLinkID'];?>">
+                    <?php
+                    if($addedit != 'Add')
+                    {
+                      if($row2['Mode']=="carry")
+                      {
+                //get input value from link, comp, subcomp
+                        $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` 
+                        WHERE input_user=".$userid." AND input_sublinkid = 
+                        (SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` 
+                        WHERE SubLink_LinkID=".$row2['CarryLinkID']." and SubLink_CompID=".$row2['CarryCompID'];
+                        if($row2['CarrySubCompID']>0)
+                        {
+                          $sqlcurrent .=  " AND SubLink_SubCompID = ".$row2['CarrySubCompID'];
+                        }
+                        $sqlcurrent     .=  ")";
+                        $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);
+                        $rescarry        = $functionsObj->FetchObject($objcarrycurrent);
+                        $value           = $rescarry->input_current;
+                      }
+              //if(!empty($data[$areaname."_subc_".$row2['SubCompID']])){
+                      elseif($row2['Mode']=="admin")
+                      {
+                        $value = $row2['AdminCurrent'];
+                      }
+                      elseif($row2['Mode']=="formula")
+                      {
+                        $value = 0;
+                      }
+                      elseif(isset($data[$areaname."_subc_".$row2['SubCompID']]) || !empty($data[$areaname."_subc_".$row2['SubCompID']]))
+                      {
+                        if($row2['RoundOff'] == 0)
+                        {
+                          $value = $data[$areaname."_subc_".$row2['SubCompID']];
+                        }
+                        else
+                        {
+                          $value = round($data[$areaname."_subc_".$row2['SubCompID']]);
+                        }
+                      }
+                    }
+                    elseif($row2['Mode']=="admin")
+                    {
+                      $value = $row2['AdminCurrent'];
+                    }
+                    elseif($row2['Mode']=="formula")
+                    {
+                      $value = 0;
+                    }
+                    elseif($row2['Mode']=="carry")
+                    {
+              //get input value from link, comp, subcomp
+                      $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` 
+                      WHERE input_user=".$userid." AND input_sublinkid = 
+                      (SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` 
+                      WHERE SubLink_LinkID=".$row2['CarryLinkID']." and SubLink_CompID=".$row2['CarryCompID'];
+                      if($row2['CarrySubCompID']>0)
+                      {
+                        $sqlcurrent .=  " AND SubLink_SubCompID = ".$row2['CarrySubCompID'];
+                      }
+                      $sqlcurrent     .=  ")";
+                      $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);
+                      $rescarry        = $functionsObj->FetchObject($objcarrycurrent);
+                      $value           = $rescarry->input_current;
+
+                    }
+                    if($row2['Mode']=="formula")
+                    {
+                     $formulaSql = "SELECT input_current FROM GAME_INPUT WHERE input_sublinkid =".$row2['SubLinkID']." AND input_user=".$userid;
+              // die($formulaSql);
+                     $formulaCurrent = $functionsObj->ExecuteQuery($formulaSql);
+                     $formaulValue   = $functionsObj->FetchObject($formulaCurrent);
+                     if($formaulValue->input_current)
+                     {
+                      $value = $formaulValue->input_current;
+                    }
+                    echo "<input type='text' value='".$value."' id='".$areaname."_fsubc_".$row2['SubCompID']."' name='".$areaname."_fsubc_".$row2['SubCompID']."' ";
+                    $sankey_val = '"'.$areaname."_fsubc_".$row2['SubCompID'].'"';
+                    echo " readonly></input>";
+              // echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' "." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' readonly></input>";
+                    echo "<input type='hidden' class='json_expsubc' id='".$areaname."_expsubc_".$row2['SubCompID']."' name='".$areaname."_expsubc_".$row2['SubCompID']."' value='".$row2['exp']."'>";
+                  }
+                  else
+                  {
+                    $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
+                    if ($row2['Mode']=="user")
+                    {
+                      if($data[$areaname."_subc_".$row2['SubCompID']])
+                      {
+                        $value = $data[$areaname."_subc_".$row2['SubCompID']];
+                      }
+                      else
+                      {
+                        $value = 0;
+                      }
+                      if($row2['InputModeType']=="range")
+                      {
+                        $range                 = explode(',', $row2['InputModeTypeValue']);
+                        $SubLink_MinVal        = $range['0'];
+                        $SubLink_MaxVal        = $range['1'];
+                        $SubLink_RangeInterval = $range['2'];
+                        $type                  = "type='range' min='".$SubLink_MinVal."' max='".$SubLink_MaxVal."' step='".$SubLink_RangeInterval."'";
+
+
+                        echo "<input value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required $type ";
+
+                        echo "onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'";
+
+                        echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
+                        ?>
+                        <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 30%; margin-top: 1%; padding: 0.6px 4px;"></span>
+                        <?php
+                      }
+                      elseif($row2['InputModeType']=="mChoice")
+                      {
+                        $mChoice_details = json_decode($row2['InputModeTypeValue'],TRUE);
+                        echo "<div class='row text-center' style='font-weight: 700;margin-left:28px;float:left;'>".$mChoice_details['question']."</div>";
+                        $makeDefaultCheckedSub = $mChoice_details['makeDefaultChecked'];
+                        // removing the last element of the array, i.e. default selection from admin end, if exist
+                        if($makeDefaultCheckedSub)
+                        {
+                          array_pop($mChoice_details);
+                        }
+                        ?>
+                        <div class="col-md-12">
+                          <?php
+                          $continue = 0;
+                          $flag     = true;
+                          foreach ($mChoice_details as $wrow => $wrow_value)
+                          {
+                            if($continue < 1)
+                            {
+                              $continue++;
+                              continue;
+                            }
+                            echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
+                            // echo (($value == $wrow_value)?'checked':'');
+                            if($flag)
+                            {
+                              if($value == $wrow_value)
+                              {
+                                $flag = false;
+                                echo 'checked';
+                              }
+
+                              elseif($makeDefaultCheckedSub == $wrow)
+                              { 
+                                $flag = false;
+                                echo 'checked';
+                              }
+
+                              // else
+                              // { 
+                              //   echo 'checked';
+                              // }
+                            }
+                            echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
+                          } ?>
+                        </div>
+                      <?php }
+                      else
+                      {
+                        echo "<input type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
+                        echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
+                      }
+                    }
+                    else
+                    {
+                      echo "<input type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
+                      $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
+                      echo " readonly></input>";
                 // echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' readonly></input>";
-            }
-          }
-          ?>
-        </div>
-        <?php
-        echo "<div class='InlineBox ".(($row2['InputFieldOrder']==3)?'hidden':'')."'>";
+                    }
+                  }
+                  ?>
+                </div>
+                <?php
+                echo "<div class='InlineBox ".(($row2['InputFieldOrder']==3)?'hidden':'')."'>";
                           //echo "<label class='scenariaLabel'>Last</label>";
-        echo "<label class='scenariaLabel'>".$row2['LabelLast']."</label>";
-        $sqllast = "SELECT * FROM `GAME_INPUT`
-        WHERE input_user=".$userid." AND input_sublinkid = 
-        (SELECT ls.SubLink_ID
-        FROM GAME_LINKAGE_SUB ls 
-        WHERE SubLink_SubCompID = ".$row2['SubCompID']." AND SubLink_CompID=".$row2['CompID']." 
-        AND ls.SubLink_LinkID =
-        (
-        SELECT Link_ID FROM `GAME_LINKAGE`
-        WHERE Link_GameID=".$row2['GameID']." AND Link_ScenarioID != ".$row2['ScenID']."
-        AND Link_Order < ".$row2['Order']." 
-        ORDER BY Link_Order DESC LIMIT 1))";
+                echo "<label class='scenariaLabel'>".$row2['LabelLast']."</label>";
+                $sqllast = "SELECT * FROM `GAME_INPUT`
+                WHERE input_user=".$userid." AND input_sublinkid = 
+                (SELECT ls.SubLink_ID
+                FROM GAME_LINKAGE_SUB ls 
+                WHERE SubLink_SubCompID = ".$row2['SubCompID']." AND SubLink_CompID=".$row2['CompID']." 
+                AND ls.SubLink_LinkID =
+                (
+                SELECT Link_ID FROM `GAME_LINKAGE`
+                WHERE Link_GameID=".$row2['GameID']." AND Link_ScenarioID != ".$row2['ScenID']."
+                AND Link_Order < ".$row2['Order']." 
+                ORDER BY Link_Order DESC LIMIT 1))";
                               //echo $sqllast;
-        echo "<input type='text' class='scenariaInput' ";
-        if($row2['Mode']=="admin"){
-          echo " value ='".$row2['AdminLast']."' ";                         
-        }
-        else{
+                echo "<input type='text' class='scenariaInput' ";
+                if($row2['Mode']=="admin"){
+                  echo " value ='".$row2['AdminLast']."' ";                         
+                }
+                else{
 
-          $objlast = $functionsObj->ExecuteQuery($sqllast);
-          $reslast = $functionsObj->FetchObject($objlast);
-          echo " value ='".$reslast->input_current."' ";
-        }
-        echo " readonly></input>";
+                  $objlast = $functionsObj->ExecuteQuery($sqllast);
+                  $reslast = $functionsObj->FetchObject($objlast);
+                  echo " value ='".$reslast->input_current."' ";
+                }
+                echo " readonly></input>";
                           //echo "<input type='text' class='scenariaInput' readonly></input>";
-        echo "</div>";
-        echo "</div>";
+                echo "</div>";
+                echo "</div>";
 
-        echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row2['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
+                echo '<div class="InlineBox"> <div class="timer closeSave text-center col-sm-1 pull-right" id="SaveInput_'.$row2['SubLinkID'].'" style="width:40px; margin-bottom: -7px; display:none; cursor:pointer;background: #009aef;">Save</div> </div>';
 
 
-        echo "</div>";
-      }
+                echo "</div>";
+              }
                          // writing this to show only for alignmenet of viewing order to show component name in middle
 
-      if($row2['ViewingOrder'] == 6)
-      {
-        echo "<div class='col-sm-1 col-md-2 regular'>";
-        echo $row2['SubComp_Name'];
-        echo "</div>";
-      }
+              if($row2['ViewingOrder'] == 6)
+              {
+                echo "<div class='col-sm-1 col-md-2 regular'>";
+                echo $row2['SubComp_Name'];
+                echo "</div>";
+              }
 
-      echo "<div class='clearfix'></div>";
+              echo "<div class='clearfix'></div>";
 
-      echo "</div>";
+              echo "</div>";
 
-    }
-    if($row1['componentBranching'] > 0)
-    {
+            }
+            if($row1['componentBranching'] > 0)
+            {
       // closing the branchingOverlay div here
-      echo '</div>';
-    }
-    echo "</div>";  
+              echo '</div>';
+            }
+            echo "</div>";  
     //<!--scenariaListingDiv-->
     //}
     //else{
 
     //}
 
-  }
+          }
                 //echo "</form>";
-  echo "</div>";
+          echo "</div>";
 
-}
-?>              
-</form>
-</div>
-</div> <!--tab content -->
-<div class="clearix"></div>
+        }
+        ?>              
+      </form>
+    </div>
+  </div> <!--tab content -->
+  <div class="clearix"></div>
 </div>
       <!--
         <div class="col-sm-12 text-right">
@@ -1575,11 +1651,11 @@ include_once 'includes/header.php';
       }
     });
     // trigger click on save button onchange if type=radio
-    $('input:radio').each(function(i,e){
-      $(this).click(function(e){
-        $(this).parents('div.text-right').find('div.closeSave').trigger('click');
-      });
-    });
+    // $('input:radio').each(function(i,e){
+    //   $(this).click(function(e){
+    //     $(this).parents('div.text-right').find('div.closeSave').trigger('click');
+    //   });
+    // });
     // removing inlinebox class from button div if input type=range to align button down
     $('input[type="range"]').each(function(i,e){
       $(this).parents('div.text-right').find('div.closeSave').parent('div').removeClass('InlineBox').css({'margin':'4% 1% 0% 2%'});
@@ -1652,6 +1728,11 @@ include_once 'includes/header.php';
     // console.log(formula_json_expsubc);
     // console.log(input_field_values);
     // console.log(input_field_keys);
+    // making component charts
+    $('.graph_chart').each(function(index, el) {
+      var new_src    = $(this).attr('src');
+      $(this).attr('src',new_src);
+    });
 
   });
 function create_json_carry_field_data()
@@ -2041,8 +2122,12 @@ function create_json_input_field_keys(key)
             // $('#'+index).val(parseFloat(result[index].values).toFixed(2));
             // $('#'+index).val(parseInt(result[index].values));
 
-
-            $('#'+index).val(result[index].values);
+            // don't update value if button type is radio button
+            if(!$('#'+index).parents('div').hasClass('align_radio'))
+            {
+              // var value = $("input[name='"+key+"']:checked").val();
+              $('#'+index).val(result[index].values);
+            }
             // input_field_values[index] = result[index];
             
             // red, if component branching enabled, if component main div has class 'hideByAdmin' then don't show this div. otherwise show div, having id=branchComp_sublinkId, if component branching is enabled and it's child div which is added to make the comp div unclickable so that user can not change prev comp value has the id overlay_sublinkId
@@ -2089,7 +2174,7 @@ function create_json_input_field_keys(key)
           // $("#"+id).show();
           
           // refreshing charts
-          $('.comp_chart').each(function(index, el) {
+          $('.graph_chart').each(function(index, el) {
             var new_src    = $(this).attr('src');
             $(this).attr('src',new_src);
           });

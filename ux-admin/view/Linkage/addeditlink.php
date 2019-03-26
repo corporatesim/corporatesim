@@ -6,10 +6,13 @@
   //-->
 </script>
 <style type="text/css">
-span.alert-danger {
-  background-color: #ffffff;
-  font-size       : 18px;
-}
+  span.alert-danger {
+    background-color: #ffffff;
+    font-size       : 18px;
+  }
+  .checkedDefault{
+    margin-left: 5px !important;
+  }
 </style>
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script src="<?php echo site_root; ?>assets/components/ckeditor/ckeditor.js" type="text/javascript"></script>
@@ -19,6 +22,10 @@ span.alert-danger {
   {
     // adding options and value on button click
     removeDiv();
+    // adding this code to change radio button value for default selection
+    makeDefaultChecked();
+    // while option text value is changed, change value of it's radio button as well
+    changeValueOnChangingText();
     // writing this line to get the comp on change of scen while page load
     <?php if(isset($linkdetails->SubLink_LinkIDcarry)){ ?>
       $('#carry_linkid').trigger('change');
@@ -36,10 +43,29 @@ span.alert-danger {
 
     $('input[type="radio"]').click(function(){
      if($(this).attr("value")=="subcomp"){
+      var statusType = 0;
       $("#subcomponent").show();
+      $.ajax({
+        url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
+        type: "POST",
+        data: { gameId: '<?php echo $result->Link_GameID; ?>', statusType: statusType },
+        success: function(resultData){
+          // console.log(resultData);
+          $('#chart_id').html(resultData);
+        }
+      });
     }
     if($(this).attr("value")=="comp"){
+      var statusType = 1;
       $("#subcomponent").hide();
+      $.ajax({
+        url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
+        type: "POST",
+        data: { gameId: '<?php echo $result->Link_GameID; ?>', statusType: statusType },
+        success: function(resultData){
+          $('#chart_id').html(resultData);
+        }
+      });
     }
 
     if($(this).attr("value")=="formula"){ 
@@ -69,15 +95,15 @@ span.alert-danger {
   });
   /*function label_choice(select){
   
-  	//console.log('clicked'+select);
-  	var x = document.getElementById("SubLink_InputFieldOrder");
-  	document.getElementById("SubLink_InputFieldOrder").options[3].selected=false;
-  	document.getElementById("SubLink_InputFieldOrder").options[4].selected=false;
-  	if(x.options[x.selectedIndex].value)
-  	{
-  	alert("You have selected Both Labels.");
-  	}
-  	
+    //console.log('clicked'+select);
+    var x = document.getElementById("SubLink_InputFieldOrder");
+    document.getElementById("SubLink_InputFieldOrder").options[3].selected=false;
+    document.getElementById("SubLink_InputFieldOrder").options[4].selected=false;
+    if(x.options[x.selectedIndex].value)
+    {
+    alert("You have selected Both Labels.");
+    }
+    
      //alert(select.options[select.selectedIndex].text);
   }
   */
@@ -88,35 +114,35 @@ span.alert-danger {
 <!-- change color code hex to rgb -->
 <!-- <script type="text/javascript">
   function hexToRgb(hex) {
-  	// console.log('clicked '+hex);
-  	var c;
-  	if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex))
-  	{
-  		c = hex.substring(1).split('');
-  		if(c.length == 3)
-  		{
-  			c = [c[0], c[0], c[1], c[1], c[2], c[2]];
-  		}
-  		c = '0x'+c.join('');
-  		console.log('rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',1)');
-  		return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',1)';
-  	}
+    // console.log('clicked '+hex);
+    var c;
+    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex))
+    {
+      c = hex.substring(1).split('');
+      if(c.length == 3)
+      {
+        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+      }
+      c = '0x'+c.join('');
+      console.log('rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',1)');
+      return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',1)';
+    }
   
   }
   
   //jquery to change color format
   // $(document).ready(function(){
-  // 	$("#changeMe").spectrum({
-  // 		preferredFormat: "rgb",
-  // 		showInput: true,
-  // 		showPalette: true,
-  // 		palette: [["red", "rgba(0, 255, 0, .5)", "rgb(0, 0, 255)"]]
-  // 	});
+  //  $("#changeMe").spectrum({
+  //    preferredFormat: "rgb",
+  //    showInput: true,
+  //    showPalette: true,
+  //    palette: [["red", "rgba(0, 255, 0, .5)", "rgb(0, 0, 255)"]]
+  //  });
   
-  // 	$("#changeMe").spectrum("show");
-  // 	$("#change").click(function() {
-  // 		$("#changeMe").spectrum("set", $("#entervalue").val());
-  // 	});
+  //  $("#changeMe").spectrum("show");
+  //  $("#change").click(function() {
+  //    $("#changeMe").spectrum("set", $("#entervalue").val());
+  //  });
   // });
 </script> -->
 <div class="row">
@@ -141,7 +167,7 @@ span.alert-danger {
         <div class="panel-body">
           <div class="col-sm-12">
             <input type="hidden" name="linkid" id="linkid" 
-            value="<?php if(isset($result)){ echo $result->Link_ID; } ?>">								
+            value="<?php if(isset($result)){ echo $result->Link_ID; } ?>">                
             <div class="col-sm-6">
               <input type="hidden" name="gameid" id="gameid" value="<?php echo $result->Link_GameID ; ?>">
               <div class="form-group">
@@ -156,7 +182,7 @@ span.alert-danger {
           </div>
         <?php //if(isset($_GET['link'])) { 
           if($linkscenario->num_rows>0) {
-          	?>
+            ?>
             <div class="col-sm-12">
               <div class="col-sm-6">
                 <label>Copy from Scenario - </label>
@@ -181,7 +207,7 @@ span.alert-danger {
               <br>
               <div class="col-sm-12">
                 <input type="hidden" name="Link_ID" id="Link_ID" 
-                value="<?php if(isset($result)){ echo $result->Link_ID; } ?>">	
+                value="<?php if(isset($result)){ echo $result->Link_ID; } ?>">  
                 <button type="submit" name="submit" id="Link_download" class="btn btn-primary"
                 value="Download"> Download </button>
               </div>
@@ -216,7 +242,7 @@ span.alert-danger {
                  ?>
             <!--div class="col-md-3">
               <select class="form-control" name="area_id" id="area_id">
-              	<option value="">-- SELECT USER --</option>
+                <option value="">-- SELECT USER --</option>
               </select>
             </div-->
             <div class="col-sm-3">
@@ -255,11 +281,11 @@ span.alert-danger {
 <!-- DISPLAY ERROR MESSAGE ->
   <?php if(isset($msg)){ ?>
   <div class="form-group <?php echo $type[1]; ?>">
-  	<div align="center" id="<?php echo $type[0]; ?>">
-  		<label class="control-label" for="<?php echo $type[0]; ?>">
-  				<?php echo $msg; ?>
-  			</label>
-  	</div>
+    <div align="center" id="<?php echo $type[0]; ?>">
+      <label class="control-label" for="<?php echo $type[0]; ?>">
+          <?php echo $msg; ?>
+        </label>
+    </div>
   </div>
   <?php } ?>
   !-- DISPLAY ERROR MESSAGE END -->
@@ -291,7 +317,7 @@ span.alert-danger {
                 <input type="hidden" name="link" id="link" 
                 value="<?php if(isset($result)){ echo $result->Link_ID; } ?>">
                 <input type="hidden" name="sublinkid"
-                value="<?php if(isset($_GET['link'])){ echo $linkdetails->SubLink_ID; } ?>">								
+                value="<?php if(isset($_GET['link'])){ echo $linkdetails->SubLink_ID; } ?>">                
                 <div class="form-group" >
                   <label><span class="alert-danger">*</span> Select </label>
                   <input type="radio" name="Mode" value="comp"
@@ -355,6 +381,7 @@ span.alert-danger {
                     <option value="16" <?php  echo ($SubLink_ViewingOrder == 16?'selected':''); ?>> CK Editor - Half Length</option> 
                     <option value="17" <?php  echo ($SubLink_ViewingOrder == 17?'selected':''); ?>> CK Editor - Input Fields - Half Length</option> 
                     <option value="18" <?php  echo ($SubLink_ViewingOrder == 18?'selected':''); ?>> Input Fields - CK Editor - Half Length</option> 
+                    <option value="19" <?php  echo ($SubLink_ViewingOrder == 19?'selected':''); ?>> Name - Details/Chart - Half Length</option> 
                   </select>
                 </div>
                 <br><br>
@@ -399,13 +426,13 @@ span.alert-danger {
               <br>
               <div class="row">
                 <div class="col-md-8">
-                  <!--	<div class="form-group">-->
+                  <!--  <div class="form-group">-->
                     <label><span class="alert-danger">*</span>Type - </label>
                     <input type="radio" name="Type" value="input"
                     <?php if(!empty($linkdetails) && $linkdetails->SubLink_Type == 0){ echo "checked"; } ?> checked/> Input
                     <input type="radio" name="Type" value="output"
                     <?php if(!empty($linkdetails) && $linkdetails->SubLink_Type == 1){ echo "checked"; } ?> > Output
-                    <!--	</div>-->
+                    <!--  </div>-->
                   </div>
                 </div>
                 <br>
@@ -528,25 +555,28 @@ span.alert-danger {
                             <input name="question" id="question" type="text" value="<?php echo $question;?>" class="form-control" placeholder="Enter Question">
                           </div>
                           <div class="form-group col-md-3" style="float: right;">
-                            <button class="btn-primary" type="button" id="add_options" title="Add Options" style="margin-top: 16%;">+</button>
+                            <button class="btn-primary" type="button" id="add_options" data-toggle="tooltip" title="Add More Options" style="margin-top: 16%;">+</button>
                           </div>
                           <br>
                           <div class="form-group col-md-6" style="margin-left: 1px;">
                             <label for="No of questions">Text:</label>
-                            <input name="option[]" id="option[]" type="text" value="<?php echo (!empty($options))?$options:'Option-';?>" class="form-control" placeholder="Enter Option Text">
+                            <input name="option[]" id="option[]" type="text" value="<?php echo (!empty($options))?$options:'Option-';?>" class="form-control optionTextBox" placeholder="Enter Option Text">
                           </div>
                           <div class="form-group col-md-3">
                             <label for="No of questions">Value:</label>
                             <input name="option_value[]" id="option_value[]" type="text" value="<?php echo $options_value;?>" class="form-control" placeholder="Value">
                           </div>
                           <?php if(count($option) > 1 && count($option_value) > 1){
+                            // array_pop(array);
                             for($i=1; $i < count($option); $i++) { ?>
-                              <div>
-                                <div class="form-group col-md-6"><input name="option[]" type="text" value="<?php echo $option[$i];?>" placeholder="Text" class="form-control"></div>
+                              <div class="parentDefault">
+                                <div class="form-group col-md-6"><input name="option[]" type="text" value="<?php echo $option[$i];?>" placeholder="Text" class="form-control optionTextBox"></div>
                                 <div class="form-group col-md-3"><input name="option_value[]" type="text" value="<?php echo $option_value[$i];?>" placeholder="Value" class="form-control"></div>
-                                <div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" title="Remove Option">-</button></div>
+                                <div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" data-toggle="tooltip" title="Remove Option">-</button>
+                                  <input class="checkedDefault" type="radio" name="makeDefaultChecked[]" data-toggle="tooltip" title="Make This Default Checked" value="<?php echo $option[$i];?>" <?php echo ($makeDefaultChecked == $option[$i])?'checked':'';?>/>
+                                </div>
                               </div>
-                            <?php }	} ?>
+                            <?php } } ?>
                             <div class="row">
                               <div id="add_here"></div>
                             </div>
@@ -587,7 +617,7 @@ span.alert-danger {
                           <label>Order</label>
                         </div>
                         <div class="col-md-4">
-                          <input type="text" name="order" id="order" value="<?php if(!empty($linkdetails->SubLink_Order)) echo $linkdetails->SubLink_Order; ?>"	class="form-control" placeholder="Enter Order No" required>
+                          <input type="text" name="order" id="order" value="<?php if(!empty($linkdetails->SubLink_Order)) echo $linkdetails->SubLink_Order; ?>" class="form-control" placeholder="Enter Order No" required>
                         </div>
                       </div>
                       <br>
@@ -651,7 +681,7 @@ span.alert-danger {
                       </div>
                       <div class="row">
                         <input type="hidden" name="replaceid3" id="replaceid3" 
-                        value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_ID; } ?>">		
+                        value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_ID; } ?>">   
                         <div class="col-md-4">
                           <input type="text" name="start3" id="start3" 
                           value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Start; } ?>"
@@ -676,57 +706,70 @@ span.alert-danger {
                         <div class="col-md-4">
                           <select class="form-control" name="chart_id" id="chart_id">
                             <option value="">-- SELECT --</option>
-                            <?php 
-                            $sqlchart = "SELECT * FROM `GAME_CHART` WHERE `Chart_GameID`=".$result->Link_GameID;
-                            $chart    =  $functionsObj->ExecuteQuery($sqlchart);
-                            while($row = $chart->fetch_object()){ ?>
-                              <option value="<?php echo $row->Chart_ID; ?>"
-                                <?php if(isset($linkdetails->SubLink_ChartID) && $linkdetails->SubLink_ChartID == $row->Chart_ID){echo 'selected'; } ?>>
-                                <?php echo $row->Chart_Name; ?>
-                              </option>
-                            <?php } ?>
-                          </select>
+                            <!-- for components chart -->
+                            <?php
+                            if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0) { 
+                              $sqlchart = "SELECT * FROM `GAME_CHART` WHERE `Chart_GameID`=".$result->Link_GameID." AND Chart_Type_Status=1";
+                              $subCompChart =  $functionsObj->ExecuteQuery($sqlchart);
+                              while($row = $subCompChart->fetch_object()) { ?>
+                                <option value="<?php echo $row->Chart_ID; ?>"
+                                  <?php if(isset($linkdetails->SubLink_ChartID) && $linkdetails->SubLink_ChartID == $row->Chart_ID){echo 'selected'; } ?>>
+                                  <?php echo $row->Chart_Name; ?>
+                                </option>
+                              <?php }} ?>
+                              <!-- for subcomponent charts -->
+                              <?php
+                              if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID>0) { 
+                                $sqlchart = "SELECT * FROM `GAME_CHART` WHERE `Chart_GameID`=".$result->Link_GameID." AND Chart_Type_Status=0";
+                                $subCompChart =  $functionsObj->ExecuteQuery($sqlchart);
+                                while($row = $subCompChart->fetch_object()) { ?>
+                                  <option value="<?php echo $row->Chart_ID; ?>"
+                                    <?php if(isset($linkdetails->SubLink_ChartID) && $linkdetails->SubLink_ChartID == $row->Chart_ID){echo 'selected'; } ?>>
+                                    <?php echo $row->Chart_Name; ?>
+                                  </option>
+                                <?php }} ?>
+                              </select>
+                            </div>
+                          </div>
+                          <br>OR<br><br>
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <label><span class="alert-danger">*</span>Details</label>
+                              <div class="form-group">
+                                <!--<div class="input-group">-->
+                                  <textarea id="details" name="details" class="form-control"><?php if(!empty($linkdetails->SubLink_Details)){ echo $linkdetails->SubLink_Details; } ?></textarea>
+                                  <!--</div>-->
+                                  <div class="contact_error"></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <div class="form-group text-center">        
+                                  <?php if(isset($_GET['linkedit']) && !empty($_GET['linkedit'])){?>
+                                    <button type="button" id="siteuser_btn_update" class="btn btn-primary"
+                                    > Update </button>
+                                    <button type="submit" name="submit" id="siteuser_update" class="btn btn-primary hidden"
+                                    value="Update"> Update </button>
+                                    <button type="button" class="btn btn-primary"
+                                    onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
+                                  <?php }else{?>
+                                    <button type="button" id="siteuser_btn" class="btn btn-primary"
+                                    value="Submit"> Submit </button>
+                                    <button type="submit" name="submit" id="siteuser_sbmit"
+                                    class="btn btn-primary hidden" value="Submit"> Submit </button>
+                                    <button type="button" class="btn btn-primary"
+                                    onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
+                                  <?php }?>
+                                </div>
+                              </div>
+                            </div>
+                          </form>
                         </div>
                       </div>
-                      <br>OR<br><br>
-                      <div class="row">
-                        <div class="col-sm-12">
-                          <label><span class="alert-danger">*</span>Details</label>
-                          <div class="form-group">
-                            <!--<div class="input-group">-->
-                              <textarea id="details" name="details" class="form-control"><?php if(!empty($linkdetails->SubLink_Details)){ echo $linkdetails->SubLink_Details; } ?></textarea>
-                              <!--</div>-->
-                              <div class="contact_error"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-12">
-                            <div class="form-group text-center">				
-                              <?php if(isset($_GET['linkedit']) && !empty($_GET['linkedit'])){?>
-                                <button type="button" id="siteuser_btn_update" class="btn btn-primary"
-                                > Update </button>
-                                <button type="submit" name="submit" id="siteuser_update" class="btn btn-primary hidden"
-                                value="Update"> Update </button>
-                                <button type="button" class="btn btn-primary"
-                                onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
-                              <?php }else{?>
-                                <button type="button" id="siteuser_btn" class="btn btn-primary"
-                                value="Submit"> Submit </button>
-                                <button type="submit" name="submit" id="siteuser_sbmit"
-                                class="btn btn-primary hidden" value="Submit"> Submit </button>
-                                <button type="button" class="btn btn-primary"
-                                onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
-                              <?php }?>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="clearfix"></div>
+                  <div class="clearfix"></div>
 <!--
   <?php if(isset($msg)){echo "<div class=\"form-group ". $type[1] ." \"><div align=\"center\" class=\"form-control\" id=". $type[0] ."><label class=\"control-label\" for=". $type[0] .">". $msg ."</label></div></div>";} ?>
 -->
@@ -735,12 +778,12 @@ span.alert-danger {
     <div class="pull-right legend">
       <ul>
         <li><b>Legend : </b></li>
-        <li> <span class="glyphicon glyphicon-ok">		</span><a href="javascript:void(0);" data-toggle="tooltip" title="This is Active Status"> Active	</a></li>
-        <li> <span class="glyphicon glyphicon-remove">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="This Deactive Status"> Deactive	</a></li>
-        <li> <span class="glyphicon glyphicon-search">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can View the Record"> View		</a></li>
-        <li> <span class="glyphicon glyphicon-pencil">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Edit the Record"> Edit		</a></li>
+        <li> <span class="glyphicon glyphicon-ok">    </span><a href="javascript:void(0);" data-toggle="tooltip" title="This is Active Status"> Active  </a></li>
+        <li> <span class="glyphicon glyphicon-remove">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="This Deactive Status"> Deactive </a></li>
+        <li> <span class="glyphicon glyphicon-search">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can View the Record"> View   </a></li>
+        <li> <span class="glyphicon glyphicon-pencil">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Edit the Record"> Edit   </a></li>
         <li> <span class="glyphicon glyphicon-trash"> </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Delete the Record"> Delete </a></li>
-        <li> <span class="fa fa-bolt">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="Start component for area"> Start Component	</a></li>
+        <li> <span class="fa fa-bolt">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="Start component for area"> Start Component  </a></li>
       </ul>
     </div>
   </div>
@@ -785,12 +828,12 @@ span.alert-danger {
                   <?php
                   if($row->SubLink_BackgroundColor)
                   {
-                  	$hex = sscanf($row->SubLink_BackgroundColor, "#%02x%02x%02x");
-                  	$r   = $hex[0];
-                  	$g   = $hex[1];
-                  	$b   = $hex[2];
-                  	echo $row->SubLink_BackgroundColor.'<br>';
-                  	echo $r.','.$g.','.$b;
+                    $hex = sscanf($row->SubLink_BackgroundColor, "#%02x%02x%02x");
+                    $r   = $hex[0];
+                    $g   = $hex[1];
+                    $b   = $hex[2];
+                    echo $row->SubLink_BackgroundColor.'<br>';
+                    echo $r.','.$g.','.$b;
                   }
                   ?> 
                 </code>
@@ -800,12 +843,12 @@ span.alert-danger {
                   <?php
                   if($row->SubLink_TextColor)
                   {
-                  	$hex = sscanf($row->SubLink_TextColor, "#%02x%02x%02x");
-                  	$r   = $hex[0];
-                  	$g   = $hex[1];
-                  	$b   = $hex[2];
-                  	echo $row->SubLink_TextColor.'<br>';
-                  	echo $r.','.$g.','.$b;
+                    $hex = sscanf($row->SubLink_TextColor, "#%02x%02x%02x");
+                    $r   = $hex[0];
+                    $g   = $hex[1];
+                    $b   = $hex[2];
+                    echo $row->SubLink_TextColor.'<br>';
+                    echo $r.','.$g.','.$b;
                   }
                   ?> </code>
                 </td>
@@ -886,116 +929,124 @@ span.alert-danger {
 <script type="text/javascript">
 
   $('#add_options').on('click',function(){
-    $('#add_here').append('<div class="col-md-12"><div class="form-group col-md-6"><input name="option[]" type="text" placeholder="Enter Option Text" class="form-control" value="Option-"></div> <div class="form-group col-md-3"><input name="option_value[]" type="text" placeholder="Value" class="form-control"></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" title="Remove Option">-</button></div></div>');
+    $('#add_here').append('<div class="col-md-12 parentDefault"><div class="form-group col-md-6"><input name="option[]" type="text" placeholder="Enter Option Text" class="form-control optionTextBox" value="Option-"></div> <div class="form-group col-md-3"><input name="option_value[]" type="text" placeholder="Value" class="form-control"></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" data-toggle="tooltip" title="Remove Option">-</button><input class="checkedDefault" type="radio" name="makeDefaultChecked[]" data-toggle="tooltip" title="Make This Default Checked" value="" /></div></div>');
     removeDiv();
+    makeDefaultChecked();
+    changeValueOnChangingText();
+    $('[data-toggle="tooltip"]').tooltip();
   });
   
   function removeDiv()
   {
-  	$('.removeDiv').on('click',function(){
-  		// alert('clicked');
-  		$(this).parent().parent().remove();
-  	});
+    $('.removeDiv').on('click',function(){
+      // alert('clicked');
+      $(this).parent().parent().remove();
+    });
   }
   
   $('input[name=inputType]').on('change',function(){
-  	if($(this).val() != 'user')
-  	{
-  		$('#user').addClass('hidden');
-  	}
-  	else
-  	{
-  		$('#user').removeClass('hidden');
-  	}
+    if($(this).val() != 'user')
+    {
+      $('#user').addClass('hidden');
+      $('#question').attr('required',false);
+    }
+    else
+    {
+      $('#user').removeClass('hidden');
+    }
   });
   
   $('#SubLink_InputModeType').on('change',function(){
-  	var input_type = $(this).val();
-  	if(input_type == 'select')
-  	{
-  		$('#user_default_value').addClass('hidden');
-  		$('#mChoice').addClass('hidden');
-  		$('#range').addClass('hidden');
-  	}
-  	if(input_type == 'user')
-  	{
-  		// $('#user_default_value').removeClass('hidden');
-  		$('#mChoice').addClass('hidden');
-  		$('#range').addClass('hidden');
-  	}
-  	if(input_type == 'mChoice')
-  	{
-  		$('#mChoice').removeClass('hidden');
-  		$('#range').addClass('hidden');
-  		$('#user_default_value').addClass('hidden');
-  	}
-  	if(input_type == 'range')
-  	{
-  		$('#range').removeClass('hidden');
-  		$('#mChoice').addClass('hidden');
-  		$('#user_default_value').addClass('hidden');
-  	}
+    var input_type = $(this).val();
+    if(input_type == 'select')
+    {
+      $('#user_default_value').addClass('hidden');
+      $('#mChoice').addClass('hidden');
+      $('#range').addClass('hidden');
+      $('#question').attr('required',false);
+    }
+    if(input_type == 'user')
+    {
+      // $('#user_default_value').removeClass('hidden');
+      $('#mChoice').addClass('hidden');
+      $('#range').addClass('hidden');
+      $('#question').attr('required',false);
+    }
+    if(input_type == 'mChoice')
+    {
+      $('#mChoice').removeClass('hidden');
+      $('#range').addClass('hidden');
+      $('#user_default_value').addClass('hidden');
+      $('#question').attr('required',true);
+    }
+    if(input_type == 'range')
+    {
+      $('#range').removeClass('hidden');
+      $('#mChoice').addClass('hidden');
+      $('#user_default_value').addClass('hidden');
+      $('#question').attr('required',false);
+    }
   });
   
   $('#formula_id').on('change', function(){
-  	var formula_id = $(this).val();
-  	//alert(comp_id);
-  	//$('#subcomp_id').html('<option value="">-- SELECT --</option>');
+    var formula_id = $(this).val();
+    //alert(comp_id);
+    //$('#subcomp_id').html('<option value="">-- SELECT --</option>');
 
-  	$.ajax({
-  		url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
-  		type: "POST",
-  		data: { formula_id: formula_id },
-  		success: function(data){
-  			//alert(data);
-  			$('#f_exp').html(data);
-  		}
-  	});
+    $.ajax({
+      url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
+      type: "POST",
+      data: { formula_id: formula_id },
+      success: function(data){
+        //alert(data);
+        $('#f_exp').html(data);
+      }
+    });
   });
   
   
   $('#area_id').on('change', function(){
-  	var area_id = $(this).val();
-  	//alert(area_id);
-  	$('#comp_id').html('<option value="">-- SELECT --</option>');
+    var area_id = $(this).val();
+    //alert(area_id);
+    $('#comp_id').html('<option value="">-- SELECT --</option>');
 
-  	$.ajax({
-  		url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
-  		type: "POST",
-  		data: { area_id: area_id },
-  		success: function(data){
-  			$('#comp_id').html(data);
-  		}
-  	});
-  });	
+    $.ajax({
+      url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
+      type: "POST",
+      data: { area_id: area_id },
+      success: function(data){
+        $('#comp_id').html(data);
+      }
+    });
+  }); 
   
   $('#comp_id').on('change', function(){
-  	var comp_id = $(this).val();
-  	//alert(comp_id);
-  	$('#subcomp_id').html('<option value="">-- SELECT --</option>');
+    var comp_id = $(this).val();
+    //alert(comp_id);
+    $('#subcomp_id').html('<option value="">-- SELECT --</option>');
 
-  	$.ajax({
-  		url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
-  		type: "POST",
-  		data: { comp_id: comp_id },
-  		success: function(data){
-  			$('#subcomp_id').html(data);
-  		}
-  	});
+    $.ajax({
+      url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
+      type: "POST",
+      data: { comp_id: comp_id },
+      success: function(data){
+        $('#subcomp_id').html(data);
+      }
+    });
   });
   
   $('#carry_linkid').on('change',function(){
-  	var link_id = $(this).val();
-  	//alert(comp_id);
-  	$('#carry_compid').html('<option value="">-- SELECT --</option>');
+    var link_id = $(this).val();
+    //alert(comp_id);
+    $('#carry_compid').html('<option value="">-- SELECT --</option>');
 
-  	$.ajax({
-  		url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
-  		type: "POST",
-  		data: { link_id: link_id },
-  		success: function(data){
-  			//alert(data);
-  			$('#carry_compid').html(data);
+    $.ajax({
+      url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
+      type: "POST",
+      data: { link_id: link_id },
+      success: function(data){
+        //alert(data);
+        $('#carry_compid').html(data);
         <?php if(isset($linkdetails->SubLink_CompIDcarry)){ ?>
           setTimeout(function()
           {
@@ -1037,59 +1088,79 @@ span.alert-danger {
   });
   
   $('#scen_id').on('change', function(){
-  	var thisVal = $(this).val();
-  	//alert(thisVal);
-  	$("input[id=scenid]").val(thisVal);		
+    var thisVal = $(this).val();
+    //alert(thisVal);
+    $("input[id=scenid]").val(thisVal);   
   });
   
-  $('#update_link').click( function(){	
-  	//alert($('#<%= scenid.ClientID%>').val());
-  	var link_id = $('#linkid').val();
-  	var game_id = $('#gameid').val();
-  	var scen_id = $('#scenid').val();
-  	if($('#scen_id').val() == '')
-  	{
-  		alert('Please Select Scenario');
-  		return false;
-  	}
-  	//alert(link_id);
-  	//alert(site_root + "ux-admin/model/ajax/update_game_link.php");
-  	$.ajax({			
-  		url: site_root + "ux-admin/model/ajax/update_game_link.php",
-  		type: "POST",
-  		data: { Link_id: link_id, Game_id: game_id, Scen_id: scen_id },
-  		beforeSend: function(){
-  			//alert("beforeSend");
-  			$('#loader').addClass( 'loader' );
-  		},
-  		success: function( result ){
-  			try{
-  				//alert("SUCCESS");
-  				alert (result);
-  				var response = JSON.parse( result );
-  				
-  				if( response.status == 1 ){
-  					//alert("Linkage added");
-  					$('#Modal_Success').modal('show', { backdrop: "static" } );
-  				} else {
-  					$('.option_err').html( result.msg );
-  				}
-  			} catch ( e ) {
-  				alert(e + "\n" + result);
-  				console.log( e + "\n" + result );
-  			}
-  			
-  			$('#loader').removeClass( 'loader' );
-  		},
-  		error: function(jqXHR, exception){
-  			alert('error'+ jqXHR.status +" - "+exception);
-  		}
-  	});
+  $('#update_link').click( function(){  
+    //alert($('#<%= scenid.ClientID%>').val());
+    var link_id = $('#linkid').val();
+    var game_id = $('#gameid').val();
+    var scen_id = $('#scenid').val();
+    if($('#scen_id').val() == '')
+    {
+      alert('Please Select Scenario');
+      return false;
+    }
+    //alert(link_id);
+    //alert(site_root + "ux-admin/model/ajax/update_game_link.php");
+    $.ajax({      
+      url: site_root + "ux-admin/model/ajax/update_game_link.php",
+      type: "POST",
+      data: { Link_id: link_id, Game_id: game_id, Scen_id: scen_id },
+      beforeSend: function(){
+        //alert("beforeSend");
+        $('#loader').addClass( 'loader' );
+      },
+      success: function( result ){
+        try{
+          //alert("SUCCESS");
+          alert (result);
+          var response = JSON.parse( result );
+          
+          if( response.status == 1 ){
+            //alert("Linkage added");
+            $('#Modal_Success').modal('show', { backdrop: "static" } );
+          } else {
+            $('.option_err').html( result.msg );
+          }
+        } catch ( e ) {
+          alert(e + "\n" + result);
+          console.log( e + "\n" + result );
+        }
+        
+        $('#loader').removeClass( 'loader' );
+      },
+      error: function(jqXHR, exception){
+        alert('error'+ jqXHR.status +" - "+exception);
+      }
+    });
   });
-  
+
+  function makeDefaultChecked()
+  {
+    $('.checkedDefault').on('click',function(){
+      var defaultRadioButton = $(this);
+      var inputValue         = $(this).parents('div.parentDefault').find('input[name*="option"]').val();
+      $(defaultRadioButton).val(inputValue);
+    });
+  }
+
+  function changeValueOnChangingText()
+  {
+    $('.optionTextBox').on('click change blur keyup keydown',function(){
+      var optionTextBox       = $(this);
+      var textValue           = $(this).val();
+      var adjecentRadioButton = $(this).parents('div.parentDefault').find('input[name*="makeDefaultChecked"]');
+      console.log(adjecentRadioButton);
+      $(adjecentRadioButton).val(textValue);
+    });
+  }
+
 </script>
 <script type="text/javascript">
   <!--
-  	CKEDITOR.replace('details');	
+    CKEDITOR.replace('details');  
   //-->
 </script>

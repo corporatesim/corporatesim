@@ -6,14 +6,14 @@ if($server == 'local'){
 	define("USR", "root");
 	define("PWD", "");
 	define("DBN", "uxconsul_game");
-	// live db
+	// user for testing (recomended)
+	// define("HST", "develop.corporatesim.com");
+	// define("USR", "organiza_devuser");
+	// define("PWD", "2GX7'_;rudyU");
+	// define("DBN", "organiza_devGameData");
+	// for live server (only if needed)
 	// define("HST", "kiit.corporatesim.com");
-	// define("USR", "organiza_game");
-	// define("PWD", "M^aAq&VLDt8Q");
-	// define("DBN", "organiza_game");
-	// for new server details
-	// define("HST", "live.corporatesim.com");
-	// define("USR", "organizationgame");
+	// define("USR", "organiza_newGame");
 	// define("PWD", "2GX7'_;rudyU");
 	// define("DBN", "organiza_game");
 }elseif($server == 'server'){

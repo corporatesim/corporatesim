@@ -12,8 +12,8 @@ $server = 'local';
 
 if($server == 'local')
 {
-	define("site_root","http://".$_SERVER['HTTP_HOST']."/simulation/");
-	define("doc_root",$_SERVER['DOCUMENT_ROOT']."/simulation/");
+	define("site_root","http://".$_SERVER['HTTP_HOST']."/corp_simulation/");
+	define("doc_root",$_SERVER['DOCUMENT_ROOT']."/corp_simulation/");
 }
 else
 {

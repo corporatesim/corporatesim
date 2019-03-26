@@ -87,6 +87,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 					'question' => $_POST['question'],
 				);
 				$SubLink_InputModeTypeValue = $question + $option;
+				// adding the default checked value for admin and user
+				$makeDefaultChecked                               = $_POST['makeDefaultChecked'][0];
+				$SubLink_InputModeTypeValue['makeDefaultChecked'] = ($makeDefaultChecked)?$makeDefaultChecked:'NoVal';
 				if(count($option) > 1)
 				{
 					$SubLink_InputModeTypeValue = json_encode($SubLink_InputModeTypeValue);
@@ -279,6 +282,7 @@ else
 }
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){	
+	// header('X-XSS-Protection:0');	echo "<pre>"; print_r($_POST); die('Update Linkage');
 	if(isset($_GET['linkedit'])){		
 		$file      = 'addeditlink.php';	
 		$sublinkid = $_GET['linkedit'];
@@ -358,11 +362,17 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 				}
 				elseif($_POST['SubLink_InputModeType'] == 'mChoice')
 				{
-					$option                     = array_combine($_POST['option'],$_POST['option_value']);
-					$question                   = array(
+					// mcq's question text
+					$question = array(
 						'question' => $_POST['question'],
 					);
+					// options for the questions i.e. mcq's responses
+					$option                     = array_combine($_POST['option'],$_POST['option_value']);
 					$SubLink_InputModeTypeValue = $question + $option;
+					// adding the default checked value for admin and user
+					$makeDefaultChecked                               = $_POST['makeDefaultChecked'][0];
+					$SubLink_InputModeTypeValue['makeDefaultChecked'] = ($makeDefaultChecked)?$makeDefaultChecked:'NoVal';
+					// print_r($question); print_r($option); print_r($SubLink_InputModeTypeValue);
 					if(count($option) > 1)
 					{
 						$SubLink_InputModeTypeValue = json_encode($SubLink_InputModeTypeValue);
@@ -1228,17 +1238,27 @@ if(isset($_GET['linkedit']))
 	if($result_object->SubLink_InputModeType == 'mChoice')
 	{
 		$mChoice  = json_decode($result_object->SubLink_InputModeTypeValue);
+		// echo "<pre>"; print_r($mChoice); exit();
 		$question = $mChoice->question;
-		// ignoring the question as earlier got it, so once skip
-		$count    = 0;
+		$makeDefaultChecked = '';
+		// ignoring the question as earlier stored into another variable, so once skip
+		$flag  = true;
 		foreach ($mChoice as $key => $value)
 		{
-			if($count > 0)
+			if($flag)
+			{
+				$flag = false;
+				continue;
+			}
+			if($key != 'makeDefaultChecked')
 			{
 				$option[]       = $key;
 				$option_value[] = $value;
 			}
-			$count++; 
+			else
+			{
+				$makeDefaultChecked = $value;
+			}
 		}
 		// echo count($option).'<br>'; print_r($option); echo '<br>'; print_r($option_value); exit; 
 		$options       = $option['0'];

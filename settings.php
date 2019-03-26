@@ -19,7 +19,12 @@ $uid                  = $_SESSION['userid'];
 $object               = $functionsObj->SelectData(array(), 'GAME_SITE_USERS', array('User_id='.$uid), '', '', '', '', 0);
 $userdetails          = $functionsObj->FetchObject($object);
 	//$url = site_root."ux-admin/index?q=siteusers";
-
+$msg                 = $_SESSION['msg'];		
+$type[0]             = $_SESSION['type[0]'];
+$type[1]             = $_SESSION['type[1]'];
+$_SESSION['msg']     = '';
+$_SESSION['type[0]'] = '';
+$_SESSION['type[1]'] = '';
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 //	echo $_POST['fname'];
 //	echo $_POST['lname'];
@@ -57,7 +62,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 			//$result = $functionsObj->InsertData('GAME_USER_AUTHENTICATION', $login_details, 0, 0);
 			//$result = $functionsObj->UpdateData('GAME_SITE_USERS', $userdetails, 'User_id', $uid, 0);
 		if($result === true){
-			$_SESSION['msg']     = "User details updated successfully";
+			$_SESSION['msg']     = "Password updated successfully";
 			$_SESSION['type[0]'] = "inputSuccess";
 			$_SESSION['type[1]'] = "has-success";
 				//$msg = "User details updated successfully";

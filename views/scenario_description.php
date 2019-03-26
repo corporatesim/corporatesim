@@ -57,7 +57,7 @@ include_once 'includes/header.php';
 
 						</div>
 
-						<div class="clearfix"></div>
+						<div class="clearfix scenario_header"></div>
 						<div class="col-sm-12 no_padding shadow">
 							<!-- Nav tabs -->	
 							<div class="shadow TabMain col-sm-12">
@@ -198,137 +198,23 @@ include_once 'includes/header.php';
 					</div>
 				</div>
 			</footer>
-			
+			<script>
+				$(document).ready(function()
+				{
+					// adding a confirmation box while click on proceed
+					$('#proceedBtn').on('click',function(){
+						var conf = confirm('Please confirm that you have gone through all the content by clicking OK else press Cancel');
+						if(conf)
+						{
+							window.location='<?php echo $url; ?>';
+						}
+					});
+					$('img').on('contextmenu', function() {
+						return false;
+					})
+				});
+			</script>
 			<script src="js/jquery.min.js"></script>	
 			<script src="js/bootstrap.min.js"></script>			
-			<!-- creating pop up for image modal -->
-			<style>
-			#showImageModal {
-				border-radius: 5px;
-				cursor       : pointer;
-				transition   : 0.3s;
-			}
-
-			#showImageModal:hover {opacity: 0.7;}
-
-			/* The Modal (background) */
-			.modal {
-				display         : none; /* Hidden by default */
-				position        : fixed; /* Stay in place */
-				z-index         : 1; /* Sit on top */
-				padding-top     : 100px; /* Location of the box */
-				left            : 0;
-				top             : 0;
-				width           : 100%; /* Full width */
-				height          : 100%; /* Full height */
-				overflow        : auto; /* Enable scroll if needed */
-				background-color: rgb(0,0,0); /* Fallback color */
-				background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
-			}
-
-			/* Modal Content (image) */
-			.modal-content {
-				margin   : auto;
-				display  : block;
-				width    : 80%;
-				max-width: 700px;
-				top      : 5%;
-			}
-
-			/* Caption of Modal Image */
-			#caption {
-				margin    : auto;
-				display   : block;
-				width     : 80%;
-				max-width : 700px;
-				text-align: center;
-				color     : #ccc;
-				padding   : 10px 0;
-				height    : 150px;
-			}
-
-			/* Add Animation */
-			.modal-content, #caption {  
-				-webkit-animation-name    : zoom;
-				-webkit-animation-duration: 0.6s;
-				animation-name            : zoom;
-				animation-duration        : 0.6s;
-			}
-
-			@-webkit-keyframes zoom {
-				from {-webkit-transform:scale(0)} 
-				to {-webkit-transform:scale(1)}
-			}
-
-			@keyframes zoom {
-				from {transform:scale(0)} 
-				to {transform:scale(1)}
-			}
-
-			/* 100% Image Width on Smaller Screens */
-			@media only screen and (max-width: 700px){
-				.modal-content {
-					width: 100%;
-				}
-			}
-		</style>
-
-		<!-- The Modal -->
-		<center>
-			<div id="imageModal" class="modal">
-				<span class="close" id="close" style="font-size: 50px; opacity: 1; color:#f00;">
-					&times;
-				</span>
-				<img class="modal-content" id="showImageHere">
-				<div id="caption"></div>
-			</div>
-		</center>
-		<script>
-			$(document).ready(function(){
-				// adding a confirmation box while click on proceed
-				$('#proceedBtn').on('click',function(){
-					var conf = confirm('Please confirm that you have gone through all the content by clicking OK else press Cancel');
-					if(conf)
-					{
-						window.location='<?php echo $url; ?>';
-					}
-				});
-				$('.showImageModal').each(function(){
-					$(this).on('click',function(){
-						$('#imageModal').show();
-						$('#showImageHere').attr('src',$(this).attr('src'));
-					});
-				});
-				$('#close').on('click',function(){
-					// $('#imageModal').hide('slow');
-					$('#imageModal').slideUp(1000);
-				});
-				$('img').on('contextmenu', function() {
-					return false;
-				})
-			});
-		</script>
-	<!--
-	<script src="js/function.js"></script>
-<script type="text/javascript">
-
-<?php
-		// $sql = "SELECT Link_Hour,Link_Min FROM `GAME_LINKAGE` WHERE Link_ID= ".$linkid;
-		// $objsql = $functionsObj->ExecuteQuery($sql);
-		// $ressql = $functionsObj->FetchObject($objsql);
-		// $hour = $ressql->Link_Hour;	
-		// $min = $ressql->Link_Min + ($hour * 60);
-		
-		// echo "if (".$linkid." == getCookie('linkid')){} else {";
-		// echo "setCookie('linkid',".$linkid.",10);";
-		// echo "setCookie('minutes',".$min.",10);";
-		
-		// echo "}";
-
-		// echo "countdown(".$min.",true);";
-		
-?>
-</script>
--->
-</body>
-</html>
+		</body>
+		</html>

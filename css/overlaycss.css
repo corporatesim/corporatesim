@@ -1,0 +1,263 @@
+
+.overlay {
+  height: 100%;
+  width: 100%;
+  display: none;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0, 0.9);
+}
+
+.overlay a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.overlay a:hover, .overlay a:focus {
+  color: #f1f1f1;
+}
+
+.overlay .closebtn {
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 60px;
+}
+
+@media screen and (max-height: 450px) {
+  .overlay a {font-size: 20px}
+  .overlay .closebtn {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+  }
+}
+
+.main_div{
+  background-image: linear-gradient(to top, #16222A 0%, #3A6073 100%); 
+  height:500px; 
+  width:600px; 
+  border-radius:30px; 
+  text-align:center; 
+  margin-left:380px;
+  margin-top:100px;
+}
+.name{
+  display:inline-block; 
+  padding-top:70px;
+  
+  color:#ffffff;
+  font-size:20px;
+}
+
+.game_div{
+ display:inline-block; 
+ width:200px; 
+ height:30px;
+ border:2px solid #ffffff; 
+ border-radius:10px;
+
+}
+
+.short_div{
+  display:inline-block; 
+  width:200px; 
+  height:40px;
+  border:2px solid #ffffff; 
+  border-radius:10px;
+
+}
+
+.long_div{
+
+  display:inline-block; 
+  width:200px; 
+  height:80px;
+  border:2px solid #ffffff; 
+  border-radius:10px;
+  padding-bottom:25px;
+}
+
+.price_div{
+
+  display:inline-block; 
+  width:100px; 
+  height:30px;
+  border:2px solid #ffffff; 
+  border-radius:5px;
+}
+
+@media only screen and (max-width: 600px) {
+
+  .main_div{
+    width:500px !important;
+    margin-left:30px !important;
+  }
+
+
+}
+
+@media  (min-width: 601px) and (max-width: 768px) {
+
+  .main_div{
+    width:550px !important;
+    margin-left:85px !important;
+  }
+}
+
+@media  (min-width: 769px) and (max-width: 991px) {
+
+  .main_div{
+    width:600px !important;
+    margin-left:170px !important;
+  }
+}
+
+@media  (min-width: 992px) and (max-width: 1199px) {
+
+  .main_div{
+    width:800px !important;
+    margin-left:150px !important;
+  }
+}
+
+/* for responsive overlay page*/
+@media only screen and (max-width: 991px) {
+
+  .price_div{
+    margin-left:35px !important;
+  }
+  .price{
+    margin-left:-40px !important;
+  }
+
+  .game_name{
+    margin-left:-10px !important;
+  }
+
+  .game_div{
+    margin-left:0px !important;
+  }
+
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+
+  .price_div{
+    margin-left:385px !important;
+  }
+  .price{
+    margin-left:-765px !important;
+  }
+
+  .game_name{
+    margin-left:20px !important;
+  }
+
+  .game_div{
+    margin-left:-20px !important;
+  }
+
+}
+
+@media only screen and (max-width: 768px) {
+  .main_div{
+   height:400px !important;
+   margin-top:130px !important;
+ }
+
+ .row{
+  margin-top:-50px !important;
+}
+
+#registerButton{
+  margin-top:30px !important;
+  font-size: 15px !important;
+  margin-right:150px !important;
+}
+
+.closebtn{
+  margin-top:20px !important;
+  margin-right:-20px !important;
+}
+
+}
+
+@media (min-width: 769px) and (max-width: 990px) {
+
+ #registerButton{
+  margin-top:30px !important;
+  font-size: 15px !important;
+  margin-right:90px !important;
+  width:80px;
+}
+
+.main_div{
+ height:400px !important;
+ margin-top:130px !important;
+}
+
+.row{
+  margin-top:-50px !important;
+}
+}
+
+@media (min-width: 991px) and (max-width: 1200px) {
+
+  #registerButton{
+    margin-top:30px !important;
+    font-size: 20px !important;
+    margin-left:320px !important;
+    width:140px;
+  }
+
+}
+
+@media only screen and (max-width: 500px) {
+  .main_div{
+    margin-left:5px !important;
+    width:450px !important;
+  }
+
+}
+
+@media  (min-width: 601px) and (max-width: 654px) {
+  .main_div{
+
+    margin-left:35px !important;
+    
+  }
+
+}
+@media  (min-width: 655px) and (max-width: 768px) {
+  .main_div{
+    margin-left:75px !important;
+    
+  }
+
+}
+@media  (min-width: 769px) and (max-width: 842px) {
+  .main_div{
+    margin-left:85px !important;
+    
+  }
+
+}
+
+.closebtn{
+  margin-top:15px;
+}
+@media only screen and (max-width:1100px){
+  .closebtn{
+    margin-top:-5px !important;
+    margin-right:-40px !important;
+  }
+}
+

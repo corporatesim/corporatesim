@@ -244,6 +244,7 @@
     					<th>Sr. No</th>
     					<th>User Id</th>
     					<th>Name</th>
+    					<th>User Type</th>
     					<th>E-mail</th>
     					<th id="password">Password</th>
     					<th id="contact">Contact</th>
@@ -260,6 +261,9 @@
     						<th><?php echo $i;?></th>
     						<th><?php echo $row->User_id;?></th>
     						<td><?php echo ucfirst($row->User_fname)." ".ucfirst($row->User_lname); ?></td>
+    						<td><?php if($row->User_Role ==2){ echo "<code>SubEnterpriseUser</code><br><b>Ent-</b> ".$row->Enterprise_Name."<br><b>SubEnt-</b> ".$row->SubEnterprise_Name;} elseif ($row->User_Role ==1) {
+    							echo "<code>EnterpriseUser</code><br><b>Ent-</b> ".$row->Enterprise_Name;
+    						} else echo "HumalLinks User"; ?></td>
     						<td><?php echo $row->User_email;?></td>
     						<td><?php echo $row->pwd;?></td>
     						<td><?php echo "+91".$row->User_mobile;?></td>

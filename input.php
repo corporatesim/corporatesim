@@ -245,7 +245,8 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 			$chekExist = $functionsObj->ExecuteQuery($chkSql);
 			if($chekExist->num_rows < 1)
 			{
-				$bulkInsertArray[] = "($userid,$snap_view->input_sublinkid,$snap_view->input_current,'".$snap_view->input_key."')";
+				$snapCurrent       = ($snap_view->input_current != '')?$snap_view->input_current:'NULL';
+				$bulkInsertArray[] = "($userid,$snap_view->input_sublinkid,$snapCurrent,'".$snap_view->input_key."')";
 			}
 			// $insert_data       = $functionsObj->InsertData ( 'GAME_INPUT', $insertArr, 0, 0 );
 		}
@@ -254,6 +255,7 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 		{
 			$bulkValues      = implode(',',$bulkInsertArray);
 			$bulkInsertQuery = "INSERT INTO GAME_INPUT (input_user,input_sublinkid,input_current,input_key) VALUES $bulkValues";
+			// die($bulkInsertQuery);
 			$functionsObj->ExecuteQuery($bulkInsertQuery);
 		}
 		else

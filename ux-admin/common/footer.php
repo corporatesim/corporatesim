@@ -86,7 +86,7 @@
 
 	$('#cs_yes').click( function() {
 		var val = $(this).val();
-		var id = btoa(val);
+		var id  = btoa(val);
 		window.location.href = site_root + loc_url_stat + id;
 	});
 //-->

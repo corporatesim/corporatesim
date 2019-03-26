@@ -7,39 +7,39 @@ $functionsObj = new Model();
 $object   = $functionsObj->SelectData(array(), 'GAME_SITESETTINGS', array('id=1'), '', '', '', '', 0);
 $sitename = $functionsObj->FetchObject($object);
 
-// select Enterprize details
-$object = $functionsObj->SelectData(array('Enterprize_ID','Enterprize_Name'), 'GAME_ENTERPRIZE', array('Enterprize_Status=0'), '', '', '', '', 0);
+// select Enterprise details
+$object = $functionsObj->SelectData(array('Enterprise_ID','Enterprise_Name'), 'GAME_ENTERPRISE', array('Enterprise_Status=0'), '', '', '', '', 0);
 if($object->num_rows > 0);
 {
-	while($EnterprizeDetails = mysqli_fetch_object($object))
+	while($EnterpriseDetails = mysqli_fetch_object($object))
 	{
-		//$Enterprize_ID = $EnterprizeDetails->Enterprize_ID;
-		$EnterprizeName[] = $EnterprizeDetails;
+		//$Enterprise_ID = $EnterpriseDetails->Enterprise_ID;
+		$EnterpriseName[] = $EnterpriseDetails;
 	}
-		//echo "<pre>"; print_r($Enterprize_ID); exit();
+		//echo "<pre>"; print_r($Enterprise_ID); exit();
 }
 
-// select SubEnterprize details
-$object = $functionsObj->SelectData(array('SubEnterprize_ID','SubEnterprize_Name'), 'GAME_SUBENTERPRIZE', array('SubEnterprize_Status=0'), '', '', '', '', 0);
+// select SubEnterprise details
+$object = $functionsObj->SelectData(array('SubEnterprise_ID','SubEnterprise_Name'), 'GAME_SUBENTERPRISE', array('SubEnterprise_Status=0'), '', '', '', '', 0);
 if($object->num_rows > 0);
 {
-	while($SubEnterprizeDetails = mysqli_fetch_object($object))
+	while($SubEnterpriseDetails = mysqli_fetch_object($object))
 	{
-		//$Enterprize_ID = $EnterprizeDetails->Enterprize_ID;
-		$SubEnterprizeName[] = $SubEnterprizeDetails;
+		//$Enterprise_ID = $EnterpriseDetails->Enterprise_ID;
+		$SubEnterpriseName[] = $SubEnterpriseDetails;
 	}
-		//echo "<pre>"; print_r($Enterprize_ID); exit();
+		//echo "<pre>"; print_r($Enterprise_ID); exit();
 }
 
 // Add game site users
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 {
 	//For Showing User Role
-	if($_POST['Enterprize'] && $_POST['SubEnterprize'] )
+	if($_POST['Enterprise'] && $_POST['SubEnterprise'] )
 	{
 		$User_Role =2;
 	}
-	else if($_POST['Enterprize'])
+	else if($_POST['Enterprise'])
 	{
 		$User_Role =1;
 	}
@@ -48,19 +48,19 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 		$User_Role =0;
 	}
 
-//For Enterprize And SubENterprize
-	if($_POST['Enterprize'])
+//For Enterprise And SubENterprise
+	if($_POST['Enterprise'])
 	{
-		$User_ParentId = $_POST['Enterprize'];
+		$User_ParentId = $_POST['Enterprise'];
 	}
 	else
 	{
 		$User_ParentId = -1;
 	}
 
- if($_POST['SubEnterprize'])
+ if($_POST['SubEnterprise'])
 	{
-		$User_SubParentId = $_POST['SubEnterprize'];
+		$User_SubParentId = $_POST['SubEnterprise'];
 	}
 	else
 	{
@@ -114,7 +114,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 				$result1 = $functionsObj->InsertData('GAME_USER_AUTHENTICATION', $login_details, 0, 0);
 				if($result1)
 				{
-					$from     = "webmaster@simulation.com";
+					$from     = "support@corporatesim.com";
 					$subject  = "New Account created for Simulation Game";
 					$message  = "Dear User";
 					$message .= "<p>Username : ".$username;
@@ -166,11 +166,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 //update user details
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 {
-	if($_POST['Enterprize'] && $_POST['SubEnterprize'] )
+	if($_POST['Enterprise'] && $_POST['SubEnterprise'] )
 	{
 		$User_Role =2;
 	}
-	else if($_POST['Enterprize'])
+	else if($_POST['Enterprise'])
 	{
 		$User_Role =1;
 	}
@@ -178,19 +178,19 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 	{
 		$User_Role =0;
 	}
-	//For Enterprize And SubENterprize
-	if($_POST['Enterprize'])
+	//For Enterprise And SubENterprise
+	if($_POST['Enterprise'])
 	{
-		$User_ParentId = $_POST['Enterprize'];
+		$User_ParentId = $_POST['Enterprise'];
 	}
 	else
 	{
 		$User_ParentId = -1;
 	}
 
- if($_POST['SubEnterprize'])
+ if($_POST['SubEnterprise'])
 	{
-		$User_SubParentId = $_POST['SubEnterprize'];
+		$User_SubParentId = $_POST['SubEnterprise'];
 	}
 	else
 	{
@@ -330,7 +330,7 @@ if(isset($_GET['edit']))
 	$object1     = $functionsObj->SelectData(array(), 'GAME_USER_AUTHENTICATION', array('Auth_userid='.$uid), '', '', '', '', 0);
 	$userauth    = $functionsObj->FetchObject($object1);
 
-	$sql         = " SELECT gu.*,gs.* FROM `GAME_SITE_USERS`gu LEFT JOIN GAME_SUBENTERPRIZE gs ON gs.SubEnterprize_ID=gu.User_SubParentId WHERE User_id = $uid ";
+	$sql         = " SELECT gu.*,gs.* FROM `GAME_SITE_USERS`gu LEFT JOIN GAME_SUBENTERPRISE gs ON gs.SubEnterprise_ID=gu.User_SubParentId WHERE User_id = $uid ";
 	$subObj      = $functionsObj->ExecuteQuery($sql);
   $subObjRes   = $functionsObj->FetchObject($subObj);
 	$url         = site_root."ux-admin/siteusers";
@@ -394,13 +394,11 @@ elseif(isset($_GET['stat']))
 else
 {
 	// fetch siteuser list from db
-	$sql = "SELECT  u.*,ua.Auth_password as pwd, (SELECT count(*) FROM GAME_USERGAMES WHERE UG_UserID = u.User_id) as gamecount,ge.Enterprize_Name,gs.SubEnterprize_Name 
-	FROM `GAME_SITE_USERS` u INNER JOIN GAME_USER_AUTHENTICATION ua on u.User_id=ua.Auth_userid LEFT JOIN GAME_ENTERPRIZE ge ON ge.Enterprize_ID=u.User_ParentId LEFT JOIN GAME_SUBENTERPRIZE gs ON gs.SubEnterprize_ID=u.User_SubParentId
+	$sql = "SELECT  u.*,ua.Auth_password as pwd, (SELECT count(*) FROM GAME_USERGAMES WHERE UG_UserID = u.User_id) as gamecount,ge.Enterprise_Name,gs.SubEnterprise_Name 
+	FROM `GAME_SITE_USERS` u INNER JOIN GAME_USER_AUTHENTICATION ua on u.User_id=ua.Auth_userid LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID=u.User_ParentId LEFT JOIN GAME_SUBENTERPRISE gs ON gs.SubEnterprise_ID=u.User_SubParentId
 	WHERE User_Delete = 0 
 	ORDER BY User_datetime DESC";
-	//$sql="SELECT  u.*, (SELECT count(*) FROM GAME_USERGAMES WHERE UG_UserID = u.User_id) as gamecount FROM `GAME_SITE_USERS` u WHERE User_Delete = 0 ORDER BY User_datetime DESC";
 	
-	//$object = $functionsObj->SelectData(array(), 'GAME_SITE_USERS', array('User_Delete=0'), 'User_datetime DESC', '', '', '', 0);
 	$object = $functionsObj->ExecuteQuery($sql);
 	$file   = 'list.php';
 }

@@ -172,3 +172,22 @@ if(isset($_POST['comp_scen_id']))
 				}
 			}	
 		}
+		// for populating the game chart dropdown 
+		if(isset($_POST['gameId']) && isset($_POST['statusType']))
+		{
+			// print_r($_POST);
+			$gameId     = $_POST['gameId'];
+			$statusType = $_POST['statusType'];
+			// $chartSql   = "SELECT * FROM `GAME_CHART` WHERE `Chart_GameID`=".$result->Link_GameID." AND Chart_Type_Status=".$statusType;
+			$chartObject  = $funObj->SelectData(array(), 'GAME_CHART', array('Chart_GameID='.$gameId, 'Chart_Type_Status='.$statusType), 'Chart_Name', '', '', '', 0);
+			?>
+			<option value="">-- Select Chart --</option>
+			<?php 
+
+			if($chartObject->num_rows > 0)
+			{
+				while($wrow = $chartObject->fetch_object()){ ?>
+					<option value="<?php echo $wrow->Chart_ID; ?>"><?php echo $wrow->Chart_Name; ?></option>
+				<?php }
+			}
+		}

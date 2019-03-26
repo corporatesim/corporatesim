@@ -28,7 +28,9 @@ $(function() {
 
     var url = window.location;
     var element = $('ul.nav a').filter(function() {
-        return this.href == url || url.href.indexOf(this.href) == 0;
+        // return this.href == url || url.href.indexOf(this.href) == 0;
+        // commenting above line and adding the below line to match the exact url
+        return this.href == url;
     }).addClass('active').parent().parent().addClass('in').parent();
     if (element.is('li')) {
         element.addClass('active');

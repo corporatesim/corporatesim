@@ -16,7 +16,7 @@ if($_SESSION['username'] == NULL)
 	header("Location:".site_root."login.php");
 }
 $functionsObj         = new Functions();
-$_SESSION['userpage'] = 'game';
+$_SESSION['userpage'] = 'selectgame';
 $uid                  = $_SESSION['userid'];
 $check_endDate        = "SELECT User_GameEndDate FROM GAME_SITE_USERS WHERE User_id=$uid";
 $res_check            = $functionsObj->ExecuteQuery($check_endDate);

@@ -14,7 +14,7 @@ $file         = 'list.php';
 //exit();
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
-{	
+{
 	$component    = implode(',',$_POST['component']);
 	$subcomponent = implode(',',$_POST['subcomponent']);
 	$chartdetails = (object) array(
@@ -71,9 +71,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 	if( !empty($_POST['game_id']) && !empty($_POST['scen_id']) && !empty($_POST['chartType']) )
 	{
 		$linkid = $_GET['edit'];
-			//echo $linkid;
 		$result = $functionsObj->UpdateData('GAME_CHART', $chartdetails, 'Chart_ID', $linkid, 0);
-			//exit();
 		if($result === true)
 		{
 			$_SESSION['msg']     = "Link updated successfully";
@@ -90,11 +88,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		}
 	}
 }
-
 // Edit Siteuser
 if(isset($_GET['edit']))
 {
-	$header       = 'Edit Chart';
+	$header       = 'Edit Chart Component';
 	$uid          = $_GET['edit'];
 	$object       = $functionsObj->SelectData(array(), 'GAME_CHART', array('Chart_ID='.$uid), '', '', '', '', 0);
 	$chartdetails = $functionsObj->FetchObject($object);
@@ -104,23 +101,21 @@ if(isset($_GET['edit']))
 elseif(isset($_GET['add']))
 {
 	// Add Siteuser
-	$header = 'Add Chart';
+	$header = 'Add Chart Component';
 	$url    = site_root."ux-admin/chartComp";
 	$file   = 'addedit.php';
 }
 elseif(isset($_GET['del']))
 {
 	// Delete Siteuser
-	$id = base64_decode($_GET['del']);
-	echo $id;
-	//exit();
+	$id                  = base64_decode($_GET['del']);
+	// echo $id; exit();
 	$result              = $functionsObj->DeleteData('GAME_CHART','Chart_ID',$id,0);
 	$_SESSION['msg']     = "Chart deleted successfully";
 	$_SESSION['type[0]'] = "inputSuccess";
 	$_SESSION['type[1]'] = "has-success";
 	header("Location: ".site_root."ux-admin/chartComp");
 	exit(0);
-
 }
 elseif(isset($_GET['stat']))
 {
@@ -158,21 +153,20 @@ elseif(isset($_GET['stat']))
 else
 {
 	// fetch siteuser list from db
-	$sql="SELECT
+	$sql = "SELECT
 	C.*,
 	(SELECT `Game_Name`  FROM  GAME_GAME WHERE  `Game_ID` = C.Chart_GameID) as Game,
 	(SELECT `Scen_Name`  FROM  GAME_SCENARIO WHERE  `Scen_ID` = C.`Chart_ScenarioID`) as Scenario
-	FROM
-	`GAME_CHART` as C where C.Chart_Type_Status=1";
+	FROM `GAME_CHART` as C where C.Chart_Type_Status=1";
 	$object = $functionsObj->ExecuteQuery($sql);
 	$file   = 'list.php';
 }
 
 // Fetch Services list
 
-$area         = $functionsObj->SelectData(array(), 'GAME_AREA', array('Area_Delete=0'), '', '', '', '', 0);
-$game         = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), '', '', '', '', 0);
-$scenario     = $functionsObj->SelectData(array(), 'GAME_SCENARIO', array('Scen_Delete=0'), '', '', '', '', 0);
+$area         = $functionsObj->SelectData(array(), 'GAME_AREA', array('Area_Delete=0'), 'Area_Name', '', '', '', 0);
+$game         = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), 'Game_Name', '', '', '', 0);
+$scenario     = $functionsObj->SelectData(array(), 'GAME_SCENARIO', array('Scen_Delete=0'), 'Scen_Name', '', '', '', 0);
 $component    = $functionsObj->SelectData(array(), 'GAME_COMPONENT', array('Comp_Delete=0'), 'Comp_Name', '', '', '', 0);
 $subcomponent = $functionsObj->SelectData(array(), 'GAME_SUBCOMPONENT', array('SubComp_Delete=0'),'SubComp_Name','','','',0);
 $formula      = $functionsObj->SelectData(array(), 'GAME_FORMULAS', array(), 'formula_title', '', '', '', 0);

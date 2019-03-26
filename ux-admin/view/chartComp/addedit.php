@@ -40,6 +40,7 @@ span.alert-danger {
 				<div class="col-md-4">
 					<select class="form-control" name="chartType" id="chartType" required>
 						<option value="">-- Select Chart Type--</option>
+
 						<option disabled >-- Pie Charts --</option>
 						<option value="simplepie" 
 						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'simplepie'){echo 'selected'; } ?>> Simple Pie Chart</option>
@@ -49,6 +50,11 @@ span.alert-danger {
 						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'multidepthpie'){echo 'selected'; } ?>>Multi-Depth Pie Chart</option>
 						<option value="sidelabelpie"
 						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'sidelabelpie'){echo 'selected'; } ?>>Side Label Layout</option>
+						<option value="threeddonutshading" 
+						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'threeddonutshading'){echo 'selected'; } ?>>3D Donut Shading</option>
+						<option value="donutChart" 
+						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'donutChart'){echo 'selected'; } ?>>Donut Chart</option>
+						
 						<option disabled>-- Bar Charts --</option>
 						<option value="simplebar"
 						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'simplebar'){echo 'selected'; } ?>>Simple Bar Chart</option>
@@ -56,23 +62,51 @@ span.alert-danger {
 						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'barlabel'){echo 'selected'; } ?>>Bar Labels</option>
 						<option value="colorbar"
 						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'colorbar'){echo 'selected'; } ?>>Multi-Color Bar Chart</option>
-						<option value="softlightbar"
-						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'softlightbar'){echo 'selected'; } ?>>Soft Bar Shading</option>
+						<option value="softbarshading"
+						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'softBarShading'){echo 'selected'; } ?>>Soft Bar Shading</option>
+						<option value="multicolorbarchartone"
+						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'multicolorbarchartone'){echo 'selected'; } ?>>Multi-Color Bar Chart (1)</option>
+						<option value="histogramwithbellcurve"
+						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'histogramwithbellcurve'){echo 'selected'; } ?>>Histogram with Bell Curve</option>
+						
 						<option disabled>-- Trending Charts --</option>
 						<option value="trendline"
 						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'trendline'){echo 'selected'; } ?>>Trend Line Chart</option>
+
+						<option disabled>-- Scatter/Bubble/Vector Charts --</option>
+						<option value="customscattersymbols"
+						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'customscattersymbols'){echo 'selected'; } ?>>Custom Scatter Symbols</option>
+						
 						<option disabled>-- Area Charts --</option>
 						<option value="simplearea"
 						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'simplearea'){echo 'selected'; } ?>>Simple Area Chart</option>
+						<option value="arealinechart"
+						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'arealinechart'){echo 'selected'; } ?>>Area Line Chart</option>
+						<option value="percentageareachart"
+						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'percentageareachart'){echo 'selected'; } ?>>Percentage Area Chart</option>
+						
 						<option disabled>-- Waterfall Charts --</option>
 						<option value="posnegwaterfall"
 						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'posnegwaterfall'){echo 'selected'; } ?>>Pos/Neg Waterfall Chart</option>
+
+						<option disabled>-- Gantt Charts --</option>
+						<option value="simpleganttchart"
+						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'simpleganttchart'){echo 'selected'; } ?>>Simple Gantt Chart</option>
+						
 						<option disabled>-- Radar Charts --</option>
 						<option value="simpleradar"
 						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'simpleradar'){echo 'selected'; } ?>>Simple Radar Chart</option>
+						<option value="multiradarchart"
+						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'multiradarchart'){echo 'selected'; } ?>>Multi Radar Chart</option>
+						
 						<option disabled>-- Cones Charts --</option>
 						<option value="cone"
 						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'cone'){echo 'selected'; } ?>>Cone Chart</option>
+
+						<option disabled>-- Pyramids/Cones/Funnels --</option>
+						<option value="rotatedpyramidchart"
+						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'rotatedpyramidchart'){echo 'selected'; } ?>>Rotated Pyramid Chart</option>
+						
 						<option disabled>-- Angular Meters/Guages --</option>
 						<option value="semicirclemeter"
 						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'semicirclemeter'){echo 'selected'; } ?>>Semicircle Meter</option>
@@ -82,8 +116,10 @@ span.alert-danger {
 					<option value="semicirclemetergreentored"
 						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'semicirclemetergreentored'){echo 'selected'; } ?>>Semicircle Meter Green To Red</option>
 						<option value="roundmetergreentored"
-						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'roundmetergreentored'){echo 'selected'; } ?>>
-					Round Meter Green To Red</option>
+						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'roundmetergreentored'){echo 'selected'; } ?>>Round Meter Green To Red</option>
+						<option value="semicircleMeterwithReadout"
+						<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'semicircleMeterwithReadout'){echo 'selected'; } ?>>Semicircle Meter with Readout</option>
+					
 					<option disabled>-- Linear Meters/Guages --</option>
 					<option value="horizontallinearmeter"
 					<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'horizontallinearmeter'){echo 'selected'; } ?>>Horizontal Linear Meter</option>
@@ -95,6 +131,7 @@ span.alert-danger {
 					<option value="verticallinearmetergreentored"
 					<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'verticallinearmetergreentored'){echo 'selected'; } ?>>
 				Vertical Linear Meter Green To Red</option>
+				
 				<option disabled>-- Bar Meters/Guages --</option>
 				<option value="horizontalbarmeter"
 				<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'horizontalbarmeter'){echo 'selected'; } ?>>Horizontal Bar Meter</option>
@@ -104,6 +141,8 @@ span.alert-danger {
 				<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'horizontalbarmetergreentored'){echo 'selected'; } ?>>Horizontal Bar Meter Green To Red</option>
 				<option value="verticalbarmetergreentored"
 				<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'verticalbarmetergreentored'){echo 'selected'; } ?>>Vertical Bar Meter Green To Red</option>
+				<option value="blackhorizontalbarmeters"
+				<?php if(isset($chartdetails->Chart_Type) && $chartdetails->Chart_Type == 'blackhorizontalbarmeters'){echo 'selected'; } ?>>Black Horizontal Bar Meters</option>
 			</select>
 		</div>
 	</div>

@@ -1,120 +1,138 @@
 <?php
 include_once '../../../config/settings.php';
 include_once doc_root.'config/functions.php';
-
+//require_once doc_root . 'ux-admin/model/model.php';
+//$functionsObj = new Model ();
+// echo 'Test message';
+// exit();
 
 $funObj      = new Functions(); // Create Object
-
 $maxFileSize = 2097152; // Set max upload file size [2MB]
-$validext    = array ('csv');  // Allowed Extensions
+$validext    = array ('xls', 'xlsx', 'csv');  // Allowed Extensions
 //$uid = $_SESSION['siteuser'];
 
+if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['name'] ) ){
+	$explode_filename = explode(".", $_FILES['upload_csv']['name']);
+	//echo $explode_filename[0];
+	//exit();
+	$ext = strtolower( end($explode_filename) );
+		//echo $ext."\n";
+	if(in_array( $ext, $validext ) ){
+		try{	
+			$file              = $_FILES['upload_csv']['tmp_name'];
+			$handle            = fopen($file, "r");
+			$not_inserted_data = array();
+			$inserted_data     = array();
+			$c                 = 0;
+			$flag              = true;
 
-function check_ext($file)
-{
-	$ext = explode('.', $file);
-	if($ext[count($ext)-1]=='csv')
-		return true;
+			while( ( $filesop = fgetcsv( $handle, 1000, "," ) ) !== false ){
+				if($flag) { $flag = false; continue; }
+					//echo $filesop[1];
+				// echo "<pre>"; print_r($filesop); exit();
+				$email    = $filesop[4];
+				$username = $filesop[2];
+				$where    = array("`User_email`='".$email."' OR `User_username`='".$username."' AND User_Delete=0 ");
+				$object   = $funObj->SelectData(array(), 'GAME_SITE_USERS', $where, '', '', '', '', 0);
+				if($object->num_rows > 0){
+						//insert email into not_inserted_data
+					array_push($not_inserted_data,$filesop[4]);
+				}
+				else
+				{
+					if( !empty($filesop) )
+					{
+						$array = array(
+							"User_fname"         =>	$filesop[0],
+							"User_lname"         =>	$filesop[1],
+							"User_username"      =>	$filesop[2],
+							"User_mobile"        =>	$filesop[3],
+							"User_email"         =>	$filesop[4],
+							"User_companyid"     =>	$filesop[5],
+							"User_games"         =>	$filesop[6],
+							"User_GameStartDate" =>	$filesop[7],
+							"User_GameEndDate"   =>	$filesop[8],
+							"User_datetime"      =>	date("Y-m-d H:i:s")
+						);
+						$result = $funObj->InsertData("GAME_SITE_USERS", $array, 0, 0);
+						$c++;
+						if($result){
+							$uid = $funObj->InsertID();
+							$to  = $filesop[6];								
+
+							$password      = $funObj->randomPassword(); 
+							$login_details = array(
+								'Auth_userid'    => $uid,
+								'Auth_username'  => $filesop[2],
+								'Auth_password'  => $password,
+								'Auth_date_time' =>	date('Y-m-d H:i:s')
+							);
+
+							$game_mapping = array(
+								'UG_UserID'        => $uid,
+								'UG_GameID'        => $filesop[6],
+								'UG_ParentId'      => -1,
+								'UG_SubParentId'   =>	-2,
+								'UG_GameStartDate' =>	$filesop[7],
+								'UG_GameEndDate'   =>	$filesop[8],
+							);
+
+							$result1 = $funObj->InsertData('GAME_USERGAMES', $game_mapping, 0, 0);
+							$result1 = $funObj->InsertData('GAME_USER_AUTHENTICATION', $login_details, 0, 0);
+							if($result1){
+								$from    = "webmaster@simulation.com";
+								$subject = "New Account created for Simulation Game";
+								$message = "Dear User";
+								$message.= "<p>Username : ".$username;
+								$message.= "<p>Password : ".$password;
+								
+								$header  = "From:" . $from . "\r\n";
+								$header .= "MIME-Version: 1.0\r\n";
+								$header .= "Content-type: text/html; charset: utf8\r\n";
+
+								// mail($to, $subject, $message, $header);
+
+								$_SESSION['msg']     = "User account created successfully";
+								$_SESSION['type[0]'] = "inputSuccess";
+								$_SESSION['type[1]'] = "has-success";
+									//header("Location: ".site_root."ux-admin/siteusers");
+									//exit(0);
+							}else{
+								$msg = "Error: ".$result1;
+									//echo $msg;
+									//exit();
+								$type[0] = "inputError";
+								$type[1] = "has-error";
+							}	 
+						}
+					}
+				}					
+			}
+				//echo $c;
+			if (!empty($not_inserted_data))
+			{
+				$msg = "</br>Email id not imported -> ".implode(" , ",$not_inserted_data);
+			}
+
+			$result = array(
+				"msg"    =>	"Import successful. You have imported ".$c." User entries.".$msg,
+				"status" =>	1
+			);
+
+		} catch (Exception $e) {
+			$result = array(
+				"msg"    =>	"Error: ".$e,
+				"status" =>	0
+			);
+		}
+	}
+	
+	//exit();	
+} else {
+	$result = array(
+		"msg"    =>	"Please select a file to import",
+		"status" =>	0
+	);
 }
 
-
-if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['name'] ) )
-{
-	
-	
-	
-	if($_FILES['upload_csv']['size']==0 || !check_ext($_FILES['upload_csv']['name'])) 
-	{
-		$_SESSION['err_msg'] = 'Please Upload CSV File Type!';
-	}
-	else 
-	{
-		$fileName     = $_FILES['upload_csv']['name']; 
-		
-		$ext          = substr(strrchr($fileName, "."), 1); 
-		
-		$array        = explode('.', $fileName);
-		
-		$first        = str_replace(' ','_',$array [0]);
-		
-		$filename_chh = $first.'-'.time().'.' . $ext;
-		
-		$path         = 'usercsvfile/'.$filename_chh;
-		
-		if(move_uploaded_file($_FILES['upload_csv']['tmp_name'], $path)) 
-		{	
-			$file = fopen($path, "r");
-
-			if($_SERVER["DOCUMENT_ROOT"] == 'C:/xampp/htdocs')
-			{
-				// for local server
-				$filename = doc_root.'/ux-admin/model/ajax/usercsvfile/'.$filename_chh;
-			}
-			else
-			{
-				//$filename = $_SERVER["DOCUMENT_ROOT"].'/organizationgames/sim/ux-admin/model/ajax/usercsvfile/'.$filename_chh;
-				$filename = $_SERVER["DOCUMENT_ROOT"].'/ux-admin/model/ajax/usercsvfile/'.$filename_chh;
-			}
-
-			/* $sql =	"LOAD DATA INFILE '".$filename."'
-					INTO TABLE `GAME_SITE_USERS`
-					FIELDS TERMINATED BY ','
-					OPTIONALLY ENCLOSED BY '\"' 
-					LINES TERMINATED BY '\n' 
-					IGNORE 1 LINES
-				   (`User_fname`,`User_lname`,`User_username`,`User_mobile`,`User_email`)
-				   ;"; */
-				   
-				   $sql = "LOAD DATA LOCAL INFILE '".$filename."'
-				   INTO TABLE GAME_SITE_USERS COLUMNS TERMINATED BY ',' IGNORE 1 LINES (User_fname,User_lname,User_username,User_mobile,User_email,User_companyid,@User_GameStartDate,@User_GameEndDate) SET User_GameStartDate = STR_TO_DATE(@User_GameStartDate, '%m/%d/%Y'), User_GameEndDate = STR_TO_DATE(@User_GameEndDate, '%m/%d/%Y');";
-				   
-				   $res = $funObj->ExecuteQuery($sql);
-				   // print_r($res); exit;
-				   if($res)
-				   {
-				   	$password = $funObj->randomPassword(); 	
-				   	$insert   = "INSERT INTO GAME_USER_AUTHENTICATION ( Auth_userid, Auth_username,Auth_password,Auth_date_time ) 
-				   	SELECT User_id, User_username, 'pwd2018', User_datetime FROM GAME_SITE_USERS
-				   	where User_csv_status = 0
-				   	ORDER BY User_id ASC ";
-				   	$resauth = $funObj->ExecuteQuery($insert);
-				   	if($resauth)
-				   	{
-				   		$update    = "UPDATE GAME_SITE_USERS SET User_csv_status=1 WHERE User_csv_status=0 ";
-				   		$resupdate = $funObj->ExecuteQuery($update);
-
-
-				   		$result = array(
-				   			"msg"    =>	"Successfully Added User CSV File!",
-				   			"status" =>	1
-				   		);
-				   	}
-				   	else
-				   	{
-				   		$result = array(
-				   			"msg"    =>	"Not insert user authentication",
-				   			"status" =>	0
-				   		);
-				   	}
-
-
-				   }
-				   else
-				   {
-				   	$result = array(
-				   		"msg"    =>	"Not insert users",
-				   		"status" =>	0
-				   	);
-				   }
-				 }
-
-				}
-
-			} else {
-				$result = array(
-					"msg"    =>	"Please select a file to import",
-					"status" =>	0
-				);
-			}
-
-			echo json_encode($result);
+echo json_encode($result);

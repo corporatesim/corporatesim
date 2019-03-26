@@ -24,11 +24,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Login')
 
 				//$access_obj = $functionsObj->SelectData(array(), 'GAME_ADMINUSERS_ACCESS', array('uid='.$result->id), "", "", "", "", 0);
 
-				$_SESSION['ux-admin-id'] = $result->id;
+				$_SESSION['ux-admin-id']    = $result->id;
 
 				//$_SESSION['admin_access'] = 1;
-				
+				$_SESSION['admin_fname']	  = $result->fname;
+				$_SESSION['admin_lname']	  = $result->lname;
 				$_SESSION['admin_usertype']	= $result->usertype;
+				$_SESSION['admin_username']	= $result->username;
 
 				header("Location:".site_root."ux-admin/Dashboard");
 				exit();

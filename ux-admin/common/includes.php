@@ -146,16 +146,16 @@ switch($_GET['q']){
 	$showfile = 'componentBranching.php';
 	break;
 
-	case 'ManageEnterprize':
-	$showfile = 'ManageEnterprize.php';
+	case 'ManageEnterprise':
+	$showfile = 'ManageEnterprise.php';
 	break;
 
-	case 'ManageSubEnterprize':
-	$showfile = 'ManageSubEnterprize.php';
+	case 'ManageSubEnterprise':
+	$showfile = 'ManageSubEnterprise.php';
 	break;
 
-	case 'ManageEntSubEntUsers':
-	$showfile = 'EntSubEnterprizeUsers.php';
+	case 'EntSubEnterpriseUsers':
+	$showfile = 'EntSubEnterpriseUsers.php';
 	break;
 
 		// Logout

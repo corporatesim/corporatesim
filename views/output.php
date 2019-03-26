@@ -1,19 +1,21 @@
 <?php 
 include_once 'includes/header.php'; 
 ?>
-<section>
+<section id="video_player">
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-9 col-md-10 no_padding"><h2 class="InnerPageHeader"><?php if(!empty($result)){ echo $result->Scenario ; }?> <!-- - Outcome --></h2></div>
         <!--<div class="col-sm-9 col-md-10 no_padding"><h2 class="InnerPageHeader"><?php if(!empty($result)){ echo $result->Game." | ".$result->Scenario ; }?> Your Output</h2></div>
         	<div class="col-sm-3 col-md-2 text-center timer">hh:mm:ss</div>-->
 
-        	<div class="clearfix"></div>
+        	<div class="clearfix output_header">
+            <button type="button" name="submit" id="submitShow" class="btn innerBtns pull-right" value="Submit" style="margin: 0.5%;">Next</button>
+          </div>
 
-        	<form method="POST" action="" id="game_frm" name="game_frm">
-        		<input type="hidden" name="ScenarioId" id="ScenarioId" value="<?php echo $result->Link_ScenarioID; ?>">
-        		<input type="hidden" name="LinkId" id="LinkId" value="<?php echo ($result->Link_ID)?$result->Link_ID:$linkid; ?>">
-        		<div class="col-sm-12 no_padding shadow">
+          <form method="POST" action="" id="game_frm" name="game_frm">
+            <input type="hidden" name="ScenarioId" id="ScenarioId" value="<?php echo $result->Link_ScenarioID; ?>">
+            <input type="hidden" name="LinkId" id="LinkId" value="<?php echo ($result->Link_ID)?$result->Link_ID:$linkid; ?>">
+            <div class="col-sm-12 no_padding shadow">
           <!--
             <div class="col-sm-6 ">
               <span style="margin-right:20px;"><a href="<?php echo $gameurl; ?>" target="_blank" class="innerPageLink">Game Description</a></span>
@@ -26,7 +28,7 @@ include_once 'includes/header.php';
             </div>-->
             <div class="col-sm-12  text-right pull-right"">
             	<!-- <button type="submit" name="submit" id="submit" class="btn innerBtns" value="Download">Download</button> -->
-            	<button type="submit" name="submit" id="submit" class="btn innerBtns" value="Submit">Next</button>
+            	<button type="submit" name="submit" id="submit" class="btn innerBtns hidden" value="Submit">Next</button>
             </div>
             
             <!-- Nav tabs --> 
@@ -358,20 +360,21 @@ include_once 'includes/header.php';
                         break;
 
                         case 'formula':
-                        $formulaSql = "SELECT input_current FROM GAME_INPUT WHERE input_sublinkid =".$row1['SubLinkID']." AND input_user=".$userid;
-                        // echo $formulaSql;
-                        $formulaCurrent = $functionsObj->ExecuteQuery($formulaSql);
-                        $formaulValue   = $functionsObj->FetchObject($formulaCurrent);
-                        if($formaulValue->input_current)
-                        {
-                          // $value = $formaulValue->input_current;
-                          $value = $row1['CURRENT'];
-                        }
+                        // $formulaSql = "SELECT input_current FROM GAME_INPUT WHERE input_sublinkid =".$row1['SubLinkID']." AND input_user=".$userid;
+                        // // echo $formulaSql;
+                        // $formulaCurrent = $functionsObj->ExecuteQuery($formulaSql);
+                        // $formaulValue   = $functionsObj->FetchObject($formulaCurrent);
+                        // if(!$formaulValue->input_current)
+                        // {
+                        //   // $value = $formaulValue->input_current;
+                        //   $value = $row1['CURRENT'];
+                        // }
+                        $value = $row1['CURRENT'];
                         break;
                         
                         default:
-                          // if the value is null then make it 0
-                        $value = $row1['CURRENT']?$row1['CURRENT']:'0';
+                        // if the value is null then make it 0
+                        $value = ($row1['CURRENT'] != '')?$row1['CURRENT']:'0';
                         break;
                       }
 
@@ -597,43 +600,43 @@ include_once 'includes/header.php';
 
                     if($length=='col-sm-6')
                     {
-                      $width="col-md-6";
-                      $width1="col-md-6";
+                      $width  = "col-md-6";
+                      $width1 = "col-md-6";
                     }
                     else
                     {
-                      $width="col-md-2";
-                      $width1="col-md-4";
+                      $width  = "col-md-2";
+                      $width1 = "col-md-4";
                     }
                     if ($row2['ShowHide'] == 0)
                     {
-                      $hidden="";
+                      $hidden = "";
                     }
                     else
                     {
-                      $hidden= "hidden";
+                      $hidden = "hidden";
                     }
 
                     switch ($row2['InputFieldOrder'])
                     {
                       case 1:
-                      $labelC="";
-                      $labelL="pull-right";
+                      $labelC = "";
+                      $labelL = "pull-right";
                       break;
 
                       case 2:
-                      $labelL="";
-                      $labelC="pull-right";
+                      $labelL = "";
+                      $labelC = "pull-right";
                       break;
 
                       case 3:
-                      $labelC="";
-                      $labelL="hidden";
+                      $labelC = "";
+                      $labelL = "hidden";
                       break;
 
                       case 4:
-                      $labelC="hidden";
-                      $labelL="";
+                      $labelC = "hidden";
+                      $labelL = "";
                       break;
                     }
                  /* if($row2['ShowHide'] == 0)
@@ -642,13 +645,13 @@ include_once 'includes/header.php';
                   }*/
                 // if component div is half length then make subcomponent div col-md-12
                   echo "<div class='".$length." subCompnent ".$hidden."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor'].";'>";
-                  echo "<div class='col-sm-2 ".$width." regular text-center".$SubcomponentName."'>";
+                  echo "<div class='col-sm-2 ".$width." regular text-center ".$SubcomponentName."'>";
                   echo $row2['SubComp_Name'];
                   echo "</div>";
-                  echo "<div class='col-sm-4 ".$cklength." no_padding".$DetailsChart."'>";
+                  echo "<div class='col-sm-4 ".$cklength." no_padding ".$DetailsChart."'>";
                   echo $row2['Description'];
                   echo "</div>";
-                  echo "<div class=' col-sm-6 ".$width1." text-center".$InputFields."'>";
+                  echo "<div class=' col-sm-6 ".$width1." text-center ".$InputFields."'>";
                   echo "<div class='InlineBox ".$labelC."'>";
                   echo "<label class='scenariaLabel'>".$row2['LabelCurrent']."</label>";
                   echo "<input type='text' id='subcomp_".$row2['SubCompID']."' name='".$row2['Area_Name']."_subc_".$row2['SubCompID']."' class='scenariaInput' readonly></input>";
@@ -668,11 +671,11 @@ include_once 'includes/header.php';
                   echo "</div>";
                   if($row2['ViewingOrder'] == 4)
                   {
-                  	echo "<div class='col-sm-2 ".$width." text-center regular'>".$row1['SubComp_Name']." </div>";
+                  	echo "<div class='col-sm-2 ".$width." text-center regular'>".$row2['SubComp_Name']." </div>";
                   }
                   if($row2['ViewingOrder'] == 6)
                   {
-                  	echo "<div class='col-sm-2 ".$width." text-center regular'>".$row1['SubComp_Name']." </div>";
+                  	echo "<div class='col-sm-2 ".$width." text-center regular'>".$row2['SubComp_Name']." </div>";
                   }
                   echo "<div class='clearfix'></div>";
                   echo "</div>";
@@ -720,6 +723,9 @@ include_once 'includes/header.php';
 		$(".removeThis").each(function(){
 			$(this).remove();
 		});
+    $('#submitShow').on('click',function(){
+      $('#submit').trigger('click');
+    });
 	});
 </script>
 </body>

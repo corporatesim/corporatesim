@@ -12,7 +12,7 @@ if($_SESSION['username'] == NULL)
 	header("Location:".site_root."login.php");
 }
 $functionsObj         = new Functions();
-$_SESSION['userpage'] = 'profile';
+$_SESSION['userpage'] = 'my_profile';
 
 $uid                  = $_SESSION['userid'];
 	//base64_decode($_GET['edit']);
@@ -20,21 +20,18 @@ $object               = $functionsObj->SelectData(array(), 'GAME_SITE_USERS', ar
 $userdetails          = $functionsObj->FetchObject($object);
 	//$url = site_root."ux-admin/index?q=siteusers";
 
-if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
-//	echo $_POST['fname'];
-//	echo $_POST['lname'];
-//	echo $_POST['mobile'];
-//	echo $_POST['email'];
-//	exit();
+if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
+{
+	// echo "<pre>"; print_r($updateArray); print_r($_FILES); exit;
 	$updateArray = array(
-		'User_fname'         =>	$_POST['fname'],
-		'User_lname'         =>	$_POST['lname'],
-		'User_mobile'        =>	$_POST['mobile'],			
-		'User_profile_video' =>	base64_encode($_POST['User_profile_video']),			
+		'User_fname'         =>	$_POST['User_fname'],
+		'User_lname'         =>	$_POST['User_lname'],
+		'User_mobile'        =>	$_POST['User_mobile'],			
+		'User_profile_video' =>	$_POST['User_profile_video'],			
 	);	
 	// echo "<pre>"; print_r($updateArray); print_r($_FILES); exit;
 
-	if(!empty($_POST['fname']) && !empty($_POST['lname'])  && !empty($_POST['mobile']))
+	if(!empty($_POST['User_fname']) && !empty($_POST['User_lname'])  && !empty($_POST['User_mobile']))
 	{
 		$error = array();
 		// if user_profile_pic or user_resume is not empty
@@ -109,7 +106,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 		$userdetails = (object)$updateArray;
 		// echo "<pre>"; print_r($userdetails); die($_POST['id']);
 
-		$uid   = $_POST['id'];
+		// $uid   = $_POST['id'];
 		$where = array(
 			"(`User_email` ='".$userdetails->User_email."'
 			OR `User_mobile` ='".$userdetails->User_mobile."')",

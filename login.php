@@ -93,12 +93,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 	}
 }
 
-if(isset($_POST['reset']) && $_POST['reset'] == "reset")
+if(isset($_POST['reset']) && $_POST['reset'] == "resetPassword")
 {
 	$registeredEmail = $funObj->EscapeString($_POST['registeredEmail']);
 	$requestSql      = " SELECT User_id FROM GAME_SITE_USERS WHERE User_email='".$registeredEmail."'";
 	$requestObj      = $funObj->ExecuteQuery($requestSql);
-	// print_r($requestObj);
+	// print_r($requestObj);exit;
 	if($requestObj->num_rows < 1)
 	{
 		$msg              = "Invalid Email ID";
@@ -117,7 +117,7 @@ if(isset($_POST['reset']) && $_POST['reset'] == "reset")
 		$passwordResult = $funObj->FetchObject($passwordObj);
 		$password       = $passwordResult->Auth_password;
 		$username       = $passwordResult->Auth_username;
-		$from           = "webmaster@simulation.com";
+		$from           = "support@corporatesim.com";
 		$subject        = "Corporate Simulation - Password Request For Account Login";
 		$message        = "<br>Dear User,<br>\r\n Your Username and Password is given below:";
 		$message       .= "<p>Username : ".$username."</p>";

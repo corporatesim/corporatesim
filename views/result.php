@@ -1,10 +1,10 @@
 <?php 
 include_once 'includes/header.php'; 
 ?>
-<section>
+<section id="video_player">
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-12 no_padding"><h2 class="InnerPageHeader">End of Game</h2></div>
+			<div class="col-sm-12 no_padding scenario_name scenario_header"><h2 class="InnerPageHeader">End of Game</h2></div>
 			<div class="clearfix"></div>
 			<div class="col-sm-12 no_padding ">
 				<div class="shadow col-sm-12">
@@ -16,7 +16,7 @@ include_once 'includes/header.php';
 						View Game Report <img src="images/reportIcon.png" alt="Report">
 						<?php 
 						// echo "<pre>"; print_r($result1); echo "</pre>";
-					// finding user company id if it is 21 then allow replay $result1->US_UserID
+						// finding user company id if it is 21 then allow replay $result1->US_UserID
 						$compSql = "SELECT User_companyid FROM GAME_SITE_USERS WHERE User_companyid = '21' AND User_id=".$result1->US_UserID;
 						$compObj = $functionsObj->ExecuteQuery($compSql);
 						if($compObj->num_rows > 0)
