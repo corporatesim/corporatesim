@@ -184,7 +184,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 		{
 			// find sublinkid from GAME_LINKAGE_SUB regarding comp or subc
 			$SubLink_CompID =  explode('_',$input_key);
-			$CompID         = $SubLink_CompID[2];
+			$CompID         = end($SubLink_CompID);
+			// $CompID      = $SubLink_CompID[2];
 			$find_sublinkId = "SELECT SubLink_ID FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID=".$linkidSession;
 			if($SubLink_CompID[1] == 'comp')
 			{
