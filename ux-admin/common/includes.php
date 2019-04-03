@@ -158,6 +158,10 @@ switch($_GET['q']){
 	$showfile = 'EntSubEnterpriseUsers.php';
 	break;
 
+	case 'addChartDetails':
+	$showfile = 'addChartDetails.php';
+	break;
+
 		// Logout
 	case 'Logout':
 	$showfile = 'logout.php';

@@ -10,7 +10,7 @@
         <div class="row">
           <div class="col-md-6 col-sm-12">
             <div class="title">
-              <h1><a href="<?php echo base_url('Enterprise/addEnterprise/');?>"><i class="fa fa-plus-circle text-blue" title="Add Enterprise"> 
+              <h1><a href="<?php echo base_url('Enterprise/addEnterprise/');?>" data-toggle="tooltip" title="Add Enterprise"><i class="fa fa-plus-circle text-blue"> 
               </i></a> Manage Enterprise</h1>
             </div>
             <nav aria-label="breadcrumb" role="navigation">
@@ -39,54 +39,72 @@
                 <div class="clearfix mb-20">
                   <div class="pull-left">
                     <h5 class="text-blue mb-20">Enterprise Details</h5>
-                    <form method="post" action="" id="filterForm">
-                      <div class="form-group row"id="selectenterprise">
-                        <label for="Select Enterprise" class="col-sm-12 col-md-4 col-form-label">Choose Filter</label>
-                        <div class="col-sm-12 col-md-8">
-                          <select name='Enterprise_ID' id='enterprise' class='form-control'>
-                            <option value=''>--Select Enterprise--</option>
-                            <?php foreach ($Enterprise as $row) { ?> <option value="<?php echo $row->Enterprise_ID;?>"<?php echo ($filterID==$row->Enterprise_ID)?'selected':'';?>><?php echo $row->Enterprise_Name; ?></option>
-                          <?php } ?> 
-                        </select>
-                      </div>
-                    </div>    
-                  </form>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <table class="stripe hover multiple-select-row data-table-export nowrap">
-                  <thead>
-                    <tr>
-                      <th class="">Enterprise Name</th>
-                      <th>CreatedBy</th>
-                      <th>CreatedOn</th>
-                      <th>UpdatedBy</th>
-                      <th>UpdatedOn</th>
-                      <th>Games</th>
-                      <th class="datatable-nosort">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php foreach ($EnterpriseDetails as 
-                      $enterprisedetails) { ?>
+                <div class="row">
+                  <table class="stripe hover multiple-select-row data-table-export nowrap">
+                    <thead>
+                      <tr>
+                        <th class="">S.No</th>
+                        <th class="">Name</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Password</th>
+                        <th>Games</th>
+                        <th>Duration(DD-MM-YYYY)</th>
+                        <!-- <th>Created By</th> -->
+                        <!-- <th>Created On</th> -->
+                        <th class="datatable-nosort">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php 
+                      $rowNum = 1;
+                      foreach ($EnterpriseDetails as $enterprisedetails)
+                      { 
+                        $address1 = ($enterprisedetails->Enterprise_Address1)?$enterprisedetails->Enterprise_Address1.'<br>':'';
+                        $address2 = ($enterprisedetails->Enterprise_Address2)?$enterprisedetails->Enterprise_Address2.'<br>':'';
+                        $province = ($enterprisedetails->Enterprise_Province)?$enterprisedetails->Enterprise_Province.', ':'';
+                        $state    = ($enterprisedetails->State_Name)?$enterprisedetails->State_Name.' ':'';
+                        $pincode  = ($enterprisedetails->Enterprise_Pincode)?$enterprisedetails->Enterprise_Pincode.'<br>':'';
+                        $country  = ($enterprisedetails->Country_Name)?'<b>'.$enterprisedetails->Country_Name.'</b>':'';
+                        $address  = $address1.$address2.$province.$state.$pincode.$country;
+                        ?>
                         <tr>
-                          <td><?php echo $enterprisedetails->Enterprise_Name; ?></td>
-                          <td><?php echo $enterprisedetails->User_Name;?>
-                        </td>
-                        <td class="table-plus"><?php
-                        echo date('Y-m-d',strtotime($enterprisedetails->Enterprise_CreatedOn));
-                        ?></td>
-                        <td class="table-plus"><?php if($enterprisedetails->Enterprise_UpdatedBy==0){ echo "NOT NOW";}else{ ?><?php echo $enterprisedetails->User_Name;}?></td>
-                        <td class="table-plus"><?php echo  $enterprisedetails->Enterprise_UpdatedOn ; ?></td>
-                        <td><a class="dropdown-item" href="<?php echo base_url('Games/assignGames/').base64_encode($enterprisedetails->Enterprise_ID).'/'.base64_encode($this->uri->segment(1));?>" title="Allocate/Deallocate Games"><?php if($enterprisedetails->gamecount>0){echo $enterprisedetails->gamecount; }else{echo "0";}?></a></td>
+                          <td>
+                            <?php echo $rowNum; ?>
+                          </td>
+                          <td>
+                            <?php echo $enterprisedetails->Enterprise_Name; ?>
+                          </td>
+                          <td>
+                            <?php echo $enterprisedetails->Enterprise_Email; ?>
+                          </td>
+                          <td>
+                            <?php echo $address; ?>
+                          </td>
+                          <td>
+                            <?php echo $enterprisedetails->Enterprise_Password; ?>
+                          </td>
+                          <td>
+                            <a class="dropdown-item" href="<?php echo base_url('Games/assignGames/').base64_encode($enterprisedetails->Enterprise_ID).'/'.base64_encode($this->uri->segment(1));?>" title="Allocate/Deallocate Games"><?php if($enterprisedetails->gamecount>0){echo $enterprisedetails->gamecount; }else{echo "0";}?></a>
+                          </td>
+                          <td>
+                            <?php echo date('d-M-y',strtotime($enterprisedetails->Enterprise_StartDate)).' <b>To</b> '.date('d-M-y',strtotime($enterprisedetails->Enterprise_EndDate));?>
+                          </td>
+                          <!-- <td><?php echo $enterprisedetails->User_Name;?></td> -->
+                          <!-- <td class="table-plus"><?php
+                          echo date('Y-m-d',strtotime($enterprisedetails->Enterprise_CreatedOn));
+                          ?>
+                        </td> -->
                         <td>
                           <div class="dropdown">
                             <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button"data-toggle="dropdown">
                               <i class="fa fa-ellipsis-h"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                              <a class="dropdown-item" href="#"><i class="fa fa-eye"></i> View</a>
-                              <a class="dropdown-item" href="<?php echo base_url('Enterprise/edit/');?><?php echo base64_encode($enterprisedetails->Enterprise_ID); ?>"title="   Edit"><i class="fa fa-pencil">
+                              <!-- <a class="dropdown-item" href="#"><i class="fa fa-eye"></i> View</a> -->
+                              <a class="dropdown-item" href="<?php echo base_url('Enterprise/edit/');?><?php echo base64_encode($enterprisedetails->Enterprise_ID); ?>" title="Edit"><i class="fa fa-pencil">
                               </i> Edit</a>
                               <a class="dropdown-item dl_btn" href="javascript:void(0);" class="btn btn-primary dl_btn" id="<?php echo 
                               $enterprisedetails->Enterprise_ID; ?>" title="Delete"><i class="fa fa-trash"></i> Delete</a>
@@ -94,7 +112,7 @@
                           </div>
                         </td>
                       </tr>
-                    <?php }?>
+                    <?php $rowNum++; } ?>
                   </tbody> 
                 </table>
               </div>
@@ -143,7 +161,7 @@
               });
             });
           </script>
-          
+
 
 
 

@@ -19,7 +19,7 @@
  					<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
  						<div class="clearfix">
  							<?php $this->load->view('components/trErMsg');?>
- 							<div class="pull-left">
+ 							<div class="col-md-6 pull-left">
  								<h4 class="text-blue">
  									<?php switch($type)
  									{
@@ -37,6 +37,10 @@
  										break;		
  									}?> </h4>
  								</div>
+ 								<div class="col-md-6 pull-right text-right">
+ 									<input type="checkbox" name="select_all" id="select_all">
+ 									<label for="name"> Select All</label>
+ 								</div>
  							</div><br>
  							<?php
  							if(count($assignGames)<1){ ?>
@@ -47,23 +51,28 @@
  							<?php }
  							else
  								{ ?>
+ 									<div class="row" id="labelNames">
+ 										<div class="col-md-4">
+ 											<label for="name"><span class="alert-danger">*</span>Select Games</label>
+ 										</div>
+ 										<div class="col-md-3">
+ 											<label for="name"><span class="alert-danger">*</span>Start Date</label>
+ 										</div>
+ 										<div class="col-md-3">
+ 											<label for="name"><span class="alert-danger">*</span>End Date</label>
+ 										</div>
+ 										<div class="col-md-2">
+ 											<label for="name">Replay Count (Unlimited -1)</label>
+ 										</div>
+ 									</div>
  									<form action="" method="post" enctype="multipart/form-data">
- 										<div class="form-group row">
- 											<div class="col-md-6">
- 												<label for="name"><span class="alert-danger">*</span>Select Games</label>
- 											</div>
- 											<div class="col-md-6">
- 												<input type="checkbox" name="select_all" id="select_all">
- 												<label for="name"> Select All</label>
- 											</div>
- 										</div><br>
  										<?php foreach ($assignGames as $games) { ?>
  											<div class="form-group row" id="addGames<?php echo $games->Game_ID;?>">
  												<?php switch($type)
  												{
  													case 'Enterprise':												
- 													$GameStartDate = $games->Enterprise_GameStartDate;
- 													$GameEndDate   = $games->Enterprise_GameEndDate;
+ 													$GameStartDate = $games->Enterprise_StartDate;
+ 													$GameEndDate   = $games->Enterprise_EndDate;
  													$ReplayCount   = 0;
  													if($games->Game_ID == $games->EG_GameID)
  													{
@@ -79,16 +88,16 @@
  														$checked = ' ';
  														if($checked)
  														{
- 															$startDate = $games->Enterprise_GameStartDate;;
- 															$endDate   = $games->Enterprise_GameEndDate;
+ 															$startDate = $games->Enterprise_StartDate;;
+ 															$endDate   = $games->Enterprise_EndDate;
  														}
  													}
  													break;
 
  													case 'SubEnterprise':
  													echo "<input type='hidden' name='EnterpriseID' value=' $games->SubEnterprise_EnterpriseID'>";
- 													$GameStartDate = $games->EG_Game_Start_Date;
- 													$GameEndDate   = $games->EG_Game_End_Date;
+ 													$GameStartDate = $games->SubEnterprise_StartDate;
+ 													$GameEndDate   = $games->SubEnterprise_EndDate;
  													$ReplayCount   = 0;
 
  													if($games->EG_GameID == $games->SG_GameID)
@@ -140,8 +149,8 @@
  													case 'SubEnterpriseUsers':
  													echo "<input type='hidden' name='Enterprise_ID' value=' $games->SubEnterprise_EnterpriseID'>";
  													echo "<input type='hidden' name='SubEnterprise_ID' value=' $games->SubEnterprise_ID'>";
- 													$GameStartDate = $games->SG_Game_Start_Date;
- 													$GameEndDate   = $games->SG_Game_End_Date; 
+ 													$GameStartDate = $games->SubEnterprise_StartDate;
+ 													$GameEndDate   = $games->SubEnterprise_EndDate; 
  													$ReplayCount   = $games->UG_ReplayCount;
 
  													if($games->SG_GameID == $games->UG_GameID) 
@@ -193,36 +202,36 @@
  										<button type="submit" class="btn btn-primary" name="submit" value="submit" id="submit">SUBMIT</button>
  										<?php if($type=='Enterprise'){?>
  											<a href="<?php echo base_url('Enterprise/');?>" class="btn btn-primary ">CANCEL</a>
- 											<?php } elseif($type=='SubEnterprise')
- 											{?><a href="<?php echo base_url('SubEnterprise/');?>" class="btn btn-primary ">CANCEL</a>
- 										<?php }else{?>
- 											<a href="<?php echo base_url('Users/').base64_decode($this->uri->segment(4));?>" class="btn btn-primary ">CANCEL</a>
- 										<?php }?>				
- 									</div>
- 								</form>
- 							<?php } ?>
- 						</div>
- 						<div class="clearfix"></div>
+ 										<?php } elseif($type=='SubEnterprise')
+ 										{?><a href="<?php echo base_url('SubEnterprise/');?>" class="btn btn-primary ">CANCEL</a>
+ 									<?php }else{?>
+ 										<a href="<?php echo base_url('Users/').base64_decode($this->uri->segment(4));?>" class="btn btn-primary ">CANCEL</a>
+ 									<?php }?>				
+ 								</div>
+ 							</form>
+ 						<?php } ?>
  					</div>
+ 					<div class="clearfix"></div>
  				</div>
  			</div>
  		</div>
- 		<script type="text/javascript">
- 			$(document).ready(function(){
- 				$('#select_all').click(function(i,e){
- 					if($(this).is(':checked'))
- 					{
- 						$('input[type=checkbox]').each(function(i,e){
- 							$(this).prop('checked',true);
- 						});
- 					}
- 					else
- 					{
- 						$('input[type=checkbox]').each(function(i,e){
- 							$(this).prop('checked',false);
- 						});
- 					}
- 				});
+ 	</div>
+ 	<script type="text/javascript">
+ 		$(document).ready(function(){
+ 			$('#select_all').click(function(i,e){
+ 				if($(this).is(':checked'))
+ 				{
+ 					$('input[type=checkbox]').each(function(i,e){
+ 						$(this).prop('checked',true);
+ 					});
+ 				}
+ 				else
+ 				{
+ 					$('input[type=checkbox]').each(function(i,e){
+ 						$(this).prop('checked',false);
+ 					});
+ 				}
  			});
- 		</script>
+ 		});
+ 	</script>
 

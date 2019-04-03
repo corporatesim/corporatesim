@@ -49,22 +49,75 @@
 <script type="text/javascript">
 	$('document').ready(function()
 	{
-		$('.datepicker-here').each(function(i,e){
-			var startDate   = new Date($(this).data('startdate')*1000);
-			var endDate     = new Date($(this).data('enddate')*1000);
-			var currentDate = new Date($(this).data('value')*1000);
-			var selDate     = $(e).datepicker().data('datepicker');
-			selDate.selectDate(currentDate);
-			// alert(currentDate);
-			$(this).datepicker({
-				minDate    : startDate,
-				maxDate    : endDate,
-				autoClose  : true,
-				clearButton: true,
-				setDate    : new Date(),
-				// todayButton: new Date(),
-			});
+		// set date range while createing the subenterprise accordingly
+		$('#enterprise').on('change',function(){
+			var Enterprise_ID = $(this).val();
+			$.ajax({
+				url     : "<?php echo base_url('Ajax/get_dateRange/')?>"+Enterprise_ID,
+				type    : 'POST',
+				dataType: 'json',
+				// data    : {param1: 'value1'},
+				success: function(result)
+				{
+					if(result == 'no')
+					{
+						console.log(result);
+					}
+					else
+					{
+						// console.log(result.Enterprise_StartDate+' '+result.Enterprise_EndDate);
+						$('#SubEnterprise_StartDate').data('startdate', result.Enterprise_StartDate);
+						$('#SubEnterprise_StartDate').data('enddate', result.Enterprise_EndDate);
+						$('#SubEnterprise_EndDate').data('startdate', result.Enterprise_StartDate);
+						$('#SubEnterprise_EndDate').data('enddate', result.Enterprise_EndDate);
+						// set the data attribute value here and then call datepickerBindHere()
+						datepickerBindHere();
+					}
+				}
+			})
 		});
+
+		// add country change function
+		$('#country').on('change',function(){
+			var stateid    = $('#state').data('stateid');
+			var Country_Id = $(this).val();
+			var options    = "<option>--Select State--</option>";
+			if(!Country_Id)
+			{
+				alert('Please Select Country.');
+				return false;
+			}
+			$.ajax({
+				url     : "<?php echo base_url('Ajax/get_states/')?>"+Country_Id,
+				type    : 'POST',
+				dataType: 'json',
+				// data    : {param1: 'value1'},
+				success: function(result)
+				{
+					if(result == 'no')
+					{
+						alert('Please Select Country.');
+					}
+					else if(result == 'nos')
+					{
+						alert('Threre are no states regarding the selected country');
+					}
+					else
+					{
+						$.each(result, function (index, val){
+							options += "<option value='"+result[index].State_Id+"'>"+result[index].State_Name+"</option>"
+						});
+						$('#state').html(options);
+						if(stateid)
+						{
+							$('#state').val(stateid);
+						}
+					}
+				}
+			})			
+		});
+		// end of adding country state on change
+		datepickerBindHere();
 
 		$('.data-table').DataTable({
 			scrollCollapse: true,
@@ -81,6 +134,27 @@
 			},
 		});
 	});
+	// add datepicker here
+	function datepickerBindHere()
+	{
+		$('.datepicker-here').each(function(i,e){
+			var startDate   = new Date($(this).data('startdate')*1000);
+			var endDate     = new Date($(this).data('enddate')*1000);
+			var currentDate = new Date($(this).data('value')*1000);
+			var selDate     = $(e).datepicker().data('datepicker');
+			selDate.selectDate(currentDate);
+			// console.log($(this).data('startdate')*1000+' '+$(this).data('enddate')*1000);
+			$(this).datepicker({
+				minDate    : startDate,
+				maxDate    : endDate,
+				autoClose  : true,
+				clearButton: true,
+				setDate    : new Date(),
+				// todayButton: new Date(),
+			});
+		});
+	}
+	// datepicker ends here
 	$('.data-table-export').DataTable({
 		scrollCollapse: true,
 		autoWidth     : false,

@@ -143,12 +143,14 @@ span.alert-danger {
               if(result.trim() != 'no link')
               {
                 result = JSON.parse(result)
+               // console.log(result)
                 $(result).each(function(index,e)
                 {
-                  //console.log(index);
-                  option += ('<option value='+result.Scen_ID+' data-linkid='+result.linkid+' data-scenarioname="'+result.Scen_Name+'">'+result.Scen_Name+'</option>');
+               // console.log(index);
+                /*  option += ('<option value='+result.Scen_ID+' data-linkid='+result.linkid+' data-scenarioname="'+result.Scen_Name+'">'+result.Scen_Name+'</option>');*/
+                 option += ('<option value='+result[index].Scen_ID+' data-linkid='+result[index].linkid+' data-scenarioname="'+result[index].Scen_Name+'">'+result[index].Scen_Name+'</option>');
                 });
-               // console.log(option);
+             // console.log(option);
                $('#game_scenario').html(option);
              }
              else

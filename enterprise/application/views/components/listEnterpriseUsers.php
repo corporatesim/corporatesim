@@ -10,7 +10,7 @@
 				<div class="row">
 					<div class="col-md-6 col-sm-12">
 						<div class="title">
-							<h1><a href="<?php echo base_url('Users/addUsers/');?>"><i class="fa fa-plus-circle text-blue" title="Add Enterprise"> 
+							<h1><a href="<?php echo base_url('Users/addUsers/');?>" data-toggle="tooltip" title="Add User"><i class="fa fa-plus-circle text-blue"> 
               </i></a> Enterprise Users</h1>
 						</div>
 						<nav aria-label="breadcrumb" role="navigation">
@@ -47,10 +47,11 @@
 									<table class="stripe hover multiple-select-row data-table-export nowrap">
 										<thead>
 											<tr>
-												<!-- <th>Sr.No.</th> -->
+												<th>Sr.No.</th>
 												<th>Enterprise</th>
 												<th class="table-plus">UserName</th>
 												<th>Email</th>
+												<th>Password</th>
 												<th>Contact</th>
 												<th class="datatable-nosort">Games</th>
 												<th class="datatable-nosort">Action</th>
@@ -60,11 +61,12 @@
 											<?php $i=1;
 											foreach ($enterpriseusersDetails as $enterpriseusersDetails) { ?>
 												<tr>
-													<!-- 	<td><?php echo $i; ?></td> -->
+														<td><?php echo $i; ?></td>
 													<td class="table-plus"><?php echo $enterpriseusersDetails->Enterprise_Name ; ?></td>
 													<td><?php echo $enterpriseusersDetails->User_username;?>
 												</td>
 												<td ><?php echo $enterpriseusersDetails->User_email; ?></td>
+												<td ><?php echo $enterpriseusersDetails->password; ?></td>
 												<td><?php echo $enterpriseusersDetails->User_mobile; ?></td>
 												<td>
 													<a href="<?php echo base_url('Games/assignGames/');?>

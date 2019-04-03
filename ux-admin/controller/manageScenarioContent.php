@@ -96,6 +96,7 @@ if(isset($_GET['Delete'])){
 }
 
 $id = base64_decode($_GET['Edit']);
+
 $fields = array();
 $where  = array('ScenGen_Delete = 0','ScenGen_ScenID='.$id);
 $object = $functionsObj->SelectData($fields, 'GAME_SCENGENERAL', $where, '', '', '', '', 0);

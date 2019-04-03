@@ -10,7 +10,7 @@
         <div class="row">
           <div class="col-md-6 col-sm-12">
             <div class="title">
-              <h1><a href="<?php echo base_url('SubEnterprise/addSubEnterprise/');?>"><i class="fa fa-plus-circle text-blue" title="Add SubEnterprise"> 
+              <h1><a href="<?php echo base_url('SubEnterprise/addSubEnterprise/');?>" data-toggle="tooltip" title="Add SubEnterprise"><i class="fa fa-plus-circle text-blue"> 
               </i></a> Manage SubEnterprise</h1>
             </div>
             <nav aria-label="breadcrumb" role="navigation">
@@ -69,92 +69,97 @@
               <table class="stripe hover multiple-select-row data-table-export nowrap">
                 <thead>
                   <tr>
+                    <th class="">S.No</th>
                     <th class="">Enterprise Name</th>
                     <th class="">SubEnterprise Name</th>
-                    <th>CreatedBy</th>
-                    <th>CreatedOn</th>
-                    <th>UpdatedBy</th>
-                    <th>UpdatedOn</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Password</th>
                     <th>Games</th>
+                    <th>Duration</th>
                     <th class="datatable-nosort">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <?php foreach ($subEnterpriseDetails as $subEnterpriseDetails) { ?>
+                  <?php
+                  $rowNum = 1;
+                  foreach ($subEnterpriseDetails as $subEnterpriseDetails){
+                    ?>
                     <tr>
+                      <td>
+                        <?php echo $rowNum; ?>
+                      </td>
                       <td><?php echo $subEnterpriseDetails->Enterprise_Name; ?></td>
                       <td><?php echo $subEnterpriseDetails->SubEnterprise_Name; ?></td>
-                      <td><?php if($subEnterpriseDetails->SubEnterprise_Owner==1){
-                        echo $subEnterpriseDetails->fname.' '.$subEnterpriseDetails->lname;
-                      }else{ echo $subEnterpriseDetails->User_fname.' '.$subEnterpriseDetails->User_lname;}?>
-                    </td>
-                    <td class="table-plus"><?php echo $subEnterpriseDetails->SubEnterprise_CreatedOn ; ?></td>
-                    <td><?php if($subEnterpriseDetails->SubEnterprise_UpdatedBy==$subEnterpriseDetails->User_id){echo $subEnterpriseDetails->User_fname.' '.$subEnterpriseDetails->User_lname;}else if($subEnterpriseDetails->SubEnterprise_UpdatedBy==$subEnterpriseDetails->id){echo $subEnterpriseDetails->fname.' '.$subEnterpriseDetails->lname;}else{echo "NOT NOW";}?> </td>
-                    <td><?php if(!empty($subEnterpriseDetails->SubEnterprise_UpdatedOn))
-                    { echo $subEnterpriseDetails->SubEnterprise_UpdatedOn;
-                    }else {echo "NOT NOW" ;} ?></td>
-                    <td><a class="dropdown-item" href="<?php echo base_url('Games/assignGames/');?><?php echo base64_encode($subEnterpriseDetails->SubEnterprise_ID).'/'.base64_encode($this->uri->segment(1)); ?>" title="Allocate/Deallocate Games"><?php echo $subEnterpriseDetails->gamecount; ?></a></td>
-                    <td>
-                      <div class="dropdown">
-                        <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                          <i class="fa fa-ellipsis-h"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#"><i class="fa fa-eye"></i> View</a>
-                          <a class="dropdown-item" href="<?php echo base_url('SubEnterprise/edit/');?><?php echo base64_encode($subEnterpriseDetails->SubEnterprise_ID); ?>"title="   Edit"><i class="fa fa-pencil">
-                          </i> Edit</a>
-                          <!-- <a class="dropdown-item" href="<?php //echo base_url('SubEnterprise/assignGames/');?><?php //echo base64_encode($subEnterpriseDetails->SubEnterprise_ID); ?>" title="Allocate/Deallocate Games"><i class="fa fa-gamepad"></i> Allocate/Deallocate Games</a> -->
-                          <a class="dropdown-item dl_btn" href="javascript:void(0);" class="btn btn-primary dl_btn" id="<?php echo 
-                          $subEnterpriseDetails->SubEnterprise_ID; ?>" title="Delete"><i class="fa fa-trash"></i> Delete</a>
+                      <td><?php echo $subEnterpriseDetails->SubEnterprise_Email; ?></td>
+                      <td><?php echo $subEnterpriseDetails->SubEnterprise_Address1; ?></td>
+                      <td><?php echo $subEnterpriseDetails->SubEnterprise_Password; ?></td>
+                      <td>
+                        <a class="dropdown-item" href="<?php echo base_url('Games/assignGames/');?><?php echo base64_encode($subEnterpriseDetails->SubEnterprise_ID).'/'.base64_encode($this->uri->segment(1)); ?>" title="Allocate/Deallocate Games"><?php echo $subEnterpriseDetails->gamecount; ?></a>
+                      </td>
+                      <td><?php echo date('d-M-y',strtotime($subEnterpriseDetails->SubEnterprise_StartDate)).' <b>To</b> '.date('d-M-y',strtotime($subEnterpriseDetails->SubEnterprise_EndDate));?></td>
+                      <td>
+                        <div class="dropdown">
+                          <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                            <i class="fa fa-ellipsis-h"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#"><i class="fa fa-eye"></i> View</a>
+                            <a class="dropdown-item" href="<?php echo base_url('SubEnterprise/edit/');?><?php echo base64_encode($subEnterpriseDetails->SubEnterprise_ID); ?>"title="   Edit"><i class="fa fa-pencil">
+                            </i> Edit</a>
+                            <!-- <a class="dropdown-item" href="<?php //echo base_url('SubEnterprise/assignGames/');?><?php //echo base64_encode($subEnterpriseDetails->SubEnterprise_ID); ?>" title="Allocate/Deallocate Games"><i class="fa fa-gamepad"></i> Allocate/Deallocate Games</a> -->
+                            <a class="dropdown-item dl_btn" href="javascript:void(0);" class="btn btn-primary dl_btn" id="<?php echo 
+                            $subEnterpriseDetails->SubEnterprise_ID; ?>" title="Delete"><i class="fa fa-trash"></i> Delete</a>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                  </tr>
-                <?php }?>
-              </tbody>
-            </table>
+                      </td>
+                    </tr>
+                    <?php
+                    $rowNum++; } ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div id="Modal_Bulkupload" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Import Success</h4>
-            </div>
-            <div class="modal-body">
-              <p id="bulk_u_msg"></p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Modal -->
-      <div id="Modal_BulkuploadError" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title"></h4>
-            </div>
-            <div class="modal-body">
-              <p id="bulk_u_err"></p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <div id="Modal_Bulkupload" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Import Success</h4>
+                </div>
+                <div class="modal-body">
+                  <p id="bulk_u_msg"></p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+          <!-- Modal -->
+          <div id="Modal_BulkuploadError" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                  <p id="bulk_u_err"></p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
-      <script type="text/javascript">
-        $(document).ready(function(){
+          <script type="text/javascript">
+            $(document).ready(function(){
           //select subenterprize
           $('#subenterprise').on('change',function(){
             $('#filterForm').submit();

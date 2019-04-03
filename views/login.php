@@ -65,7 +65,7 @@ include_once 'includes/header.php';
 		<div class="row hidden" id="forgotPassword"><br><br>
 			<br><br>
 			<form role="form" method="post" action="">				
-				<div class="col-sm-8 col-md-6 loginBg col-sm-offset-2 col-md-offset-3">
+				<div class="col-sm-8 col-md-6 loginBg col-sm-offset-2 col-md-offset-3" style="background:#ffffff;height:320px;margin-top:7%;padding-top:10px;">
 					<div class="col-sm-12 text-center">
 						<h1 class="pageHeadLine text-primary">Forgot Password</h1>
 					</div>

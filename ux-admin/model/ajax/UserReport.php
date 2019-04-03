@@ -13,12 +13,21 @@ $funObj = new Model(); // Create Object
 if($_POST['action'] == 'game_scenario')
 {
 	$Game_ID = $_POST['Game_ID'];
+	//die($Game_ID);
 	$sql     = "SELECT gl.Link_ID AS linkid, gl.Link_ScenarioID AS Scen_ID, gc.Scen_Name FROM `GAME_LINKAGE` gl LEFT JOIN GAME_GAME gm ON gm.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gc ON gc.Scen_ID = gl.Link_ScenarioID WHERE gl.Link_GameID = $Game_ID";
 	// die($sql);
 	$Object = $funObj->ExecuteQuery($sql);
 	if($Object->num_rows > 0)
 	{
-		$result = mysqli_fetch_object($Object);
+		//$result = mysqli_fetch_object($Object);
+		
+		//$result = array();
+		while($data = $Object->fetch_object()){
+		/*	$linkid = $data->linkid;
+			$scenid = $data->Scen_ID;
+			$scenname = $data->Scen_Name;*/
+			$result[]=$data;
+		}
 		echo json_encode($result);
 	}
 	else

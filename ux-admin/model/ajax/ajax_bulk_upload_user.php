@@ -42,6 +42,13 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 				{
 					if( !empty($filesop) )
 					{
+						//convert the date format 
+						$date = $filesop[7];
+						$GameStartDate = date("Y-m-d", strtotime($date));
+
+            $newdate = $filesop[8];
+						$GameEndDate = date("Y-m-d", strtotime($newdate));
+						
 						$array = array(
 							"User_fname"         =>	$filesop[0],
 							"User_lname"         =>	$filesop[1],
@@ -50,8 +57,8 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 							"User_email"         =>	$filesop[4],
 							"User_companyid"     =>	$filesop[5],
 							"User_games"         =>	$filesop[6],
-							"User_GameStartDate" =>	$filesop[7],
-							"User_GameEndDate"   =>	$filesop[8],
+						  "User_GameStartDate" => $GameStartDate,
+							"User_GameEndDate"   => $GameEndDate,
 							"User_datetime"      =>	date("Y-m-d H:i:s")
 						);
 						$result = $funObj->InsertData("GAME_SITE_USERS", $array, 0, 0);
@@ -67,20 +74,32 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 								'Auth_password'  => $password,
 								'Auth_date_time' =>	date('Y-m-d H:i:s')
 							);
-
-							$game_mapping = array(
+  
+						 	$game_mapping = array(
 								'UG_UserID'        => $uid,
 								'UG_GameID'        => $filesop[6],
 								'UG_ParentId'      => -1,
 								'UG_SubParentId'   =>	-2,
-								'UG_GameStartDate' =>	$filesop[7],
-								'UG_GameEndDate'   =>	$filesop[8],
+								'UG_GameStartDate' => $GameStartDate,
+								'UG_GameEndDate'   =>	$GameEndDate
 							);
+							$getdata = explode(',',$filesop[6]);
+							$total = count($getdata);
+							if($total>1)
+							{
+								for ($i=0; $i<$total; $i++) {
+									$game_mapping['UG_GameID'] = $getdata[$i]; 
+								 $result1 = $funObj->InsertData('GAME_USERGAMES', $game_mapping, 0, 0);
+								}
+							}
 
+               else
+               {
 							$result1 = $funObj->InsertData('GAME_USERGAMES', $game_mapping, 0, 0);
+						   }
 							$result1 = $funObj->InsertData('GAME_USER_AUTHENTICATION', $login_details, 0, 0);
 							if($result1){
-								$from    = "webmaster@simulation.com";
+								$from    = "support@corporatesim.com";
 								$subject = "New Account created for Simulation Game";
 								$message = "Dear User";
 								$message.= "<p>Username : ".$username;

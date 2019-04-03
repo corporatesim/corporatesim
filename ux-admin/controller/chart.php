@@ -91,6 +91,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 // Edit Siteuser
 if(isset($_GET['edit']))
 {
+	$chartSql     = "SELECT gcl.List_ID,gcl.List_Name,gcl.List_Value,gcl.List_TitleId,gct.Title_Name FROM GAME_CHART_LIST gcl LEFT JOIN GAME_CHART_TITLE gct ON gct.Title_ID=gcl.List_TitleId WHERE gcl.List_Status=0 ORDER BY `gcl`.`List_TitleId` ASC";
+	$chartList    = $functionsObj->ExecuteQuery($chartSql);
 	$header       = 'Edit Chart Sub-Component';
 	$uid          = $_GET['edit'];
 	$object       = $functionsObj->SelectData(array(), 'GAME_CHART', array('Chart_ID='.$uid), '', '', '', '', 0);
@@ -100,10 +102,12 @@ if(isset($_GET['edit']))
 }
 elseif(isset($_GET['add']))
 {
+	$chartSql  = "SELECT gcl.List_ID,gcl.List_Name,gcl.List_Value,gcl.List_TitleId,gct.Title_Name FROM GAME_CHART_LIST gcl LEFT JOIN GAME_CHART_TITLE gct ON gct.Title_ID=gcl.List_TitleId WHERE gcl.List_Status=0 ORDER BY `gcl`.`List_TitleId` ASC";
+	$chartList = $functionsObj->ExecuteQuery($chartSql);
 	// Add Siteuser
-	$header = 'Add Chart Sub-Component';
-	$url    = site_root."ux-admin/chart";
-	$file   = 'addedit.php';
+	$header    = 'Add Chart Sub-Component';
+	$url       = site_root."ux-admin/chart";
+	$file      = 'addedit.php';
 }
 elseif(isset($_GET['del']))
 {

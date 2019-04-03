@@ -173,8 +173,8 @@ public function editPassword($id)
 //random password generate for user
  function random_password() 
  {
-   $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-   $password = array(); 
+   $alphabet     = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+   $password     = array(); 
    $alpha_length = strlen($alphabet) - 1; 
    for ($i = 0; $i < 8; $i++) 
    {
@@ -196,8 +196,9 @@ public function deleteRecords($tableName=NULL,$where=NULL)
 public function updateRecords($tableName=NULL,$data=NULL,$where=NULL)
 {
   $this->db->where($where);
-  $this->db->update($tableName,$data);
-  return $this->db->last_query();
+  $affectedRows = $this->db->update($tableName,$data);
+  // print_r($this->db->last_query()); exit();
+  return $affectedRows;
 }
 
 }

@@ -60,7 +60,7 @@
 						<div class="form-group text-center">
 							<?php if(isset($_GET['tab'])){ ?>
 								<button class="btn btn-primary" type="submit" name="submit" value="Update">Update</button>
-								<button class="btn btn-primary" type="button" onclick="window.location='<?php echo site_root."ux-admin/ManageScenarioContent"; ?>';">Cancel</button>
+								<button class="btn btn-primary" type="button" onclick="history.back();">Cancel</button>
 							<?php }else{ ?>
 								<button class="btn btn-primary" id="submit" type="submit" name="submit" value="Submit">Submit</button>
 							<?php } ?>								

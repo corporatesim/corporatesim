@@ -38,7 +38,7 @@ class Users extends CI_Controller {
 			$this->session->set_flashdata('er_msg', 'You do not have the permission to access <b>'.$this->uri->segment(2).'</b> page');
 			redirect('Users/SubEnterpriseUsers');
 		}
-		$query = "SELECT gu.*, ge.*,(SELECT count(UG_GameID) FROM GAME_USERGAMES WHERE UG_UserID = gu.User_id) AS gameCount FROM GAME_SITE_USERS gu LEFT JOIN GAME_ENTERPRISE ge ON gu.User_ParentId = ge.Enterprise_ID ";
+		$query = "SELECT gu.*, gua.Auth_password AS password, ge.*,(SELECT count(UG_GameID) FROM GAME_USERGAMES WHERE UG_UserID = gu.User_id) AS gameCount FROM GAME_SITE_USERS gu LEFT JOIN GAME_ENTERPRISE ge ON gu.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_USER_AUTHENTICATION gua ON gua.Auth_userid = gu.User_id";
 		if($this->session->userdata('loginData')['User_Role']!=1)
 		{
 			// it means user is not enterprise
@@ -59,7 +59,7 @@ class Users extends CI_Controller {
 	{
 		$where         = array();
 		$RequestMethod = $this->input->server('REQUEST_METHOD');
-		$query         = "SELECT gu.*, gs.*, ge.*,(SELECT count(UG_GameID) FROM GAME_USERGAMES WHERE UG_UserID = gu.User_id) AS gameCount FROM GAME_SITE_USERS AS gu LEFT JOIN GAME_SUBENTERPRISE AS gs ON gu.User_SubParentId = gs.SubEnterprise_ID LEFT JOIN GAME_ENTERPRISE AS ge ON gu.User_ParentId = ge.Enterprise_ID WHERE User_Delete = 0 AND User_Role = 2";
+		$query         = "SELECT gu.*, gua.Auth_password AS password, gs.*, ge.*,(SELECT count(UG_GameID) FROM GAME_USERGAMES WHERE UG_UserID = gu.User_id) AS gameCount FROM GAME_SITE_USERS AS gu LEFT JOIN GAME_SUBENTERPRISE AS gs ON gu.User_SubParentId = gs.SubEnterprise_ID LEFT JOIN GAME_ENTERPRISE AS ge ON gu.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_USER_AUTHENTICATION gua ON gua.Auth_userid = gu.User_id WHERE User_Delete = 0 AND User_Role = 2";
 		if($this->session->userdata('loginData')['User_Role'] == 1)
 		{
 			// it means enterprise is logged in = only dependent subent users

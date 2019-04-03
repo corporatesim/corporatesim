@@ -14,7 +14,7 @@ $validext    = array ('xls', 'xlsx', 'csv');  // Allowed Extensions
 if( isset( $_FILES['updategame_csv']['name'] ) && !empty( $_FILES['updategame_csv']['name'] ) )
 {
 	$explode_filename = explode(".", $_FILES['updategame_csv']['name']);
-	//echo $explode_filename[0];
+	//print_r($explode_filename);
 	//exit();
 	$ext = strtolower( end($explode_filename) );
 		//echo $ext."\n";
@@ -44,17 +44,26 @@ if( isset( $_FILES['updategame_csv']['name'] ) && !empty( $_FILES['updategame_cs
 					{
 						$objectgame = $object->fetch_object();
 						$gameids    = $objectgame->User_games;
+						//echo $gameids;exit;
 						$gameidsval = array(
 							"User_games"	=>	$gameids.$filesop[1].',',
 							"User_status"	=>	$filesop[2],
 						);
+						//print_r($gameidsval);exit;
 						// $result = $funObj->UpdateData('GAME_SITE_USERS', $gameidsval, 'User_id', $uid, 0);
 						// adding this function to replace the above commented function for bulk upload for user game values
-						$result = $funObj->UpdateGame('GAME_SITE_USERS', $gameidsval, 'User_id', $uid, 0);
+					/*	$result = $funObj->UpdateGame('GAME_SITE_USERS', $gameidsval, 'User_id', $uid, 0);
+						echo $result;exit;*/
+						$result1 = "UPDATE GAME_SITE_USERS SET User_games = CONCAT(User_games,',','$gameid') WHERE User_id = $uid";
+            $result = $funObj->ExecuteQuery($result1);
+
 						if($result){
 							$gamedetails = (object) array(
-								'UG_UserID' => $uid,
-								'UG_GameID'	=> $gameid
+								'UG_UserID'        => $uid,
+								'UG_GameID'        => $gameid,
+								'UG_ParentId'      => -1,
+								'UG_SubParentId'   => -2
+							
 							);	
 							$result              = $funObj->InsertData('GAME_USERGAMES', $gamedetails, 0, 0);	
 							$_SESSION['msg']     = "User game updated successfully";

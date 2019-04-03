@@ -44,33 +44,8 @@ class Enterprise extends CI_Controller {
 		);
 		$Enterprise            = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where,'','Enterprise_Name');
 		$content['Enterprise'] = $Enterprise;
-
-		$RequestMethod         = $this->input->server('REQUEST_METHOD');
-		if($RequestMethod == 'POST')
-		{  
-			//apply filter for select Enterprise
-			$filterID = $this->input->post('Enterprise_ID');	
-			//print_r($filterID); exit();	
-		}
-		if(!empty($filterID))
-		{
-			$query = "SELECT ge.*,concat(ga.fname,' ',ga.lname) AS User_Name,(SELECT count(*) FROM GAME_ENTERPRISE_GAME WHERE EG_EnterpriseID = ge.Enterprise_ID) as gamecount FROM GAME_ENTERPRISE ge LEFT JOIN GAME_ADMINUSERS ga ON ge.Enterprise_CreatedBy=ga.id WHERE Enterprise_ID = $filterID AND Enterprise_Status = 0";
-		}
-		else
-		{
-			$query = "SELECT ge.*,concat(ga.fname,' ',ga.lname) AS User_Name,(SELECT count(*) FROM GAME_ENTERPRISE_GAME WHERE EG_EnterpriseID = ge.Enterprise_ID) as gamecount FROM GAME_ENTERPRISE ge LEFT JOIN GAME_ADMINUSERS ga ON ge.Enterprise_CreatedBy=ga.id WHERE Enterprise_Status = 0";
-		}
-		$result = $this->Common_Model->executeQuery($query);
-		//print_r($result);exit();
-		if(!empty($filterID))
-		{
-			$filterID = $filterID;
-		}
-		else
-		{
-			$filterID = '-1';
-		}
-		$content['filterID']          = $filterID;
+		$query                 = "SELECT ge.*,concat(ga.fname,' ',ga.lname) AS User_Name, gc.Country_Name, gs.State_Name ,(SELECT count(*) FROM GAME_ENTERPRISE_GAME WHERE EG_EnterpriseID = ge.Enterprise_ID) as gamecount FROM GAME_ENTERPRISE ge LEFT JOIN GAME_ADMINUSERS ga ON ge.Enterprise_CreatedBy=ga.id LEFT JOIN GAME_COUNTRY gc ON gc.Country_Id= ge.Enterprise_Country LEFT JOIN GAME_STATE gs ON gs.State_Id=ge.Enterprise_State WHERE Enterprise_Status = 0";
+		$result                       = $this->Common_Model->executeQuery($query);
 		$content['EnterpriseDetails'] = $result;
 		$content['subview']           = 'manageEnterprise';
 		$this->load->view('main_layout',$content);
@@ -85,34 +60,38 @@ class Enterprise extends CI_Controller {
 			'Enterprise_ID'      => $EnterpriseId,
 			'Enterprise_Status'  => 0,
 		);
-		$result   = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where);
+		$whereCountry = array(
+			'Country_Status' => 0,
+		);
+		$result                    = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where);
 		$content['editEnterprise'] = $result[0];
+		$resultCountry             = $this->Common_Model->fetchRecords('GAME_COUNTRY',$whereCountry);
+		$content['country']        = $resultCountry;
 		//Update Enterprise
-		$RequestMethod             = $this->input->server('REQUEST_METHOD');
+		$RequestMethod = $this->input->server('REQUEST_METHOD');
 		if($RequestMethod == 'POST')
 		{
 			$EnterpriseLogo = $_FILES['logo']['name'];
-			$EnterpriseName = $this->input->post('enterprise');
+			$EnterpriseName = $this->input->post('Enterprise_Name');
+			$Enterprisedata = array(
+				'Enterprise_Name'      =>$this->input->post('Enterprise_Name'),
+				'Enterprise_Email'     => $this->input->post('Enterprise_Email'),
+				'Enterprise_Number'    => $this->input->post('Enterprise_Number'),
+				'Enterprise_Address1'  => $this->input->post('Enterprise_Address1'),
+				'Enterprise_Address2'  => $this->input->post('Enterprise_Address2'),
+				'Enterprise_Country'   => $this->input->post('Enterprise_Country'),
+				'Enterprise_State'     => $this->input->post('Enterprise_State'),
+				'Enterprise_Province'  => $this->input->post('Enterprise_Province'),
+				'Enterprise_Pincode'   => $this->input->post('Enterprise_Pincode'),
+				'Enterprise_StartDate' => $this->input->post('Enterprise_StartDate'),
+				'Enterprise_EndDate'   => $this->input->post('Enterprise_EndDate'),
+				'Enterprise_UpdatedOn' => date('Y-m-d H:i:s'),
+				'Enterprise_UpdatedBy' => $UserID,
+			);
+			// if user update his profile pic
 			if(!empty($EnterpriseLogo))
 			{
-				$Enterprisedata = array(
-					'Enterprise_Name'         =>$this->input->post('enterprise'),
-					'Enterprise_GameStartDate'=> $this->input->post('Enterprise_GameStartDate'),
-					'Enterprise_GameEndDate'  => $this->input->post('Enterprise_GameEndDate'),
-					'Enterprise_UpdatedOn'    => date('Y-m-d H:i:s'),
-					'Enterprise_UpdatedBy'    => $UserID,
-					'Enterprise_Logo'         => $EnterpriseLogo,
-				);
-			}
-			else
-			{	
-				$Enterprisedata = array(
-					'Enterprise_Name'          =>$this->input->post('enterprise'),
-					'Enterprise_GameStartDate' => $this->input->post('Enterprise_GameStartDate'),
-					'Enterprise_GameEndDate'   => $this->input->post('Enterprise_GameEndDate'),
-					'Enterprise_UpdatedOn'     => date('Y-m-d H:i:s'),
-					'Enterprise_UpdatedBy'     => $UserID,
-				);
+				$Enterprisedata['Enterprise_Logo'] = $EnterpriseLogo;
 			}
 			$this->do_upload();
 			//Update Game_Enterprise details
@@ -132,24 +111,38 @@ class Enterprise extends CI_Controller {
   //Insert Enterprise
 	public function addEnterprise()
 	{
-		$UserID           = $this->session->userdata('loginData')['User_Id'];
-		$RequestMethod    = $this->input->server('REQUEST_METHOD');
+		$UserID        = $this->session->userdata('loginData')['User_Id'];
+		$RequestMethod = $this->input->server('REQUEST_METHOD');
+		$whereCountry  = array(
+			'Country_Status' => 0,
+		);
+		$resultCountry      = $this->Common_Model->fetchRecords('GAME_COUNTRY',$whereCountry);
+		$content['country'] = $resultCountry;
 		if($RequestMethod == 'POST')
 		{
 			$Enterprisedata           = array(
-				'Enterprise_Name'          => $this->input->post('enterprise'),
-				'Enterprise_GameStartDate' => $this->input->post('Enterprise_GameStartDate'),
-				'Enterprise_GameEndDate'   => $this->input->post('Enterprise_GameEndDate'),
-				'Enterprise_CreatedOn'     => date('Y-m-d'),
-				'Enterprise_CreatedBy'     => $UserID ,
-				'Enterprise_Logo'          => $_FILES['logo']['name'],
+				'Enterprise_Name'      => $this->input->post('Enterprise_Name'),
+				'Enterprise_Email'     => $this->input->post('Enterprise_Email'),
+				'Enterprise_Number'    => $this->input->post('Enterprise_Number'),
+				'Enterprise_Address1'  => $this->input->post('Enterprise_Address1'),
+				'Enterprise_Address2'  => $this->input->post('Enterprise_Address2'),
+				'Enterprise_Country'   => $this->input->post('Enterprise_Country'),
+				'Enterprise_State'     => $this->input->post('Enterprise_State'),
+				'Enterprise_Province'  => $this->input->post('Enterprise_Province'),
+				'Enterprise_Pincode'   => $this->input->post('Enterprise_Pincode'),
+				'Enterprise_Password'  => $this->input->post('Enterprise_Password'),
+				'Enterprise_StartDate' => date('Y-m-d H:i:s',strtotime($this->input->post('Enterprise_StartDate'))),
+				'Enterprise_EndDate'   => date('Y-m-d H:i:s',strtotime($this->input->post('Enterprise_EndDate'))),
+				'Enterprise_CreatedOn' => date('Y-m-d'),
+				'Enterprise_CreatedBy' => $UserID ,
+				'Enterprise_Logo'      => $_FILES['logo']['name'],
 			);
 			//print_r($Enterprisedata);exit();
 			$this->do_upload();
-			if(!empty($this->input->post('enterprise')))
+			if(!empty($this->input->post('Enterprise_Name')))
 			{
 				$where  = array(
-					'Enterprise_Name' =>	$this->input->post('enterprise'),
+					'Enterprise_Name' =>	$this->input->post('Enterprise_Name'),
 				);
 				$query = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where);	
 				if($query)
@@ -165,7 +158,7 @@ class Enterprise extends CI_Controller {
 				}
 			}
 		}
-		$content['subview']     = 'addEnterprise';
+		$content['subview'] = 'addEnterprise';
 		$this->load->view('main_layout',$content);
 	}
 
@@ -192,6 +185,7 @@ class Enterprise extends CI_Controller {
 			$updateSessionData['logo'] = $data['upload_data']['file_name'];
 		}	
 	}
+
 //delete Enterprise Users
 	public function delete($id=NULL)
 	{

@@ -10,7 +10,7 @@
 				<div class="row">
 					<div class="col-md-6 col-sm-12">
 						<div class="title">
-							<h1><a href="<?php echo base_url('Users/addUsers/');?>"><i class="fa fa-plus-circle text-blue" title="Add Enterprise"> 
+							<h1><a href="<?php echo base_url('Users/addUsers/');?>" data-toggle="tooltip" title="Add User"><i class="fa fa-plus-circle text-blue"> 
 							</i></a> SubEnterprise Users
 						</h1>
 					</div>
@@ -64,10 +64,11 @@
 								<table class="stripe hover multiple-select-row data-table-export nowrap" >
 									<thead>
 										<tr>
-											<!-- <th>Sr.No.</th> -->
+											<th>Sr.No.</th>
 											<th class="datatable-nosort">SubEnterprise</th>
 											<th class="table-plus">User Name</th>
 											<th>Email</th>
+											<th>Password</th>
 											<th class="datatable-nosort">Contact</th>
 											<th class="datatable-nosort">Games</th>
 											<th class="datatable-nosort">Action</th>
@@ -77,11 +78,12 @@
 										<?php $i=1;
 										foreach ($userDetails as $userDetails) { ?>
 											<tr>
-												<!-- <td><?php //echo $i; ?></td> -->
+												<td><?php echo $i; ?></td>
 												<td class="table-plus"><?php echo $userDetails->SubEnterprise_Name ; ?></td>
 												<td><?php echo $userDetails->User_username;?>
 											</td>
 											<td><?php echo $userDetails->User_email; ?></td>
+											<td><?php echo $userDetails->password; ?></td>
 											<td><?php echo $userDetails->User_mobile; ?></td>
 											<td>
 												<a href="<?php echo base_url('Games/assignGames/').base64_encode($userDetails->User_id).'/'.base64_encode($this->uri->segment(2)); ?>" title="Allocate/Deallocate Games"><?php echo $userDetails->gameCount; ?></a>

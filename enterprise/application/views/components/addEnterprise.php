@@ -24,17 +24,89 @@
 					</div>
 					<form method="post" action=""enctype="multipart/form-data">
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span style="color: red">*</span> Enterprise</label>
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Name</label>
 							<div class="col-sm-12 col-md-6">
-								<input class="form-control" name="enterprise" value="" type="text" required="">
+								<input class="form-control" name="Enterprise_Name" value="" type="text" placeholder="Enter Enterprise Name" required="">
 							</div>
 						</div> 
+
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span style="color: red">*</span> Choose Logo</label>
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Number</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="Enterprise_Number" value="" type="text" placeholder="Enter Enterprise Number" required="">
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Email</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="Enterprise_Email" value="" type="email" placeholder="Enter Enterprise Email" required="">
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Address1</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="Enterprise_Address1" value="" type="text" placeholder="Enter Enterprise Address1" required="">
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"> Enterprise Address2</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="Enterprise_Address2" value="" type="text" placeholder="Enter Enterprise Address2">
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Country</label>
+							<div class="col-sm-12 col-md-6">
+								<select class="form-control" name="Enterprise_Country" required="" id="country">
+									<option value="">--Select Country--</option>
+									<?php foreach ($country as $row) { ?>
+										<option value="<?php echo $row->Country_Id;?>"><?php echo $row->Country_Name;?></option>
+									<?php } ?>
+								</select>
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise State</label>
+							<div class="col-sm-12 col-md-6">
+								<select class="form-control" name="Enterprise_State" required="" id="state">
+									<option value="">--Select State--</option>
+								</select>
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"> Enterprise Province</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="Enterprise_Province" value="" type="text" placeholder="Enter Enterprise Province">
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Pincode</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="Enterprise_Pincode" value="" type="text" placeholder="Enter Enterprise Pincode" required="">
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Password</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="Enterprise_Password" type="text" placeholder="Enter Enterprise Password" required="" value="123Ent@2019">
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Choose Logo</label>
 							<div class="col-sm-12 col-md-6">
 								<input type="file" name="logo" multiple="multiple" accept="image/*" id="image" value="" class="form-control">
 							</div>
 						</div>
+
 						<div class="row" id="sandbox-container">
 							<div class="col-md-4">
 								<label for="Game Duration"><span class="alert-danger">*</span> Select Account Duration</label>
@@ -45,6 +117,7 @@
 								<input type="text" class="form-control datetimepicker" data-date-format="yyyy-mm-dd" id="Enterprise_GameEndDate" name="Enterprise_GameEndDate" value="" placeholder="Select End Date" required readonly/>
 							</div>
 						</div><br>
+
 						<div class="text-center">
 							<button type="submit" name="submit"class="btn btn-primary">SUBMIT</button>
 							<a href="<?php echo base_url('Enterprise');?>"><button type="button" name="submit"class="btn btn-primary">CANCEL</button></a>

@@ -1,6 +1,6 @@
 <div class="main-container">
 	<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
-  <?php $this->load->view('components/trErMsg');?>
+		<?php $this->load->view('components/trErMsg');?>
 		<div class="min-height-200px">
 			<div class="page-header">
 				<div class="row">
@@ -34,47 +34,122 @@
 							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> SubEnterprise Name</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" type="text" value="<?php echo $editSubEnterprise->SubEnterprise_Name?>" 
-								  name="subenterprise">
+								name="SubEnterprise_Name">
 							</div>
 						</div>
+						<!-- adding more field -->
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> SubEnterprise Number</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="SubEnterprise_Number" value="<?php echo $editSubEnterprise->SubEnterprise_Number;?>" type="text" placeholder="Enter SubEnterprise Number" required="">
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> SubEnterprise Email</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="SubEnterprise_Email" value="<?php echo $editSubEnterprise->SubEnterprise_Email;?>" type="email" placeholder="Enter SubEnterprise Email" required="">
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> SubEnterprise Address1</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="SubEnterprise_Address1" value="<?php echo $editSubEnterprise->SubEnterprise_Address1;?>" type="text" placeholder="Enter SubEnterprise Address1" required="">
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"> SubEnterprise Address2</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="SubEnterprise_Address2" value="<?php echo $editSubEnterprise->SubEnterprise_Address2;?>" type="text" placeholder="Enter SubEnterprise Address2">
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> SubEnterprise Country</label>
+							<div class="col-sm-12 col-md-6">
+								<select class="form-control" name="SubEnterprise_Country" required="" id="country">
+									<option value="">--Select Country--</option>
+									<?php foreach ($country as $row) { ?>
+										<option value="<?php echo $row->Country_Id;?>" <?php echo ($editSubEnterprise->SubEnterprise_Country==$row->Country_Id)?'selected':'';?>><?php echo $row->Country_Name;?></option>
+									<?php } ?>
+								</select>
+								<?php if($editSubEnterprise->SubEnterprise_Country){ ?>
+									<script>
+										setTimeout(function(){
+											$('#country').trigger('change');
+										},1000);
+									</script>
+								<?php } ?>
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> SubEnterprise State</label>
+							<div class="col-sm-12 col-md-6">
+								<select class="form-control" name="SubEnterprise_State" required="" id="state" data-stateid="<?php echo $editSubEnterprise->SubEnterprise_State;?>">
+									<option value="">--Select State--</option>
+								</select>
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"> SubEnterprise Province</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="SubEnterprise_Province" value="<?php echo $editSubEnterprise->SubEnterprise_Province;?>" type="text" placeholder="Enter SubEnterprise Province">
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> SubEnterprise Pincode</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="SubEnterprise_Pincode" value="<?php echo $editSubEnterprise->SubEnterprise_Pincode;?>" type="text" placeholder="Enter SubEnterprise Pincode" required="">
+							</div>
+						</div> 
+
 						<!-- <div class="form-group row">
-							<label class="col-sm-12 col-md-2 col-form-label">CreatedOn</label>
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> SubEnterprise Password</label>
 							<div class="col-sm-12 col-md-6">
-								<input class="form-control" placeholder="" type="text" value="<?php //echo 
-								$editSubEnterprise->SubEnterprise_CreatedOn?>" readonly>
+								<input class="form-control" name="SubEnterprise_Password" type="text" placeholder="Enter SubEnterprise Password" required="" value="123Ent@2019">
 							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-12 col-md-2 col-form-label">CreatedBy</label>
-							<div class="col-sm-12 col-md-6">
-								<input class="form-control" value="<?php //echo 
-								$editSubEnterprise->SubEnterprise_CreatedBy?>" type="text" readonly>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="example-datetime-local-input" class="col-sm-12 col-md-2 col-form-label">UpdatedOn</label>
-							<div class="col-sm-12 col-md-6">
-								<input class="form-control" placeholder="Choose Date and time" type="text" value="<?php //echo 
-								$editSubEnterprise->SubEnterprise_UpdatedOn?>" readonly>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-12 col-md-2 col-form-label">UpadtedBy</label>
-							<div class="col-sm-12 col-md-6">
-								<input class="form-control" placeholder="" type="text" value="<?php //echo 
-								$editSubEnterprise->SubEnterprise_UpdatedBy?>" readonly>
-							</div>
-						</div> -->
+						</div>  -->
+						<!-- end of adding field -->
 						<div class="form-group row">
 							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Choose Logo</label>
 							<div class="col-sm-12 col-md-6">
 								<input type="file" name="logo" multiple="multiple" accept="image/*" id="image" value="" class="form-control">
 							</div>
 						</div>
+
+					<!-- 	<div class="form-group row"id="sandbox-container">
+							<div class="col-md-4">
+								<label for="Game Duration"><span class="alert-danger">*</span> Select Account Duration</label>
+							</div>
+							<div class="input-daterange input-group col-md-6" id="datepicker">
+								<input type="text" class="form-control datetimepicker" data-date-format="yyyy-mm-dd" id="SubEnterprise_StartDate" name="SubEnterprise_StartDate" value="<?php echo $editSubEnterprise->Enterprise_StartDate;?>" placeholder="Select Start Date" required readonly/>
+								<span class="input-group-addon">to</span>
+								<input type="text" class="form-control datetimepicker" data-date-format="yyyy-mm-dd" id="SubEnterprise_EndDate" name="SubEnterprise_EndDate" value="<?php echo $editSubEnterprise->Enterprise_EndDate;?>" placeholder="Select End Date" required readonly/>
+							</div>
+						</div> -->
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Account Duration</label>
+							<div id="assignDate"class="col-sm-12 col-md-6">
+								<div class="input-group" name="gamedate" id="datepicker">
+									<input type="text" class="form-control datepicker-here" id="SubEnterprise_StartDate" name="SubEnterprise_StartDate" value="<?php echo $editSubEnterprise->SubEnterprise_StartDate ?>" data-value="<?php echo strtotime($editSubEnterprise->SubEnterprise_StartDate);?>" placeholder="Select Start Date" required="" readonly="" data-startDate="<?php echo strtotime($editSubEnterprise->Enterprise_StartDate);?>" data-endDate="<?php echo strtotime($editSubEnterprise->Enterprise_EndDate);?>" data-language='en' data-date-format="dd-mm-yyyy">
+
+									<span class="input-group-addon" >To</span>
+
+									<input type ="text" class="form-control datepicker-here" id="SubEnterprise_EndDate" name="SubEnterprise_EndDate" value="<?php echo $editSubEnterprise->SubEnterprise_EndDate ?>" data-value="<?php echo strtotime($editSubEnterprise->SubEnterprise_EndDate);?>" placeholder="Select End Date" required="" readonly="" data-startDate="<?php echo strtotime($editSubEnterprise->Enterprise_StartDate);?>" data-endDate="<?php echo strtotime($editSubEnterprise->Enterprise_EndDate);?>" data-language='en' data-date-format="dd-mm-yyyy">
+								</div>
+							</div>
+						</div>
+
 						<div class="form-group row">
 							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Current SubEnterprise Logo</label>
 							<div class="col-sm-12 col-md-6">
-							<img src="<?php echo base_url('Common/Logo/'.$editSubEnterprise->SubEnterprise_Logo);?>" width="100px"height="100px" alternate="SubEnterprise_Logo">
+								<img src="<?php echo base_url('common/Logo/'.$editSubEnterprise->SubEnterprise_Logo);?>" width="100px"height="100px" alternate="SubEnterprise_Logo">
 							</div>
 						</div>
 						<div class="text-center">
