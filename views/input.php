@@ -385,6 +385,7 @@ include_once 'includes/header.php';
                     $ImageMaxWidth  = "90%";
                     break;
 
+                    //Name - Detailchart - halfLength
                     case 19:
                     $ckEditorLength = 'col-md-6';
                     $ComponentName  = "";
@@ -765,6 +766,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-12";
                   $sImageMaxWidth   = "60%";
+                  $addCenterPadding = "";
                   break;
 
                   // Name - InputFields - Details/Chart
@@ -775,6 +777,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-12";
                   $sImageMaxWidth   = "60%";
+                  $addCenterPadding = "";
                   break;
 
                   // Details/Chart - InputFields - Name
@@ -785,6 +788,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-12";
                   $sImageMaxWidth   = "60%";
+                  $addCenterPadding = "";
                   break;
 
                   // Details/Chart - Name - InputFields
@@ -796,6 +800,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-12";
                   $sImageMaxWidth   = "60%";
+                  $addCenterPadding = "";
                   break;
 
                   // InputFields - Details/Chart - Name
@@ -806,6 +811,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-12";
                   $sImageMaxWidth   = "60%";
+                  $addCenterPadding = "";
                   break;
 
                   // InputFields - Name - Details/Chart
@@ -817,6 +823,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-12";
                   $sImageMaxWidth   = "60%";
+                  $addCenterPadding = "";
                   break;
 
                   // InputFields - Name - FullLength
@@ -827,6 +834,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-12";
                   $sImageMaxWidth   = "60%";
+                  $addCenterPadding = "";
                   break;
 
                   // InputFields - Details/Chart
@@ -837,6 +845,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-12";
                   $sImageMaxWidth   = "60%";
+                  $addCenterPadding = "";
                   break;
 
                   // Name - Details/Chart
@@ -847,6 +856,7 @@ include_once 'includes/header.php';
                   $InputFields      = "hidden";
                   $length           = "col-md-12";
                   $sImageMaxWidth   = "60%";
+                  $addCenterPadding = "";
                   break;
 
                   // Name - InputFields - FullLength
@@ -857,6 +867,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-12";
                   $sImageMaxWidth   = "90%";
+                  $addCenterPadding = "";
                   break;
 
                   // Details/Chart - Name
@@ -867,6 +878,7 @@ include_once 'includes/header.php';
                   $InputFields      = "hidden";
                   $length           = "col-md-12";
                   $sImageMaxWidth   = "60%";
+                  $addCenterPadding = "";
                   break;
 
                   // Details/Chart - InputFields
@@ -877,6 +889,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-12";
                   $sImageMaxWidth   = "60%";
+                  $addCenterPadding = "";
                   break;
 
                   // Name - InputFields - HalfLength
@@ -887,6 +900,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-6";
                   $sImageMaxWidth   = "90%";
+                  $addCenterPadding = "";
                   break;
 
                   // InputFields - Name - HalfLength
@@ -897,6 +911,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-6";
                   $sImageMaxWidth   = "90%";
+                  $addCenterPadding = "";
                   break;
 
                   // CkEditor - FullLength
@@ -907,6 +922,7 @@ include_once 'includes/header.php';
                   $InputFields      = "hidden";
                   $length           = "col-md-12";
                   $sImageMaxWidth   = "30%";
+                  $addCenterPadding = "";
                   break;
 
                   // CkEditor - HalfLength
@@ -917,6 +933,7 @@ include_once 'includes/header.php';
                   $InputFields      = "hidden";
                   $length           = "col-md-6";
                   $sImageMaxWidth   = "90%";
+                  $addCenterPadding = "";
                   break;
 
                   // ckEditor - InputFields - HalfLength
@@ -927,6 +944,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-6";
                   $sImageMaxWidth   = "90%";
+                  $addCenterPadding = "";
                   break;
 
                   // InputFields - ckEditor - HalfLength
@@ -937,6 +955,7 @@ include_once 'includes/header.php';
                   $InputFields      = "";
                   $length           = "col-md-6";
                   $sImageMaxWidth   = "90%";
+                  $addCenterPadding = "";
                   break;
 
                   // Name - Details/Chart - HalfLength
@@ -947,6 +966,29 @@ include_once 'includes/header.php';
                   $InputFields      = "hidden";
                   $length           = "col-md-6";
                   $sImageMaxWidth   = "90%";
+                  $addCenterPadding = "";
+                  break;
+
+                  //ck-editor 1/4 length
+                  case 20:
+                  $SubCkEditor      = 'col-md-12';
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "";
+                  $InputFields      = "hidden";
+                  $length           = "col-md-3";
+                  $sImageMaxWidth   = "90%";
+                  $addCenterPadding = "";
+                  break;
+
+                  // inputfields 1/4 length
+                  case 21:
+                  $SubCkEditor      = 'col-md-12';
+                  $SubcomponentName = "hidden";
+                  $DetailsChart     = "hidden";
+                  $InputFields      = "";
+                  $length           = "col-md-3";
+                  $sImageMaxWidth   = "90%";
+                  $addCenterPadding = "addCenterPadding";
                   break;
                 }
 
@@ -966,13 +1008,17 @@ include_once 'includes/header.php';
                   $subcomp_label_min_width   = '110px';
                   // $subcomp_save_button_align = '';
                 }
-                else
+                elseif($length == 'col-md-12')
                 {
                   $input_lenght              = 'col-md-4';
                   $name_length               = 'col-md-2';
                   $limit_char                = 55;
                   $subcomp_label_min_width   = '122px';
                   // $subcomp_save_button_align = 'top: 50%; position: absolute;';
+                }
+                else
+                {
+                  $input_lenght              = 'col-md-12';
                 }
                 echo "<div class='".$length." subCompnent ".$hide."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor']."; border:none;'";
                   // if ($row2['ShowHide']==1){
@@ -1018,7 +1064,7 @@ include_once 'includes/header.php';
                     echo "<div class=' col-sm-5 ".$input_lenght." text-right ".$InputFields."'>";
                   // putting both current and last input field div inside a div having same class inlinebox to shift left/right
                     echo "<div class='InlineBox'>";
-                    echo "<div class='InlineBox ".(($row2['InputFieldOrder']==2)?'pull-right':'')." ".(($row2['InputFieldOrder']==4)?'hidden':'')."'>";
+                    echo "<div class='InlineBox ".$addCenterPadding." ".(($row2['InputFieldOrder']==2)?'pull-right':'')." ".(($row2['InputFieldOrder']==4)?'hidden':'')."'>";
                     if($row2['Mode']=="user" && $row2['InputModeType'] == "mChoice")
                     {
                       $hide_label = 'hidden';
@@ -2013,7 +2059,16 @@ function create_json_input_field_keys(key)
     $('input').each(function(i,e){
       if($(this).attr('type') == 'range')
       {
-        $(this).parent('div.InlineBox').css({'padding':'0px 5px 0px 0px'});
+        // addCenterPadding
+        if($(this).parent('div.InlineBox').hasClass('addCenterPadding'))
+        {
+          // $(this).css({'padding':'0px 50px 0px 0px'});
+          $(this).parent('div.InlineBox').css({'padding':'0px 50px 0px 0px'});
+        }
+        else
+        {
+          $(this).parent('div.InlineBox').css({'padding':'0px 5px 0px 0px'});
+        }
       }
 
       if($(e).attr('required') || $(e).attr('readonly'))

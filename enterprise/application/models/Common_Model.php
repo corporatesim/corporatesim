@@ -9,34 +9,45 @@ class Common_Model extends CI_Model {
   //  $this->load->model('Common_Model');
   // }
 
+  // finding the count
+  public function findCount($tableName=NULL,$where=NULL,$columnName=NULL,$order=NULL,$limit=NULL)
+  {
+    $this->db->where($where);
+    $result = $this->db->get($tableName);
+    // echo "<pre>"; print_r($this->db->last_query()); exit();
+    // echo "<pre>"; print_r($result->num_rows()); exit();
+    $count  = $result->num_rows();
+    return $count;
+  }
+
 //fetch record of login Enterprise
-	public function fetchRecords($tableName=NULL,$where=NULL,$columnName=NULL,$order=NULL,$limit=NULL)
-	{
+  public function fetchRecords($tableName=NULL,$where=NULL,$columnName=NULL,$order=NULL,$limit=NULL)
+  {
     // die('in modal');
-		if($columnName)
-		{
-			$this->db->select($columnName);
-		}
-		if($order)
-		{
-			$this->db->order_by($order);
-		}
-		if($limit)
-		{
-			$limit = explode(',',$limit);
-			$this->db->limit($limit[1],$limit[0]);
-		}
-		$this->db->from($tableName);
-		$this->db->where($where);
-		$query  = $this->db->get();
-		$result = $query->result();
+    if($columnName)
+    {
+      $this->db->select($columnName);
+    }
+    if($order)
+    {
+      $this->db->order_by($order);
+    }
+    if($limit)
+    {
+      $limit = explode(',',$limit);
+      $this->db->limit($limit[1],$limit[0]);
+    }
+    $this->db->from($tableName);
+    $this->db->where($where);
+    $query  = $this->db->get();
+    $result = $query->result();
     //print_r($this->db->last_query()); exit();
-		return $result;
-	}
+    return $result;
+  }
 
 //verify login details of Enterprise
-	public function verifyLogin($Users_Email=NULL,$Users_Password=NULL)
-	{
+  public function verifyLogin($Users_Email=NULL,$Users_Password=NULL)
+  {
     // for admin users
     $whereAdmin = array (
       'username' => $Users_Email,
@@ -57,43 +68,76 @@ class Common_Model extends CI_Model {
     // for non admin users
     if(count($resultAdmin) < 1)
     {
-      $this->db->select('gsu.*,ge.Enterprise_Name,gs.SubEnterprise_Name');
-      $this->db->join('GAME_ENTERPRISE ge','ge.Enterprise_ID=gsu.User_ParentId','left');
-      $this->db->join('GAME_SUBENTERPRISE gs','gs.SubEnterprise_ID=gsu.User_SubParentId','left');
-      $where = array(
-        'User_username' => $Users_Email,
-        'User_email'    => $Users_Email,
+      // for enterprise , user role will be 1
+      $entWhere = array(
+        'Enterprise_Email'    => $Users_Email,
+        'Enterprise_Password' => $Users_Password,
       );
-      $this->db->group_start();
-      $this->db->or_where($where);
-      $this->db->group_end();
-      $this->db->where('User_Role >',0);
-      $this->db->where('User_Delete',0);
-      $result = $this->db->get('GAME_SITE_USERS gsu')->result();
-     // echo count($result)."<pre>"; print_r($this->db->last_query()); echo "<br>"; print_r($result); exit;
-    // if user exist then match the password other wise user not exist game_user_authentication
-      if(count($result) > 0)
+      $this->db->select();
+      $this->db->where($entWhere);
+      $resultEnt = $this->db->get('GAME_ENTERPRISE')->result();
+      // for subEnterprise, user role will be 2
+      $subEntWhere = array(
+        'SubEnterprise_Email'    => $Users_Email,
+        'SubEnterprise_Password' => $Users_Password,
+      );
+      $this->db->select();
+      $this->db->where($subEntWhere);
+      $resultSbuEnt = $this->db->get('GAME_SUBENTERPRISE')->result();
+      // fetch and return result
+      if(count($resultEnt) > 0)
       {
-       $where = array(
-        'Auth_userid'   => $result[0]->User_id,
-        'Auth_password' => $Users_Password,
-      );
-       $this->db->where($where);
-       $resultPassword = $this->db->get('GAME_USER_AUTHENTICATION')->result();
-       if(count($resultPassword) > 0)
-       {
-        // echo "<pre>"; print_r($result); exit;
-        return $result[0];
+        $resultEnt[0]->User_Role = 'enterprise';
+        return $resultEnt[0];
+      }
+      elseif(count($resultSbuEnt) > 0)
+      {
+        $resultSbuEnt[0]->User_Role = 'subenterprise';
+        return $resultSbuEnt[0];
       }
       else
       {
         return 'error';
       }
-    }
-    else
-    {
-      return 'error';
-    }
+
+
+    //   $this->db->select('gsu.*,ge.Enterprise_Name,gs.SubEnterprise_Name');
+    //   $this->db->join('GAME_ENTERPRISE ge','ge.Enterprise_ID=gsu.User_ParentId','left');
+    //   $this->db->join('GAME_SUBENTERPRISE gs','gs.SubEnterprise_ID=gsu.User_SubParentId','left');
+    //   $where = array(
+    //     'User_username' => $Users_Email,
+    //     'User_email'    => $Users_Email,
+    //   );
+    //   $this->db->group_start();
+    //   $this->db->or_where($where);
+    //   $this->db->group_end();
+    //   $this->db->where('User_Role >',0);
+    //   $this->db->where('User_Delete',0);
+    //   $result = $this->db->get('GAME_SITE_USERS gsu')->result();
+    //  // echo count($result)."<pre>"; print_r($this->db->last_query()); echo "<br>"; print_r($result); exit;
+    // // if user exist then match the password other wise user not exist game_user_authentication
+    //   if(count($result) > 0)
+    //   {
+    //    $where = array(
+    //     'Auth_userid'   => $result[0]->User_id,
+    //     'Auth_password' => $Users_Password,
+    //   );
+    //    $this->db->where($where);
+    //    $resultPassword = $this->db->get('GAME_USER_AUTHENTICATION')->result();
+    //    if(count($resultPassword) > 0)
+    //    {
+    //     // echo "<pre>"; print_r($result); exit;
+    //     return $result[0];
+    //   }
+    //   else
+    //   {
+    //     return 'error';
+    //   }
+    // }
+    // else
+    // {
+    //   return 'error';
+    // }
   }
   else
   {
@@ -105,7 +149,7 @@ class Common_Model extends CI_Model {
 public  function insert($tableName=NULL,$data=NULL,$check=NULL)
 {
   $this->db->insert($tableName,$data);
-		// print_r($this->db->last_query());exit();
+    // print_r($this->db->last_query());exit();
   $userId = $this->db->insert_id();
   return $userId;
 }
@@ -126,42 +170,42 @@ public function editPassword($id)
 //Update Password
   public function updatePassword($id=NULL,$password=NULL)
   {
-  	$this->db->where('Auth_userid',$id);
-  	$this->db->update('GAME_USER_AUTHENTICATION',$password);
+    $this->db->where('Auth_userid',$id);
+    $this->db->update('GAME_USER_AUTHENTICATION',$password);
     //print_r($this->db->last_query());exit();
-  	return $this->db->last_query();
+    return $this->db->last_query();
   }
 
 //Update User Details
   public function update($tableName=NULL,$id=NULL,$data=NULL,$check=NULL,$checkCol=NULL)
   {
-  	if($checkCol)
-  	{
-  		$this->db->where("$checkCol !=", $id);
-  	}
-  	$this->db->group_start();
-  	$this->db->or_where($check);
-  	$this->db->group_end();
-  	$result = $this->db->get($tableName)->result();
+    if($checkCol)
+    {
+      $this->db->where("$checkCol !=", $id);
+    }
+    $this->db->group_start();
+    $this->db->or_where($check);
+    $this->db->group_end();
+    $result = $this->db->get($tableName)->result();
     // echo "$checkCol<pre>"; print_r($this->db->last_query()); print_r($result); exit();
-  	if(count($result) > 0)
-  	{
-  		$return = 'duplicate';
-  	}
-  	else
-  	{
-  		$this->db->where('User_Id',$id);
-  		$this->db->update($tableName,$data);
-  		$return = 'update';
-  	}
+    if(count($result) > 0)
+    {
+      $return = 'duplicate';
+    }
+    else
+    {
+      $this->db->where($checkCol,$id);
+      $this->db->update($tableName,$data);
+      $return = 'update';
+    }
     //print_r($this->db->last_query());exit();
-  	return $return;
+    return $return;
   }
 
   // pass query as an argument to execute
   public function executeQuery($query=NULL,$noReturn=NULL)
   {
-  	$query  = $this->db->query($query);
+    $query  = $this->db->query($query);
     // echo "<pre>"; print_r($this->db->last_query()); print_r($result); exit();
     if($noReturn != 'noReturn')
     {
@@ -189,7 +233,7 @@ public function deleteRecords($tableName=NULL,$where=NULL)
 {
  $this->db->where($where);
  $this->db->delete($tableName);
-  	// print_r($this->db->last_query()); exit();
+    // print_r($this->db->last_query()); exit();
 }
 
  //Update Records

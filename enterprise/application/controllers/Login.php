@@ -22,7 +22,6 @@ class Login extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Common_Model');
 		if($this->session->userdata('loginData') != NULL)
 		{
 			redirect('dashboard');
@@ -79,28 +78,8 @@ class Login extends CI_Controller {
 			if($result != 'error')
 			{
 				// getting records from database and setting the sessions
-				if(isset($result->User_ParentId))
-				{
-					// for non admin users
-					$loginData         = array(
-						'User_Id'            => $result->User_id,
-						'User_FullName'      => $result->User_fname.' '.$result->User_lname,
-						'User_Username'      => $result->User_username,
-						'User_Email'         => $result->User_email,
-						'User_Mobile'        => $result->User_mobile,
-						'User_games'         => $result->User_games,
-						'User_lastlogin'     => $result->User_lastlogin,
-						'User_ParentId'      => $result->User_ParentId,
-						'User_SubParentId'   => $result->User_SubParentId,
-						'User_profile_pic'   => $result->User_profile_pic,
-						'User_Role'          => $result->User_Role,
-						'Enterprise_Name'    => $result->Enterprise_Name,
-						'SubEnterprise_Name' =>$result->SubEnterprise_Name,
-					);
-				}
-				else
-				{
-					// for admin users
+				switch ($result->User_Role) {
+					case 'superadmin':
 					$loginData = array(
 						'User_Id'       => $result->User_Id,
 						'User_FullName' => $result->User_FullName,
@@ -109,8 +88,45 @@ class Login extends CI_Controller {
 						'User_Mobile'   => $result->User_Mobile,
 						'User_Role'     => $result->User_Role,
 					);
+					break;
+
+					case 'enterprise':
+					$loginData         = array(
+						'User_Id'            => $result->Enterprise_ID,
+						'User_FullName'      => $result->Enterprise_Name,
+						'User_Username'      => $result->Enterprise_Name,
+						'User_Email'         => $result->Enterprise_Email,
+						'User_Mobile'        => $result->Enterprise_Number,
+						'User_games'         => $result->Enterprise_Games,
+						'User_ParentId'      => $result->Enterprise_ID,
+						'User_SubParentId'   => $result->Enterprise_ID,
+						'User_profile_pic'   => $result->Enterprise_Logo,
+						'User_Role'          => 1,
+						'Enterprise_Name'    => $result->Enterprise_Name,
+						// 'SubEnterprise_Name' =>$result->SubEnterprise_Name,
+						// 'User_lastlogin'     => $result->User_lastlogin,
+					);
+					break;
+
+					case 'subenterprise':
+					$loginData         = array(
+						'User_Id'            => $result->SubEnterprise_ID,
+						'User_FullName'      => $result->SubEnterprise_Name,
+						'User_Username'      => $result->SubEnterprise_Name,
+						'User_Email'         => $result->SubEnterprise_Email,
+						'User_Mobile'        => $result->SubEnterprise_Number,
+						'User_games'         => $result->SubEnterprise_Games,
+						'User_ParentId'      => $result->SubEnterprise_EnterpriseID,
+						'User_SubParentId'   => $result->SubEnterprise_ID,
+						'User_profile_pic'   => $result->SubEnterprise_Logo,
+						'User_Role'          => 2,
+						'Enterprise_Name'    => $result->Enterprise_Name,
+						'SubEnterprise_Name' => $result->SubEnterprise_Name,
+						// 'User_lastlogin'     => $result->User_lastlogin,
+					);
+					break;
 				}
-				 //echo "<pre>"; print_r($loginData); exit;
+				 // echo "<pre>"; print_r($loginData); exit;
 				$this->session->set_userdata('loginData',$loginData);
 				redirect('dashboard');
 			}

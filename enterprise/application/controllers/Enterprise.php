@@ -22,7 +22,6 @@ class Enterprise extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Common_Model');
 		if($this->session->userdata('loginData') == NULL)
 		{
 			$this->session->set_flashdata('er_msg', 'You need to login to see the dashboard');
@@ -40,7 +39,7 @@ class Enterprise extends CI_Controller {
 		}
 		//show dropdown for Enterprise
 		$where = array(	
-			'Enterprise_Status'       => 0,
+			'Enterprise_Status' => 0,
 		);
 		$Enterprise            = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where,'','Enterprise_Name');
 		$content['Enterprise'] = $Enterprise;
@@ -52,11 +51,11 @@ class Enterprise extends CI_Controller {
 	}
 	
 	//Edit/Update Enterprise
-	public function edit()
+	public function edit($id=NULL)
 	{
 		$UserID       = $this->session->userdata('loginData')['User_Id'];
-		$EnterpriseId = base64_decode($this->uri->segment(3));
-		$where = array(
+		$EnterpriseId = base64_decode($id);
+		$where        = array(
 			'Enterprise_ID'      => $EnterpriseId,
 			'Enterprise_Status'  => 0,
 		);
@@ -67,6 +66,16 @@ class Enterprise extends CI_Controller {
 		$content['editEnterprise'] = $result[0];
 		$resultCountry             = $this->Common_Model->fetchRecords('GAME_COUNTRY',$whereCountry);
 		$content['country']        = $resultCountry;
+		$whereDomain               = array(
+			'Domain_EnterpriseId' => $EnterpriseId,
+			'Domain_Status'       => 0,
+		);
+		$resultDomain = $this->Common_Model->fetchRecords('GAME_DOMAIN',$whereDomain);
+		if(count($resultDomain) > 0)
+		{
+			$content['domainName'] = $resultDomain[0];
+		}
+		// print_r($resultDomain[0]->Domain_Name);die();
 		//Update Enterprise
 		$RequestMethod = $this->input->server('REQUEST_METHOD');
 		if($RequestMethod == 'POST')
@@ -74,7 +83,7 @@ class Enterprise extends CI_Controller {
 			$EnterpriseLogo = $_FILES['logo']['name'];
 			$EnterpriseName = $this->input->post('Enterprise_Name');
 			$Enterprisedata = array(
-				'Enterprise_Name'      =>$this->input->post('Enterprise_Name'),
+				'Enterprise_Name'      => $this->input->post('Enterprise_Name'),
 				'Enterprise_Email'     => $this->input->post('Enterprise_Email'),
 				'Enterprise_Number'    => $this->input->post('Enterprise_Number'),
 				'Enterprise_Address1'  => $this->input->post('Enterprise_Address1'),
@@ -83,8 +92,8 @@ class Enterprise extends CI_Controller {
 				'Enterprise_State'     => $this->input->post('Enterprise_State'),
 				'Enterprise_Province'  => $this->input->post('Enterprise_Province'),
 				'Enterprise_Pincode'   => $this->input->post('Enterprise_Pincode'),
-				'Enterprise_StartDate' => $this->input->post('Enterprise_StartDate'),
-				'Enterprise_EndDate'   => $this->input->post('Enterprise_EndDate'),
+				'Enterprise_StartDate' => date('Y-m-d H:i:s',strtotime($this->input->post('Enterprise_StartDate'))),
+				'Enterprise_EndDate'   => date('Y-m-d H:i:s',strtotime($this->input->post('Enterprise_EndDate'))),
 				'Enterprise_UpdatedOn' => date('Y-m-d H:i:s'),
 				'Enterprise_UpdatedBy' => $UserID,
 			);
@@ -101,10 +110,21 @@ class Enterprise extends CI_Controller {
 			);
 			$result1 = $this->Common_Model->updateRecords('GAME_ENTERPRISE',$Enterprisedata,$where);
 			//print_r($result1);exit();
+
+			if($result1 && !empty($EnterpriseLogo))
+			{
+				$updateDomain  = array(
+					// "Domain_Name" => $this->input->post('commonDomain'),
+					"Domain_Logo" => $EnterpriseLogo,
+				);
+				$where = array('Domain_EnterpriseId' => $EnterpriseId);
+				$this->Common_Model->updateRecords('GAME_DOMAIN',$updateDomain,$where);
+			}
 			$this->session->set_flashdata("tr_msg","Details Update Successfully" );
 			redirect("Enterprise","refresh");
+
 		}
-		$content['subview']     = 'editEnterprise';
+		$content['subview'] = 'editEnterprise';
 		$this->load->view('main_layout',$content);
 	}
 
@@ -120,41 +140,63 @@ class Enterprise extends CI_Controller {
 		$content['country'] = $resultCountry;
 		if($RequestMethod == 'POST')
 		{
-			$Enterprisedata           = array(
-				'Enterprise_Name'      => $this->input->post('Enterprise_Name'),
-				'Enterprise_Email'     => $this->input->post('Enterprise_Email'),
-				'Enterprise_Number'    => $this->input->post('Enterprise_Number'),
-				'Enterprise_Address1'  => $this->input->post('Enterprise_Address1'),
-				'Enterprise_Address2'  => $this->input->post('Enterprise_Address2'),
-				'Enterprise_Country'   => $this->input->post('Enterprise_Country'),
-				'Enterprise_State'     => $this->input->post('Enterprise_State'),
-				'Enterprise_Province'  => $this->input->post('Enterprise_Province'),
-				'Enterprise_Pincode'   => $this->input->post('Enterprise_Pincode'),
-				'Enterprise_Password'  => $this->input->post('Enterprise_Password'),
-				'Enterprise_StartDate' => date('Y-m-d H:i:s',strtotime($this->input->post('Enterprise_StartDate'))),
-				'Enterprise_EndDate'   => date('Y-m-d H:i:s',strtotime($this->input->post('Enterprise_EndDate'))),
-				'Enterprise_CreatedOn' => date('Y-m-d'),
-				'Enterprise_CreatedBy' => $UserID ,
-				'Enterprise_Logo'      => $_FILES['logo']['name'],
-			);
-			//print_r($Enterprisedata);exit();
-			$this->do_upload();
-			if(!empty($this->input->post('Enterprise_Name')))
+			// echo "<pre>"; print_r($this->input->post()); exit();
+			if($this->input->post('submit') == 'save')
 			{
-				$where  = array(
-					'Enterprise_Name' =>	$this->input->post('Enterprise_Name'),
+				$Enterprisedata = array(
+					'Enterprise_Name'      => $this->input->post('Enterprise_Name'),
+					'Enterprise_Email'     => $this->input->post('Enterprise_Email'),
+					'Enterprise_Number'    => $this->input->post('Enterprise_Number'),
+					'Enterprise_Address1'  => $this->input->post('Enterprise_Address1'),
+					'Enterprise_Address2'  => $this->input->post('Enterprise_Address2'),
+					'Enterprise_Country'   => $this->input->post('Enterprise_Country'),
+					'Enterprise_State'     => $this->input->post('Enterprise_State'),
+					'Enterprise_Province'  => $this->input->post('Enterprise_Province'),
+					'Enterprise_Pincode'   => $this->input->post('Enterprise_Pincode'),
+					'Enterprise_Password'  => $this->input->post('Enterprise_Password'),
+					'Enterprise_StartDate' => date('Y-m-d H:i:s',strtotime($this->input->post('Enterprise_StartDate'))),
+					'Enterprise_EndDate'   => date('Y-m-d H:i:s',strtotime($this->input->post('Enterprise_EndDate'))),
+					'Enterprise_CreatedOn' => date('Y-m-d'),
+					'Enterprise_CreatedBy' => $UserID ,
+					'Enterprise_Logo'      => $_FILES['logo']['name'],
 				);
-				$query = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where);	
-				if($query)
+				$this->do_upload();
+				if(!empty($this->input->post('Enterprise_Name')))
 				{
-					$this->session->set_flashdata("er_msg","Enterprise already registered" );
-					redirect("Enterprise","refresh");
-				}
-				else
-				{
-					$this->Common_Model->insert('GAME_ENTERPRISE',$Enterprisedata);
-					$this->session->set_flashdata("tr_msg","Details Insert Successfully" );
-					redirect("Enterprise","refresh");
+					$where  = array(
+						'Enterprise_Name' =>	$this->input->post('Enterprise_Name'),
+					);
+					$query = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where);	
+					if($query)
+					{
+						$this->session->set_flashdata("er_msg","Enterprise already registered" );
+						redirect("Enterprise","refresh");
+					}
+					else
+					{
+						$result = $this->Common_Model->insert('GAME_ENTERPRISE',$Enterprisedata);
+						
+						if($result)
+						{
+							$Domain_EnterpriseId = $result;
+							$Domain_Name         = $this->input->post('commonDomain');
+							$Domain_Logo         = $_FILES['logo']['name'];
+							$Domain_details      = array(
+								'Domain_Name'         => trim("http://".$Domain_Name.".corporatesim.com"),
+								'Domain_EnterpriseId' => $Domain_EnterpriseId,
+								'Domain_Logo'         => $Domain_Logo,
+								'Domain_Status'       => 0,
+							);
+							if($this->input->post('allow') == 'allow')
+							{
+								// insert data to domain table only if domanin is neither existing nor empty
+								$this->Common_Model->insert('GAME_DOMAIN',$Domain_details);
+							}
+						}
+
+						$this->session->set_flashdata("tr_msg","Details Insert Successfully" );
+						redirect("Enterprise","refresh");
+					}
 				}
 			}
 		}

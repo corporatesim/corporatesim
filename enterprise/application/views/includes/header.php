@@ -3,7 +3,7 @@
 <head>
   <!-- Basic Page Info -->
   <meta charset="utf-8">
-  <title>Dashboard</title>
+  <title><?php echo ucfirst($this->uri->segment(1)); ?></title>
   <!-- Site favicon -->
   <!-- <link rel="shortcut icon" href="images/favicon.ico"> -->
   <!-- Mobile Specific Metas -->
@@ -41,19 +41,23 @@
     <div class="header-right" style="width:100%">
       <div class="brand-logo">
         <a href="<?php echo base_url('Dashboard');?>">
-          <img src="<?php echo base_url('common/'); ?>vendors/images/cs_logo.jpg" alt="CorporateSim">
+          <?php if(isset($this->session->userdata('loginData')['User_profile_pic'])) { ?>
+            <img src="<?php echo base_url('common/Logo/'.$this->session->userdata('loginData')['User_profile_pic']); ?>" alt="CorporateSim">
+          <?php } else { ?>
+            <img src="<?php echo base_url('common/'); ?>vendors/images/cs_logo.jpg" alt="CorporateSim">
+          <?php } ?>
         </a> 
       </div>
-      <div class="menu-icon">
+     <!--  <div class="menu-icon">
         <span></span>
         <span></span>
         <span></span>
         <span></span>
-      </div>
+      </div> -->
       <div class="user-info-dropdown">
         <div class="dropdown">
           <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-            <?php
+            <!-- <?php
             if($this->session->userdata('loginData')['User_Role'] > 0 )
             {
 
@@ -66,7 +70,7 @@
             {
               echo "<span class='user-icon'><i class='fa fa-user-o'></i></span>";
             } 
-            ?>
+            ?> -->
             <span class="user-name"><?php echo ucfirst($this->session->userdata('loginData')['User_FullName']); ?>
             <?php if($this->session->userdata('loginData')['User_Role'] == 1){?>
               <br><span class="small"><center><code>Enterprise: <?php echo $this->session->userdata('loginData')['Enterprise_Name'];?> </code></center></span>

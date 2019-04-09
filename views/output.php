@@ -120,6 +120,7 @@ include_once 'includes/header.php';
               //Get Component for this area for this linkid
                   while($row1 = mysqli_fetch_array($component)){ 
                     switch ($row1['ViewingOrder']) {
+                      //Name - detailsChart - inputfields
                      case 1:
                      $ComponentName  = "";
                      $DetailsChart   = "";
@@ -128,6 +129,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-6";
                      break;
 
+                    //Name - inputfields - Detailschart
                      case 2:
                      $ComponentName  = "";
                      $InputFields    = "";
@@ -136,6 +138,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-6";
                      break;
 
+                    //Detailchart - inputfields - Name
                      case 3:
                      $DetailsChart   = "";
                      $InputFields    = "";
@@ -144,6 +147,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-6";
                      break;
 
+                     //detailchart - inputfields
                      case 4:
                      $ComponentName  = "hidden removeThis";
                      $DetailsChart   = "pull-left";
@@ -152,6 +156,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-6";
                      break;
 
+                     //inputfields - detailschart - Name
                      case 5:
                      $ComponentName  = "pull-right";
                      $DetailsChart   = "pull-right";
@@ -160,6 +165,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-6";
                      break;
 
+                     //inputfiels - detailchart
                      case 6:
                      $InputFields    = "pull-left";
                      $ComponentName  = "hidden removeThis";
@@ -168,6 +174,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-6";
                      break;
 
+                    //inputfield - name - fullLength
                      case 7:
                      $ComponentName  = "pull-right";
                      $DetailsChart   = "hidden";
@@ -176,6 +183,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-6";
                      break;
 
+                     //inputfield - detailchart
                      case 8:
                      $ComponentName  = "hidden";
                      $DetailsChart   = "pull-right";
@@ -184,6 +192,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-6";
                      break;
 
+                     //Name - detailchart
                      case 9:
                      $ComponentName  = "";
                      $DetailsChart   = "pull-right";
@@ -192,6 +201,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-6";
                      break;
 
+                     //Name - inputfields - fullLength
                      case 10:
                      $ComponentName  = "";
                      $DetailsChart   = "hidden";
@@ -200,6 +210,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-6";
                      break;
 
+                    //detailschart - Name
                      case 11:
                      $ComponentName  = "pull-right";
                      $DetailsChart   = "";
@@ -208,6 +219,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-6";
                      break;
 
+                     //Detailschart - inputfields
                      case 12:
                      $ComponentName  = "hidden";
                      $DetailsChart   = "";
@@ -216,6 +228,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-6";
                      break;
 
+                     //Name - inputfields - halfLength
                      case 13:
                      $ComponentName  = "";
                      $DetailsChart   = "hidden";
@@ -224,6 +237,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-12";
                      break;
 
+                    //Inputfiels - Name - halfLength
                      case 14:
                      $InputFields    = "";
                      $ComponentName  = "pull-right";
@@ -232,6 +246,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-12";
                      break;
 
+                     //CkEditor - fullLength
                      case 15:
                      $ComponentName  = "hidden";
                      $DetailsChart   = "";
@@ -240,6 +255,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-12";
                      break;
 
+                     //CkEditor - halfLength
                      case 16:
                      $ComponentName  = "hidden";
                      $DetailsChart   = "";
@@ -248,6 +264,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-12";
                      break;
 
+                    // ckEditor - InputFields - HalfLength
                      case 17:
                      $ComponentName  = "hidden";
                      $DetailsChart   = "";
@@ -256,6 +273,7 @@ include_once 'includes/header.php';
                      $cklength       = "col-md-6";
                      break;
 
+                     // InputFields - ckEditor - HalfLength
                      case 18:
                      $ComponentName  = "hidden";
                      $DetailsChart   = "pull-right";
@@ -263,7 +281,17 @@ include_once 'includes/header.php';
                      $length         = "col-sm-6";
                      $cklength       = "col-md-6";
                      break;
+
+                    //Name - Detailchart - halfLength
+                     case 19:
+                     $ComponentName  = "";
+                     $DetailsChart   = "pull-right";
+                     $InputFields    = "hidden";
+                     $length         = "col-sm-6";
+                     $cklength       = 'col-md-6';
+                     break;
                    }
+
                    if($length == 'col-sm-6')
                    {
                      $width  = "col-md-6";
@@ -453,6 +481,7 @@ include_once 'includes/header.php';
                   //Get Component for this area for this linkid
                    while($row2 = mysqli_fetch_array($subcomponent)){
                      switch ($row2['ViewingOrder']) {
+                       // Name - Details/Chart - InputFields
                       case 1:
                       $SubcomponentName  = "";
                       $DetailsChart      = "";
@@ -461,6 +490,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-6";
                       break;
 
+                       // Name - InputFields - Details/Chart
                       case 2:
                       $SubcomponentName  = "";
                       $InputFields       = "";
@@ -469,6 +499,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-6";
                       break;
 
+                     // Details/Chart - InputFields - Name
                       case 3:
                       $DetailsChart     = "";
                       $InputFields      = "";
@@ -485,6 +516,7 @@ include_once 'includes/header.php';
                       $cklength         = "col-md-6";
                       break;
 
+                      // InputFields - Details/Chart - Name
                       case 5:
                       $SubcomponentName  = "pull-right";
                       $DetailsChart      = "pull-right";
@@ -501,6 +533,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-6";
                       break;
 
+                       // InputFields - Name - FullLength
                       case 7:
                       $SubcomponentName  = "pull-right";
                       $DetailsChart      = "hidden";
@@ -509,6 +542,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-6";
                       break;
 
+                      // InputFields - Details/Chart
                       case 8:
                       $SubcomponentName  = "hidden";
                       $DetailsChart      = "pull-right";
@@ -517,6 +551,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-6";
                       break;
 
+                       // Name - Details/Chart
                       case 9:
                       $SubcomponentName = "";
                       $DetailsChart     = "pull-right";
@@ -525,6 +560,7 @@ include_once 'includes/header.php';
                       $cklength         = "col-md-6";
                       break;
 
+                       // Name - InputFields - FullLength
                       case 10:
                       $SubcomponentName  = "";
                       $DetailsChart      = "hidden";
@@ -533,6 +569,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-6";
                       break;
 
+                      // Details/Chart - Name
                       case 11:
                       $SubcomponentName  = "pull-right";
                       $DetailsChart      = "";
@@ -541,6 +578,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-6";
                       break;
 
+                      // Details/Chart - InputFields
                       case 12:
                       $SubcomponentName  = "hidden";
                       $DetailsChart      = "";
@@ -549,6 +587,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-6";
                       break;
 
+                      // Name - InputFields - HalfLength
                       case 13:
                       $SubcomponentName  = "";
                       $DetailsChart      = "hidden";
@@ -557,6 +596,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-12";
                       break;
 
+                      // InputFields - Name - HalfLength
                       case 14:
                       $InputFields       = "";
                       $SubcomponentName  = "pull-right";
@@ -565,6 +605,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-12";
                       break;
 
+                      // CkEditor - FullLength
                       case 15:
                       $SubcomponentName  = "hidden";
                       $DetailsChart      = "";
@@ -573,6 +614,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-12";
                       break;
 
+                      // CkEditor - HalfLength
                       case 16:
                       $SubcomponentName  = "hidden";
                       $DetailsChart      = "";
@@ -581,6 +623,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-12";
                       break;
 
+                      // ckEditor - InputFields - HalfLength
                       case 17:
                       $SubcomponentName  = "hidden";
                       $DetailsChart      = "";
@@ -589,6 +632,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-6";
                       break;
 
+                      // InputFields - ckEditor - HalfLength
                       case 18:
                       $SubcomponentName = "hidden";
                       $DetailsChart     = "pull-right";
@@ -596,49 +640,81 @@ include_once 'includes/header.php';
                       $length           = "col-sm-6";
                       $cklength         = "col-md-6";
                       break;
+
+                       // Name - Details/Chart - HalfLength
+                      case 19:
+                      $SubcomponentName  = "";
+                      $DetailsChart      = "pull-right";
+                      $InputFields       = "hidden";
+                      $length            = "col-sm-6";
+                      $cklength          = 'col-md-6';
+                      break;
+
+                      //ck-editor 1/4 length
+                      case 20:
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "";
+                      $InputFields      = "hidden";
+                      $length           = "col-md-3";
+                      $cklength         = 'col-md-12';
+                      break;
+
+                      //inputfields 1/4 length
+                      case 21:
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "hidden";
+                      $InputFields      = "";
+                      $length           = "col-md-3";
+                      $cklength         = 'col-md-12';
+                      break;
                     }
 
-                    if($length=='col-sm-6')
+                    if($length  ==  'col-sm-6')
                     {
                       $width  = "col-md-6";
                       $width1 = "col-md-6";
                     }
-                    else
+                    elseif($length  ==  'col-sm-12')
                     {
                       $width  = "col-md-2";
                       $width1 = "col-md-4";
                     }
-                    if ($row2['ShowHide'] == 0)
-                    {
-                      $hidden = "";
-                    }
                     else
                     {
-                      $hidden = "hidden";
+                     $width1 = "col-md-12";
                     }
+                    //for show and hide components and subcomponents
+                   if ($row2['ShowHide'] == 0)
+                   {
+                    $hidden = "";
+                  }
+                  else
+                  {
+                    $hidden = "hidden";
+                  }
 
-                    switch ($row2['InputFieldOrder'])
-                    {
-                      case 1:
-                      $labelC = "";
-                      $labelL = "pull-right";
-                      break;
+                  switch ($row2['InputFieldOrder'])
+                  {
+                    case 1:
+                    $labelC = "";
+                    $labelL = "pull-right";
+                    break;
 
-                      case 2:
-                      $labelL = "";
-                      $labelC = "pull-right";
-                      break;
+                    case 2:
+                    $labelL = "";
+                    $labelC = "pull-right";
+                    break;
 
-                      case 3:
-                      $labelC = "";
-                      $labelL = "hidden";
-                      break;
+                    case 3:
+                    $labelC = "";
+                    $labelL = "hidden";
+                    break;
 
-                      case 4:
-                      $labelC = "hidden";
-                      $labelL = "";
-                      break;
-                    }
+                    case 4:
+                    $labelC = "hidden";
+                    $labelL = "";
+                    break;
+                  }
                  /* if($row2['ShowHide'] == 0)
                   {
 
@@ -726,7 +802,7 @@ include_once 'includes/header.php';
     $('#submitShow').on('click',function(){
       $('#submit').trigger('click');
     });
-	});
+  });
 </script>
 </body>
 </html>

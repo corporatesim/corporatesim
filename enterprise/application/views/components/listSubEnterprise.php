@@ -25,7 +25,7 @@
           <div class="col-md-12 col-sm-12">
             <div class="title">
               <div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
-                <div class="pull-right">
+                <!-- <div class="pull-right">
                   <form method="post"  action="<?php echo base_url('excel_export/downloadSubEnterprise/'.$filterID); ?>" enctype="multipart/form-data">
                     <button type="submit" name="submit" id="user_download" class="btn btn-primary"
                     value="Download" style="display: none"><span class="fa fa-download"></span> Download </button>
@@ -39,11 +39,11 @@
                     </span>
                   </form>
                   <a href="<?php echo base_url()."csvdemofiles/subenterprise-upload-csv-demo-file.csv"; ?>" download="DemoSubEnterprise.csv"><u>Demo Subenterprise</u></a>
-                </div>
+                </div> -->
                 <div class="clearfix mb-20">
                   <div class="pull-left">
                     <h5 class="text-blue mb-20">SubEnterprise Details</h5>
-                    <form method="post" action="" id="filterForm">
+                    <!-- <form method="post" action="" id="filterForm">
                       <div class="form-group row"id="selectSubenterprise">
                         <label for="Select SubEnterprise" class="col-sm-12 col-md-4 col-form-label">Choose Filter</label>
                         <div class="col-sm-12 col-md-8">
@@ -62,7 +62,7 @@
                       <?php }?>
                     </div>
                   </div>    
-                </form>
+                </form> -->
               </div>
             </div>
             <div class="row">
@@ -76,7 +76,7 @@
                     <th>Address</th>
                     <th>Password</th>
                     <th>Games</th>
-                    <th>Duration</th>
+                    <th>Duration (DD-MM-YYYY)</th>
                     <th class="datatable-nosort">Action</th>
                   </tr>
                 </thead>
@@ -84,6 +84,13 @@
                   <?php
                   $rowNum = 1;
                   foreach ($subEnterpriseDetails as $subEnterpriseDetails){
+                    $address1 = ($subEnterpriseDetails->Enterprise_Address1)?$subEnterpriseDetails->Enterprise_Address1:'';
+                    $address2 = ($subEnterpriseDetails->Enterprise_Address2)?'<br>'.$subEnterpriseDetails->Enterprise_Address2:'';
+                    $province = ($subEnterpriseDetails->Enterprise_Province)?', '.$subEnterpriseDetails->Enterprise_Province:'';
+                    $state    = ($subEnterpriseDetails->State_Name)?'<br>'.$subEnterpriseDetails->State_Name:'';
+                    $pincode  = ($subEnterpriseDetails->Enterprise_Pincode)?', '.$subEnterpriseDetails->Enterprise_Pincode:'';
+                    $country  = ($subEnterpriseDetails->Country_Name)?'<br><b>'.$subEnterpriseDetails->Country_Name.'</b>':'';
+                    $address  = $address1.$address2.$province.$state.$pincode.$country;
                     ?>
                     <tr>
                       <td>
@@ -92,7 +99,7 @@
                       <td><?php echo $subEnterpriseDetails->Enterprise_Name; ?></td>
                       <td><?php echo $subEnterpriseDetails->SubEnterprise_Name; ?></td>
                       <td><?php echo $subEnterpriseDetails->SubEnterprise_Email; ?></td>
-                      <td><?php echo $subEnterpriseDetails->SubEnterprise_Address1; ?></td>
+                      <td><?php echo $address; ?></td>
                       <td><?php echo $subEnterpriseDetails->SubEnterprise_Password; ?></td>
                       <td>
                         <a class="dropdown-item" href="<?php echo base_url('Games/assignGames/');?><?php echo base64_encode($subEnterpriseDetails->SubEnterprise_ID).'/'.base64_encode($this->uri->segment(1)); ?>" title="Allocate/Deallocate Games"><?php echo $subEnterpriseDetails->gamecount; ?></a>
@@ -103,8 +110,8 @@
                           <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                             <i class="fa fa-ellipsis-h"></i>
                           </a>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#"><i class="fa fa-eye"></i> View</a>
+                          <div class="dropdown-menu dropdown-menu-left">
+                            <!-- <a class="dropdown-item" href="#"><i class="fa fa-eye"></i> View</a> -->
                             <a class="dropdown-item" href="<?php echo base_url('SubEnterprise/edit/');?><?php echo base64_encode($subEnterpriseDetails->SubEnterprise_ID); ?>"title="   Edit"><i class="fa fa-pencil">
                             </i> Edit</a>
                             <!-- <a class="dropdown-item" href="<?php //echo base_url('SubEnterprise/assignGames/');?><?php //echo base64_encode($subEnterpriseDetails->SubEnterprise_ID); ?>" title="Allocate/Deallocate Games"><i class="fa fa-gamepad"></i> Allocate/Deallocate Games</a> -->

@@ -25,7 +25,7 @@
           <div class="col-md-12 col-sm-12">
             <div class="title">
               <div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
-                <div class="pull-right">
+                <!-- <div class="pull-right">
                   <form method="post" id="uploadUser" name="uploadUser" action="" enctype="multipart/form-data">
                     <span id="fileselector">
                       <label class="btn btn-default" for="upload-file">
@@ -34,9 +34,9 @@
                       </label>
                     </span>
                   </form>
-                  <!--  <a href="<?php //echo base_url()."csvdemofiles/enterprise-upload-csv-demo-file.csv"; ?>" download="DemoEnterprise.csv"><u>Demo Users CSV</u></a> -->
-                </div>
-                <div class="clearfix mb-20">
+                   <a href="<?php //echo base_url()."csvdemofiles/enterprise-upload-csv-demo-file.csv"; ?>" download="DemoEnterprise.csv"><u>Demo Users CSV</u></a>
+                 </div> -->
+                 <div class="clearfix mb-20">
                   <div class="pull-left">
                     <h5 class="text-blue mb-20">Enterprise Details</h5>
                   </div>
@@ -62,12 +62,12 @@
                       $rowNum = 1;
                       foreach ($EnterpriseDetails as $enterprisedetails)
                       { 
-                        $address1 = ($enterprisedetails->Enterprise_Address1)?$enterprisedetails->Enterprise_Address1.'<br>':'';
-                        $address2 = ($enterprisedetails->Enterprise_Address2)?$enterprisedetails->Enterprise_Address2.'<br>':'';
-                        $province = ($enterprisedetails->Enterprise_Province)?$enterprisedetails->Enterprise_Province.', ':'';
-                        $state    = ($enterprisedetails->State_Name)?$enterprisedetails->State_Name.' ':'';
-                        $pincode  = ($enterprisedetails->Enterprise_Pincode)?$enterprisedetails->Enterprise_Pincode.'<br>':'';
-                        $country  = ($enterprisedetails->Country_Name)?'<b>'.$enterprisedetails->Country_Name.'</b>':'';
+                        $address1 = ($enterprisedetails->Enterprise_Address1)?$enterprisedetails->Enterprise_Address1:'';
+                        $address2 = ($enterprisedetails->Enterprise_Address2)?'<br>'.$enterprisedetails->Enterprise_Address2:'';
+                        $province = ($enterprisedetails->Enterprise_Province)?', '.$enterprisedetails->Enterprise_Province:'';
+                        $state    = ($enterprisedetails->State_Name)?'<br>'.$enterprisedetails->State_Name.', ':'';
+                        $pincode  = ($enterprisedetails->Enterprise_Pincode)?$enterprisedetails->Enterprise_Pincode:'';
+                        $country  = ($enterprisedetails->Country_Name)?'<br><b>'.$enterprisedetails->Country_Name.'</b>':'';
                         $address  = $address1.$address2.$province.$state.$pincode.$country;
                         ?>
                         <tr>
@@ -102,7 +102,7 @@
                             <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button"data-toggle="dropdown">
                               <i class="fa fa-ellipsis-h"></i>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right">
+                            <div class="dropdown-menu dropdown-menu-left">
                               <!-- <a class="dropdown-item" href="#"><i class="fa fa-eye"></i> View</a> -->
                               <a class="dropdown-item" href="<?php echo base_url('Enterprise/edit/');?><?php echo base64_encode($enterprisedetails->Enterprise_ID); ?>" title="Edit"><i class="fa fa-pencil">
                               </i> Edit</a>
@@ -112,55 +112,55 @@
                           </div>
                         </td>
                       </tr>
-                    <?php $rowNum++; } ?>
-                  </tbody> 
-                </table>
+                      <?php $rowNum++; } ?>
+                    </tbody> 
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div id="Modal_Bulkupload" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-              <!-- Modal content-->
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Import Success</h4>
-                </div>
-                <div class="modal-body">
-                  <p id="bulk_u_msg"></p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" onclick="window.location='<?php echo $url; ?>';" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Modal -->
-          <div id="Modal_BulkuploadError" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-              <!-- Modal content-->
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title"></h4>
-                </div>
-                <div class="modal-body">
-                  <p id="bulk_u_err"></p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <div id="Modal_Bulkupload" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Import Success</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p id="bulk_u_msg"></p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" onclick="window.location='<?php echo $url; ?>';" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <script type="text/javascript">
-            $(document).ready(function(){
-              $('#enterprise').on('change',function(){
-                $('#filterForm').submit();
+            <!-- Modal -->
+            <div id="Modal_BulkuploadError" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"></h4>
+                  </div>
+                  <div class="modal-body">
+                    <p id="bulk_u_err"></p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+              $(document).ready(function(){
+                $('#enterprise').on('change',function(){
+                  $('#filterForm').submit();
+                });
               });
-            });
-          </script>
+            </script>
 
 
 

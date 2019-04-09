@@ -1,4 +1,6 @@
 <?php 
+// die('http://'.$_SERVER['SERVER_NAME']);
+$enterpriseDomain = 'http://'.$_SERVER['SERVER_NAME'];
 //include_once 'includes/header.php'; 
 include_once 'config/settings.php';
 include_once doc_root.'config/functions.php';
@@ -18,6 +20,24 @@ if($_SESSION['username'] != NULL)
 // Create object
 $funObj = new Functions();
 
+// fetch logo to show for b2c modal
+$sql = " SELECT * FROM GAME_DOMAIN WHERE Domain_Name='".$enterpriseDomain."' AND Domain_Status=0";
+$logoObj = $funObj->ExecuteQuery($sql);
+// echo $sql.'<br>'; print_r($logoObj->num_rows); exit();
+if($logoObj->num_rows > 0)
+{
+	$logoRes = $funObj->FetchObject($logoObj);
+	// domain has logo
+	$showLogo = $logoRes->Domain_Logo;
+	if(!empty($showLogo))
+	{
+		$_SESSION['logo'] = $showLogo;
+	}
+}
+else
+{
+	unset($_SESSION['logo']);
+}
 
 // If session value msg is set assign value to variable and unset session variable
 if(isset($_SESSION['msg']))
@@ -36,12 +56,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 		$username = $funObj->EscapeString($_POST['username']);
 		$password = $_POST['password'];
 
-		$sql = "SELECT * 
-		FROM GAME_SITE_USERS u inner join GAME_USER_AUTHENTICATION ua 
-		on u.User_id = ua.Auth_userid 
-		WHERE (u.User_username='".$username."' 
-		or u.User_email='".$username."') 
-		and ua.Auth_password='".$password."' 
+		$sql = "SELECT u.*, ge.Enterprise_Logo ,gse.SubEnterprise_Logo
+		FROM GAME_SITE_USERS u INNER JOIN GAME_USER_AUTHENTICATION ua
+		ON u.User_id = ua.Auth_userid LEFT JOIN GAME_ENTERPRISE ge ON u.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_SUBENTERPRISE gse ON u.User_SubParentId=gse.SubEnterprise_ID
+		WHERE (u.User_username='".$username."'
+		or u.User_email='".$username."')
+		and ua.Auth_password='".$password."'
 		";
 		//echo $sql;
 		//exit();
@@ -49,6 +69,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 
 		if($object->num_rows > 0){
 			$res = $funObj->FetchObject($object);
+			/*echo "<pre>";
+			print_r($res);exit;*/
 
 			if($res->User_Delete == 0)
 			{
@@ -58,7 +80,18 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 					$_SESSION['userid']    = (int) $res->User_id;
 					$_SESSION['username']  = $res->User_username;
 					$_SESSION['companyid'] = $res->User_companyid;
-
+					if(empty($_SESSION['logo']))
+					{
+						if($res->User_Role == 1)
+						{
+							$_SESSION['logo'] = $res->Enterprise_Logo;
+						}
+						elseif($res->User_Role == 2)
+						{
+							$_SESSION['logo'] = $res->SubEnterprise_Logo;
+						}
+					}
+					//unset($_SESSION['logo']);
 					//header("Location:".site_root."my_profile.php");
 					//echo '<script>window.location = "http://simulation.uxconsultant.in/my_profile.php"; </script>';
 					echo '<script>window.location = "'.site_root.'selectgame.php"; </script>';

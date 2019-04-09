@@ -6,7 +6,10 @@
 				<div class="row">
 					<div class="col-md-6 col-sm-12">
 						<div class="title">
-							<h1>Edit Enterprise</h1>
+							<h1>
+								<a href="<?php echo base_url(); ?>Enterprise/addEnterprise/" data-toggle="tooltip" title="" data-original-title="Add Enterprise"><i class="fa fa-plus-circle text-blue"></i></a>
+								Edit Enterprise
+							</h1>
 						</div>
 						<nav aria-label="breadcrumb" role="navigation">
 							<ol class="breadcrumb">
@@ -23,28 +26,28 @@
 					</div>
 					<form method="post" action=""enctype="multipart/form-data">
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span>Enterprise Name</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Name</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" type="text" value="<?php echo $editEnterprise->Enterprise_Name;?>" name="Enterprise_Name">
 							</div>
 						</div>
 						<!-- start adding more fields -->
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Number</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Contact Number</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="Enterprise_Number" value="<?php echo $editEnterprise->Enterprise_Number;?>" type="text" required="">
 							</div>
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Email</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Email ID</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="Enterprise_Email" value="<?php echo $editEnterprise->Enterprise_Email;?>" type="email" required="">
 							</div>
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Address1</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Address1</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="Enterprise_Address1" value="<?php echo $editEnterprise->Enterprise_Address1;?>" type="text" required="">
 							</div>
@@ -58,7 +61,7 @@
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Country</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Country</label>
 							<div class="col-sm-12 col-md-6">
 								<select class="form-control" name="Enterprise_Country" required="" id="country">
 									<!-- value="<?php echo $editEnterprise->Enterprise_Country;?>" -->
@@ -71,14 +74,14 @@
 									<script>
 										setTimeout(function(){
 											$('#country').trigger('change');
-										},1000);
+										},3000);
 									</script>
 								<?php } ?>
 							</div>
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise State</label>
+							<label class="col-sm-12 col-md-4 col-form-label">State</label>
 							<div class="col-sm-12 col-md-6">
 								<select class="form-control" name="Enterprise_State" required="" id="state" data-stateid="<?php echo $editEnterprise->Enterprise_State;?>">
 									<option value="">--Select State--</option>
@@ -94,7 +97,7 @@
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Pincode</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Pincode</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="Enterprise_Pincode" value="<?php echo $editEnterprise->Enterprise_Pincode;?>" type="text" required="">
 							</div>
@@ -102,35 +105,52 @@
 						<!-- end of adding more fields  -->
 						<div class="form-group row"id="sandbox-container">
 							<div class="col-md-4">
-								<label for="Game Duration"><span class="alert-danger">*</span> Select Account Duration</label>
+								<label for="Game Duration">Select Account Duration</label>
 							</div>
 							<div class="input-daterange input-group col-md-6" id="datepicker">
-								<input type="text" class="form-control datetimepicker" data-date-format="yyyy-mm-dd" id="Enterprise_StartDate" name="Enterprise_StartDate" value="<?php echo $editEnterprise->Enterprise_StartDate;?>" placeholder="Select Start Date" required readonly/>
-								<span class="input-group-addon">to</span>
-								<input type="text" class="form-control datetimepicker" data-date-format="yyyy-mm-dd" id="Enterprise_EndDate" name="Enterprise_EndDate" value="<?php echo $editEnterprise->Enterprise_EndDate;?>" placeholder="Select End Date" required readonly/>
+								<input type="text" class="form-control datetimepicker" data-date-format="yyyy-mm-dd" id="Enterprise_StartDate" name="Enterprise_StartDate" value="<?php echo $editEnterprise->Enterprise_StartDate;?>" data-startDate="<?php echo strtotime($editEnterprise->Enterprise_StartDate);?>" data-endDate="<?php echo strtotime($editEnterprise->Enterprise_EndDate);?>" placeholder="Select Start Date" required readonly/>
+								<!-- <span class="input-group-addon">to</span> --> &nbsp;
+								<input type="text" class="form-control datetimepicker" data-date-format="yyyy-mm-dd" id="Enterprise_EndDate" name="Enterprise_EndDate" value="<?php echo $editEnterprise->Enterprise_EndDate;?>" data-startDate="<?php echo strtotime($editEnterprise->Enterprise_StartDate);?>" data-endDate="<?php echo strtotime($editEnterprise->Enterprise_EndDate);?>" placeholder="Select End Date" required readonly/>
 							</div>
 						</div>
 						<div class="form-group row">
 							<label class="col-sm-12 col-md-4 col-form-label">
-								<span class="alert-danger">*</span> Choose Logo</label>
-								<div class="col-sm-12 col-md-6">
-									<input type="file" name="logo" multiple="multiple" accept="image/*" id="image" class="form-control">
+							Choose Logo</label>
+							<div class="col-sm-12 col-md-6">
+								<input type="file" name="logo" multiple="multiple" accept="image/*" id="image" class="form-control">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label">Domain/Sub-Domain</label>
+							<?php if(isset($domainName->Domain_Name)) { ?>
+								<div class="col-sm-12 col-md-6" id="addDomainField">
+									<input type="text" name="" id="commonDomain" class="form-control" value="<?php echo $domainName->Domain_Name;?>" disabled >
 								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Current Enterprise Logo</label>
-								<div class="col-sm-12 col-md-6">
-									<img src="<?php echo base_url('common/Logo/'.$editEnterprise->Enterprise_Logo);?>" width="100px"height="100px" alternate="Enterprise_Logo">
+							<?php } else { ?>
+								<div class="col-sm-6 col-md-3" id="addDomainField">
+									<input type="text" name="commonDomain" id="commonDomain" class="form-control" value="" placeholder="Enter Sub-Domain Name" pattern="[A-Za-z]{3,}">
 								</div>
+								<div class="col-sm-6 col-md-3" id="showDomain">
+									.corporatesim.com
+								</div>
+							<?php } ?>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label">Current Enterprise Logo</label>
+							<div class="col-sm-12 col-md-6">
+								<img src="<?php echo base_url('common/Logo/'.$editEnterprise->Enterprise_Logo);?>" width="100px"height="100px" alternate="Enterprise_Logo">
 							</div>
-							<div class="text-center">
-								<button type="submit" name="submit"class="btn btn-primary">UPDATE</button>
-								<a href="<?php echo base_url('Enterprise/');?>"><button type="button" name="submit"class="btn btn-primary">CANCEL</button></a>
-							</div>
-						</form>
-					</div>
+						</div>
+						<div class="text-center">
+							<button type="submit" name="submit"class="btn btn-primary">UPDATE</button>
+							<a href="<?php echo base_url('Enterprise/');?>"><button type="button" name="submit"class="btn btn-primary">CANCEL</button></a>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
 

@@ -47,10 +47,71 @@
 <script src="<?php echo base_url('common/'); ?>datetimePicker/js/i18n/datepicker.en.js"></script>
 <!-- Show datatable -->
 <script type="text/javascript">
-	$('document').ready(function()
+	$(document).ready(function()
 	{
+		// to manage domain/sub-domain field accordingly
+		// $('input[name=Sub-Domain]').on('change',function(){
+		// 	if($(this).val() == 'Specific')
+		// 	{
+		// 		$('#addDomainField').empty();
+		// 		$('#addDomainField').append('<input type="url" name="commonDomain" id="commonDomain" class="form-control" value="" placeholder="http://exampleAbc.com">');
+		// 	}
+		// 	else
+		// 	{
+		// 		$('#addDomainField').empty();
+		// 		$('#addDomainField').append('<input type="text" name="commonDomain" id="commonDomain" class="form-control" value="" placeholder="http://abcExample.corporatesim.com">');
+		// 	}
+		// });
+		// show domain name
+		$('#commonDomain').on('keypress keyup', function(e){
+			var domainName = $(this).val().trim();
+			// console.log(e+' and '+domainName.length);
+			if(domainName.length > 2)
+			{
+				// trigger ajax to find that domain already exist or not
+				$.ajax({
+					url     : "<?php echo base_url('Ajax/getDomainName/')?>"+domainName,
+					type    : 'POST',
+					// dataType: 'json',
+					success: function(result)
+					{
+						// console.log(result);
+						if(result == 'success')
+						{
+							$('#showDomain').empty();
+							$('#showDomain').html('Your Domain will be: <span class="alert-success"><b>'+domainName+'.corporatesim.com</b></span>');
+							$('#showDomain').append('<input type="hidden" name="allow" value="allow">');
+						}
+						else
+						{
+							$('#showDomain').empty();
+							$('#showDomain').html('Domain: <span class="alert-danger">"<b>'+domainName+'.corporatesim.com</b>" already taken. Please try different domain.</span>');
+						}
+					}
+				})
+			}
+			else
+			{
+				$('#showDomain').empty();
+				$('#showDomain').html('<b class="alert-danger">Only Alphabates are allowed. Min 3 Characters.</b>');
+			}
+			
+		});
+		// to manipulate csv form and normal form to insert/upload data
+		$('#showCsvForm').on('click',function(){
+			if($(this).is(':checked'))
+			{
+				$('#addByCsv').removeClass('d-none');
+				$('#addByForm').addClass('d-none');
+			}
+			else
+			{
+				$('#addByCsv').addClass('d-none');
+				$('#addByForm').removeClass('d-none');
+			}
+		});
 		// set date range while createing the subenterprise accordingly
-		$('#enterprise').on('change',function(){
+		$('.enterprise').on('change',function(){
 			var Enterprise_ID = $(this).val();
 			$.ajax({
 				url     : "<?php echo base_url('Ajax/get_dateRange/')?>"+Enterprise_ID,

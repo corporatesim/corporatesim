@@ -5,9 +5,6 @@
 			<div class="page-header">
 				<div class="row">
 					<div class="col-md-6 col-sm-12">
-						<div class="title">
-							<h1>Add Enterprise</h1>
-						</div>
 						<nav aria-label="breadcrumb" role="navigation">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
@@ -19,47 +16,68 @@
 				<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
 					<div class="clearfix">
 						<div class="pull-left">
-							<h4 class="text-blue">Add Enterprise</h4><br>
+							<h4 class="text-blue">Add Enterprise</h4>
+						</div>
+						<div class="pull-right">
+							<input type="checkbox" name="showCsvForm" id="showCsvForm"> Choose File To Upload Enterprise
 						</div>
 					</div>
-					<form method="post" action=""enctype="multipart/form-data">
+					<br>
+					<!-- to add data by csv -->
+					<form action="" method="post" id="addByCsv" enctype="multipart/form-data" class="d-none">
+						<div class="pull-right"style="margin-top:-30px;"><a href="<?php echo base_url()."csvdemofiles/enterprise-upload-csv-demo-file.csv"; ?>" download="DemoEnterprise.csv"><u><i class="fa fa-download"></i></u> Demo CSV file</a></div>
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Name</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Choose Csv File To Upload</label>
 							<div class="col-sm-12 col-md-6">
-								<input class="form-control" name="Enterprise_Name" value="" type="text" placeholder="Enter Enterprise Name" required="">
+								<input type="file" name="upload_csv" accept=".csv" id="csvFile" value="" class="form-control" required="">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label"></label>
+							<div class="col-sm-12 col-md-6">
+								<button class="btn btn-primary" type="submit" value="Upload" name="submit" id="uploadCsvFile">Upload</button>
+							</div>
+						</div>
+					</form>
+					<!-- to add data by single record -->
+					<form method="post" action=""enctype="multipart/form-data" id="addByForm">
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label">Name</label>
+							<div class="col-sm-12 col-md-6">
+								<input class="form-control" name="Enterprise_Name" value="" type="text" placeholder="Enter Name" required="">
 							</div>
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Number</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Contact Number</label>
 							<div class="col-sm-12 col-md-6">
-								<input class="form-control" name="Enterprise_Number" value="" type="text" placeholder="Enter Enterprise Number" required="">
+								<input class="form-control" name="Enterprise_Number" value="" type="text" placeholder="Enter Number" required="">
 							</div>
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Email</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Email ID</label>
 							<div class="col-sm-12 col-md-6">
-								<input class="form-control" name="Enterprise_Email" value="" type="email" placeholder="Enter Enterprise Email" required="">
+								<input class="form-control" name="Enterprise_Email" value="" type="email" placeholder="Enter Email" required="">
 							</div>
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Address1</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Address1</label>
 							<div class="col-sm-12 col-md-6">
-								<input class="form-control" name="Enterprise_Address1" value="" type="text" placeholder="Enter Enterprise Address1" required="">
+								<input class="form-control" name="Enterprise_Address1" value="" type="text" placeholder="Enter Address1" required="">
 							</div>
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"> Enterprise Address2</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Address2</label>
 							<div class="col-sm-12 col-md-6">
-								<input class="form-control" name="Enterprise_Address2" value="" type="text" placeholder="Enter Enterprise Address2">
+								<input class="form-control" name="Enterprise_Address2" value="" type="text" placeholder="Enter Address2">
 							</div>
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Country</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Country</label>
 							<div class="col-sm-12 col-md-6">
 								<select class="form-control" name="Enterprise_Country" required="" id="country">
 									<option value="">--Select Country--</option>
@@ -71,7 +89,7 @@
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise State</label>
+							<label class="col-sm-12 col-md-4 col-form-label">State</label>
 							<div class="col-sm-12 col-md-6">
 								<select class="form-control" name="Enterprise_State" required="" id="state">
 									<option value="">--Select State--</option>
@@ -80,28 +98,28 @@
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"> Enterprise Province</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Province</label>
 							<div class="col-sm-12 col-md-6">
-								<input class="form-control" name="Enterprise_Province" value="" type="text" placeholder="Enter Enterprise Province">
+								<input class="form-control" name="Enterprise_Province" value="" type="text" placeholder="Enter Province">
 							</div>
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Pincode</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Pincode</label>
 							<div class="col-sm-12 col-md-6">
-								<input class="form-control" name="Enterprise_Pincode" value="" type="text" placeholder="Enter Enterprise Pincode" required="">
+								<input class="form-control" name="Enterprise_Pincode" value="" type="text" placeholder="Enter Pincode" required="">
 							</div>
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Enterprise Password</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Password</label>
 							<div class="col-sm-12 col-md-6">
-								<input class="form-control" name="Enterprise_Password" type="text" placeholder="Enter Enterprise Password" required="" value="123Ent@2019">
+								<input class="form-control" name="Enterprise_Password" type="text" placeholder="Enter Password" required="" value="123Ent@2019">
 							</div>
 						</div> 
 
 						<div class="form-group row">
-							<label class="col-sm-12 col-md-4 col-form-label"><span class="alert-danger">*</span> Choose Logo</label>
+							<label class="col-sm-12 col-md-4 col-form-label">Choose Logo</label>
 							<div class="col-sm-12 col-md-6">
 								<input type="file" name="logo" multiple="multiple" accept="image/*" id="image" value="" class="form-control">
 							</div>
@@ -109,17 +127,27 @@
 
 						<div class="row" id="sandbox-container">
 							<div class="col-md-4">
-								<label for="Game Duration"><span class="alert-danger">*</span> Select Account Duration</label>
+								<label for="Game Duration">Select Account Duration</label>
 							</div>
 							<div class="input-daterange input-group col-md-6" id="datepicker">
 								<input type="text" class="form-control datetimepicker" data-date-format="yyyy-mm-dd" id="Enterprise_GameStartDate" name="Enterprise_GameStartDate" value="" placeholder="Select Start Date" required readonly/>
-								<span class="input-group-addon">to</span>
+								<!-- <span class="input-group-addon">to</span> --> &nbsp;
 								<input type="text" class="form-control datetimepicker" data-date-format="yyyy-mm-dd" id="Enterprise_GameEndDate" name="Enterprise_GameEndDate" value="" placeholder="Select End Date" required readonly/>
 							</div>
-						</div><br>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-sm-12 col-md-4 col-form-label">Domain/Sub-Domain</label>
+							<div class="col-sm-6 col-md-3" id="addDomainField">
+								<input type="text" name="commonDomain" id="commonDomain" class="form-control" value="" placeholder="Enter Sub-Domain Name" pattern="[A-Za-z]{3,}">
+							</div>
+							<div class="col-sm-6 col-md-3" id="showDomain">
+								.corporatesim.com
+							</div>
+						</div>
 
 						<div class="text-center">
-							<button type="submit" name="submit"class="btn btn-primary">SUBMIT</button>
+							<button type="submit" value="save" name="submit" class="btn btn-primary">SUBMIT</button>
 							<a href="<?php echo base_url('Enterprise');?>"><button type="button" name="submit"class="btn btn-primary">CANCEL</button></a>
 						</div>
 					</form>
@@ -128,4 +156,79 @@
 		</div>
 	</div>
 </div>
+
+
+<div id="Modal_Bulkupload" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<p id="bulk_u_msg"></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Modal -->
+<div id="Modal_BulkuploadError" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<p id="bulk_u_err"></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	<!--
+
+		$('#uploadCsvFile').on('click',function(e){
+			e.preventDefault();
+			$('#addByCsv').submit();
+			var form = $('#addByCsv').get(0);                     
+			$.ajax({
+				url        : '<?php echo base_url();?>Ajax/enterprisecsv',
+				type       : "POST",
+				data       : new FormData(form),
+				cache      : false,
+				contentType: false,
+				processData: false,
+				beforeSend : function(){
+					$('#loader').addClass('loading');
+				},
+				success: function( result ){
+					try {   
+						var response = JSON.parse( result );
+						if( response.status == 1 ){
+							$('#bulk_u_msg').html( response.msg );
+							$('#Modal_Bulkupload').modal( 'show' );
+						} else {
+							$('#bulk_u_err').html( response.msg );
+							$('#Modal_BulkuploadError').modal( 'show' );
+						}
+					} catch ( e ) {
+						console.log( result );
+					}
+					$('#loader').removeClass('loading');
+				}
+			});
+		});
+          //-->
+        </script>
+
 

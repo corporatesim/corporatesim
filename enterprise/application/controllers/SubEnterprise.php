@@ -22,7 +22,6 @@ class SubEnterprise extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Common_Model');
 		if($this->session->userdata('loginData') == NULL)
 		{
 			$this->session->set_flashdata('er_msg', 'You need to login to see the dashboard');
@@ -39,7 +38,7 @@ class SubEnterprise extends CI_Controller {
 			redirect('Profile');
 		}
 		$RequestMethod = $this->input->server('REQUEST_METHOD');
-		$query         = "SELECT *, (SELECT count(*) FROM GAME_SUBENTERPRISE_GAME WHERE SG_SubEnterpriseID = gs.SubEnterprise_ID) as gamecount FROM GAME_SUBENTERPRISE gs LEFT JOIN GAME_ENTERPRISE ge ON gs.SubEnterprise_EnterpriseID = ge.Enterprise_ID LEFT JOIN GAME_ADMINUSERS ga ON ga.id = gs.SubEnterprise_CreatedBy OR ga.id = gs.SubEnterprise_UpdatedBy LEFT JOIN GAME_SITE_USERS gu ON gu.User_id = gs.SubEnterprise_CreatedBy OR gu.User_id = gs.SubEnterprise_UpdatedBy WHERE SubEnterprise_Status = 0 ";
+		$query         = "SELECT *, (SELECT count(*) FROM GAME_SUBENTERPRISE_GAME WHERE SG_SubEnterpriseID = gs.SubEnterprise_ID) as gamecount FROM GAME_SUBENTERPRISE gs LEFT JOIN GAME_ENTERPRISE ge ON gs.SubEnterprise_EnterpriseID = ge.Enterprise_ID LEFT JOIN GAME_ADMINUSERS ga ON ga.id = gs.SubEnterprise_CreatedBy OR ga.id = gs.SubEnterprise_UpdatedBy LEFT JOIN GAME_SITE_USERS gu ON gu.User_id = gs.SubEnterprise_CreatedBy OR gu.User_id = gs.SubEnterprise_UpdatedBy LEFT JOIN GAME_COUNTRY gc ON gc.Country_Id=gs.SubEnterprise_Country LEFT JOIN GAME_STATE gst ON gst.State_Id=gs.SubEnterprise_State WHERE SubEnterprise_Status = 0 ";
 
 		if($this->session->userdata('loginData')['User_Role'] == 1)
 		{
@@ -223,7 +222,23 @@ class SubEnterprise extends CI_Controller {
 				}
 				else
 				{
-					$this->Common_Model->insert('GAME_SUBENTERPRISE',$subEnterprisedata);
+					$result = $this->Common_Model->insert('GAME_SUBENTERPRISE',$subEnterprisedata);
+					if($result){
+						            //$Domain_EnterpriseId  = $UserID  ;
+						            $Domain_SubEnterpriseId  = $result;
+                        $Domain_Name          = $this->input->post('commonDomain');
+                        $Domain_Logo          = $_FILES['logo']['name'];
+                        $Domain_details = array(
+                            'Domain_Name'             => $Domain_Name,
+                            'Domain_EnterpriseId'     => $this->input->post('Enterprise_ID'),
+                            'Domain_SubEnterpriseId'  => $Domain_SubEnterpriseId,
+                            'Domain_Logo'             => $Domain_Logo,
+                            'Domain_Status'           => 0,
+                        );
+                            //print_r($Domain_details);exit();
+                        $this->Common_Model->insert('GAME_DOMAIN',$Domain_details);
+					}
+
 					$this->session->set_flashdata("tr_msg","Details Insert Successfully" );
 					redirect("SubEnterprise","refresh");
 				}
@@ -272,93 +287,4 @@ class SubEnterprise extends CI_Controller {
 		$this->db->update('GAME_SUBENTERPRISE');
 		redirect("SubEnterprise","refresh");
 	}
-
-//csv upload for subenterprise...
-	public function subenterprisecsv()
-	{
-		  $maxFileSize = 2097152; // Set max upload file size [2MB]
-        $validext    = array ('csv');  // Allowed Extensions
-
-        function check_ext($file)
-        {
-        	$ext = explode('.', $file);
-        	if($ext[count($ext)-1]=='csv')
-        		return true;
-        }
-        
-        if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['name'] ) )
-        {
-
-        	if($_FILES['upload_csv']['size']==0 || !check_ext($_FILES['upload_csv']['name'])) 
-        	{
-        		$_SESSION['err_msg'] = 'Please Upload CSV File Type!';
-        	}
-        	else 
-        	{
-
-        		$fileName     = $_FILES['upload_csv']['name']; 
-
-        		$ext          = substr(strrchr($fileName, "."), 1); 
-
-        		$array        = explode('.', $fileName);
-
-        		$first        = str_replace(' ','_',$array [0]);
-
-        		$filename_chh = $first.'-'.time().'.' . $ext;
-
-        		$path         = $_SERVER['DOCUMENT_ROOT'].'/corp_simulation/enterprise/movecsv/'.$filename_chh;
-
-        		$tmpfile      = $_FILES['upload_csv']['tmp_name'];
-
-        		$movefile     = move_uploaded_file($tmpfile,$path);
-
-        		if($movefile)
-        		{	
-        			$file = fopen($path, "r");
-
-        			if($_SERVER["DOCUMENT_ROOT"] == 'C:/xampp/htdocs')
-        			{
-				// for local server
-        				$filename = $_SERVER['DOCUMENT_ROOT'].'/corp_simulation/enterprise/movecsv/'.$filename_chh;
-        			}
-        			else
-        			{
-
-        				$filename = $_SERVER["DOCUMENT_ROOT"].'/corp_simulation/enterprise/'.$filename_chh;
-        			}
-
-        			$EnterpriseID              = $this->session->userdata('loginData')['User_ParentId'];
-        			$SubEnterprise_CreatedBy   = $this->session->userdata('loginData')['User_Id'];
-
-        			$sql = "LOAD DATA LOCAL INFILE '".$filename."'
-        			INTO TABLE GAME_SUBENTERPRISE COLUMNS TERMINATED BY ',' IGNORE 1 LINES (SubEnterprise_Name,SubEnterprise_EnterpriseID,SubEnterprise_CreatedOn,SubEnterprise_CreatedBy) SET SubEnterprise_EnterpriseID = $EnterpriseID,SubEnterprise_CreatedOn = NOW(),SubEnterprise_CreatedBy = $SubEnterprise_CreatedBy";
-
-        					/*	$sql = "LOAD DATA LOCAL INFILE '".$filename."'
-        					INTO TABLE GAME_SUBENTERPRISE COLUMNS TERMINATED BY ',' IGNORE 1 LINES (SubEnterprise_Name)";*/
-        					$query = $this->db->query($sql);
-
-			//echo $this->db->last_query(); die;
-        					/*	$this->db->last_query();*/
-			/*	$result = $query->result();
-			return $result;*/
-		}
-
-	}
-
-	$result = array(
-		"msg"    => "Import Successfull",
-		"status" => 0
-	);
-}
-else
-{
-	$result = array(
-		"msg"    =>	"Please select a file to import",
-		"status" =>	0
-	);
-}
-
-echo json_encode($result);
-}
-
 }

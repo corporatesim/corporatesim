@@ -22,7 +22,6 @@ class Dashboard extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Common_Model');
 		if($this->session->userdata('loginData') == NULL)
 		{
 			$this->session->set_flashdata('er_msg', 'You need to login to see the dashboard');
@@ -32,7 +31,19 @@ class Dashboard extends CI_Controller {
 
 	public function index()
 	{
-		$content['subview'] = 'homePage';
+		// $activeEnterprise           = "";
+		// $deactiveEnterprise         = "";
+		// $activeSubEnterprise        = "";
+		// $deactiveSubEnterprise      = "";
+		// $activeEnterpriseUsers      = "";
+		// $deactiveEnterpriseUsers    = "";
+		// $activeSubEnterpriseUsers   = "";
+		// $deactiveSubEnterpriseUsers = "";
+		$content['totalEnterprise']         = $this->Common_Model->findCount('GAME_ENTERPRISE',array('Enterprise_Status' => 0));
+		$content['totalSubEnterprise']      = $this->Common_Model->findCount('GAME_SUBENTERPRISE',array('SubEnterprise_Status' => 0));
+		$content['totalEnterpriseUsers']    = $this->Common_Model->findCount('GAME_SITE_USERS',array('User_Role' => 1));
+		$content['totalSubEnterpriseUsers'] = $this->Common_Model->findCount('GAME_SITE_USERS',array('User_Role' => 2));
+		$content['subview']                 = 'homePage';
 		$this->load->view('main_layout',$content);
 	}
 
@@ -43,24 +54,24 @@ class Dashboard extends CI_Controller {
 		
 		if($this->session->userdata('loginData')['User_Role']==1)
 		{  
-       $EnterpriseLogo = array(
-       	'Enterprise_ID'  => $EnterpriseId,
-       	'Enterprise_Logo'=> $_FILES['logo']['name'],
-       );
+			$EnterpriseLogo = array(
+				'Enterprise_ID'  => $EnterpriseId,
+				'Enterprise_Logo'=> $_FILES['logo']['name'],
+			);
        //print_r($EnterpriseData);
-       $this->do_upload();
-       $this->db->where('Enterprise_ID',$EnterpriseId);
-		   $this->db->update('GAME_ENTERprise',$EnterpriseLogo);
+			$this->do_upload();
+			$this->db->where('Enterprise_ID',$EnterpriseId);
+			$this->db->update('GAME_ENTERPRISE',$EnterpriseLogo);
 		   //print_r($this->db->last_query());exit();
 		}
 		else
 		{
-      $SubEnterpriselogo = array(
-      	'SubEnterprise_Logo'=>$_FILES['logo']['name']
-      );
-      $this->do_upload();
-		  $this->db->where('SubEnterprise_ID',$SubEnterpriseId);
-		  $updateLogo  = $this->db->update('GAME_SUBENTERprise',$SubEnterpriselogo);
+			$SubEnterpriselogo = array(
+				'SubEnterprise_Logo'=>$_FILES['logo']['name']
+			);
+			$this->do_upload();
+			$this->db->where('SubEnterprise_ID',$SubEnterpriseId);
+			$updateLogo  = $this->db->update('GAME_SUBENTERISE',$SubEnterpriselogo);
 		  //print_r($this->db->last_query());exit();
 		}
     //$content['updateLogo'] = $updateLogo;

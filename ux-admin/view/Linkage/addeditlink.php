@@ -6,13 +6,13 @@
   //-->
 </script>
 <style type="text/css">
-  span.alert-danger {
-    background-color: #ffffff;
-    font-size       : 18px;
-  }
-  .checkedDefault{
-    margin-left: 5px !important;
-  }
+span.alert-danger {
+  background-color: #ffffff;
+  font-size       : 18px;
+}
+.checkedDefault{
+  margin-left: 5px !important;
+}
 </style>
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script src="<?php echo site_root; ?>assets/components/ckeditor/ckeditor.js" type="text/javascript"></script>
@@ -382,6 +382,8 @@
                     <option value="17" <?php  echo ($SubLink_ViewingOrder == 17?'selected':''); ?>> CK Editor - Input Fields - Half Length</option> 
                     <option value="18" <?php  echo ($SubLink_ViewingOrder == 18?'selected':''); ?>> Input Fields - CK Editor - Half Length</option> 
                     <option value="19" <?php  echo ($SubLink_ViewingOrder == 19?'selected':''); ?>> Name - Details/Chart - Half Length</option> 
+                    <option value="20" <?php  echo ($SubLink_ViewingOrder == 20?'selected':''); ?>> CK-Editor 1/4 length(for SubComponent only)</option> 
+                    <option value="21" <?php  echo ($SubLink_ViewingOrder == 21?'selected':''); ?>> InputField 1/4 length(for SubComponent only)</option>
                   </select>
                 </div>
                 <br><br>

@@ -22,7 +22,6 @@ class Users extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Common_Model');
 		if($this->session->userdata('loginData') == NULL)
 		{
 			$this->session->set_flashdata('er_msg', 'You need to login to see the dashboard');
@@ -48,9 +47,9 @@ class Users extends CI_Controller {
 		{
 			$query .= " WHERE User_ParentId = ".$this->session->userdata('loginData')['User_ParentId']." AND User_Role = 1 AND User_Delete = 0";
 		}
-		$result = $this->Common_Model->executeQuery($query);
+		$result                            = $this->Common_Model->executeQuery($query);
 		$content['enterpriseusersDetails'] = $result;
-		$content['subview']     = 'listEnterpriseUsers';
+		$content['subview']                = 'listEnterpriseUsers';
 		$this->load->view('main_layout',$content);
 	}
 
@@ -59,7 +58,7 @@ class Users extends CI_Controller {
 	{
 		$where         = array();
 		$RequestMethod = $this->input->server('REQUEST_METHOD');
-		$query         = "SELECT gu.*, gua.Auth_password AS password, gs.*, ge.*,(SELECT count(UG_GameID) FROM GAME_USERGAMES WHERE UG_UserID = gu.User_id) AS gameCount FROM GAME_SITE_USERS AS gu LEFT JOIN GAME_SUBENTERPRISE AS gs ON gu.User_SubParentId = gs.SubEnterprise_ID LEFT JOIN GAME_ENTERPRISE AS ge ON gu.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_USER_AUTHENTICATION gua ON gua.Auth_userid = gu.User_id WHERE User_Delete = 0 AND User_Role = 2";
+		$query         = "SELECT gu.*, gua.Auth_password AS password, gs.*, ge.*,(SELECT count(UG_GameID) FROM GAME_USERGAMES WHERE UG_UserID = gu.User_id) AS gameCount, ge.Enterprise_Name FROM GAME_SITE_USERS AS gu LEFT JOIN GAME_SUBENTERPRISE AS gs ON gu.User_SubParentId = gs.SubEnterprise_ID LEFT JOIN GAME_ENTERPRISE AS ge ON gu.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_USER_AUTHENTICATION gua ON gua.Auth_userid = gu.User_id WHERE User_Delete = 0 AND User_Role = 2";
 		if($this->session->userdata('loginData')['User_Role'] == 1)
 		{
 			// it means enterprise is logged in = only dependent subent users
@@ -117,10 +116,10 @@ class Users extends CI_Controller {
   //edit users of Enterprise and SubEnterprise 
 	public function user($id=NULL,$redirect=NULL)
 	{
-		$id             = base64_decode($this->uri->segment(3));
+		$id = base64_decode($this->uri->segment(3));
 		//edit user deatil
 		$query = "SELECT * FROM GAME_SITE_USERS gs LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID=gs.User_ParentId WHERE User_id=$id";
-		$result = $this->Common_Model->executeQuery($query);
+		$result              = $this->Common_Model->executeQuery($query);
 		$content['editUser'] = $result[0];		
     //Show Subenterprize dropdown list When Enterprise Login
 		if($this->session->userdata('loginData')['User_Role']==1)
@@ -193,11 +192,11 @@ class Users extends CI_Controller {
 	}
 
 //insert Enterprize and SubEnterprize users 
-	public function addUsers()
+	public function addUsers($typeUser=NULL)
 	{
 		$RequestMethod = $this->input->server('REQUEST_METHOD');
 		$userType      = $this->input->post('userType');
-	//add subent users by enterprize depending on enterprize was logeed In
+		//add subent users by enterprize depending on enterprize was logeed In
 		if($this->session->userdata('loginData')['User_Role']==1)
 		{
 			$User_ParentId = $this->session->userdata('loginData')['User_ParentId'];
@@ -220,14 +219,14 @@ class Users extends CI_Controller {
 				$User_Role      =  1;
 			}
 		}
-	//add subent users by subenterprize depending on subenterprize logged in
+		//add subent users by subenterprize depending on subenterprize logged in
 		elseif($this->session->userdata('loginData')['User_Role']==2)
 		{
 			$User_ParentId = $this->session->userdata('loginData')['User_ParentId'];
 			$User_SubParentId = $this->session->userdata('loginData')['User_SubParentId'];
 			$User_Role     = 2;
 		}
-	//add Ent/subEnterprize Users by admin
+		//add Ent/subEnterprize Users by admin
 		else
 		{
 			$where['Enterprise_Status'] = 0;
@@ -330,7 +329,8 @@ class Users extends CI_Controller {
 				}
 			}
 		}
-		$content['subview']     = 'addUsers';
+		$content['subview']  = 'addUsers';
+		$content['typeUser'] = $typeUser;
 		$this->load->view('main_layout',$content);
 	}
 
@@ -362,174 +362,4 @@ class Users extends CI_Controller {
 		$this->db->update('GAME_SITE_USERS');
 		redirect("Users/".$redirect,"refresh");
 	}
-
-
-//csv upload for enterprise Users
-	public function EnterpriseUsersCSV()
-	{
-    $maxFileSize = 2097152; // Set max upload file size [2MB]
-    $validext    = array ('csv'); // Allowed Extensions
-
-    function check_ext($file)
-    {
-    	$ext = explode('.', $file);
-    	if($ext[count($ext)-1]=='csv')
-    		return true;
-    }
-
-    if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['name'] ) )
-    {
-
-    	if($_FILES['upload_csv']['size']==0 || !check_ext($_FILES['upload_csv']['name'])) 
-    	{
-    		$_SESSION['err_msg'] = 'Please Upload CSV File Type!';
-    	}
-    	else 
-    	{
-
-    		$fileName     = $_FILES['upload_csv']['name']; 
-
-    		$ext          = substr(strrchr($fileName, "."), 1); 
-
-    		$array        = explode('.', $fileName);
-
-    		$first        = str_replace(' ','_',$array [0]);
-
-    		$filename_chh = $first.'-'.time().'.' . $ext;
-
-    		$path         = $_SERVER['DOCUMENT_ROOT'].'/corp_simulation/enterprise/movecsv/'.$filename_chh;
-
-    		$tmpfile      = $_FILES['upload_csv']['tmp_name'];
-
-    		$movefile     = move_uploaded_file($tmpfile,$path);
-
-    		if($movefile)
-    		{ 
-    			$file = fopen($path, "r");
-
-    			if($_SERVER["DOCUMENT_ROOT"] == 'C:/xampp/htdocs')
-    			{
-        // for local server
-    				$filename = $_SERVER['DOCUMENT_ROOT'].'/corp_simulation/enterprise/movecsv/'.$filename_chh;
-    			}
-    			else
-    			{
-
-    				$filename = $_SERVER["DOCUMENT_ROOT"].'/corp_simulation/enterprise/'.$filename_chh;
-    			}
-
-    			$Enterprise_User   = $this->session->userdata('loginData')['User_ParentId'];
-    			$User_SubParentId  = -2;
-    			$User_role         =  1;
-
-    			$sql = "LOAD DATA LOCAL INFILE '".$filename."'
-    			INTO TABLE GAME_SITE_USERS COLUMNS TERMINATED BY ',' IGNORE 1 LINES (User_fname,User_lname,User_username,User_mobile,User_email,User_companyid,User_Role,User_ParentId,User_SubParentId,User_datetime) SET
-    			User_role = $User_role,User_ParentId = $Enterprise_User,User_SubParentId = $User_SubParentId";
-
-    		/*	$sql = "LOAD DATA LOCAL INFILE '".$filename."'
-    		INTO TABLE GAME_SITE_USERS COLUMNS TERMINATED BY ',' IGNORE 1 LINES (User_fname,User_lname,User_username,User_mobile,User_email,User_companyid)";*/
-
-    		$query = $this->db->query($sql);
-      //echo $this->db->last_query(); die;
-    	}
-
-    }
-
-    $result = array(
-    	"msg"    => "Import Successfull",
-    	"status" => 0
-    );
-  }
-  else
-  {
-  	$result = array(
-  		"msg"    => "Please select a file to import",
-  		"status" => 0
-  	);
-  }
-
-  echo json_encode($result);
-}
-
-
-//csv upload for subenterprise users...
-public function subenterpriseUsersCSV($subEnterprizeID=NULL)
-{
-		$maxFileSize = 2097152; // Set max upload file size [2MB]
-    $validext    = array ('csv');  // Allowed Extensions
-
-    function check_ext($file)
-    {
-    	$ext = explode('.', $file);
-    	if($ext[count($ext)-1]=='csv')
-    		return true;
-    }
-
-    if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['name'] ) )
-    {
-
-    	if($_FILES['upload_csv']['size']==0 || !check_ext($_FILES['upload_csv']['name'])) 
-    	{
-    		$_SESSION['err_msg'] = 'Please Upload CSV File';
-    	}
-    	else 
-    	{
-
-    		$fileName     = $_FILES['upload_csv']['name']; 
-
-    		$ext          = substr(strrchr($fileName, "."), 1); 
-
-    		$array        = explode('.', $fileName);
-
-    		$first        = str_replace(' ','_',$array [0]);
-
-    		$filename_chh = $first.'-'.time().'.' . $ext;
-
-    		$path         = $_SERVER['DOCUMENT_ROOT'].'/corp_simulation/enterprise/movecsv/'.$filename_chh;
-
-    		$tmpfile      = $_FILES['upload_csv']['tmp_name'];
-
-    		$movefile     = move_uploaded_file($tmpfile,$path);
-
-    		if($movefile)
-    		{
-    			$file = fopen($path, "r");
-
-    			if($_SERVER["DOCUMENT_ROOT"] == 'C:/xampp/htdocs')
-    			{
-						// for local server
-    				$filename = $_SERVER['DOCUMENT_ROOT'].'/corp_simulation/enterprise/movecsv/'.$filename_chh;
-    			}
-    			else
-    			{
-    				$filename = $_SERVER["DOCUMENT_ROOT"].'/corp_simulation/enterprise/'.$filename_chh;
-    			}
-
-    			$User_ParentId    = $this->session->userdata('loginData')['User_ParentId'];
-    			$User_SubParentId = $subEnterprizeID;
-    			$user_role        = 2;
-    			$sql              = "LOAD DATA LOCAL INFILE '".$filename."'
-    			INTO TABLE GAME_SITE_USERS COLUMNS TERMINATED BY ',' IGNORE 1 LINES (User_fname,User_lname,User_username,User_mobile,User_email,User_companyid,User_Role,User_ParentId,User_SubParentId) SET User_Role = $user_role,User_ParentId = $User_ParentId,User_SubParentId = $User_SubParentId";
-    			$query = $this->db->query($sql);
-					//echo $this->db->last_query(); die;
-    		}
-
-    	}
-
-    	$result = array(
-    		"msg"    => "Import Successfull",
-    		"status" => 0
-    	);
-    }
-    else
-    {
-    	$result = array(
-    		"msg"    =>	"Please select a file to import",
-    		"status" =>	0
-    	);
-    }
-
-    echo json_encode($result);
-  }
-
 }

@@ -1,6 +1,6 @@
 <script type="text/javascript">
-	var loc_url_del  = "<?php echo base_url('Users/delete/');?>";
-	var func = "<?php echo $this->uri->segment(2);?>";
+	var loc_url_del = "<?php echo base_url('Users/delete/');?>";
+	var func        = "<?php echo $this->uri->segment(2);?>";
 </script>
 <div class="main-container">
 	<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
@@ -10,7 +10,7 @@
 				<div class="row">
 					<div class="col-md-6 col-sm-12">
 						<div class="title">
-							<h1><a href="<?php echo base_url('Users/addUsers/');?>" data-toggle="tooltip" title="Add User"><i class="fa fa-plus-circle text-blue"> 
+							<h1><a href="<?php echo base_url('Users/addUsers/entuser');?>" data-toggle="tooltip" title="Add User"><i class="fa fa-plus-circle text-blue"> 
               </i></a> Enterprise Users</h1>
 						</div>
 						<nav aria-label="breadcrumb" role="navigation">
@@ -25,7 +25,7 @@
 					<div class="col-md-12 col-sm-12">
 						<div class="title">
 							<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
-								<div class="pull-right">
+								<!-- <div class="pull-right">
 									<form method="post"  action="<?php echo base_url('excel_export/downloadEnterpriseUser'); ?>" enctype="multipart/form-data">
 										<button type="submit" name="submit" id="user_download" class="btn btn-primary"
 										value="Download" style="display: none"><span class="fa fa-download"></span> Download </button>
@@ -39,7 +39,7 @@
 										</span>
 									</form>
 									 <a href="<?php echo base_url()."csvdemofiles/user-enterprise-upload-csv-demo-file.csv"; ?>" download="DemoEnterpriseUsers.csv"><u>Demo Enterprise Users</u></a>
-								</div>
+								</div> -->
 								<div class="clearfix mb-20">
 									<h5 class="text-blue">Enterprise Users Details</h5>
 								</div>
@@ -78,8 +78,8 @@
 														<a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 															<i class="fa fa-ellipsis-h"></i>
 														</a>
-														<div class="dropdown-menu dropdown-menu-right">
-															<a class="dropdown-item" href="#"><i class="fa fa-eye"></i> View</a>
+														<div class="dropdown-menu dropdown-menu-left">
+															<!-- <a class="dropdown-item" href="#"><i class="fa fa-eye"></i> View</a> -->
 															<a class="dropdown-item" href="<?php echo base_url('Users/user/').base64_encode($enterpriseusersDetails->User_id).'/'.$this->uri->segment(2);?>"><i class="fa fa-pencil"></i> Edit</a>
 															<!-- <a class="dropdown-item" href="<?php //echo base_url('Enterprise/assignGames/');?><?php //echo base64_encode($enterpriseusersDetails->User_id); ?>" title="Allocate/Deallocate Games"><i class="fa fa-gamepad"></i> Allocate/Deallocate Games</a> -->
 															<a class="dropdown-item dl_btn" href="javascript:void(0);" class="btn btn-primary dl_btn" id="<?php echo 

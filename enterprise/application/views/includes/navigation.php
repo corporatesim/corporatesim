@@ -1,9 +1,13 @@
   <div class="left-side-bar">
     <div class="brand-logo">
-      <a href="<?php echo base_url('Dashboard');?>">
-        <img src="<?php echo base_url('common/'); ?>vendors/images/cs_logo.jpg" alt="">
-      </a>
-    </div>
+        <a href="<?php echo base_url('Dashboard');?>">
+          <?php if(isset($this->session->userdata('loginData')['User_profile_pic'])) { ?>
+            <img src="<?php echo base_url('common/Logo/'.$this->session->userdata('loginData')['User_profile_pic']); ?>" alt="CorporateSim">
+          <?php } else { ?>
+            <img src="<?php echo base_url('common/'); ?>vendors/images/cs_logo.jpg" alt="CorporateSim">
+          <?php } ?>
+        </a> 
+      </div>
     <div class="menu-block customscroll">
       <div class="sidebar-menu">
         <ul id="accordion-menu">
@@ -12,61 +16,60 @@
               <span class="fa fa-dashboard fa-fw"></span><span class="mtext">Dashboard</span>
             </a>
           </li>
-          <li class="dropdown">
-            <?php  if(($this->session->userdata('loginData')['User_Role'])> 0) {?>
+          <!-- show profile only to enterprise or subenterprise -->
+          <?php if(($this->session->userdata('loginData')['User_Role']) == 1 || ($this->session->userdata('loginData')['User_Role']) ==2) { ?>
+            <li class="dropdown">
               <a href="<?php echo base_url('Profile');?>" class="dropdown-toggle no-arrow">
                 <span class="fa fa fa-user-md"></span><span class="mtext">Profile</span>
               </a>
-            <?php }?>
-          </li>
-          <?php if(($this->session->userdata('loginData')['User_Role'])==1) {?>
+            </li>
+          <?php } ?>
+          <!-- show option to manage enterprise only for superadmin -->
+          <?php if($this->session->userdata('loginData')['User_Role'] == 'superadmin') { ?>
             <li class="dropdown">
-             <a href="javascript:;" class="dropdown-toggle">
-              <span class="fa fa-building-o custom"></span><span class="mtext">Manage SubEnterprise</span>
+             <a href="<?php echo base_url('Enterprise/');?>" class="dropdown-toggle no-arrow">
+              <span class="fa fa-institution"></span><span class="mtext">Manage Enterprise</span>
             </a>
-            <ul class="submenu">
-              <li><a href="<?php echo base_url('SubEnterprise/');?>"><span class="fa fa-building"></span> SubEnterprise</a></li>
-              <li><a href="<?php echo base_url('SubEnterprise/addSubEnterprise/');?>"><span class="fa fa-plus-circle"></span> Add SubEnterprise</a></li>
-            </ul> 
-          </li> 
-        <?php }else if(($this->session->userdata('loginData')['User_Role'])<1){?>
-         <li class="dropdown">
-           <a href="<?php echo base_url('Enterprise/');?>" class="dropdown-toggle no-arrow">
-            <span class="fa fa-institution"></span><span class="mtext">Manage Enterprise</span>
+          </li>
+        <?php } ?>
+        <!-- show option to manage subenterprise only for admin or enterprise -->
+        <?php if(($this->session->userdata('loginData')['User_Role']) == 1 || ($this->session->userdata('loginData')['User_Role']) == 'superadmin') { ?>
+          <li class="dropdown">
+           <a href="<?php echo base_url('SubEnterprise/');?>" class="dropdown-toggle no-arrow">
+            <span class="fa fa-building"></span><span class="mtext">Manage SubEnterprise</span>
           </a>
         </li>
+      <?php } ?>
+      <!-- show option to manage ent/subent users only for admin and enterprise -->
+      <?php if(($this->session->userdata('loginData')['User_Role']) == 1 || ($this->session->userdata('loginData')['User_Role']) == 'superadmin') { ?>
         <li class="dropdown">
-         <a href="<?php echo base_url('SubEnterprise/');?>" class="dropdown-toggle no-arrow">
-          <span class="fa fa-building"></span><span class="mtext">Manage SubEnterprise</span>
+          <a href="javascript:;" class="dropdown-toggle">
+            <span class="fa fa-users"></span><span class="mtext">Manage Users</span>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="<?php echo base_url('Users/EnterpriseUsers');?>">
+                <?php if($this->session->userdata('loginData')['User_Role'] == 'superadmin'){ ?>
+                  <!-- admin then -->
+                  <span class='fa fa-user-circle-o'></span> Enterprise Users
+                <?php } else { ?>
+                  <!-- enterprise then -->
+                  <span class='fa fa-user-circle-o'></span> My Users
+                <?php } ?>
+              </a>
+            </li>
+            <li><a href="<?php echo base_url('Users/SubEnterpriseUsers');?>"><span class="fa fa-user-circle-o"></span> SubEnterprise Users</a></li>
+            <!-- <li><a href="<?php echo base_url('Users/addUsers/');?>"><span class="fa fa-plus-circle"></span> Add Users</a></li> -->
+          </ul>
+        </li>
+        <!-- if user of type subenterprise then show only subenterprise users -->
+      <?php } else { ?>
+       <li class="dropdown">
+         <a href="<?php echo base_url('Users/SubEnterpriseUsers/');?>" class="dropdown-toggle no-arrow">
+          <span class="fa fa-user-circle-o"></span><span class="mtext">Manage Users</span>
         </a>
       </li>
-    <?php }?>
-    <li class="dropdown">
-      <a href="javascript:;" class="dropdown-toggle">
-        <span class="fa fa-users"></span><span class="mtext">Manage Users</span>
-      </a>
-      <ul class="submenu">
-        <?php if(($this->session->userdata('loginData')['User_Role'])<1) {?>
-          <li>
-            <a href="<?php echo base_url('Users/EnterpriseUsers');?>">
-              <span class='fa fa-user-circle-o'></span> Enterprise Users
-            </a>
-          </li>
-          <li><a href="<?php echo base_url('Users/SubEnterpriseUsers');?>"><span class="fa fa-user-circle-o"></span> SubEnterprise Users</a></li>
-        <?php } else if(($this->session->userdata('loginData')['User_Role'])==1 ) {?>
-          <li>
-            <a href="<?php echo base_url('Users/EnterpriseUsers');?>">
-              <span class='fa fa-user-circle-o'></span> Enterprise Users
-            </a>
-          </li>
-          <li><a href="<?php echo base_url('Users/SubEnterpriseUsers');?>"><span class="fa fa-user-circle-o"></span> SubEnterprise Users</a></li>
-          <li><a href="<?php echo base_url('Users/addUsers/');?>"><span class="fa fa-plus-circle"></span> Add Users</a></li>
-        <?php } else{?>
-          <li><a href="<?php echo base_url('Users/SubEnterpriseUsers');?>"><span class="fa fa-user-circle-o"></span> SubEnterprise Users</a></li>
-          <li><a href="<?php echo base_url('Users/addUsers/');?>"><span class="fa fa-plus-circle"></span> Add Users</a></li>
-        <?php }?>
-      </ul>
-    </li>
+    <?php } ?>
   </ul>
 </div>
 </div>

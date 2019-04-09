@@ -1,3 +1,4 @@
+<!-- <?php //echo $_SESSION['logo'];exit;?> -->
 <!doctype html>
 <html>
 
@@ -52,7 +53,12 @@
 				<div class="navbar-header1">
 					<!--<a class="navbar-brand logo" href="#">Logo</a>-->
 					<!--a style="padding: 2px 15px;" class="navbar-brand" href="<?php echo site_root."index.php";?>"--> 
+					<?php if(isset($_SESSION['logo'])) { ?>
+              <img src="<?php echo site_root."enterprise/common/Logo/".$_SESSION['logo'];?>" width="100px" height="40px" />
+
+					<?php } else { ?>
 					<img src="<?php echo site_root."images/logo-main.png";?>"  width="40px" />
+					<?php } ?>
 					<!--/a-->
 				</div>
 				<ul class="nav navbar-nav navbar-right headerNav" id="nav">
