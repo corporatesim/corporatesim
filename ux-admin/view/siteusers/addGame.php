@@ -57,16 +57,31 @@ span.alert-danger {
 
 					$id     = base64_decode($_GET['edit']);		
 					$result = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), '', '', '', '', 0);
+					//print_r($result);exit;
 					while($row = mysqli_fetch_array($result)) {
+					//print_r($row);exit;
 						$object = $functionsObj->SelectData(array(), 'GAME_USERGAMES', array('UG_UserID='.$id, 'UG_GameID='.$row['Game_ID']), '', '', '', '', 0);
 
 						echo "<div class='col-sm-4'><div class='checkbox'";
 						if($object->num_rows > 0)
 						{
+							if($row['Game_Elearning'] == 1)
+							{
+							echo "style='background:#ccc;'><input type='checkbox' checked='checked' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name']." <b>(Elearning)</b>";
+						}else
+						{
 							echo "style='background:#ccc;'><input type='checkbox' checked='checked' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name'];
+						}
+						}
+						else{
+
+							if($row['Game_Elearning'] == 1)
+							{
+							echo "><input type='checkbox' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name']." <b>(eLearning)</b>";
 						}
 						else{
 							echo "><input type='checkbox' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name'];
+						}
 						}
 						echo "</div></div>";
 					}

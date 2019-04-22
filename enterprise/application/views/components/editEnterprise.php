@@ -29,6 +29,7 @@
 							<label class="col-sm-12 col-md-4 col-form-label">Name</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" type="text" value="<?php echo $editEnterprise->Enterprise_Name;?>" name="Enterprise_Name">
+								<span><?php echo form_error('Enterprise_Name'); ?></span>
 							</div>
 						</div>
 						<!-- start adding more fields -->
@@ -36,6 +37,7 @@
 							<label class="col-sm-12 col-md-4 col-form-label">Contact Number</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="Enterprise_Number" value="<?php echo $editEnterprise->Enterprise_Number;?>" type="text" required="">
+								<span><?php echo form_error('Enterprise_Number'); ?></span>
 							</div>
 						</div> 
 
@@ -43,6 +45,7 @@
 							<label class="col-sm-12 col-md-4 col-form-label">Email ID</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="Enterprise_Email" value="<?php echo $editEnterprise->Enterprise_Email;?>" type="email" required="">
+								<span><?php echo form_error('Enterprise_Email'); ?></span>
 							</div>
 						</div> 
 
@@ -50,6 +53,7 @@
 							<label class="col-sm-12 col-md-4 col-form-label">Address1</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="Enterprise_Address1" value="<?php echo $editEnterprise->Enterprise_Address1;?>" type="text" required="">
+								<span><?php echo form_error('Enterprise_Address1'); ?></span>
 							</div>
 						</div> 
 
@@ -57,6 +61,7 @@
 							<label class="col-sm-12 col-md-4 col-form-label"> Enterprise Address2</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="Enterprise_Address2" value="<?php echo $editEnterprise->Enterprise_Address2;?>" type="text">
+								<span><?php echo form_error('Enterprise_Address2'); ?></span>
 							</div>
 						</div> 
 
@@ -70,6 +75,7 @@
 										<option value="<?php echo $row->Country_Id;?>" <?php echo ($row->Country_Id==$editEnterprise->Enterprise_Country)?'selected':''; ?>><?php echo $row->Country_Name;?></option>
 									<?php } ?>
 								</select>
+								<span><?php echo form_error('Enterprise_Country'); ?></span>
 								<?php if($editEnterprise->Enterprise_Country){ ?>
 									<script>
 										setTimeout(function(){
@@ -86,6 +92,7 @@
 								<select class="form-control" name="Enterprise_State" required="" id="state" data-stateid="<?php echo $editEnterprise->Enterprise_State;?>">
 									<option value="">--Select State--</option>
 								</select>
+								<span><?php echo form_error('Enterprise_State'); ?></span>
 							</div>
 						</div> 
 
@@ -93,6 +100,7 @@
 							<label class="col-sm-12 col-md-4 col-form-label"> Enterprise Province</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="Enterprise_Province" value="<?php echo $editEnterprise->Enterprise_Province;?>" type="text">
+								<span><?php echo form_error('Enterprise_Province'); ?></span>
 							</div>
 						</div> 
 
@@ -100,6 +108,7 @@
 							<label class="col-sm-12 col-md-4 col-form-label">Pincode</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="Enterprise_Pincode" value="<?php echo $editEnterprise->Enterprise_Pincode;?>" type="text" required="">
+								<span><?php echo form_error('Enterprise_Pincode'); ?></span>
 							</div>
 						</div>
 						<!-- end of adding more fields  -->

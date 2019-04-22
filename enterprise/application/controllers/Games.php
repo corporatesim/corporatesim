@@ -45,21 +45,22 @@ public function assignGames($ID=NULL,$userType=NULL)
 		{
 			$type       = $userType;
 			$controller = 'Users';
-			$query      = "SELECT gg.*,geg.*,gug.*,gsu.User_username,geg.EG_EnterpriseID FROM GAME_GAME gg LEFT JOIN GAME_ENTERPRISE_GAME geg ON gg.Game_ID=geg.EG_GameID LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_ParentId = geg.EG_EnterpriseID  LEFT JOIN GAME_USERGAMES gug ON gug.UG_GameID = geg.EG_GameID AND gug.UG_UserID = $ID  WHERE geg.EG_EnterpriseID= $EnterpriseID AND gsu.User_id=$ID";
-		}
+			$query      = "SELECT gg.*,geg.*,gug.*,gsu.User_id,gsu.User_username,geg.EG_EnterpriseID FROM GAME_GAME gg LEFT JOIN GAME_ENTERPRISE_GAME geg ON gg.Game_ID=geg.EG_GameID LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_ParentId = geg.EG_EnterpriseID  LEFT JOIN GAME_USERGAMES gug ON gug.UG_GameID = geg.EG_GameID AND gug.UG_UserID = $ID  WHERE geg.EG_EnterpriseID= $EnterpriseID AND gsu.User_id=$ID";
+		}   
 		// allocate/deallocate Games for SUbEnterprise users
 		else if($userType == 'SubEnterpriseUsers')
 		{
 			$type       = $userType;
 			$controller = 'Users';
-			$query      = "SELECT gg.Game_ID,gg.Game_Name, gsg.*,gs.*,gsu.User_id,gsu.User_games,gsu.User_Role,gsu.User_username,gse.SubEnterprise_Name,gse.SubEnterprise_EnterpriseID,gse.SubEnterprise_ID FROM GAME_GAME gg LEFT JOIN GAME_SUBENTERPRISE_GAME gsg ON gg.Game_ID = gsg.SG_GameID LEFT JOIN GAME_SUBENTERPRISE gse ON gse.SubEnterprise_ID=gsg.SG_SubEnterpriseID LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_SubParentId = gsg.SG_SubEnterpriseID LEFT JOIN GAME_USERGAMES gs ON gs.UG_GameID = gg.Game_ID AND gs.UG_UserID=$ID WHERE gsg.SG_EnterpriseID = $EnterpriseID AND gsu.User_id=$ID  ";
+			$query      = "SELECT gg.Game_ID,gg.Game_Name,gg.Game_Elearning, gsg.*,gs.*,gse.SubEnterprise_StartDate,gse.SubEnterprise_EndDate,gsu.User_id,gsu.User_games,gsu.User_Role,gsu.User_username,gse.SubEnterprise_Name,gse.SubEnterprise_EnterpriseID,gse.SubEnterprise_ID FROM GAME_GAME gg LEFT JOIN GAME_SUBENTERPRISE_GAME gsg ON gg.Game_ID = gsg.SG_GameID LEFT JOIN GAME_SUBENTERPRISE gse ON gse.SubEnterprise_ID=gsg.SG_SubEnterpriseID LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_SubParentId = gsg.SG_SubEnterpriseID LEFT JOIN GAME_USERGAMES gs ON gs.UG_GameID = gg.Game_ID AND gs.UG_UserID=$ID WHERE gsg.SG_EnterpriseID = $EnterpriseID AND gsu.User_id=$ID  ";
 		}
 		// allocate/deallocate Games for Sub Enterprise
 		else
 		{
 			$type       = 'SubEnterprise';
 			$controller = 'SubEnterprise';
-			$query      = "SELECT gg.Game_ID, gg.Game_Name,gsg.SG_GameID, gsg.SG_ID, gsg.SG_Game_Start_Date, gsg.SG_Game_End_Date,geg.EG_GameID,geg.EG_Game_Start_Date,geg.EG_Game_End_Date,gs.SubEnterprise_Name,gs.SubEnterprise_EnterpriseID FROM GAME_GAME gg LEFT JOIN GAME_ENTERPRISE_GAME geg ON geg.EG_GameID=gg.Game_ID  LEFT JOIN GAME_SUBENTERPRISE gs ON gs.SubEnterprise_EnterpriseID=geg.EG_EnterpriseID  LEFT JOIN GAME_SUBENTERPRISE_GAME gsg ON gsg.SG_GameID = gg.Game_ID AND gsg.SG_SubEnterpriseID = $ID WHERE gg.Game_Delete = 0 AND geg.EG_EnterpriseID=$EnterpriseID AND gs.SubEnterprise_ID=$ID ORDER BY gg.Game_ID ASC";
+			$query      = "SELECT gg.Game_ID, gg.Game_Name,gg.Game_Elearning,gsg.SG_GameID, gsg.SG_ID, gsg.SG_Game_Start_Date, gsg.SG_Game_End_Date,geg.EG_GameID,geg.EG_Game_Start_Date,geg.EG_Game_End_Date,gs.SubEnterprise_Name,gs.SubEnterprise_EnterpriseID,gs.SubEnterprise_ID,gs.SubEnterprise_StartDate,gs.SubEnterprise_EndDate FROM GAME_GAME gg LEFT JOIN GAME_ENTERPRISE_GAME geg ON geg.EG_GameID=gg.Game_ID  LEFT JOIN GAME_SUBENTERPRISE gs ON gs.SubEnterprise_EnterpriseID=geg.EG_EnterpriseID  LEFT JOIN GAME_SUBENTERPRISE_GAME gsg ON gsg.SG_GameID = gg.Game_ID AND gsg.SG_SubEnterpriseID = $ID WHERE gg.Game_Delete = 0 AND geg.EG_EnterpriseID=$EnterpriseID AND gs.SubEnterprise_ID=$ID ORDER BY gg.Game_ID ASC";
+			//print_r($query);exit;
 		}
 	}	
 	else if($this->session->userdata('loginData')['User_Role']==2)
@@ -69,7 +70,7 @@ public function assignGames($ID=NULL,$userType=NULL)
 		//when subenterprise login, then only allocate/deallocate game for subenterprise users
 		$type       = 'SubEnterpriseUsers';
 		$controller = 'Users';
-		$query      = "SELECT gg.Game_ID,gg.Game_Name, gsg.*,gs.*,gsu.User_id,gsu.User_games,gse.SubEnterprise_Name,gsu.User_username,gse.SubEnterprise_EnterpriseID,gse.SubEnterprise_ID, gse.SubEnterprise_StartDate, gse.SubEnterprise_EndDate FROM GAME_GAME gg LEFT JOIN GAME_SUBENTERPRISE_GAME gsg ON gg.Game_ID = gsg.SG_GameID LEFT JOIN GAME_SUBENTERPRISE gse ON gse.SubEnterprise_ID=gsg.SG_SubEnterpriseID LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_SubParentId = gsg.SG_SubEnterpriseID LEFT JOIN GAME_USERGAMES gs ON gs.UG_GameID = gg.Game_ID AND gs.UG_UserID=$ID WHERE gsg.SG_EnterpriseID = $EnterpriseID AND gsg.SG_SubEnterpriseID = $SubEnterpriseID  AND gsu.User_id=$ID ";
+		$query      = "SELECT gg.Game_ID,gg.Game_Name,gg.Game_Elearning,gsg.*,gs.*,gsu.User_id,gsu.User_games,gse.SubEnterprise_Name,gsu.User_username,gse.SubEnterprise_EnterpriseID,gse.SubEnterprise_ID, gse.SubEnterprise_StartDate, gse.SubEnterprise_EndDate FROM GAME_GAME gg LEFT JOIN GAME_SUBENTERPRISE_GAME gsg ON gg.Game_ID = gsg.SG_GameID LEFT JOIN GAME_SUBENTERPRISE gse ON gse.SubEnterprise_ID=gsg.SG_SubEnterpriseID LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_SubParentId = gsg.SG_SubEnterpriseID LEFT JOIN GAME_USERGAMES gs ON gs.UG_GameID = gg.Game_ID AND gs.UG_UserID=$ID WHERE gsg.SG_EnterpriseID = $EnterpriseID AND gsg.SG_SubEnterpriseID = $SubEnterpriseID  AND gsu.User_id=$ID ";
 	}
 	else
 	{
@@ -78,19 +79,19 @@ public function assignGames($ID=NULL,$userType=NULL)
 		{ 
 			$type       = 'Enterprise';
 			$controller = 'Enterprise';	
-			$query = "SELECT gg.Game_ID,gg.Game_Name,geg.EG_GameID,geg.EG_ID,geg.EG_Game_Start_Date,geg.EG_Game_End_Date,ge.Enterprise_Name,ge.Enterprise_ID,ge.Enterprise_StartDate,ge.Enterprise_EndDate FROM GAME_GAME gg LEFT JOIN GAME_ENTERPRISE_GAME geg ON geg.EG_GameID=gg.Game_ID AND geg.EG_EnterpriseID=$ID JOIN GAME_ENTERPRISE ge WHERE gg.Game_Delete = 0 AND ge.Enterprise_ID=$ID ORDER BY gg.Game_ID ASC";
+			$query = "SELECT gg.Game_ID,gg.Game_Name,gg.Game_Elearning,geg.EG_GameID,geg.EG_ID,geg.EG_Game_Start_Date,geg.EG_Game_End_Date,ge.Enterprise_Name,ge.Enterprise_ID,ge.Enterprise_StartDate,ge.Enterprise_EndDate FROM GAME_GAME gg LEFT JOIN GAME_ENTERPRISE_GAME geg ON geg.EG_GameID=gg.Game_ID AND geg.EG_EnterpriseID=$ID JOIN GAME_ENTERPRISE ge WHERE gg.Game_Delete = 0 AND ge.Enterprise_ID=$ID ORDER BY gg.Game_ID ASC";
 		}
 		elseif($userType == 'SubEnterprise')
 		{
 			$type       = 'SubEnterprise';
 			$controller = 'SubEnterprise';
-			$query = "SELECT gg.Game_ID, gg.Game_Name,gsg.SG_GameID, gsg.SG_ID, gsg.SG_Game_Start_Date, gsg.SG_Game_End_Date,geg.EG_GameID,geg.EG_Game_Start_Date,geg.EG_Game_End_Date,gs.SubEnterprise_EnterpriseID,gs.SubEnterprise_ID,gs.SubEnterprise_Name, gs.SubEnterprise_StartDate, gs.SubEnterprise_EndDate FROM GAME_GAME gg LEFT JOIN GAME_ENTERPRISE_GAME geg ON geg.EG_GameID=gg.Game_ID LEFT JOIN GAME_SUBENTERPRISE gs ON gs.SubEnterprise_EnterpriseID=geg.EG_EnterpriseID  LEFT JOIN GAME_SUBENTERPRISE_GAME gsg ON gsg.SG_GameID = gg.Game_ID AND gsg.SG_SubEnterpriseID = $ID WHERE gg.Game_Delete = 0 AND gs.SubEnterprise_ID=$ID ORDER BY gg.Game_ID ASC";
+			$query = "SELECT gg.Game_ID, gg.Game_Name,gg.Game_Elearning,gsg.SG_GameID, gsg.SG_ID, gsg.SG_Game_Start_Date, gsg.SG_Game_End_Date,geg.EG_GameID,geg.EG_Game_Start_Date,geg.EG_Game_End_Date,gs.SubEnterprise_EnterpriseID,gs.SubEnterprise_ID,gs.SubEnterprise_Name, gs.SubEnterprise_StartDate, gs.SubEnterprise_EndDate FROM GAME_GAME gg LEFT JOIN GAME_ENTERPRISE_GAME geg ON geg.EG_GameID=gg.Game_ID LEFT JOIN GAME_SUBENTERPRISE gs ON gs.SubEnterprise_EnterpriseID=geg.EG_EnterpriseID  LEFT JOIN GAME_SUBENTERPRISE_GAME gsg ON gsg.SG_GameID = gg.Game_ID AND gsg.SG_SubEnterpriseID = $ID WHERE gg.Game_Delete = 0 AND gs.SubEnterprise_ID=$ID ORDER BY gg.Game_ID ASC";
 		}
 		elseif($userType == 'EnterpriseUsers')
 		{
 			$type       = 'EnterpriseUsers';
 			$controller = 'Users';
-			$query      = "SELECT gg.*,geg.*,gug.*,gsu.User_username,geg.EG_EnterpriseID FROM GAME_GAME gg LEFT JOIN GAME_ENTERPRISE_GAME geg ON gg.Game_ID=geg.EG_GameID LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_ParentId = geg.EG_EnterpriseID  LEFT JOIN GAME_USERGAMES gug ON gug.UG_GameID = geg.EG_GameID AND gug.UG_UserID = $ID  WHERE gsu.User_id=$ID";
+			$query      = "SELECT gg.*,geg.*,gug.*,gsu.User_username,gsu.User_id,geg.EG_EnterpriseID FROM GAME_GAME gg LEFT JOIN GAME_ENTERPRISE_GAME geg ON gg.Game_ID=geg.EG_GameID LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_ParentId = geg.EG_EnterpriseID  LEFT JOIN GAME_USERGAMES gug ON gug.UG_GameID = geg.EG_GameID AND gug.UG_UserID = $ID  WHERE gsu.User_id=$ID";
 		}
 		else
 		{
@@ -111,11 +112,14 @@ public function assignGames($ID=NULL,$userType=NULL)
 	{
 		if($type=='SubEnterprise')
 		{
-			$query = "SELECT SubEnterprise_Name FROM GAME_SUBENTERPRISE WHERE SubEnterprise_ID = $ID";
+			$query = "SELECT SubEnterprise_Name,SubEnterprise_ID FROM GAME_SUBENTERPRISE WHERE SubEnterprise_ID = $ID";
 		}
-		else
+		elseif ($type=='EnterpriseUsers') {
+			$query = "SELECT User_username,User_id FROM GAME_SITE_USERS WHERE User_id = $ID";
+		}
+		elseif($type=='SubEnterpriseUsers')
 		{
-			$query = "SELECT gsu.User_username,gse.SubEnterprise_Name FROM GAME_SITE_USERS gsu LEFT JOIN GAME_SUBENTERPRISE gse ON gsu.User_SubParentId=gse.SubEnterprise_ID WHERE gsu.User_id=".$ID;
+			$query = "SELECT gsu.User_username,gsu.User_id,gse.SubEnterprise_Name FROM GAME_SITE_USERS gsu LEFT JOIN GAME_SUBENTERPRISE gse ON gsu.User_SubParentId=gse.SubEnterprise_ID WHERE gsu.User_id=".$ID;
 		}
 		$assignGames = $this->Common_Model->executeQuery($query);
 		$content['Games'] = $assignGames[0];
@@ -193,11 +197,16 @@ public function assignGames($ID=NULL,$userType=NULL)
 		elseif($userType=='SubEnterprise')
 		{
 			//Delete already existing data of SubEnterprise
-			$where = array (
-				'SG_SubEnterpriseID' => $ID,
-				'SG_EnterpriseID'    => $this->input->post('EnterpriseID'),
-			);
+			$where['SG_SubEnterpriseID'] = $ID ;
 			$this->Common_Model->deleteRecords('GAME_SUBENTERPRISE_GAME',$where);
+
+			$query = "DELETE FROM GAME_USERGAMES WHERE UG_SubParentId=$ID";
+			$this->Common_Model->executeQuery($query,'noReturn');
+
+			//update enterprise games
+			$query = "UPDATE GAME_SUBENTERPRISE gs INNER JOIN GAME_SITE_USERS gu ON gu.User_ParentId=gs.SubEnterprise_EnterpriseID SET gs.SubEnterprise_Games='',gu.User_games='' WHERE gs.SubEnterprise_ID=$ID";
+			$this->Common_Model->executeQuery($query,'noReturn');
+				
 			// manage array for game and date index count
 			$SubEnterprisegameid = '';
 			if($gamecount>0)

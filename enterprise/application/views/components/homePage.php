@@ -6,7 +6,7 @@
       <!-- total enterprise -->
       <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
         <div class="card border-success mb-3" style="max-width: 18rem;">
-          <div class="card-header bg-transparent border-success"><b>Total Enterprise</b></div>
+          <div class="card-header bg-transparent border-success"><b>Total Enterprize</b></div>
           <div class="card-body text-success">
             <!-- <h5 class="card-title"></h5> -->
             <div class="project-info clearfix">
@@ -27,7 +27,7 @@
       <!-- Enterprise users -->
       <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
         <div class="card border-success mb-3" style="max-width: 18rem;">
-          <div class="card-header bg-transparent border-success"><b>Total Enterprise Users</b></div>
+          <div class="card-header bg-transparent border-success"><b>Total Enterprize Users</b></div>
           <div class="card-body text-success">
             <div class="project-info clearfix">
               <div class="project-info-left">
@@ -47,7 +47,7 @@
       <!-- total subenterprise -->
       <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
         <div class="card border-success mb-3" style="max-width: 18rem;">
-          <div class="card-header bg-transparent border-success"><b>Total Sub Enterprise</b></div>
+          <div class="card-header bg-transparent border-success"><b>Total Sub Enterprize</b></div>
           <div class="card-body text-success">
             <div class="project-info clearfix">
               <div class="project-info-left">
@@ -67,7 +67,7 @@
       <!-- subenterprise users -->
       <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
         <div class="card border-success mb-3" style="max-width: 18rem;">
-          <div class="card-header bg-transparent border-success"><b>Total Sub Enterprise Users</b></div>
+          <div class="card-header bg-transparent border-success"><b>Total Sub Enterprize Users</b></div>
           <div class="card-body text-success">
             <div class="project-info clearfix">
               <div class="project-info-left">

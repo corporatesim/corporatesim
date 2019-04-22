@@ -11,13 +11,13 @@
 					<div class="col-md-6 col-sm-12">
 						<div class="title">
 							<h1><a href="<?php echo base_url('Users/addUsers/subentuser');?>" data-toggle="tooltip" title="Add User"><i class="fa fa-plus-circle text-blue"> 
-							</i></a> SubEnterprise Users
+							</i></a> SubEnterprize Users
 						</h1>
 					</div>
 					<nav aria-label="breadcrumb" role="navigation">
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-							<li class="breadcrumb-item active" aria-current="page">Manage SubEnterprise Users</li>
+							<li class="breadcrumb-item active" aria-current="page">Manage SubEnterprize Users</li>
 						</ol>
 					</nav>
 				</div>
@@ -42,7 +42,7 @@
 								<a href="<?php echo base_url()."csvdemofiles/user-subenterprise-upload-csv-demo-file.csv";?>" download="DemoSubEnterpriseUser.csv"><u>Demo SubEnterprise Users</u></a>
 							</div> -->
 							<div class="clearfix mb-20">
-								<h5 class="text-blue mb-20">SubEnterprise Users Details</h5>
+								<h5 class="text-blue mb-20">SubEnterprize Users Details</h5>
 								<!-- to show filter only for enterprise users -->
 								<!-- <?php if($this->session->userdata('loginData')['User_Role']!=2){ ?>
 									<form method="post" action="" id="filterForm">
@@ -65,8 +65,8 @@
 									<thead>
 										<tr>
 											<th>Sr.No.</th>
-											<th class="datatable-nosort">Enterprise</th>
-											<th class="datatable-nosort">SubEnterprise</th>
+											<th class="datatable-nosort">Enterprize</th>
+											<th class="datatable-nosort">SubEnterprize</th>
 											<th class="table-plus">User Name</th>
 											<th>Email</th>
 											<th>Password</th>

@@ -28,7 +28,7 @@
           <?php if($this->session->userdata('loginData')['User_Role'] == 'superadmin') { ?>
             <li class="dropdown">
              <a href="<?php echo base_url('Enterprise/');?>" class="dropdown-toggle no-arrow">
-              <span class="fa fa-institution"></span><span class="mtext">Manage Enterprise</span>
+              <span class="fa fa-institution"></span><span class="mtext">Manage Enterprize</span>
             </a>
           </li>
         <?php } ?>
@@ -36,7 +36,7 @@
         <?php if(($this->session->userdata('loginData')['User_Role']) == 1 || ($this->session->userdata('loginData')['User_Role']) == 'superadmin') { ?>
           <li class="dropdown">
            <a href="<?php echo base_url('SubEnterprise/');?>" class="dropdown-toggle no-arrow">
-            <span class="fa fa-building"></span><span class="mtext">Manage SubEnterprise</span>
+            <span class="fa fa-building"></span><span class="mtext">Manage SubEnterprize</span>
           </a>
         </li>
       <?php } ?>
@@ -51,14 +51,14 @@
               <a href="<?php echo base_url('Users/EnterpriseUsers');?>">
                 <?php if($this->session->userdata('loginData')['User_Role'] == 'superadmin'){ ?>
                   <!-- admin then -->
-                  <span class='fa fa-user-circle-o'></span> Enterprise Users
+                  <span class='fa fa-user-circle-o'></span> Enterprize Users
                 <?php } else { ?>
                   <!-- enterprise then -->
                   <span class='fa fa-user-circle-o'></span> My Users
                 <?php } ?>
               </a>
             </li>
-            <li><a href="<?php echo base_url('Users/SubEnterpriseUsers');?>"><span class="fa fa-user-circle-o"></span> SubEnterprise Users</a></li>
+            <li><a href="<?php echo base_url('Users/SubEnterpriseUsers');?>"><span class="fa fa-user-circle-o"></span> SubEnterprize Users</a></li>
             <!-- <li><a href="<?php echo base_url('Users/addUsers/');?>"><span class="fa fa-plus-circle"></span> Add Users</a></li> -->
           </ul>
         </li>

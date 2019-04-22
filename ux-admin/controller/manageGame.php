@@ -22,10 +22,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 		'Game_Header'           => $_POST['Game_Header'],
 		'Game_shortDescription' => $_POST['Game_shortDescription'],
 		'Game_longDescription'  => $_POST['Game_longDescription'],
-		'Game_prize'            => $_POST['Game_prize'],
+		'Game_prise'            => $_POST['Game_prize'],
 		'Game_discount'         => $_POST['Game_discount'],
 		'Game_Datetime'         => date('Y-m-d H:i:s'),
 		'Game_Status'           => $Game_Status,
+		'Game_Elearning'        => $_POST['eLearning'],
 	);
 	
 	if( !empty($_POST['name']) && !empty($_POST['comments']))
@@ -151,7 +152,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		'Game_Header'   => $_POST['Game_Header'],
 		'Game_Message'  => $_POST['message'],
 		'Game_Datetime' => date('Y-m-d H:i:s'),
-		'Game_Status'   => 1
+		'Game_Status'   => 1,
+		'Game_Elearning'=> $_POST['eLearning']
 	);
 
 	if( !empty($_POST['name']) && !empty($_POST['comments']) )
@@ -188,6 +190,7 @@ if(isset($_GET['edit']))
 	$uid         = base64_decode($_GET['edit']);
 	$object      = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_ID='.$uid), '', '', '', '', 0);
 	$gamedetails = $functionsObj->FetchObject($object);
+	//print_r($gamedetails);exit;
 	$url         = site_root."ux-admin/ManageGame";
 	$file        = 'addeditGame.php';
 	if(isset($_GET['tab']))

@@ -58,6 +58,21 @@ span.alert-danger {
 
 						<div class="col-sm-10">
 							<form method="POST" action="" id="game_frm" name="game_frm" enctype="multipart/form-data">
+                <div class="col-sm-12 col-md-12">
+										<div class="form-group">
+											<?php if($gamedetails->Game_Elearning == 1)
+											{
+												$checked = checked;
+											}
+											else
+												{
+													$checked = '';
+												}
+												?>
+											<input type="checkbox" class="" name="eLearning" id="eLearning" value="1" <?php echo $checked;?>>
+											<label for="eLearning">eLearning</label>
+										</div>
+									</div>
 
 								<div class="row name" id="name">
 									<div class="col-sm-6">

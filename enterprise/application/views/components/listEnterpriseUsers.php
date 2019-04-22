@@ -11,12 +11,12 @@
 					<div class="col-md-6 col-sm-12">
 						<div class="title">
 							<h1><a href="<?php echo base_url('Users/addUsers/entuser');?>" data-toggle="tooltip" title="Add User"><i class="fa fa-plus-circle text-blue"> 
-              </i></a> Enterprise Users</h1>
+              </i></a> Enterprize Users</h1>
 						</div>
 						<nav aria-label="breadcrumb" role="navigation">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Manage Enterprise Users</li>
+								<li class="breadcrumb-item active" aria-current="page">Manage Enterprize Users</li>
 							</ol>
 						</nav>
 					</div>
@@ -41,14 +41,14 @@
 									 <a href="<?php echo base_url()."csvdemofiles/user-enterprise-upload-csv-demo-file.csv"; ?>" download="DemoEnterpriseUsers.csv"><u>Demo Enterprise Users</u></a>
 								</div> -->
 								<div class="clearfix mb-20">
-									<h5 class="text-blue">Enterprise Users Details</h5>
+									<h5 class="text-blue">Enterprize Users Details</h5>
 								</div>
 								<div class="row">
 									<table class="stripe hover multiple-select-row data-table-export nowrap">
 										<thead>
 											<tr>
 												<th>Sr.No.</th>
-												<th>Enterprise</th>
+												<th>Enterprize</th>
 												<th class="table-plus">UserName</th>
 												<th>Email</th>
 												<th>Password</th>

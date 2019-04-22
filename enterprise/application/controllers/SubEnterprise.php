@@ -28,7 +28,7 @@ class SubEnterprise extends CI_Controller {
 			redirect('Login/login');
 		}
 	}
-
+//
 //show Subenterprise details
 	public function index()
 	{
@@ -111,6 +111,56 @@ class SubEnterprise extends CI_Controller {
 		$RequestMethod                = $this->input->server('REQUEST_METHOD');
 		if($RequestMethod == 'POST')
 		{
+			$this->form_validation->set_rules('SubEnterprise_Name', 'SubEnterprise Name', 'trim|required|alpha_numeric_spaces');
+
+			//validate email with itself 
+			 $value = $this->db->query("SELECT SubEnterprise_Email FROM GAME_SUBENTERPRISE WHERE SubEnterprise_ID = ".$id)->row()->SubEnterprise_Email ;
+      if($this->input->post('SubEnterprise_Email') != $value) 
+       {
+       $is_unique =  '|is_unique[GAME_SUBENTERPRISE.SubEnterprise_Email]';
+       } 
+       else 
+       {
+       $is_unique =  '';
+       }
+
+			$this->form_validation->set_rules('SubEnterprise_Email', 'SubEnterprise Email', 'trim|required|valid_email'.$is_unique);
+
+			//validate mobile with itself 
+			 $value = $this->db->query("SELECT SubEnterprise_Number FROM GAME_SUBENTERPRISE WHERE SubEnterprise_ID = ".$id)->row()->SubEnterprise_Number ;
+      if($this->input->post('SubEnterprise_Number') != $value) 
+       {
+       $is_unique =  '|is_unique[GAME_SUBENTERPRISE.SubEnterprise_Number]';
+       } 
+       else 
+       {
+       $is_unique =  '';
+       }
+
+			$this->form_validation->set_rules('SubEnterprise_Number', 'SubEnterprise Number', 'trim|required|numeric|exact_length[10]'.$is_unique);
+
+			$this->form_validation->set_rules('SubEnterprise_Address1', 'Address', 'trim|required|alpha_numeric_spaces');
+
+			$this->form_validation->set_rules('SubEnterprise_Address2', 'Address2', 'trim|required|alpha_numeric_spaces');
+
+			$this->form_validation->set_rules('SubEnterprise_Country', 'Country', 'required');
+
+			$this->form_validation->set_rules('SubEnterprise_State', 'State', 'required');
+
+			$this->form_validation->set_rules('SubEnterprise_Province', 'Province', 'trim|required');
+
+			$this->form_validation->set_rules('SubEnterprise_Pincode', 'Pincode', 'trim|required|numeric');
+
+			if($this->form_validation->run() == FALSE)
+			{
+				$this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
+
+				$this->session->set_flashdata('er_msg', 'There have been validation error(s), please check the error messages');
+
+			$hasValidationErrors = true;
+				goto prepareview;
+			}
+
 			$EnterpriseID      = $this->input->post('Enterprise_ID');
 			$subenterpriseLogo = $_FILES['logo']['name'];
 			$SubEnterpriseName = $this->input->post('SubEnterprise_Name');
@@ -153,6 +203,17 @@ class SubEnterprise extends CI_Controller {
 				redirect("SubEnterprise/edit/".$encodedId);
 			}
 		}
+
+		prepareview:
+     $hasValidationErrors = '';
+		if($hasValidationErrors)
+		{
+			$content['hasValidationErrors'] = true;
+		}
+		else
+		{
+			$content['hasValidationErrors'] = false;                
+		}
 		$content['subview'] = 'editSubEnterprise';
 		$this->load->view('main_layout',$content);
 	}
@@ -177,6 +238,36 @@ class SubEnterprise extends CI_Controller {
 		
 		if($RequestMethod == 'POST')
 		{
+			$this->form_validation->set_rules('Enterprise_ID', 'Select Enterprise', 'required');
+			$this->form_validation->set_rules('SubEnterprise_Name', 'SubEnterprise Name', 'trim|required|alpha_numeric_spaces');
+
+			$this->form_validation->set_rules('SubEnterprise_Email', 'SubEnterprise Email', 'trim|required|valid_email|is_unique[GAME_ENTERPRISE.Enterprise_Email]');
+
+			$this->form_validation->set_rules('SubEnterprise_Number', 'SubEnterprise Number', 'trim|required|numeric|exact_length[10]|is_unique[GAME_SUBENTERPRISE.SubEnterprise_Number]');
+
+			$this->form_validation->set_rules('SubEnterprise_Address1', 'Address', 'trim|required|alpha_numeric_spaces');
+
+			$this->form_validation->set_rules('SubEnterprise_Address2', 'Address2', 'trim|required|alpha_numeric_spaces');
+
+			$this->form_validation->set_rules('SubEnterprise_Country', 'Country', 'required');
+
+			$this->form_validation->set_rules('SubEnterprise_State', 'State', 'required');
+
+			$this->form_validation->set_rules('SubEnterprise_Province', 'Province', 'trim|required');
+
+			$this->form_validation->set_rules('SubEnterprise_Pincode', 'Pincode', 'trim|required|numeric');
+
+			$this->form_validation->set_rules('SubEnterprise_Password', 'Password', 'trim|required|min_length[5]|max_length[12]|alpha_numeric');
+
+			if($this->form_validation->run() == FALSE)
+			{
+				$this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
+
+				$this->session->set_flashdata('er_msg', 'There have been validation error(s), please check the error messages');
+
+			$hasValidationErrors = true;
+				goto prepareview;
+			}
 			$subEnterprisedata = array(
 				'SubEnterprise_Name'      => $this->input->post('SubEnterprise_Name'),
 				'SubEnterprise_Number'    => $this->input->post('SubEnterprise_Number'),
@@ -225,24 +316,53 @@ class SubEnterprise extends CI_Controller {
 					$result = $this->Common_Model->insert('GAME_SUBENTERPRISE',$subEnterprisedata);
 					if($result){
 						            //$Domain_EnterpriseId  = $UserID  ;
-						            $Domain_SubEnterpriseId  = $result;
-                        $Domain_Name          = $this->input->post('commonDomain');
-                        $Domain_Logo          = $_FILES['logo']['name'];
-                        $Domain_details = array(
-                            'Domain_Name'             => $Domain_Name,
-                            'Domain_EnterpriseId'     => $this->input->post('Enterprise_ID'),
-                            'Domain_SubEnterpriseId'  => $Domain_SubEnterpriseId,
-                            'Domain_Logo'             => $Domain_Logo,
-                            'Domain_Status'           => 0,
-                        );
+						$Domain_SubEnterpriseId  = $result;
+						$Domain_Name          = $this->input->post('commonDomain');
+						$Domain_Logo          = $_FILES['logo']['name'];
+						$Domain_details = array(
+							'Domain_Name'             => $Domain_Name,
+							'Domain_EnterpriseId'     => $this->input->post('Enterprise_ID'),
+							'Domain_SubEnterpriseId'  => $Domain_SubEnterpriseId,
+							'Domain_Logo'             => $Domain_Logo,
+							'Domain_Status'           => 0,
+						);
                             //print_r($Domain_details);exit();
-                        $this->Common_Model->insert('GAME_DOMAIN',$Domain_details);
+						$this->Common_Model->insert('GAME_DOMAIN',$Domain_details);
 					}
+					if($result)
+					{
+						      $emailid  = $this->input->post('SubEnterprise_Email');
+									$password = $this->input->post('SubEnterprise_Password');
+									if($this->input->post('commonDomain') == '')
+									{
+										$domain = '';
+									}
+									else
+									{
+								  	$domain   = $this->input->post('commonDomain');
+								  }
 
-					$this->session->set_flashdata("tr_msg","Details Insert Successfully" );
-					redirect("SubEnterprise","refresh");
+									$this->email->to($emailid);
+									$this->email->from('support@corporatesim.com','corporatesim','support@corporatesim.com');
+									$this->email->subject('Here is your Email and Password');
+									$this->email->message('Hello User, your Email Id is '.$emailid.' , your Password is '.$password.' And your Domain is '.$domain);
+									$this->email->send();
+					}
 				}
+				$this->session->set_flashdata("tr_msg","Details Insert Successfully" );
+				redirect("SubEnterprise","refresh");
 			}
+
+		}
+	  prepareview:
+     $hasValidationErrors = '';
+		if($hasValidationErrors)
+		{
+			$content['hasValidationErrors'] = true;
+		}
+		else
+		{
+			$content['hasValidationErrors'] = false;                
 		}
 		$content['subview'] = 'addSubEnterprise';
 		$this->load->view('main_layout',$content);

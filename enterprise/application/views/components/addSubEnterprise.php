@@ -1,4 +1,5 @@
-<div class="main-container">
+
+<div class="main-container ">
 	<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
 		<?php $this->load->view('components/trErMsg');?>
 		<div class="min-height-200px">
@@ -8,7 +9,7 @@
 						<nav aria-label="breadcrumb" role="navigation">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Add SubEnterprise</li>
+								<li class="breadcrumb-item active" aria-current="page">Add SubEnterprize</li>
 							</ol>
 						</nav>
 					</div>	
@@ -16,10 +17,10 @@
 				<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
 					<div class="clearfix">
 						<div class="pull-left">
-							<h4 class="text-blue">Add SubEnterprise</h4>
+							<h4 class="text-blue">Add SubEnterprize</h4>
 						</div>
 						<div class="pull-right">
-							<input type="checkbox" name="showCsvForm" id="showCsvForm"> Choose File To Upload SubEnterprise
+							<input type="checkbox" name="showCsvForm" id="showCsvForm"> Choose File To Upload SubEnterprize
 							
 						</div>
 					</div>
@@ -58,97 +59,108 @@
 				<form method="post" action="" enctype="multipart/form-data" id="addByForm">
 					<?php if($this->session->userdata('loginData')['User_Role']!=1) { ?>
 						<div class="form-group row" id="selectSubenterprise">
-							<label for="Select SubEnterprise" class="col-sm-12 col-md-4 col-form-label">Select Enterprise</label>
+							<label for="Select SubEnterprise" class="col-sm-12 col-md-4 col-form-label">Select Enterprize</label>
 							<div class="col-sm-12 col-md-6">
-								<select name='Enterprise_ID' id='enterprise' class='form-control enterprise' required="">
-									<option value=''>--Select Enterprise--</option>
+								<select name='Enterprise_ID' id='enterprise' class='form-control enterprise' >
+									<option value=''>--Select Enterprize--</option>
 									<?php foreach ($EnterpriseDetails as $row) { ?> <option value="<?php echo $row->Enterprise_ID;?>"><?php echo $row->Enterprise_Name; ?></option>
 								<?php } ?> 
 							</select>
+								<span><?php echo form_error('Enterprise_ID'); ?></span>
 						</div>
 					</div>
 				<?php } ?>
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-4 col-form-label">Name</label>
 					<div class="col-sm-12 col-md-6">
-						<input class="form-control" name="SubEnterprise_Name" value="" type="text" placeholder="Enter Name" required="">
+						<input class="form-control" required="" name="SubEnterprise_Name" value="<?php echo set_value('SubEnterprise_Name');?>" type="text" placeholder="Enter Name" >
+						<span><?php echo form_error('SubEnterprise_Name'); ?></span>
 					</div>
 				</div> 
 				<!-- adding more field -->
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-4 col-form-label">Contact Number</label>
 					<div class="col-sm-12 col-md-6">
-						<input class="form-control" name="SubEnterprise_Number" value="" type="text" placeholder="Enter Number" required="">
+						<input class="form-control" required="" name="SubEnterprise_Number" value="<?php echo set_value('SubEnterprise_Number');?>" type="text" placeholder="Enter Number" >
+						<span><?php echo form_error('SubEnterprise_Number'); ?></span>
 					</div>
 				</div> 
 
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-4 col-form-label">Email ID</label>
 					<div class="col-sm-12 col-md-6">
-						<input class="form-control" name="SubEnterprise_Email" value="" type="email" placeholder="Enter Email" required="">
+						<input class="form-control" required="" name="SubEnterprise_Email" value="<?php echo set_value('SubEnterprise_Email');?>" type="email" placeholder="Enter Email" >
+						<span><?php echo form_error('SubEnterprise_Email'); ?></span>
 					</div>
 				</div> 
 
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-4 col-form-label">Address1</label>
 					<div class="col-sm-12 col-md-6">
-						<input class="form-control" name="SubEnterprise_Address1" value="" type="text" placeholder="Enter Address1" required="">
+						<input class="form-control" required="" name="SubEnterprise_Address1" value="<?php echo set_value('SubEnterprise_Address1');?>" type="text" placeholder="Enter Address1" >
+						<span><?php echo form_error('SubEnterprise_Address1'); ?></span>
 					</div>
 				</div> 
 
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-4 col-form-label">Address2</label>
 					<div class="col-sm-12 col-md-6">
-						<input class="form-control" name="SubEnterprise_Address2" value="" type="text" placeholder="Enter Address2">
+						<input class="form-control" required="" name="SubEnterprise_Address2" value="<?php echo set_value('SubEnterprise_Address2');?>" type="text" placeholder="Enter Address2">
+						<span><?php echo form_error('SubEnterprise_Address2'); ?></span>
 					</div>
 				</div> 
 
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-4 col-form-label">Country</label>
 					<div class="col-sm-12 col-md-6">
-						<select class="form-control" name="SubEnterprise_Country" required="" id="country">
+						<select class="form-control" required="" name="SubEnterprise_Country" id="country">
 							<option value="">--Select Country--</option>
 							<?php foreach ($country as $row) { ?>
 								<option value="<?php echo $row->Country_Id;?>"><?php echo $row->Country_Name;?></option>
 							<?php } ?>
 						</select>
+						<span><?php echo form_error('SubEnterprise_Country'); ?></span>
 					</div>
 				</div> 
 
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-4 col-form-label">State</label>
 					<div class="col-sm-12 col-md-6">
-						<select class="form-control" name="SubEnterprise_State" required="" id="state">
+						<select class="form-control" name="SubEnterprise_State" id="state">
 							<option value="">--Select State--</option>
 						</select>
+						<span><?php echo form_error('SubEnterprise_State'); ?></span>
 					</div>
 				</div> 
 
 				<div class="form-group row">
-					<label class="col-sm-12 col-md-4 col-form-label"> SubEnterprise Province</label>
+					<label class="col-sm-12 col-md-4 col-form-label"> SubEnterprize Province</label>
 					<div class="col-sm-12 col-md-6">
-						<input class="form-control" name="SubEnterprise_Province" value="" type="text" placeholder="Enter Province">
+						<input class="form-control" required="" name="SubEnterprise_Province" value="<?php echo set_value('SubEnterprise_Province');?>" type="text" placeholder="Enter Province">
+						<span><?php echo form_error('SubEnterprise_Province'); ?></span>
 					</div>
 				</div> 
 
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-4 col-form-label">Pincode</label>
 					<div class="col-sm-12 col-md-6">
-						<input class="form-control" name="SubEnterprise_Pincode" value="" type="text" placeholder="Enter Pincode" required="">
+						<input class="form-control" required="" name="SubEnterprise_Pincode" value="<?php echo set_value('SubEnterprise_Pincode');?>" type="text" placeholder="Enter Pincode" >
+						<span><?php echo form_error('SubEnterprise_Pincode'); ?></span>
 					</div>
 				</div> 
 
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-4 col-form-label">Password</label>
 					<div class="col-sm-12 col-md-6">
-						<input class="form-control" name="SubEnterprise_Password" type="text" placeholder="Enter Password" required="" value="123Ent@2019">
+						<input class="form-control" required="" name="SubEnterprise_Password" type="text" placeholder="Enter Password"  value="<?php echo set_value('SubEnterprise_Password');?>">
+						<span><?php echo form_error('SubEnterprise_Password'); ?></span>
 					</div>
 				</div> 
 				<!-- end of adding field -->
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-4 col-form-label">Choose Logo</label>
 					<div class="col-sm-12 col-md-6">
-						<input type="file" name="logo" multiple="multiple" accept="image/*" id="image" value="" class="form-control">
+						<input type="file" name="logo" required="" multiple="multiple" accept="image/*" id="image" value="" class="form-control">
 					</div>
 				</div>
 

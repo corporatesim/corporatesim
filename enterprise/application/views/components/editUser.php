@@ -34,32 +34,37 @@
 							<div class="form-group row">
 								<label class="col-sm-12 col-md-2 col-form-label">First Name</label>
 								<div class="col-sm-12 col-md-6">
-									<input class="form-control" type="text" name="User_fname" placeholder="FirstName" value="<?php echo $editUser->User_fname ?>">
+									<input class="form-control" type="text" name="User_fname" required="" placeholder="FirstName" value="<?php echo $editUser->User_fname ?>">
+									<?php echo form_error('User_fname'); ?>
 								</div>
 							</div>
 							<div class="form-group row">
 								<label class="col-sm-12 col-md-2 col-form-label">Last Name</label>
 								<div class="col-sm-12 col-md-6">
 									<input class="form-control" name="User_lname" placeholder=
-									"LastName" value="<?php echo $editUser->User_lname ?>">
+									"LastName"  required="" value="<?php echo $editUser->User_lname ?>">
+									<?php echo form_error('User_lname'); ?>
 								</div>
 							</div>
 							<div class="form-group row">
 								<label class="col-sm-12 col-md-2 col-form-label">User Name</label>
 								<div class="col-sm-12 col-md-6">
-									<input class="form-control" name="User_username" value="<?php echo $editUser->User_username ?>">
+									<input class="form-control"  required="" name="User_username" value="<?php echo $editUser->User_username ?>">
+									<?php echo form_error('User_username'); ?>
 								</div>
 							</div>
 							<div class="form-group row">
 								<label class="col-sm-12 col-md-2 col-form-label">Email ID</label>
 								<div class="col-sm-12 col-md-6">
-									<input class="form-control" name="User_email" value="<?php echo $editUser->User_email ?>">
+									<input class="form-control"  required="" name="User_email" value="<?php echo $editUser->User_email ?>">
+									<?php echo form_error('User_email'); ?>
 								</div>
 							</div>
 							<div class="form-group row">
 								<label class="col-sm-12 col-md-2 col-form-label">Contact Number</label>
 								<div class="col-sm-12 col-md-6">
-									<input class="form-control" name="User_mobile" value="<?php echo $editUser->User_mobile ?>">
+									<input class="form-control"  required="" name="User_mobile" value="<?php echo $editUser->User_mobile ?>">
+									<?php echo form_error('User_mobile'); ?>
 								</div>
 							</div>
 							<?php if($editUser->User_SubParentId != -2){?>

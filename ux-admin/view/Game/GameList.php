@@ -62,6 +62,7 @@
 								<th>Name</th>
 								<th>Comments</th>
 								<th>Header</th>
+								 <th>Game/eLearning</th>
 								<th class="no-sort">Upload Option</th>
 								<th class="no-sort">Action</th>
 							</tr>
@@ -75,6 +76,15 @@
 									<td><?php echo $row->Game_Name; ?></td>
 									<td><?php echo $row->Game_Comments;?></td>
 									<td><?php echo $row->Game_Header;?></td>
+									<td><?php if($row->Game_Elearning == 1)
+									{
+										echo "eLearning";
+									}
+										else
+										{
+											echo  "Game";
+										}
+									?></td>
 
 									<td class="text-center">
 										<a href="<?php echo site_root."ux-admin/ManageGameContent/Edit/".base64_encode($row->Game_ID); ?>"

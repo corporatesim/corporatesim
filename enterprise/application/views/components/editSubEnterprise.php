@@ -38,6 +38,7 @@
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" type="text" value="<?php echo $editSubEnterprise->SubEnterprise_Name?>" 
 								name="SubEnterprise_Name">
+								<span><?php echo form_error('SubEnterprise_Name'); ?></span>
 							</div>
 						</div>
 						<!-- adding more field -->
@@ -45,6 +46,7 @@
 							<label class="col-sm-12 col-md-4 col-form-label">Contact Number</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="SubEnterprise_Number" value="<?php echo $editSubEnterprise->SubEnterprise_Number;?>" type="text" placeholder="Enter SubEnterprise Number" required="">
+								<span><?php echo form_error('SubEnterprise_Number'); ?></span>
 							</div>
 						</div> 
 
@@ -52,6 +54,7 @@
 							<label class="col-sm-12 col-md-4 col-form-label">Email ID</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="SubEnterprise_Email" value="<?php echo $editSubEnterprise->SubEnterprise_Email;?>" type="email" placeholder="Enter SubEnterprise Email" required="">
+								<span><?php echo form_error('SubEnterprise_Email'); ?></span>
 							</div>
 						</div> 
 
@@ -59,6 +62,7 @@
 							<label class="col-sm-12 col-md-4 col-form-label">Address1</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="SubEnterprise_Address1" value="<?php echo $editSubEnterprise->SubEnterprise_Address1;?>" type="text" placeholder="Enter SubEnterprise Address1" required="">
+								<span><?php echo form_error('SubEnterprise_Address1'); ?></span>
 							</div>
 						</div> 
 
@@ -66,6 +70,7 @@
 							<label class="col-sm-12 col-md-4 col-form-label"> SubEnterprise Address2</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="SubEnterprise_Address2" value="<?php echo $editSubEnterprise->SubEnterprise_Address2;?>" type="text" placeholder="Enter SubEnterprise Address2">
+								<span><?php echo form_error('SubEnterprise_Address2'); ?></span>
 							</div>
 						</div> 
 
@@ -78,6 +83,7 @@
 										<option value="<?php echo $row->Country_Id;?>" <?php echo ($editSubEnterprise->SubEnterprise_Country==$row->Country_Id)?'selected':'';?>><?php echo $row->Country_Name;?></option>
 									<?php } ?>
 								</select>
+								<span><?php echo form_error('SubEnterprise_Country'); ?></span>
 								<?php if($editSubEnterprise->SubEnterprise_Country){ ?>
 									<script>
 										setTimeout(function(){
@@ -94,6 +100,7 @@
 								<select class="form-control" name="SubEnterprise_State" required="" id="state" data-stateid="<?php echo $editSubEnterprise->SubEnterprise_State;?>">
 									<option value="">--Select State--</option>
 								</select>
+								<span><?php echo form_error('SubEnterprise_State'); ?></span>
 							</div>
 						</div> 
 
@@ -101,6 +108,7 @@
 							<label class="col-sm-12 col-md-4 col-form-label"> SubEnterprise Province</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="SubEnterprise_Province" value="<?php echo $editSubEnterprise->SubEnterprise_Province;?>" type="text" placeholder="Enter SubEnterprise Province">
+								<span><?php echo form_error('SubEnterprise_Province'); ?></span>
 							</div>
 						</div> 
 
@@ -108,6 +116,7 @@
 							<label class="col-sm-12 col-md-4 col-form-label">Pincode</label>
 							<div class="col-sm-12 col-md-6">
 								<input class="form-control" name="SubEnterprise_Pincode" value="<?php echo $editSubEnterprise->SubEnterprise_Pincode;?>" type="text" placeholder="Enter SubEnterprise Pincode" required="">
+								<span><?php echo form_error('SubEnterprise_Pincode'); ?></span>
 							</div>
 						</div> 
 

@@ -9,7 +9,7 @@ class Common_Model extends CI_Model {
   //  $this->load->model('Common_Model');
   // }
 
-  // finding the count
+  // finding the count of num_rows
   public function findCount($tableName=NULL,$where=NULL,$columnName=NULL,$order=NULL,$limit=NULL)
   {
     $this->db->where($where);

@@ -4,7 +4,7 @@ include_once 'includes/header2.php';
 ?>
 <div class="row" style="margin-top:50px;">
 	<div class="col-md-9" style="margin-left:-10px;">
-		<h1 style="text-align: center; margin-top: 20px; color:#ffffff;">Select a Game</h1>
+		<h1 style="text-align: center; margin-top: 20px; color:#ffffff;">Select Module</h1>
 		<div class="row">
 			<div id="input_container" class="col-md-6 mb-3" style="margin-top:60px;">
 				<input  type="text" id="myFilter" class="form-control icon" onkeyup="searchGame()" placeholder="Search for Games..">
@@ -119,7 +119,7 @@ include_once 'includes/header2.php';
           $returnUrl = "<a class='icons' href='game_description.php?Game=".$row['Game_ID']."' style='margin-left:40px;'><img src='images/play1.png' style='width:120px; height:120px;'></a>";
         }
         ?>
-        <div class="col-md-4 col-md-6 col-xs-12" title="<?php echo $row['Game_Name']; ?>">
+        <div class="col-md-4 col-md-6 col-xs-12 reduce_width" title="<?php echo $row['Game_Name']; ?>">
           <div style="background:none; height:420px !important;" class="card card-flip h-100">
            <div class="card-front text-white" style="background-color: #263238;" >
             <div class="card-body">
@@ -133,7 +133,7 @@ include_once 'includes/header2.php';
             <?php echo $returnUrl; ?>
           </div>
         </div>
-        <div class="card-back bg-primary" style="width:315px; height:410px; background-color: #263238;">
+        <div class="card-back bg-primary reduce_flipspeed" style="width:295px;height:410px; background-color: #263238;">
           <div class="card-body">
            <h3 style="margin-left:10px;" class="card-title text-center">Know More</h3>
            <p class="card-text text-center">Suprise this one has more more more more content on the back!</p>

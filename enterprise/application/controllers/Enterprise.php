@@ -43,8 +43,9 @@ class Enterprise extends CI_Controller {
 		);
 		$Enterprise            = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where,'','Enterprise_Name');
 		$content['Enterprise'] = $Enterprise;
-		$query                 = "SELECT ge.*,concat(ga.fname,' ',ga.lname) AS User_Name, gc.Country_Name, gs.State_Name ,(SELECT count(*) FROM GAME_ENTERPRISE_GAME WHERE EG_EnterpriseID = ge.Enterprise_ID) as gamecount FROM GAME_ENTERPRISE ge LEFT JOIN GAME_ADMINUSERS ga ON ge.Enterprise_CreatedBy=ga.id LEFT JOIN GAME_COUNTRY gc ON gc.Country_Id= ge.Enterprise_Country LEFT JOIN GAME_STATE gs ON gs.State_Id=ge.Enterprise_State WHERE Enterprise_Status = 0";
+		$query                 = "SELECT ge.*,concat(ga.fname,' ',ga.lname) AS User_Name, gd.Domain_Name, gc.Country_Name, gs.State_Name ,(SELECT count(*) FROM GAME_ENTERPRISE_GAME WHERE EG_EnterpriseID = ge.Enterprise_ID) as gamecount FROM GAME_ENTERPRISE ge LEFT JOIN GAME_ADMINUSERS ga ON ge.Enterprise_CreatedBy=ga.id LEFT JOIN GAME_COUNTRY gc ON gc.Country_Id= ge.Enterprise_Country LEFT JOIN GAME_STATE gs ON gs.State_Id=ge.Enterprise_State LEFT JOIN GAME_DOMAIN gd ON ge.Enterprise_ID = gd.Domain_EnterpriseId  WHERE Enterprise_Status = 0";
 		$result                       = $this->Common_Model->executeQuery($query);
+	//echo "<pre>";print_r($result);exit;
 		$content['EnterpriseDetails'] = $result;
 		$content['subview']           = 'manageEnterprise';
 		$this->load->view('main_layout',$content);
@@ -80,6 +81,55 @@ class Enterprise extends CI_Controller {
 		$RequestMethod = $this->input->server('REQUEST_METHOD');
 		if($RequestMethod == 'POST')
 		{
+
+				$this->form_validation->set_rules('Enterprise_Name', 'Enterprise Name', 'trim|required|alpha_numeric_spaces');
+
+			//validate email with itself
+			 $value = $this->db->query("SELECT Enterprise_Email FROM GAME_ENTERPRISE WHERE Enterprise_ID = ".$EnterpriseId)->row()->Enterprise_Email ;
+      if($this->input->post('Enterprise_Email') != $value) 
+       {
+       $is_unique =  '|is_unique[GAME_ENTERPRISE.Enterprise_Email]';
+       } 
+       else 
+       {
+       $is_unique =  '';
+       }
+       $this->form_validation->set_rules('Enterprise_Email', 'Enterprise Email', 'trim|required|valid_email'.$is_unique);
+            //validate mobile with itslelf
+           $Original_value = $this->db->query("SELECT Enterprise_Number FROM GAME_ENTERPRISE WHERE Enterprise_ID = ".$EnterpriseId)->row()->Enterprise_Number ;
+       if($this->input->post('Enterprise_Number') != $Original_value) 
+        {
+        $is_unique =  '|is_unique[GAME_ENTERPRISE.Enterprise_Number]';
+        } 
+        else 
+        {
+        $is_unique =  '';
+        }
+
+			$this->form_validation->set_rules('Enterprise_Number', 'Enterprise Number', 'trim|required|numeric|exact_length[10]'.$is_unique);
+
+			$this->form_validation->set_rules('Enterprise_Address1', 'Address', 'trim|required|alpha_numeric_spaces');
+
+			$this->form_validation->set_rules('Enterprise_Address2', 'Address2', 'trim|required|alpha_numeric_spaces');
+
+			$this->form_validation->set_rules('Enterprise_Country', 'Country', 'required');
+
+			$this->form_validation->set_rules('Enterprise_State', 'State', 'required');
+
+			$this->form_validation->set_rules('Enterprise_Province', 'Province', 'trim|required');
+
+			$this->form_validation->set_rules('Enterprise_Pincode', 'Pincode', 'trim|required|numeric');
+
+			if($this->form_validation->run() == FALSE)
+			{
+				$this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
+
+				$this->session->set_flashdata('er_msg', 'There have been validation error(s), please check the error messages');
+
+				$hasValidationErrors = true;
+				goto prepareview;
+			}
+       
 			$EnterpriseLogo = $_FILES['logo']['name'];
 			$EnterpriseName = $this->input->post('Enterprise_Name');
 			$Enterprisedata = array(
@@ -124,6 +174,16 @@ class Enterprise extends CI_Controller {
 			redirect("Enterprise","refresh");
 
 		}
+			prepareview:
+     $hasValidationErrors = '';
+		if($hasValidationErrors)
+		{
+			$content['hasValidationErrors'] = true;
+		}
+		else
+		{
+			$content['hasValidationErrors'] = false;                
+		}
 		$content['subview'] = 'editEnterprise';
 		$this->load->view('main_layout',$content);
 	}
@@ -140,65 +200,129 @@ class Enterprise extends CI_Controller {
 		$content['country'] = $resultCountry;
 		if($RequestMethod == 'POST')
 		{
-			// echo "<pre>"; print_r($this->input->post()); exit();
-			if($this->input->post('submit') == 'save')
-			{
-				$Enterprisedata = array(
-					'Enterprise_Name'      => $this->input->post('Enterprise_Name'),
-					'Enterprise_Email'     => $this->input->post('Enterprise_Email'),
-					'Enterprise_Number'    => $this->input->post('Enterprise_Number'),
-					'Enterprise_Address1'  => $this->input->post('Enterprise_Address1'),
-					'Enterprise_Address2'  => $this->input->post('Enterprise_Address2'),
-					'Enterprise_Country'   => $this->input->post('Enterprise_Country'),
-					'Enterprise_State'     => $this->input->post('Enterprise_State'),
-					'Enterprise_Province'  => $this->input->post('Enterprise_Province'),
-					'Enterprise_Pincode'   => $this->input->post('Enterprise_Pincode'),
-					'Enterprise_Password'  => $this->input->post('Enterprise_Password'),
-					'Enterprise_StartDate' => date('Y-m-d H:i:s',strtotime($this->input->post('Enterprise_StartDate'))),
-					'Enterprise_EndDate'   => date('Y-m-d H:i:s',strtotime($this->input->post('Enterprise_EndDate'))),
-					'Enterprise_CreatedOn' => date('Y-m-d'),
-					'Enterprise_CreatedBy' => $UserID ,
-					'Enterprise_Logo'      => $_FILES['logo']['name'],
-				);
-				$this->do_upload();
-				if(!empty($this->input->post('Enterprise_Name')))
-				{
-					$where  = array(
-						'Enterprise_Name' =>	$this->input->post('Enterprise_Name'),
-					);
-					$query = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where);	
-					if($query)
-					{
-						$this->session->set_flashdata("er_msg","Enterprise already registered" );
-						redirect("Enterprise","refresh");
-					}
-					else
-					{
-						$result = $this->Common_Model->insert('GAME_ENTERPRISE',$Enterprisedata);
-						
-						if($result)
-						{
-							$Domain_EnterpriseId = $result;
-							$Domain_Name         = $this->input->post('commonDomain');
-							$Domain_Logo         = $_FILES['logo']['name'];
-							$Domain_details      = array(
-								'Domain_Name'         => trim("http://".$Domain_Name.".corporatesim.com"),
-								'Domain_EnterpriseId' => $Domain_EnterpriseId,
-								'Domain_Logo'         => $Domain_Logo,
-								'Domain_Status'       => 0,
-							);
-							if($this->input->post('allow') == 'allow')
-							{
-								// insert data to domain table only if domanin is neither existing nor empty
-								$this->Common_Model->insert('GAME_DOMAIN',$Domain_details);
-							}
-						}
 
-						$this->session->set_flashdata("tr_msg","Details Insert Successfully" );
-						redirect("Enterprise","refresh");
+			$this->form_validation->set_rules('Enterprise_Name', 'Enterprise Name', 'trim|required|alpha_numeric_spaces');
+			
+			$this->form_validation->set_rules('Enterprise_Email', 'Enterprise Email', 'trim|required|valid_email|is_unique[GAME_ENTERPRISE.Enterprise_Email]');
+
+			$this->form_validation->set_rules('Enterprise_Number', 'Enterprise Number', 'trim|required|numeric|exact_length[10]|is_unique[GAME_ENTERPRISE.Enterprise_Number]');
+
+			$this->form_validation->set_rules('Enterprise_Address1', 'Address', 'trim|required|alpha_numeric_spaces');
+
+			$this->form_validation->set_rules('Enterprise_Address2', 'Address2', 'trim|required|alpha_numeric_spaces');
+
+			$this->form_validation->set_rules('Enterprise_Country', 'Country', 'required');
+
+			$this->form_validation->set_rules('Enterprise_State', 'State', 'required');
+
+			$this->form_validation->set_rules('Enterprise_Province', 'Province', 'trim|required');
+
+			$this->form_validation->set_rules('Enterprise_Pincode', 'Pincode', 'trim|required|numeric');
+
+			$this->form_validation->set_rules('Enterprise_Password', 'Password', 'trim|required|min_length[5]|max_length[12]|alpha_numeric');
+
+			$this->form_validation->set_rules('commonDomain', 'Domain/SubDomain', 'required');
+
+			if($this->form_validation->run() == FALSE)
+			{
+				$this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
+
+				$this->session->set_flashdata('er_msg', 'There have been validation error(s), please check the error messages');
+
+				$hasValidationErrors = true;
+				goto prepareview;
+			}
+
+			// echo "<pre>"; print_r($this->input->post()); exit();
+				if($this->input->post('submit') == 'save')
+				{
+					$Enterprisedata = array(
+						'Enterprise_Name'      => $this->input->post('Enterprise_Name'),
+						'Enterprise_Email'     => $this->input->post('Enterprise_Email'),
+						'Enterprise_Number'    => $this->input->post('Enterprise_Number'),
+						'Enterprise_Address1'  => $this->input->post('Enterprise_Address1'),
+						'Enterprise_Address2'  => $this->input->post('Enterprise_Address2'),
+						'Enterprise_Country'   => $this->input->post('Enterprise_Country'),
+						'Enterprise_State'     => $this->input->post('Enterprise_State'),
+						'Enterprise_Province'  => $this->input->post('Enterprise_Province'),
+						'Enterprise_Pincode'   => $this->input->post('Enterprise_Pincode'),
+						'Enterprise_Password'  => $this->input->post('Enterprise_Password'),
+						'Enterprise_StartDate' => date('Y-m-d H:i:s',strtotime($this->input->post('Enterprise_GameStartDate'))),
+						'Enterprise_EndDate'   => date('Y-m-d H:i:s',strtotime($this->input->post('Enterprise_GameEndDate'))),
+						'Enterprise_CreatedOn' => date('Y-m-d'),
+						'Enterprise_CreatedBy' => $UserID ,
+						'Enterprise_Logo'      => $_FILES['logo']['name'],
+					);
+					//
+					$this->do_upload();
+					if(!empty($this->input->post('Enterprise_Name')))
+					{
+						$where  = array(
+							'Enterprise_Name' =>	$this->input->post('Enterprise_Name'),
+						);
+						$query = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where);	
+						if($query)
+						{
+							$this->session->set_flashdata("er_msg","Enterprise already registered" );
+							redirect("Enterprise","refresh");
+						}
+						else
+						{
+							$result = $this->Common_Model->insert('GAME_ENTERPRISE',$Enterprisedata);
+							
+							if($result)
+							{
+								$Domain_EnterpriseId = $result;
+								$Domain_Name         = $this->input->post('commonDomain');
+								$Domain_Logo         = $_FILES['logo']['name'];
+								$Domain_details      = array(
+									'Domain_Name'         => trim("http://".$Domain_Name.".corporatesim.com"),
+									'Domain_EnterpriseId' => $Domain_EnterpriseId,
+									'Domain_Logo'         => $Domain_Logo,
+									'Domain_Status'       => 0,
+								);
+								if($this->input->post('allow') == 'allow')
+								{
+								// insert data to domain table only if domanin is neither existing nor empty
+									$this->Common_Model->insert('GAME_DOMAIN',$Domain_details);
+								}
+								if($result)
+								{
+									$emailid  = $this->input->post('Enterprise_Email');
+									$password = $this->input->post('Enterprise_Password');
+									if($this->input->post('commonDomain') == '')
+									{
+										$domain = '';
+									}
+									else
+									{
+									$domain   = $this->input->post('commonDomain');
+								  }
+
+									$this->email->to($emailid);
+									$this->email->from('support@corporatesim.com','corporatesim','support@corporatesim.com');
+									$this->email->subject('Here is your Email and Password');
+									$this->email->message('Hello User, your Email Id is '.$emailid.' , your Password is '.$password.' And your Domain is '.$domain);
+									$this->email->send();
+
+								}
+							}
+
+							$this->session->set_flashdata("tr_msg","Details Insert Successfully" );
+							redirect("Enterprise","refresh");
+						}
 					}
 				}
-			}
+		}
+			prepareview:
+     $hasValidationErrors = '';
+		if($hasValidationErrors)
+		{
+			$content['hasValidationErrors'] = true;
+		}
+		else
+		{
+			$content['hasValidationErrors'] = false;                
 		}
 		$content['subview'] = 'addEnterprise';
 		$this->load->view('main_layout',$content);

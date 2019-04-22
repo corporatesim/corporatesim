@@ -11,12 +11,12 @@
           <div class="col-md-6 col-sm-12">
             <div class="title">
               <h1><a href="<?php echo base_url('SubEnterprise/addSubEnterprise/');?>" data-toggle="tooltip" title="Add SubEnterprise"><i class="fa fa-plus-circle text-blue"> 
-              </i></a> Manage SubEnterprise</h1>
+              </i></a> Manage SubEnterprize</h1>
             </div>
             <nav aria-label="breadcrumb" role="navigation">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Manage SubEnterprise</li>
+                <li class="breadcrumb-item active" aria-current="page">Manage SubEnterprize</li>
               </ol>
             </nav>
           </div>
@@ -42,7 +42,7 @@
                 </div> -->
                 <div class="clearfix mb-20">
                   <div class="pull-left">
-                    <h5 class="text-blue mb-20">SubEnterprise Details</h5>
+                    <h5 class="text-blue mb-20">SubEnterprize Details</h5>
                     <!-- <form method="post" action="" id="filterForm">
                       <div class="form-group row"id="selectSubenterprise">
                         <label for="Select SubEnterprise" class="col-sm-12 col-md-4 col-form-label">Choose Filter</label>
@@ -70,11 +70,11 @@
                 <thead>
                   <tr>
                     <th class="">S.No</th>
-                    <th class="">Enterprise Name</th>
-                    <th class="">SubEnterprise Name</th>
+                    <th class="">Enterprize Name</th>
+                    <th class="">SubEnterprize Name</th>
                     <th>Email</th>
-                    <th>Address</th>
                     <th>Password</th>
+                    <th>Address</th>
                     <th>Games</th>
                     <th>Duration (DD-MM-YYYY)</th>
                     <th class="datatable-nosort">Action</th>
@@ -99,8 +99,9 @@
                       <td><?php echo $subEnterpriseDetails->Enterprise_Name; ?></td>
                       <td><?php echo $subEnterpriseDetails->SubEnterprise_Name; ?></td>
                       <td><?php echo $subEnterpriseDetails->SubEnterprise_Email; ?></td>
-                      <td><?php echo $address; ?></td>
                       <td><?php echo $subEnterpriseDetails->SubEnterprise_Password; ?></td>
+                      <td><?php echo $address; ?></td>
+                     
                       <td>
                         <a class="dropdown-item" href="<?php echo base_url('Games/assignGames/');?><?php echo base64_encode($subEnterpriseDetails->SubEnterprise_ID).'/'.base64_encode($this->uri->segment(1)); ?>" title="Allocate/Deallocate Games"><?php echo $subEnterpriseDetails->gamecount; ?></a>
                       </td>

@@ -69,13 +69,12 @@ class Ajax extends CI_Controller {
     $result                       = $result[0];
     $result->Enterprise_StartDate = strtotime($result->Enterprise_StartDate);
     $result->Enterprise_EndDate   = strtotime($result->Enterprise_EndDate);
-		echo json_encode($result);
-	}
-
+    echo json_encode($result);
+  }
 
 	//csv upload for enterprise...
-	public function enterprisecsv()
-	{
+  public function enterprisecsv()
+  {
     if(strpos(base_url(),'localhost') !== FALSE)
     {
       $sendEmail = FALSE;
@@ -85,7 +84,7 @@ class Ajax extends CI_Controller {
       $sendEmail = TRUE;
     }
 
-		$maxFileSize = 2097152; 
+    $maxFileSize = 2097152; 
     // Set max upload file size [2MB]
     $validext    = array ('xls', 'xlsx', 'csv');  
 
@@ -96,6 +95,9 @@ class Ajax extends CI_Controller {
       try{	
        $file   = $_FILES['upload_csv']['tmp_name'];
        $handle = fopen($file, "r");
+       $not_inserted_data = array();
+       $inserted_data     = array();
+       $c                 = 0;
        $flag   = true;
 
        while( ( $filesop = fgetcsv( $handle, 1000, "," ) ) !== false )
@@ -103,7 +105,7 @@ class Ajax extends CI_Controller {
         if($flag)
         {
          $flag = false; continue; 
-       }
+        }
 
        if( !empty($filesop) )
        {
@@ -112,14 +114,34 @@ class Ajax extends CI_Controller {
          $newdate   = $filesop[7];
          $EndDate   = date("Y-m-d", strtotime($newdate));
          $password  = $filesop[5];
-         if($password != '')
+
+         $email  = $filesop[2];
+         $mobile = $filesop[1];
+
+         $where = array(
+          "Enterprise_Number" => $mobile,
+          "Enterprise_Email"  => $email
+        );
+        // die(print_r($where));
+         $object  = $this->Common_Model->findCount('GAME_ENTERPRISE',$where,0,0,0);
+           //print_r($object);exit;
+           //print_r($this->db->last_query()); exit();
+         if($object > 0)
          {
+           array_push($not_inserted_data,$filesop[2]);
+          //echo "abcd";exit;
+          //$result  = "email and mobile already registered";
+         }
+         else{
+
+        if($password != '')
+        {
           $password = $filesop[5];
         }
         else
         {
          $password = $this->Common_Model->random_password();
-       }
+        }
 
        $array = array(
 
@@ -136,6 +158,7 @@ class Ajax extends CI_Controller {
        /*print_r($array);exit();*/
        $insertResult = $this->Common_Model->insert("GAME_ENTERPRISE", $array, 0, 0);
        /*print_r($this->db->last_query());exit;*/
+       $c++;
        if($insertResult && $sendEmail)
        {
         // send mail only if in live server, not in local
@@ -155,10 +178,16 @@ class Ajax extends CI_Controller {
       }
 
     }
+  }
 
   }
+  if (!empty($not_inserted_data))
+      {
+        $msg = "</br>Email id not imported -> ".implode(" , ",$not_inserted_data);
+      }
+
   $result = array(
-    "msg"    =>	"Import successful",
+    "msg"    =>	"Import successfull",
     "status" =>	1
   );
 
@@ -212,83 +241,106 @@ public function EnterpriseUsersCSV($Enterpriseid=NULL)
 						//convert the date format 
         					$date = $filesop[6];
         					$GameStartDate = date("Y-m-d", strtotime($date));
-
-
         					$newdate     =   $filesop[7];
         					$GameEndDate = date("Y-m-d", strtotime($newdate));
-						//echo $GameEndDate;exit();
 
-        					$User_role   = 1;
-        					$entid       = $Enterpriseid;
+                  $email  = $filesop[4];
+                  $mobile = $filesop[3];
+                  $where = array(
+                    "User_mobile" => $mobile,
+                    "User_email"  => $email
+                  );
 
+                  $object = $this->Common_Model->findCount('GAME_SITE_USERS',$where);
+                  if($object > 0)
+                  {
+                    echo "details already registered";
+                    exit;
+                  }
 
-        					$array = array(
-        						"User_fname"         =>	$filesop[0],
-        						"User_lname"         =>	$filesop[1],
-        						"User_username"      =>	$filesop[2],
-        						"User_mobile"        =>	$filesop[3],
-        						"User_email"         =>	$filesop[4],
-        						"User_companyid"     =>	$filesop[5],
-        						"User_Role"          => $User_role,
-        						"User_ParentId"      => $entid,
-        						"User_GameStartDate" => $GameStartDate,
-        						"User_GameEndDate"   => $GameEndDate,
-        						"User_datetime"      =>	date("Y-m-d H:i:s")
-        					);
-        					/*print_r($array);exit();*/
-        					$result = $this->Common_Model->insert("GAME_SITE_USERS", $array, 0, 0);
-        					/*print_r($this->db->last_query());exit;*/
-        					$c++;
-        					if($result){
-        						$uid = $result;
+                  $User_role   = 1;
+                  if($Enterpriseid == 0)
+                  {
+                    $entid  = $this->session->userdata('loginData')['User_ParentId'];
+                  }
+                  else
+                  {
+                  $entid       = $Enterpriseid;
+                  }
+                  $array = array(
+                    "User_fname"         =>	$filesop[0],
+                    "User_lname"         =>	$filesop[1],
+                    "User_username"      =>	$filesop[2],
+                    "User_mobile"        =>	$filesop[3],
+                    "User_email"         =>	$filesop[4],
+                    "User_companyid"     =>	$filesop[5],
+                    "User_Role"          => $User_role,
+                    "User_ParentId"      => $entid,
+                    "User_GameStartDate" => $GameStartDate,
+                    "User_GameEndDate"   => $GameEndDate,
+                    "User_datetime"      =>	date("Y-m-d H:i:s")
+                  );
+                  /*print_r($array);exit();*/
+                  $result = $this->Common_Model->insert("GAME_SITE_USERS", $array, 0, 0);
+                  /*print_r($this->db->last_query());exit;*/
+                  $c++;
+                  if($result){
+                    $uid = $result;
         						//echo $uid;exit();
-        						$password      = $this->Common_Model->random_password(); 
-        						$login_details = array(
-        							'Auth_userid'    => $uid,
-        							'Auth_username'  => $filesop[2],
-        							'Auth_password'  => $password,
-        							'Auth_date_time' =>	date('Y-m-d H:i:s')
-        						);
+                    $password      = $this->Common_Model->random_password(); 
+                    $login_details = array(
+                     'Auth_userid'    => $uid,
+                     'Auth_username'  => $filesop[2],
+                     'Auth_password'  => $password,
+                     'Auth_date_time' =>	date('Y-m-d H:i:s')
+                   );
 
-        						$result1 = $this->Common_Model->insert('GAME_USER_AUTHENTICATION', $login_details, 0, 0);
-        					}
-        				}
+                    $result1 = $this->Common_Model->insert('GAME_USER_AUTHENTICATION', $login_details, 0, 0);
+                  }
+                }
 
-        			}
+              }
 				//echo $c;
-        			if (!empty($not_inserted_data))
-        			{
-        				$msg = "</br>Email id not imported -> ".implode(" , ",$not_inserted_data);
-        			}
+              if (!empty($not_inserted_data))
+              {
+                $msg = "</br>Email id not imported -> ".implode(" , ",$not_inserted_data);
+              }
 
-        			$result = array(
-        				"msg"    =>	"Import successful",
-        				"status" =>	1
-        			);
+              $result = array(
+                "msg"    =>	"Import successful",
+                "status" =>	1
+              );
 
-        		} catch (Exception $e) {
-        			$result = array(
-        				"msg"    =>	"Error: ".$e,
-        				"status" =>	0
-        			);
-        		}
-        	}
+            } catch (Exception $e) {
+             $result = array(
+              "msg"    =>	"Error: ".$e,
+              "status" =>	0
+            );
+           }
+         }
 
 	//exit();	
-        } else {
-        	$result = array(
-        		"msg"    =>	"Please select a file to import",
-        		"status" =>	0
-        	);
-        }
+       } else {
+         $result = array(
+          "msg"    =>	"Please select a file to import",
+          "status" =>	0
+        );
+       }
 
-        echo json_encode($result);
-      }
-      
+       echo json_encode($result);
+     }
 
       //csv upload for subenterprise...
-      public function subenterprisecsv($enterpriseid=NULL)
+     public function subenterprisecsv($enterpriseid=NULL)
+     {
+       if(strpos(base_url(),'localhost') !== FALSE)
+       {
+        $sendEmail = FALSE;
+      }
+      else
       {
+        $sendEmail = TRUE;
+      }
 
 	    	$maxFileSize = 2097152; // Set max upload file size [2MB]
         $validext    = array ('xls', 'xlsx', 'csv');  // Allowed Extensions
@@ -312,16 +364,37 @@ public function EnterpriseUsersCSV($Enterpriseid=NULL)
 
         				if( !empty($filesop) )
         				{
+                  
 						  //convert the date format 
         					$date      = $filesop[6];
         					$StartDate = date("Y-m-d", strtotime($date));
 
-
         					$newdate   = $filesop[7];
         					$EndDate   = date("Y-m-d", strtotime($newdate));
 						  //echo $GameEndDate;exit();
-                  $password = $filesop[5];
+                  $mobile = $filesop[1];
+                  $email  = $filesop[2];
+                  $where = array(
+                    "SubEnterprise_Number" => $mobile,
+                    "SubEnterprise_Email"  => $email
+                  );
+                  $object = $this->Common_Model->findCount('GAME_SUBENTERPRISE',$where);
+                  if($object > 0)
+                  {
+                    echo "details already registered";
+                    exit;
+                  }
+
+                  if($enterpriseid == 0)
+                  {
+                    $enterprise = $this->session->userdata('loginData')['User_ParentId'];
+                  }
+                  else
+                  {
                   $enterprise = $enterpriseid;
+                  }
+
+                  $password = $filesop[5];
                   if($password != '')
                   {
                     $password = $filesop[5];
@@ -329,7 +402,7 @@ public function EnterpriseUsersCSV($Enterpriseid=NULL)
                   else
                   {
                    $password = $this->Common_Model->random_password();
-                 }
+                  }
 
                  $array = array(
 
@@ -350,7 +423,7 @@ public function EnterpriseUsersCSV($Enterpriseid=NULL)
                  $insertResult = $this->Common_Model->insert("GAME_SUBENTERPRISE", $array, 0, 0);
                  /*print_r($this->db->last_query());exit;*/
 
-                 if($insertResult)
+                 if($insertResult && $sendEmail)
                  {
                   $SubEnterpriseName = $filesop[0];
                   $password1         = $password;
@@ -398,7 +471,7 @@ public function EnterpriseUsersCSV($Enterpriseid=NULL)
    public function SubEnterpriseUsersCSV($Enterpriseid=NULL,$SubEnterpriseid)
    {
 
-            $maxFileSize = 2097152; // Set max upload file size [2MB]
+          $maxFileSize = 2097152; // Set max upload file size [2MB]
         $validext    = array ('xls', 'xlsx', 'csv');  // Allowed Extensions
         
         if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['name'] ) ){
@@ -424,17 +497,41 @@ public function EnterpriseUsersCSV($Enterpriseid=NULL)
                         //convert the date format 
                   $date = $filesop[6];
                   $GameStartDate = date("Y-m-d", strtotime($date));
-
-
                   $newdate     =   $filesop[7];
                   $GameEndDate = date("Y-m-d", strtotime($newdate));
                         //echo $GameEndDate;exit();
+                  $mobile = $filesop[3];
+                  $email  = $filesop[4];
+                  $where = array(
+                    "User_mobile" => $mobile,
+                    "User_email"  => $email
+                  );
 
+                  $object = $this->Common_Model->findCount('GAME_SITE_USERS',$where);
+                  if($object > 0)
+                  {
+                    echo "details already registered";
+                    exit;
+                  }
+                  //enterpriseid for admin and enterprise login
+                  if($Enterpriseid == 0)
+                  {
+                    $entid = $this->session->userdata('loginData')['User_ParentId'];
+                  }
+                  else
+                  {
+                    $entid       = $Enterpriseid;
+                  }
 
-                  $entid       = $Enterpriseid;
+                  if($SubEnterpriseid == 0)
+                  {
+                    $subentid = $this->session->userdata('loginData')['User_SubParentId'];
+                  }
+                  else
+                  {
                   $subentid    = $SubEnterpriseid;
+                  }
                   $user_role   = 2;
-
 
                   $array = array(
                     "User_fname"         => $filesop[0],
@@ -500,5 +597,24 @@ public function EnterpriseUsersCSV($Enterpriseid=NULL)
         echo json_encode($result);
       }
 
-    }
+      public function getDomainName($Domain_Name=NULL)
+      {
+       $Domain_Name       = $Domain_Name;
+       $where = array(
+         'Domain_Status' => 0,
+         'Domain_Name'   => trim("http://".$Domain_Name.".corporatesim.com"),
+       );
+       $resultDomain_Name = $this->Common_Model->findCount('GAME_DOMAIN',$where);
+       // print_r($this->db->last_query()); print_r($resultDomain_Name); exit();
+       if($resultDomain_Name > 0)
+       {
+         echo 'no'; // for duplicate
+       }
+       else
+       {
+         echo 'success';
+       }
+     }
+
+   }
 

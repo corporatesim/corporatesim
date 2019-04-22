@@ -11,12 +11,12 @@
           <div class="col-md-6 col-sm-12">
             <div class="title">
               <h1><a href="<?php echo base_url('Enterprise/addEnterprise/');?>" data-toggle="tooltip" title="Add Enterprise"><i class="fa fa-plus-circle text-blue"> 
-              </i></a> Manage Enterprise</h1>
+              </i></a> Manage Enterprize</h1>
             </div>
             <nav aria-label="breadcrumb" role="navigation">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Manage Enterprise</li>
+                <li class="breadcrumb-item active" aria-current="page">Manage Enterprize</li>
               </ol>
             </nav>
           </div>
@@ -38,7 +38,7 @@
                  </div> -->
                  <div class="clearfix mb-20">
                   <div class="pull-left">
-                    <h5 class="text-blue mb-20">Enterprise Details</h5>
+                    <h5 class="text-blue mb-20">Enterprize Details</h5>
                   </div>
                 </div>
                 <div class="row">
@@ -48,9 +48,10 @@
                         <th class="">S.No</th>
                         <th class="">Name</th>
                         <th>Email</th>
-                        <th>Address</th>
                         <th>Password</th>
+                        <th>Address</th>
                         <th>Games</th>
+                        <th>Domain</th>
                         <th>Duration(DD-MM-YYYY)</th>
                         <!-- <th>Created By</th> -->
                         <!-- <th>Created On</th> -->
@@ -80,19 +81,33 @@
                           <td>
                             <?php echo $enterprisedetails->Enterprise_Email; ?>
                           </td>
-                          <td>
-                            <?php echo $address; ?>
-                          </td>
-                          <td>
+                           <td>
                             <?php echo $enterprisedetails->Enterprise_Password; ?>
                           </td>
                           <td>
-                            <a class="dropdown-item" href="<?php echo base_url('Games/assignGames/').base64_encode($enterprisedetails->Enterprise_ID).'/'.base64_encode($this->uri->segment(1));?>" title="Allocate/Deallocate Games"><?php if($enterprisedetails->gamecount>0){echo $enterprisedetails->gamecount; }else{echo "0";}?></a>
+                            <?php echo $address; ?>
                           </td>
+                         
                           <td>
-                            <?php echo date('d-M-y',strtotime($enterprisedetails->Enterprise_StartDate)).' <b>To</b> '.date('d-M-y',strtotime($enterprisedetails->Enterprise_EndDate));?>
-                          </td>
-                          <!-- <td><?php echo $enterprisedetails->User_Name;?></td> -->
+                            <a class="dropdown-item" href="<?php echo base_url('Games/assignGames/').base64_encode($enterprisedetails->Enterprise_ID).'/'.base64_encode($this->uri->segment(1));?>" title="Allocate/Deallocate Games"><?php if($enterprisedetails->gamecount>0){echo $enterprisedetails->gamecount; }else{echo "0";}?></a>
+                          </td> 
+
+                          <td>
+                            <?php if ($enterprisedetails->Domain_Name != '')
+                              {
+                              echo $enterprisedetails->Domain_Name;
+                              }
+                               else
+                               {
+                                echo "No Domain";
+                               }
+                              ?>
+                              </td>
+
+                              <td>
+                                <?php echo date('d-M-y',strtotime($enterprisedetails->Enterprise_StartDate)).' <b>To</b> '.date('d-M-y',strtotime($enterprisedetails->Enterprise_EndDate));?>
+                              </td>
+                              <!-- <td><?php echo $enterprisedetails->User_Name;?></td> -->
                           <!-- <td class="table-plus"><?php
                           echo date('Y-m-d',strtotime($enterprisedetails->Enterprise_CreatedOn));
                           ?>

@@ -18,7 +18,7 @@ class Users extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
-
+//
 	public function __construct()
 	{
 		parent::__construct();
@@ -92,12 +92,11 @@ class Users extends CI_Controller {
 		}
 		//show dropdownlist of Subenterprise
 		$where['SubEnterprise_Status'] = 0;
-		$Subenterprise = $this->Common_Model->fetchRecords('GAME_SUBENTERPRISE',$where,' ','SubEnterprise_ID');
+		$Subenterprise                 = $this->Common_Model->fetchRecords('GAME_SUBENTERPRISE',$where,' ','SubEnterprise_ID');
 		// echo "<pre>"; print_r($where); print_r($Subenterprise); exit();
-		$content['Subenterprise'] = $Subenterprise;
-
+		$content['Subenterprise']      = $Subenterprise;
 		//Show Detail Lists Of SubEnterprise Users;
-		$result  = $this->Common_Model->executeQuery($query); 
+		$result                        = $this->Common_Model->executeQuery($query); 
 		// print_r($result);exit();
 		if(!empty($filterID))
 		{
@@ -156,6 +155,53 @@ class Users extends CI_Controller {
 				$User_SubParentId = -2;
 				$User_Role        =  1;
 			}
+
+			$this->form_validation->set_rules('User_fname', 'First Name', 'trim|required|alpha_numeric_spaces'); 
+			$this->form_validation->set_rules('User_lname', 'Last Name', 'trim|required|alpha_numeric_spaces');
+			//validate mobile with itself
+			$value = $this->db->query("SELECT User_mobile FROM GAME_SITE_USERS WHERE User_id = ".$id)->row()->User_mobile;
+			if($this->input->post('User_mobile' != $value))
+			{
+				$unique ='|[GAME_SITE_USERS.User_mobile]';
+			}
+			else
+			{
+				$unique = '';
+			}
+			$this->form_validation->set_rules('User_mobile', 'Mobile', 'trim|required|numeric|exact_length[10]'.$unique);
+				//validate email with itself
+			$value = $this->db->query("SELECT User_email FROM GAME_SITE_USERS WHERE User_id = ".$id)->row()->User_email;
+			if($this->input->post('User_email' != $value))
+			{
+				$unique ='|[GAME_SITE_USERS.User_email]';
+			}
+			else
+			{
+				$unique = '';
+			}
+
+			$this->form_validation->set_rules('User_email', 'Email', 'trim|required|valid_email'.$unique);
+				//validate username with itself
+			$value = $this->db->query("SELECT User_username FROM GAME_SITE_USERS WHERE User_id = ".$id)->row()->User_username;
+			if($this->input->post('User_username' != $value))
+			{
+				$unique ='|[GAME_SITE_USERS.User_username]';
+			}
+			else
+			{
+				$unique = '';
+			}
+			$this->form_validation->set_rules('User_username', 'Username', 'trim|required|alpha_numeric_spaces'.$unique);
+			if($this->form_validation->run() == FALSE)
+			{
+				$this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
+
+				$this->session->set_flashdata('er_msg', 'There have been validation error(s), please check the error messages');
+
+				$hasValidationErrors = true;
+				goto prepareview;
+			}
+
 			$userdata = array(
 				'User_fname'       => $this->input->post('User_fname'),
 				'User_lname'       => $this->input->post('User_lname'),
@@ -187,6 +233,17 @@ class Users extends CI_Controller {
 				redirect("Users/user/".$this->uri->segment(3),"refresh");
 			}	
 		}
+  	prepareview:
+     $hasValidationErrors = '';
+		if($hasValidationErrors)
+		{
+			$content['hasValidationErrors'] = true;
+		}
+		else
+		{
+			$content['hasValidationErrors'] = false;                
+		}
+
 		$content['subview'] = 'editUser';
 		$this->load->view('main_layout',$content);
 	}
@@ -211,29 +268,29 @@ class Users extends CI_Controller {
 			if(!empty($this->input->post('subenterprise')) && $this->input->post('userType')==1)
 			{
 				$User_SubParentId = $this->input->post('subenterprise');
-				$User_Role      = 2;
+				$User_Role        = 2;
 			}
 			else
 			{
-				$User_SubParentId  = -2;
-				$User_Role      =  1;
+				$User_SubParentId = -2;
+				$User_Role        =  1;
 			}
 		}
 		//add subent users by subenterprize depending on subenterprize logged in
 		elseif($this->session->userdata('loginData')['User_Role']==2)
 		{
-			$User_ParentId = $this->session->userdata('loginData')['User_ParentId'];
+			$User_ParentId    = $this->session->userdata('loginData')['User_ParentId'];
 			$User_SubParentId = $this->session->userdata('loginData')['User_SubParentId'];
-			$User_Role     = 2;
+			$User_Role        = 2;
 		}
 		//add Ent/subEnterprize Users by admin
 		else
 		{
 			$where['Enterprise_Status'] = 0;
-			$Enterprise = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where);
-			$content['EnterpriseName'] = $Enterprise;
+			$Enterprise                 = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where);
+			$content['EnterpriseName']  = $Enterprise;
 
-			if($this->input->post('Enterprise') && $this->input->post('SubEnterprise') )
+			if($this->input->post('Enterprise') && $this->input->post('subenterprise') )
 			{
 				$User_Role =2;
 			}
@@ -256,9 +313,9 @@ class Users extends CI_Controller {
 				$User_ParentId = -1;
 			}
 
-			if($this->input->post('SubEnterprise'))
+			if($this->input->post('subenterprise'))
 			{
-				$User_SubParentId = $this->input->post('SubEnterprise');
+				$User_SubParentId = $this->input->post('subenterprise');
 			}
 			else
 			{
@@ -267,7 +324,28 @@ class Users extends CI_Controller {
 
 		}
 		if($RequestMethod == 'POST')
-		{
+		{ 
+			$this->form_validation->set_rules('Enterprise', 'Enterprise', 'required');
+			if($typeUser == 'subentuser')
+			{
+				$this->form_validation->set_rules('subenterprise', 'SubEnterprise', 'required');
+			}
+			$this->form_validation->set_rules('User_fname', 'First Name', 'trim|required|alpha_numeric_spaces'); 
+			$this->form_validation->set_rules('User_lname', 'Last Name', 'trim|required|alpha_numeric_spaces');
+			$this->form_validation->set_rules('User_mobile', 'Mobile', 'trim|required|numeric|exact_length[10]|is_unique[GAME_SITE_USERS.User_mobile]');
+
+			$this->form_validation->set_rules('User_email', 'Email', 'trim|required|valid_email|is_unique[GAME_SITE_USERS.User_email]');
+			$this->form_validation->set_rules('User_username', 'Username', 'trim|required|alpha_numeric_spaces|is_unique[GAME_SITE_USERS.User_username]');
+			if($this->form_validation->run() == FALSE)
+			{
+				$this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
+
+				$this->session->set_flashdata('er_msg', 'There have been validation error(s), please check the error messages');
+
+				$hasValidationErrors = true;
+				goto prepareview;
+			}
+
 			$userdata = array(
 				'User_fname'       =>	$this->input->post('User_fname'),
 				'User_lname'       =>	$this->input->post('User_lname'),
@@ -315,7 +393,16 @@ class Users extends CI_Controller {
 							'Auth_date_time' =>	date('Y-m-d H:i:s')
 						);
 							//print_r($login_details);exit();
-						$this->Common_Model->insert('GAME_USER_AUTHENTICATION',$login_details);		
+						$this->Common_Model->insert('GAME_USER_AUTHENTICATION',$login_details);	
+						if($result)
+						{
+
+							$this->email->to($to);
+							$this->email->from('support@corporatesim.com','corporatesim','support@corporatesim.com');
+							$this->email->subject('Here is your Username and Password');
+							$this->email->message('Hello User, your Username is '.$username.' And your Password is '.$password);
+							$this->email->send();
+						}	
 					}
 				}
 				$this->session->set_flashdata("tr_msg","Details Insert Successfully" );
@@ -329,6 +416,18 @@ class Users extends CI_Controller {
 				}
 			}
 		}
+
+		prepareview:
+     $hasValidationErrors = '';
+		if($hasValidationErrors)
+		{
+			$content['hasValidationErrors'] = true;
+		}
+		else
+		{
+			$content['hasValidationErrors'] = false;                
+		}
+
 		$content['subview']  = 'addUsers';
 		$content['typeUser'] = $typeUser;
 		$this->load->view('main_layout',$content);

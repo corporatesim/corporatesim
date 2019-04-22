@@ -120,7 +120,7 @@ class Login extends CI_Controller {
 						'User_SubParentId'   => $result->SubEnterprise_ID,
 						'User_profile_pic'   => $result->SubEnterprise_Logo,
 						'User_Role'          => 2,
-						'Enterprise_Name'    => $result->Enterprise_Name,
+						// 'Enterprise_Name'    => $result->Enterprise_Name,
 						'SubEnterprise_Name' => $result->SubEnterprise_Name,
 						// 'User_lastlogin'     => $result->User_lastlogin,
 					);

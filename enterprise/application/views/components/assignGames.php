@@ -1,4 +1,4 @@
-  <!--  <?php //echo $type."<pre>";print_r($assignGames); exit(); ?>  -->
+ <!--   <?php// echo $type."<pre>";print_r($assignGames); exit(); ?>   -->
  	<div class="main-container">
  		<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
  			<div class="min-height-200px">
@@ -22,10 +22,10 @@
  										echo "SubEnterprise: $Games->SubEnterprise_Name ($Games->SubEnterprise_ID) ";
  										break;
  										case 'EnterpriseUsers':
- 										echo "Enterprise User: $Games->User_username ($Games->UG_UserID) ";
+ 										echo "Enterprise User: $Games->User_username ($Games->User_id) ";
  										break;
  										case  'SubEnterpriseUsers':
- 										echo "SubEnterprise: $Games->SubEnterprise_Name <br> User: $Games->User_username ($Games->UG_UserID) ";
+ 										echo "SubEnterprise: $Games->SubEnterprise_Name <br> User: $Games->User_username ($Games->User_id) ";
  										break;		
  									}?>
  									</li>
@@ -60,9 +60,11 @@
  									<div class="col-md-3">
  										<label for="name"><span class="alert-danger">*</span>End Date</label>
  									</div>
- 									<div class="col-md-2">
- 										<label for="name">Replay Count (Unlimited -1)</label>
- 									</div>
+ 									<?php if($type!='Enterprise'&& $type!='SubEnterprise'){ ?>
+                                     <div class="col-md-2">
+                                         <label for="name">Replay Count (Unlimited -1)</label>
+                                     </div>
+                                 <?php }?>
  								</div>
  								<form action="" method="post" enctype="multipart/form-data">
  									<?php foreach ($assignGames as $games) { ?>
@@ -175,8 +177,19 @@
  											?>
  											<div class="col-md-4">
  												<input type="checkbox" class="GameCheckBox" name="assigngames[]" value="<?php echo $games->Game_ID;?>" id="<?php echo $games->Game_ID;?>" <?php echo $checked; ?>>
- 												<strong> <?php echo $games->Game_Name;?>
+ 												<?php if($games->Game_Elearning==1)
+ 												{
+ 													?>
+ 												<strong> <?php echo $games->Game_Name." (eLearning)";?>
  											</strong>
+ 											<?php
+ 									   	}
+ 									   	else{?>
+                            <strong> <?php echo $games->Game_Name;?>
+ 											</strong>
+ 										<?php
+ 										 }
+ 										 ?>
  										</div>
  										<div id="assignDate"class="col-md-6">
  											<input type="hidden"name="gameID[]" value="<?php echo $games->Game_ID;?>">
@@ -188,7 +201,7 @@
  												<input type ="text" class="form-control datepicker-here" id="<?php echo $games->Game_ID;?>_endDate" name="gameenddate[]" value="<?php echo $endDate ?>" data-value="<?php echo strtotime($endDate);?>" placeholder="Select End Date" required="" readonly="" data-startDate="<?php echo strtotime($GameStartDate);?>" data-endDate="<?php echo strtotime($GameEndDate);?>" data-language='en' data-date-format="dd-mm-yyyy">
  											</div>
  										</div>
- 										<?php if($type!='Subenterprise'){ ?>
+ 										<?php if($type!='Enterprise'&& $type!='SubEnterprise'){ ?>
  											<div class="col-md-2">
  												<input type="text" class="form-control" name="UG_ReplayCount[]" id="UG_ReplayCount_<?php echo $games->Game_ID;?>" value="<?php echo $ReplayCount;?>" placeholder="Rep-Count">
  											</div>

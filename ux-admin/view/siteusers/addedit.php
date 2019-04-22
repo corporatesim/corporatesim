@@ -98,10 +98,10 @@ span.alert-danger {
 				</div>
 			</div>
 			<!-- Add dropDown for select Enterprise and SubEnterprise Users -->
-			<div class="form-group">
+			<div class="form-group hidden">
 				<div class="row">
 					<div class="col-md-6" id="Enterprise_Section">
-						<label for="Select Enterprise"><span class="alert-danger">*</span>Select Enterprise</label>
+						<label for="Select Enterprise">Select Enterprise</label>
 						<select name="Enterprise" id="Enterprise" class="form-control">
 							<option value="">--Select Enterprise--</option>           
 							<?php foreach ($EnterpriseName as $EnterpriseData) { ?>
@@ -111,7 +111,7 @@ span.alert-danger {
 					</div>
 					<input type="hidden" name="Enterprisename" id="Enterprisename">
 					<div class="col-md-6 hidden" id="SubEnterprise_section">
-						<label for="Select SubEnterprise"><span class="alert-danger">*</span>Select SubEnterprise</label> 
+						<label for="Select SubEnterprise">Select SubEnterprise</label> 
 						<select name="SubEnterprise" id="SubEnterprise" class="form-control">	<?php if(isset($_GET['edit'])){ ?>
 							<option value="<?php echo $subObjRes->SubEnterprise_ID; ?>" <?php echo ($subObjRes->SubEnterprise_ID==$userdetails->User_SubParentId)?"selected":''; ?>><?php echo $subObjRes->SubEnterprise_Name; ?></option> 
 						<?php }else {?>
@@ -201,7 +201,8 @@ span.alert-danger {
         	{
         		$('#SubEnterprise_section').addClass('hidden');
         	}
-        	alert('Please Select Enterprise...');
+        	// alert('Please Select Enterprise...');
+        	console.log('Please Select Enterprise...');
         	return false;
         }
       });
