@@ -130,4 +130,4 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Enroll')
 			$sqlObj = $FunctionsObj->ExecuteQuery($sql);
 			// echo "<pre>"; print_r($sqlObj->fetch_object()); exit();
 
-			include_once doc_root.'views/Assesment.php';
+			include_once doc_root.'views/assesment.php';

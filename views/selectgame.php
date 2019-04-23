@@ -133,7 +133,7 @@ include_once 'includes/header2.php';
             <?php echo $returnUrl; ?>
           </div>
         </div>
-        <div class="card-back bg-primary reduce_flipspeed" style="width:295px;height:410px; background-color: #263238;">
+        <div class="card-back bg-primary reduce_flipspeed" style="width:280px;height:410px; background-color: #263238;">
           <div class="card-body">
            <h3 style="margin-left:10px;" class="card-title text-center">Know More</h3>
            <p class="card-text text-center">Suprise this one has more more more more content on the back!</p>

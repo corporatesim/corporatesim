@@ -41,7 +41,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Sumbit')
      $message1 = $_POST['message'];
      $username = $name.($userid);
      //echo $title.$message.$username;exit;
-     $to      = "pankaj.shishodia11@gmail.com";
+     $to      = "support@corporatesim.com";
      $from    = $email;
      $subject = $title;
      $message = "<p> Here is the message ".$message1." And the Username is: ".$username."</p>";

@@ -5,7 +5,7 @@ include_once 'includes/header2.php';
 ?>
 <div class="row" style="margin-top:50px;">
   <div class="col-md-9" style="margin-left:-10px;">
-    <h1 style="text-align: center; margin-top: 20px; color:#ffffff;">Select eLearning</h1>
+    <h1 style="text-align: center; margin-top: 20px; color:#ffffff;">Select Assesment</h1>
     <div class="row">
       <div id="input_container" class="col-md-6 mb-3" style="margin-top:60px;">
         <input  type="text" id="myFilter" class="form-control icon" onkeyup="searchGame()" placeholder="Search for Games..">
@@ -33,7 +33,7 @@ include_once 'includes/header2.php';
                   <button type="submit" style="margin-left:120px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
                 </div>
               </div>
-              <div class="card-back bg-primary reduce_flipspeed" style="width:295px;height:410px;background-color: #263238;">
+              <div class="card-back bg-primary reduce_flipspeed" style="width:280px;height:410px;background-color: #263238;">
                 <div class="card-body">
                   <h3 style="margin-left:10px;" class="card-title text-center">Know More</h3>
                   <p class="card-text text-center">Suprise this one has more more more more content on the back!</p>
