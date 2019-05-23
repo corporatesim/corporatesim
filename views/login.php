@@ -41,10 +41,10 @@ include_once 'includes/header.php';
 					<div class="clearfix"></div>
 				<?php } ?>
 				<div class="form-group">
-					<input type="text" name="username" id="username" placeholder="username" class="form-control" required="required" /><br>
-					<input type="password" name="password" id="password" placeholder="password" class="form-control" required="required"/><br>
-
-					
+					<input type="text" name="username" id="username" placeholder="username" class="form-control" required="required"/>
+					<br>
+					<input type="password" name="password" id="password" placeholder="password" class="form-control" required="required"/>
+					<br>
 					<div class="col-sm-8 col-sm-offset-2 text-right pull-right" style="padding-bottom:2px;">
 						<a href="javascript:void(0);" class="blueColor regular" id="resetPassword">Forgot Password ?</a>
 					</div>

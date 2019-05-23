@@ -50,7 +50,7 @@ if(isset($_GET['File'])){
 	}
 }
 
-$sql    = "SELECT *FROM GAME_GAME WHERE Game_ID = ".$gameid;
+$sql    = "SELECT * FROM GAME_GAME WHERE Game_ID = ".$gameid;
 $object = $functionsObj->ExecuteQuery($sql);
 
 if($object->num_rows > 0){

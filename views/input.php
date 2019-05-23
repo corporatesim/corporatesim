@@ -25,6 +25,12 @@ include_once 'includes/header.php';
     transform : scale(0);
   }
 
+  input[type=text] {
+    border-radius: 12px;
+    border       : none;
+    text-align   : center; 
+  }
+
 </style>
 <section id="video_player">
   <div class="container">
@@ -45,12 +51,12 @@ include_once 'includes/header.php';
       <!--<div class="col-sm-3 col-md-2 text-center timer">hh:mm:ss</div>-->
       <?php //echo $_SESSION['date']; ?>
       <div class="clearfix"></div>
-      <form method="POST" action="" id="game_frm" name="game_frm">
+      <form method="POST" action="" id="game_frm" name="game_frm" novalidate="">
         <div class="col-sm-12 no_padding shadow">
           <div class="col-sm-6 ">
-            <span style="margin-right:20px;"><a href="<?php echo $gameurl; ?>" target="_blank" class="innerPageLink">Introduction</a><i class="fa fa-window-restore" aria-hidden="true"></i>
+            <span style="margin-right:20px;"><a href="<?php echo $gameurl; ?>" target="_blank" class="innerPageLink <?php echo ($skipRes->Link_IntroductionLink)?'hidden':''?>">Introduction</a><i class="fa fa-window-restore" aria-hidden="true"></i>
             </span>
-            <span style="margin-right:20px;"><a href="<?php echo $scenurl; ?>" target="_blank" class="innerPageLink">Description</a><i class="fa fa-window-restore" aria-hidden="true"></i></span>
+            <span style="margin-right:20px;"><a href="<?php echo $scenurl; ?>" target="_blank" class="innerPageLink <?php echo ($skipRes->Link_DescriptionLink)?'hidden':''?>">Description</a><i class="fa fa-window-restore" aria-hidden="true"></i></span>
             <a href="chart.php?act=chart&ID=<?=$gameid?>" target="_blank" class="innerPageLink hidden">Dashboard</a><i class="fa fa-window-restore" aria-hidden="true"></i>
           </div>
           <div class="col-sm-6  text-right" style="padding: 2px 2px 5px 0px;">
@@ -184,7 +190,7 @@ include_once 'includes/header.php';
                 f.expression as exp , ls.SubLink_ID as SubLinkID,ls.Sublink_AdminCurrent as AdminCurrent, 
                 ls.Sublink_AdminLast as AdminLast, ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff,
                 ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
-                ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue
+                ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle
                 FROM GAME_LINKAGE l 
                 INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
                 INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
@@ -450,7 +456,7 @@ include_once 'includes/header.php';
                     echo "<div class='".$comp_length." scenariaListingDiv ".(($row1['ShowHide']==1)?'hidden':'')."' style='background:".$row1['BackgroundColor']."; color:".$row1['TextColor'].";' id='ref_".$row1['SubLinkID']."'>";
                   }
 
-                  echo "<div class='col-sm-1 ".$comp_name_length." regular ".$ComponentName."'>";
+                  echo "<div class='col-sm-1 ".$comp_name_length." regular ".$ComponentName."' style='font-size: ".$row1['fontSize']."px; font-family: ".$row1['fontStyle'].";'>";
                   echo $row1['Comp_Name'];
                   echo "</div>";
                   echo "<div class='col-sm-6 ".$ckEditorLength." no_padding ".$DetailsChart."'>";
@@ -738,7 +744,7 @@ include_once 'includes/header.php';
               ls.SubLink_ID as SubLinkID ,ls.Sublink_AdminCurrent as AdminCurrent, ls.Sublink_AdminLast as AdminLast, 
               ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff , 
               ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
-              ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue
+              ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle
               FROM GAME_LINKAGE l 
               INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
               INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
@@ -1018,14 +1024,14 @@ include_once 'includes/header.php';
                 }
                 else
                 {
-                  $input_lenght              = 'col-md-12';
+                  $input_lenght = 'col-md-12';
                 }
                 echo "<div class='".$length." subCompnent ".$hide."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor']."; border:none;'";
                   // if ($row2['ShowHide']==1){
                   //   echo "style='display:none;'";
                   // }
                 echo ">";
-                echo "<div class='col-sm-1 ".$name_length." regular ".$SubcomponentName."'>";
+                echo "<div class='col-sm-1 ".$name_length." regular ".$SubcomponentName."' style='font-size: ".$row2['fontSize']."px; font-family: ".$row2['fontStyle'].";'>";
                   echo $row2['SubComp_Name']; //." - Mode - ".$row2['Mode'] ;
                   echo "</div>";
                   echo "<div class='col-sm-6 ".$SubCkEditor." no_padding ".$DetailsChart."'>";
@@ -1690,11 +1696,43 @@ include_once 'includes/header.php';
     });
     // adding alert box while submitting the form to submit the inputs
     $('#submitBtn').on('click',function(){
-      var conf = confirm('Please press OK if you have provided all your inputs and are ready to submit else press Cancel. Please note that you can not come back to this page after clicking OK');
-      if(conf)
-      {
-        $('#submit').trigger('click');
-      }
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false,
+      })
+
+      swalWithBootstrapButtons.fire({
+        // title: 'Are you sure?',
+        text: "Please press OK if you have provided all your inputs and are ready to submit else press Cancel. Please note that you can not come back to this page after clicking OK",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        reverseButtons: false
+      }).then((result) => {
+        if (result.value) {
+          // swalWithBootstrapButtons.fire(
+          //   'Deleted!',
+          //   'Your file has been deleted.',
+          //   'success'
+          //   )
+          $('#submit').trigger('click');
+          $('.overlay').show();
+        }
+    //     else if (
+    // // Read more about handling dismissals
+    // result.dismiss === Swal.DismissReason.cancel
+    // ) {
+    //       swalWithBootstrapButtons.fire(
+    //         'Cancelled',
+    //         'Your imaginary file is safe :)',
+    //         'error'
+    //         )
+    //     }
+  })
     });
     // trigger click on save button onchange if type=radio
     // $('input:radio').each(function(i,e){
@@ -2257,5 +2295,4 @@ function create_json_input_field_keys(key)
     });
 }
 </script>
-</body>
-</html>
+<?php include_once 'includes/footer.php' ?>

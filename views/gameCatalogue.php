@@ -1,58 +1,194 @@
 <?php 
-include_once 'includes/header.php'; 
-include_once 'includes/header2.php'; 
-// echo "<pre>"; print_r($_SESSION); echo "</pre>";
+include_once 'includes/headerNav.php'; 
+// require_once 'eLearning.php'; 
 ?>
-<div class="row" style="margin-top:50px;">
-  <div class="col-md-9" style="margin-left:-10px;">
-    <h1 style="text-align: center; margin-top: 20px; color:#ffffff;">Select Simulation</h1>
-    <div class="row">
-      <div id="input_container" class="col-md-6 mb-3" style="margin-top:60px;">
-        <input  type="text" id="myFilter" class="form-control icon" onkeyup="searchGame()" placeholder="Search for Games..">
-      </div>
-    </div>
-    <div class="row" id="myItems" style="margin-top:20px;">
-      <?php 
-      while ($resultObj = $FunctionsObj->FetchObject($sqlObj)) { 
-        $image = ($resultObj->Game_Image)?$resultObj->Game_Image:'Game2.jpg';
-        ?>
-        <form method="post" action="">
-          <input type="hidden" id="gameId" name="gameId" value="<?php echo $resultObj->Game_ID;?>">
-          <input type="hidden" id="gameName" name="gameName" value="<?php echo $resultObj->Game_Name; ?>"> 
-          <input type="hidden" id="Description" name="Description" value='"<?php echo $resultObj->Game_Comments;?>"'>
-          <div class="col-md-4 col-md-6 col-xs-12 reduce_width" title="<?php echo $resultObj->Game_Name; ?>">
-            <div style="background:none; height:420px !important;" class="card card-flip h-100">
-              <div class="card-front text-white" style="background-color: #263238;" >
-                <div class="card-body">
-                  <h3 style="height:70px;"  class="card-title text-center"><?php echo $resultObj->Game_Name;?></h3>
-                  <img class="cardimg" src="<?php echo site_root.'images/'.$image;?>" style="width:100%; height:150px; "><br><br>
-                  <div class="link" style="height:35px;">
-                    <a style="margin-left:120px; color:#ffffff !important;" href="#" class="text-center">How to Play</a>
-                  </div>
-                  <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a> -->
-                  <button type="submit" style="margin-left:120px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
-                </div>
-              </div>
-              <div class="card-back bg-primary reduce_flipspeed" style="width:280px;height:410px; background-color: #263238;">
-                <div class="card-body">
-                  <h3 style="margin-left:10px;" class="card-title text-center">Know More</h3>
-                  <p class="card-text text-center">Suprise this one has more more more more content on the back!</p>
-                  <a class="how-to" style="margin-left:120px; color:#ffffff !important;" href="#" class="text-center">How to Play</a>
 
-                  <div  style="margin-top:180px;">
-                   <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a>  -->
-                   <button type="submit" style="margin-left:120px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
-                 </div>
+<div class="row col-md-9" style="margin-left: 23%;">
+  <div class="tab-content tabs tab-content1">
+    <div role="tabpanel" class="tab-pane fade in active" id="intro">
+      <div class="row">
+
+        <div class="tab" role="tabpanel">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs tab2 row col-md-12 col-sm-6 col-xs-12" role="tablist">
+            <li role="presentation" class="row col-md-4 col-sm-12 col-xs-12 active simulation"><a href="#simulation" aria-controls="simulation" role="tab" data-toggle="tab" style="">Simulation</a></li>
+            <li role="presentation" class="row col-md-4 col-sm-12 col-xs-12"><a href="#eLearning" aria-controls="eLearning" role="tab" data-toggle="tab" style="">eLearning</a></li>
+
+            <li role="presentation" class="row col-md-4 col-sm-12 col-xs-12"><a href="#Assessment" aria-controls="Assessment" role="tab" data-toggle="tab" style=" ">Assessment</a></li>
+          </ul>
+          <div class="clearfix"></div>
+          <!-- Tab panes -->
+          <div class="tab-content tabs tab-content2">
+
+            <div role="tabpanel" class="tab-pane fade in active" id="simulation">
+              <div class="row">
+                <div id="wowslider-container1">
+
+                 <div class="row col-md-12">
+                  <div class="col-md-2 pull-right">
+                    <br>
+                    <!-- <i class="glyphicon glyphicon-search icon pull-right"></i> -->
+                    <input type="search" id="myFilter" class="form-control icon pull-right" onkeyup="searchGame();" placeholder="Search Simulation" style="width: 200px; border-radius: 18px;">
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row" id="simulationGames" style="margin-top:20px;">
+                  <?php
+                  while ($resultObj = mysqli_fetch_object($sqlObj)) { 
+                    $image = ($resultObj->Game_Image)?$resultObj->Game_Image:'Game2.jpg';
+                    ?>
+                    <form method="post" action="">
+                      <input type="hidden" id="gameId" name="gameId" value="<?php echo $resultObj->Game_ID;?>">
+                      <input type="hidden" id="gameName" name="gameName" value="<?php echo $resultObj->Game_Name; ?>"> 
+                      <input type="hidden" id="Description" name="Description" value='"<?php echo $resultObj->Game_Comments;?>"'>
+                      <div class="col-md-4 col-xs-12 col-sm-6 col-lg-3 reduce_width" title="<?php echo $resultObj->Game_Name; ?>">
+                        <div style="background:none; height:330px !important;" class="card card-flip h-100">
+                          <div class="card-front text-white" style="background-color: #263238;" >
+                            <div class="card-body">
+                              <h3 style="height:70px;"  class="card-title text-center"><?php echo $resultObj->Game_Name;?></h3>
+                              <img class="cardimg" src="<?php echo site_root.'images/'.$image;?>" style="width:100%; height:150px; margin-top:-15px"><br><br>
+                              <div class="link" style="height:35px;margin-top: -8px;">
+                                <a style="margin-left:80px; color:#ffffff !important;" href="#" class="text-center">How to Play</a>
+                              </div>
+                              <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a> -->
+                              <button type="submit" style="margin-left:80px;margin-top:-5px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
+                            </div>
+                          </div>
+                          <div class="card-back bg-primary reduce_flipspeed" style="width:222px;height:320px; background-color: #263238;">
+                            <div class="card-body">
+                              <h3 style="margin-left:10px;" class="card-title text-center">Know More</h3><br>
+                              <p class="card-text text-center" style="margin-left:20px; margin-top:-10px;"><?php echo $resultObj->Game_Comments;?></p>
+                              <a class="how-to" style="margin-left:50px; color:#ffffff !important;" href="#" class="text-center"></a>
+
+                              <div  style="margin-top:180px; margin-top:110px;">
+                               <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a>  -->
+                               <button type="submit" style="margin-left:80px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   </form>
+                 <?php } ?>
                </div>
-             </div>
+             </div>  
            </div>
          </div>
-       </form>
-     <?php } ?>
+
+         <div role="tabpanel" class="tab-pane fade" id="eLearning">
+          <div class="row">
+            <div class="row col-md-12">
+              <div class="col-md-2 pull-right">
+                <br>
+                <!-- <i class="glyphicon glyphicon-search icon pull-right"></i> -->
+                <input type="search" id="myeLearning" class="form-control icon pull-right" onkeyup="searcheLearning();" placeholder="Search eLearning" style="width: 200px; border-radius: 18px;margin-bottom: 20px;">
+              </div>
+            </div>
+            <div class="row" id="simulationElearning" style="margin-top:20px;">
+              <?php
+
+              while ($result = mysqli_fetch_object($sqlObj1)) { 
+
+                $image = ($result->Game_Image)?$result->Game_Image:'Game2.jpg';
+                ?>
+                <form method="post" action="">
+                  <input type="hidden" id="gameId" name="gameId" value="<?php echo $result->Game_ID;?>">
+                  <input type="hidden" id="gameName" name="gameName" value="<?php echo $result->Game_Name; ?>"> 
+                  <input type="hidden" id="Description" name="Description" value='"<?php echo $result->Game_Comments;?>"'>
+                  <div class="col-md-4 col-xs-12 col-sm-6 col-lg-3 reduce_width" title="<?php echo $result->Game_Name; ?>">
+                    <div style="background:none; height:330px !important;" class="card card-flip h-100">
+                      <div class="card-front text-white" style="background-color: #263238;" >
+                        <div class="card-body">
+                          <h3 style="height:70px;"  class="card-title text-center"><?php echo $result->Game_Name;?></h3>
+                          <img class="cardimg" src="<?php echo site_root.'images/'.$image;?>" style="width:100%; height:150px; margin-top:-20px"><br><br>
+                          <div class="link" style="height:35px;margin-top: -8px;">
+                            <a style="margin-left:80px; color:#ffffff !important;" href="#" class="text-center">How to Play</a>
+                          </div>
+                          <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a> -->
+                          <button type="submit" style="margin-left:80px;margin-top:-2px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
+                        </div>
+                      </div>
+                      <div class="card-back bg-primary reduce_flipspeed" style="width:222px;height:320px; background-color: #263238;">
+                        <div class="card-body">
+                          <h3 style="margin-left:10px;" class="card-title text-center">Know More</h3><br>
+                          <p class="card-text text-center" style="margin-left:20px"><?php echo $result->Game_Comments;?></p>
+                          <a class="how-to" style="margin-left:50px; color:#ffffff !important;" href="#" class="text-center"></a>
+
+                          <div  style="margin-top:180px; margin-top:150px;">
+                           <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a>  -->
+                           <button type="submit" style="margin-left:80px;margin-top:-5px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </form>
+             <?php } ?>
+           </div>
+         </div>
+       </div>
+
+       <div role="tabpanel" class="tab-pane fade" id="Assessment">
+        <div class="row">
+          <div class="row col-md-12">
+            <div class="col-md-2 pull-right">
+              <br>
+              <!-- <i class="glyphicon glyphicon-search icon pull-right"></i> -->
+              <input type="search" id="myAssessment" class="form-control icon pull-right" onkeyup="searchassessment();" placeholder="Search Assessment" style="width: 200px; border-radius: 18px; margin-bottom: 20px;">
+            </div>
+          </div>
+
+          <div class="row" id="simulationAssesment" style="margin-top:20px;">
+            <?php
+
+            while ($resultAssesment = mysqli_fetch_object($sqlObj2)) { 
+
+              $image = ($resultAssesment->Game_Image)?$resultAssesment->Game_Image:'Game2.jpg';
+              ?>
+              <form method="post" action="">
+                <input type="hidden" id="gameId" name="gameId" value="<?php echo $resultAssesment->Game_ID;?>">
+                <input type="hidden" id="gameName" name="gameName" value="<?php echo $resultAssesment->Game_Name; ?>"> 
+                <input type="hidden" id="Description" name="Description" value='"<?php echo $resultAssesment->Game_Comments;?>"'>
+
+                <div class="col-md-4 col-xs-12 col-sm-6 col-lg-3 reduce_width" title="<?php echo $result->Game_Name; ?>">
+                  <div style="background:none; height:330px !important;" class="card card-flip h-100">
+                    <div class="card-front text-white" style="background-color: #263238;" >
+                      <div class="card-body">
+                        <h3 style="height:70px;"  class="card-title text-center"><?php echo $resultAssesment->Game_Name;?></h3>
+                        <img class="cardimg" src="<?php echo site_root.'images/'.$image;?>" style="width:100%; height:150px; margin-top:-20px"><br><br>
+                        <div class="link" style="height:35px;margin-top:-8px; ">
+                          <a style="margin-left:80px; color:#ffffff !important;" href="#" class="text-center">How to Play</a>
+                        </div>
+                        <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a> -->
+                        <button type="submit" style="margin-left:80px; margin-top: -1px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
+                      </div>
+                    </div>
+                    <div class="card-back bg-primary reduce_flipspeed" style="width:222px;height:320px; background-color: #263238;">
+                      <div class="card-body">
+                        <h3 style="margin-left:10px;" class="card-title text-center">Know More</h3><br>
+                        <p class="card-text text-center" style="margin-left:20px"><?php echo $resultAssesment->Game_Comments;?></p>
+                        <a class="how-to" style="margin-left:50px; color:#ffffff !important;" href="#" class="text-center"></a>
+
+                        <div  style="margin-top:180px; margin-top:150px;">
+                         <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a>  -->
+                         <button type="submit" style="margin-left:80px;margin-top: -5px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </form>
+           <?php } ?>
+         </div>
+
+       </div>
+     </div>
+
    </div>
  </div>
-</div>
-</body>
-</html>
 
-<?php include_once 'includes/footer.php'; ?>    
+</div>
+</div>
+</div>
+
+<?php include_once 'includes/footer.php' ?>

@@ -1,10 +1,11 @@
+
 <style type="text/css">
 	span.alert-danger {
 		background-color: #ffffff;
 		font-size: 18px;
 	}
 </style>
-<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script> -->
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header"><?php echo $header; ?></h1>

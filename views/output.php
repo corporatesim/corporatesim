@@ -1,3 +1,10 @@
+<style>
+ input[type=text] {
+  border-radius: 12px;
+  /*border       : none;*/
+  text-align   : center !important; 
+}
+</style>
 <?php 
 include_once 'includes/header.php'; 
 ?>
@@ -106,7 +113,9 @@ include_once 'includes/header.php';
                   gls.SubLink_LinkIDcarry as CarryLinkID,
                   gls.SubLink_CompIDcarry as CarryCompID,
                   gls.SubLink_SubCompIDcarry as CarrySubCompID,
-                  gls.SubLink_ID as SubLinkID
+                  gls.SubLink_ID as SubLinkID,
+                  gls.SubLink_FontSize as fontSize,
+                  gls.SubLink_FontStyle as fontStyle
                   FROM GAME_LINKAGE_SUB gls 
                   LEFT JOIN GAME_LINKAGE gl ON gl.Link_ID=gls.SubLink_LinkID
                   LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID=gls.SubLink_CompID
@@ -406,9 +415,14 @@ include_once 'includes/header.php';
                         break;
                       }
 
+                      if(empty($value) || $value=='')
+                      {
+                        $value = 0;
+                      }
+
                       echo "<div class='".$length." scenariaListingDiv ".$hidden."' style='background:".$row1['BackgroundColor']."; color:".$row1['TextColor'].";'>";
 
-                      echo "<div class='col-sm-2 ".$width." regular text-center ".$ComponentName." ".$ShowHide."'>";
+                      echo "<div class='col-sm-2 ".$width." regular text-center ".$ComponentName." ".$ShowHide."' style='font-size: ".$row1['fontSize']."px; font-family: ".$row1['fontStyle'].";'>";
 
                       echo $row1['Comp_Name'];
                       echo "</div>";
@@ -416,7 +430,8 @@ include_once 'includes/header.php';
 
                       echo "<div class=' col-sm-6 ".$width1." text-center ".$InputFields." ".$ShowHide."'>";
                       $sqlOutcome = "SELECT * FROM GAME_PERSONALIZE_OUTCOME gpo WHERE gpo.Outcome_CompId=".$row1['CompID']." AND gpo.Outcome_LinkId=".$linkid." AND ".$value.">=gpo.Outcome_MinVal AND ".$value."<=gpo.Outcome_MaxVal AND gpo.Outcome_IsActive=0 ORDER BY Outcome_Order";
-                      $objRes          = $functionsObj->ExecuteQuery($sqlOutcome);
+                      $objRes              = $functionsObj->ExecuteQuery($sqlOutcome);
+                      $Outcome_Description = "";
                       if($objRes->num_rows > 0)
                       {
                        while($objectResult = $functionsObj->FetchObject($objRes))
@@ -425,20 +440,21 @@ include_once 'includes/header.php';
 		                      // if same component and not the default outcome selected i.e. 3
                         if($objectResult->Outcome_FileType !=3 && ($value>=$objectResult->Outcome_MinVal AND $value<=$objectResult->Outcome_MaxVal))
                         {
-                         echo "<div class ='InlineBox'>";
+                          $Outcome_Description = $objectResult->Outcome_Description;
+                          echo "<div class ='InlineBox'>";
 		                        // echo "<label class ='scenariaLabel'>OutcomeResult</label>";
-                         echo "<img id='".$objectResult->Outcome_FileName."' src='".site_root."ux-admin/upload/Badges/".$objectResult->Outcome_FileName."' alt='Outcome_image' width=100 height=100 />";
-                         echo "</div>";
-                         echo "<div class='InlineBox hidden ".$labelC."'>";
-                         echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
-                         echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value='".$value."' readonly></input>";
-                         echo "</div>";
-                         break;
-                       }
-                     }
-                   }
-                   else
-                   {
+                          echo "<img id='".$objectResult->Outcome_FileName."' src='".site_root."ux-admin/upload/Badges/".$objectResult->Outcome_FileName."' alt='Outcome_image' width=100 height=100 />";
+                          echo "</div>";
+                          echo "<div class='InlineBox hidden ".$labelC."'>";
+                          echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
+                          echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value='".$value."' readonly></input>";
+                          echo "</div>";
+                          break;
+                        }
+                      }
+                    }
+                    else
+                    {
                      echo "<div class='InlineBox ".$labelC."'>";
                      echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
                      echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value='".$value."' readonly></input>";
@@ -466,7 +482,7 @@ include_once 'includes/header.php';
                    a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, s.SubComp_Name as SubComp_Name,ls.SubLink_ViewingOrder as ViewingOrder,
                    ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast,ls.SubLink_InputFieldOrder as InputFieldOrder,
                    ls.subLink_ShowHide as ShowHide,
-                   ls.SubLink_Details as Description ,ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor
+                   ls.SubLink_Details as Description ,ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle
                    FROM GAME_LINKAGE l 
                    INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
                    INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
@@ -682,7 +698,7 @@ include_once 'includes/header.php';
                     else
                     {
                      $width1 = "col-md-12";
-                    }
+                   }
                     //for show and hide components and subcomponents
                    if ($row2['ShowHide'] == 0)
                    {
@@ -721,7 +737,7 @@ include_once 'includes/header.php';
                   }*/
                 // if component div is half length then make subcomponent div col-md-12
                   echo "<div class='".$length." subCompnent ".$hidden."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor'].";'>";
-                  echo "<div class='col-sm-2 ".$width." regular text-center ".$SubcomponentName."'>";
+                  echo "<div class='col-sm-2 ".$width." regular text-center ".$SubcomponentName."' style='font-size: ".$row2['fontSize']."px; font-family: ".$row2['fontStyle'].";'>";
                   echo $row2['SubComp_Name'];
                   echo "</div>";
                   echo "<div class='col-sm-4 ".$cklength." no_padding ".$DetailsChart."'>";
@@ -757,7 +773,17 @@ include_once 'includes/header.php';
                   echo "</div>";
 
                 }
-                echo "</div>";  
+                echo "</div>";
+                if(!empty($Outcome_Description)){
+                  ?>
+                  <!-- adding this div here to show the description for outcome badges -->
+                  <div class="scenariaListingDiv <?php echo $length;?>">
+                    <center>
+                      <?php echo $Outcome_Description;?>
+                    </center>
+                  </div>
+                  <?php
+                }
                 //}
                 //else{
 

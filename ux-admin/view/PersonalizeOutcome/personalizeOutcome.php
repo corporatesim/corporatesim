@@ -126,6 +126,7 @@ span.alert-danger {
                 <th id="password">OutputComponent</th>
                 <th>MinValue</th>
                 <th>MaxValue</th>
+                <th>Description</th>
                 <th>Order</th>
                 <th>OutcomeType</th>
                 <th>OutcomeName</th>
@@ -142,6 +143,7 @@ span.alert-danger {
                   <td><?php echo $row->Comp_Name;?></td>
                   <td><?php echo $row->Outcome_MinVal;?></td>
                   <td><?php echo $row->Outcome_MaxVal;?></td>
+                  <td><?php echo $row->Outcome_Description;?></td>
                   <td><?php echo $row->Outcome_Order;?></td>
                   <td><?php echo $row->Outcome_Name;?></td>
                   <td><?php echo $row->Outcome_FileName;?></td>

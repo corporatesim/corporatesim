@@ -49,6 +49,10 @@
 <script type="text/javascript">
 	$(document).ready(function()
 	{
+		// increasing the width of scroll-bar
+		setTimeout(function(){
+			$('div.mCSB_dragger_bar').css({'width':'90%'});
+		},1000);
 		// to manage domain/sub-domain field accordingly
 		// $('input[name=Sub-Domain]').on('change',function(){
 		// 	if($(this).val() == 'Specific')

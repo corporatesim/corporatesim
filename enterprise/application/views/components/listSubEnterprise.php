@@ -101,9 +101,9 @@
                       <td><?php echo $subEnterpriseDetails->SubEnterprise_Email; ?></td>
                       <td><?php echo $subEnterpriseDetails->SubEnterprise_Password; ?></td>
                       <td><?php echo $address; ?></td>
-                     
+                      
                       <td>
-                        <a class="dropdown-item" href="<?php echo base_url('Games/assignGames/');?><?php echo base64_encode($subEnterpriseDetails->SubEnterprise_ID).'/'.base64_encode($this->uri->segment(1)); ?>" title="Allocate/Deallocate Games"><?php echo $subEnterpriseDetails->gamecount; ?></a>
+                        <a class="dropdown-item" href="<?php echo base_url('Games/assignGames/');?><?php echo base64_encode($subEnterpriseDetails->SubEnterprise_ID).'/'.base64_encode($this->uri->segment(1)); ?>" title="Allocate/Deallocate Games"><?php echo "<b style='color:#0029ff;'>".$subEnterpriseDetails->gamecount."</b>"; ?></a>
                       </td>
                       <td><?php echo date('d-M-y',strtotime($subEnterpriseDetails->SubEnterprise_StartDate)).' <b>To</b> '.date('d-M-y',strtotime($subEnterpriseDetails->SubEnterprise_EndDate));?></td>
                       <td>
@@ -117,7 +117,7 @@
                             </i> Edit</a>
                             <!-- <a class="dropdown-item" href="<?php //echo base_url('SubEnterprise/assignGames/');?><?php //echo base64_encode($subEnterpriseDetails->SubEnterprise_ID); ?>" title="Allocate/Deallocate Games"><i class="fa fa-gamepad"></i> Allocate/Deallocate Games</a> -->
                             <a class="dropdown-item dl_btn" href="javascript:void(0);" class="btn btn-primary dl_btn" id="<?php echo 
-                            $subEnterpriseDetails->SubEnterprise_ID; ?>" title="Delete"><i class="fa fa-trash"></i> Delete</a>
+                            $subEnterpriseDetails->SubEnterprise_ID; ?>" title="Delete"  onclick="deleteSubent()"><i class="fa fa-trash"></i> Delete</a>
                           </div>
                         </div>
                       </td>
@@ -177,6 +177,20 @@
         $('#enterprise').on('change',function(){
           $('#filterForm').submit();
         });
+
+        function deleteSubent()
+        {
+          $('.dl_btn').click( function() {
+            $('#cnf_yes').val($(this).attr('id'));
+            $('#cnf_del_modal').modal('show');
+          });
+          
+          $('#cnf_yes').click( function() {
+            var val              = $(this).val();
+            var id               = btoa(val);
+            window.location.href = loc_url_del + id +"/"+ func;   
+          });
+        }
 
       </script>
 

@@ -116,7 +116,7 @@
 							<option value="">-- SELECT --</option>
 							<?php 
 						// Fetch Services list
-							$game = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), '', '', '', '', 0);
+							$game = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), '', 'Game_Name', '', '', 0);
 							while($row = $game->fetch_object()){ ?>
 								<option value="<?php echo $row->Game_ID; ?>">
 									<?php echo $row->Game_Name; ?>
@@ -332,4 +332,8 @@ var formula_string = [];
 	});
 
 //-->
+$("#game_id").select2();
+
+
+
 </script>

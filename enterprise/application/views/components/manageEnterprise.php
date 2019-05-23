@@ -81,33 +81,32 @@
                           <td>
                             <?php echo $enterprisedetails->Enterprise_Email; ?>
                           </td>
-                           <td>
+                          <td>
                             <?php echo $enterprisedetails->Enterprise_Password; ?>
                           </td>
                           <td>
                             <?php echo $address; ?>
                           </td>
-                         
                           <td>
-                            <a class="dropdown-item" href="<?php echo base_url('Games/assignGames/').base64_encode($enterprisedetails->Enterprise_ID).'/'.base64_encode($this->uri->segment(1));?>" title="Allocate/Deallocate Games"><?php if($enterprisedetails->gamecount>0){echo $enterprisedetails->gamecount; }else{echo "0";}?></a>
+                            <a class="dropdown-item" href="<?php echo base_url('Games/assignGames/').base64_encode($enterprisedetails->Enterprise_ID).'/'.base64_encode($this->uri->segment(1));?>" title="Allocate/Deallocate Games"><?php if($enterprisedetails->gamecount>0){echo "<b style='color:#0029ff;'>".$enterprisedetails->gamecount."</b>"; }else{echo "<b style='color:#0029ff;'>0</b>";}?></a>
                           </td> 
 
                           <td>
                             <?php if ($enterprisedetails->Domain_Name != '')
-                              {
+                            {
                               echo $enterprisedetails->Domain_Name;
-                              }
-                               else
-                               {
-                                echo "No Domain";
-                               }
-                              ?>
-                              </td>
+                            }
+                            else
+                            {
+                              echo "No Domain";
+                            }
+                            ?>
+                          </td>
 
-                              <td>
-                                <?php echo date('d-M-y',strtotime($enterprisedetails->Enterprise_StartDate)).' <b>To</b> '.date('d-M-y',strtotime($enterprisedetails->Enterprise_EndDate));?>
-                              </td>
-                              <!-- <td><?php echo $enterprisedetails->User_Name;?></td> -->
+                          <td>
+                            <?php echo date('d-M-y',strtotime($enterprisedetails->Enterprise_StartDate)).' <b>To</b> '.date('d-M-y',strtotime($enterprisedetails->Enterprise_EndDate));?>
+                          </td>
+                          <!-- <td><?php echo $enterprisedetails->User_Name;?></td> -->
                           <!-- <td class="table-plus"><?php
                           echo date('Y-m-d',strtotime($enterprisedetails->Enterprise_CreatedOn));
                           ?>
@@ -122,7 +121,7 @@
                               <a class="dropdown-item" href="<?php echo base_url('Enterprise/edit/');?><?php echo base64_encode($enterprisedetails->Enterprise_ID); ?>" title="Edit"><i class="fa fa-pencil">
                               </i> Edit</a>
                               <a class="dropdown-item dl_btn" href="javascript:void(0);" class="btn btn-primary dl_btn" id="<?php echo 
-                              $enterprisedetails->Enterprise_ID; ?>" title="Delete"><i class="fa fa-trash"></i> Delete</a>
+                              $enterprisedetails->Enterprise_ID; ?>" title="Delete" onclick="deleteEnt()"><i class="fa fa-trash"></i> Delete</a>
                             </div>
                           </div>
                         </td>
@@ -175,6 +174,19 @@
                   $('#filterForm').submit();
                 });
               });
+              function deleteEnt()
+              {
+                  $('.dl_btn').click( function() {
+                  $('#cnf_yes').val($(this).attr('id'));
+                  $('#cnf_del_modal').modal('show');
+                  });
+                
+                $('#cnf_yes').click( function() {
+                  var val              = $(this).val();
+                  var id               = btoa(val);
+                  window.location.href = loc_url_del + id +"/"+ func;   
+                });
+              }
             </script>
 
 

@@ -1,11 +1,12 @@
 <?php 
-include_once 'includes/header.php'; 
-include_once 'includes/header2.php'; 
+include_once 'includes/headerNav.php'; 
+// include_once 'includes/header.php'; 
+// include_once 'includes/header2.php'; 
 // echo "<pre>"; print_r($_SESSION); echo "</pre>".$msg; 
 ?>
 <div class="row" style="margin-top:50px;">
 
-	<div class="container col-md-7" style="margin-top:60px; margin-left:160px;" >
+	<div class="container col-md-7" style="margin-left:30%;" >
 
 
 		<span class="anchor" id="formUserEdit"></span>
@@ -17,32 +18,32 @@ include_once 'includes/header2.php';
 			<div class="card-body profile_card" >
 				<form class="form" role="form" autocomplete="off" method="post" action="" enctype="multipart/form-data">
 					<div class="form-group row">
-						<label class="col-lg-3 col-form-label form-control-label">First name</label>
+						<label class="col-lg-2 col-form-label form-control-label">First name</label>
 						<div class="col-lg-9">
 							<input class="form-control" type="text" name="User_fname" id="User_fname" value="<?php echo $userdetails->User_fname;?>">
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-lg-3 col-form-label form-control-label">Last name</label>
+						<label class="col-lg-2 col-form-label form-control-label">Last name</label>
 						<div class="col-lg-9">
 							<input class="form-control" type="text" name="User_lname" id="User_lname" value="<?php echo $userdetails->User_lname;?>">
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-lg-3 col-form-label form-control-label">Contact</label>
+						<label class="col-lg-2 col-form-label form-control-label">Contact</label>
 						<div class="col-lg-9">
 							<input class="form-control" type="number" name="User_mobile" id="User_mobile" value="<?php echo $userdetails->User_mobile;?>">
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-lg-3 col-form-label form-control-label">Email</label>
+						<label class="col-lg-2 col-form-label form-control-label">Email</label>
 						<div class="col-lg-9">
 							<input class="form-control" type="email" name="User_email" value="<?php echo $userdetails->User_email;?>" readonly>
 						</div>
 					</div>
 
 					<div class="form-group row">
-						<label class="col-lg-3 col-form-label form-control-label">Profile Picture</label>
+						<label class="col-lg-2 col-form-label form-control-label">Profile Picture</label>
 						<div class="col-lg-7">
 							<input class="form-control" type="file" name="User_profile_pic" id="User_profile_pic" accept="image/*">
 						</div>
@@ -55,7 +56,7 @@ include_once 'includes/header2.php';
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-lg-3 col-form-label form-control-label">Resume</label>
+						<label class="col-lg-2 col-form-label form-control-label">Resume</label>
 						<div class="col-lg-7">
 							<input type="file" id="User_Resume" name="User_Resume" class="form-control" accept="application/msword,text/plain, application/pdf">
 						</div>
@@ -71,7 +72,7 @@ include_once 'includes/header2.php';
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-lg-3 col-form-label form-control-label">Profile Video</label>
+						<label class="col-lg-2 col-form-label form-control-label">Profile Video</label>
 						<div class="col-lg-9">
 							<input class="form-control" type="text" id="videoUrl" value='<?php echo base64_decode($userdetails->User_profile_video);?>'>
 							<input type="hidden" name="User_profile_video" id="User_profile_video" value='<?php echo $userdetails->User_profile_video; ?>'>
@@ -106,10 +107,11 @@ include_once 'includes/header2.php';
 <?php include_once 'includes/footer.php'; ?>		
 <script>
 	$(document).ready(function(){
-		$('[data-toggle="tooltip"]').tooltip(); 
+		$('[data-toggle="tooltip"]').tooltip();
 		$('#videoUrl').on('change keyup keydown',function(){
 			var videoUrl = $(this).val();
 			$('#User_profile_video').val(btoa(videoUrl));
 		});
 	});
 </script>
+<?php include_once 'includes/footer.php' ?>

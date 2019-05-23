@@ -99,8 +99,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Enroll')
 			$Result   = $modelObj->UpdateData('GAME_SITE_USERS', $usersdata, 'User_id', $UserId, 0);
 
 			$UserData = (object) array(
-				'UG_UserID'   => $UserId,
-				'UG_GameID'   => $gameId,
+				'UG_UserID' => $UserId,
+				'UG_GameID' => $gameId,
 			);
 			$InsertDetail = $modelObj->InsertData('GAME_USERGAMES',$UserData);
 

@@ -124,7 +124,7 @@ if(isset($_GET['edit']) && !empty($_GET['edit']))
 
 		// if user doesn't choose file to upload
 	 // echo "<pre>"; print_r($_POST); print_r($_FILES);
-		if(isset($_FILES['image']))
+		if(isset($_FILES['image']) || isset($_POST['choosenImageName']))
 		{
 			$errors    = array();
 			$file_name = $_FILES['image']['name'];
@@ -134,12 +134,13 @@ if(isset($_GET['edit']) && !empty($_GET['edit']))
 			{
 				$file_name = $_POST['choosenImageName'];
 				$updateArr = array(
-					'OutcomeID'        => $_POST['Outcome_Id'],
-					'Outcome_CompId'   => $_POST['ComponentName'],
-					'Outcome_MinVal'   => $_POST['minVal'],
-					'Outcome_MaxVal'   => $_POST['maxVal'],
-					'Outcome_Order'    => $_POST['order'],
-					'Outcome_FileName' => $file_name,
+					'OutcomeID'           => $_POST['Outcome_Id'],
+					'Outcome_CompId'      => $_POST['ComponentName'],
+					'Outcome_MinVal'      => $_POST['minVal'],
+					'Outcome_MaxVal'      => $_POST['maxVal'],
+					'Outcome_Description' => $_POST['Outcome_Description'],
+					'Outcome_Order'       => $_POST['order'],
+					'Outcome_FileName'    => $file_name,
 					//'Outcome_FileType' => $_POST['outcome'],	
 				);
         // echo "<pre>"; print_r($updateArr);print_r($_FILES);exit();
@@ -149,13 +150,14 @@ if(isset($_GET['edit']) && !empty($_GET['edit']))
 			else
 			{
 				$updateArr = array(
-					'OutcomeID'        => $_POST['Outcome_Id'],
-					'Outcome_CompId'   => $_POST['ComponentName'],
-					'Outcome_MinVal'   => $_POST['minVal'],
-					'Outcome_MaxVal	'  => $_POST['maxVal'],
-					'Outcome_Order'    => $_POST['order'],
-					'Outcome_FileType' => $_POST['Outcome'],
-					'Outcome_FileName' => $file_name,
+					'OutcomeID'             => $_POST['Outcome_Id'],
+					'Outcome_CompId'        => $_POST['ComponentName'],
+					'Outcome_MinVal'        => $_POST['minVal'],
+					'Outcome_MaxVal	'       => $_POST['maxVal'],
+					'Outcome_Description	' => $_POST['Outcome_Description'],
+					'Outcome_Order'         => $_POST['order'],
+					'Outcome_FileType'      => $_POST['Outcome'],
+					'Outcome_FileName'      => $file_name,
 				);
 				//print_r($_POST);print_r($_FILES);exit();
 				$move = move_uploaded_file($file_tmp,doc_root."/ux-admin/upload/".$file_name);

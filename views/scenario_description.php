@@ -67,7 +67,7 @@ include_once 'includes/header.php';
 									<li role="presentation" class="regular"><a href="#videosTab" aria-controls="videosTab" role="tab" data-toggle="tab">Videos</a></li>
 									<li role="presentation" class="regular"><a href="#imagesTab" aria-controls="imagesTab" role="tab" data-toggle="tab">Images</a></li>
 									<li role="presentation" class="regular"><a href="#documentsTab" aria-controls="documentsTab" role="tab" data-toggle="tab">Documents</a></li>
-									<li role="presentation" class="regular pull-right" style="margin-right: 40%;"><a href='<?php echo site_root."game_description.php?Game=".$gameidChk; ?>'>Go Back To Introduction</a></li>
+									<li role="presentation" class="regular pull-right <?php echo ($link->Link_BackToIntro)?'hidden':''?>" style="margin-right: 40%;"><a href='<?php echo site_root."game_description.php?Game=".$gameidChk; ?>'>Go Back To Introduction</a></li>
 								</ul>
 
 								<!-- Tab panes -->
@@ -203,12 +203,44 @@ include_once 'includes/header.php';
 				{
 					// adding a confirmation box while click on proceed
 					$('#proceedBtn').on('click',function(){
-						var conf = confirm('Please confirm that you have gone through all the content by clicking OK else press Cancel');
-						if(conf)
-						{
-							window.location='<?php echo $url; ?>';
-						}
-					});
+						const swalWithBootstrapButtons = Swal.mixin({
+							customClass: {
+								confirmButton: 'btn btn-success',
+								cancelButton : 'btn btn-danger'
+							},
+							buttonsStyling: false,
+						})
+
+						swalWithBootstrapButtons.fire({
+					// title: 'Are you sure?',
+					text             : "Please confirm that you have gone through all the content by clicking YES else press NO",
+					type             : 'warning',
+					showCancelButton : true,
+					confirmButtonText: 'YES',
+					cancelButtonText : 'NO',
+					reverseButtons   : false
+				}).then((result) => {
+					if (result.value) {
+						window.location='<?php echo $url; ?>';
+						// swalWithBootstrapButtons.fire(
+						//   'Deleted!',
+						//   'Your file has been deleted.',
+						//   'success'
+						//   )
+					}
+					//     else if (
+					// // Read more about handling dismissals
+					// result.dismiss === Swal.DismissReason.cancel
+					// ) {
+					//       swalWithBootstrapButtons.fire(
+					//         'Cancelled',
+					//         'Your imaginary file is safe :)',
+					//         'error'
+					//         )
+					//     }
+				})
+
+			});
 					$('img').on('contextmenu', function() {
 						return false;
 					})

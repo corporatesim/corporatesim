@@ -1,4 +1,11 @@
 <!-- <?php // echo "<pre>"; print_r($header); exit;?> -->
+   <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="<?php echo site_root.'js/select2.min.js';?>"></script>
+
+<!-- CSS -->
+<link href="<?php echo site_root.'css/select2.min.css';?>" rel='stylesheet' type='text/css'>
+  </head>
   <script type="text/javascript">
     <!--
      var loc_url_del  = "ux-admin/linkage/linkdel/";
@@ -240,7 +247,6 @@ span.alert-danger {
         }
       });
 
-
     $('#select_all').on('click',function(){
       if($(this).is(':checked'))
       {
@@ -280,7 +286,6 @@ span.alert-danger {
             $('#linkid').attr('value',linkid);
             $('#users_data').html(checkbox);
             
-
           }
           else
           {
@@ -313,5 +318,14 @@ span.alert-danger {
         }
       }
     });
+  });
+</script>
+
+ <!-- for searchable dropdown -->
+<script type="text/javascript">
+  $(document).ready(function(){
+   $("#game_game").select2();
+  /* $("#game_scenario").select2();*/
+
   });
 </script>

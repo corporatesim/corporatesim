@@ -33,8 +33,10 @@
 
 <!-- jQuery -->
 <script src="<?php echo site_root; ?>assets/components/jquery/dist/jquery.min.js"></script>
+<script src="<?php echo site_root; ?>js/select2.min.js"></script>
+<link href="<?php echo site_root; ?>css/select2.min.css" rel="stylesheet" type="text/css">
 
-<script src="<?php echo site_root; ?>js/jquery.validate.js"></script>
+<!-- <script src="<?php echo site_root; ?>js/jquery.validate.js"></script> -->
 
 <script type="text/javascript">
 <!--

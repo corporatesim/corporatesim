@@ -16,7 +16,54 @@ $file     = 'list.php';
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 {
-	//echo "in submit";	
+	// echo "<pre>"; print_r($_POST); exit();
+	if(isset($_POST['game_id']) && !empty($_POST['game_id']))
+	{
+		$id_game = $_POST['game_id'];
+	}
+	else
+	{
+		$findGameId = "SELECT * FROM GAME_LINKAGE WHERE Link_ID=".$_POST['link'];
+		$exeSql     = $functionsObj->ExecuteQuery($findGameId);
+		$gamedetail = $functionsObj->FetchObject($exeSql);
+		$id_game    = $gamedetail->Link_GameID;
+	}
+	$statusCheckSql        = "SELECT * FROM GAME_GAME WHERE Game_ID=".$id_game;
+	$runSql                = $functionsObj->ExecuteQuery($statusCheckSql);
+	$gameSkipStatus        = $functionsObj->FetchObject($runSql);
+	$Game_Description      = $gameSkipStatus->Game_Description;
+	$Game_IntroductionLink = $gameSkipStatus->Game_IntroductionLink;
+	$Game_DescriptionLink  = $gameSkipStatus->Game_DescriptionLink;
+	$Game_BackToIntro      = $gameSkipStatus->Game_BackToIntro;
+	$Game_Introduction     = $gameSkipStatus->Game_Introduction;
+
+	$Link_Description      = isset($_POST['Link_Description'])?$_POST['Link_Description']:0;
+	$Link_IntroductionLink = isset($_POST['Link_IntroductionLink'])?$_POST['Link_IntroductionLink']:0;
+	$Link_DescriptionLink  = isset($_POST['Link_DescriptionLink'])?$_POST['Link_DescriptionLink']:0;
+	$Link_BackToIntro      = isset($_POST['Link_BackToIntro'])?$_POST['Link_BackToIntro']:0;
+	$Link_Introduction     = isset($_POST['Link_Introduction'])?$_POST['Link_Introduction']:0;
+	// check wheather intro,scenario description or button or hide to intro button skip or not
+	if($Game_Description > 0)
+	{
+		$Link_Description = 1;
+	}
+	if($Game_IntroductionLink > 0)
+	{
+		$Link_IntroductionLink = 1;
+	}
+	if($Game_DescriptionLink > 0)
+	{
+		$Link_DescriptionLink = 1;
+	}
+	if($Game_BackToIntro > 0)
+	{
+		$Link_BackToIntro = 1;
+	}
+	if($Game_Introduction > 0)
+	{
+		$Link_Introduction = 1;
+	}
+
 	if(isset($_GET['link']))
 	{
 		$file   ='addeditlink.php';	
@@ -132,6 +179,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 				'SubLink_TextColor'          => $_POST['SubLink_TextColor'],
 				'SubLink_LabelCurrent'       => $_POST['SubLink_LabelCurrent'],
 				'SubLink_LabelLast'          => $_POST['SubLink_LabelLast'],
+				'SubLink_FontSize'           => $_POST['SubLink_FontSize'],
+				'SubLink_FontStyle'          => $_POST['SubLink_FontStyle'],
 				'SubLink_InputFieldOrder'    => $_POST['SubLink_InputFieldOrder'],
 				'SubLink_CreateDate'         => date('Y-m-d H:i:s')
 			);
@@ -236,17 +285,23 @@ else
 		$Link_Branching = 0;
 	}
 	$linkdetails = (object) array(
-		'Link_GameID'     =>	$_POST['game_id'],
-		'Link_ScenarioID' =>	$_POST['scen_id'],
-		'Link_Hour'       =>	$_POST['hour'],
-		'Link_Min'        =>	$_POST['minute'],
-		'Link_Order'      =>	$_POST['order'],
-		'Link_Mode'       =>	$_POST['Mode'],
-		'Link_Enabled'    =>	isset($_POST['enabled']) ? 1 : 0,
-		'Link_Branching'  =>	$Link_Branching,
-		'Link_Status'     =>	1,			
-		'Link_CreateDate' =>	date('Y-m-d H:i:s')
-	);		
+		'Link_GameID'           =>	$_POST['game_id'],
+		'Link_ScenarioID'       =>	$_POST['scen_id'],
+		'Link_Hour'             =>	$_POST['hour'],
+		'Link_Min'              =>	$_POST['minute'],
+		'Link_Order'            =>	$_POST['order'],
+		'Link_Mode'             =>	$_POST['Mode'],
+		'Link_Enabled'          =>	isset($_POST['enabled']) ? 1 : 0,
+		'Link_Branching'        =>	isset($_POST['Link_Branching'])?$_POST['Link_Branching']:0,
+		'Link_Introduction'     =>	$Link_Introduction,
+		'Link_IntroductionLink' =>	$Link_IntroductionLink,
+		'Link_Description'      =>	$Link_Description,
+		'Link_DescriptionLink'  =>	$Link_DescriptionLink,
+		'Link_BackToIntro'      =>  $Link_BackToIntro,
+		'Link_Status'           =>	1,			
+		'Link_CreateDate'       =>	date('Y-m-d H:i:s')
+	);
+	//echo "<pre>";print_r($linkdetails);exit;	
 	if( !empty($_POST['game_id']) && !empty($_POST['scen_id']) && !empty($_POST['order']) )
 	{
 		$where = "Link_GameID=".$_POST['game_id']."	AND Link_ScenarioID=".$_POST['scen_id']."	AND Link_Branching=".$Link_Branching;
@@ -282,7 +337,54 @@ else
 }
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){	
-	// header('X-XSS-Protection:0');	echo "<pre>"; print_r($_POST); die('Update Linkage');
+	// header('X-XSS-Protection:0');	echo "<pre>"; print_r($_POST); die('Update Linkage'); 
+	if(isset($_POST['game_id']) && !empty($_POST['game_id']))
+	{
+		$id_game = $_POST['game_id'];
+	}
+	else
+	{
+		$findGameId = "SELECT * FROM GAME_LINKAGE WHERE Link_ID=".$_POST['link'];
+		$exeSql     = $functionsObj->ExecuteQuery($findGameId);
+		$gamedetail = $functionsObj->FetchObject($exeSql);
+		$id_game    = $gamedetail->Link_GameID;
+	}
+
+	$statusCheckSql        = "SELECT * FROM GAME_GAME WHERE Game_ID=".$id_game;
+	$runSql                = $functionsObj->ExecuteQuery($statusCheckSql);
+	$gameSkipStatus        = $functionsObj->FetchObject($runSql);
+	$Game_Description      = $gameSkipStatus->Game_Description;
+	$Game_IntroductionLink = $gameSkipStatus->Game_IntroductionLink;
+	$Game_DescriptionLink  = $gameSkipStatus->Game_DescriptionLink;
+	$Game_BackToIntro      = $gameSkipStatus->Game_BackToIntro;
+	$Game_Introduction     = $gameSkipStatus->Game_Introduction;
+
+	$Link_Description      = isset($_POST['Link_Description'])?$_POST['Link_Description']:0;
+	$Link_IntroductionLink = isset($_POST['Link_IntroductionLink'])?$_POST['Link_IntroductionLink']:0;
+	$Link_DescriptionLink  = isset($_POST['Link_DescriptionLink'])?$_POST['Link_DescriptionLink']:0;
+	$Link_BackToIntro      = isset($_POST['Link_BackToIntro'])?$_POST['Link_BackToIntro']:0;
+	$Link_Introduction     = isset($_POST['Link_Introduction'])?$_POST['Link_Introduction']:0;
+	// check wheather intro,scenario description or button or hide to intro button skip or not
+	if($Game_Description > 0)
+	{
+		$Link_Description = 1;
+	}
+	if($Game_IntroductionLink > 0)
+	{
+		$Link_IntroductionLink = 1;
+	}
+	if($Game_DescriptionLink > 0)
+	{
+		$Link_DescriptionLink = 1;
+	}
+	if($Game_BackToIntro > 0)
+	{
+		$Link_BackToIntro = 1;
+	}
+	if($Game_Introduction > 0)
+	{
+		$Link_Introduction = 1;
+	}
 	if(isset($_GET['linkedit'])){		
 		$file      = 'addeditlink.php';	
 		$sublinkid = $_GET['linkedit'];
@@ -417,6 +519,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 				'SubLink_TextColor'          => $_POST['SubLink_TextColor'],
 				'SubLink_LabelCurrent'       => $_POST['SubLink_LabelCurrent'],
 				'SubLink_LabelLast'          => $_POST['SubLink_LabelLast'],
+				'SubLink_FontSize'           => $_POST['SubLink_FontSize'],
+				'SubLink_FontStyle'          => $_POST['SubLink_FontStyle'],
 				'SubLink_InputFieldOrder'    => $_POST['SubLink_InputFieldOrder'],
 					//'SubLink_Details'	=> $_POST['details']
 			);
@@ -568,17 +672,24 @@ else
 	}
 
 	$linkdetails = (object) array(
-		'Link_GameID'     =>	$_POST['game_id'],
-		'Link_ScenarioID' =>	$_POST['scen_id'],
-		'Link_Hour'       =>	$_POST['hour'],
-		'Link_Min'        =>	$_POST['minute'],
-		'Link_Order'      =>	$_POST['order'],
-		'Link_Mode'       =>	$_POST['Mode'],
-		'Link_Branching'  =>	$_POST['Link_Branching'],
-		'Link_Enabled'    =>	isset($_POST['enabled']) ? 1 : 0,
-		'Link_Status'     =>	1,			
-		'Link_CreateDate' =>	date('Y-m-d H:i:s')
-	);		
+		'Link_GameID'           =>	$_POST['game_id'],
+		'Link_ScenarioID'       =>	$_POST['scen_id'],
+		'Link_Hour'             =>	$_POST['hour'],
+		'Link_Min'              =>	$_POST['minute'],
+		'Link_Order'            =>	$_POST['order'],
+		'Link_Mode'             =>	$_POST['Mode'],
+		'Link_Branching'        =>	isset($_POST['Link_Branching'])?$_POST['Link_Branching']:0,
+		'Link_Introduction'     =>	$Link_Introduction,
+		'Link_IntroductionLink' =>	$Link_IntroductionLink,
+		'Link_Description'      =>	$Link_Description,
+		'Link_DescriptionLink'  =>	$Link_DescriptionLink,
+		'Link_BackToIntro'      =>  $Link_BackToIntro,
+		'Link_Enabled'          =>	isset($_POST['enabled']) ? 1 : 0,
+		'Link_Status'           =>	1,			
+		'Link_CreateDate'       =>	date('Y-m-d H:i:s')
+	);
+
+	// check default/skip status from game and allow/disallow accordingly
 
 	// echo $_POST['Mode'];
 	//	exit();
@@ -596,7 +707,9 @@ else
 			$_SESSION['type[1]'] = "has-success";
 			header("Location: ".site_root."ux-admin/linkage");
 			exit(0);
-		}else{
+		}
+		else
+		{
 			$msg     = "Error: ".$result;
 			$type[0] = "inputError";
 			$type[1] = "has-error";
@@ -950,8 +1063,9 @@ elseif(isset($_GET['del'])){
 	// echo $id;
 	//exit();
 
-	$result          = $functionsObj->DeleteData('GAME_LINKAGE','Link_ID',$id,1);
-	$resultLinkUsers = $functionsObj->DeleteData('GAME_LINKAGE_USERS','UsScen_LinkId',$id,1);
+	$result           = $functionsObj->DeleteData('GAME_LINKAGE','Link_ID',$id,0);
+	$resultLinkUsers  = $functionsObj->DeleteData('GAME_LINKAGE_USERS','UsScen_LinkId',$id,0);
+	$resultSubLinkage = $functionsObj->DeleteData('GAME_LINKAGE_SUB','SubLink_LinkID',$id,0);
 	// print_r($resultLinkUsers); echo "<br>"; print_r($result); exit;
 
 	$_SESSION['msg']     = "Link deleted successfully";
@@ -1223,6 +1337,10 @@ if(isset($_GET['linkedit']))
 	$SubLink_LabelCurrent    = $result_object->SubLink_LabelCurrent;
 	// getting the text for label last
 	$SubLink_LabelLast       = $result_object->SubLink_LabelLast;
+	// getting the font size
+	$SubLink_FontSize        = $result_object->SubLink_FontSize;
+	// getting the font style
+	$SubLink_FontStyle       = $result_object->SubLink_FontStyle;
 	// getting the input field order
 	$SubLink_InputFieldOrder = $result_object->SubLink_InputFieldOrder;
 	// if range then find the min max and range interval
@@ -1266,9 +1384,37 @@ if(isset($_GET['linkedit']))
 	}
 
 }
-$areaLink       = $functionsObj->SelectData(array(), 'GAME_AREA', array('Area_Delete=0'), 'Area_Name', '', '', '', 0);
+// $areaLink       = $functionsObj->SelectData(array(), 'GAME_AREA', array('Area_Delete=0'), 'Area_Name', '', '', '', 0);
+$areaQuery = "SELECT ga.Area_ID, ga.Area_Name, glsd.Game_Name, glsd.Scen_Name FROM GAME_AREA ga LEFT JOIN( SELECT gls.`SubLink_ID`, gls.`SubLink_LinkID`, gg.Game_ID, gg.Game_Name, gs.Scen_ID, gs.Scen_Name, gls.`SubLink_AreaID` FROM `GAME_LINKAGE_SUB` gls LEFT JOIN GAME_LINKAGE gl ON gl.Link_ID = gls.SubLink_LinkID LEFT JOIN GAME_GAME gg ON gg.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Link_ScenarioID WHERE gls.SubLink_AreaID > 0 GROUP BY gls.SubLink_LinkID, gls.SubLink_AreaID ORDER BY `gls`.`SubLink_AreaID` ASC ) glsd ON ga.Area_ID = glsd.SubLink_AreaID ORDER BY `ga`.`Area_Name` ASC";
+$areaLink = $functionsObj->ExecuteQuery($areaQuery);
+// echo "<pre>"; print_r($areaLink); 
+$checkAreaId = '';
+$areaTitle   = '';
+// creating a multidimensional array
+$areaArray     = array();
+$arrayCount    = 0;
+$previousCount = 0;
+while($row = $areaLink->fetch_object())
+{
+	if($checkAreaId != $row->Area_ID)
+	{
+		$previousCount                       = $arrayCount;
+		$checkAreaId                         = $row->Area_ID;
+		$areaArray[$arrayCount]['Area_ID']   = $row->Area_ID;
+		$areaArray[$arrayCount]['Area_Name'] = $row->Area_Name;
+		$areaArray[$arrayCount]['Game_Name'] = $row->Game_Name;
+		$areaTitle                           = $row->Game_Name;
+		$arrayCount++;
+	}
+	else
+	{
+		$areaTitle .= ', '.$row->Game_Name;
+		$areaArray[$previousCount]['Game_Name'] = trim($areaTitle,',');
+	}
+}
+// print_r($areaArray); exit();
 
-$game           = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), '', '', '', '', 0);
+$game           = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), '', 'Game_Name', '', '', 0);
 
 $scenario       = $functionsObj->SelectData(array(), 'GAME_SCENARIO', array('Scen_Delete=0','Scen_Branching=0'), array('Scen_Name ASC'), '', '', '', 0);
 $BranchScenario = $functionsObj->SelectData(array(), 'GAME_SCENARIO', array('Scen_Delete=0','Scen_Branching=1'), array('Scen_Name ASC'), '', '', '', 0);

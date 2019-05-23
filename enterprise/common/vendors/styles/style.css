@@ -5389,7 +5389,20 @@ tbody.collapse.show {
   background-color: #721c24;
   border-color    : #721c24; 
 }
-
+/* width increase for dropdown in csv case */
+span.select2.select2-container.select2-container--default.select2-container--focus {
+    width: 514px!important;
+}
+span.select2.select2-container.select2-container--default.select2-container--above {
+    width: 514px!important;
+}
+span.select2.select2-container.select2-container--default.select2-container--below {
+    width: 514px!important;
+}
+span.select2.select2-container.select2-container--default {
+    width: 514px!important;
+}
+/* ----end----- */
 .list-group-item-light {
   color: #818182;
   background-color: #fdfdfe; 

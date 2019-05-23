@@ -88,7 +88,7 @@
 											<td><?php echo $userDetails->password; ?></td>
 											<td><?php echo $userDetails->User_mobile; ?></td>
 											<td>
-												<a href="<?php echo base_url('Games/assignGames/').base64_encode($userDetails->User_id).'/'.base64_encode($this->uri->segment(2)); ?>" title="Allocate/Deallocate Games"><?php echo $userDetails->gameCount; ?></a>
+												<a href="<?php echo base_url('Games/assignGames/').base64_encode($userDetails->User_id).'/'.base64_encode($this->uri->segment(2)); ?>" title="Allocate/Deallocate Games"><?php echo "<b style='color:#0029ff;'>".$userDetails->gameCount."</b>"; ?></a>
 											</td>
 											<td>
 												<div class="dropdown">

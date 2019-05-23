@@ -1,8 +1,8 @@
 <style type="text/css">
-span.alert-danger {
-	background-color: #ffffff;
-	font-size: 18px;
-}
+	span.alert-danger {
+		background-color: #ffffff;
+		font-size: 18px;
+	}
 </style>
 
 <div class="row">
@@ -207,16 +207,18 @@ span.alert-danger {
         }
       });
 		//show selected Subenterprise
-		$('#Enterprise').trigger('change');
-		<?php if(isset($_GET['edit'])){ ?>
-			if(<?php echo $subObjRes->SubEnterprise_ID; ?>)
-			{
+		<?php if($subObjRes->SubEnterprise_ID){ ?>
+			$('#Enterprise').trigger('change');
+			<?php if(isset($_GET['edit'])){ ?>
+				if(<?php echo $subObjRes->SubEnterprise_ID; ?>)
+				{
 			// alert(<?php // echo $subObjRes->SubEnterprise_ID; ?>);
 			setTimeout(function(){
 				$('#SubEnterprise [value="<?php echo $subObjRes->SubEnterprise_ID; ?>"]').prop('selected', true);
 			},100);
 		}
-	<?php }?>
+	<?php } ?>
+<?php }?>
 //$("#siteuser_frm").validate({
 //	rules: {
 //		fname: "required",

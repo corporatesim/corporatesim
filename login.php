@@ -56,9 +56,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 		$username = $funObj->EscapeString($_POST['username']);
 		$password = $_POST['password'];
 
-		$sql = "SELECT u.*, ge.Enterprise_Logo ,gse.SubEnterprise_Logo
+		$sql = "SELECT u.*, ge.Enterprise_Logo ,gse.SubEnterprise_Logo,gd.Domain_Name
 		FROM GAME_SITE_USERS u INNER JOIN GAME_USER_AUTHENTICATION ua
-		ON u.User_id = ua.Auth_userid LEFT JOIN GAME_ENTERPRISE ge ON u.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_SUBENTERPRISE gse ON u.User_SubParentId=gse.SubEnterprise_ID
+		ON u.User_id = ua.Auth_userid LEFT JOIN GAME_ENTERPRISE ge ON u.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_SUBENTERPRISE gse ON u.User_SubParentId=gse.SubEnterprise_ID LEFT JOIN GAME_DOMAIN gd ON ge.Enterprise_ID = gd.Domain_EnterpriseId 
 		WHERE (u.User_username='".$username."'
 		or u.User_email='".$username."')
 		and ua.Auth_password='".$password."'
@@ -69,9 +69,17 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 
 		if($object->num_rows > 0){
 			$res = $funObj->FetchObject($object);
-			/*echo "<pre>";
+		 /* echo "<pre>";
 			print_r($res);exit;*/
-
+			$domain = $res->Domain_Name;
+			if($domain != '')
+			{
+				$msg              = "Sorry, Please login to your own domain";
+				$type             = "alert alert-danger alert-dismissible";
+			}
+			else
+			{
+			
 			if($res->User_Delete == 0)
 			{
 				if($res->User_status == 1)
@@ -103,11 +111,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 					$type = "err";
 				}
 			}
+
 			else
 			{
 				$msg  = "Your account has been deactivated by siteadmin";
 				$type = "err";
 			}
+		}
 		}
 		else
 		{

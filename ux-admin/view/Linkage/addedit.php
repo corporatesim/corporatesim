@@ -1,3 +1,4 @@
+
 <style type="text/css">
 span.alert-danger {
 	background-color: #ffffff;
@@ -5,20 +6,7 @@ span.alert-danger {
 }
 </style>
 
-<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('input[type="radio"]').click(function(){
-			if($(this).attr("value")=="1"){            
-				$(".checkbox").show();
-			}
-			else{
-				$(".checkbox").hide();
-			}
-		});
-	});
-</script>
-
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script> -->
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header"><?php echo $header; ?></h1>
@@ -52,16 +40,61 @@ span.alert-danger {
 		<form method="POST" action="" id="siteuser_frm" name="siteuser_frm">
 			<div class="row">
 				<!-- adding this checkbox for component branching -->
-				<div class="row name" id="branchingCheckbox">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<div class="form-check">
-								<input type="checkbox" class="form-check-input" id="Link_Branching" name="Link_Branching" value="1" <?php echo ($linkdetails->Link_Branching == 1)?'checked':'';?>>
-								<label class="form-check-label" for="Component Branching">Component Branching</label>
-							</div>
+				<div class="row name col-md-2 col-lg-3 col-sm-12 col-xs-12" id="branchingCheckbox">
+					<div class="form-group" data-toggle="tooltip" title="If checked, then only component branching enabled scenario will be visible">
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="Link_Branching" name="Link_Branching" value="1" <?php echo ($linkdetails->Link_Branching == 1)?'checked':'';?>>
+							<label class="form-check-label" for="Component Branching">Component Branching</label>
 						</div>
 					</div>
 				</div>
+				<!-- end of checkbox for component branching -->
+				<!-- adding checkbox to skip introduction and description -->
+				<div class="row name col-md-2 col-lg-2 col-sm-12 col-xs-12" id="skipIntroduction">
+					<div class="form-group">
+						<div class="form-check" data-toggle="tooltip" title="If checked, then skipped for current game">
+							<input type="checkbox" class="form-check-input" id="Link_Introduction" name="Link_Introduction" value="1" <?php echo ($linkdetails->Link_Introduction == 1)?'checked':'';?>>
+							<label class="form-check-label" for="Skip Introduction">Skip Introduction</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row name col-md-2 col-lg-2 col-sm-12 col-xs-12" id="skipDescription">
+					<div class="form-group">
+						<div class="form-check" data-toggle="tooltip" title="If checked, then skipped for current scenario">
+							<input type="checkbox" class="form-check-input" id="Link_Description" name="Link_Description" value="1" <?php echo ($linkdetails->Link_Description == 1)?'checked':'';?>>
+							<label class="form-check-label" for="Skip Description">Skip Description</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row name col-md-2 col-lg-2 col-sm-12 col-xs-12" id="skipDescription">
+					<div class="form-group">
+						<div class="form-check" data-toggle="tooltip" title="If checked, then skipped for current scenario">
+							<input type="checkbox" class="form-check-input" id="Link_IntroductionLink" name="Link_IntroductionLink" value="1" <?php echo ($linkdetails->Link_IntroductionLink == 1)?'checked':'';?>>
+							<label class="form-check-label" for="Skip Description">Hide Introduction Link</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row name col-md-2 col-lg-2 col-sm-12 col-xs-12" id="skipDescription">
+					<div class="form-group">
+						<div class="form-check" data-toggle="tooltip" title="If checked, then skipped for current scenario">
+							<input type="checkbox" class="form-check-input" id="Link_DescriptionLink" name="Link_DescriptionLink" value="1" <?php echo ($linkdetails->Link_DescriptionLink == 1)?'checked':'';?>>
+							<label class="form-check-label" for="Skip Description">Hide Description Link</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row name col-md-2 col-lg-2 col-sm-12 col-xs-12" id="skipBackToIntro">
+					<div class="form-group">
+						<div class="form-check" data-toggle="tooltip" title="If checked, then skipped for current scenario">
+							<input type="checkbox" class="form-check-input" id="Link_BackToIntro" name="Link_BackToIntro" value="1" <?php echo ($linkdetails->Link_BackToIntro == 1)?'checked':'';?>>
+							<label class="form-check-label" for="Skip BackToIntro">Hide Back To Intro</label>
+						</div>
+					</div>
+				</div>
+				<!-- end of adding checkbox to skip introduction and description -->
 				<div class="col-md-4">
 					<input type="hidden" name="id"
 					value="<?php if(isset($_GET['edit'])){ echo $details->Link_ID; } ?>">
@@ -171,11 +204,21 @@ span.alert-danger {
 
 <script>
 	<!--
-		$('#Link_Branching').on('click',function(){
-			var appendScenario       = '<option value="">--Select Scenario--</option>';
-			var appendBranchScenario = '<option value="">--Select Branching Scenario--</option>';
-			if(!$(this).is(':checked'))
-			{
+		$(document).ready(function(){
+			$('[data-toggle="tooltip"]').tooltip();
+			$('input[type="radio"]').click(function(){
+				if($(this).attr("value")=="1"){            
+					$(".checkbox").show();
+				}
+				else{
+					$(".checkbox").hide();
+				}
+			});
+			$('#Link_Branching').on('click',function(){
+				var appendScenario       = '<option value="">--Select Scenario--</option>';
+				var appendBranchScenario = '<option value="">--Select Branching Scenario--</option>';
+				if(!$(this).is(':checked'))
+				{
 				// console.log('"<?php // print_r($appendScenario); ?>"');
 				<?php foreach ($appendScenario as $row ) { ?>
 					appendScenario += "<option value='<?php echo $row->Scen_ID; ?>'><?php echo $row->Scen_Name?></option>"
@@ -192,17 +235,25 @@ span.alert-danger {
 				$('#scen_id').html(appendBranchScenario);
 			}
 		});
-		$('#siteuser_btn').click( function(){
+			$('#siteuser_btn').click( function(){
 //	if($("#siteuser_frm").valid()){		
 	$( "#siteuser_sbmit" ).trigger( "click" );
 //	}
 });
 
-		$('#siteuser_btn_update').click( function(){
+			$('#siteuser_btn_update').click( function(){
 //	if($("#siteuser_frm").valid()){
 	$( "#siteuser_update" ).trigger( "click" );
 //	}
 });
+		});
 
 // -->
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+	$("#game_id").select2();
+	$("#scen_id").select2();
+});
 </script>

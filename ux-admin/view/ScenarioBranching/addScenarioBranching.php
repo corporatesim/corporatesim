@@ -1,4 +1,5 @@
 <!-- <?php //echo "<pre>"; print_r($header); exit;?>  -->
+  
   <script type="text/javascript">
     <!--
      var loc_url_del  = "ux-admin/ScenarioBranching/linkdel/";
@@ -346,4 +347,11 @@ function setCheckboxValue()
   });
 }
 
+</script>
+<!-- for Searchable dropdown -->
+<script type="text/javascript">
+  $(document).ready(function(){
+  $("#game_game").select2();
+ /* $("#game_scenario").select2();*/
+  });
 </script>

@@ -1,4 +1,5 @@
 <!-- <?php //echo "<pre>"; print_r($header); exit;?>  -->
+  
   <script type="text/javascript">
     <!--
      var loc_url_del  = "ux-admin/ScenarioBranching/linkdel/";
@@ -137,7 +138,7 @@ span.alert-danger {
         <label for="Select Component"><span class="alert-danger">*</span>Next Scenario</label>
         <select name="NextScenario" id="NextScenario" class="form-control NextScenario">
           <?php 
-          $scenSql    = "SELECT gl.Link_ID,gc.Scen_Name,gc.Scen_ID FROM `GAME_LINKAGE` gl LEFT JOIN GAME_SCENARIO gc ON gc.Scen_ID=gl.Link_ScenarioID WHERE Link_GameID = $editResObject->Branch_GameId"; 
+          $scenSql    = "SELECT gl.Link_ID,gc.Scen_Name,gc.Scen_ID FROM `GAME_LINKAGE` gl LEFT JOIN GAME_SCENARIO gc ON gc.Scen_ID=gl.Link_ScenarioID WHERE Link_GameID = $editResObject->Branch_GameId ORDER BY gc.Scen_Name ASC"; 
           $scenResObj = $functionsObj->ExecuteQuery($scenSql);
           // $scenRes    = $scenResObj->Fetch_Object();
           ?>
@@ -168,3 +169,11 @@ span.alert-danger {
 </form>
 </div>
 <div class="clearfix"></div>
+
+<!-- for searchable dropdown -->
+<script type="text/javascript">
+  $(document).ready(function(){
+  $("#NextScenario").select2();
+  $("#ComponentName").select2();
+});
+</script>

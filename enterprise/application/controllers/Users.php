@@ -41,7 +41,8 @@ class Users extends CI_Controller {
 		if($this->session->userdata('loginData')['User_Role']!=1)
 		{
 			// it means user is not enterprise
-			$query .= " WHERE User_Role = 1 AND User_Delete = 0";
+			//$query .= " WHERE User_Role = 1 AND User_Delete = 0";
+			$query .= " WHERE User_Role = 1 AND User_Delete = 0 ORDER BY User_datetime DESC";
 		}
 		else
 		{
@@ -58,7 +59,7 @@ class Users extends CI_Controller {
 	{
 		$where         = array();
 		$RequestMethod = $this->input->server('REQUEST_METHOD');
-		$query         = "SELECT gu.*, gua.Auth_password AS password, gs.*, ge.*,(SELECT count(UG_GameID) FROM GAME_USERGAMES WHERE UG_UserID = gu.User_id) AS gameCount, ge.Enterprise_Name FROM GAME_SITE_USERS AS gu LEFT JOIN GAME_SUBENTERPRISE AS gs ON gu.User_SubParentId = gs.SubEnterprise_ID LEFT JOIN GAME_ENTERPRISE AS ge ON gu.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_USER_AUTHENTICATION gua ON gua.Auth_userid = gu.User_id WHERE User_Delete = 0 AND User_Role = 2";
+		$query         = "SELECT gu.*, gua.Auth_password AS password, gs.*, ge.*,(SELECT count(UG_GameID) FROM GAME_USERGAMES WHERE UG_UserID = gu.User_id) AS gameCount, ge.Enterprise_Name FROM GAME_SITE_USERS AS gu LEFT JOIN GAME_SUBENTERPRISE AS gs ON gu.User_SubParentId = gs.SubEnterprise_ID LEFT JOIN GAME_ENTERPRISE AS ge ON gu.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_USER_AUTHENTICATION gua ON gua.Auth_userid = gu.User_id WHERE User_Delete = 0 AND User_Role = 2 ORDER BY User_datetime DESC";
 		if($this->session->userdata('loginData')['User_Role'] == 1)
 		{
 			// it means enterprise is logged in = only dependent subent users
@@ -397,11 +398,27 @@ class Users extends CI_Controller {
 						if($result)
 						{
 
-							$this->email->to($to);
-							$this->email->from('support@corporatesim.com','corporatesim','support@corporatesim.com');
-							$this->email->subject('Here is your Username and Password');
-							$this->email->message('Hello User, your Username is '.$username.' And your Password is '.$password);
-							$this->email->send();
+						$domain = "https://live.corporatesim.com";
+
+						$message  = "Thanks for your enrolling!\r\n\r\n";
+						$message .= 	"Your login and password for accessing our Simulation Games/eLearning programs/Assessments are provided below.\r\n\r\n";
+						$message .= "You will have to login at :$domain\r\n\r\n";
+						$message .= "Login :$username\r\n";
+						$message .= "Password :$password\r\n\r\n";
+						$message .= "Regards,\r\n Admin";
+
+						$config['charset'] = 'utf-8';
+						$config['mailtype'] = 'text';
+						$config['newline'] = '\r\n';
+
+
+						$this->email->initialize($config);
+						$this->email->to($to);
+						$this->email->from('support@corporatesim.com','corporatesim','support@corporatesim.com');
+						$this->email->subject("Here is your email and password");
+						$this->email->message($message);
+
+						$this->email->send();
 						}	
 					}
 				}

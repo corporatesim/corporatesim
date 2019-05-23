@@ -13,7 +13,7 @@ $funObj = new Model(); // Create Object
 if($_POST['action'] == 'game_scenario')
 {
 	$Game_ID = $_POST['Game_ID'];
-	$sql     = "SELECT gl.Link_ID AS linkid, gl.Link_ScenarioID AS Scen_ID, gc.Scen_Name FROM `GAME_LINKAGE` gl LEFT JOIN GAME_GAME gm ON gm.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gc ON gc.Scen_ID = gl.Link_ScenarioID WHERE gl.Link_GameID = $Game_ID";
+	$sql     = "SELECT gl.Link_ID AS linkid, gl.Link_ScenarioID AS Scen_ID, gc.Scen_Name FROM `GAME_LINKAGE` gl LEFT JOIN GAME_GAME gm ON gm.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gc ON gc.Scen_ID = gl.Link_ScenarioID WHERE gl.Link_GameID = $Game_ID ORDER BY gc.Scen_Name ASC";
 	// echo $sql;
 	$Object = $funObj->ExecuteQuery($sql);
 	if($Object->num_rows > 0)

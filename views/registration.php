@@ -11,6 +11,7 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/flip.css">
   <link rel="stylesheet" href="css/overlaycss.css">
   
@@ -68,19 +69,37 @@
 
 
 <body background="images/bg3.jpg">
-  <nav class="navbar navbar-fixed-top" style="background: #ffffff; border-color: #000000;">
-    <div class="container">
-      <div class="navbar-header">
-        <!--<a class="navbar-brand logo" href="#">Logo</a>-->
-        <!--a style="padding: 2px 15px;" class="navbar-brand" href="http://localhost/corp_simulation/index.php"--> 
-        <img class="logo" src="<?php echo site_root;?>images/logo-main.png" width="40px" style="margin-top: 2px;">
-        <!--/a-->
-      </div>
-      <div>
-        <button name="login" value="login" class="loginbtn btn btn-lg btn-primary pull-right" style="margin-top: 2px;" onclick="window.location='login.php'">Login</button>
-      </div>
-    </div>
-  </nav>
+  <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- add image logo here -->
+        <div class="navbar-header">
+          <?php if(isset($_SESSION['logo'])) { ?>
+            <a href="<?php echo site_root;?>"><img src="<?php echo site_root."enterprise/common/Logo/".$_SESSION['logo'];?>" width="40px" height="40px" /></a>
+
+          <?php } else { ?>
+            <a href="<?php echo site_root;?>"><img src="<?php echo site_root."images/logo-main.png";?>"  width="40px" /></a>
+          <?php } ?>
+        </div>
+        <!-- end of adding image logo here -->
+        <ul class="nav navbar-nav navbar-right">
+          <?php 
+          if($_REQUEST['act']!='chart')
+          {
+            if(isset($_SESSION['username']) && !empty($_SESSION['username'])){ 
+              ?>
+              <li class="hoverAnchor"><a href="<?php echo site_root."selectgame.php";?>" class="btn btn-primary">Welcome <?php echo ucfirst(strtolower($_SESSION['username'])); ?></a></li>
+              <li class="hoverAnchor"><a href="<?php echo site_root."logout.php?q=Logout";?>" class="btn btn-primary">Logout</a></li>
+            <?php }else{ ?>
+              <li class="hoverAnchor"><a href="<?php echo site_root."login.php";?>" class="btn btn-primary">Login</a></li>
+              <!-- <li>
+                <div>
+                  <button name="login" value="login" class="btn btn-lg btn-primary  pull-right register" style="margin-right: -10%; padding: 6px 12px;" onclick="window.location='registration.php'">Register</button>
+                </div>
+              </li> -->
+            <?php } }?>
+          </ul>
+        </div>
+      </nav>
 
   <div class="container" style="margin-top:15px;">
 

@@ -127,7 +127,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Enroll')
 			/*$sql   ="SELECT * FROM GAME_GAME gg LEFT JOIN game_userstatus gus ON gus.US_GameID = gg.Game_ID AND gus.US_UserID = 6670 WHERE gg.Game_ID NOT IN( SELECT gug.UG_GameID FROM game_usergames gug LEFT JOIN `game_userstatus` gs ON gug.UG_UserID = gs.US_UserID WHERE gs.us_userId = 6670 AND gs.US_LinkID = 0 ) AND gg.Game_Delete = 0 ORDER BY `gg`.`Game_ID` ASC";*/
 
 			$sql="SELECT * FROM GAME_GAME gg WHERE gg.Game_Delete = 0 AND gg.Game_ID NOT IN( SELECT gug.UG_GameID FROM GAME_USERGAMES gug LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID = gug.UG_GameID AND gug.UG_UserID = gus.US_UserID WHERE gug.UG_UserID = $UserId AND( gus.US_LinkID < 1 OR gus.US_LinkID IS NULL ) ) AND gg.Game_Elearning = 1";
-			$sqlObj = $FunctionsObj->ExecuteQuery($sql);
-			// echo "<pre>"; print_r($sqlObj->fetch_object()); exit();
+			$sqlObj1 = $FunctionsObj->ExecuteQuery($sql);
+			// echo "<pre>"; print_r($sqlObj1->fetch_object()); exit();
 
-			include_once doc_root.'views/eLearning.php';
+			include_once doc_root.'views/gameCatalogue.php';

@@ -1,5 +1,6 @@
 
 <!-- <?php //echo "<pre>"; print_r($header); exit;?>  -->
+
   <script type="text/javascript">
     <!--
      var loc_url_del  = "ux-admin/linkage/linkdel/";
@@ -317,7 +318,6 @@ span.alert-danger {
           });
         }
       });
-
 
       $('#searchBox').on('keyup',function(){
         var search = $(this).val().toLowerCase();

@@ -41,7 +41,7 @@
 		<div class="center-sign">
 			<?php $this->load->view('components/trErMsg');?>
 			<a href="<?php echo base_url();?>" class="logo pull-left">
-				<img src="<?php echo base_url('common/loginSignup');?>/images/cs_logo.jpg" height="54" alt="Porto Admin" style="margin-top: 12%;"/>
+				<img src="<?php echo base_url('common/loginSignup');?>/images/cs_logo.png" height="54" alt="Porto Admin" style="margin-top: 12%;"/>
 			</a>
 
 			<div class="panel panel-sign">
@@ -65,7 +65,7 @@
 						<div class="form-group mb-lg">
 							<div class="clearfix">
 								<label class="pull-left">Password</label>
-								<a href="<?php echo base_url('login/requestPassword'); ?>" class="pull-right">Lost Password?</a>
+								
 							</div>
 							<div class="input-group input-group-icon">
 								<input name="Users_Password" type="password" class="form-control input-lg" placeholder="Enter Password" required="" />
@@ -84,13 +84,16 @@
 									<label for="RememberMe">Remember Me</label>
 								</div>
 							</div>
-							<div class="col-sm-4 text-right">
+							
+							<a href="<?php echo base_url('login/requestPassword'); ?>" class="pull-right">Lost Password?</a>
+						
+							<div class="col-sm-4 text-right" style="margin-top:10px;">
 								<button type="submit" class="btn btn-primary hidden-xs">Sign In</button>
 								<button type="submit" class="btn btn-primary btn-block btn-lg visible-xs mt-lg">Sign In</button>
 							</div>
 						</div>
 
-						<span class="mt-lg mb-lg line-thru text-center text-uppercase">
+						<!-- <span class="mt-lg mb-lg line-thru text-center text-uppercase">
 							<span>or</span>
 						</span>
 
@@ -99,7 +102,7 @@
 							<a class="btn btn-twitter mb-md ml-xs mr-xs">Connect with <i class="fa fa-twitter"></i></a>
 						</div>
 
-						<p class="text-center">Don't have an account yet? <a href="<?php echo base_url('login/signUp'); ?>">Sign Up!</a>
+						<p class="text-center">Don't have an account yet? <a href="<?php echo base_url('login/signUp'); ?>">Sign Up!</a> -->
 
 						</form>
 					</div>

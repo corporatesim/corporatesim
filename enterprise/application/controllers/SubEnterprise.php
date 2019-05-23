@@ -38,7 +38,7 @@ class SubEnterprise extends CI_Controller {
 			redirect('Profile');
 		}
 		$RequestMethod = $this->input->server('REQUEST_METHOD');
-		$query         = "SELECT *, (SELECT count(*) FROM GAME_SUBENTERPRISE_GAME WHERE SG_SubEnterpriseID = gs.SubEnterprise_ID) as gamecount FROM GAME_SUBENTERPRISE gs LEFT JOIN GAME_ENTERPRISE ge ON gs.SubEnterprise_EnterpriseID = ge.Enterprise_ID LEFT JOIN GAME_ADMINUSERS ga ON ga.id = gs.SubEnterprise_CreatedBy OR ga.id = gs.SubEnterprise_UpdatedBy LEFT JOIN GAME_SITE_USERS gu ON gu.User_id = gs.SubEnterprise_CreatedBy OR gu.User_id = gs.SubEnterprise_UpdatedBy LEFT JOIN GAME_COUNTRY gc ON gc.Country_Id=gs.SubEnterprise_Country LEFT JOIN GAME_STATE gst ON gst.State_Id=gs.SubEnterprise_State WHERE SubEnterprise_Status = 0 ";
+		$query         = "SELECT *, (SELECT count(*) FROM GAME_SUBENTERPRISE_GAME WHERE SG_SubEnterpriseID = gs.SubEnterprise_ID) as gamecount FROM GAME_SUBENTERPRISE gs LEFT JOIN GAME_ENTERPRISE ge ON gs.SubEnterprise_EnterpriseID = ge.Enterprise_ID LEFT JOIN GAME_ADMINUSERS ga ON ga.id = gs.SubEnterprise_CreatedBy OR ga.id = gs.SubEnterprise_UpdatedBy LEFT JOIN GAME_SITE_USERS gu ON gu.User_id = gs.SubEnterprise_CreatedBy OR gu.User_id = gs.SubEnterprise_UpdatedBy LEFT JOIN GAME_COUNTRY gc ON gc.Country_Id=gs.SubEnterprise_Country LEFT JOIN GAME_STATE gst ON gst.State_Id=gs.SubEnterprise_State WHERE SubEnterprise_Status = 0 ORDER BY SubEnterprise_CreatedOn DESC";
 
 		if($this->session->userdata('loginData')['User_Role'] == 1)
 		{
@@ -114,28 +114,28 @@ class SubEnterprise extends CI_Controller {
 			$this->form_validation->set_rules('SubEnterprise_Name', 'SubEnterprise Name', 'trim|required|alpha_numeric_spaces');
 
 			//validate email with itself 
-			 $value = $this->db->query("SELECT SubEnterprise_Email FROM GAME_SUBENTERPRISE WHERE SubEnterprise_ID = ".$id)->row()->SubEnterprise_Email ;
-      if($this->input->post('SubEnterprise_Email') != $value) 
-       {
-       $is_unique =  '|is_unique[GAME_SUBENTERPRISE.SubEnterprise_Email]';
-       } 
-       else 
-       {
-       $is_unique =  '';
-       }
+			$value = $this->db->query("SELECT SubEnterprise_Email FROM GAME_SUBENTERPRISE WHERE SubEnterprise_ID = ".$id)->row()->SubEnterprise_Email ;
+			if($this->input->post('SubEnterprise_Email') != $value) 
+			{
+				$is_unique =  '|is_unique[GAME_SUBENTERPRISE.SubEnterprise_Email]';
+			} 
+			else 
+			{
+				$is_unique =  '';
+			}
 
 			$this->form_validation->set_rules('SubEnterprise_Email', 'SubEnterprise Email', 'trim|required|valid_email'.$is_unique);
 
 			//validate mobile with itself 
-			 $value = $this->db->query("SELECT SubEnterprise_Number FROM GAME_SUBENTERPRISE WHERE SubEnterprise_ID = ".$id)->row()->SubEnterprise_Number ;
-      if($this->input->post('SubEnterprise_Number') != $value) 
-       {
-       $is_unique =  '|is_unique[GAME_SUBENTERPRISE.SubEnterprise_Number]';
-       } 
-       else 
-       {
-       $is_unique =  '';
-       }
+			$value = $this->db->query("SELECT SubEnterprise_Number FROM GAME_SUBENTERPRISE WHERE SubEnterprise_ID = ".$id)->row()->SubEnterprise_Number ;
+			if($this->input->post('SubEnterprise_Number') != $value) 
+			{
+				$is_unique =  '|is_unique[GAME_SUBENTERPRISE.SubEnterprise_Number]';
+			} 
+			else 
+			{
+				$is_unique =  '';
+			}
 
 			$this->form_validation->set_rules('SubEnterprise_Number', 'SubEnterprise Number', 'trim|required|numeric|exact_length[10]'.$is_unique);
 
@@ -157,7 +157,7 @@ class SubEnterprise extends CI_Controller {
 
 				$this->session->set_flashdata('er_msg', 'There have been validation error(s), please check the error messages');
 
-			$hasValidationErrors = true;
+				$hasValidationErrors = true;
 				goto prepareview;
 			}
 
@@ -205,7 +205,7 @@ class SubEnterprise extends CI_Controller {
 		}
 
 		prepareview:
-     $hasValidationErrors = '';
+		$hasValidationErrors = '';
 		if($hasValidationErrors)
 		{
 			$content['hasValidationErrors'] = true;
@@ -265,7 +265,7 @@ class SubEnterprise extends CI_Controller {
 
 				$this->session->set_flashdata('er_msg', 'There have been validation error(s), please check the error messages');
 
-			$hasValidationErrors = true;
+				$hasValidationErrors = true;
 				goto prepareview;
 			}
 			$subEnterprisedata = array(
@@ -331,22 +331,29 @@ class SubEnterprise extends CI_Controller {
 					}
 					if($result)
 					{
-						      $emailid  = $this->input->post('SubEnterprise_Email');
-									$password = $this->input->post('SubEnterprise_Password');
-									if($this->input->post('commonDomain') == '')
-									{
-										$domain = '';
-									}
-									else
-									{
-								  	$domain   = $this->input->post('commonDomain');
-								  }
+						$emailid  = $this->input->post('SubEnterprise_Email');
+						$password = $this->input->post('SubEnterprise_Password');
+						$domain = "https://live.corporatesim.com";
 
-									$this->email->to($emailid);
-									$this->email->from('support@corporatesim.com','corporatesim','support@corporatesim.com');
-									$this->email->subject('Here is your Email and Password');
-									$this->email->message('Hello User, your Email Id is '.$emailid.' , your Password is '.$password.' And your Domain is '.$domain);
-									$this->email->send();
+						$message  = "Thanks for your enrolling!\r\n\r\n";
+						$message .= 	"Your login and password for accessing our Simulation Games/eLearning programs/Assessments are provided below.\r\n\r\n";
+						$message .= "You will have to login at :$domain\r\n\r\n";
+						$message .= "login :$emailid\r\n";
+						$message .= "password :.$password\r\n\r\n";
+						$message .= "Regards,\r\n Admin";
+
+						$config['charset'] = 'utf-8';
+						$config['mailtype'] = 'text';
+						$config['newline'] = '\r\n';
+
+
+						$this->email->initialize($config);
+						$this->email->to($emailid);
+						$this->email->from('support@corporatesim.com','corporatesim','support@corporatesim.com');
+						$this->email->subject("Here is your email and password");
+						$this->email->message($message);
+
+						$this->email->send();
 					}
 				}
 				$this->session->set_flashdata("tr_msg","Details Insert Successfully" );
@@ -354,8 +361,8 @@ class SubEnterprise extends CI_Controller {
 			}
 
 		}
-	  prepareview:
-     $hasValidationErrors = '';
+		prepareview:
+		$hasValidationErrors = '';
 		if($hasValidationErrors)
 		{
 			$content['hasValidationErrors'] = true;

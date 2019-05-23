@@ -70,7 +70,7 @@
 												<td><?php echo $enterpriseusersDetails->User_mobile; ?></td>
 												<td>
 													<a href="<?php echo base_url('Games/assignGames/');?>
-													<?php echo base64_encode($enterpriseusersDetails->User_id).'/'.base64_encode($this->uri->segment(2));?>" title="Allocate/Deallocate Games"><?php echo $enterpriseusersDetails->gameCount;?>
+													<?php echo base64_encode($enterpriseusersDetails->User_id).'/'.base64_encode($this->uri->segment(2));?>" title="Allocate/Deallocate Games"><?php echo "<b style='color:#0029ff;'>".$enterpriseusersDetails->gameCount."</b>";?>
 													</a>
 												</td>
 												<td>

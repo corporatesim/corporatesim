@@ -1,3 +1,4 @@
+
 <script type="text/javascript">
 	<!--
 		var loc_url_del = "ux-admin/ManageSubComponent/del/";
@@ -188,5 +189,3 @@
 			}
 		});
 	});
-
-</script>

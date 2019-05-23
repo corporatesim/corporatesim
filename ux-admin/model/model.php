@@ -180,8 +180,7 @@ class Model extends database{
 		}
 		return implode($pass); //turn the array into a string
 	}
-	
-	function checkModuleAuth($menu,$rights)
+	function checkModuleAuth($menu,$rights,$innerrights=NULL)
 	{
 		if(isset($_SESSION['admin_usertype']) && $_SESSION['admin_usertype']=='admin')
 		{
@@ -194,6 +193,10 @@ class Model extends database{
 			$rightsVal = json_decode($val, true);
 
 			if($rightsVal[$menu][$rights]=='yes')
+			{
+				return true;
+			}
+			else if($rightsVal[$menu][$rights][$innerrights]=='yes')
 			{
 				return true;
 			}

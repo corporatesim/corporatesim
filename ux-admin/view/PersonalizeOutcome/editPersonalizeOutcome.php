@@ -1,4 +1,5 @@
 <!-- <?php //echo "<pre>"; print_r($header); exit;?>  -->
+ 
   <script type="text/javascript">
     <!--
      var loc_url_del  = "ux-admin/personalizeOutcome/linkdel/";
@@ -7,79 +8,79 @@
 </script>
 <!-- css for overlay div -->
 <style>
-#overlay {
-  position        : fixed;
-  display         : none;
-  width           : 100%;
-  height          : 100%;
-  top             : 0;
-  left            : 250px;
-  right           : 0;
-  bottom          : 0;
-  background-color: rgba(0,0,0,0.8);
-  z-index         : 2;
-  cursor          : pointer;
-}
+  #overlay {
+    position        : fixed;
+    display         : none;
+    width           : 100%;
+    height          : 100%;
+    top             : 0;
+    left            : 250px;
+    right           : 0;
+    bottom          : 0;
+    background-color: rgba(0,0,0,0.8);
+    z-index         : 2;
+    cursor          : pointer;
+  }
 
-.divImages img{
-  margin-top: 52px;
-  width     : 100px;
-  height    : 100px;
-}
+  .divImages img{
+    margin-top: 52px;
+    width     : 100px;
+    height    : 100px;
+  }
 </style>
 <!-- personalise outcome  Data table CSS -->
 <style>
-<!--
-.dropdown-menu > li > button {
-  display    : block;
-  padding    : 3px 20px;
-  clear      : both;
-  font-weight: 400;
-  line-height: 1.42857143;
-  color      : #ffffff;
-  white-space: nowrap;
-}
-#contact
-{
-  width: auto!important;
-}
-#password
-{
-  width: auto!important;
-}
-#action
-{
-  width: 70px!important;
-}
-.drop_down{
-  padding: 0 5px !important;
-}
-
-#upload-file-selector {
-  display:none;
-}
-.margin-correction {
-  margin-right: 10px;
-}
-
-@media screen and ( min-width: '361px' ){
-  .resp_pull_right{
-    float: right;
+  <!--
+  .dropdown-menu > li > button {
+    display    : block;
+    padding    : 3px 20px;
+    clear      : both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color      : #ffffff;
+    white-space: nowrap;
   }
-}
-
-@media screen and ( max-width: '360px' ){
-  .resp_pull_right{
-    float     : none;
-    text-align: center;
-    width     : 100%;
-    padding   : 0 15px;
+  #contact
+  {
+    width: auto!important;
   }
-}
--->
-#update-file-selector {
-  display:none;
-}
+  #password
+  {
+    width: auto!important;
+  }
+  #action
+  {
+    width: 70px!important;
+  }
+  .drop_down{
+    padding: 0 5px !important;
+  }
+
+  #upload-file-selector {
+    display:none;
+  }
+  .margin-correction {
+    margin-right: 10px;
+  }
+
+  @media screen and ( min-width: '361px' ){
+    .resp_pull_right{
+      float: right;
+    }
+  }
+
+  @media screen and ( max-width: '360px' ){
+    .resp_pull_right{
+      float     : none;
+      text-align: center;
+      width     : 100%;
+      padding   : 0 15px;
+    }
+  }
+  -->
+  #update-file-selector {
+    display:none;
+  }
 </style>
 <!-- personalise outcome  Data table CSS ends -->
 <div class="row">
@@ -105,10 +106,10 @@
 <?php } ?>
 <!-- DISPLAY ERROR MESSAGE END -->
 <style>
-span.alert-danger {
-  background-color: #ffffff;
-  font-size       : 18px;
-}
+  span.alert-danger {
+    background-color: #ffffff;
+    font-size       : 18px;
+  }
 </style>
 <!-- edit personalise outcome -->
 <div id="container">
@@ -158,7 +159,7 @@ span.alert-danger {
         <label for="Select Outcome"><span class="alert-danger">*</span>Select Outcome</label>
         <select name="Outcome" id="outcome" class="form-control Outcome" required="">
           <?php
-          $sql="SELECT * FROM `GAME_OUTCOME_RESULT`";
+          $sql="SELECT * FROM `GAME_OUTCOME_RESULT` ORDER BY Outcome_Name ASC";
           $outcomeResult = $functionsObj->ExecuteQuery($sql);
           ?>
           <option value="">--Select Outcome--</option>
@@ -170,10 +171,15 @@ span.alert-danger {
       <div class="col-md-2 " id="OutcomeType">
         <label for="Select File"><span class="alert-danger">*</span>Upoload File</label>
         <input type="file" name="image" accept="image/*" id="image" value="<?php echo $editResObject->Outcome_FileName;?>">
-        <input type="hidden" name="choosenImageName" id="choosenImageName">
+        <input type="hidden" name="choosenImageName" id="choosenImageName" value="<?php echo $editResObject->Outcome_FileName;?>">
         <img src="" alt="tmp_img" name="choosenImage" id="choosenImage" width="100px" height="100px" class="hidden">
       </div>
     </div>
+    <br>
+    <div class="row col-md-12">
+      <textarea name="Outcome_Description" id="" style="width: 100%;" placeholder="Enter Your Description"><?php echo $editResObject->Outcome_Description;?></textarea>
+    </div>
+    <div class="clearfix"></div>
     <div class="row col-md-3">
      <label for="Selected Image"><span class="alert-danger">*</span>Current Selected Image</label>
      <img src="<?php echo site_root."ux-admin/upload/Badges/".$editResObject->Outcome_FileName;?>" name="img" width="50px" height="50px" alt="You don't have any image" style="padding-top: 5px;">
@@ -221,6 +227,14 @@ span.alert-danger {
         $('#choosenImageName').val(selectedImage);
       });
     });
+  });
+</script>
+
+<!-- for searchable dropdown -->
+<script type="text/javascript">
+  $(document).ready(function(){
+   $("#ComponentName").select2();
+   $("#outcome").select2();
   });
 </script>
 

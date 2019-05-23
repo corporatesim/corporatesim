@@ -1,10 +1,10 @@
 <script src="<?php echo site_root; ?>assets/components/ckeditor/ckeditor.js" type="text/javascript"></script>
 
 <style type="text/css">
-span.alert-danger {
-	background-color: #ffffff;
-	font-size: 18px;
-}
+	span.alert-danger {
+		background-color: #ffffff;
+		font-size: 18px;
+	}
 </style>
 
 <div class="row">
@@ -42,7 +42,9 @@ span.alert-danger {
 										title="Video"><span class="fa fa-video-camera"></span> Video</a>
 									</div>
 								</div>
-							</div>		
+							</div>
+							<br>
+							<br>		
 						<?php } ?>		
 						<!-- DISPLAY ERROR MESSAGE -->
 						<?php if(isset($msg)){ ?>
@@ -56,23 +58,70 @@ span.alert-danger {
 						<?php } ?>
 						<!-- DISPLAY ERROR MESSAGE END -->
 
-						<div class="col-sm-10">
+						<div class="col-sm-12">
 							<form method="POST" action="" id="game_frm" name="game_frm" enctype="multipart/form-data">
-                <div class="col-sm-12 col-md-12">
+								<div class="row col-md-12">
+									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12">
 										<div class="form-group">
 											<?php if($gamedetails->Game_Elearning == 1)
 											{
 												$checked = checked;
 											}
 											else
-												{
-													$checked = '';
-												}
-												?>
+											{
+												$checked = '';
+											}
+											?>
 											<input type="checkbox" class="" name="eLearning" id="eLearning" value="1" <?php echo $checked;?>>
 											<label for="eLearning">eLearning</label>
 										</div>
 									</div>
+
+									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipIntroduction">
+										<div class="form-group">
+											<div class="form-check" data-toggle="tooltip">
+												<input type="checkbox" class="form-check-input" id="Game_Introduction" name="Game_Introduction" value="1"<?php echo ($gamedetails->Game_Introduction == 1)?'checked':'';?>>
+												<label class="form-check-label" for="Skip Introduction">Skip Introduction</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipDescription">
+										<div class="form-group">
+											<div class="form-check" data-toggle="tooltip">
+												<input type="checkbox" class="form-check-input" id="Game_Description" name="Game_Description" value="1"<?php echo ($gamedetails->Game_Description == 1)?'checked':'';?>>
+												<label class="form-check-label" for="Skip Description">Skip Description</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipIntroductionLink">
+										<div class="form-group">
+											<div class="form-check" data-toggle="tooltip">
+												<input type="checkbox" class="form-check-input" id="Game_IntroductionLink" name="Game_IntroductionLink" value="1"<?php echo ($gamedetails->Game_IntroductionLink == 1)?'checked':'';?>>
+												<label class="form-check-label" for="Skip Description">Hide Introduction Link</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipDescriptionLink">
+										<div class="form-group">
+											<div class="form-check" data-toggle="tooltip">
+												<input type="checkbox" class="form-check-input" id="Game_DescriptionLink" name="Game_DescriptionLink" value="1"<?php echo ($gamedetails->Game_DescriptionLink == 1)?'checked':'';?>>
+												<label class="form-check-label" for="Skip Description">Hide Description Link</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipBackToIntro">
+										<div class="form-group">
+											<div class="form-check" data-toggle="tooltip">
+												<input type="checkbox" class="form-check-input" id="Game_BackToIntro" name="Game_BackToIntro" value="1" <?php echo ($gamedetails->Game_BackToIntro == 1)?'checked':'';?>>
+												<label class="form-check-label" for="Skip BackToIntro">Hide Back To Intro</label>
+											</div>
+										</div>
+									</div>
+								</div>
 
 								<div class="row name" id="name">
 									<div class="col-sm-6">
@@ -154,11 +203,11 @@ span.alert-danger {
 									</div>
 									<?php if(!empty($gamedetails->Game_Image)) { ?>
 										<div class="col-md-6 col-xs-12">
-											<img src="<?php doc_root.$gamedetails->Game_Image;?>" alt="Game Image">
+											<img src="<?php echo site_root.'images/'.$gamedetails->Game_Image;?>" alt="Game Image">
 										</div>
 									<?php } ?>
 								</div>
-
+								<br>
 								<div class="row">
 									<div class="col-sm-12">
 										<div class="form-group text-center">

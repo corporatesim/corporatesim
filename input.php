@@ -66,15 +66,34 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 	);
 	$obj = $functionsObj->SelectData ( array (), 'GAME_USERSTATUS', $where, 'US_CreateDate desc', '', '1', '', 0 );
 	//echo "US_GameID = " . $gameid." , US_UserID = " . $userid. " , Count = ".$obj->num_rows."</br>";
-	//exit();
-	if ($obj->num_rows > 0)
-	{							
+	// adding skip condition here for skipping the game and acenario description by inserting the record
+	$skipSql           = "SELECT * FROM GAME_LINKAGE WHERE Link_GameID=".$gameid." ORDER BY Link_Order LIMIT 1";
+	$skipObj           = $functionsObj->ExecuteQuery($skipSql);
+	$skipRes           = $functionsObj->FetchObject ($skipObj);
+	$Link_Introduction = $skipRes->Link_Introduction;
+	$Link_Description  = $skipRes->Link_Description;
+	$Link_ScenarioID   = $skipRes->Link_ScenarioID;
+	// echo "<pre>"; print_r($skipRes); die($skipSql);
+	if ($obj->num_rows > 0 || $Link_Introduction > 0)
+	{		
+		$array = array (
+			'US_GameID'     => $gameid,
+			'US_ScenID'     => $Link_ScenarioID,
+			'US_UserID'     => $userid,
+			'US_Input'      => 1,
+			'US_CreateDate' => date ( 'Y-m-d H:i:s' ) 
+		);
+		if($obj->num_rows < 1)
+		{
+			$result = $functionsObj->InsertData ( 'GAME_USERSTATUS', $array, 0, 0 );					
+		}
+		// echo "<pre>"; print_r($obj); print_r($functionsObj->FetchObject ( $obj )); exit();
 		$result1 = $functionsObj->FetchObject ( $obj );
 		//echo "result1 -> US_LinkID  ".$result1->US_LinkID."  , Scen_ID  ".$result1->US_ScenID."</br>";
 		//exit();
 		if ($result1->US_LinkID == 0)
 		{
-			if($result1->US_ScenID == 0)
+			if($result1->US_ScenID == 0 && $Link_Introduction < 1)
 			{
 				//goto game_description page
 				header("Location:".site_root."game_description.php?Game=".$gameid);
@@ -84,8 +103,17 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 			{
 				//get linkid				
 				// $sqllink    = "SELECT * FROM `GAME_LINKAGE` WHERE `Link_GameID`=".$gameid." AND Link_ScenarioID= ".$result1->US_ScenID;
-				$sqllink = "SELECT gl.*, gm.Game_Name, gs.Scen_Name FROM `GAME_LINKAGE` gl LEFT JOIN GAME_GAME gm ON gm.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Link_ScenarioID WHERE gl.`Link_GameID` = $gameid AND gl.Link_ScenarioID=$result1->US_ScenID";
-				// die($sqllink);
+				// if intro/scenario skipped then result1->US_ScenID will be null, so our scen_ID will be the inserted record id
+				if(!empty($result1->US_ScenID))
+				{
+					$scenarioID = $result1->US_ScenID;
+				}
+				else
+				{
+					$scenarioID = $Link_ScenarioID;
+				}
+				$sqllink = "SELECT gl.*, gm.Game_Name, gs.Scen_Name FROM `GAME_LINKAGE` gl LEFT JOIN GAME_GAME gm ON gm.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Link_ScenarioID WHERE gl.`Link_GameID` = $gameid AND gl.Link_ScenarioID=$scenarioID";
+				// die($Link_ScenarioID.', '.$sqllink);
 				$link         = $functionsObj->ExecuteQuery($sqllink);
 				$resultlink   = $functionsObj->FetchObject($link);				
 				$linkid       = $resultlink->Link_ID;
@@ -147,6 +175,7 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 	else
 	{
 		//goto game_description page
+		// echo "first time user <pre>"; print_r($obj); print_r($functionsObj->FetchObject ( $obj )); exit();
 		header("Location:".site_root."game_description.php?Game=".$gameid);
 		exit();
 	}

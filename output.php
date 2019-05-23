@@ -77,7 +77,7 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 				{
 					//goto Input page
 					//$url = site_root."input.php?Link=".$resultlink->Link_ID;
-					header("Location:".site_root."input.php?Game=".$gameid);
+					header("Location:".site_root."input.php?ID=".$gameid);
 					exit();
 				}
 				else
@@ -295,9 +295,34 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 						// updating end scenario 
 						$unplayScenario = " UPDATE GAME_LINKAGE_USERS SET UsScen_IsEndScenario=".$subObj->Branch_IsEndScenario." WHERE  UsScen_UserId=$userid AND UsScen_LinkId =".$subObj->Branch_NextLinkId;
 						$functionsObj->ExecuteQuery($unplayScenario);
-						// echo $unplayScen.'<br>'.$unplayScenario; exit;
-						header("Location: ".site_root."scenario_description.php?Link=".$subObj->Branch_NextLinkId);
+						// echo "<pre>".$unplayScen.'<br>'.$unplayScenario; print_r($subObj); exit;
+						// finding that in next scenario intro/description is skipped or not 
+						$skipSql = "SELECT * FROM GAME_LINKAGE WHERE Link_ID=".$subObj->Branch_NextLinkId;
+						$skipObj = $functionsObj->ExecuteQuery($skipSql);
+						$skipRes = $functionsObj->FetchObject ($skipObj);
+						// update the game_userstatus and skip scenario if enabled then redirect to i/p page
+						if($skipRes->Link_Description > 0)
+						{
+							$array = array (			
+								'US_ScenID' => $skipRes->Link_ScenarioID,
+								'US_Input'  => 1,
+								'US_Output' => 0
+							);
+							$result = $functionsObj->UpdateData ( 'GAME_USERSTATUS', $array, 'US_ID', $userstatusid  );
+							header("Location: ".site_root."input.php?ID=".$gameid);
+						}
+						// if intro/desc is not skipped then redirect to scenario_description page
+						else
+						{
+							header("Location: ".site_root."scenario_description.php?Link=".$subObj->Branch_NextLinkId);
+						}
 						exit(0);
+					}
+					else
+					{
+						// if user submit from o/p page and come back to o/p page then locate to scenario or next step
+						// echo "<pre>".$unplayScen.'<br>'.$unplayScenario; print_r($subObj->Branch_IsEndScenario); exit;
+						header("Location: ".site_root."scenario_description.php?Link=".$subObj->Branch_NextLinkId);
 					}
 				}
 			}
@@ -307,7 +332,24 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 				$unplay = "UPDATE GAME_LINKAGE_USERS SET UsScen_Status=1 WHERE  UsScen_UserId=$userid AND UsScen_LinkId =".$updateLinkId;
 				$functionsObj->ExecuteQuery($unplay);
 				// $result = $functionsObj->FetchObject($input);
-				header("Location: ".site_root."scenario_description.php?Link=".$inputObj->Link_ID);
+				$skipSql = "SELECT * FROM GAME_LINKAGE WHERE Link_ID=".$inputObj->Link_ID;
+				$skipObj = $functionsObj->ExecuteQuery($skipSql);
+				$skipRes = $functionsObj->FetchObject ($skipObj);
+				// update the game_userstatus and skip scenario if enabled then redirect to i/p page
+				if($skipRes->Link_Description > 0)
+				{
+					$array = array (			
+						'US_ScenID' => $skipRes->Link_ScenarioID,
+						'US_Input'  => 1,
+						'US_Output' => 0
+					);
+					$result = $functionsObj->UpdateData ( 'GAME_USERSTATUS', $array, 'US_ID', $userstatusid  );
+					header("Location: ".site_root."input.php?ID=".$gameid);
+				}
+				else
+				{
+					header("Location: ".site_root."scenario_description.php?Link=".$inputObj->Link_ID);
+				}
 				// header("Location: ".site_root."result.php?ID=".$gameid);
 				exit(0);
 			}

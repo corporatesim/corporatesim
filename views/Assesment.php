@@ -36,7 +36,7 @@ include_once 'includes/header2.php';
               <div class="card-back bg-primary reduce_flipspeed" style="width:280px;height:410px;background-color: #263238;">
                 <div class="card-body">
                   <h3 style="margin-left:10px;" class="card-title text-center">Know More</h3>
-                  <p class="card-text text-center">Suprise this one has more more more more content on the back!</p>
+                  <p class="card-text text-center" style="margin-left:20px"><?php echo $resultObj->Game_Comments;?></p>
                   <a class="how-to" style="margin-left:120px; color:#ffffff !important;" href="#" class="text-center">How to Play</a>
 
                   <div  style="margin-top:180px;">

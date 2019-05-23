@@ -177,7 +177,7 @@
  											?>
  											<div class="col-md-4">
  												<input type="checkbox" class="GameCheckBox" name="assigngames[]" value="<?php echo $games->Game_ID;?>" id="<?php echo $games->Game_ID;?>" <?php echo $checked; ?>>
- 												<?php if($games->Game_Elearning==1)
+ 												<?php if($games->Game_Elearning == 1)
  												{
  													?>
  												<strong> <?php echo $games->Game_Name." (eLearning)";?>

@@ -34,7 +34,7 @@
 							<div class="form-group row" id="selectSubenterprise">
 								<label for="Select SubEnterprise" class="col-sm-12 col-md-4 col-form-label">Select Enterprise</label>
 								<div class="col-sm-12 col-md-6">
-									<select name='Enterprise_ID' id='enterprise' class='form-control' required="">
+									<select name='Enterprise_ID' id='enterprise1' class='custom-select2 form-control' required="">
 										<option value=''>--Select Enterprise--</option>
 										<?php foreach ($EnterpriseDetails as $row) { ?> <option value="<?php echo $row->Enterprise_ID;?>"><?php echo $row->Enterprise_Name; ?></option>
 									<?php } ?> 
@@ -61,7 +61,7 @@
 						<div class="form-group row" id="selectSubenterprise">
 							<label for="Select SubEnterprise" class="col-sm-12 col-md-4 col-form-label">Select Enterprize</label>
 							<div class="col-sm-12 col-md-6">
-								<select name='Enterprise_ID' id='enterprise' class='form-control enterprise' >
+								<select name='Enterprise_ID' id='enterprise' class='custom-select2 form-control enterprise' >
 									<option value=''>--Select Enterprize--</option>
 									<?php foreach ($EnterpriseDetails as $row) { ?> <option value="<?php echo $row->Enterprise_ID;?>"><?php echo $row->Enterprise_Name; ?></option>
 								<?php } ?> 
@@ -113,7 +113,7 @@
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-4 col-form-label">Country</label>
 					<div class="col-sm-12 col-md-6">
-						<select class="form-control" required="" name="SubEnterprise_Country" id="country">
+						<select class="custom-select2 form-control" required="" name="SubEnterprise_Country" id="country">
 							<option value="">--Select Country--</option>
 							<?php foreach ($country as $row) { ?>
 								<option value="<?php echo $row->Country_Id;?>"><?php echo $row->Country_Name;?></option>
@@ -126,7 +126,7 @@
 				<div class="form-group row">
 					<label class="col-sm-12 col-md-4 col-form-label">State</label>
 					<div class="col-sm-12 col-md-6">
-						<select class="form-control" name="SubEnterprise_State" id="state">
+						<select class="custom-select2 form-control" name="SubEnterprise_State" id="state">
 							<option value="">--Select State--</option>
 						</select>
 						<span><?php echo form_error('SubEnterprise_State'); ?></span>
@@ -251,7 +251,7 @@
 
 		$('#uploadCsvFile').on('click',function(e){
 			e.preventDefault();
-			var enterpriseid = $('#enterprise').val()
+			var enterpriseid = $('#enterprise1').val()
           	//alert(enterpriseid);
           	var form = $('#addByCsv').get(0);                     
           	$.ajax({

@@ -81,7 +81,7 @@
 .nav-tabs > li > a::after { content: ""; background: #009aef; height: 2px; position: absolute; width: 100%; left: 0px; bottom: -1px; transition: all 250ms ease 0s; transform: scale(0); }
 .nav-tabs > li.active > a::after, .nav-tabs > li:hover > a::after { transform: scale(1); }
 .tab-nav > li > a::after { background: #21527d none repeat scroll 0% 0%; color: #fff; }
-.tab-pane { padding: 15px 0; }
+/*.tab-pane { padding: 15px 0; }*/
 .tab-content{padding:20px}
 
 
@@ -170,12 +170,12 @@
 
 .scenariaListingDiv{
 	background    :#f8f8f8;
-	border        :2px solid #cdcdcd;
+	/*border        :2px solid #cdcdcd;*/
 	padding-top   :10px;
 	padding-bottom:10px;
-	border-radius :4px;
+	/*border-radius :4px;*/
 	font-size     :14px;
-	margin-bottom :15px;
+	/*margin-bottom :15px;*/
 }
 
 .InlineBox{
@@ -205,12 +205,17 @@
 	margin:0 3px;
 }
 
+input{
+	text-align   : center; 
+	border-radius: 18px !important;
+}
+
 .subCompnent{
 	margin-top   :10px;
 	background   :#ffffff;
 	border       :1px solid #cdcdcd;
 	padding      :9px 0;
-	border-radius:4px;
+	/*border-radius:4px;*/
 	min-height   : 95px;
 }
 

@@ -25,7 +25,9 @@
           </div>
           <!-- to add data by csv -->
           <form action="" method="post" id="addByCsv" enctype="multipart/form-data" class="d-none">
-            <div class="pull-right"style="margin-top:-30px;"><a href="<?php echo base_url()."csvdemofiles/user-enterprise-upload-csv-demo-file.csv"; ?>" download="DemoEnterpriseUsers.csv"><u><i class="fa fa-download"></i></u> Demo CSV file</a></div>
+            <div class="pull-right"style="margin-top:-30px;">
+              <a href="<?php echo base_url()."csvdemofiles/user-enterprise-upload-csv-demo-file.csv"; ?>" download="DemoEnterpriseUsers.csv"> <i class="fa fa-download"></i> Demo CSV file</a>
+            </div>
             <div class="form-group row" id="Enterprise_Section">
               <?php if($this->session->userdata('loginData')['User_Role']==1){?>
               <label for="Select Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
@@ -35,7 +37,8 @@
               <?php }else if($this->session->userdata('loginData')['User_Role']!=1 && $this->session->userdata('loginData')['User_Role']!=2){?>
               <label for="Select Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
               <div class="col-sm-12 col-md-6">
-                <select name="Enterprise" id="Enterprise" class="form-control Enterprise" required="">
+                <select name="Enterprise" id="Enterprise1" class="custom-select2 form-control Enterprise" required="">
+
                   <option value="">--Select Enterprise--</option>
                   <?php foreach ($EnterpriseName as $EnterpriseData) { ?>
                   <option value="<?php echo $EnterpriseData->Enterprise_ID; ?>" date-enterprisename="<?php echo $EnterpriseData->Enterprise_Name;?>"><?php echo $EnterpriseData->Enterprise_Name; ?></option>
@@ -54,7 +57,7 @@
                </div>
               <?php }else{?>
               <div class="col-sm-12 col-md-6">
-                <select name='subenterprise' id='subenterprise' class='form-control subenterprise' required="">
+                <select name='subenterprise' id='subenterprise1' class='custom-select2 form-control subenterprise' required="">
                   <option value=''>-Select SubEnterprise-</option>
                   <?php foreach ($Subenterprise as $row) { ?> 
                   <option value="<?php echo $row->SubEnterprise_ID;?>"><?php echo $row->SubEnterprise_Name; ?></option>
@@ -96,7 +99,8 @@
               <?php }elseif($this->session->userdata('loginData')['User_Role']!=1 && $this->session->userdata('loginData')['User_Role']!=2){?>
                 <label for="Select Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
               <div class="col-sm-12 col-md-6">
-                <select name="Enterprise" id="Enterprise" class="form-control Enterprise">
+                <select name="Enterprise" id="Enterprise" class="custom-select2 form-control Enterprise">
+
                   <option value="">--Select Enterprise--</option>
                   <?php foreach ($EnterpriseName as $EnterpriseData) { ?>
                   <option value="<?php echo $EnterpriseData->Enterprise_ID; ?>" date-enterprisename="<?php echo $EnterpriseData->Enterprise_Name;?>"><?php echo $EnterpriseData->Enterprise_Name; ?></option>
@@ -112,11 +116,11 @@
               <label for="Select SubEnterprise" class="col-sm-12 col-md-3 col-form-label"><span class="alert-danger">*</span>Select SubEnterprise</label>
               <?php if($this->session->userdata('loginData')['User_Role']==2){?>
                 <div class="col-sm-12 col-md-6 ">
-                 <input  type="text" name="subenterprise" id="subenterprise" class="form-control subenterprise" value="<?php echo $this->session->userdata('loginData')['User_FullName'];?> " readonly>
+                 <input  type="text" name="subenterprise" id="subenterprise" class=" form-control subenterprise" value="<?php echo $this->session->userdata('loginData')['User_FullName'];?> " readonly>
                </div>
               <?php }else{?>
               <div class="col-sm-12 col-md-6 ">
-                <select name='subenterprise' id='subenterprise' class='form-control subenterprise' >
+                <select name='subenterprise' id='subenterprise' class='custom-select2 form-control subenterprise' >
                   <option value=''>-Select SubEnterprise-</option>
                   <?php foreach ($Subenterprise as $row) { ?> 
                   <option value="<?php echo $row->SubEnterprise_ID;?>"><?php echo $row->SubEnterprise_Name; ?></option>
@@ -262,9 +266,9 @@
   
   	$('#clickButton').on( 'click',function(e){
       e.preventDefault();
-  		var Enterpriseid = $('#Enterprise').val();
-  		var SubEnterpriseid = $('#subenterprise').val();
-  		
+  		var Enterpriseid = $('#Enterprise1').val();
+  		var SubEnterpriseid = $('#subenterprise1').val();
+
   		if(SubEnterpriseid != '' && SubEnterpriseid != undefined){
   
   			$url = '<?php echo base_url();?>Ajax/SubEnterpriseUsersCSV/'+Enterpriseid+'/'+SubEnterpriseid

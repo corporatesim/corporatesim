@@ -5,7 +5,7 @@
 			font-size: 18px;
 		}
 	</style>
-	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+	<!-- <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script> -->
 	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header"><?php echo $header; ?></h1>
@@ -218,4 +218,13 @@
 });
   
   // -->
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+	 $("#chartType").select2();
+   $("#game_id").select2();
+   $("#scen_id").select2();
+   $("#area_id").select2();
+	});
 </script>

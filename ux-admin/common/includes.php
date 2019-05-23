@@ -134,7 +134,7 @@ switch($_GET['q']){
 	$showfile = 'ScenarioBranching.php';
 	break;
 
-  case 'outcomeBadges':
+	case 'outcomeBadges':
 	$showfile = 'outcomeBadges.php';
 	break;
 
@@ -160,6 +160,10 @@ switch($_GET['q']){
 
 	case 'addChartDetails':
 	$showfile = 'addChartDetails.php';
+	break;
+
+	case 'createMis':
+	$showfile = 'createMis.php';
 	break;
 
 		// Logout

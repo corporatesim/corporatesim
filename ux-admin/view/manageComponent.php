@@ -1,3 +1,4 @@
+
 <script type="text/javascript">
 <!--
 	var loc_url_del = "ux-admin/ManageComponent/delete/";
@@ -34,7 +35,7 @@
 						<div class="form-group">
 							<label>Select Area</label>
 							<input type="hidden" name="Comp_ID" value="<?php if(isset($_GET['edit'])){ echo $result->Comp_ID; } ?>" >
-							<select class="form-control" name="Area_ID">
+							<select class="form-control" name="Area_ID" id="area">
 								<option value="">-- SELECT --</option>
 								
 								<?php while($row = $Area->fetch_object()){?>
@@ -125,3 +126,4 @@
 		</div>
 	</div>
 </div>
+

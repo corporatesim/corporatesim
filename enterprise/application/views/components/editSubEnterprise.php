@@ -77,7 +77,7 @@
 						<div class="form-group row">
 							<label class="col-sm-12 col-md-4 col-form-label">Country</label>
 							<div class="col-sm-12 col-md-6">
-								<select class="form-control" name="SubEnterprise_Country" required="" id="country">
+								<select class="custom-select2 form-control" name="SubEnterprise_Country" required="" id="country">
 									<option value="">--Select Country--</option>
 									<?php foreach ($country as $row) { ?>
 										<option value="<?php echo $row->Country_Id;?>" <?php echo ($editSubEnterprise->SubEnterprise_Country==$row->Country_Id)?'selected':'';?>><?php echo $row->Country_Name;?></option>
@@ -97,7 +97,7 @@
 						<div class="form-group row">
 							<label class="col-sm-12 col-md-4 col-form-label">State</label>
 							<div class="col-sm-12 col-md-6">
-								<select class="form-control" name="SubEnterprise_State" required="" id="state" data-stateid="<?php echo $editSubEnterprise->SubEnterprise_State;?>">
+								<select class="custom-select2 form-control" name="SubEnterprise_State" required="" id="state" data-stateid="<?php echo $editSubEnterprise->SubEnterprise_State;?>">
 									<option value="">--Select State--</option>
 								</select>
 								<span><?php echo form_error('SubEnterprise_State'); ?></span>

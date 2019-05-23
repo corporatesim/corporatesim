@@ -48,57 +48,65 @@
 </div>
 
 <script type="text/javascript">
-<!--
-	$("#select_All").change(function () {
-	    $(".select_all").prop('checked', $(this).prop("checked"));
-	});
-
-	$('#username').blur(function(){
-		var username = $(this).val();
-		$.ajax({
-			url: site_root + "ux-admin/model/ajax/usernameCheck.php",
-			type: "POST",
-			data: { username: username },
-			beforeSend: function(){
-				$('.username_error').html('<div class="col-sm-12 alert alert-info">Checking..</div>');
-			},
-			success: function(data){
-				$('.username_error').html(data);
-			}
+	<!--
+		$("#select_All").change(function () {
+			$(".select_all").prop('checked', $(this).prop("checked"));
 		});
-	});
 
-	$('.dl_btn').click( function() {
-		$('#cnf_yes').val($(this).attr('id'));
-		$('#cnf_del_modal').modal('show');
-	});
+		$('#username').blur(function(){
+			var username = $(this).val();
+			$.ajax({
+				url: site_root + "ux-admin/model/ajax/usernameCheck.php",
+				type: "POST",
+				data: { username: username },
+				beforeSend: function(){
+					$('.username_error').html('<div class="col-sm-12 alert alert-info">Checking..</div>');
+				},
+				success: function(data){
+					$('.username_error').html(data);
+				}
+			});
+		});
 
-	$('#cnf_yes').click( function() {
-		var val = $(this).val();
-		var id = btoa(val);
-		window.location.href = site_root + loc_url_del + id;
-	});
+		$('.dl_btn').click( function() {
+			$('#cnf_yes').val($(this).attr('id'));
+			$('#cnf_del_modal').modal('show');
+		});
 
-	$('.cs_btn').click( function() {
-		$('#cs_yes').val($(this).attr('id'));
-		$('#cnf_stat_modal').modal('show');
-	});
+		$('#cnf_yes').click( function() {
+			var val = $(this).val();
+			var id = btoa(val);
+			window.location.href = site_root + loc_url_del + id;
+		});
 
-	$('#cs_yes').click( function() {
-		var val = $(this).val();
-		var id  = btoa(val);
-		window.location.href = site_root + loc_url_stat + id;
+		$('.cs_btn').click( function() {
+			$('#cs_yes').val($(this).attr('id'));
+			$('#cnf_stat_modal').modal('show');
+		});
+
+		$('#cs_yes').click( function() {
+			var val = $(this).val();
+			var id  = btoa(val);
+			window.location.href = site_root + loc_url_stat + id;
+		});
+	// adding select2 function to make dropdown searchable
+	$('select').each(function(){
+		$('select').select2();
 	});
+	$('select').on('change',function(){
+	// alert($(this).val());
+	$('select').select2();
+});
 //-->
 </script>
 
 <div class="col-sm-12">
 	<div class="col-sm-8">
 		<p style="padding: 10px 0; margin:0px;">&copy; 2017.  All rights reserved</p>
-    </div>
-    <div class="col-sm-4">
+	</div>
+	<div class="col-sm-4">
 	<!--
 	    <p style="padding: 10px 0; margin:0px;" class="muted pull-right">Powered By:<b><a href="http://www.uxexpert.in" target="_blank">UxExpert.in</a></b></p>
-		-->
-    </div>
+	  -->
+	</div>
 </div>

@@ -165,9 +165,9 @@ else
 	$file   = 'list.php';
 }
 // Fetch Services list
-$area         = $functionsObj->SelectData(array(),'GAME_AREA',array('Area_Delete=0'),'', '','','', 0);
-$game         = $functionsObj->SelectData(array(),'GAME_GAME',array('Game_Delete=0'),'', '','','', 0);
-$scenario     = $functionsObj->SelectData(array(),'GAME_SCENARIO',array('Scen_Delete=0'),'', '','','', 0);
+$area         = $functionsObj->SelectData(array(),'GAME_AREA',array('Area_Delete=0'),'', 'Area_Name','','', 0);
+$game         = $functionsObj->SelectData(array(),'GAME_GAME',array('Game_Delete=0'),'', 'Game_Name','','', 0);
+$scenario     = $functionsObj->SelectData(array(),'GAME_SCENARIO',array('Scen_Delete=0'),'', 'Scen_Name','','', 0);
 $component    = $functionsObj->SelectData(array(),'GAME_COMPONENT',array('Comp_Delete=0'),'Comp_Name', '','','', 0);
 $subcomponent = $functionsObj->SelectData(array(),'GAME_SUBCOMPONENT',array('SubComp_Delete=0'),'SubComp_Name', '','','', 0);
 $formula      = $functionsObj->SelectData(array(),'GAME_FORMULAS', array(), 'formula_title', '', '', '', 0);

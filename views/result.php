@@ -17,9 +17,13 @@ include_once 'includes/header.php';
 						<?php 
 						// echo "<pre>"; print_r($result1); echo "</pre>";
 						// finding user company id if it is 21 then allow replay $result1->US_UserID
-						$compSql = "SELECT User_companyid FROM GAME_SITE_USERS WHERE User_companyid = '21' AND User_id=".$result1->US_UserID;
-						$compObj = $functionsObj->ExecuteQuery($compSql);
-						if($compObj->num_rows > 0)
+						$compSql        = "SELECT User_companyid FROM GAME_SITE_USERS WHERE User_companyid = '21' AND User_id=".$result1->US_UserID;
+						$compObj        = $functionsObj->ExecuteQuery($compSql);
+						$replaySql      = "SELECT UG_ReplayCount FROM GAME_USERGAMES WHERE UG_GameID = ".$gameid." AND UG_UserID=".$result1->US_UserID;
+						$replayObj      = $functionsObj->ExecuteQuery($replaySql);
+						$UG_ReplayCount = $functionsObj->FetchObject($replayObj);
+
+						if(($compObj->num_rows > 0) || ($UG_ReplayCount->UG_ReplayCount == '-1') || ($UG_ReplayCount->UG_ReplayCount > 0))
 						{
 							$allowReplay = true;
 						}
@@ -29,7 +33,7 @@ include_once 'includes/header.php';
 						}
 						if($result1->US_ReplayStatus == 1 || $allowReplay)
 						{
-							$urlstr .= "<a id='restart' href='#' data-LinkID='".$linkid."'><img src='images/restartGameIcon.png' alt='ReStart/Resume Game' class='restart'></a>";
+							$urlstr .= "<a id='restart' href='#' data-gameid='".$gameid."' data-scenid='".$ScenID."' data-linkid='".$linkid."' class='restart'><img src='images/restartGameIcon.png' alt='ReStart/Resume Game'></a>";
 							echo $urlstr;
 						}
 						?>						
@@ -159,48 +163,4 @@ include_once 'includes/header.php';
 </footer>
 <script src="js/jquery.min.js"></script>	
 <script src="js/bootstrap.min.js"></script>			
-<script type="text/javascript">
-
-	$(document).ready(function() {
-		var GameID = "<?php echo $_GET['ID']; ?>";
-		var ScenID = "<?php echo $ScenID; ?>";
-		//alert(ScenID);
-		$('a#restart').on('click',function(e){
-			e.preventDefault();
-			var LinkID = $(this).attr('data-LinkID');
-			//alert(LinkID);
-			var c = confirm('Press OK to confirm your wish to play this simulation again else press Cancel');
-			if(c == true)
-			{
-				$.ajax({
-					url : "includes/ajax/ajax_replay.php",
-					type: "POST",
-					data: "action=replay&GameID="+GameID+'&ScenID='+ScenID+'&LinkID='+LinkID,
-					beforeSend: function(){
-						$('.overlay').show();
-					},
-					success:function(result)
-					{
-						if(result == 'redirect')
-						{
-							// alert('Redirect User to input page');
-							window.location = "<?php echo site_root.'selectgame.php'?>";
-						}	
-						else
-						{
-							$('.overlay').hide();
-							alert('Connection Problem');
-							console.log(result);
-						}
-					}
-				});
-			}
-			else
-			{
-				return false;
-			}
-		});	
-	});
-</script>	
-</body>
-</html>
+<?php include_once 'includes/footer.php' ?>

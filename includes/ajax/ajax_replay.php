@@ -37,20 +37,45 @@ if($_POST['action'] == 'replay')
   // die($updTimer);
 	// print_r($resultUpdate);	print_r($resultDelete);	die('here');
 	//echo $updateSql.'<br>'.$deleteSql; die();
-  if($resultUpdate && $resultDelete)
-  {
-  	echo 'redirect';
-  }
-  elseif($resultUpdate)
-  {
-  	echo 'User Status Update';
-  }
-  elseif($resultDelete)
-  {
-  	echo 'User Record Deleted';
-  }
-  else
-  {
-  	echo 'Database Connection Error';
-  }
+
+ //to reduce the replaycount with 1
+	$qry ="SELECT UG_ReplayCount FROM GAME_USERGAMES WHERE UG_GameID = $GameID AND UG_UserID = $UserID";
+	$execute = $funObj->ExecuteQuery($qry);
+	$fetch   = $funObj->FetchObject($execute);
+	$replayCount = $fetch->UG_ReplayCount;
+	//echo $replayCount;exit;
+	if($replayCount == -1)
+	{
+
+	}
+	elseif($replayCount>0)
+	{
+		$replayCount-=1;
+
+		$qry = "UPDATE GAME_USERGAMES SET UG_ReplayCount = $replayCount WHERE UG_GameID = $GameID AND UG_UserID = $UserID";
+		$updatedqry = $funObj->ExecuteQuery($qry);
+
+	}
+	else
+	{
+
+	}
+
+
+	if($resultUpdate && $resultDelete)
+	{
+		echo 'redirect';
+	}
+	elseif($resultUpdate)
+	{
+		echo 'User Status Update';
+	}
+	elseif($resultDelete)
+	{
+		echo 'User Record Deleted';
+	}
+	else
+	{
+		echo 'Database Connection Error';
+	}
 }
