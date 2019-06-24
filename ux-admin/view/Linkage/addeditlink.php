@@ -317,7 +317,8 @@
                 <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_area')){?>
                   <select class="form-control" name="area_id" id="area_id" >
                   <?php } else {?>
-                    <select class="form-control" name="area_id" id="area_id" <?php if($SubLink_InputFieldOrder != ''){?> disabled=""<?php }else {?>required="required"<?php }?> >
+                    <input type="hidden" name="dis_area_id" value="<?php echo $linkdetails->SubLink_AreaID;?>">
+                    <select class="form-control" name="area_id" id="area_id" disabled="" >
                     <?php }?>
                     <option value="">-- SELECT --</option>
                     <!-- <?php while($row = $areaLink->fetch_object()){ ?>
@@ -342,12 +343,20 @@
                     <input type="hidden" name="sublinkid"
                     value="<?php if(isset($_GET['link'])){ echo $linkdetails->SubLink_ID; } ?>">
 
-                    <div class="form-group" >
+                    <div class="form-group">
                       <label><span class="alert-danger">*</span> Select </label>
-                      <input type="radio" name="Mode" value="comp"
-                      <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "checked"; }else{ echo 'checked'; } ?> > Component
-                      <input type="radio" name="Mode" value="subcomp"
-                      <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID>0){ echo "checked"; } ?> > Sub Component
+
+                      <label for="Modecomp" class="containerRadio">
+                        <input type="radio" name="Mode" value="comp" id="Modecomp"
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "checked"; }else{ echo 'checked'; } ?> > Component
+                        <span class="checkmarkRadio"></span>
+                      </label>
+
+                      <label for="Modesubcomp" class="containerRadio">
+                        <input type="radio" name="Mode" value="subcomp" id="Modesubcomp"
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID>0){ echo "checked"; } ?> > Sub Component
+                        <span class="checkmarkRadio"></span>
+                      </label>
                     </div>
                   </div>
             <!--</div>
@@ -357,7 +366,9 @@
                   <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_compo')){?>
                     <select class="form-control" name="comp_id" id="comp_id">
                     <?php } else {?>
-                      <select class="form-control" name="comp_id" id="comp_id" <?php if($SubLink_InputFieldOrder != ''){?> disabled=""<?php }else {?>required="required"<?php }?>>
+                      <input type="hidden" name="dis_comp_id" value="<?php echo $linkdetails->SubLink_CompID; ?>">
+                      <select class="form-control" name="comp_id" id="comp_id" disabled="">
+                        <!-- as due to permissions component dropdown will be disabled so no value will be passed, that's why adding a hidden field to send comp id in the controller -->
                       <?php }?>
                       <option value="">-- SELECT COMPONENT--</option>
                       <?php while($row = $component->fetch_object()){ ?>
@@ -373,7 +384,8 @@
                     <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_subcompo')){?>
                       <select class="form-control" name="subcomp_id" id="subcomp_id">
                       <?php } else {?>
-                        <select class="form-control" name="subcomp_id" id="subcomp_id" <?php if($SubLink_InputFieldOrder != ''){?> disabled=""<?php }else {?>required="required"<?php }?>>
+                        <input type="hidden" name="dis_subcomp_id" value="<?php echo $linkdetails->SubLink_SubCompID;?>">
+                        <select class="form-control" name="subcomp_id" id="subcomp_id" disabled="">
                         <?php }?>
                         <option value="">-- SELECT SUBCOMPONENT--</option>
                         <?php while($row = $subcomponent->fetch_object()){ ?>
@@ -396,7 +408,8 @@
                       <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_viewingorder')){?>
                         <select class="form-control" name="SubLink_ViewingOrder" id="SubLink_ViewingOrder">
                         <?php } else {?>
-                          <select class="form-control" name="SubLink_ViewingOrder" id="SubLink_ViewingOrder" <?php if($SubLink_ViewingOrder != ''){?> disabled=""<?php }else {?>required="required"<?php }?>>
+                          <input type="hidden" name="dis_SubLink_ViewingOrder" value="<?php echo $SubLink_ViewingOrder;?>">
+                          <select class="form-control" name="SubLink_ViewingOrder" id="SubLink_ViewingOrder" disabled="">
                           <?php }?>
                           <option value="">-- SELECT --</option>
                           <option value="1" <?php echo ($SubLink_ViewingOrder == 1?'selected':''); ?>>Name - Details/Chart - Input Fields</option>
@@ -437,11 +450,11 @@
                       <?php } else {?>
                         <div class="col-md-2">
                           <label><span class="alert-danger">*</span>Label Current</label>
-                          <input type="text" name="SubLink_LabelCurrent" id="SubLink_LabelCurrent" class="form-control" value="<?php echo $SubLink_LabelCurrent;?>" placeholder="Enter Label Text"<?php if($SubLink_LabelCurrent != ''){?> disabled=""<?php }else {?>required="required"<?php }?>>
+                          <input type="text" name="SubLink_LabelCurrent" id="SubLink_LabelCurrent" class="form-control" value="<?php echo $SubLink_LabelCurrent;?>" placeholder="Enter Label Text"disabled="">
                         </div>
                         <div class="col-md-2">
                           <label><span class="alert-danger">*</span>Label Last</label>
-                          <input type="text" name="SubLink_LabelLast" id="SubLink_LabelLast" class="form-control"  value="<?php echo $SubLink_LabelLast;?>" placeholder="Enter Label Text" <?php if($SubLink_LabelLast != ''){?> disabled=""<?php }else {?>required="required"<?php }?>>
+                          <input type="text" name="SubLink_LabelLast" id="SubLink_LabelLast" class="form-control"  value="<?php echo $SubLink_LabelLast;?>" placeholder="Enter Label Text" disabled="">
                         </div>
                       <?php }?>
                     </div>
@@ -487,7 +500,7 @@
                         <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_labelOrder')){?>
                           <select class="form-control" name="SubLink_InputFieldOrder" id="SubLink_InputFieldOrder">
                           <?php } else {?>
-                           <select class="form-control" name="SubLink_InputFieldOrder" id="SubLink_InputFieldOrder" <?php if($SubLink_InputFieldOrder != ''){?> disabled=""<?php }else {?>required="required"<?php }?>>
+                           <select class="form-control" name="SubLink_InputFieldOrder" id="SubLink_InputFieldOrder" disabled="">
                            <?php }?>
                            <option value="">-- SELECT --</option>
                            <option value="1" <?php echo ($SubLink_InputFieldOrder == 1?'selected':'');?>>Label(C) <?php echo $SubLink_LabelCurrent;?> - Label(L) <?php echo $SubLink_LabelLast;?></option>
@@ -504,7 +517,7 @@
                         <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_bgcolor')){?>
                           <input type="color" id="changeMe" name="SubLink_BackgroundColor" id="SubLink_BackgroundColor" value="<?php echo ($SubLink_BackgroundColor == NULL)?'#ffffff':$SubLink_BackgroundColor;?>" onchange="hexToRgb(this.value)">
                         <?php } else {?>
-                         <input type="color" id="changeMe" name="SubLink_BackgroundColor" id="SubLink_BackgroundColor" value="<?php echo ($SubLink_BackgroundColor == NULL)?'#ffffff':$SubLink_BackgroundColor;?>" onchange="hexToRgb(this.value)" <?php if($SubLink_BackgroundColor != ''){?> disabled=""<?php }else {?>required="required"<?php }?>>
+                         <input type="color" id="changeMe" name="SubLink_BackgroundColor" id="SubLink_BackgroundColor" value="<?php echo ($SubLink_BackgroundColor == NULL)?'#ffffff':$SubLink_BackgroundColor;?>" onchange="hexToRgb(this.value)" disabled="">
                        <?php }?>
                        <!-- <button id="change" style='color:white;background-color: blue; width: 40px; height:20px' onclick="hexToRgb('#fbafff')"></button> -->
                      </div>
@@ -513,393 +526,456 @@
                       <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_textbgcolor')){?>
                         <input type="color" name="SubLink_TextColor" id="SubLink_TextColor" value="<?php echo ($SubLink_TextColor == NULL)?'#000000':$SubLink_TextColor;?>">
                       <?php } else {?>
-                       <input type="color" name="SubLink_TextColor" id="SubLink_TextColor" value="<?php echo ($SubLink_TextColor == NULL)?'#000000':$SubLink_TextColor;?>" <?php if($SubLink_TextColor != ''){?> disabled=""<?php }else {?>required="required"<?php }?>>
+                       <input type="color" name="SubLink_TextColor" id="SubLink_TextColor" value="<?php echo ($SubLink_TextColor == NULL)?'#000000':$SubLink_TextColor;?>" disabled="">
                      <?php }?>
                    </div>
                  </div>
                  <br>
-                 <div class="row">
-                  <div class="col-md-8">
-                    <!--  <div class="form-group">-->
-                      <label><span class="alert-danger">*</span>Type - </label>
-                      <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
-                        <input type="radio" name="Type" value="input"
-                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_Type == 0){ echo "checked"; } ?> checked/> Input
-                        <input type="radio" name="Type" value="output"
-                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_Type == 1){ echo "checked"; } ?> > Output
-
-                      <?php } else {?>
-                       <input type="radio"  name="Type" value="input"
-                       <?php if(!empty($linkdetails) && $linkdetails->SubLink_Type == 0){ echo "checked"; } ?> checked <?php if($linkdetails != ''){?> disabled=""<?php }else {?>required="required"<?php }?>/> Input
-                       <input type="radio"  name="Type" value="output"
-                       <?php if(!empty($linkdetails) && $linkdetails->SubLink_Type == 1){ echo "checked"; } ?> <?php if($linkdetails != ''){?> disabled=""<?php }else {?>required="required"<?php }?>> Output
-
-                     <?php }?>
-                     <!--  </div>-->
-                   </div>
-                 </div>
-                 <br>
-                 <div class="row" >
-                  <div class="col-md-4">
+                 <div class="row col-md-12">
+                  <!--  <div class="form-group">-->
+                    <label class="pull-left"><span class="alert-danger">*</span>Type - </label>
                     <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
-                      <input type="radio" name="inputType" value="formula"
-                      <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'formula'){ echo "checked"; } ?> > Formula
+                      <div class="col-md-2">
+                        <label class="containerRadio">
+                          <input type="radio" name="Type" value="input" id="typeInput"
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Type == 0){ echo "checked"; } ?> checked/> Input
+                          <span class="checkmarkRadio"></span>
+                        </label>
+                      </div>
+
+                      <div class="col-md-2">
+                        <label class="containerRadio">
+                          <input type="radio" name="Type" value="output" id="typeOutput"
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Type == 1){ echo "checked"; } ?> > Output
+                          <span class="checkmarkRadio"></span>
+                        </label>
+                      </div>
+
                     <?php } else {?>
-                     <input type="radio" name="inputType" value="formula"
-                     <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'formula'){ echo "checked"; } ?> <?php if($linkdetails != ''){?> disabled=""<?php }else {?>required="required"<?php }?>> Formula
-                   <?php }?>
-                 </div>
-                 <div class="col-md-4">
-                  <div id="formula" name="formula" <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'formula') {} else { echo "style='display:none;'";} ?> >
-                    <!--<label><span class="alert-danger">*</span>Select Formula</label> -->
-                    <select class="form-control" name="formula_id" id="formula_id">
-                      <option value="">-- SELECT FORMULA--</option>
-                      <?php while($row = $formula->fetch_object()){ ?>
-                        <option value="<?php echo $row->f_id; ?>"
-                          <?php if(isset($linkdetails->SubLink_FormulaID) && $linkdetails->SubLink_FormulaID == $row->f_id){echo 'selected'; } ?>>
-                          <?php echo $row->formula_title; ?>
-                        </option>
-                      <?php } ?>
-                    </select>
-                    <label id="f_exp" name="f_exp"></label>
-                  </div>
-                </div>
-              </div>
-              <div class="clearfix"></div>
-              <div class="row">
-                <div class="col-md-4">
-                  <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
-                    <input type="radio" name="inputType" value="admin"
-                    <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'admin'){ echo "checked"; } ?> > By Admin
-                  <?php } else {?>
-                    <input type="radio" name="inputType" value="admin"
-                    <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'admin'){ echo "checked"; } ?> <?php if($linkdetails != ''){?> disabled=""<?php }else {?>required="required"<?php }?>> By Admin
-                  <?php }?>
-                </div>
-                <div id="admin" name="admin" <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'admin') {} else { echo "style='display:none;'";}?> >
-                  <div class="col-md-4">
-                   <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
-                    <!--<label>Current Input</label>-->
-                    <input type="text" name="current" id="current" value="<?php if(!empty($linkdetails->SubLink_AdminCurrent)) echo $linkdetails->SubLink_AdminCurrent;  ?>" 
-                    class="form-control">
-                  <?php } else {?>
-                    <input type="text" name="current" id="current" value="<?php if(!empty($linkdetails->SubLink_AdminCurrent)) echo $linkdetails->SubLink_AdminCurrent;  ?>" 
-                    class="form-control" <?php if($linkdetails->SubLink_AdminCurrent != ''){?> disabled=""<?php }else {?>required="required"<?php }?>>
-                  <?php }?>
-                </div>
-                <div class="col-md-4">
-                  <!--<label>Last Stored Input</label>-->
-                  <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
-                    <input type="text" name="last" id="last" placeholder="Last Stored Input" value="<?php if(!empty($linkdetails->SubLink_AdminLast)) echo $linkdetails->SubLink_AdminLast; ?>"
-                    class="form-control">
-                  <?php } else {?>
-                    <input type="text" name="last" id="last" placeholder="Last Stored Input" value="<?php if(!empty($linkdetails->SubLink_AdminLast)) echo $linkdetails->SubLink_AdminLast; ?>"
-                    class="form-control" <?php if($linkdetails->SubLink_AdminCurrent != ''){?> disabled=""<?php }else {?>required="required"<?php }?>>
-                  <?php }?>
-                </div>
-              </div>
-            </div>
-            <div class="clearfix"></div>
-            <div class="row">
-              <div class="col-md-4">
-                <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
-                  <input type="radio" name="inputType" value="carry"
-                  <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'carry'){ echo "checked"; } ?> > Carry Forward
-                <?php } else {?>
-                  <input type="radio" name="inputType" value="carry"
-                  <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'carry'){ echo "checked"; } ?> <?php if($linkdetails != ''){?> disabled=""<?php }else {?>required="required"<?php }?>> Carry Forward
-                <?php }?>
-              </div>
-              <div id="carry" name="carry" <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'carry') {} else { echo "style='display:none;'";}?> >
-                <!-- need link to scenario-->
-                <div class="col-md-2" id="carry_scen" name="carry_scen">
-                  <!--<label><span class="alert-danger">*</span>Select Component</label> -->
-                  <select class="form-control" name="carry_linkid" id="carry_linkid">
-                    <option value="">-- SELECT SCENARIO LINK--</option>
-                    <?php 
-                    while($row = $objcarry->fetch_object()){ ?>
-                      <option value="<?php echo $row->Link_ID; ?>"
-                        <?php if(isset($linkdetails->SubLink_LinkIDcarry) && $linkdetails->SubLink_LinkIDcarry == $row->Link_ID){echo 'selected'; } ?>>
-                        <?php echo $row->Scen_Name; ?>
-                      </option>
-                    <?php } ?>
-                  </select>
-                </div>
-                <div class="col-md-2" id="carry_comp" name="carry_comp">
-                  <!--<label><span class="alert-danger">*</span>Select Component</label> -->
-                  <select class="form-control" name="carry_compid" id="carry_compid">
-                    <option value="">-- SELECT COMPONENT--</option>
-                    <?php 
-                    while($row = $component->fetch_object()){ ?>
-                      <option value="<?php echo $row->Comp_ID; ?>"
-                        <?php if(isset($linkdetails->SubLink_CompIDcarry) && $linkdetails->SubLink_CompIDcarry == $row->Comp_ID){echo 'selected'; } ?>>
-                        <?php echo $row->Comp_Name; ?>
-                      </option>
-                    <?php } ?>
-                  </select>
-                </div>
-                <!-- <div class="col-md-4"></br></div> -->
-                <div class="col-md-2" id="carry_subcomp" name="carry_subcomp">
-                  <!--<label><span class="alert-danger">*</span>Select SubComponent</label> -->
-                  <select class="form-control" name="carry_subcompid" id="carry_subcompid">
-                    <option value="">-- SELECT SUBCOMPONENT--</option>
-                    <?php while($row = $subcomponent->fetch_object()){ ?>
-                      <option value="<?php echo $row->SubComp_ID; ?>"
-                        <?php if(isset($linkdetails->SubLink_SubCompIDcarry) && $linkdetails->SubLink_SubCompIDcarry == $row->SubComp_ID){echo 'selected'; } ?>>
-                        <?php echo $row->SubComp_Name; ?>
-                      </option>
-                    <?php } ?>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="clearfix"></div>
-            <div class="row">
-              <div class="col-md-4">
-                <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
-                  <input type="radio" name="inputType" value="user"
-                  <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'user'){ echo "checked"; } ?>/> By User
-                <?php } else {?>
-                 <input type="radio" name="inputType" value="user"
-                 <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'user'){ echo "checked"; } ?> <?php if($linkdetails != ''){?> disabled=""<?php }else {?>required="required"<?php }?>/> By User
-               <?php }?>
-             </div>
-             <!-- adding multiple choice and range type here -->
-             <div class="row col-md-8 <?php echo ($linkdetails->SubLink_InputMode == 'user')?'':'hidden'; ?>" id="user" name="user">
-              <!--  <div class="col-md-4 <?php // echo ($linkdetails->SubLink_InputMode == 'user')?'':'hidden'; ?>">  -->
-                <div class="col-md-6">
-                  <select name="SubLink_InputModeType" id="SubLink_InputModeType" class="form-control">
-                    <!-- <option value="select" id="1" <?php echo ($linkdetails->SubLink_InputModeType == 'select')?'selected':''; ?> >-- Select Input --</option> -->
-                    <option value="user" id="2" <?php echo ($linkdetails->SubLink_InputModeType == 'user')?'selected':''; ?> > Default/Text</option>
-                    <option value="mChoice" id="3" <?php echo ($linkdetails->SubLink_InputModeType == 'mChoice')?'selected':''; ?>>Multiple Choice</option>
-                    <option value="range" id="4" <?php echo ($linkdetails->SubLink_InputModeType == 'range')?'selected':''; ?> >Range/Button</option>
-                  </select>
-                </div>
-                <!--for default Text--->
-                <div class="col-md-6 <?php echo ($linkdetails->SubLink_InputModeType == 'user')?'':'hidden'; ?>" id="user_default_value">
-                  <input type="text" name="enterText" placeholder="Enter Default Value" class="form-control" readonly="">
-                </div>
-                <!-- for multiple choice -->
-                <div class="row">
-                  <div class="col-md-12 <?php echo ($linkdetails->SubLink_InputModeType == 'mChoice')?'':'hidden'; ?>" id="mChoice">
-                    <br>
-                    <div class="form-group col-md-6">
-                      <label for="No of questions">Enter Question:</label>
-                      <input name="question" id="question" type="text" value="<?php echo $question;?>" class="form-control" placeholder="Enter Question">
-                    </div>
-                    <div class="form-group col-md-3" style="float: right;">
-                      <button class="btn-primary" type="button" id="add_options" data-toggle="tooltip" title="Add More Options" style="margin-top: 16%;">+</button>
-                    </div>
-                    <br>
-                    <div class="form-group col-md-6" style="margin-left: 1px;">
-                      <label for="No of questions">Text:</label>
-                      <input name="option[]" id="option[]" type="text" value="<?php echo (!empty($options))?$options:'Option-';?>" class="form-control optionTextBox" placeholder="Enter Option Text">
-                    </div>
-                    <div class="form-group col-md-3">
-                      <label for="No of questions">Value:</label>
-                      <input name="option_value[]" id="option_value[]" type="text" value="<?php echo $options_value;?>" class="form-control" placeholder="Value">
-                    </div>
-                    <?php if(count($option) > 1 && count($option_value) > 1){
-                            // array_pop(array);
-                      for($i=1; $i < count($option); $i++) { ?>
-                        <div class="parentDefault">
-                          <div class="form-group col-md-6"><input name="option[]" type="text" value="<?php echo $option[$i];?>" placeholder="Text" class="form-control optionTextBox"></div>
-                          <div class="form-group col-md-3"><input name="option_value[]" type="text" value="<?php echo $option_value[$i];?>" placeholder="Value" class="form-control"></div>
-                          <div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" data-toggle="tooltip" title="Remove Option">-</button>
-                            <input class="checkedDefault" type="radio" name="makeDefaultChecked[]" data-toggle="tooltip" title="Make This Default Checked" value="<?php echo $option[$i];?>" <?php echo ($makeDefaultChecked == $option[$i])?'checked':'';?>/>
-                          </div>
-                        </div>
-                      <?php } } ?>
-                      <div class="row">
-                        <div id="add_here"></div>
+
+                      <div class="col-md-2">
+                        <label class="containerRadio">
+                          <input type="radio"  name="Type" value="input" id="typeInput"
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Type == 0){ echo "checked"; } ?> checked disabled=""/> Input
+                          <span class="checkmarkRadio"></span>
+                        </label>
                       </div>
-                    </div>
-                  </div>
-                  <!-- for range -->
-                  <div class="row">
-                    <!-- <div class="col-md-12 <?php echo ($linkdetails->SubLink_InputModeType == 'range')?'':'hidden'; ?>" id="range" onchange="label_choice(this.value)"><br> -->
-                      <div class="col-md-12 <?php echo ($linkdetails->SubLink_InputModeType == 'range')?'':'hidden'; ?>" id="range">
-                        <div class="form-group col-md-2">
-                          <label for="Min Value">Min:</label>
-                          <input name="SubLink_MinVal" id="SubLink_MinVal" type="number" value="<?php echo ($SubLink_MinVal)?$SubLink_MinVal:'0';?>" class="form-control" placeholder="Enter Min Range">
-                        </div>
-                        <div class="form-group col-md-2">
-                          <label for="Max Value">Max:</label>
-                          <input name="SubLink_MaxVal" id="SubLink_MaxVal" type="number" value="<?php echo ($SubLink_MaxVal)?$SubLink_MaxVal:'0';?>" class="form-control" placeholder="Enter Min Range">
-                        </div>
-                        <div class="form-group col-md-2">
-                          <label for="Interval Value">Interval:</label>
-                          <input name="SubLink_RangeInterval" id="SubLink_RangeInterval" type="number" value="<?php echo ($SubLink_RangeInterval)?$SubLink_RangeInterval:'0';?>" class="form-control" placeholder="Enter Interval">
-                        </div>
+
+                      <div class="col-md-2">
+                        <label class="containerRadio">
+                          <input type="radio"  name="Type" value="output" id="typeOutput"
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Type == 1){ echo "checked"; } ?> disabled=""> Output
+                          <span class="checkmarkRadio"></span>
+                        </label>
                       </div>
+                    <?php }?>
+                    <!--  </div>-->
+                  </div>
+                  <br>
+                  <div class="row" >
+                    <div class="col-md-4">
+                      <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
+                        <label class="containerRadio" for="inputTypeformula">
+                          <input type="radio" name="inputType" value="formula" id="inputTypeformula"
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'formula'){ echo "checked"; } ?> > Formula
+                          <span class="checkmarkRadio"></span>
+                        </label>
+                      <?php } else {?>
+                        <label class="containerRadio" for="inputTypeformula">
+                         <input type="radio" name="inputType" value="formula" id="inputTypeformula"
+                         <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'formula'){ echo "checked"; } ?> disabled=""> Formula
+                         <span class="checkmarkRadio"></span>
+                       </label>
+                     <?php }?>
+                   </div>
+                   <div class="col-md-4">
+                    <div id="formula" name="formula" <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'formula') {} else { echo "style='display:none;'";} ?> >
+                      <!--<label><span class="alert-danger">*</span>Select Formula</label> -->
+                      <select class="form-control" name="formula_id" id="formula_id">
+                        <option value="">-- SELECT FORMULA--</option>
+                        <?php while($row = $formula->fetch_object()){ ?>
+                          <option value="<?php echo $row->f_id; ?>"
+                            <?php if(isset($linkdetails->SubLink_FormulaID) && $linkdetails->SubLink_FormulaID == $row->f_id){echo 'selected'; } ?>>
+                            <?php echo $row->formula_title; ?>
+                          </option>
+                        <?php } ?>
+                      </select>
+                      <label id="f_exp" name="f_exp"></label>
                     </div>
                   </div>
-                  <!-- end of multiple choice and range type -->
                 </div>
                 <div class="clearfix"></div>
                 <div class="row">
                   <div class="col-md-4">
-                   <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
-                    <input type="radio" name="inputType" value="none"
-                    <?php if(empty($linkdetails) || $linkdetails->SubLink_InputMode == 'none'){ echo "checked"; } ?> > None
+                    <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
+                      <label class="containerRadio" for="inputTypeAdmin">
+                        <input type="radio" name="inputType" value="admin" id="inputTypeAdmin"
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'admin'){ echo "checked"; } ?> > By Admin
+                        <span class="checkmarkRadio"></span>
+                      </label>
+                    <?php } else {?>
+                      <label class="containerRadio" for="inputTypeAdmin">
+                        <input type="radio" name="inputType" value="admin" id="inputTypeAdmin"
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'admin'){ echo "checked"; } ?> disabled=""> By Admin
+                        <span class="checkmarkRadio"></span>
+                      </label>
+                    <?php }?>
+                  </div>
+                  <div id="admin" name="admin" <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'admin') {} else { echo "style='display:none;'";}?> >
+                    <div class="col-md-4">
+                      <!--<label>Current Input</label>-->
+                      <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
+                        <input type="text" name="current" id="current" value="<?php if(!empty($linkdetails->SubLink_AdminCurrent)) echo $linkdetails->SubLink_AdminCurrent;  ?>" 
+                        class="form-control">
+                      <?php } else {?>
+                        <input type="text" name="current" id="current" value="<?php if(!empty($linkdetails->SubLink_AdminCurrent)) echo $linkdetails->SubLink_AdminCurrent;  ?>" 
+                        class="form-control" disabled="">
+                      <?php }?>
+                    </div>
+                    <div class="col-md-4">
+                      <!--<label>Last Stored Input</label>-->
+                      <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
+                        <input type="text" name="last" id="last" placeholder="Last Stored Input" value="<?php if(!empty($linkdetails->SubLink_AdminLast)) echo $linkdetails->SubLink_AdminLast; ?>"
+                        class="form-control">
+                      <?php } else {?>
+                        <input type="text" name="last" id="last" placeholder="Last Stored Input" value="<?php if(!empty($linkdetails->SubLink_AdminLast)) echo $linkdetails->SubLink_AdminLast; ?>"
+                        class="form-control" disabled="">
+                      <?php }?>
+                    </div>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
+                      <label class="containerRadio" for="inputTypeCarry">
+                        <input type="radio" name="inputType" value="carry" id="inputTypeCarry"
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'carry'){ echo "checked"; } ?> > Carry Forward
+                        <span class="checkmarkRadio"></span>
+                      </label>
+                    <?php } else {?>
+                      <label class="containerRadio" for="inputTypeCarry">
+                        <input type="radio" name="inputType" value="carry" id="inputTypeCarry"
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'carry'){ echo "checked"; } ?> disabled=""> Carry Forward
+                        <span class="checkmarkRadio"></span>
+                      </label>
+                    <?php }?>
+                  </div>
+                  <div id="carry" name="carry" <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'carry') {} else { echo "style='display:none;'";}?> >
+                    <!-- need link to scenario-->
+                    <div class="col-md-2" id="carry_scen" name="carry_scen">
+                      <!--<label><span class="alert-danger">*</span>Select Component</label> -->
+                      <select class="form-control" name="carry_linkid" id="carry_linkid">
+                        <option value="">-- SELECT SCENARIO LINK--</option>
+                        <?php 
+                        while($row = $objcarry->fetch_object()){ ?>
+                          <option value="<?php echo $row->Link_ID; ?>"
+                            <?php if(isset($linkdetails->SubLink_LinkIDcarry) && $linkdetails->SubLink_LinkIDcarry == $row->Link_ID){echo 'selected'; } ?>>
+                            <?php echo $row->Scen_Name; ?>
+                          </option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                    <div class="col-md-2" id="carry_comp" name="carry_comp">
+                      <!--<label><span class="alert-danger">*</span>Select Component</label> -->
+                      <select class="form-control" name="carry_compid" id="carry_compid">
+                        <option value="">-- SELECT COMPONENT--</option>
+                        <?php 
+                        while($row = $component->fetch_object()){ ?>
+                          <option value="<?php echo $row->Comp_ID; ?>"
+                            <?php if(isset($linkdetails->SubLink_CompIDcarry) && $linkdetails->SubLink_CompIDcarry == $row->Comp_ID){echo 'selected'; } ?>>
+                            <?php echo $row->Comp_Name; ?>
+                          </option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                    <!-- <div class="col-md-4"></br></div> -->
+                    <div class="col-md-2" id="carry_subcomp" name="carry_subcomp">
+                      <!--<label><span class="alert-danger">*</span>Select SubComponent</label> -->
+                      <select class="form-control" name="carry_subcompid" id="carry_subcompid">
+                        <option value="">-- SELECT SUBCOMPONENT--</option>
+                        <?php while($row = $subcomponent->fetch_object()){ ?>
+                          <option value="<?php echo $row->SubComp_ID; ?>"
+                            <?php if(isset($linkdetails->SubLink_SubCompIDcarry) && $linkdetails->SubLink_SubCompIDcarry == $row->SubComp_ID){echo 'selected'; } ?>>
+                            <?php echo $row->SubComp_Name; ?>
+                          </option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
+                      <label class="containerRadio" for="inputTypeUser">
+                        <input type="radio" name="inputType" value="user" id="inputTypeUser"
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'user'){ echo "checked"; } ?>/> By User
+                        <span class="checkmarkRadio"></span>
+                      </label>
+                    <?php } else {?>
+                      <label class="containerRadio" for="inputTypeUser">
+                        <input type="radio" name="inputType" value="user" id="inputTypeUser"
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'user'){ echo "checked"; } ?> disabled=""/> By User
+                        <span class="checkmarkRadio"></span>
+                      </label>
+                    <?php }?>
+                  </div>
+                  <!-- adding multiple choice and range type here -->
+                  <div class="row col-md-8 <?php echo ($linkdetails->SubLink_InputMode == 'user')?'':'hidden'; ?>" id="user" name="user">
+                    <!--  <div class="col-md-4 <?php // echo ($linkdetails->SubLink_InputMode == 'user')?'':'hidden'; ?>">  -->
+                      <div class="col-md-6">
+                        <select name="SubLink_InputModeType" id="SubLink_InputModeType" class="form-control">
+                          <!-- <option value="select" id="1" <?php echo ($linkdetails->SubLink_InputModeType == 'select')?'selected':''; ?> >-- Select Input --</option> -->
+                          <option value="user" id="2" <?php echo ($linkdetails->SubLink_InputModeType == 'user')?'selected':''; ?> > Default/Text</option>
+                          <option value="mChoice" id="3" <?php echo ($linkdetails->SubLink_InputModeType == 'mChoice')?'selected':''; ?>>Multiple Choice</option>
+                          <option value="range" id="4" <?php echo ($linkdetails->SubLink_InputModeType == 'range')?'selected':''; ?> >Range/Button</option>
+                        </select>
+                      </div>
+                      <!--for default Text--->
+                      <div class="col-md-6 <?php echo ($linkdetails->SubLink_InputModeType == 'user')?'':'hidden'; ?>" id="user_default_value">
+                        <input type="text" name="enterText" placeholder="Enter Default Value" class="form-control" readonly="">
+                      </div>
+                      <!-- for multiple choice -->
+                      <div class="row">
+                        <div class="col-md-12 <?php echo ($linkdetails->SubLink_InputModeType == 'mChoice')?'':'hidden'; ?>" id="mChoice">
+                          <br>
+                          <div class="form-group col-md-6">
+                            <label for="No of questions">Enter Question:</label>
+                            <input name="question" id="question" type="text" value="<?php echo $question;?>" class="form-control" placeholder="Enter Question" required="">
+                          </div>
+                          <div class="form-group col-md-3" style="float: right;">
+                            <button class="btn-primary" type="button" id="add_options" data-toggle="tooltip" title="Add More Options" style="margin-top: 16%;">+</button>
+                          </div>
+                          <br>
+                          <div class="form-group col-md-6" style="margin-left: 1px;">
+                            <label for="No of questions">Text:</label>
+                            <input name="option[]" id="option[]" type="text" value="<?php echo (!empty($options))?$options:'Option-';?>" class="form-control optionTextBox" placeholder="Enter Option Text" required="">
+                          </div>
+                          <div class="form-group col-md-3">
+                            <label for="No of questions">Value:</label>
+                            <input name="option_value[]" id="option_value[]" type="text" value="<?php echo $options_value;?>" class="form-control" placeholder="Value" required="">
+                          </div>
+                          <?php if(count($option) > 1 && count($option_value) > 1){
+                            // array_pop(array);
+                            for($i=1; $i < count($option); $i++) { ?>
+                              <div class="parentDefault">
+                                <div class="form-group col-md-6"><input name="option[]" type="text" value="<?php echo $option[$i];?>" placeholder="Text" class="form-control optionTextBox"></div>
+                                <div class="form-group col-md-3"><input name="option_value[]" type="text" value="<?php echo $option_value[$i];?>" placeholder="Value" class="form-control" required=""></div>
+                                <div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" data-toggle="tooltip" title="Remove Option">-</button>
+                                  <input class="checkedDefault" type="radio" name="makeDefaultChecked[]" data-toggle="tooltip" title="Make This Default Checked" value="<?php echo $option[$i];?>" <?php echo ($makeDefaultChecked == $option[$i])?'checked':'';?>/>
+                                </div>
+                              </div>
+                            <?php } } ?>
+                            <div class="row">
+                              <div id="add_here"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- for range -->
+                        <div class="row">
+                          <!-- <div class="col-md-12 <?php echo ($linkdetails->SubLink_InputModeType == 'range')?'':'hidden'; ?>" id="range" onchange="label_choice(this.value)"><br> -->
+                            <div class="col-md-12 <?php echo ($linkdetails->SubLink_InputModeType == 'range')?'':'hidden'; ?>" id="range">
+                              <div class="form-group col-md-2">
+                                <label for="Min Value">Min:</label>
+                                <input name="SubLink_MinVal" id="SubLink_MinVal" type="number" value="<?php echo ($SubLink_MinVal)?$SubLink_MinVal:'0';?>" class="form-control" placeholder="Enter Min Range">
+                              </div>
+                              <div class="form-group col-md-2">
+                                <label for="Max Value">Max:</label>
+                                <input name="SubLink_MaxVal" id="SubLink_MaxVal" type="number" value="<?php echo ($SubLink_MaxVal)?$SubLink_MaxVal:'0';?>" class="form-control" placeholder="Enter Min Range">
+                              </div>
+                              <div class="form-group col-md-2">
+                                <label for="Interval Value">Interval:</label>
+                                <input name="SubLink_RangeInterval" id="SubLink_RangeInterval" type="number" value="<?php echo ($SubLink_RangeInterval)?$SubLink_RangeInterval:'0';?>" class="form-control" placeholder="Enter Interval">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- end of multiple choice and range type -->
+                      </div>
+                      <div class="clearfix"></div>
+                      <div class="row">
+                        <div class="col-md-4">
+                         <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
+                          <label class="containerRadio" for="inputTypeNone">
+                            <input type="radio" name="inputType" value="none" id="inputTypeNone"
+                            <?php if(empty($linkdetails) || $linkdetails->SubLink_InputMode == 'none'){ echo "checked"; } ?> > None
+                            <span class="checkmarkRadio"></span>
+                          </label>
+                        <?php } else {?>
+                          <label class="containerRadio" for="inputTypeNone">
+                            <input type="radio" name="inputType" value="none" id="inputTypeNone"
+                            <?php if(empty($linkdetails) || $linkdetails->SubLink_InputMode == 'none'){ echo "checked"; } ?>disabled=""> None
+                            <span class="checkmarkRadio"></span>
+                          </label>
+                        <?php }?>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <label>Order</label>
+                      </div>
+                      <div class="col-md-4">
+                        <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_order')){?>
+                          <input type="text" name="order" id="order" value="<?php if(!empty($linkdetails->SubLink_Order)) echo $linkdetails->SubLink_Order; ?>" class="form-control" placeholder="Enter Order No" required>
+                        <?php } else {?>
+                         <input type="text" name="order" id="order" value="<?php if(!empty($linkdetails->SubLink_Order)) echo $linkdetails->SubLink_Order; ?>" class="form-control" placeholder="Enter Order No" disabled="">
+                       <?php }?>
+                     </div>
+                   </div>
+                   <br>
+                   <div class="row">
+                    <div class="col-md-12">
+                      <div class="col-md-6">
+                        <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_showhide')){?>
+                          <label class="containerRadio" for="ShowHide0">
+                            <input type="radio" name="ShowHide" id="ShowHide0" value="0"
+                            <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 0){ echo "checked"; } ?> > Show
+                            <span class="checkmarkRadio"></span>
+                          </label>
+                          <label class="containerRadio" for="ShowHide1">
+                            <input type="radio" name="ShowHide" id="ShowHide1" value="1"
+                            <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 1){ echo "checked"; } ?> > Hide
+                            <span class="checkmarkRadio"></span>
+                          </label>
+                        <?php } else {?>
+                          <label class="containerRadio" for="ShowHide0">
+                           <input type="radio" name="ShowHide" id="ShowHide0" value="0"
+                           <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 0){ echo "checked"; } ?> disabled=""> Show
+                           <span class="checkmarkRadio"></span>
+                         </label>
+                         <label class="containerRadio" for="ShowHide1">
+                           <input type="radio" name="ShowHide" id="ShowHide1" value="1"
+                           <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 1){ echo "checked"; } ?> disabled=""> Hide
+                           <span class="checkmarkRadio"></span>
+                         </label>
+                       <?php }?>
+                     </div>
+                     <div class="col-md-6">
+                      <label for="chkround" class='containerCheckbox'>
+                        <input type='checkbox' <?php if(!empty($linkdetails) && $linkdetails->SubLink_Roundoff == 1) { ?> checked='checked' <?php } ?> name='chkround' id='chkround'> Round Off
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <label>Replace</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <input type="hidden" name="replaceid1" id="replaceid1" 
+                  value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_ID; } ?>">
+                  <div class="col-md-4">
+                    <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
+                      <input type="text" name="start1" id="start1" 
+                      value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Start; } ?>" 
+                      placeholder = "Start" class="form-control">
+                    <?php } else {?>
+                      <input type="text" name="start1" id="start1" 
+                      value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Start; } ?>" 
+                      placeholder = "Start" class="form-control" <?php if($linkreplace1 != ''){?> disabled=""<?php } ?>>
+                    <?php }?>
+                  </div>
+                  <div class="col-md-4">
+                   <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
+                    <input type="text" name="end1" id="end1" 
+                    value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_End; } ?>" 
+                    placeholder = "End" class="form-control">
                   <?php } else {?>
-                   <input type="radio" name="inputType" value="none"
-                   <?php if(empty($linkdetails) || $linkdetails->SubLink_InputMode == 'none'){ echo "checked"; } ?>disabled=""> None
+                   <input type="text" name="end1" id="end1" 
+                   value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_End; } ?>" 
+                   placeholder = "End" class="form-control" <?php if($linkreplace1 != ''){?> disabled=""<?php } ?>>
                  <?php }?>
                </div>
-             </div>
-             <br>
-             <div class="clearfix"></div>
-             <div class="row">
-              <div class="col-md-4">
-                <label>Order</label>
-              </div>
-              <div class="col-md-4">
-                <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_order')){?>
-                  <input type="text" name="order" id="order" value="<?php if(!empty($linkdetails->SubLink_Order)) echo $linkdetails->SubLink_Order; ?>" class="form-control" placeholder="Enter Order No" required>
+               <div class="col-md-4">
+                 <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
+                  <input type="text" name="value1" id="value1" 
+                  value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Value; }?>" 
+                  placeholder = "Value" class="form-control">
                 <?php } else {?>
-                 <input type="text" name="order" id="order" value="<?php if(!empty($linkdetails->SubLink_Order)) echo $linkdetails->SubLink_Order; ?>" class="form-control" placeholder="Enter Order No" <?php if($linkdetails->SubLink_Order != ''){?> disabled=""<?php }else {?>required="required"<?php }?>>
-               <?php }?>
-             </div>
-           </div>
-           <br>
-           <div class="row">
-            <div class="col-md-12">
-              <div class="col-md-6">
-                <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_showhide')){?>
-                  <input type="radio" name="ShowHide" value="0"
-                  <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 0){ echo "checked"; } ?> > Show
-                  <input type="radio" name="ShowHide" value="1"
-                  <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 1){ echo "checked"; } ?> > Hide
-                <?php } else {?>
-                 <input type="radio" name="ShowHide" value="0"
-                 <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 0){ echo "checked"; } ?> <?php if($linkdetails != ''){?> disabled=""<?php }else {?>required="required"<?php }?>> Show
-                 <input type="radio" name="ShowHide" value="1"
-                 <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 1){ echo "checked"; } ?> <?php if($linkdetails != ''){?> disabled=""<?php }else {?>required="required"<?php }?>> Hide
-               <?php }?>
-             </div>
-             <div class="col-md-6">
-              <div class='checkbox'>
-                <input type='checkbox' <?php if(!empty($linkdetails) && $linkdetails->SubLink_Roundoff == 1) { ?> checked='checked' <?php } ?> name='chkround' id='chkround'> Roundoff
+                  <input type="text" name="value1" id="value1" 
+                  value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Value; }?>" 
+                  placeholder = "Value" class="form-control" <?php if($linkreplace1 != ''){?> disabled=""<?php } ?>>
+                <?php }?>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4">
-            <label>Replace</label>
-          </div>
-        </div>
-        <div class="row">
-          <input type="hidden" name="replaceid1" id="replaceid1" 
-          value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_ID; } ?>">
-          <div class="col-md-4">
-            <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
-              <input type="text" name="start1" id="start1" 
-              value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Start; } ?>" 
-              placeholder = "Start" class="form-control">
+            <div class="row">
+              <input type="hidden" name="replaceid2" id="replaceid2" 
+              value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_ID; } ?>">
+              <div class="col-md-4">
+               <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
+                <input type="text" name="start2" id="start2" 
+                value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Start; } ?>" 
+                placeholder = "Start" class="form-control">
+              <?php } else {?>
+               <input type="text" name="start2" id="start2" 
+               value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Start; } ?>" 
+               placeholder = "Start" class="form-control" <?php if($linkreplace2 != ''){?> disabled=""<?php } ?>>
+             <?php }?>
+           </div>
+           <div class="col-md-4">
+             <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
+              <input type="text" name="end2" id="end2" 
+              value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_End; } ?>"
+              placeholder = "End" class="form-control">
             <?php } else {?>
-              <input type="text" name="start1" id="start1" 
-              value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Start; } ?>" 
-              placeholder = "Start" class="form-control" <?php if($linkreplace1 != ''){?> disabled=""<?php } ?>>
-            <?php }?>
-          </div>
-          <div class="col-md-4">
+             <input type="text" name="end2" id="end2" 
+             value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_End; } ?>"
+             placeholder = "End" class="form-control" <?php if($linkreplace2 != ''){?> disabled=""<?php } ?>>
+           <?php }?>
+         </div>
+         <div class="col-md-4">
            <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
-            <input type="text" name="end1" id="end1" 
-            value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_End; } ?>" 
-            placeholder = "End" class="form-control">
+            <input type="text" name="value2" id="value2" 
+            value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Value; }?>"
+            placeholder = "Value" class="form-control">
           <?php } else {?>
-           <input type="text" name="end1" id="end1" 
-           value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_End; } ?>" 
-           placeholder = "End" class="form-control" <?php if($linkreplace1 != ''){?> disabled=""<?php } ?>>
+           <input type="text" name="value2" id="value2" 
+           value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Value; }?>"
+           placeholder = "Value" class="form-control" <?php if($linkreplace2 != ''){?> disabled=""<?php } ?>>
          <?php }?>
        </div>
-       <div class="col-md-4">
-         <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
-          <input type="text" name="value1" id="value1" 
-          value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Value; }?>" 
-          placeholder = "Value" class="form-control">
-        <?php } else {?>
-          <input type="text" name="value1" id="value1" 
-          value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Value; }?>" 
-          placeholder = "Value" class="form-control" <?php if($linkreplace1 != ''){?> disabled=""<?php } ?>>
-        <?php }?>
-      </div>
-    </div>
-    <div class="row">
-      <input type="hidden" name="replaceid2" id="replaceid2" 
-      value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_ID; } ?>">
+     </div>
+     <div class="row">
+      <input type="hidden" name="replaceid3" id="replaceid3" 
+      value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_ID; } ?>">   
       <div class="col-md-4">
        <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
-        <input type="text" name="start2" id="start2" 
-        value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Start; } ?>" 
+        <input type="text" name="start3" id="start3" 
+        value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Start; } ?>"
         placeholder = "Start" class="form-control">
       <?php } else {?>
-       <input type="text" name="start2" id="start2" 
-       value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Start; } ?>" 
-       placeholder = "Start" class="form-control" <?php if($linkreplace2 != ''){?> disabled=""<?php } ?>>
+        <input type="text" name="start3" id="start3" 
+        value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Start; } ?>"
+        placeholder = "Start" class="form-control" <?php if($linkreplace3 != ''){?> disabled=""<?php } ?>>
+      <?php }?>
+    </div>
+    <div class="col-md-4">
+      <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
+        <input type="text" name="end3" id="end3" 
+        value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_End; } ?>"
+        placeholder = "End" class="form-control">
+      <?php } else {?>
+       <input type="text" name="end3" id="end3" 
+       value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_End; } ?>"
+       placeholder = "End" class="form-control" <?php if($linkreplace3 != ''){?> disabled=""<?php } ?>>
      <?php }?>
    </div>
    <div class="col-md-4">
-     <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
-      <input type="text" name="end2" id="end2" 
-      value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_End; } ?>"
-      placeholder = "End" class="form-control">
+    <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
+      <input type="text" name="value3" id="value3" 
+      value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Value; }?>"
+      placeholder = "Value" class="form-control">
     <?php } else {?>
-     <input type="text" name="end2" id="end2" 
-     value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_End; } ?>"
-     placeholder = "End" class="form-control" <?php if($linkreplace2 != ''){?> disabled=""<?php } ?>>
-   <?php }?>
- </div>
- <div class="col-md-4">
-   <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
-    <input type="text" name="value2" id="value2" 
-    value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Value; }?>"
-    placeholder = "Value" class="form-control">
-  <?php } else {?>
-   <input type="text" name="value2" id="value2" 
-   value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Value; }?>"
-   placeholder = "Value" class="form-control" <?php if($linkreplace2 != ''){?> disabled=""<?php } ?>>
- <?php }?>
-</div>
-</div>
-<div class="row">
-  <input type="hidden" name="replaceid3" id="replaceid3" 
-  value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_ID; } ?>">   
-  <div class="col-md-4">
-   <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
-    <input type="text" name="start3" id="start3" 
-    value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Start; } ?>"
-    placeholder = "Start" class="form-control">
-  <?php } else {?>
-    <input type="text" name="start3" id="start3" 
-    value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Start; } ?>"
-    placeholder = "Start" class="form-control" <?php if($linkreplace3 != ''){?> disabled=""<?php } ?>>
-  <?php }?>
-</div>
-<div class="col-md-4">
-  <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
-    <input type="text" name="end3" id="end3" 
-    value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_End; } ?>"
-    placeholder = "End" class="form-control">
-  <?php } else {?>
-   <input type="text" name="end3" id="end3" 
-   value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_End; } ?>"
-   placeholder = "End" class="form-control" <?php if($linkreplace3 != ''){?> disabled=""<?php } ?>>
- <?php }?>
-</div>
-<div class="col-md-4">
-  <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
-    <input type="text" name="value3" id="value3" 
-    value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Value; }?>"
-    placeholder = "Value" class="form-control">
-  <?php } else {?>
-    <input type="text" name="value3" id="value3" 
-    value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Value; }?>"
-    placeholder = "Value" class="form-control"  <?php if($linkreplace3 != ''){?> disabled=""<?php } ?>>
-  <?php }?>
-</div>
+      <input type="text" name="value3" id="value3" 
+      value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Value; }?>"
+      placeholder = "Value" class="form-control"  <?php if($linkreplace3 != ''){?> disabled=""<?php } ?>>
+    <?php }?>
+  </div>
 </div>
 <div class="row">
   <br><br>
@@ -947,7 +1023,7 @@
              <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_chart')){?>
               <textarea id="details" name="details" class="form-control"><?php if(!empty($linkdetails->SubLink_Details)){ echo $linkdetails->SubLink_Details; } ?></textarea>
             <?php } else {?>
-             <textarea id="details" name="details" class="form-control" <?php if($linkdetails->SubLink_Details != ''){?> disabled=""<?php }else {?>required="required"<?php }?>>
+             <textarea id="details" name="details" class="form-control" disabled="">
 
               <?php if(!empty($linkdetails->SubLink_Details)){ echo $linkdetails->SubLink_Details; } ?></textarea>
             <?php }?>
@@ -1149,7 +1225,7 @@
 <script type="text/javascript">
 
   $('#add_options').on('click',function(){
-    $('#add_here').append('<div class="col-md-12 parentDefault"><div class="form-group col-md-6"><input name="option[]" type="text" placeholder="Enter Option Text" class="form-control optionTextBox" value="Option-"></div> <div class="form-group col-md-3"><input name="option_value[]" type="text" placeholder="Value" class="form-control"></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" data-toggle="tooltip" title="Remove Option">-</button><input class="checkedDefault" type="radio" name="makeDefaultChecked[]" data-toggle="tooltip" title="Make This Default Checked" value="" /></div></div>');
+    $('#add_here').append('<div class="col-md-12 parentDefault"><div class="form-group col-md-6"><input name="option[]" type="text" placeholder="Enter Option Text" class="form-control optionTextBox" value="Option-" required=""></div> <div class="form-group col-md-3"><input name="option_value[]" type="text" placeholder="Value" value="" required="" class="form-control"></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" data-toggle="tooltip" title="Remove Option">-</button><input class="checkedDefault" type="radio" name="makeDefaultChecked[]" data-toggle="tooltip" title="Make This Default Checked" value="" /></div></div>');
     removeDiv();
     makeDefaultChecked();
     changeValueOnChangingText();

@@ -69,19 +69,23 @@ span.alert-danger {
           <label for="Choose Filters"><span class="alert-danger">*</span>Choose Filters</label>
         </div>
         <div class="col-md-2">
-          <label for="All Users">
+          <label for="all_users" class="containerRadio">
             <input type="radio"  name="user_filter" id="all_users" checked="" value="all_users">All Users
+            <span class="checkmarkRadio"></span>
           </label>
-          <label for="Select Users">
+          <label for="select_users" class="containerRadio">
             <input type="radio" name="user_filter" id="select_users" value="select_users">Select Users
+            <span class="checkmarkRadio"></span>
           </label>
         </div>
         <div class="col-md-2">
-           <label for="All Users">
+           <label for="outputComponent" class="containerCheckbox">
             <input type="checkbox"  name="outputComponentFilter" id="outputComponent" value="1">Output
+            <span class="checkmark"></span>
           </label>
-          <label for="Select Users">
+          <label for="editableInput" class="containerCheckbox">
             <input type="checkbox" name="inputComponentFilter" id="editableInput" value="1">Users Input
+            <span class="checkmark"></span>
           </label>
         </div>
 
@@ -96,8 +100,9 @@ span.alert-danger {
         </div>
 
         <div class="col-md-2 hidden" id="select_all_div">
-          <label for="Select All Data" data-toggle="tooltip" title="Select All Users">
+          <label for="Select All Data" data-toggle="tooltip" title="Select All Users" class="containerCheckbox" id="select_all_checkbox">
             <input type="checkbox" name="select_all" id="select_all" value=select_all > Select All
+            <span class="checkmark"></span>
           </label>
         </div>
       </div>
@@ -202,7 +207,7 @@ span.alert-danger {
                 {
                   count++;
                   // checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="UserName: '+result[index].UserName+' and Email: '+result[index].Email+'"><input type="checkbox" name="user_id[]" id="user'+result[index].User_id+' value='+result[index].User_id+'"> '+result[index].Name+'</label></div>';
-                  checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="'+result[index].Email+'"><input type="checkbox" class="user_id" value="'+result[index].User_id+'" name="user_id[]"> '+result[index].Name+'</label></div>'
+                  checkbox += '<div class="col-md-2"><label for="id_'+result[index].User_id+'" class="containerCheckbox" data-toggle="tooltip" title="'+result[index].Email+'"><input type="checkbox" class="user_id" id="id_'+result[index].User_id+'" value="'+result[index].User_id+'" name="user_id[]"> '+result[index].Name+' <span class="checkmark"></span> </label></div>'
                 });
                 // alert(count);
                 $('#count').html('<label class="alert-success">Total Users: '+count+'</label>');
@@ -279,7 +284,7 @@ span.alert-danger {
             $(result).each(function(index,e)
             {
               count++;
-              checkbox += '<div class="col-md-2"><label for="User Details" data-toggle="tooltip" title="'+result[index].Email+'"><input type="checkbox" class="user_id" value="'+result[index].User_id+'" name="user_id[]"> '+result[index].Name+'</label></div>';
+              checkbox += '<div class="col-md-2"><label class="containerCheckbox" for="id'+result[index].User_id+'" data-toggle="tooltip" title="'+result[index].Email+'"><input type="checkbox" id="id'+result[index].User_id+'" class="user_id" value="'+result[index].User_id+'" name="user_id[]"> '+result[index].Name+'<span class="checkmark"></span></label></div>';
             });
 
             $('#count').html('<label class="alert-success">Total Users: '+count+'</label>');

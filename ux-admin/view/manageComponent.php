@@ -37,7 +37,6 @@
 							<input type="hidden" name="Comp_ID" value="<?php if(isset($_GET['edit'])){ echo $result->Comp_ID; } ?>" >
 							<select class="form-control" name="Area_ID" id="area">
 								<option value="">-- SELECT --</option>
-								
 								<?php while($row = $Area->fetch_object()){?>
 								<option 
 									value="<?php echo $row->Area_ID; ?>" 
@@ -49,7 +48,7 @@
 								<?php } ?>
 							</select>
 						</div>
-						
+
 						<div class="form-group">
 							<label>Enter Component Name</label>
 							<input class="form-control" type="text" name="Comp_Name" value="<?php if(isset($_GET['edit'])){ echo $result->Comp_Name; } ?>" >
@@ -63,12 +62,48 @@
 								<button class="btn btn-primary" type="submit" name="submit" value="Submit">Submit</button>
 							<?php } ?>
 						</div>
-					</form>
+							</form>
 				</div>
 			</div>
 		</div>
 		<?php }?>
+		
+		<form method="post" action="">
 		<div class="row">
+			 <div class="col-md-6">
+
+       <a id="HideDownloadIcon"><i class="fa fa-download" aria-hidden="true" data-toggle="tooltip" title="Download Component"></i></a>
+       <div id="downloadCompo">
+       	<div class="row" id="sandbox-container">
+            <div class="input-daterange input-group" id="datepicker">
+          <input type="text" class="input-sm form-control" id="fromdate" name="fromdate"placeholder="Select Start Date" required readonly/>
+          <span class="input-group-addon">to</span>
+          <input type="text" class="input-sm form-control" id="enddate" name="enddate" placeholder="Select End Date" required readonly/>
+        </div>
+        </div>
+        <br>
+        <div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
+        	<label>Select Area</label>
+        	<input type="hidden" name="Comp_ID" value="<?php if(isset($_GET['edit'])){ echo $result->Comp_ID; } ?>" >
+        	<select class="form-control" name="Area[]" id="Area" multiple>
+        		<option value="">-- SELECT --</option>
+
+        		<?php while($Area = $data->fetch_object()){?>
+        			<option 
+        			value="<?php echo $Area->Area_ID; ?>" 
+        			<?php if(isset($_GET['edit']) && $result->Comp_AreaID == $Area->Area_ID){ 
+        				echo 'selected'; 
+        			} ?> >
+        			<?php echo $Area->Area_Name; ?>
+        		</option>
+        	<?php } ?>
+        </select>
+      </div>
+							<button type="submit" name="download_excel" id="download_excel" class="btn btn-primary" value="Download"> Download </button>
+       </div>
+      </div>
+       
+      <div class="col-md-6">
 			<div class="col-sm-12">
 				<div class="pull-right legend">
 					<ul>
@@ -82,6 +117,9 @@
 				</div>
 			</div>
 		</div>
+	</div>
+</form>
+
 		<div class="form-group"></div>
 		<div class="panel panel-default">
 			<div class="panel-heading">Component List</div>
@@ -126,4 +164,3 @@
 		</div>
 	</div>
 </div>
-

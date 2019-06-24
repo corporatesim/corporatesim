@@ -196,4 +196,87 @@ $dataQuery = "SELECT gb.*,gg.Game_Name,gc.Scen_Name,gcn.Scen_Name AS NextSceneNa
 $object = $functionsObj->ExecuteQuery($dataQuery);
 // print_r($object); exit;
 
+//download scenario branching in excelsheet..
+if(isset($_POST['download_excel']) && $_POST['download_excel'] == 'Download'){
+	$game     = $_POST['game'];
+	$scenario1 = $_POST['scenario'];
+	$scenario = implode(',',$scenario1);
+	//echo $scenario;
+
+
+	$objPHPExcel = new PHPExcel;
+	$objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
+	$objPHPExcel->getDefaultStyle()->getFont()->setSize(10);
+	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+	ob_end_clean();
+	$currencyFormat = '#,#0.## \€;[Red]-#,#0.## \€';
+	$numberFormat   = '#,#0.##;[Red]-#,#0.##';
+	$objSheet       = $objPHPExcel->getActiveSheet();
+	
+	$objSheet->setTitle('ScenarioBranching');
+	$objSheet->getStyle('B1:L1')->getFont()->setBold(true)->setSize(12);
+	
+	//$objSheet->getCell('A1')->setValue('Scenario');
+	$objSheet->getCell('B1')->setValue('Game');
+	$objSheet->getCell('C1')->setValue('Scenario');
+	$objSheet->getCell('D1')->setValue('Component');
+	$objSheet->getCell('E1')->setValue('Min Value');
+	$objSheet->getCell('F1')->setValue('Max Value');
+	$objSheet->getCell('G1')->setValue('Next ScenName');
+
+	if($game == '' && $scenario == '')
+	{
+	$sql = "SELECT gbs.Branch_MinVal,gbs.Branch_MaxVal,gg.Game_Name,gs.Scen_Name,gc.Comp_Name,gsn.Scen_Name AS NextSceneName FROM GAME_BRANCHING_SCENARIO gbs INNER JOIN GAME_GAME gg ON gbs.Branch_GameId=gg.Game_ID INNER JOIN GAME_SCENARIO gs ON gbs.Branch_ScenId = gs.Scen_ID INNER JOIN GAME_COMPONENT gc ON gbs.Branch_CompId = gc.Comp_ID INNER JOIN GAME_SCENARIO gsn ON gbs.Branch_NextScen = gsn.Scen_ID";
+  }
+  elseif($scenario == '')
+  {
+    $sql = "SELECT gbs.Branch_MinVal,gbs.Branch_MaxVal,gg.Game_Name,gs.Scen_Name,gc.Comp_Name,gsn.Scen_Name AS NextSceneName FROM GAME_BRANCHING_SCENARIO gbs INNER JOIN GAME_GAME gg ON gbs.Branch_GameId=gg.Game_ID INNER JOIN GAME_SCENARIO gs ON gbs.Branch_ScenId = gs.Scen_ID INNER JOIN GAME_COMPONENT gc ON gbs.Branch_CompId = gc.Comp_ID INNER JOIN GAME_SCENARIO gsn ON gbs.Branch_NextScen = gsn.Scen_ID WHERE gbs.Branch_GameId = $game";
+  }
+  else
+  {
+  	$sql = "SELECT gbs.Branch_MinVal,gbs.Branch_MaxVal,gg.Game_Name,gs.Scen_Name,gc.Comp_Name,gsn.Scen_Name AS NextSceneName FROM GAME_BRANCHING_SCENARIO gbs INNER JOIN GAME_GAME gg ON gbs.Branch_GameId=gg.Game_ID INNER JOIN GAME_SCENARIO gs ON gbs.Branch_ScenId = gs.Scen_ID INNER JOIN GAME_COMPONENT gc ON gbs.Branch_CompId = gc.Comp_ID INNER JOIN GAME_SCENARIO gsn ON gbs.Branch_NextScen = gsn.Scen_ID WHERE gbs.Branch_GameId = $game AND gbs.Branch_ScenId IN ($scenario)";
+  }
+	
+	/*$sql = "SELECT gg.Game_Name,gs.Scen_Name,gc.Comp_Name FROM GAME_PERSONALIZE_OUTCOME gpo INNER JOIN GAME_GAME gg ON gpo.Outcome_GameId = gg.Game_ID INNER JOIN GAME_SCENARIO gs ON gpo.Outcome_ScenId = gs.Scen_ID INNER JOIN GAME_COMPONENT gc ON gpo.Outcome_CompId = gc.Comp_ID WHERE Scen_Datetime BETWEEN '$fromdate' AND '$enddate'";*/
+	
+	$objlink = $functionsObj->ExecuteQuery($sql);
+	
+	if($objlink->num_rows > 0){
+		$i=2;
+		while($row= $objlink->fetch_object()){
+			//$objSheet->getCell('A'.$i)->setValue('Game');
+			$objSheet->getCell('B'.$i)->setValue($row->Game_Name);
+			$objSheet->getCell('C'.$i)->setValue($row->Scen_Name);
+			$objSheet->getCell('D'.$i)->setValue($row->Comp_Name);
+			$objSheet->getCell('E'.$i)->setValue($row->Branch_MinVal);
+			$objSheet->getCell('F'.$i)->setValue($row->Branch_MaxVal);
+			$objSheet->getCell('G'.$i)->setValue($row->NextSceneName);
+			$i++;
+		}
+	}
+	
+	//$objSheet->getColumnDimension('A')->setAutoSize(true);
+	$objSheet->getColumnDimension('B')->setWidth(20);	
+	$objSheet->getColumnDimension('C')->setWidth(20);	
+	$objSheet->getColumnDimension('D')->setWidth(20);
+	$objSheet->getColumnDimension('E')->setWidth(20);
+	$objSheet->getColumnDimension('F')->setWidth(20);	
+	$objSheet->getColumnDimension('G')->setWidth(20);	
+
+	$objSheet->getStyle('B1:B'.$i)->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('D1:D100')->getAlignment()->setWrapText(true);
+	
+	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	header('Content-Disposition: attachment;filename="scenariobranching.xlsx"');
+	header('Cache-Control: max-age=0');
+
+	$objWriter->save('php://output');
+	//$objWriter->save('testoutput.xlsx');
+	//$objWriter->save('testlinkage.csv'); 
+	
+}
+
+$query = "SELECT * FROM GAME_GAME WHERE Game_Delete = 0 ORDER BY Game_Name ASC";
+$execute = $functionsObj->ExecuteQuery($query);
+
 include_once doc_root.'ux-admin/view/ScenarioBranching/'.$file;

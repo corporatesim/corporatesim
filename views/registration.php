@@ -61,7 +61,7 @@
       </div>
     </div>
 
-    <button class="col-md-4 col-md-offset-4 btn" style="background-color:#A93937; color:#ffffff;padding:6px; font-size:22px;border-radius: 5px;  margin-top:50px;" id="registerButton" name="submit" value="Enroll"> Register
+    <button class="col-md-4 col-md-offset-4 btn" style="background-color:#A93937; color:#ffffff;padding:6px; font-size:22px;border-radius: 5px;  margin-top:50px;" id="registerButton" name="submit" value="Enroll" disabled=""> Register
     </button>
 
   </div>
@@ -134,7 +134,7 @@
                <?php echo strip_tags($resultObj->Game_Comments); ?>
              </div>
              <!-- <a style="margin-left:90px;" href="javascript:void(0)" class="btn btn-danger">Register</a> -->
-             <button type="button" class="btn btn-danger openOverlay" data-gameid="<?php echo $resultObj->Game_ID;?>" id="openOverlay_<?php echo $resultObj->Game_ID;?>" style="margin-left:90px; color:#ffffff !important;">Register</button>
+             <button type="button" class="btn btn-danger openOverlay" data-gameid="<?php echo $resultObj->Game_ID;?>" id="openOverlay_<?php echo $resultObj->Game_ID;?>" style="margin-left:90px; color:#ffffff !important;" disabled="">Register</button>
            </div>
          </div>
          <div class="card-back bg-primary" style="width:255px; height:390px !important; background-color: #263238;">
@@ -146,7 +146,7 @@
               <b><a style="margin-left:70px; color:#ffffff !important;" href="#" class="text-center"><?php echo strip_tags($resultObj->Game_Comments);?></a></b></div>
 
               <!-- <a style="margin-left:90px;" href="javascript:void(0)" class="btn btn-danger">Register</a> -->
-              <button type="button" data-gameid="<?php echo $resultObj->Game_ID;?>" class="btn btn-danger openOverlay" id="openOverlay_<?php echo $resultObj->Game_ID;?>" style="margin-left:90px; margin-top:220px; color:#ffffff !important;">Register</button>
+              <button type="button" data-gameid="<?php echo $resultObj->Game_ID;?>" class="btn btn-danger openOverlay" id="openOverlay_<?php echo $resultObj->Game_ID;?>" style="margin-left:90px; margin-top:220px; color:#ffffff !important;" disabled="">Register</button>
             </div>
           </div>
         </div>

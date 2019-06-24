@@ -474,7 +474,7 @@ include_once 'includes/header.php';
                     // adding a refresh icon
                     echo '<a class="refreshChart" data-redirect="'.site_root.'input.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row1['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
                     ?>  
-                    <img class="graph_chart showImageModal comp_chart col-md-12" src="chart/<?=$charttypeComp?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>" style="max-width:<?php echo $ImageMaxWidth; ?>;">
+                    <img class="graph_chart showImageModal comp_chart col-md-12" src="<?php echo site_root;?>chart/<?=$charttypeComp?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>" style="max-width:<?php echo $ImageMaxWidth; ?>;">
                     <?php
                   }
                   echo "</div>";
@@ -647,7 +647,8 @@ include_once 'includes/header.php';
                             continue;
                           }
                           // 'makeDefaultChecked' is the array key for default selection from admin and it's value is the text of the option for the particular question i.e. $wrow
-                          echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
+                          // title-removethis should be replaced with title when we need to show the title
+                          echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
                           // if db value is matched from option value then checked that option, otherwise make admin choice selected
                           if($flag)
                           {
@@ -1053,7 +1054,7 @@ include_once 'includes/header.php';
                     echo '<a class="refreshChart" data-redirect="'.site_root.'input.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row2['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
                     ?>
                     <!-- adding this section to make comp chart insert into subcomp as discussed -->
-                    <img class="graph_chart showImageModal subcomp_chart col-md-12" src="chart/<?=$charttype?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row2['ChartID']?>" style="max-width:<?php echo $sImageMaxWidth; ?>;">
+                    <img class="graph_chart showImageModal subcomp_chart col-md-12" src="<?php echo site_root;?>chart/<?=$charttype?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row2['ChartID']?>" style="max-width:<?php echo $sImageMaxWidth; ?>;">
                     <!-- Edn of adding section to make comp chart insert into subcomp as discussed -->
                     <?php
                   }
@@ -1228,7 +1229,8 @@ include_once 'includes/header.php';
                               $continue++;
                               continue;
                             }
-                            echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
+                            // title-removethis should be replaced with title when we need to show the title
+                            echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
                             // echo (($value == $wrow_value)?'checked':'');
                             if($flag)
                             {

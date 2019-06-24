@@ -34,7 +34,7 @@ include_once 'includes/headerNav.php';
                 <div class="clearfix"></div>
                 <div class="row" id="simulationGames" style="margin-top:20px;">
                   <?php
-                  while ($resultObj = mysqli_fetch_object($sqlObj)) { 
+                  while ($resultObj = mysqli_fetch_object($simulationGames)) { 
                     $image = ($resultObj->Game_Image)?$resultObj->Game_Image:'Game2.jpg';
                     ?>
                     <form method="post" action="">
@@ -48,10 +48,10 @@ include_once 'includes/headerNav.php';
                               <h3 style="height:70px;"  class="card-title text-center"><?php echo $resultObj->Game_Name;?></h3>
                               <img class="cardimg" src="<?php echo site_root.'images/'.$image;?>" style="width:100%; height:150px; margin-top:-15px"><br><br>
                               <div class="link" style="height:35px;margin-top: -8px;">
-                                <a style="margin-left:80px; color:#ffffff !important;" href="#" class="text-center">How to Play</a>
+                                <!-- <a style="margin-left:80px; color:#ffffff !important;" href="#" class="text-center">How to Play</a> -->
                               </div>
                               <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a> -->
-                              <button type="submit" style="margin-left:80px;margin-top:-5px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
+                              <button type="submit" style="margin-left:80px;margin-top:-5px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll" disabled="">Enroll</button>
                             </div>
                           </div>
                           <div class="card-back bg-primary reduce_flipspeed" style="width:222px;height:320px; background-color: #263238;">
@@ -62,7 +62,7 @@ include_once 'includes/headerNav.php';
 
                               <div  style="margin-top:180px; margin-top:110px;">
                                <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a>  -->
-                               <button type="submit" style="margin-left:80px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
+                               <button type="submit" style="margin-left:80px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll" disabled="">Enroll</button>
                              </div>
                            </div>
                          </div>
@@ -87,36 +87,36 @@ include_once 'includes/headerNav.php';
             <div class="row" id="simulationElearning" style="margin-top:20px;">
               <?php
 
-              while ($result = mysqli_fetch_object($sqlObj1)) { 
+              while ($resultElearning = mysqli_fetch_object($simulationElearning)) { 
 
-                $image = ($result->Game_Image)?$result->Game_Image:'Game2.jpg';
+                $image = ($resultElearning->Game_Image)?$resultElearning->Game_Image:'Game2.jpg';
                 ?>
                 <form method="post" action="">
-                  <input type="hidden" id="gameId" name="gameId" value="<?php echo $result->Game_ID;?>">
-                  <input type="hidden" id="gameName" name="gameName" value="<?php echo $result->Game_Name; ?>"> 
-                  <input type="hidden" id="Description" name="Description" value='"<?php echo $result->Game_Comments;?>"'>
-                  <div class="col-md-4 col-xs-12 col-sm-6 col-lg-3 reduce_width" title="<?php echo $result->Game_Name; ?>">
+                  <input type="hidden" id="gameId" name="gameId" value="<?php echo $resultElearning->Game_ID;?>">
+                  <input type="hidden" id="gameName" name="gameName" value="<?php echo $resultElearning->Game_Name; ?>"> 
+                  <input type="hidden" id="Description" name="Description" value='"<?php echo $resultElearning->Game_Comments;?>"'>
+                  <div class="col-md-4 col-xs-12 col-sm-6 col-lg-3 reduce_width" title="<?php echo $resultElearning->Game_Name; ?>">
                     <div style="background:none; height:330px !important;" class="card card-flip h-100">
                       <div class="card-front text-white" style="background-color: #263238;" >
                         <div class="card-body">
-                          <h3 style="height:70px;"  class="card-title text-center"><?php echo $result->Game_Name;?></h3>
+                          <h3 style="height:70px;"  class="card-title text-center"><?php echo $resultElearning->Game_Name;?></h3>
                           <img class="cardimg" src="<?php echo site_root.'images/'.$image;?>" style="width:100%; height:150px; margin-top:-20px"><br><br>
                           <div class="link" style="height:35px;margin-top: -8px;">
-                            <a style="margin-left:80px; color:#ffffff !important;" href="#" class="text-center">How to Play</a>
+                            <!-- <a style="margin-left:80px; color:#ffffff !important;" href="#" class="text-center">How to Play</a> -->
                           </div>
                           <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a> -->
-                          <button type="submit" style="margin-left:80px;margin-top:-2px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
+                          <button type="submit" style="margin-left:80px;margin-top:-2px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll" disabled="">Enroll</button>
                         </div>
                       </div>
                       <div class="card-back bg-primary reduce_flipspeed" style="width:222px;height:320px; background-color: #263238;">
                         <div class="card-body">
                           <h3 style="margin-left:10px;" class="card-title text-center">Know More</h3><br>
-                          <p class="card-text text-center" style="margin-left:20px"><?php echo $result->Game_Comments;?></p>
+                          <p class="card-text text-center" style="margin-left:20px"><?php echo $resultElearning->Game_Comments;?></p>
                           <a class="how-to" style="margin-left:50px; color:#ffffff !important;" href="#" class="text-center"></a>
 
                           <div  style="margin-top:180px; margin-top:150px;">
                            <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a>  -->
-                           <button type="submit" style="margin-left:80px;margin-top:-5px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
+                           <button type="submit" style="margin-left:80px;margin-top:-5px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll" disabled="">Enroll</button>
                          </div>
                        </div>
                      </div>
@@ -141,7 +141,7 @@ include_once 'includes/headerNav.php';
           <div class="row" id="simulationAssesment" style="margin-top:20px;">
             <?php
 
-            while ($resultAssesment = mysqli_fetch_object($sqlObj2)) { 
+            while ($resultAssesment = mysqli_fetch_object($simulationAssesment)) { 
 
               $image = ($resultAssesment->Game_Image)?$resultAssesment->Game_Image:'Game2.jpg';
               ?>
@@ -157,10 +157,10 @@ include_once 'includes/headerNav.php';
                         <h3 style="height:70px;"  class="card-title text-center"><?php echo $resultAssesment->Game_Name;?></h3>
                         <img class="cardimg" src="<?php echo site_root.'images/'.$image;?>" style="width:100%; height:150px; margin-top:-20px"><br><br>
                         <div class="link" style="height:35px;margin-top:-8px; ">
-                          <a style="margin-left:80px; color:#ffffff !important;" href="#" class="text-center">How to Play</a>
+                          <!-- <a style="margin-left:80px; color:#ffffff !important;" href="#" class="text-center">How to Play</a> -->
                         </div>
                         <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a> -->
-                        <button type="submit" style="margin-left:80px; margin-top: -1px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
+                        <button type="submit" style="margin-left:80px; margin-top: -1px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll" disabled="">Enroll</button>
                       </div>
                     </div>
                     <div class="card-back bg-primary reduce_flipspeed" style="width:222px;height:320px; background-color: #263238;">
@@ -171,7 +171,7 @@ include_once 'includes/headerNav.php';
 
                         <div  style="margin-top:180px; margin-top:150px;">
                          <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="enroll btn btn-danger">Enroll</a>  -->
-                         <button type="submit" style="margin-left:80px;margin-top: -5px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll">Enroll</button>
+                         <button type="submit" style="margin-left:80px;margin-top: -5px;" class="enroll btn btn-danger" name= "submit" id="submit" value="Enroll" disabled="">Enroll</button>
                        </div>
                      </div>
                    </div>

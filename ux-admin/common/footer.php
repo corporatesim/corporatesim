@@ -100,6 +100,135 @@
 //-->
 </script>
 
+<script>
+	<!--
+		$(document).ready(function(){
+			$('#select_all_checkbox').on('click',function(){
+				$(this).children('#select_all').trigger('click');
+			});
+	// selecte all
+	$('#select_all').on('click',function(){
+		if($(this).is(':checked')){
+			$('input[type="checkbox"]').prop('checked',true);
+			$('.checkbox').each(function(index, el){
+				$(this).css({'background-color':'#ccc'});
+			});
+		}
+		else
+		{
+			$('input[type="checkbox"]').prop('checked',false);
+			$('.checkbox').each(function(index, el){
+				$(this).css({'background-color':'#ffffff'});
+			});
+			$('.enableDisable').css({'background-color':'#d3d3d3'});
+			$('.enableDisableSub').css({'background-color':'#d3d3d3'});
+		}
+	});
+
+	$('#siteuser_btn').click( function(){
+		$( "#siteuser_sbmit" ).trigger( "click" );
+	});
+	$('#siteuser_btn_update').click( function(){
+		var User_GameStartDate = $('#User_GameStartDate').val();
+		var User_GameEndDate   = $('#User_GameEndDate').val();
+		if(User_GameEndDate < User_GameStartDate)
+		{
+			alert('End date must be greate than start date.');
+			return false;
+		}
+
+		$("#siteuser_update").trigger("click");
+	});
+	// changing back ground color of checkbox for checked and not checked
+	$('.usergame').each(function(index, el)
+	{
+		$(el).on('click',function(){
+			if($(this).is(':checked'))
+			{
+				$(this).parent('label').css({'background-color':'#ccc'});
+			}
+			else
+			{
+				$(this).parent('label').css({'background-color':'#ffffff'});
+				$('#select_all').prop('checked',false);
+				$('#select_all_checkbox').css({'background-color':'#ffffff'});
+			}
+		});
+	});
+});
+
+// -->
+</script>
+<!-- to download area,compo,subcompo,game,scenario,personalize outcomes in excelsheet -->
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#downloadArea").hide();
+		$("#downloadCompo").hide();
+		$("#downloadSubCompo").hide();
+		$("#downloadGame").hide();
+		$("#downloadScenario").hide();
+		$("#downloadPersonalizeOutcome").hide();
+		$("#downloadScenarioBranching").hide();
+		
+		$("#HideDownloadIcon").on('click',function(){
+			$("#downloadArea").toggle();
+			$("#downloadCompo").toggle();
+			$("#downloadSubCompo").toggle();
+			$("#downloadGame").toggle();
+			$("#downloadScenario").toggle();
+			$("#downloadPersonalizeOutcome").toggle();
+			$("#downloadScenarioBranching").toggle();
+			
+			$("#download_excel").click(function(){
+				var fromdate = $('input[name="fromdate"]').val()
+				var enddate  = $('input[name="enddate"]').val()
+				//alert(enddate);
+				if(fromdate == '' || enddate == '')
+				{//alert("empty");
+			var yes = confirm("Startdate and Enddate is empty,This will download all data");
+			if(yes)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+		}
+		if(fromdate > enddate)
+		{
+			alert("Please select the valid date");
+			return false;
+		}
+				//alert(fromdate);
+			});
+		/*	$("#HideDownloadIcon").addClass("hidden");
+			$("#downloadArea").removeClass("hidden");
+			$("#downloadCompo").removeClass("hidden");
+			$("#downloadSubCompo").removeClass("hidden");*/
+		});
+	});
+</script>
+
+<!-- dropdown for personalize outcome and scenario branching download in excel -->
+  <script type="text/javascript">
+  $('#game').change( function(){
+    var game = $(this).val();
+    //alert(game_id);
+    $('#scenario').html('<option value="">-- SELECT --</option>');
+  
+    $.ajax({
+      url: "<?php echo site_root; ?>ux-admin/model/ajax/populate_dropdown.php",
+      type: "POST",
+      data: { game: game },
+      success: function(data){
+        $('#scenario').html(data);
+      }
+    });
+  });
+  </script> 
+
 <div class="col-sm-12">
 	<div class="col-sm-8">
 		<p style="padding: 10px 0; margin:0px;">&copy; 2017.  All rights reserved</p>

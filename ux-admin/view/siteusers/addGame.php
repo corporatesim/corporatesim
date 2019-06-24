@@ -1,8 +1,8 @@
 <style type="text/css">
-span.alert-danger {
-	background-color: #ffffff;
-	font-size: 18px;
-}
+	span.alert-danger {
+		background-color: #ffffff;
+		font-size: 18px;
+	}
 </style>
 
 <div class="row">
@@ -44,8 +44,11 @@ span.alert-danger {
 				<input type="hidden" name="id" value="<?php if(isset($_GET['edit'])){ echo $userdetails->User_id; } ?>">
 			</div>
 			<div class="col-md-6">
-				<input type="checkbox" name="select_all" id="select_all">
-				<label for="name">Selecte All</label>
+				<label for="name" class="checkbox containerCheckbox" id="select_all_checkbox">
+					<input type="checkbox" name="select_all" id="select_all">
+					Selecte All
+					<span class="checkmark"></span>
+				</label>
 			</div>
 		</div>
 		<div class="row">
@@ -62,28 +65,28 @@ span.alert-danger {
 					//print_r($row);exit;
 						$object = $functionsObj->SelectData(array(), 'GAME_USERGAMES', array('UG_UserID='.$id, 'UG_GameID='.$row['Game_ID']), '', '', '', '', 0);
 
-						echo "<div class='col-sm-4'><div class='checkbox'";
+						echo "<div class='col-sm-4'><label class='checkbox containerCheckbox'";
 						if($object->num_rows > 0)
 						{
 							if($row['Game_Elearning'] == 1)
 							{
-							echo "style='background:#ccc;'><input type='checkbox' checked='checked' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name']." <b>(Elearning)</b>";
-						}else
-						{
-							echo "style='background:#ccc;'><input type='checkbox' checked='checked' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name'];
-						}
+								echo "style='background:#ccc;'><input type='checkbox' checked='checked' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name']." <b>(Elearning)</b>";
+							}else
+							{
+								echo "style='background:#ccc;'><input type='checkbox' checked='checked' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name'];
+							}
 						}
 						else{
 
 							if($row['Game_Elearning'] == 1)
 							{
-							echo "><input type='checkbox' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name']." <b>(eLearning)</b>";
+								echo "><input type='checkbox' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name']." <b>(eLearning)</b>";
+							}
+							else{
+								echo "><input type='checkbox' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name'];
+							}
 						}
-						else{
-							echo "><input type='checkbox' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name'];
-						}
-						}
-						echo "</div></div>";
+						echo "<span class='checkmark'></label></div>";
 					}
 					?>
 				</div>
@@ -147,87 +150,4 @@ span.alert-danger {
 	</div>
 	<div class="clearfix"></div>
 
-	<script>
-		<!--
-
-//$("#siteuser_frm").validate({
-//	rules: {
-//		fname: "required",
-//		lname: "required",
-//		mobile: {
-//			required: true,
-//			minlength: 10,
-//			maxlength: 10
-//		},
-//		email:  {
-//			required: true,
-//			email: true
-//		},
-//		username: "required"
-//	},
-//	// Specify validation error messages
-//	messages: {
-//		mobile: {
-//			required: "Please provide mobile number",
-//			minlength: "Please Enter a valid 10 digit mobile number",
-//			maxlength: "Please Enter a valid 10 digit mobile number"
-//		}
-//    },
-//    errorPlacement: function(error, element) {
-//		if (element.attr("name") == "mobile" ){  //Id of input field
-//             error.appendTo('.contact_error');
-//		}
-//	}
-//});
-
-$(document).ready(function(){
-	// selecte all
-	$('#select_all').on('click',function(){
-		if($(this).is(':checked')){
-			$('input[type="checkbox"]').prop('checked',true);
-			$('.checkbox').each(function(index, el){
-				$(this).css({'background-color':'#ccc'});
-			});
-		}
-		else
-		{
-			$('input[type="checkbox"]').prop('checked',false);
-			$('.checkbox').each(function(index, el){
-				$(this).css({'background-color':'#ffffff'});
-			});
-		}
-	});
-
-	$('#siteuser_btn').click( function(){
-		$( "#siteuser_sbmit" ).trigger( "click" );
-	});
-	$('#siteuser_btn_update').click( function(){
-		var User_GameStartDate = $('#User_GameStartDate').val();
-		var User_GameEndDate   = $('#User_GameEndDate').val();
-		if(User_GameEndDate < User_GameStartDate)
-		{
-			alert('End date must be greate than start date.');
-			return false;
-		}
-
-		$("#siteuser_update").trigger("click");
-	});
-	// changing back ground color of checkbox for checked and not checked
-	$('.usergame').each(function(index, el)
-	{
-		$(el).on('click',function(){
-			if($(this).is(':checked'))
-			{
-				$(this).parent('div').css({'background-color':'#ccc'});
-			}
-			else
-			{
-				$(this).parent('div').css({'background-color':'#ffffff'});
-				$('#select_all').prop('checked',false);
-			}
-		});
-	});
-});
-
-// -->
-</script>
+	

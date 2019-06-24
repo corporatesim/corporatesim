@@ -90,7 +90,39 @@ span.alert-danger {
 </style>
 
 <!-- data table starts here -->
+<form method="post" action="">
 <div class="row">
+   <div class="col-md-6">
+
+     <a id="HideDownloadIcon"><i class="fa fa-download" aria-hidden="true" data-toggle="tooltip" title="Download Scenario Branching"></i></a>
+     <br>
+     <div id="downloadScenarioBranching">
+       <div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
+            <label>Select Game</label> 
+            <select class="form-control"
+            name="game" id="game">
+            <option value="">-- SELECT --</option>
+            <?php while($row = $execute->fetch_object()){?>
+              <option value="<?php echo $row->Game_ID;?>">
+                <?php echo $row->Game_Name;?>
+              </option>
+              <?php }?>
+          </select>
+        </div>
+
+        <div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
+          <label>Select Scenario</label> <select class="form-control"
+          name="scenario[]" id="scenario" multiple>
+          <option value="">-- SELECT --</option>
+              <option value="">
+                </option>
+          </select>
+        </div>
+      <button type="submit" name="download_excel" id="download_excel" class="btn btn-primary" value="Download"> Download </button>
+    </div>
+
+  </div>
+  <div class="col-md-6">
   <div class="col-lg-12">
     <div class="pull-right legend">
       <ul>
@@ -107,6 +139,8 @@ span.alert-danger {
     </div>
   </div>
 </div>
+</div>
+</form>
 <div class="row">
   <div class="panel panel-default" id="loader">
     <div class="panel-heading">

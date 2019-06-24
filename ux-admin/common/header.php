@@ -149,8 +149,14 @@
 		<li id="manageCMSmis"><a href="#"><i class="fa fa-file"></i> MIS Report <span class="fa arrow"></span></a>
 			<ul class="nav nav-second-level">
 				<?php if($functionsObj->checkModuleAuth('createMis','enable')){ ?>
+					<!-- <li>
+						<a href="<?php // echo site_root."ux-admin/createMis";?>">Create MIS</a>
+					</li> -->
 					<li>
-						<a href="<?php echo site_root."ux-admin/createMis";?>">Create MIS</a>
+						<a href="<?php echo site_root."ux-admin/manageCompetency";?>">Manage Competency</a>
+					</li>
+					<li>
+						<a href="<?php echo site_root."ux-admin/competencyFormula";?>">Manag Competency Formula</a>
 					</li>
 				<?php } ?>
 			</ul>

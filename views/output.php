@@ -479,15 +479,17 @@ include_once 'includes/header.php';
 
                   //Get SubComponent for this Component, linkid
                    $sqlsubcomp = "SELECT distinct a.Area_ID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_SubCompID as SubCompID,  
+                   go.output_current AS outputValue,
                    a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, s.SubComp_Name as SubComp_Name,ls.SubLink_ViewingOrder as ViewingOrder,
                    ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast,ls.SubLink_InputFieldOrder as InputFieldOrder,
                    ls.subLink_ShowHide as ShowHide,
-                   ls.SubLink_Details as Description ,ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle
+                   ls.SubLink_Details as Description ,ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle, ls.SubLink_InputMode as Mode, ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, ls.SubLink_SubCompIDcarry as CarrySubCompID
                    FROM GAME_LINKAGE l 
                    INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
                    INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
                    INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
                    INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+                   LEFT JOIN GAME_OUTPUT go ON go.output_sublinkid=ls.SubLink_ID AND go.output_user=$userid
                    LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
                    INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
                    WHERE ls.SubLink_Type=1 AND ls.SubLink_SubCompID>0 and ls.SubLink_CompID=".$row1['CompID']." ORDER BY ls.SubLink_Order";
@@ -736,6 +738,25 @@ include_once 'includes/header.php';
 
                   }*/
                 // if component div is half length then make subcomponent div col-md-12
+                  if($row2['Mode'] == 'carry')
+                  {
+                    $sqlcurrent = "SELECT input_current FROM `GAME_INPUT` 
+                    WHERE input_user=".$userid." AND input_sublinkid = 
+                    (SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` 
+                    WHERE SubLink_LinkID=".$row2['CarryLinkID']." and SubLink_CompID=".$row2['CarryCompID'];
+                    if($row2['CarrySubCompID']>0)         
+                    {
+                      $sqlcurrent .= " AND SubLink_SubCompID = ".$row2['CarrySubCompID'];
+                    }          
+                    $sqlcurrent .= ")";
+                    $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);
+                    $rescarry        = $functionsObj->FetchObject($objcarrycurrent);
+                    $opValue         = $rescarry->input_current;
+                  }
+                  else
+                  {
+                    $opValue = $row2['outputValue'];
+                  }
                   echo "<div class='".$length." subCompnent ".$hidden."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor'].";'>";
                   echo "<div class='col-sm-2 ".$width." regular text-center ".$SubcomponentName."' style='font-size: ".$row2['fontSize']."px; font-family: ".$row2['fontStyle'].";'>";
                   echo $row2['SubComp_Name'];
@@ -746,7 +767,7 @@ include_once 'includes/header.php';
                   echo "<div class=' col-sm-6 ".$width1." text-center ".$InputFields."'>";
                   echo "<div class='InlineBox ".$labelC."'>";
                   echo "<label class='scenariaLabel'>".$row2['LabelCurrent']."</label>";
-                  echo "<input type='text' id='subcomp_".$row2['SubCompID']."' name='".$row2['Area_Name']."_subc_".$row2['SubCompID']."' class='scenariaInput' readonly></input>";
+                  echo "<input type='text' id='subcomp_".$row2['SubCompID']."' name='".$row2['Area_Name']."_subc_".$row2['SubCompID']."' class='scenariaInput' readonly ".$row2['Mode']." value='".$opValue."'></input>";
                   echo "</div>";
                   echo "<div class='InlineBox ".$labelL."'>";
                   echo "<label class='scenariaLabel'>".$row2['LabelLast']."</label>";

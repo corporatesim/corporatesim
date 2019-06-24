@@ -1,8 +1,8 @@
 <style type="text/css">
-span.alert-danger {
-  background-color: #ffffff;
-  font-size: 18px;
-}
+  span.alert-danger {
+    background-color: #ffffff;
+    font-size: 18px;
+  }
 </style>
 <div class="row">
   <div class="col-lg-12">
@@ -60,23 +60,33 @@ span.alert-danger {
                   </div>
                 </div>
               </div>
-              <div class="row name" id="Scen_InputButton">
-                <div class="col-sm-6">
-                  <!-- <input type="hidden" name="id" value="<?php // if(isset($_GET['edit'])){ echo $scendetails->Scen_ID; } ?>"> -->
-                  <div class="form-group">
-                    <label for="Scen_InputButton"><span class="alert-danger">*</span>Input Button Status</label><br>
-                    <input type="radio" name="Scen_InputButton" value="0" placeholder="Scenario Name" required <?php echo ($scendetails->Scen_InputButton == 0)?'checked':'';?>> Hide
-                    <input type="radio" name="Scen_InputButton" value="1" placeholder="Scenario Name" required <?php echo ($scendetails->Scen_InputButton == 1)?'checked':'';?>> Show
-                  </div>
+              <div class="row name col-sm-12" id="Scen_InputButton">
+                <!-- <input type="hidden" name="id" value="<?php // if(isset($_GET['edit'])){ echo $scendetails->Scen_ID; } ?>"> -->
+                <label for="Scen_InputButton"><span class="alert-danger">*</span>Input Button Status</label><br>
+
+                <div class="col-md-2">
+                  <label for="radioHide" class="containerRadio">
+                    <input type="radio" id="radioHide" name="Scen_InputButton" value="0" placeholder="Scenario Name" required <?php echo ($scendetails->Scen_InputButton == 0)?'checked':'';?>> Hide
+                    <span class="checkmarkRadio"></span>
+                  </label>
+                </div>
+
+                <div class="col-md-2">
+                  <label for="radioShow" class="containerRadio">
+                    <input type="radio" id="radioShow" name="Scen_InputButton" value="1" placeholder="Scenario Name" required <?php echo ($scendetails->Scen_InputButton == 1)?'checked':'';?>> Show
+                    <span class="checkmarkRadio"></span>
+                  </label>
                 </div>
               </div>
               <!-- adding this checkbox for component branching -->
               <div class="row name" id="Scen_Branching">
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                   <div class="form-group">
                     <div class="form-check">
-                      <input type="checkbox" class="form-check-input" id="Scen_Branching" name="Scen_Branching" value="1" <?php echo ($scendetails->Scen_Branching == 1)?'checked':'25';?>>
-                      <label class="form-check-label" for="Component Branching">Component Branching</label>
+                      <label class="form-check-label containerCheckbox" for="Scen_Branchings">
+                        <input type="checkbox" class="form-check-input" id="Scen_Branchings" name="Scen_Branching" value="1" <?php echo ($scendetails->Scen_Branching == 1)?'checked':'25';?>> Component Branching
+                        <span class="checkmark"></span>
+                      </label>
                     </div>
                   </div>
                 </div>

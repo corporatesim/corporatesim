@@ -1,5 +1,6 @@
 <?php
 require_once doc_root . 'ux-admin/model/model.php';
+require_once doc_root.'includes/PHPExcel.php';
 $functionsObj = new Model ();
 
 if (isset ( $_POST ['submit'] ) && $_POST ['submit'] == 'Submit') {
@@ -155,5 +156,93 @@ $object = $functionsObj->ExecuteQuery ( $sql );
 $Area   = $functionsObj->SelectData ( array (), 'GAME_AREA', array (
 	'Area_Delete = 0' 
 ), 'Area_Name', '', '', '', 0 );
+
+$data   = $functionsObj->SelectData ( array (), 'GAME_AREA', array (
+	'Area_Delete = 0' 
+), 'Area_Name', '', '', '', 0 );
+
+//echo "<pre>";print_r($data);exit;
+//download Component in excelsheet..
+if(isset($_POST['download_excel']) && $_POST['download_excel'] == 'Download'){
+	$areaid = $_POST['Area'];
+	$data = implode(',',$areaid);
+	//echo $data;exit;
+//print_r($areaid[0]);exit;
+	//echo $areaid;exit;
+
+	$from     =  $_POST['fromdate'];
+	$end      =  $_POST['enddate'];
+	$fromdate = date('Y-m-d', strtotime($from));
+	$enddate  = date('Y-m-d', strtotime($end));
+	//echo $fromdate;exit;
+
+	//echo "<pre>";print_r($_POST);exit;
+  $objPHPExcel = new PHPExcel;
+	$objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
+	$objPHPExcel->getDefaultStyle()->getFont()->setSize(10);
+	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+	ob_end_clean();
+	$currencyFormat = '#,#0.## \€;[Red]-#,#0.## \€';
+	$numberFormat   = '#,#0.##;[Red]-#,#0.##';
+	$objSheet       = $objPHPExcel->getActiveSheet();
+	
+	$objSheet->setTitle('Component');
+	$objSheet->getStyle('B1:L1')->getFont()->setBold(true)->setSize(12);
+	
+	//$objSheet->getCell('A1')->setValue('Game');
+	$objSheet->getCell('B1')->setValue('Area');
+	$objSheet->getCell('C1')->setValue('Comp Name');
+	
+	if($from == '' && $end == '' && $areaid == '')
+	{
+     $sql ="SELECT ga.Area_Name,gc.Comp_Name FROM GAME_AREA ga INNER JOIN GAME_COMPONENT gc ON ga.Area_ID = gc.Comp_AreaID ";	
+	}
+	elseif($from == '' && $end == '')
+	{
+		$sql = "SELECT ga.Area_Name,gc.Comp_Name FROM GAME_AREA ga INNER JOIN GAME_COMPONENT gc ON ga.Area_ID = gc.Comp_AreaID WHERE ga.Area_ID IN($data)";
+	}
+	elseif($areaid == '')
+	{
+		$sql = "SELECT ga.Area_Name,gc.Comp_Name FROM GAME_AREA ga INNER JOIN GAME_COMPONENT gc ON ga.Area_ID = gc.Comp_AreaID WHERE gc.Comp_Date BETWEEN '$fromdate' AND '$enddate'";
+	}
+	else
+	{
+		$sql = "SELECT ga.Area_Name,gc.Comp_Name FROM GAME_AREA ga INNER JOIN GAME_COMPONENT gc ON ga.Area_ID = gc.Comp_AreaID WHERE gc.Comp_Date BETWEEN '$fromdate' AND '$enddate' AND ga.Area_ID IN($data)";
+	}
+	 //echo $sql;exit;	
+
+	$objlink = $functionsObj->ExecuteQuery($sql);
+	
+	if($objlink->num_rows > 0){
+		$i=2;
+		while($row= $objlink->fetch_object()){
+			//$objSheet->getCell('A'.$i)->setValue('Game');
+			$objSheet->getCell('B'.$i)->setValue($row->Area_Name);
+			$objSheet->getCell('C'.$i)->setValue($row->Comp_Name);
+			$i++;
+		}
+	}
+	
+	//$objPHPExcel->
+	
+	//$objSheet->getColumnDimension('A')->setAutoSize(true);
+	$objSheet->getColumnDimension('B')->setWidth(20);	
+	$objSheet->getColumnDimension('C')->setWidth(10); 
+	
+	$objSheet->getStyle('B1:B'.$i)->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('D1:D100')->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('F1:F100')->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('J1:J100')->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('K1:K100')->getAlignment()->setWrapText(true);
+	
+	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	header('Content-Disposition: attachment;filename="Component.xlsx"');
+	header('Cache-Control: max-age=0');
+
+	$objWriter->save('php://output');
+	//$objWriter->save('testoutput.xlsx');
+	//$objWriter->save('testlinkage.csv'); 
+	
+}
 
 include_once doc_root . 'ux-admin/view/manageComponent.php';

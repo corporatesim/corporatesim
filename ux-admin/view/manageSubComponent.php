@@ -94,94 +94,145 @@
 			</div>
 		</div>
 	<?php } ?>
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="pull-right legend">
-				<ul>
-					<li><b>Legend : </b></li>
-					<li><span class="glyphicon glyphicon-ok"> </span><a
-						href="javascript:void(0);" data-toggle="tooltip"
-						title="This is Active Status"> Active </a></li>
-						<li><span class="glyphicon glyphicon-remove"> </span><a
+	<form method="post" action="">
+		<div class="row">
+			<div class="col-md-6">
+				<a id="HideDownloadIcon"><i class="fa fa-download" aria-hidden="true" data-toggle="tooltip" title="Download SubComponent"></i></a>
+				<div id="downloadSubCompo">
+					<div class="row" id="sandbox-container">
+            <div class="input-daterange input-group" id="datepicker">
+          <input type="text" class="input-sm form-control" id="fromdate" name="fromdate"placeholder="Select Start Date" required readonly/>
+          <span class="input-group-addon">to</span>
+          <input type="text" class="input-sm form-control" id="enddate" name="enddate" placeholder="Select End Date" required readonly/>
+        </div>
+        </div>
+        <br>
+					<div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
+						<label>Select Area</label> 
+						<select class="form-control"
+						name="area[]" id="area" multiple>
+						<option value="">-- SELECT --</option>
+						<?php while($row = $areaforexcel->fetch_object()){ ?>
+							<option value="<?php echo $row->Area_ID; ?>"
+								<?php if(isset($result->SubComp_AreaID) && $result->SubComp_AreaID == $row->Area_ID){echo 'selected'; } ?>>
+								<?php echo $row->Area_Name; ?>
+							</option>
+						<?php } ?>
+					</select>
+				</div>
+
+				<div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
+					<label>Select Component</label> <select class="form-control"
+					name="comp[]" id="comp" multiple>
+					<option value="">-- SELECT --</option>
+					<?php
+					
+					if (isset ( $_GET ['Edit'] )) {
+						while ( $rowdata = $componentforexcel->fetch_object () ) {
+							?>   
+							<option value="<?php echo $rowdata->Comp_ID; ?>"
+								<?php if($rowdata->Comp_ID == $result->SubComp_CompID){ echo 'selected'; } ?>><?php echo $rowdata->Comp_Name; ?></option>
+								<?php
+								
+							}
+						}
+						?>
+					</select>
+				</div>
+				<button type="submit" name="download_excel" id="download_excel" class="btn btn-primary" value="Download"> Download </button>
+			</div>
+		</div>
+		
+		<div class="col-md-6">
+			<div class="col-sm-12">
+				<div class="pull-right legend">
+					<ul>
+						<li><b>Legend : </b></li>
+						<li><span class="glyphicon glyphicon-ok"> </span><a
 							href="javascript:void(0);" data-toggle="tooltip"
-							title="This Deactive Status"> Deactive </a></li>
-							<li><span class="glyphicon glyphicon-search"> </span><a
+							title="This is Active Status"> Active </a></li>
+							<li><span class="glyphicon glyphicon-remove"> </span><a
 								href="javascript:void(0);" data-toggle="tooltip"
-								title="User Can View the Record"> View </a></li>
-								<li><span class="glyphicon glyphicon-pencil"> </span><a
+								title="This Deactive Status"> Deactive </a></li>
+								<li><span class="glyphicon glyphicon-search"> </span><a
 									href="javascript:void(0);" data-toggle="tooltip"
-									title="User Can Edit the Record"> Edit </a></li>
-									<li><span class="glyphicon glyphicon-trash"> </span><a
+									title="User Can View the Record"> View </a></li>
+									<li><span class="glyphicon glyphicon-pencil"> </span><a
 										href="javascript:void(0);" data-toggle="tooltip"
-										title="User Can Delete the Record"> Delete </a></li>
-									</ul>
+										title="User Can Edit the Record"> Edit </a></li>
+										<li><span class="glyphicon glyphicon-trash"> </span><a
+											href="javascript:void(0);" data-toggle="tooltip"
+											title="User Can Delete the Record"> Delete </a></li>
+										</ul>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div class="form-group"></div>
-						<div class="panel panel-default">
-							<div class="panel-heading">Sub Component List</div>
-							<div class="panel-body">
-								<div class="dataTable_wrapper">
-									<table class="table table-striped table-bordered table-hover"
-									id="dataTables-example">
-									<thead>
-										<tr>
-											<th>#</th>
-											<th>Sub Component Name</th>
-											<th>Component Name</th>
-											<th>Area Name</th>
-											<th class="no-sort">Action</th>
-										</tr>
-									</thead>
-									<tbody>
-										<?php
-										if ($subcomponent->num_rows > 0) {
-											$i = 1;
-											while ( $row = $subcomponent->fetch_object () ) {
-												?>
-												<tr>
-													<th><?php echo $i;?></th>
-													<td><?php echo $row->SubComp_Name;?></td>
-													<td><?php echo $row->c_name;?></td>
-													<td><?php echo $row->s_name;?></td>
-													<td class="text-center">
-														<?php if($functionsObj->checkModuleAuth('sub component','edit')){ ?>
-															<a
-															href="<?php echo site_root."ux-admin/ManageSubComponent/Edit/".base64_encode($row->SubComp_ID);?>"
-															title="Edit">
-															<span class="fa fa-pencil"></span>
-														</a>
-													<?php } if($functionsObj->checkModuleAuth('sub component','delete')){ ?>
-														<a	href="javascript:void(0);" class="dl_btn"
-														id="<?php echo $row->SubComp_ID; ?>" title="Delete">
-														<span class="fa fa-trash"></span>
+					</form>
+					<div class="form-group"></div>
+					<div class="panel panel-default">
+						<div class="panel-heading">Sub Component List</div>
+						<div class="panel-body">
+							<div class="dataTable_wrapper">
+								<table class="table table-striped table-bordered table-hover"
+								id="dataTables-example">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Sub Component Name</th>
+										<th>Component Name</th>
+										<th>Area Name</th>
+										<th class="no-sort">Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+									if ($subcomponent->num_rows > 0) {
+										$i = 1;
+										while ( $row = $subcomponent->fetch_object () ) {
+											?>
+											<tr>
+												<th><?php echo $i;?></th>
+												<td><?php echo $row->SubComp_Name;?></td>
+												<td><?php echo $row->c_name;?></td>
+												<td><?php echo $row->s_name;?></td>
+												<td class="text-center">
+													<?php if($functionsObj->checkModuleAuth('sub component','edit')){ ?>
+														<a
+														href="<?php echo site_root."ux-admin/ManageSubComponent/Edit/".base64_encode($row->SubComp_ID);?>"
+														title="Edit">
+														<span class="fa fa-pencil"></span>
 													</a>
-												<?php } ?>
-											</td>
-										</tr>
-										<?php
-										
-										$i ++;
-									}
+												<?php } if($functionsObj->checkModuleAuth('sub component','delete')){ ?>
+													<a	href="javascript:void(0);" class="dl_btn"
+													id="<?php echo $row->SubComp_ID; ?>" title="Delete">
+													<span class="fa fa-trash"></span>
+												</a>
+											<?php } ?>
+										</td>
+									</tr>
+									<?php
+									
+									$i ++;
 								}
-								?>
-							</tbody>
-						</table>
-					</div>
+							}
+							?>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
 
-	<script type="text/javascript">
-		$('#area_id').change( function(){
-			var area_id = $(this).val();
+<script type="text/javascript">
+	$('#area_id').change( function(){
+		var area_id = $(this).val();
 		//alert(area_id);
 		$('#comp_id').html('<option value="">-- SELECT --</option>');
 
 		$.ajax({
-			url: site_root + "ux-admin/model/ajax/populate_dropdown.php",
+			url: "<?php echo site_root; ?>ux-admin/model/ajax/populate_dropdown.php",
 			type: "POST",
 			data: { area_id: area_id },
 			success: function(data){
@@ -189,3 +240,21 @@
 			}
 		});
 	});
+</script>
+
+<script type="text/javascript">
+	$('#area').change( function(){
+		var area = $(this).val();
+		//alert(area_id);
+		$('#comp').html('<option value="">-- SELECT --</option>');
+
+		$.ajax({
+			url: "<?php echo site_root; ?>ux-admin/model/ajax/populate_dropdown.php",
+			type: "POST",
+			data: { area: area },
+			success: function(data){
+				$('#comp').html(data);
+			}
+		});
+	});
+</script>

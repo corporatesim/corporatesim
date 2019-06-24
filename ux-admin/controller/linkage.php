@@ -17,51 +17,54 @@ $file     = 'list.php';
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 {
 	// echo "<pre>"; print_r($_POST); exit();
-	if(isset($_POST['game_id']) && !empty($_POST['game_id']))
+	if(!isset($_GET['tab']))
 	{
-		$id_game = $_POST['game_id'];
-	}
-	else
-	{
-		$findGameId = "SELECT * FROM GAME_LINKAGE WHERE Link_ID=".$_POST['link'];
-		$exeSql     = $functionsObj->ExecuteQuery($findGameId);
-		$gamedetail = $functionsObj->FetchObject($exeSql);
-		$id_game    = $gamedetail->Link_GameID;
-	}
-	$statusCheckSql        = "SELECT * FROM GAME_GAME WHERE Game_ID=".$id_game;
-	$runSql                = $functionsObj->ExecuteQuery($statusCheckSql);
-	$gameSkipStatus        = $functionsObj->FetchObject($runSql);
-	$Game_Description      = $gameSkipStatus->Game_Description;
-	$Game_IntroductionLink = $gameSkipStatus->Game_IntroductionLink;
-	$Game_DescriptionLink  = $gameSkipStatus->Game_DescriptionLink;
-	$Game_BackToIntro      = $gameSkipStatus->Game_BackToIntro;
-	$Game_Introduction     = $gameSkipStatus->Game_Introduction;
+		if(isset($_POST['game_id']) && !empty($_POST['game_id']))
+		{
+			$id_game = $_POST['game_id'];
+		}
+		else
+		{
+			$findGameId = "SELECT * FROM GAME_LINKAGE WHERE Link_ID=".$_POST['link'];
+			$exeSql     = $functionsObj->ExecuteQuery($findGameId);
+			$gamedetail = $functionsObj->FetchObject($exeSql);
+			$id_game    = $gamedetail->Link_GameID;
+		}
+		$statusCheckSql        = "SELECT * FROM GAME_GAME WHERE Game_ID=".$id_game;
+		$runSql                = $functionsObj->ExecuteQuery($statusCheckSql);
+		$gameSkipStatus        = $functionsObj->FetchObject($runSql);
+		$Game_Description      = $gameSkipStatus->Game_Description;
+		$Game_IntroductionLink = $gameSkipStatus->Game_IntroductionLink;
+		$Game_DescriptionLink  = $gameSkipStatus->Game_DescriptionLink;
+		$Game_BackToIntro      = $gameSkipStatus->Game_BackToIntro;
+		$Game_Introduction     = $gameSkipStatus->Game_Introduction;
 
-	$Link_Description      = isset($_POST['Link_Description'])?$_POST['Link_Description']:0;
-	$Link_IntroductionLink = isset($_POST['Link_IntroductionLink'])?$_POST['Link_IntroductionLink']:0;
-	$Link_DescriptionLink  = isset($_POST['Link_DescriptionLink'])?$_POST['Link_DescriptionLink']:0;
-	$Link_BackToIntro      = isset($_POST['Link_BackToIntro'])?$_POST['Link_BackToIntro']:0;
-	$Link_Introduction     = isset($_POST['Link_Introduction'])?$_POST['Link_Introduction']:0;
-	// check wheather intro,scenario description or button or hide to intro button skip or not
-	if($Game_Description > 0)
-	{
-		$Link_Description = 1;
-	}
-	if($Game_IntroductionLink > 0)
-	{
-		$Link_IntroductionLink = 1;
-	}
-	if($Game_DescriptionLink > 0)
-	{
-		$Link_DescriptionLink = 1;
-	}
-	if($Game_BackToIntro > 0)
-	{
-		$Link_BackToIntro = 1;
-	}
-	if($Game_Introduction > 0)
-	{
-		$Link_Introduction = 1;
+		$Link_Description      = isset($_POST['Link_Description'])?$_POST['Link_Description']:0;
+		$Link_IntroductionLink = isset($_POST['Link_IntroductionLink'])?$_POST['Link_IntroductionLink']:0;
+		$Link_DescriptionLink  = isset($_POST['Link_DescriptionLink'])?$_POST['Link_DescriptionLink']:0;
+		$Link_BackToIntro      = isset($_POST['Link_BackToIntro'])?$_POST['Link_BackToIntro']:0;
+		$Link_Introduction     = isset($_POST['Link_Introduction'])?$_POST['Link_Introduction']:0;
+		// check wheather intro,scenario description or button or hide to intro button skip or not
+		if($Game_Description > 0)
+		{
+			$Link_Description = 1;
+		}
+		if($Game_IntroductionLink > 0)
+		{
+			$Link_IntroductionLink = 1;
+		}
+		if($Game_DescriptionLink > 0)
+		{
+			$Link_DescriptionLink = 1;
+		}
+		if($Game_BackToIntro > 0)
+		{
+			$Link_BackToIntro = 1;
+		}
+		if($Game_Introduction > 0)
+		{
+			$Link_Introduction = 1;
+		}
 	}
 
 	if(isset($_GET['link']))
@@ -386,16 +389,46 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 		$Link_Introduction = 1;
 	}
 	if(isset($_GET['linkedit'])){		
+		// echo "<pre>"; print_r($_POST); exit();
+		// if component is disabled then take component from hidden field
+		if(isset($_POST['comp_id']))
+		{
+			$compid = $_POST['comp_id'];
+		}
+		else
+		{
+			$compid = $_POST['dis_comp_id'];
+		}
+
+		if(isset($_POST['subcomp_id']))
+		{
+			$subcomp_id = $subcomp_id;
+		}
+		else
+		{
+			$subcomp_id = $_POST['dis_subcomp_id'];
+		}
+
+		if(isset($_POST['SubLink_ViewingOrder']))
+		{
+			$ViewingOrder = $_POST['SubLink_ViewingOrder'];
+		}
+		else
+		{
+			$ViewingOrder = $_POST['dis_SubLink_ViewingOrder'];
+		}
+
 		$file      = 'addeditlink.php';	
 		$sublinkid = $_GET['linkedit'];
 		$linkid    = $_POST['link'];
 		//echo "Linkid => ".$linkid." , SubLinkid => ". $sublinkid;
 		//exit();
 		$where = "SubLink_LinkID=" . $linkid." AND SubLink_ID!= ".$sublinkid."
-		AND SubLink_CompID=" . $_POST['comp_id'];
-		if(isset($_POST['subcomp_id']) && !empty($_POST['subcomp_id']))
+		AND SubLink_CompID=" . $compid;
+
+		if(isset($subcomp_id) && !empty($subcomp_id))
 		{	
-			$where .= " AND SubLink_SubCompID=" . $_POST['subcomp_id'];
+			$where .= " AND SubLink_SubCompID=" . $subcomp_id;
 		}
 		else{
 			$where .= " AND SubLink_SubCompID=0";
@@ -430,11 +463,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 				
 				echo $strexp;
 				
-				if(isset($_POST['subcomp_id']) && !empty($_POST['subcomp_id']))
-					{	$strcheck = "subc_".$_POST['subcomp_id'];
+				if(isset($subcomp_id) && !empty($subcomp_id))
+					{	$strcheck = "subc_".$subcomp_id;
 			}
 			else{
-				$strcheck = "comp_".$_POST['comp_id'];
+				$strcheck = "comp_".$compid;
 			}
 
 			if (strpos($strexp,$strcheck))
@@ -475,7 +508,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 					$makeDefaultChecked                               = $_POST['makeDefaultChecked'][0];
 					$SubLink_InputModeTypeValue['makeDefaultChecked'] = ($makeDefaultChecked)?$makeDefaultChecked:'NoVal';
 					// print_r($question); print_r($option); print_r($SubLink_InputModeTypeValue);
-					if(count($option) > 1)
+					if(count($option) > 0)
 					{
 						$SubLink_InputModeTypeValue = json_encode($SubLink_InputModeTypeValue);
 					}
@@ -492,11 +525,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 			}
 
 			// print_r($SubLink_InputModeTypeValue); exit; 
-
+			// if area is disabled then take area value from $_POST['dis_area_id'],
 			$linkdetails = (object) array(
-				'SubLink_AreaID'             => $_POST['area_id'],
-				'SubLink_CompID'             => $_POST['comp_id'],
-				'SubLink_SubCompID'          => isset($_POST['subcomp_id']) ? $_POST['subcomp_id'] : null,
+				'SubLink_AreaID'             => ($_POST['area_id'])?$_POST['area_id']:$_POST['dis_area_id'],
+				'SubLink_CompID'             => $compid,
+				'SubLink_SubCompID'          => isset($subcomp_id) ? $subcomp_id : null,
 				'SubLink_Type'               => isset($_POST['Type']) && $_POST['Type']=='input' ? 0 : 1,
 				'SubLink_Order'              => $_POST['order'],
 				'SubLink_ShowHide'           => $_POST['ShowHide'],
@@ -514,7 +547,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 				'SubLink_ChartID'            => $_POST['chart_id'],
 				'SubLink_ChartType'          => $_POST['chart_type'],
 				'SubLink_Details'            => $_POST['details'],
-				'SubLink_ViewingOrder'       => (!empty($_POST['SubLink_ViewingOrder'])) ? $_POST['SubLink_ViewingOrder']:1,
+				'SubLink_ViewingOrder'       => (!empty($ViewingOrder)) ? $ViewingOrder:1,
 				'SubLink_BackgroundColor'    => $_POST['SubLink_BackgroundColor'],
 				'SubLink_TextColor'          => $_POST['SubLink_TextColor'],
 				'SubLink_LabelCurrent'       => $_POST['SubLink_LabelCurrent'],
@@ -1148,7 +1181,9 @@ elseif(isset($_GET['del'])){
 	$objcarry = $functionsObj->ExecuteQuery($sqlcarry);
 	
 	
-}elseif(isset($_GET['tab'])){
+}
+elseif(isset($_GET['tab']))
+{
 	$header  = 'Area Tab Sequencing';
 	$file    ='addeditarea.php';
 	
@@ -1177,14 +1212,17 @@ elseif(isset($_GET['del'])){
 		{
 			$result = $functionsObj->UpdateData('GAME_AREA', array('Area_Sequencing'=> $value), 'Area_ID', $key, 0);
 		}
-		
+
+		$_SESSION['msg']     = "Area sequencing updated successfully";
+		$_SESSION['type[0]'] = "inputSuccess";
+		$_SESSION['type[1]'] = "has-success";		
 		header("Location: ".site_root."ux-admin/linkage");
 		exit(0);
-	}
+	}	
 	
-	
-	
-}elseif(isset($_GET['linkedit'])){
+}
+elseif(isset($_GET['linkedit']))
+{
 	$header = 'Add Links';
 	$file   = 'addeditlink.php';
 	

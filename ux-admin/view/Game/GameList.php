@@ -22,9 +22,26 @@
 	</div>
 
 	<?php if(isset($msg)){echo "<div class=\"form-group ". $type[1] ." \"><div align=\"center\" class=\"form-control\" id=". $type[0] ."><label class=\"control-label\" for=". $type[0] .">". $msg ."</label></div></div>";} ?>
-
+<form method="post" action="">
 	<div class="row">
-		<div class="col-lg-12">
+		<div class="col-md-6">
+
+           <a id="HideDownloadIcon"><i class="fa fa-download" aria-hidden="true" data-toggle="tooltip" title="Download Game"></i></a>
+           <div id="downloadGame">
+            <div class="row" id="sandbox-container">
+            <div class="input-daterange input-group" id="datepicker">
+          <input type="text" class="input-sm form-control" id="fromdate" name="fromdate" placeholder="Select Start Date" required readonly/>
+          <span class="input-group-addon">to</span>
+          <input type="text" class="input-sm form-control" id="enddate" name="enddate" placeholder="Select End Date" required readonly/>
+        </div>
+        </div>
+        <br>
+            <button type="submit" name="download_excel" id="download_excel" class="btn btn-primary" value="Download"> Download </button>
+          </div>
+
+        </div>
+        <div class="col-md-6">
+		<div class="col-sm-12">
 			<div class="pull-right legend">
 				<ul>
 					<li><b>Legend : </b></li>
@@ -41,6 +58,9 @@
 			</div>
 		</div>
 	</div>
+</div>
+</form>
+<br>
 
 	<div class="row">
 		<div class="panel panel-default">
@@ -105,7 +125,7 @@
 														title="Video"><span class="fa fa-video-camera"></span></a>
 													</td>
 													<td class="text-center">
-														<?php if($row->Game_Status == 0){?>
+														<?php if($row->Game_Delete > 0){?>
 															<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Game_ID; ?>"
 																title="Deactive"><span class="fa fa-times"></span></a>
 															<?php }else{?>

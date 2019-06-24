@@ -53,7 +53,7 @@
 				<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
 				<span class="icon-bar"></span> <span class="icon-bar"></span>
 			</button>
-			<a style="padding: 2px 15px;" class="navbar-brand" href="<?php echo site_root;?>ux-admin/index"> 
+			<!-- <a style="padding: 2px 15px;" class="navbar-brand" href="<?php echo site_root;?>ux-admin/index">  -->
 				<?php if(isset($_SESSION['logo'])) { ?>
 					<a href="<?php echo site_root;?>"><img src="<?php echo site_root."enterprise/common/Logo/".$_SESSION['logo'];?>" width="40px" height="40px"/></a>
 
@@ -76,7 +76,9 @@
 			<?php }else{ ?>
 				<li class="hoverAnchor hidden"><a href="<?php echo site_root."registration.php";?>" class="">Register</a></li>
 			<?php } }?>
-			<li class="" id="google_translate_element"></li>
+			<?php if(site_root != "http://live.corporatesim.com/") {?>
+				<li class="" id="google_translate_element"></li>
+			<?php } ?>
 		</ul>
 		<div class="clearfix"></div>
 		<!-- Left Side Main Navigation -->

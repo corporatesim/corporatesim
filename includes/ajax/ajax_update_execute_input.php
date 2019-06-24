@@ -303,6 +303,7 @@ if($_POST['action']=='updateFormula')
 	}
 	echo json_encode($input_field_values);
 }
+// on click of save button evaluate json formula
 
 if($_POST['action']=='element_not_found')
 {

@@ -57,7 +57,7 @@ else
 	INNER JOIN
 	GAME_GAME G ON UG.`UG_GameID` = G.Game_ID
 	WHERE
-	G.Game_Status = 1 AND G.Game_Delete = 0 AND UG.`UG_UserID` = ".$uid." group by UG.`UG_GameID`";
+	G.Game_Delete = 0 AND UG.`UG_UserID` = ".$uid." group by UG.`UG_GameID`";
 
 // echo $sql;
 // exit();

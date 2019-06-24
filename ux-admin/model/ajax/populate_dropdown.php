@@ -20,7 +20,44 @@ if(isset($_POST['area_id']))
 		<?php }
 	}
 }
-
+//dropdown for download subcomponent in excelsheet
+if(isset($_POST['area']))
+{
+	$area_id = $_POST['area'];
+	$area_ids = implode(',',$area_id);
+	/*$object  = $funObj->SelectData(array(), 'GAME_COMPONENT', array('Comp_AreaID='.$area_id, 'Comp_Delete=0'), 'Comp_Name', '', '', '', 0);*/
+	$object  = $funObj->SelectData(array(), 'GAME_COMPONENT', array('Comp_AreaID IN('.$area_ids.')', 'Comp_Delete=0'), 'Comp_Name', '', '', '', 0);
+	?>
+	<option value="">-- SELECT --</option>
+	<?php 
+	
+	if($object->num_rows > 0)
+	{
+		while($row = $object->fetch_object()){ ?>
+			<option value="<?php echo $row->Comp_ID; ?>"><?php echo $row->Comp_Name; ?></option>
+		<?php }
+	}
+}
+//dropdown to get scenario for personalize outcome to download data in excel
+if(isset($_POST['game']))
+{
+	$game_id = $_POST['game'];
+	$sqlscen = "SELECT s.Scen_ID,s.Scen_Name, Link_ID  
+	FROM `GAME_LINKAGE` INNER JOIN GAME_SCENARIO s ON Link_ScenarioID=s.Scen_ID
+	WHERE Link_GameID=".$game_id;
+	$object = $funObj->ExecuteQuery($sqlscen);
+	
+	?>
+	<option value="">-- SELECT --</option>
+	<?php 
+	
+	if($object->num_rows > 0)
+	{
+		while($row = $object->fetch_object()){ ?>
+			<option value="<?php echo $row->Scen_ID; ?>"><?php echo $row->Scen_Name; ?></option>
+		<?php }
+	}
+}
 
 if(isset($_POST['area_id_subcomp']))
 {

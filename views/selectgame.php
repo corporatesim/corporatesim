@@ -95,7 +95,7 @@ include_once 'includes/headerNav.php';
                   }
                   if($result1->US_ReplayStatus==1)
                   {
-                    $returnUrl .= "<a class='icons1 restart' id='restart' title='Replay will loose all your progress' href='javascript:void(0);' data-gameid='".$row['Game_ID']."' data-scenid='".$ScenID."' data-linkid='".$linkid."' style='margin-left:40px;'><img src='images/replay1.png' style='width:80px; height:80px; color:#d10053;'></a>";
+                    $returnUrl .= "<a class='icons1 restart' id='restart' title='Replay will loose all your progress' href='javascript:void(0);' data-gameid='".$row['Game_ID']."' data-scenid='".$ScenID."' data-linkid='".$linkid."' style='margin-left:50px;'><img src='images/replay1.png' style='width:50px; height:50px; color:#d10053;'></a>";
                   }
                 }
               }
@@ -129,7 +129,7 @@ include_once 'includes/headerNav.php';
               }
               if($result1->US_ReplayStatus==1 || $allowReplay)
               {
-                $returnUrl .= "<a class='icons1 restart' id='restart' href='javascript:void(0);' data-gameid='".$row['Game_ID']."' data-scenid='".$ScenID."' data-linkid='".$linkid."' style='margin-left:58px;'><img src='images/replay1.png' style='width:60px; height:60px; color:#d10053;'></a>";
+                $returnUrl .= "<a class='icons1 restart' id='restart' href='javascript:void(0);' data-gameid='".$row['Game_ID']."' data-scenid='".$ScenID."' data-linkid='".$linkid."' style='margin-left:58px;'><img src='images/replay1.png' style='width:50px; height:50px; color:#d10053;'></a>";
               }
             }
           }

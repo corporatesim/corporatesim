@@ -1,5 +1,6 @@
 <?php
 require_once doc_root.'ux-admin/model/model.php';
+require_once doc_root.'includes/PHPExcel.php';
 $functionsObj = new Model();
 $object       = $functionsObj->SelectData(array(), 'GAME_SCENARIO', array('Scen_Delete=0'), 'Scen_datetime DESC', '', '', '', 0);
 $file         = 'ScenarioList.php';
@@ -199,5 +200,72 @@ else
 	// fetch siteuser list from db
 	$object = $functionsObj->SelectData(array(), 'GAME_SCENARIO', array('Scen_Delete=0'), 'Scen_datetime DESC', '', '', '', 0);
 	$file   = 'ScenarioList.php';
+}
+
+//download Game in excelsheet..
+if(isset($_POST['download_excel']) && $_POST['download_excel'] == 'Download'){
+
+	$from     =  $_POST['fromdate'];
+	$end      =  $_POST['enddate'];
+	$fromdate = date('Y-m-d', strtotime($from));
+	$enddate  = date('Y-m-d', strtotime($end));
+	//echo $fromdate;exit;
+
+	//echo "<pre>";print_r($_POST);exit;
+	$objPHPExcel = new PHPExcel;
+	$objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
+	$objPHPExcel->getDefaultStyle()->getFont()->setSize(10);
+	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+	ob_end_clean();
+	$currencyFormat = '#,#0.## \€;[Red]-#,#0.## \€';
+	$numberFormat   = '#,#0.##;[Red]-#,#0.##';
+	$objSheet       = $objPHPExcel->getActiveSheet();
+	
+	$objSheet->setTitle('Scenario');
+	$objSheet->getStyle('B1:L1')->getFont()->setBold(true)->setSize(12);
+	
+	//$objSheet->getCell('A1')->setValue('Scenario');
+	$objSheet->getCell('B1')->setValue('Scenario');
+	
+	if($from == '' && $end == '')
+	//if($enddate>$fromdate)
+	{
+		$sql = "SELECT Scen_Name FROM GAME_SCENARIO";
+		//echo "error";
+	}
+	else
+	{
+		$sql = "SELECT Scen_Name FROM GAME_SCENARIO WHERE Scen_Datetime BETWEEN '$fromdate' AND '$enddate'";
+	}
+	
+	//echo $sql;exit;	
+
+	$objlink = $functionsObj->ExecuteQuery($sql);
+	
+	if($objlink->num_rows > 0){
+		$i=2;
+		while($row= $objlink->fetch_object()){
+			//$objSheet->getCell('A'.$i)->setValue('Game');
+			$objSheet->getCell('B'.$i)->setValue($row->Scen_Name);
+			$i++;
+		}
+	}
+	
+	//$objPHPExcel->
+	
+	//$objSheet->getColumnDimension('A')->setAutoSize(true);
+	$objSheet->getColumnDimension('B')->setWidth(20);	
+
+	$objSheet->getStyle('B1:B'.$i)->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('D1:D100')->getAlignment()->setWrapText(true);
+	
+	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	header('Content-Disposition: attachment;filename="scenario.xlsx"');
+	header('Cache-Control: max-age=0');
+
+	$objWriter->save('php://output');
+	//$objWriter->save('testoutput.xlsx');
+	//$objWriter->save('testlinkage.csv'); 
+	
 }
 include_once doc_root.'ux-admin/view/Scenario/'.$file;

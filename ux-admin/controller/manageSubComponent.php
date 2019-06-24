@@ -1,5 +1,6 @@
 <?php
 require_once doc_root.'ux-admin/model/model.php';
+require_once doc_root.'includes/PHPExcel.php';
 
 $functionsObj = new Model();
 
@@ -76,6 +77,7 @@ if(isset($_GET['Edit']) && $_GET['q'] = "ManageSubComponent"){
 	$result     = $functionsObj->FetchObject($obj);
 	
 	$component  = $functionsObj->SelectData(array(), 'GAME_COMPONENT', array('Comp_AreaID='.$result->SubComp_AreaID), 'Comp_Name', '', '', '', 0);
+	$componentforexcel  = $functionsObj->SelectData(array(), 'GAME_COMPONENT', array('Comp_AreaID='.$result->SubComp_AreaID), 'Comp_Name', '', '', '', 0);
 }
 
 // Delete Subcategory
@@ -117,6 +119,7 @@ if(isset($_GET['del'])){
 
 // Fetch Services list
 $area = $functionsObj->SelectData(array(), 'GAME_AREA', array('Area_Delete=0'), 'Area_Name', '', '', '', 0);
+$areaforexcel = $functionsObj->SelectData(array(), 'GAME_AREA', array('Area_Delete=0'), 'Area_Name', '', '', '', 0);
 // Fetch Sub Categories List
 $sql  = "SELECT 
 SubComp_ID, SubComp_Name, (
@@ -130,6 +133,108 @@ WHERE
 subcomp_delete = 0
 ";
 $subcomponent = $functionsObj->ExecuteQuery($sql);
+
+//download Component in excelsheet..
+if(isset($_POST['download_excel']) && $_POST['download_excel'] == 'Download'){
+	$areaid =  $_POST['area'];
+	$areaids = implode(',',$areaid);
+	//echo $areaids;exit;
+	$compid =  $_POST['comp'];
+	$compids = implode(',',$compid);
+	/*echo $areaids;
+	echo $compids;exit;*/
+
+	//echo $areaid;exit;
+
+	$from     =  $_POST['fromdate'];
+	$end      =  $_POST['enddate'];
+	$fromdate = date('Y-m-d', strtotime($from));
+	$enddate  = date('Y-m-d', strtotime($end));
+	//echo $fromdate;exit;
+
+	//echo "<pre>";print_r($_POST);exit;
+	$objPHPExcel = new PHPExcel;
+	$objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
+	$objPHPExcel->getDefaultStyle()->getFont()->setSize(10);
+	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+	ob_end_clean();
+	$currencyFormat = '#,#0.## \€;[Red]-#,#0.## \€';
+	$numberFormat   = '#,#0.##;[Red]-#,#0.##';
+	$objSheet       = $objPHPExcel->getActiveSheet();
+	
+	$objSheet->setTitle('SubComponent');
+	$objSheet->getStyle('B1:L1')->getFont()->setBold(true)->setSize(12);
+	
+	//$objSheet->getCell('A1')->setValue('Game');
+	$objSheet->getCell('B1')->setValue('Area');
+	$objSheet->getCell('C1')->setValue('Comp Name');
+	$objSheet->getCell('D1')->setValue('SubComp Name');
+	//echo $from.$end.$areaid.$compid;exit;
+
+	if($from == '' && $end == '' && $areaid == '' && $compid == '')
+	{
+		$sql ="SELECT ga.Area_Name,gc.Comp_Name,gs.SubComp_Name FROM GAME_SUBCOMPONENT gs INNER JOIN GAME_COMPONENT gc ON gs.SubComp_CompID=gc.Comp_ID INNER JOIN GAME_AREA ga ON gs.SubComp_AreaID=ga.Area_ID";
+	}
+
+	elseif($from == '' && $end == '' && $compid == '')
+	{
+		$sql = "SELECT ga.Area_Name,gc.Comp_Name,gs.SubComp_Name FROM GAME_SUBCOMPONENT gs INNER JOIN GAME_COMPONENT gc ON gs.SubComp_CompID=gc.Comp_ID INNER JOIN GAME_AREA ga ON gs.SubComp_AreaID=ga.Area_ID WHERE gs.SubComp_AreaID IN($areaids)";
+	}
+
+	elseif($compid == '')
+	{
+		$sql = "SELECT ga.Area_Name,gc.Comp_Name,gs.SubComp_Name FROM GAME_SUBCOMPONENT gs INNER JOIN GAME_COMPONENT gc ON gs.SubComp_CompID=gc.Comp_ID INNER JOIN GAME_AREA ga ON gs.SubComp_AreaID=ga.Area_ID WHERE gs.SubComp_AreaID IN($areaids) AND SubComp_Date BETWEEN '$fromdate' AND '$enddate'";
+	}
+
+	elseif($areaid == '' && $compid == '')
+	{
+		$sql = "SELECT ga.Area_Name,gc.Comp_Name,gs.SubComp_Name FROM GAME_SUBCOMPONENT gs INNER JOIN GAME_COMPONENT gc ON gs.SubComp_CompID=gc.Comp_ID INNER JOIN GAME_AREA ga ON gs.SubComp_AreaID=ga.Area_ID WHERE SubComp_Date BETWEEN '$fromdate' AND '$enddate'";
+	}
+
+	elseif($from == '' && $end == '')
+	{
+		$sql = "SELECT ga.Area_Name,gc.Comp_Name,gs.SubComp_Name FROM GAME_SUBCOMPONENT gs INNER JOIN GAME_COMPONENT gc ON gs.SubComp_CompID=gc.Comp_ID INNER JOIN GAME_AREA ga ON gs.SubComp_AreaID=ga.Area_ID WHERE SubComp_CompID IN($compids) AND SubComp_AreaID IN ($areaids)";
+				//echo $sql;exit;
+	}
+
+	else
+	{
+		$sql = "SELECT ga.Area_Name,gc.Comp_Name,gs.SubComp_Name FROM GAME_SUBCOMPONENT gs INNER JOIN GAME_COMPONENT gc ON gs.SubComp_CompID=gc.Comp_ID INNER JOIN GAME_AREA ga ON gs.SubComp_AreaID=ga.Area_ID WHERE SubComp_CompID IN ($compids) AND SubComp_AreaID IN ($areaids) AND SubComp_Date BETWEEN '$fromdate' AND '$enddate'";
+	}
+	 //echo $sql;exit;	
+
+	$objlink = $functionsObj->ExecuteQuery($sql);
+	
+	if($objlink->num_rows > 0){
+		$i=2;
+		while($row= $objlink->fetch_object()){
+			//$objSheet->getCell('A'.$i)->setValue('Game');
+			$objSheet->getCell('B'.$i)->setValue($row->Area_Name);
+			$objSheet->getCell('C'.$i)->setValue($row->Comp_Name);
+			$objSheet->getCell('D'.$i)->setValue($row->SubComp_Name);
+			$i++;
+		}
+	}
+	
+	//$objPHPExcel->
+	
+	//$objSheet->getColumnDimension('A')->setAutoSize(true);
+	$objSheet->getColumnDimension('B')->setWidth(20);	
+	$objSheet->getColumnDimension('C')->setWidth(20);
+	$objSheet->getColumnDimension('D')->setWidth(20); 
+	
+	$objSheet->getStyle('B1:B'.$i)->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('D1:D100')->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('F1:F100')->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('J1:J100')->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('K1:K100')->getAlignment()->setWrapText(true);
+	
+	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	header('Content-Disposition: attachment;filename="SubComponent.xlsx"');
+	header('Cache-Control: max-age=0');
+
+	$objWriter->save('php://output');
+}
 
 include_once doc_root.'ux-admin/view/manageSubComponent.php';
 ?>

@@ -166,6 +166,14 @@ switch($_GET['q']){
 	$showfile = 'createMis.php';
 	break;
 
+	case 'manageCompetency':
+	$showfile = 'manageCompetency.php';
+	break;
+
+	case 'competencyFormula':
+	$showfile = 'competencyFormula.php';
+	break;
+
 		// Logout
 	case 'Logout':
 	$showfile = 'logout.php';

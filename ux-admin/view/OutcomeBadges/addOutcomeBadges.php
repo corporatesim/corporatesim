@@ -8,24 +8,24 @@
 </script>
 <style>
 
-@media screen and ( min-width: '361px' ){
-  .resp_pull_right{
-    float: right;
+  @media screen and ( min-width: '361px' ){
+    .resp_pull_right{
+      float: right;
+    }
   }
-}
 
-@media screen and ( max-width: '360px' ){
-  .resp_pull_right{
-    float     : none;
-    text-align: center;
-    width     : 100%;
-    padding   : 0 15px;
+  @media screen and ( max-width: '360px' ){
+    .resp_pull_right{
+      float     : none;
+      text-align: center;
+      width     : 100%;
+      padding   : 0 15px;
+    }
   }
-}
 
-#update-file-selector {
-  display:none;
-}
+  #update-file-selector {
+    display:none;
+  }
 </style>
 
 <div class="row">
@@ -51,10 +51,10 @@
 <?php } ?>
 <!-- DISPLAY ERROR MESSAGE END -->
 <style>
-span.alert-danger {
-  background-color: #ffffff;
-  font-size       : 18px;
-}
+  span.alert-danger {
+    background-color: #ffffff;
+    font-size       : 18px;
+  }
 </style>
 <div id="container">
   <form action="" method="post" id="Outcome_badges" name="Outcome_badges" enctype="multipart/form-data">
@@ -73,9 +73,11 @@ span.alert-danger {
     <div class="form-group">
       <label for="Value"><span class="alert-danger">*</span>Select Value</label>
     </div>
-    <div class="row col-md-6" id="FixValue">
-      <input type="radio" name="rangeVal" id="FixValue" value="0" >
-      <label for="Value">Fix Value</label>
+    <div class="row col-md-6" id="FixValues">
+      <label for="FixValue" class="containerRadio">
+        <input type="radio" name="rangeVal" id="FixValue" value="0"> Fix Value
+        <span class="checkmarkRadio"></span>
+      </label>
       <div class="row hidden " id="fixVal">
         <div class="col-md-3" id="FixValDiv">
          <label for="Fix Value"><span class="alert-danger">*</span>Value</label>
@@ -83,9 +85,11 @@ span.alert-danger {
        </div>
      </div>
    </div>
-   <div class="row col-md-6" id="RangeValue">
-    <input type="radio" name="rangeVal"  id="RangeValue" value="1">
-    <label for="Value">Range</label>
+   <div class="row col-md-6" id="RangeValues">
+    <label for="RangeValue" class="containerRadio">
+      <input type="radio" name="rangeVal"  id="RangeValue" value="1"> Range
+      <span class="checkmarkRadio"></span>
+    </label>
     <div class="row hidden" id="RangeVal" name="RangeVal" value="">
      <div class="col-md-3" id="minValDiv">
       <label for="Minimum Value"><span class="alert-danger">*</span>Min</label>

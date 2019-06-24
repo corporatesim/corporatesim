@@ -1,5 +1,5 @@
 <!-- <?php //echo "<pre>"; print_r($header); exit;?>  -->
-  
+
   <script type="text/javascript">
     <!--
      var loc_url_del  = "ux-admin/ScenarioBranching/linkdel/";
@@ -8,57 +8,57 @@
 </script>
 <!-- scenario branching Data table CSS -->
 <style>
-<!--
-.dropdown-menu > li > button {
-  display    : block;
-  padding    : 3px 20px;
-  clear      : both;
-  font-weight: 400;
-  line-height: 1.42857143;
-  color      : #ffffff;
-  white-space: nowrap;
-}
-#contact
-{
-  width: auto!important;
-}
-#password
-{
-  width: auto!important;
-}
-#action
-{
-  width: 70px!important;
-}
-.drop_down{
-  padding: 0 5px !important;
-}
-
-#upload-file-selector {
-  display:none;
-}
-.margin-correction {
-  margin-right: 10px;
-}
-
-@media screen and ( min-width: '361px' ){
-  .resp_pull_right{
-    float: right;
+  <!--
+  .dropdown-menu > li > button {
+    display    : block;
+    padding    : 3px 20px;
+    clear      : both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color      : #ffffff;
+    white-space: nowrap;
   }
-}
-
-@media screen and ( max-width: '360px' ){
-  .resp_pull_right{
-    float     : none;
-    text-align: center;
-    width     : 100%;
-    padding   : 0 15px;
+  #contact
+  {
+    width: auto!important;
   }
-}
--->
-#update-file-selector {
-  display:none;
-}
+  #password
+  {
+    width: auto!important;
+  }
+  #action
+  {
+    width: 70px!important;
+  }
+  .drop_down{
+    padding: 0 5px !important;
+  }
+
+  #upload-file-selector {
+    display:none;
+  }
+  .margin-correction {
+    margin-right: 10px;
+  }
+
+  @media screen and ( min-width: '361px' ){
+    .resp_pull_right{
+      float: right;
+    }
+  }
+
+  @media screen and ( max-width: '360px' ){
+    .resp_pull_right{
+      float     : none;
+      text-align: center;
+      width     : 100%;
+      padding   : 0 15px;
+    }
+  }
+  -->
+  #update-file-selector {
+    display:none;
+  }
 </style>
 <!-- scenario branching Data table CSS ends -->
 <div class="row">
@@ -85,10 +85,10 @@
 <?php } ?>
 <!-- DISPLAY ERROR MESSAGE END -->
 <style>
-span.alert-danger {
-  background-color: #ffffff;
-  font-size       : 18px;
-}
+  span.alert-danger {
+    background-color: #ffffff;
+    font-size       : 18px;
+  }
 </style>
 <!-- scenario branching -->
 <div id="container">
@@ -148,9 +148,10 @@ span.alert-danger {
           <?php } ?>
         </select>
       </div>
-      <div class="col-md-1">
-        <label for="Select End Scenario" title="If selected then last">End
+      <div class="col-md-1" style="margin-top:3%;">
+        <label for="end" title="If selected then last" class="containerCheckbox">End
           <input type="checkbox" value="1" class="form-control" name="end" id="end" <?php echo ($editResObject->Branch_IsEndScenario)?"checked":'';?>>
+          <span class="checkmark"></span>
         </label>
       </div>
     </div>
@@ -173,7 +174,7 @@ span.alert-danger {
 <!-- for searchable dropdown -->
 <script type="text/javascript">
   $(document).ready(function(){
-  $("#NextScenario").select2();
-  $("#ComponentName").select2();
-});
+    $("#NextScenario").select2();
+    $("#ComponentName").select2();
+  });
 </script>

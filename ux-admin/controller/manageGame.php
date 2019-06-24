@@ -1,5 +1,6 @@
 <?php
 require_once doc_root.'ux-admin/model/model.php';
+require_once doc_root.'includes/PHPExcel.php';
 $functionsObj = new Model();
 
 $object = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), 'Game_datetime DESC', '', '', '', 0);
@@ -149,6 +150,15 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 {
+	if(isset($_POST['Game_Status']))
+	{
+		$Game_Status = $_POST['Game_Status'];
+	}
+	else
+	{
+		$Game_Status = 0;
+	}
+
 	$Game_Introduction     = ($_POST['Game_Introduction'])?$_POST['Game_Introduction']:0;
 	$Game_Description      = ($_POST['Game_Description'])?$_POST['Game_Description']:0;
 	$Game_IntroductionLink = ($_POST['Game_IntroductionLink'])?$_POST['Game_IntroductionLink']:0;
@@ -159,8 +169,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		'Game_Comments'         => $_POST['comments'],
 		'Game_Header'           => $_POST['Game_Header'],
 		'Game_Message'          => $_POST['message'],
+		'Game_shortDescription' => $_POST['Game_shortDescription'],
+		'Game_longDescription'  => $_POST['Game_longDescription'],
+		'Game_prise'            => $_POST['Game_prize'],
+		'Game_discount'         => $_POST['Game_discount'],
 		'Game_Datetime'         => date('Y-m-d H:i:s'),
-		'Game_Status'           => 1,
+		'Game_Status'           => (isset($_POST['Game_Status']))?$_POST['Game_Status']:0,
 		'Game_Elearning'        => $_POST['eLearning'],
 		'Game_Introduction'     => $Game_Introduction,
 		'Game_Description'      => $Game_Description,
@@ -323,7 +337,7 @@ elseif(isset($_GET['del']))
 		{
 			$strresult = $strresult." '".$row->Scen."' ";
 		}
-		$msg     = 'Cannot Delete Game. Is linked with '.$strresult;
+		$msg     = 'Can not Delete Game. Is linked with '.$strresult;
 		$type[0] = 'inputError';
 		$type[1] = 'has-error';		
 	}
@@ -353,15 +367,15 @@ elseif(isset($_GET['stat']))
 	$object  = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_ID='.$id), '', '', '', '', 1);
 	$details = $functionsObj->FetchObject($object);
 	
-	if($details->Game_Status == 1)
+	if($details->Game_Delete < 1)
 	{
 		$status = 'Deactivated';
-		$result = $functionsObj->UpdateData('GAME_GAME', array('Game_Status'=> 0), 'Game_ID', $id, 0);
+		$result = $functionsObj->UpdateData('GAME_GAME', array('Game_Delete'=> 1), 'Game_ID', $id, 0);
 	}
 	else
 	{
 		$status = 'Activated';
-		$result = $functionsObj->UpdateData('GAME_GAME', array('Game_Status'=> 1), 'Game_ID', $id, 0);
+		$result = $functionsObj->UpdateData('GAME_GAME', array('Game_Delete'=> 0), 'Game_ID', $id, 0);
 	}
 	if($result === true)
 	{
@@ -381,8 +395,85 @@ elseif(isset($_GET['stat']))
 else
 {
 	// fetch siteuser list from db
-	$object = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), 'Game_datetime DESC', '', '', '', 0);
+	$object = $functionsObj->SelectData(array(), 'GAME_GAME', array(), 'Game_datetime DESC', '', '', '', 0);
 	$file   = 'GameList.php';
+}
+
+//download Game in excelsheet..
+if(isset($_POST['download_excel']) && $_POST['download_excel'] == 'Download'){
+
+	$from     =  $_POST['fromdate'];
+	$end      =  $_POST['enddate'];
+	$fromdate = date('Y-m-d', strtotime($from));
+	$enddate  = date('Y-m-d', strtotime($end));
+	//echo $fromdate;exit;
+
+	//echo "<pre>";print_r($_POST);exit;
+	$objPHPExcel = new PHPExcel;
+	$objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
+	$objPHPExcel->getDefaultStyle()->getFont()->setSize(10);
+	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+	ob_end_clean();
+	$currencyFormat = '#,#0.## \€;[Red]-#,#0.## \€';
+	$numberFormat   = '#,#0.##;[Red]-#,#0.##';
+	$objSheet       = $objPHPExcel->getActiveSheet();
+	
+	$objSheet->setTitle('Game');
+	$objSheet->getStyle('B1:L1')->getFont()->setBold(true)->setSize(12);
+	
+	//$objSheet->getCell('A1')->setValue('Game');
+	$objSheet->getCell('B1')->setValue('Game');
+	
+	if($from == '' && $end == '')
+	//if($enddate>$fromdate)
+	{
+		$sql = "SELECT Game_Name,Game_Elearning FROM GAME_GAME";
+		//echo "error";
+	}
+	else
+	{
+		$sql = "SELECT Game_Name,Game_Elearning FROM GAME_GAME WHERE Game_Datetime BETWEEN '$fromdate' AND '$enddate'";
+	}
+	
+	//echo $sql;exit;	
+
+	$objlink = $functionsObj->ExecuteQuery($sql);
+	
+	if($objlink->num_rows > 0){
+		$i=2;
+		while($row= $objlink->fetch_object()){
+			//$objSheet->getCell('A'.$i)->setValue('Game');
+			if($row->Game_Elearning == 1)
+			{
+				$objSheet->getCell('B'.$i)->setValue($row->Game_Name." (eLearning)");
+			}
+			else
+			{
+				$objSheet->getCell('B'.$i)->setValue($row->Game_Name);
+			}
+			$i++;
+		}
+	}
+	
+	//$objPHPExcel->
+	
+	//$objSheet->getColumnDimension('A')->setAutoSize(true);
+	$objSheet->getColumnDimension('B')->setWidth(20);	
+
+	$objSheet->getStyle('B1:B'.$i)->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('D1:D100')->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('F1:F100')->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('J1:J100')->getAlignment()->setWrapText(true);
+	$objSheet->getStyle('K1:K100')->getAlignment()->setWrapText(true);
+	
+	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	header('Content-Disposition: attachment;filename="game.xlsx"');
+	header('Cache-Control: max-age=0');
+
+	$objWriter->save('php://output');
+	//$objWriter->save('testoutput.xlsx');
+	//$objWriter->save('testlinkage.csv'); 
+	
 }
 
 include_once doc_root.'ux-admin/view/Game/'.$file;

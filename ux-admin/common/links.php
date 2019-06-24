@@ -38,6 +38,7 @@
 
 <!-- <script src="<?php echo site_root; ?>js/jquery.validate.js"></script> -->
 
+<link href="<?php echo site_root; ?>ux-admin/common/styleFile.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 <!--
 	var site_root = '<?php echo site_root; ?>';

@@ -72,16 +72,20 @@
 												$checked = '';
 											}
 											?>
-											<input type="checkbox" class="" name="eLearning" id="eLearning" value="1" <?php echo $checked;?>>
-											<label for="eLearning">eLearning</label>
+											<label for="eLearning" class="containerCheckbox">
+												<input type="checkbox" class="" name="eLearning" id="eLearning" value="1" <?php echo $checked;?>> eLearning
+												<span class="checkmark"></span>
+											</label>
 										</div>
 									</div>
 
 									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipIntroduction">
 										<div class="form-group">
 											<div class="form-check" data-toggle="tooltip">
-												<input type="checkbox" class="form-check-input" id="Game_Introduction" name="Game_Introduction" value="1"<?php echo ($gamedetails->Game_Introduction == 1)?'checked':'';?>>
-												<label class="form-check-label" for="Skip Introduction">Skip Introduction</label>
+												<label class="form-check-label containerCheckbox" for="Game_Introduction">
+													<input type="checkbox" class="form-check-input" id="Game_Introduction" name="Game_Introduction" value="1"<?php echo ($gamedetails->Game_Introduction == 1)?'checked':'';?>> Skip Introduction
+													<span class="checkmark"></span>
+												</label>
 											</div>
 										</div>
 									</div>
@@ -89,8 +93,10 @@
 									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipDescription">
 										<div class="form-group">
 											<div class="form-check" data-toggle="tooltip">
-												<input type="checkbox" class="form-check-input" id="Game_Description" name="Game_Description" value="1"<?php echo ($gamedetails->Game_Description == 1)?'checked':'';?>>
-												<label class="form-check-label" for="Skip Description">Skip Description</label>
+												<label class="form-check-label containerCheckbox" for="Game_Description">
+													<input type="checkbox" class="form-check-input" id="Game_Description" name="Game_Description" value="1"<?php echo ($gamedetails->Game_Description == 1)?'checked':'';?>> Skip Description
+													<span class="checkmark"></span>
+												</label>
 											</div>
 										</div>
 									</div>
@@ -98,8 +104,10 @@
 									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipIntroductionLink">
 										<div class="form-group">
 											<div class="form-check" data-toggle="tooltip">
-												<input type="checkbox" class="form-check-input" id="Game_IntroductionLink" name="Game_IntroductionLink" value="1"<?php echo ($gamedetails->Game_IntroductionLink == 1)?'checked':'';?>>
-												<label class="form-check-label" for="Skip Description">Hide Introduction Link</label>
+												<label class="form-check-label containerCheckbox" for="Game_IntroductionLink">
+													<input type="checkbox" class="form-check-input" id="Game_IntroductionLink" name="Game_IntroductionLink" value="1"<?php echo ($gamedetails->Game_IntroductionLink == 1)?'checked':'';?>> Hide Introduction Link
+													<span class="checkmark"></span>
+												</label>
 											</div>
 										</div>
 									</div>
@@ -107,8 +115,10 @@
 									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipDescriptionLink">
 										<div class="form-group">
 											<div class="form-check" data-toggle="tooltip">
-												<input type="checkbox" class="form-check-input" id="Game_DescriptionLink" name="Game_DescriptionLink" value="1"<?php echo ($gamedetails->Game_DescriptionLink == 1)?'checked':'';?>>
-												<label class="form-check-label" for="Skip Description">Hide Description Link</label>
+												<label class="form-check-label containerCheckbox" for="Game_DescriptionLink">
+													<input type="checkbox" class="form-check-input" id="Game_DescriptionLink" name="Game_DescriptionLink" value="1"<?php echo ($gamedetails->Game_DescriptionLink == 1)?'checked':'';?>> Hide Description Link
+													<span class="checkmark"></span>
+												</label>
 											</div>
 										</div>
 									</div>
@@ -116,8 +126,10 @@
 									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipBackToIntro">
 										<div class="form-group">
 											<div class="form-check" data-toggle="tooltip">
-												<input type="checkbox" class="form-check-input" id="Game_BackToIntro" name="Game_BackToIntro" value="1" <?php echo ($gamedetails->Game_BackToIntro == 1)?'checked':'';?>>
-												<label class="form-check-label" for="Skip BackToIntro">Hide Back To Intro</label>
+												<label class="form-check-label containerCheckbox" for="Game_BackToIntro">
+													<input type="checkbox" class="form-check-input" id="Game_BackToIntro" name="Game_BackToIntro" value="1" <?php echo ($gamedetails->Game_BackToIntro == 1)?'checked':'';?>> Hide Back To Intro
+													<span class="checkmark"></span>
+												</label>
 											</div>
 										</div>
 									</div>
@@ -155,8 +167,10 @@
 								<div class="row name">
 									<div class="col-sm-12 col-md-6">
 										<div class="form-group">
-											<input type="checkbox" class="" name="Game_Status" id="Game_Status" value="1">
-											<label for="Game availablity">Available For B2C</label>
+											<label for="Game_Status" class="containerCheckbox">
+												<input type="checkbox" class="" name="Game_Status" id="Game_Status" value="1"> Available For B2C
+												<span class="checkmark"></span>
+											</label>
 										</div>
 									</div>
 									<div class="col-md-12 col-sm-12 hidden availableB2C">
@@ -269,6 +283,11 @@
 				});
 			}
 		});
+		// if available for b2c then show all field and mark as checked
+		<?php if($gamedetails->Game_Status){ ?>
+			$('#Game_Status').trigger('click');
+		<?php } ?>
+
 		$('#game_btn').click( function(){
 			//	if($("#siteuser_frm").valid()){		
 				$( "#game_sbmit" ).trigger( "click" );

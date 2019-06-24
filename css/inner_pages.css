@@ -37,7 +37,7 @@
 	box-shadow      :0 2px 8px 0 rgba(0,0,0, 0.20);
 	padding-top     :1px;
 	/*padding-top   :10px;*/
-	/*padding-bottom:10px;*/
+	padding-bottom:10px;
 	/*margin-bottom :10px;*/
 	background      :#ffffff;
 }
@@ -211,7 +211,7 @@ input{
 }
 
 .subCompnent{
-	margin-top   :10px;
+	
 	background   :#ffffff;
 	border       :1px solid #cdcdcd;
 	padding      :9px 0;

@@ -83,7 +83,7 @@
 						<?php }else{ ?>
 
 							<?php if(site_root == "http://live.corporatesim.com/") {?>
-								<li class="hoverAnchor">
+								<li class="hoverAnchor hidden">
 								<?php } else if(site_root == "http://develop.corporatesim.com/"){?>
 									<li class="hoverAnchor">
 									<?php } else if(site_root == "http://localhost/corp_simulation/"){?>
@@ -98,7 +98,9 @@
 								</div>
 							</li> -->
 						<?php } }?>
-						<li class="" id="google_translate_element"></li>
+						<?php if(site_root != "http://live.corporatesim.com/") {?>
+							<li class="" id="google_translate_element"></li>
+						<?php } ?>
 					</ul>
 				</div>
 			</nav>
