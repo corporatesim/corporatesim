@@ -30,7 +30,7 @@
                 <div class="form-group">
                   <label>Enter Area Name</label>
                   <input type="hidden" name="id" value="<?php if(isset($_GET['Edit'])){ echo $result->Area_ID; } ?>" >
-                  <input class="form-control" type="text" name="Area_Name" value="<?php if(isset($_GET['Edit'])){ echo $result->Area_Name; } ?>" >
+                  <input class="form-control" type="text" name="Area_Name" value="<?php if(isset($_GET['Edit'])){ echo $result->Area_Name; } ?>" title="Space between characters not allowed" required>
                 </div>
 
                 <div class="row">

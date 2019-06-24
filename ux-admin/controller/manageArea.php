@@ -4,29 +4,44 @@ require_once doc_root.'includes/PHPExcel.php';
 $functionsObj = new Model();
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
-	if(!empty($_POST['Area_Name'])){
+	if(!empty($_POST['Area_Name']))
+	{
 		$Area_Name = $_POST['Area_Name'];
-		$object    = $functionsObj->SelectData(array(), 'GAME_AREA', array("Area_Name ='".$Area_Name."'"), '', '', '');
-		if($object->num_rows > 0){
-			$msg     = 'Entered area name already present';
+		if(strpos(trim($Area_Name),' '))
+		{
+			// don't allow spaces, hence show error message
+			$msg     = 'Space in the Area Name is not allowed';
 			$type[0] = 'inputError';
 			$type[1] = 'has-error';
-		}else{
-			$array = array(
-				'Area_Name'            =>	ucfirst($Area_Name),
-				'Area_CreateDate'      =>	date('Y-m-d H:i:s'),
-				'Area_BackgroundColor' => $_POST['Area_BackgroundColor'],
-				'Area_TextColor'       => $_POST['Area_TextColor'],
-			);
-			$result = $functionsObj->InsertData('GAME_AREA', $array);
-			if($result){
-				$_SESSION['msg']     = 'Area Added Successfully';
-				$_SESSION['type[0]'] = 'inputSuccess';
-				$_SESSION['type[1]'] = 'has-success';
-				header("Location:".site_root."ux-admin/ManageArea");
+		}
+		else
+		{
+			$object    = $functionsObj->SelectData(array(), 'GAME_AREA', array("Area_Name ='".$Area_Name."'"), '', '', '');
+			if($object->num_rows > 0){
+				$msg     = 'Entered area name already present';
+				$type[0] = 'inputError';
+				$type[1] = 'has-error';
+			}
+			else
+			{
+				$array = array(
+					'Area_Name'            =>	ucfirst($Area_Name),
+					'Area_CreateDate'      =>	date('Y-m-d H:i:s'),
+					'Area_BackgroundColor' => $_POST['Area_BackgroundColor'],
+					'Area_TextColor'       => $_POST['Area_TextColor'],
+				);
+				$result = $functionsObj->InsertData('GAME_AREA', $array);
+				if($result){
+					$_SESSION['msg']     = 'Area Added Successfully';
+					$_SESSION['type[0]'] = 'inputSuccess';
+					$_SESSION['type[1]'] = 'has-success';
+					header("Location:".site_root."ux-admin/ManageArea");
+				}
 			}
 		}
-	}else{
+	}
+	else
+	{
 		$msg     = 'Field cannot be empty';
 		$type[0] = 'inputError';
 		$type[1] = 'has-error';
@@ -37,27 +52,41 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 	if(!empty($_POST['Area_Name'])){
 		$Area_Name = $_POST['Area_Name'];
 		$Area_ID   = $_POST['id'];
-		$object    = $functionsObj->SelectData(array(), 'GAME_AREA', array("Area_Name ='".$Area_Name."'", "Area_ID !=".$Area_ID), '', '', '', '', 0);
-		if($object->num_rows > 0){
-			$msg     = 'Entered area name already present';
+		if(strpos(trim($Area_Name),' '))
+		{
+			// don't allow spaces, hence show error message
+			$msg     = 'Space in the Area Name is not allowed';
 			$type[0] = 'inputError';
 			$type[1] = 'has-error';
-		}else{
-			$array = array(
-				'Area_Name'            =>	ucfirst($Area_Name),
-				'Area_BackgroundColor' => $_POST['Area_BackgroundColor'],
-				'Area_TextColor'       => $_POST['Area_TextColor'],
-			);
-			//var_dump($array);
-			$result = $functionsObj->UpdateData('GAME_AREA', $array, 'Area_ID', $Area_ID);
-			if($result){
-				$_SESSION['msg']     = 'Area Updated Successfully';
-				$_SESSION['type[0]'] = 'inputSuccess';
-				$_SESSION['type[1]'] = 'has-success';
-				header("Location:".site_root."ux-admin/ManageArea");
+		}
+		else
+		{
+			$object    = $functionsObj->SelectData(array(), 'GAME_AREA', array("Area_Name ='".$Area_Name."'", "Area_ID !=".$Area_ID), '', '', '', '', 0);
+			if($object->num_rows > 0){
+				$msg     = 'Entered area name already present';
+				$type[0] = 'inputError';
+				$type[1] = 'has-error';
+			}
+			else
+			{
+				$array = array(
+					'Area_Name'            =>	ucfirst($Area_Name),
+					'Area_BackgroundColor' => $_POST['Area_BackgroundColor'],
+					'Area_TextColor'       => $_POST['Area_TextColor'],
+				);
+				//var_dump($array);
+				$result = $functionsObj->UpdateData('GAME_AREA', $array, 'Area_ID', $Area_ID);
+				if($result){
+					$_SESSION['msg']     = 'Area Updated Successfully';
+					$_SESSION['type[0]'] = 'inputSuccess';
+					$_SESSION['type[1]'] = 'has-success';
+					header("Location:".site_root."ux-admin/ManageArea");
+				}
 			}
 		}
-	}else{
+	}
+	else
+	{
 		$msg     = 'Field cannot be empty';
 		$type[0] = 'inputError';
 		$type[1] = 'has-error';
@@ -73,7 +102,8 @@ if(isset($_GET['Edit']) && $_GET['q'] = "ManageArea"){
 	$Area_BackgroundColor = $result->Area_BackgroundColor;
 	$Area_TextColor       = $result->Area_TextColor;
 
-}elseif(isset($_GET['Delete'])){
+}
+elseif(isset($_GET['Delete'])){
 	$id     = base64_decode($_GET['Delete']);
 	$fields = array();
 	$where  = array('Comp_AreaID='.$id, "Comp_Delete = 0");
@@ -82,7 +112,9 @@ if(isset($_GET['Edit']) && $_GET['q'] = "ManageArea"){
 		$msg     = 'Can not Delete Area! Area not empty';
 		$type[0] = 'inputError';
 		$type[1] = 'has-error';
-	}else{		
+	}
+	else
+	{		
 		//$result = $functionsObj->UpdateData('GAME_AREA', array('Area_Delete' => 1), 'Area_ID', $id);
 
 		$result = $functionsObj->DeleteData('GAME_AREA','Area_ID',$id,0);
