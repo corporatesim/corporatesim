@@ -1,11 +1,3 @@
-<!-- <?php // echo "<pre>"; print_r($header); exit;?> -->
-   <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="<?php echo site_root.'js/select2.min.js';?>"></script>
-
-<!-- CSS -->
-<link href="<?php echo site_root.'css/select2.min.css';?>" rel='stylesheet' type='text/css'>
-  </head>
   <script type="text/javascript">
     <!--
      var loc_url_del  = "ux-admin/linkage/linkdel/";
@@ -13,10 +5,10 @@
   //-->
 </script>
 <style>
-span.alert-danger {
-  background-color: #ffffff;
-  font-size       : 18px;
-}
+  span.alert-danger {
+    background-color: #ffffff;
+    font-size       : 18px;
+  }
 </style>
 
 <div class="row">
@@ -79,53 +71,53 @@ span.alert-danger {
           </label>
         </div>
         <div class="col-md-2">
-           <label for="outputComponent" class="containerCheckbox">
-            <input type="checkbox"  name="outputComponentFilter" id="outputComponent" value="1">Output
-            <span class="checkmark"></span>
-          </label>
-          <label for="editableInput" class="containerCheckbox">
-            <input type="checkbox" name="inputComponentFilter" id="editableInput" value="1">Users Input
-            <span class="checkmark"></span>
-          </label>
-        </div>
-
-        <div class="col-md-2 hidden" name= "count" id="count">
-          <!-- <label> Total Users </label> -->
-        </div>
-
-        <div class="col-md-2 hidden" id="search">
-          <label>
-            <input type="search" id="searchBox" name="searchBox" class="form-control input-sm" placeholder="Serach By Email ID" aria-controls="" style="max-height: 23px; border-radius: 5px;">
-          </label>
-        </div>
-
-        <div class="col-md-2 hidden" id="select_all_div">
-          <label for="Select All Data" data-toggle="tooltip" title="Select All Users" class="containerCheckbox" id="select_all_checkbox">
-            <input type="checkbox" name="select_all" id="select_all" value=select_all > Select All
-            <span class="checkmark"></span>
-          </label>
-        </div>
+         <label for="outputComponent" class="containerCheckbox">
+          <input type="checkbox"  name="outputComponentFilter" id="outputComponent" value="1">Output
+          <span class="checkmark"></span>
+        </label>
+        <label for="editableInput" class="containerCheckbox">
+          <input type="checkbox" name="inputComponentFilter" id="editableInput" value="1">Users Input
+          <span class="checkmark"></span>
+        </label>
       </div>
-      <br>
-      <!-- if user select for filter then show this -->
-      <input type="hidden" name="linkid" id="linkid">
-      <div class="row hidden" style="margin-left: 1px;" id="users_data">
-        <!-- adding users details to this div via jquery after selection of scenario -->
+
+      <div class="col-md-2 hidden" name= "count" id="count">
+        <!-- <label> Total Users </label> -->
       </div>
-      <br>
-      <div class="row" id="sandbox-container">
-        <div class="col-md-4">
-          <input type="text" name="StartDate" id="StartDate" class="form-control" placeholder="Select Start Date" required>
-        </div>
-        <div class="col-md-4">
-          <input type="text" name="EndDate" id="EndDate" class="form-control" readonly="" placeholder="Select End Date">
-        </div>
-        <div class="col-md-4">
-          <button type="submit" class="btn btn-primary" name="downloadReport" value="DownloadUserReport" id="downloadReport">Download Report</button>
-        </div>
+
+      <div class="col-md-2 hidden" id="search">
+        <label>
+          <input type="search" id="searchBox" name="searchBox" class="form-control input-sm" placeholder="Serach By Email ID" aria-controls="" style="max-height: 23px; border-radius: 5px;">
+        </label>
+      </div>
+
+      <div class="col-md-2 hidden" id="select_all_div">
+        <label for="Select All Data" data-toggle="tooltip" title="Select All Users" class="containerCheckbox" id="select_all_checkbox">
+          <input type="checkbox" name="select_all" id="select_all" value=select_all > Select All
+          <span class="checkmark"></span>
+        </label>
       </div>
     </div>
-  </form>
+    <br>
+    <!-- if user select for filter then show this -->
+    <input type="hidden" name="linkid" id="linkid">
+    <div class="row hidden" style="margin-left: 1px;" id="users_data">
+      <!-- adding users details to this div via jquery after selection of scenario -->
+    </div>
+    <br>
+    <div class="row" id="sandbox-container">
+      <div class="col-md-4">
+        <input type="text" name="StartDate" id="StartDate" class="form-control" placeholder="Select Start Date" required>
+      </div>
+      <div class="col-md-4">
+        <input type="text" name="EndDate" id="EndDate" class="form-control" readonly="" placeholder="Select End Date">
+      </div>
+      <div class="col-md-4">
+        <button type="submit" class="btn btn-primary" name="downloadReport" value="DownloadUserReport" id="downloadReport">Download Report</button>
+      </div>
+    </div>
+  </div>
+</form>
 </div>
 
 <script>
@@ -151,26 +143,27 @@ span.alert-danger {
             data: "action=game_scenario&Game_ID="+Game_ID,
             success: function( result )
             {
-              var option = '<option value="">--Select Scenario--</option>';
+              var option = '<option value="">--Select All Scenario--</option>';
               if(result.trim() != 'no link')
               {
                 result = JSON.parse(result)
                // console.log(result)
-                $(result).each(function(index,e)
-                {
+               $(result).each(function(index,e)
+               {
                // console.log(index);
-                /*  option += ('<option value='+result.Scen_ID+' data-linkid='+result.linkid+' data-scenarioname="'+result.Scen_Name+'">'+result.Scen_Name+'</option>');*/
-                 option += ('<option value='+result[index].Scen_ID+' data-linkid='+result[index].linkid+' data-scenarioname="'+result[index].Scen_Name+'">'+result[index].Scen_Name+'</option>');
-                });
+               /*  option += ('<option value='+result.Scen_ID+' data-linkid='+result.linkid+' data-scenarioname="'+result.Scen_Name+'">'+result.Scen_Name+'</option>');*/
+               option += ('<option value='+result[index].Scen_ID+' data-linkid='+result[index].linkid+' data-scenarioname="'+result[index].Scen_Name+'">'+result[index].Scen_Name+'</option>');
+             });
              // console.log(option);
-               $('#game_scenario').html(option);
-             }
-             else
-             {
-              $('#game_scenario').html(option);
-            }
-          },
-        });          
+             $('#game_scenario').html(option);
+           }
+           else
+           {
+            $('#game_scenario').html(option);
+          }
+        },
+      });        
+          $('#game_scenario').trigger('change');  
         }
         else
         {
@@ -186,6 +179,7 @@ span.alert-danger {
     $('#game_scenario').on('change',function(){
       var element      = $(this);
       var scenarioname = $(this).find(':selected').data('scenarioname');
+      var gameid       = $('#game_game').val();
       $('#scenarioname').attr('value',scenarioname);
       if($(this).val())
       {
@@ -195,7 +189,7 @@ span.alert-danger {
           $.ajax({
             url :  "model/ajax/UserReport.php",
             type: "POST",
-            data: "action=game_users&linkid="+linkid,
+            data: "action=game_users&linkid="+linkid+"&Link_GameID="+gameid,
             success: function( result )
             {
               var checkbox = '';
@@ -224,12 +218,35 @@ span.alert-danger {
         }
         else
         {
-          if(!($('#user_section').hasClass('hidden')))
-          {
-            $('#user_section').addClass('hidden');
-          }
-          alert('Please Select Scenario...');
-          return false;
+          var linkid = 'all scenario';
+          $('#user_section').removeClass('hidden');
+          // triggering ajax to show users linked with this game and scenario
+          $.ajax({
+            url :  "model/ajax/UserReport.php",
+            type: "POST",
+            data: "action=game_users&linkid="+linkid+"&Link_GameID="+gameid,
+            success: function( result )
+            {
+              var checkbox = '';
+              var count    = 0;
+              if(result.trim() != 'no link')
+              {
+                result = JSON.parse(result)
+                $(result).each(function(index,e)
+                {
+                  count++;
+                  checkbox += '<div class="col-md-2"><label for="id_'+result[index].User_id+'" class="containerCheckbox" data-toggle="tooltip" title="'+result[index].Email+'"><input type="checkbox" class="user_id" id="id_'+result[index].User_id+'" value="'+result[index].User_id+'" name="user_id[]"> '+result[index].Name+' <span class="checkmark"></span> </label></div>'
+                });
+                $('#count').html('<label class="alert-success">Total Users: '+count+'</label>');
+                // $('#linkid').attr('value',linkid);
+                $('#users_data').html(checkbox);
+              }
+              else
+              {
+                $('#users_data').html(checkbox);
+              }
+            },
+          });
         }
       });
 
@@ -270,10 +287,11 @@ span.alert-danger {
 
     $('#searchBox').on('keyup',function(){
       var search = $(this).val().toLowerCase();
+      var gameid = $('#game_game').val();
       $.ajax({
         url : "model/ajax/UserReport.php",
         type: "POST",
-        data: "action=game_users&linkid="+linkid+'&email_value='+search,
+        data: "action=game_users&linkid="+linkid+'&email_value='+search+'&Link_GameID='+gameid,
         success: function( result )
         {
           var checkbox = '';
@@ -303,8 +321,8 @@ span.alert-danger {
 
     $('#downloadReport').on('click',function(){
       // if user selects filter option not the all users
-     if($('input[name=user_filter]:checked').val() != 'all_users')
-     {
+      if($('input[name=user_filter]:checked').val() != 'all_users')
+      {
         // check if there is any checkbox is not checked
         var total_checkboxes = $('#users_data').find('input.user_id').length;
         var limit            = 0;
@@ -323,14 +341,5 @@ span.alert-danger {
         }
       }
     });
-  });
-</script>
-
- <!-- for searchable dropdown -->
-<script type="text/javascript">
-  $(document).ready(function(){
-   $("#game_game").select2();
-  /* $("#game_scenario").select2();*/
-
   });
 </script>

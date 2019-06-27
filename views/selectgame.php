@@ -150,7 +150,7 @@ include_once 'includes/headerNav.php';
                   <img class="cardimg" src="<?php echo site_root.'images/'.$row['Game_Image']; ?>" style="width:100%; height:150px; margin-top: -25px">
                   <br><br>
                   <div class="link" style="height:35px;margin-top:-10px;">
-                    <a style="margin-left:70px; color:#ffffff !important;" href="#" class="text-center">How to Play</a>
+                    <!-- <a style="margin-left:70px; color:#ffffff !important;" href="#" class="text-center">How to Play</a> -->
                   </div>
                   <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="btn btn-danger">Register</a> -->
                   <div style="margin-top:-30px; margin-left: -35px;">

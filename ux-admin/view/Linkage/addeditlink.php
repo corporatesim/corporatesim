@@ -45,15 +45,6 @@
       $('#carry_linkid').trigger('change');
       console.log('trigger change in linkid');
     <?php } ?>
-    $('#SubLink_InputModeType').change(function() {
-      if( $("#SubLink_InputModeType option:selected").attr('id') == 3 || $("#SubLink_InputModeType  option:selected").attr('id') == 4)
-      {
-       if($('#SubLink_InputFieldOrder').val()== 1 || $('#SubLink_InputFieldOrder').val()== 2)
-       {
-         alert("You have seleted both the labels");
-       }
-     }
-   });
 
     $('input[type="radio"]').click(function(){
      if($(this).attr("value")=="subcomp"){
@@ -106,6 +97,15 @@
       $("#admin").hide();
     }
   });
+    // adding this to remvoe required from input field to novalidate if hidden or not selected /inputTypeUser
+    setTimeout(function(){
+      if($('input[name=inputType]:checked').val() != 'user')
+      {
+        $('.inputTypeUser').each(function(){
+          $(this).attr('required',false);
+        });
+      }
+    },1000);
   });
   /*function label_choice(select){
   
@@ -742,7 +742,7 @@
                           <br>
                           <div class="form-group col-md-6">
                             <label for="No of questions">Enter Question:</label>
-                            <input name="question" id="question" type="text" value="<?php echo $question;?>" class="form-control" placeholder="Enter Question" required="">
+                            <input name="question" id="question" type="text" value="<?php echo $question;?>" class="form-control inputTypeUser" placeholder="Enter Question" required="">
                           </div>
                           <div class="form-group col-md-3" style="float: right;">
                             <button class="btn-primary" type="button" id="add_options" data-toggle="tooltip" title="Add More Options" style="margin-top: 16%;">+</button>
@@ -750,11 +750,11 @@
                           <br>
                           <div class="form-group col-md-6" style="margin-left: 1px;">
                             <label for="No of questions">Text:</label>
-                            <input name="option[]" id="option[]" type="text" value="<?php echo (!empty($options))?$options:'Option-';?>" class="form-control optionTextBox" placeholder="Enter Option Text" required="">
+                            <input name="option[]" id="option[]" type="text" value="<?php echo (!empty($options))?$options:'Option-';?>" class="form-control optionTextBox inputTypeUser" placeholder="Enter Option Text" required="">
                           </div>
                           <div class="form-group col-md-3">
                             <label for="No of questions">Value:</label>
-                            <input name="option_value[]" id="option_value[]" type="text" value="<?php echo $options_value;?>" class="form-control" placeholder="Value" required="">
+                            <input name="option_value[]" id="option_value[]" type="text" value="<?php echo $options_value;?>" class="form-control inputTypeUser" placeholder="Value" required="">
                           </div>
                           <?php if(count($option) > 1 && count($option_value) > 1){
                             // array_pop(array);
@@ -1225,7 +1225,7 @@
 <script type="text/javascript">
 
   $('#add_options').on('click',function(){
-    $('#add_here').append('<div class="col-md-12 parentDefault"><div class="form-group col-md-6"><input name="option[]" type="text" placeholder="Enter Option Text" class="form-control optionTextBox" value="Option-" required=""></div> <div class="form-group col-md-3"><input name="option_value[]" type="text" placeholder="Value" value="" required="" class="form-control"></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" data-toggle="tooltip" title="Remove Option">-</button><input class="checkedDefault" type="radio" name="makeDefaultChecked[]" data-toggle="tooltip" title="Make This Default Checked" value="" /></div></div>');
+    $('#add_here').append('<div class="col-md-12 parentDefault"><div class="form-group col-md-6"><input name="option[]" type="text" placeholder="Enter Option Text" class="form-control inputTypeUser optionTextBox" value="Option-" required=""></div> <div class="form-group col-md-3"><input name="option_value[]" type="text" placeholder="Value" value="" required="" class="form-control inputTypeUser "></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" data-toggle="tooltip" title="Remove Option">-</button><input class="checkedDefault" type="radio" name="makeDefaultChecked[]" data-toggle="tooltip" title="Make This Default Checked" value="" /></div></div>');
     removeDiv();
     makeDefaultChecked();
     changeValueOnChangingText();
@@ -1243,46 +1243,65 @@
   $('input[name=inputType]').on('change',function(){
     if($(this).val() != 'user')
     {
+      $('.inputTypeUser').each(function(){
+        $(this).attr('required',false);
+      });
       $('#user').addClass('hidden');
       $('#question').attr('required',false);
     }
     else
     {
+      if($('#SubLink_InputModeType').val() == 'mChoice')
+      {
+        $('.inputTypeUser').each(function(){
+          $(this).attr('required',true);
+        });
+      }
       $('#user').removeClass('hidden');
     }
   });
   
   $('#SubLink_InputModeType').on('change',function(){
-    var input_type = $(this).val();
-    if(input_type == 'select')
+    if($("#SubLink_InputModeType option:selected").attr('id') == 3 || $("#SubLink_InputModeType  option:selected").attr('id') == 4)
     {
-      $('#user_default_value').addClass('hidden');
-      $('#mChoice').addClass('hidden');
-      $('#range').addClass('hidden');
-      $('#question').attr('required',false);
-    }
-    if(input_type == 'user')
-    {
-      // $('#user_default_value').removeClass('hidden');
-      $('#mChoice').addClass('hidden');
-      $('#range').addClass('hidden');
-      $('#question').attr('required',false);
-    }
-    if(input_type == 'mChoice')
-    {
-      $('#mChoice').removeClass('hidden');
-      $('#range').addClass('hidden');
-      $('#user_default_value').addClass('hidden');
-      $('#question').attr('required',true);
-    }
-    if(input_type == 'range')
-    {
-      $('#range').removeClass('hidden');
-      $('#mChoice').addClass('hidden');
-      $('#user_default_value').addClass('hidden');
-      $('#question').attr('required',false);
-    }
+     if($('#SubLink_InputFieldOrder').val()== 1 || $('#SubLink_InputFieldOrder').val()== 2)
+     {
+       alert("You have seleted both the labels");
+     }
+   }
+   $('.inputTypeUser').each(function(){
+    $(this).attr('required',false);
   });
+   var input_type = $(this).val();
+  //  if(input_type == 'select')
+  //  {
+  //   $('#user_default_value').addClass('hidden');
+  //   $('#mChoice').addClass('hidden');
+  //   $('#range').addClass('hidden');
+  //   $('#question').attr('required',false);
+  // }
+  if(input_type == 'user')
+  {
+    // $('#user_default_value').removeClass('hidden');
+    $('#mChoice').addClass('hidden');
+    $('#range').addClass('hidden');
+  }
+  if(input_type == 'mChoice')
+  {
+    $('#mChoice').removeClass('hidden');
+    $('#range').addClass('hidden');
+    $('#user_default_value').addClass('hidden');
+    $('.inputTypeUser').each(function(){
+      $(this).attr('required',true);
+    });
+  }
+  if(input_type == 'range')
+  {
+    $('#range').removeClass('hidden');
+    $('#mChoice').addClass('hidden');
+    $('#user_default_value').addClass('hidden');
+  }
+});
   
   $('#formula_id').on('change', function(){
     var formula_id = $(this).val();

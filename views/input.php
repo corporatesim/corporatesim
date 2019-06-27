@@ -127,27 +127,25 @@ include_once 'includes/header.php';
                 {
                   if($i == 0)
                   {
-                    echo "<li role='presentation' id='".$row['Area_Name']."' class='active ".$area_length." regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                    // adding backForward class to click the forward and back button and move the area accordingly
+                    echo "<li role='presentation' id='".$row['Area_Name']."' data-sequence='' class='backForward active ".$area_length." regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                     $activearea=$row['Area_Name'];
-
                   }
                   else
                   {
-                    echo "<li role='presentation' id='".$row['Area_Name']."' class='regular ".$area_length."' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                    echo "<li role='presentation' id='".$row['Area_Name']."' data-sequence='' class='backForward regular ".$area_length."' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                   }
-
                   $i++;
                 }
                 else if ($tab == $row['Area_Name'])
                 {
-                  echo "<li role='presentation' id='".$row['Area_Name']."' class='active ".$area_length." regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                  echo "<li role='presentation' id='".$row['Area_Name']."' data-sequence='' class='backForward active ".$area_length." regular' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                   $activearea=$row['Area_Name'];
                 }
                 else
                 {
-                  echo "<li role='presentation' id='".$row['Area_Name']."' class='regular ".$area_length."' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+                  echo "<li role='presentation' id='".$row['Area_Name']."' data-sequence='' class='backForward regular ".$area_length."' ".$showhide."><a ".$showStyle." href='#".$row['Area_Name']."Tab' aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
                 }
-
               }
               ?>
             </ul>
@@ -1340,6 +1338,15 @@ include_once 'includes/header.php';
         }
         ?>              
       </form>
+      <!-- adding next and previous buttons -->
+      <div class="clearfix"></div>
+      <br>
+      <div class="">
+        <button type="button" class="btn btn-primary pull-right" id="goForward">Go Forward</button>
+        <button type="button" class="btn btn-primary pull-right hidden" id="submitBtn2">Submit</button>
+        <button type="button" class="btn btn-primary" id="goBackward">Go Backward</button>
+      </div>
+      <!-- end of adding next and previous buttons -->
     </div>
   </div> <!--tab content -->
   <div class="clearix"></div>
@@ -1786,6 +1793,81 @@ include_once 'includes/header.php';
       }
     });
 
+    // functionality to move forward and backward using 'go forward' and 'go back' buttons starts here
+    id_count             = 0;
+    backForward_id_array = {};
+    currentActive_li     = '';
+    nextActive_li        = '';
+    prevActive_li        = '';
+    setFlagForNext       = false;
+    setFlagForPrev       = true;
+
+    $('.backForward').each(function(){
+      var li_id = $(this).attr('id');
+      if($(this).hasClass('hidden'))
+      {
+        console.log('li ID: '+li_id+' has class hidden');
+      }
+      else
+      {
+        $(this).attr('data-sequence',id_count); // setting the data-sequence for li
+        $(this).children('a').attr('data-sequence',id_count); // setting the data-sequence for li children a
+        // adding a to li_id value i.e. it's ID+a to trigger click on it's child element a to make it active
+        backForward_id_array[id_count] = li_id+' a';
+        addClickHandler(li_id+' a');
+        if($(this).hasClass('active'))
+        {
+          currentActive_li = id_count;
+          setFlagForNext   = true;
+          setFlagForPrev   = false;
+        }
+        else
+        {
+          if(setFlagForNext)
+          {
+            nextActive_li  = id_count;
+            setFlagForNext = false;
+          }
+          if(setFlagForPrev)
+          {
+            prevActive_li = id_count;
+          }
+        }
+        id_count++;
+      }
+    });
+    
+    backForwardButtonsToggle();
+    // while someone directly clicks to tab then match the value for prev, next and current active li accordingly
+    
+    function addClickHandler(li_child_a){
+      $('#'+li_child_a).on('click',function(){
+        if(!$(this).parent('li').hasClass('hidden'))
+        {
+          var data_sequence = $(this).attr('data-sequence');
+          prevActive_li     = data_sequence-1;
+          currentActive_li  = data_sequence;
+          nextActive_li     = parseInt(data_sequence)+1;
+          // alert(prevActive_li+' : '+currentActive_li+' : '+nextActive_li+' : '+id_count);
+          backForwardButtonsToggle();
+        }
+      });
+    }
+
+    $('#goForward').on('click',function(){
+      $('#'+backForward_id_array[nextActive_li]).trigger('click');
+    });
+
+    $('#goBackward').on('click',function(){
+      $('#'+backForward_id_array[prevActive_li]).trigger('click');
+    });
+
+    // submit from bottom submit button as well
+    $('#submitBtn2').on('click',function(){
+      $('#submitBtn').trigger('click');
+    });
+    // functionality to move forward and backward using 'go forward' and 'go back' buttons ends here
+
     // stopping form submission while user press enter key
     $('form').on('keyup keypress', function(e) {
       var keyCode = e.keyCode || e.which;
@@ -1800,6 +1882,42 @@ include_once 'includes/header.php';
       $(this).remove();
     });
 
+    function backForwardButtonsToggle()
+    {
+      // if there is no next and prev i.e. there is only one area so hide goForward and goBackward buttons
+      if(parseInt(id_count) < 2)
+      {
+        $('#goForward').addClass('hidden');
+        $('#submitBtn2').addClass('hidden');
+        $('#goBackward').addClass('hidden');  
+      }
+      else
+      {
+        // hide/show the goForward, goBackward and submit(downside) buttons accordingly
+        // i.e. loaded first area selected or go to first area by clicking
+        if((isNaN(parseInt(prevActive_li)) || parseInt(prevActive_li)<0) && parseInt(nextActive_li)<parseInt(id_count))
+        {
+          $('#goForward').removeClass('hidden');
+          $('#submitBtn2').addClass('hidden');
+          $('#goBackward').addClass('hidden');  
+        }
+
+        else if((isNaN(parseInt(nextActive_li)) || parseInt(nextActive_li)==parseInt(id_count)) && parseInt(prevActive_li)>=0)
+        {
+          $('#goForward').addClass('hidden');
+          $('#submitBtn2').removeClass('hidden');
+          $('#goBackward').removeClass('hidden');  
+        }
+
+        else
+        {
+          $('#submitBtn2').addClass('hidden');
+          $('#goForward').removeClass('hidden');
+          $('#goBackward').removeClass('hidden');  
+        }
+      }
+      // console.log(parseInt(prevActive_li)+' : '+parseInt(currentActive_li)+' : '+parseInt(nextActive_li)+' : '+parseInt(id_count));
+    }
     formula_json_expcomp = {};
     formula_json_expsubc = {};
     input_field_values   = {};
@@ -1819,7 +1937,6 @@ include_once 'includes/header.php';
       var new_src    = $(this).attr('src');
       $(this).attr('src',new_src);
     });
-
   });
 function create_json_carry_field_data()
 {

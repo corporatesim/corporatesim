@@ -41,6 +41,7 @@ if(isset($_POST['downloadReport']) && $_POST['downloadReport'] == 'DownloadUserR
 	$gamename        = $_POST['gamename'];
 	$scenarioname    = $_POST['scenarioname'];
 	$gameId          = $_POST['game_game'];
+	// if user select all games then $_POST['game_scenario'] will be empty i.e. download report for all scenarios, so $linkid will be empty as well
 	$scenarioId      = $_POST['game_scenario'];
 	$StartDate       = $_POST['StartDate'];
 	$EndDate         = $_POST['EndDate'];
@@ -53,9 +54,31 @@ if(isset($_POST['downloadReport']) && $_POST['downloadReport'] == 'DownloadUserR
 		$EndDate = date('Y-m-d H:i:s');
 	}
 
-	$sql = "SELECT gr.*,gu.User_username as user_name FROM GAME_SITE_USER_REPORT_NEW gr LEFT JOIN GAME_SITE_USERS gu ON gu.User_id=gr.uid WHERE linkid=".$linkid." AND (date_time BETWEEN '".$StartDate."' AND '".$EndDate."')";
+	$sql = "SELECT gr.*,gu.User_username as user_name FROM GAME_SITE_USER_REPORT_NEW gr LEFT JOIN GAME_SITE_USERS gu ON gu.User_id=gr.uid WHERE (date_time BETWEEN '".$StartDate."' AND '".$EndDate."')";
 
+	// if user select all games then $_POST['game_scenario'] will be empty i.e. download report for all scenarios, so $linkid will be empty as well
+	if(isset($linkid) && !empty($linkid) && $linkid != 'all scenario')
+	{
+		$sql    .= " AND linkid=".$linkid;
+		// adding the below line of code for query string to add below to $sqlComp
+		$sqlFind = " SubLink_LinkID=".$linkid;
+	}
+	else
+	{
+		$linkidArray   = '';
+		$findLinkidSql = "SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$gameId;
+		$findLinkidObj = $functionsObj->ExecuteQuery($findLinkidSql);
+		foreach($findLinkidObj as $gameLinkid)
+		{
+			$linkidArray .= $gameLinkid['Link_ID'].','; 
+		}
+		$linkidArray = trim($linkidArray,',');
+		$sql    .= " AND linkid IN ($linkidArray)";
+		// adding the below line of code for query string to add below to $sqlComp
+		$sqlFind = " SubLink_LinkID IN ($linkidArray)";
+	}
 
+	// die($sql);
 	if($add_user_filter == 'select_users' )
 	{
 
@@ -96,7 +119,9 @@ if(isset($_POST['downloadReport']) && $_POST['downloadReport'] == 'DownloadUserR
 	FROM `GAME_LINKAGE_SUB` ls 
 	LEFT OUTER JOIN GAME_SUBCOMPONENT s ON SubLink_SubCompID=s.SubComp_ID
 	LEFT OUTER JOIN GAME_COMPONENT c on SubLink_CompID=c.Comp_ID
-	WHERE SubLink_LinkID=".$linkid;
+	WHERE ".$sqlFind;
+	// die($sqlComp);
+	// add query to bring the scenario name in it and show component/subcomponent scenario wise in sheet
 	if(isset($_POST['inputComponentFilter']) && isset($_POST['outputComponentFilter']))
 	{
 		$sqlComp .=" AND (SubLink_InputMode='user' OR SubLink_Type=1) ";

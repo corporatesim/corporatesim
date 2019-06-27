@@ -3,6 +3,12 @@ include_once 'includes/headerNav.php';
   // include_once 'includes/header.php'; 
   // include_once 'includes/header2.php'; 
 ?>
+<style>
+  .text-errorMsg{
+    background: white;
+    color: red;
+  }
+</style>
 <div class="row" style="margin-top:2%;">
   <div class="container col-md-7" style="margin-left:30%;" >
     <span class="anchor" id="formUserEdit"></span>
@@ -10,8 +16,8 @@ include_once 'includes/headerNav.php';
     <div class="card card-outline-secondary">
       <div class="card-header">
         <?php if(isset($msg)) { ?>
-          <div class="text-danger text-center"><?php echo $msg;?></div>
-        <?php } ?>
+          <div class="text-errorMsg text-center"><b><?php echo $msg;?></b></div>
+        <?php unset($msg); } ?>
         <h3 style="color:#ffffff;" class="mb-0 text-center">Feedback</h3>
       </div>
       <div class="card-body" style="margin: 5%;" >

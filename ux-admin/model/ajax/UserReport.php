@@ -39,6 +39,7 @@ if($_POST['action'] == 'game_scenario')
 // to get the users linked with the game with scenario
 if($_POST['action'] == 'game_users')
 {
+	$gameId = $_POST['Link_GameID'];
 	if($_POST['email_value'])
 	{
 		$searchEmail = $_POST['email_value'];
@@ -49,7 +50,25 @@ if($_POST['action'] == 'game_users')
 		$filterSql = '';
 	}
 	$linkid = $_POST['linkid'];
-	$sql    = "SELECT gu.User_id,concat(gu.User_fname,' ',gu.User_lname) AS Name,gu.User_username AS UserName,gu.User_email AS Email FROM GAME_SITE_USERS gu LEFT JOIN GAME_SITE_USER_REPORT_NEW gr ON gr.uid = gu.User_id WHERE gr.linkid=$linkid";
+	$sql    = "SELECT gu.User_id,concat(gu.User_fname,' ',gu.User_lname) AS Name,gu.User_username AS UserName,gu.User_email AS Email FROM GAME_SITE_USERS gu LEFT JOIN GAME_SITE_USER_REPORT_NEW gr ON gr.uid = gu.User_id ";
+
+	if($linkid == 'all scenario')
+	{
+		$linkidArray   = '';
+		$findLinkidSql = "SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$gameId;
+		$findLinkidObj = $funObj->ExecuteQuery($findLinkidSql);
+		foreach($findLinkidObj as $gameLinkid)
+		{
+			$linkidArray .= $gameLinkid['Link_ID'].','; 
+		}
+		$linkidArray = trim($linkidArray,',');
+		$sql .= " AND linkid IN ($linkidArray)";
+	}
+	else
+	{
+		$sql .= " WHERE gr.linkid=$linkid ";
+	}
+
 	$sql .= $filterSql;
 	// die($sql);
 	$Object = $funObj->ExecuteQuery($sql);
