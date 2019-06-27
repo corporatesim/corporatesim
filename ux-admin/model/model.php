@@ -30,6 +30,12 @@ class Model extends database{
 		return $value;
 	}
 
+	function RunQueryFetchCount($sql)
+	{
+		$object = $this->conn->query($sql) or die($this->conn->error."<br>".$sql);
+		$data   = $object->num_rows or die($this->conn->error);
+		return $data;
+	}
 	function FetchData($object){
 		$data = $object->fetch_assoc() or die($this->conn->error);
 		return $data;
