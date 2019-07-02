@@ -15,7 +15,7 @@ include_once 'includes/header.php';
         	<div class="col-sm-3 col-md-2 text-center timer">hh:mm:ss</div>-->
           <div class="col-md-12 InnerPageHeader">
             <?php if(!empty($result)){ echo $result->Scenario ; }?>
-            <button type="button" name="submit" id="submitShow" class="btn btn-primary pull-right" value="Submit">End Simulation</button>
+            <button type="button" name="submit" id="submitShow" class="btn btn-primary pull-right" value="Submit">Next</button>
           </div>
           <form method="POST" action="" id="game_frm" name="game_frm">
             <input type="hidden" name="ScenarioId" id="ScenarioId" value="<?php echo $result->Link_ScenarioID; ?>">
@@ -33,7 +33,7 @@ include_once 'includes/header.php';
             </div>-->
             <div class="col-sm-12  text-right pull-right"">
             	<!-- <button type="submit" name="submit" id="submit" class="btn innerBtns" value="Download">Download</button> -->
-            	<button type="submit" name="submit" id="submit" class="btn btn-primary hidden" value="Submit">End Simulation</button>
+            	<button type="submit" name="submit" id="submit" class="btn btn-primary hidden" value="Submit">Next</button>
             </div>
             
             <!-- Nav tabs --> 
@@ -817,7 +817,7 @@ include_once 'includes/header.php';
             <!-- adding next and previous buttons -->
             <div class="">
               <button type="button" class="btn btn-primary pull-right" id="goForward">Go Forward</button>
-              <button type="button" class="btn btn-primary pull-right hidden" id="submitBtn2">End Simulation</button>
+              <button type="button" class="btn btn-primary pull-right hidden" id="submitBtn2">Next</button>
               <button type="button" class="btn btn-primary" id="goBackward">Go Back</button>
             </div>
             <!-- end of adding next and previous buttons -->
