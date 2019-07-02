@@ -15,7 +15,7 @@ include_once 'includes/header.php';
         	<div class="col-sm-3 col-md-2 text-center timer">hh:mm:ss</div>-->
           <div class="col-md-12 InnerPageHeader">
             <?php if(!empty($result)){ echo $result->Scenario ; }?>
-            <button type="button" name="submit" id="submitShow" class="btn innerBtns pull-right" value="Submit">Next</button>
+            <button type="button" name="submit" id="submitShow" class="btn btn-primary pull-right" value="Submit">End Simulation</button>
           </div>
           <form method="POST" action="" id="game_frm" name="game_frm">
             <input type="hidden" name="ScenarioId" id="ScenarioId" value="<?php echo $result->Link_ScenarioID; ?>">
@@ -33,7 +33,7 @@ include_once 'includes/header.php';
             </div>-->
             <div class="col-sm-12  text-right pull-right"">
             	<!-- <button type="submit" name="submit" id="submit" class="btn innerBtns" value="Download">Download</button> -->
-            	<button type="submit" name="submit" id="submit" class="btn innerBtns hidden" value="Submit">Next</button>
+            	<button type="submit" name="submit" id="submit" class="btn btn-primary hidden" value="Submit">End Simulation</button>
             </div>
             
             <!-- Nav tabs --> 
@@ -51,11 +51,12 @@ include_once 'includes/header.php';
             			{
             				$areaStyle = '';
             			}
+                  // adding backForward class to click the forward and back button and move the area accordingly
             			if($i==0)
             			{
-            				echo "<li role='presentation' class='active regular'><a href='#".$row['Area_Name']."Tab' $areaStyle aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+            				echo "<li role='presentation' class='backForward active regular' id='".$row['Area_Name']."'><a href='#".$row['Area_Name']."Tab' $areaStyle aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
             			}else{
-            				echo "<li role='presentation' class='regular'><a href='#".$row['Area_Name']."Tab' $areaStyle aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
+            				echo "<li role='presentation' class='backForward regular' id='".$row['Area_Name']."'><a href='#".$row['Area_Name']."Tab' $areaStyle aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
             			}
             			$i++;
             		}
@@ -67,19 +68,19 @@ include_once 'includes/header.php';
 
             		<?php
             //echo $area->num_rows;
-            		$area = $functionsObj->ExecuteQuery($sqlarea);
-            		$i = 0;
-            		while($row = mysqli_fetch_array($area)) {
-            			$areaname = $row['Area_Name'];
+                $area = $functionsObj->ExecuteQuery($sqlarea);
+                $i    = 0;
+                while($row = mysqli_fetch_array($area)) {
+                 $areaname = $row['Area_Name'];
               //echo $i." ".$row['Area_Name'];
-            			if($i==0)
-            			{
-            				echo "<div role='tabpanel' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
-            			}
-            			else{
-            				echo "<div role='tabpanel' class='tab-pane' id='".$row['Area_Name']."Tab'>";
-            			}
-            			$i++;
+                 if($i==0)
+                 {
+                  echo "<div role='tabpanel' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
+                }
+                else{
+                  echo "<div role='tabpanel' class='tab-pane' id='".$row['Area_Name']."Tab'>";
+                }
+                $i++;
 
                   // $sqlcomp = "SELECT distinct a.Area_ID as AreaID, c.Comp_ID as CompID, a.Area_Name as Area_Name, 
                   // c.Comp_Name as Comp_Name, ls.SubLink_Details as Description ,ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder,ls.Sublink_ShowHide as ShowHide , o.output_current as Current ,ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor
@@ -92,253 +93,253 @@ include_once 'includes/header.php';
                   // LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
                   // INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
                   // WHERE ls.SubLink_Type=1 AND o.output_user=".$userid." AND ls.SubLink_SubCompID=0 and l.Link_ID=".$linkid." and a.Area_ID=".$row['AreaID']." ORDER BY ls.SubLink_Order";
-            			$sqlcomp = "SELECT 
-            			ga.Area_ID AS AreaID,
-            			gc.Comp_ID AS CompID,
-            			ga.Area_Name AS Area_Name,
-            			gc.Comp_Name AS Comp_Name,
-            			gls.SubLink_Details AS Description,
-            			gls.SubLink_ViewingOrder AS ViewingOrder,
-            			gls.SubLink_LabelCurrent AS LabelCurrent,
-            			gls.SubLink_LabelLast AS LabelLast,
-            			gls.SubLink_InputFieldOrder AS InputFieldOrder,
-            			gls.Sublink_ShowHide AS ShowHide,
-            			go.output_current AS CURRENT,
-            			gls.SubLink_BackgroundColor AS BackgroundColor,
-            			gls.SubLink_TextColor AS TextColor,
-                  gls.SubLink_InputMode as Mode,
-                  gls.Sublink_AdminCurrent as AdminCurrent,
-                  gls.SubLink_LinkIDcarry as CarryLinkID,
-                  gls.SubLink_CompIDcarry as CarryCompID,
-                  gls.SubLink_SubCompIDcarry as CarrySubCompID,
-                  gls.SubLink_ID as SubLinkID,
-                  gls.SubLink_FontSize as fontSize,
-                  gls.SubLink_FontStyle as fontStyle
-                  FROM GAME_LINKAGE_SUB gls 
-                  LEFT JOIN GAME_LINKAGE gl ON gl.Link_ID=gls.SubLink_LinkID
-                  LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID=gls.SubLink_CompID
-                  LEFT JOIN GAME_SUBCOMPONENT gsc ON gsc.SubComp_ID=gls.SubLink_SubCompID
-                  LEFT JOIN GAME_AREA ga ON ga.Area_ID=gls.SubLink_AreaID
-                  LEFT JOIN GAME_OUTPUT go ON go.output_sublinkid=gls.SubLink_ID AND go.output_user=$userid
-                  WHERE
-                  gls.SubLink_Type = 1 AND gls.SubLink_SubCompID = 0 AND gls.SubLink_LinkID=".$linkid." AND gls.SubLink_AreaID=".$row['AreaID']."	GROUP BY gls.SubLink_ID ORDER BY gls.SubLink_Order";
+                $sqlcomp = "SELECT 
+                ga.Area_ID AS AreaID,
+                gc.Comp_ID AS CompID,
+                ga.Area_Name AS Area_Name,
+                gc.Comp_Name AS Comp_Name,
+                gls.SubLink_Details AS Description,
+                gls.SubLink_ViewingOrder AS ViewingOrder,
+                gls.SubLink_LabelCurrent AS LabelCurrent,
+                gls.SubLink_LabelLast AS LabelLast,
+                gls.SubLink_InputFieldOrder AS InputFieldOrder,
+                gls.Sublink_ShowHide AS ShowHide,
+                go.output_current AS CURRENT,
+                gls.SubLink_BackgroundColor AS BackgroundColor,
+                gls.SubLink_TextColor AS TextColor,
+                gls.SubLink_InputMode as Mode,
+                gls.Sublink_AdminCurrent as AdminCurrent,
+                gls.SubLink_LinkIDcarry as CarryLinkID,
+                gls.SubLink_CompIDcarry as CarryCompID,
+                gls.SubLink_SubCompIDcarry as CarrySubCompID,
+                gls.SubLink_ID as SubLinkID,
+                gls.SubLink_FontSize as fontSize,
+                gls.SubLink_FontStyle as fontStyle
+                FROM GAME_LINKAGE_SUB gls 
+                LEFT JOIN GAME_LINKAGE gl ON gl.Link_ID=gls.SubLink_LinkID
+                LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID=gls.SubLink_CompID
+                LEFT JOIN GAME_SUBCOMPONENT gsc ON gsc.SubComp_ID=gls.SubLink_SubCompID
+                LEFT JOIN GAME_AREA ga ON ga.Area_ID=gls.SubLink_AreaID
+                LEFT JOIN GAME_OUTPUT go ON go.output_sublinkid=gls.SubLink_ID AND go.output_user=$userid
+                WHERE
+                gls.SubLink_Type = 1 AND gls.SubLink_SubCompID = 0 AND gls.SubLink_LinkID=".$linkid." AND gls.SubLink_AreaID=".$row['AreaID']."	GROUP BY gls.SubLink_ID ORDER BY gls.SubLink_Order";
                   // echo $sqlcomp; exit;
-                  $component = $functionsObj->ExecuteQuery($sqlcomp);
+                $component = $functionsObj->ExecuteQuery($sqlcomp);
               //Get Component for this area for this linkid
-                  while($row1 = mysqli_fetch_array($component)){ 
-                    switch ($row1['ViewingOrder']) {
+                while($row1 = mysqli_fetch_array($component)){ 
+                  switch ($row1['ViewingOrder']) {
                       //Name - detailsChart - inputfields
-                     case 1:
-                     $ComponentName  = "";
-                     $DetailsChart   = "";
-                     $InputFields    = "";
-                     $length         = "col-sm-12";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 1:
+                   $ComponentName  = "";
+                   $DetailsChart   = "";
+                   $InputFields    = "";
+                   $length         = "col-sm-12";
+                   $cklength       = "col-md-6";
+                   break;
 
                     //Name - inputfields - Detailschart
-                     case 2:
-                     $ComponentName  = "";
-                     $InputFields    = "";
-                     $DetailsChart   = "pull-right";
-                     $length         = "col-sm-12";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 2:
+                   $ComponentName  = "";
+                   $InputFields    = "";
+                   $DetailsChart   = "pull-right";
+                   $length         = "col-sm-12";
+                   $cklength       = "col-md-6";
+                   break;
 
                     //Detailchart - inputfields - Name
-                     case 3:
-                     $DetailsChart   = "";
-                     $InputFields    = "";
-                     $ComponentName  = "pull-right";
-                     $length         = "col-sm-12";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 3:
+                   $DetailsChart   = "";
+                   $InputFields    = "";
+                   $ComponentName  = "pull-right";
+                   $length         = "col-sm-12";
+                   $cklength       = "col-md-6";
+                   break;
 
                      //detailchart - inputfields
-                     case 4:
-                     $ComponentName  = "hidden removeThis";
-                     $DetailsChart   = "pull-left";
-                     $InputFields    = "pull-right";
-                     $length         = "col-sm-12";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 4:
+                   $ComponentName  = "hidden removeThis";
+                   $DetailsChart   = "pull-left";
+                   $InputFields    = "pull-right";
+                   $length         = "col-sm-12";
+                   $cklength       = "col-md-6";
+                   break;
 
                      //inputfields - detailschart - Name
-                     case 5:
-                     $ComponentName  = "pull-right";
-                     $DetailsChart   = "pull-right";
-                     $InputFields    = "";
-                     $length         = "col-sm-12";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 5:
+                   $ComponentName  = "pull-right";
+                   $DetailsChart   = "pull-right";
+                   $InputFields    = "";
+                   $length         = "col-sm-12";
+                   $cklength       = "col-md-6";
+                   break;
 
                      //inputfiels - detailchart
-                     case 6:
-                     $InputFields    = "pull-left";
-                     $ComponentName  = "hidden removeThis";
-                     $DetailsChart   = "pull-right";
-                     $length         = "col-sm-12";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 6:
+                   $InputFields    = "pull-left";
+                   $ComponentName  = "hidden removeThis";
+                   $DetailsChart   = "pull-right";
+                   $length         = "col-sm-12";
+                   $cklength       = "col-md-6";
+                   break;
 
                     //inputfield - name - fullLength
-                     case 7:
-                     $ComponentName  = "pull-right";
-                     $DetailsChart   = "hidden";
-                     $InputFields    = "";
-                     $length         = "col-sm-12";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 7:
+                   $ComponentName  = "pull-right";
+                   $DetailsChart   = "hidden";
+                   $InputFields    = "";
+                   $length         = "col-sm-12";
+                   $cklength       = "col-md-6";
+                   break;
 
                      //inputfield - detailchart
-                     case 8:
-                     $ComponentName  = "hidden";
-                     $DetailsChart   = "pull-right";
-                     $InputFields    = "";
-                     $length         = "col-sm-12";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 8:
+                   $ComponentName  = "hidden";
+                   $DetailsChart   = "pull-right";
+                   $InputFields    = "";
+                   $length         = "col-sm-12";
+                   $cklength       = "col-md-6";
+                   break;
 
                      //Name - detailchart
-                     case 9:
-                     $ComponentName  = "";
-                     $DetailsChart   = "pull-right";
-                     $InputFields    = "hidden";
-                     $length         = "col-sm-12";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 9:
+                   $ComponentName  = "";
+                   $DetailsChart   = "pull-right";
+                   $InputFields    = "hidden";
+                   $length         = "col-sm-12";
+                   $cklength       = "col-md-6";
+                   break;
 
                      //Name - inputfields - fullLength
-                     case 10:
-                     $ComponentName  = "";
-                     $DetailsChart   = "hidden";
-                     $InputFields    = "pull-right";
-                     $length         = "col-sm-12";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 10:
+                   $ComponentName  = "";
+                   $DetailsChart   = "hidden";
+                   $InputFields    = "pull-right";
+                   $length         = "col-sm-12";
+                   $cklength       = "col-md-6";
+                   break;
 
                     //detailschart - Name
-                     case 11:
-                     $ComponentName  = "pull-right";
-                     $DetailsChart   = "";
-                     $InputFields    = "hidden";
-                     $length         = "col-sm-12";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 11:
+                   $ComponentName  = "pull-right";
+                   $DetailsChart   = "";
+                   $InputFields    = "hidden";
+                   $length         = "col-sm-12";
+                   $cklength       = "col-md-6";
+                   break;
 
                      //Detailschart - inputfields
-                     case 12:
-                     $ComponentName  = "hidden";
-                     $DetailsChart   = "";
-                     $InputFields    = "";
-                     $length         = "col-sm-12";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 12:
+                   $ComponentName  = "hidden";
+                   $DetailsChart   = "";
+                   $InputFields    = "";
+                   $length         = "col-sm-12";
+                   $cklength       = "col-md-6";
+                   break;
 
                      //Name - inputfields - halfLength
-                     case 13:
-                     $ComponentName  = "";
-                     $DetailsChart   = "hidden";
-                     $InputFields    = "pull-right";
-                     $length         = "col-sm-6";
-                     $cklength       = "col-md-12";
-                     break;
+                   case 13:
+                   $ComponentName  = "";
+                   $DetailsChart   = "hidden";
+                   $InputFields    = "pull-right";
+                   $length         = "col-sm-6";
+                   $cklength       = "col-md-12";
+                   break;
 
                     //Inputfiels - Name - halfLength
-                     case 14:
-                     $InputFields    = "";
-                     $ComponentName  = "pull-right";
-                     $DetailsChart   = "hidden";
-                     $length         = "col-sm-6";
-                     $cklength       = "col-md-12";
-                     break;
+                   case 14:
+                   $InputFields    = "";
+                   $ComponentName  = "pull-right";
+                   $DetailsChart   = "hidden";
+                   $length         = "col-sm-6";
+                   $cklength       = "col-md-12";
+                   break;
 
                      //CkEditor - fullLength
-                     case 15:
-                     $ComponentName  = "hidden";
-                     $DetailsChart   = "";
-                     $InputFields    = "hidden";
-                     $length         = "col-sm-12";
-                     $cklength       = "col-md-12";
-                     break;
+                   case 15:
+                   $ComponentName  = "hidden";
+                   $DetailsChart   = "";
+                   $InputFields    = "hidden";
+                   $length         = "col-sm-12";
+                   $cklength       = "col-md-12";
+                   break;
 
                      //CkEditor - halfLength
-                     case 16:
-                     $ComponentName  = "hidden";
-                     $DetailsChart   = "";
-                     $InputFields    = "hidden";
-                     $length         = "col-sm-6";
-                     $cklength       = "col-md-12";
-                     break;
+                   case 16:
+                   $ComponentName  = "hidden";
+                   $DetailsChart   = "";
+                   $InputFields    = "hidden";
+                   $length         = "col-sm-6";
+                   $cklength       = "col-md-12";
+                   break;
 
                     // ckEditor - InputFields - HalfLength
-                     case 17:
-                     $ComponentName  = "hidden";
-                     $DetailsChart   = "";
-                     $InputFields    = "pull-right";
-                     $length         = "col-sm-6";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 17:
+                   $ComponentName  = "hidden";
+                   $DetailsChart   = "";
+                   $InputFields    = "pull-right";
+                   $length         = "col-sm-6";
+                   $cklength       = "col-md-6";
+                   break;
 
                      // InputFields - ckEditor - HalfLength
-                     case 18:
-                     $ComponentName  = "hidden";
-                     $DetailsChart   = "pull-right";
-                     $InputFields    = "";
-                     $length         = "col-sm-6";
-                     $cklength       = "col-md-6";
-                     break;
+                   case 18:
+                   $ComponentName  = "hidden";
+                   $DetailsChart   = "pull-right";
+                   $InputFields    = "";
+                   $length         = "col-sm-6";
+                   $cklength       = "col-md-6";
+                   break;
 
                     //Name - Detailchart - halfLength
-                     case 19:
-                     $ComponentName  = "";
-                     $DetailsChart   = "pull-right";
-                     $InputFields    = "hidden";
-                     $length         = "col-sm-6";
-                     $cklength       = 'col-md-6';
-                     break;
-                   }
+                   case 19:
+                   $ComponentName  = "";
+                   $DetailsChart   = "pull-right";
+                   $InputFields    = "hidden";
+                   $length         = "col-sm-6";
+                   $cklength       = 'col-md-6';
+                   break;
+                 }
 
-                   if($length == 'col-sm-6')
-                   {
-                     $width  = "col-md-6";
-                     $width1 = "col-md-6";
-                   }
-                   else
-                   {
-                     $width  = "col-md-2";
-                     $width1 = "col-md-4";
-                   }
-                   if ($row1['ShowHide'] == 0)
-                   {
-                     $hidden = "";
-                   }
-                   else
-                   {
-                     $hidden = "hidden";
-                   }
+                 if($length == 'col-sm-6')
+                 {
+                   $width  = "col-md-6";
+                   $width1 = "col-md-6";
+                 }
+                 else
+                 {
+                   $width  = "col-md-2";
+                   $width1 = "col-md-4";
+                 }
+                 if ($row1['ShowHide'] == 0)
+                 {
+                   $hidden = "";
+                 }
+                 else
+                 {
+                   $hidden = "hidden";
+                 }
                     // echo $row1['ShowHide'].' and '.$hidden; exit();
-                   switch ($row1['InputFieldOrder']) {
-                     case 1:
-                     $labelC = "";
-                     $labelL = "pull-right";
-                     break;
+                 switch ($row1['InputFieldOrder']) {
+                   case 1:
+                   $labelC = "";
+                   $labelL = "pull-right";
+                   break;
 
-                     case 2:
-                     $labelL = "";
-                     $labelC = "pull-right";
-                     break;
+                   case 2:
+                   $labelL = "";
+                   $labelC = "pull-right";
+                   break;
 
-                     case 3:
-                     $labelC = "";
-                     $labelL = "hidden";
-                     break;
+                   case 3:
+                   $labelC = "";
+                   $labelL = "hidden";
+                   break;
 
-                     case 4:
-                     $labelC = "hidden";
-                     $labelL = "";
-                     break;
-                   }
+                   case 4:
+                   $labelC = "hidden";
+                   $labelL = "";
+                   break;
+                 }
 
                    /* if($row1['Current'] == 1){
                       $labelhide="";
@@ -809,12 +810,20 @@ include_once 'includes/header.php';
                 //}
               }
               //<!--scenariaListingDiv-->
+
               echo "</div>";
             }
             ?>
+            <!-- adding next and previous buttons -->
+            <div class="">
+              <button type="button" class="btn btn-primary pull-right" id="goForward">Go Forward</button>
+              <button type="button" class="btn btn-primary pull-right hidden" id="submitBtn2">End Simulation</button>
+              <button type="button" class="btn btn-primary" id="goBackward">Go Back</button>
+            </div>
+            <!-- end of adding next and previous buttons -->
           </div>
         </div> <!--tab content -->
-        <div class="clearix"></div>
+        <div class="clearfix"></div>
       </div>          
 
       <div class="col-sm-12 text-right">
@@ -847,6 +856,131 @@ include_once 'includes/header.php';
     $('#submitShow').on('click',function(){
       $('#submit').trigger('click');
     });
+    // functionality to move forward and backward using 'go forward' and 'go back' buttons starts here
+    id_count             = 0;
+    backForward_id_array = {};
+    currentActive_li     = '';
+    nextActive_li        = '';
+    prevActive_li        = '';
+    setFlagForNext       = false;
+    setFlagForPrev       = true;
+    // console.log(parseInt(prevActive_li)+' : '+parseInt(currentActive_li)+' : '+parseInt(nextActive_li)+' : '+parseInt(id_count));
+    $('.backForward').each(function(){
+      var li_id = $(this).attr('id');
+      if($(this).hasClass('hidden'))
+      {
+        console.log('li ID: '+li_id+' has class hidden');
+      }
+      else
+      {
+        $(this).attr('data-sequence',id_count); // setting the data-sequence for li
+        $(this).children('a').attr('data-sequence',id_count); // setting the data-sequence for li children a
+        // adding a to li_id value i.e. it's ID+a to trigger click on it's child element a to make it active
+        backForward_id_array[id_count] = li_id+' a';
+        addClickHandler(li_id+' a');
+        if($(this).hasClass('active'))
+        {
+          currentActive_li = id_count;
+          setFlagForNext   = true;
+          setFlagForPrev   = false;
+        }
+        else
+        {
+          if(setFlagForNext)
+          {
+            nextActive_li  = id_count;
+            setFlagForNext = false;
+          }
+          if(setFlagForPrev)
+          {
+            prevActive_li = id_count;
+          }
+        }
+        id_count++;
+      }
+    });
+    
+    backForwardButtonsToggle();
+    // while someone directly clicks to tab then match the value for prev, next and current active li accordingly
+    
+    function addClickHandler(li_child_a){
+      $('#'+li_child_a).on('click',function(){
+        if(!$(this).parent('li').hasClass('hidden'))
+        {
+          var data_sequence = $(this).attr('data-sequence');
+          prevActive_li     = data_sequence-1;
+          currentActive_li  = data_sequence;
+          nextActive_li     = parseInt(data_sequence)+1;
+          // alert(prevActive_li+' : '+currentActive_li+' : '+nextActive_li+' : '+id_count);
+          backForwardButtonsToggle();
+        }
+      });
+    }
+
+    $('#goForward').on('click',function(){
+      $('#'+backForward_id_array[nextActive_li]).trigger('click');
+    });
+
+    $('#goBackward').on('click',function(){
+      $('#'+backForward_id_array[prevActive_li]).trigger('click');
+    });
+
+    // submit from bottom submit button as well
+    $('#submitBtn2').on('click',function(){
+      $('#submit').trigger('click');
+    });
+    // functionality to move forward and backward using 'go forward' and 'go back' buttons ends here
+
+    // stopping form submission while user press enter key
+    $('form').on('keyup keypress', function(e) {
+      var keyCode = e.keyCode || e.which;
+      if (keyCode === 13) { 
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    // removing the element which are twice
+    $(".removeThis").each(function(){
+      $(this).remove();
+    });
+
+    function backForwardButtonsToggle()
+    {
+      // if there is no next and prev i.e. there is only one area so hide goForward and goBackward buttons
+      if(parseInt(id_count) < 2)
+      {
+        $('#goForward').addClass('hidden');
+        $('#submitBtn2').addClass('hidden');
+        $('#goBackward').addClass('hidden');  
+      }
+      else
+      {
+        // hide/show the goForward, goBackward and submit(downside) buttons accordingly
+        // i.e. loaded first area selected or go to first area by clicking
+        if((isNaN(parseInt(prevActive_li)) || parseInt(prevActive_li)<0) && parseInt(nextActive_li)<parseInt(id_count))
+        {
+          $('#goForward').removeClass('hidden');
+          $('#submitBtn2').addClass('hidden');
+          $('#goBackward').addClass('hidden');  
+        }
+
+        else if((isNaN(parseInt(nextActive_li)) || parseInt(nextActive_li)==parseInt(id_count)) && parseInt(prevActive_li)>=0)
+        {
+          $('#goForward').addClass('hidden');
+          $('#submitBtn2').removeClass('hidden');
+          $('#goBackward').removeClass('hidden');  
+        }
+
+        else
+        {
+          $('#submitBtn2').addClass('hidden');
+          $('#goForward').removeClass('hidden');
+          $('#goBackward').removeClass('hidden');  
+        }
+      }
+      // console.log(parseInt(prevActive_li)+' : '+parseInt(currentActive_li)+' : '+parseInt(nextActive_li)+' : '+parseInt(id_count));
+    }
   });
 </script>
 </body>

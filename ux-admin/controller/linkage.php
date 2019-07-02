@@ -69,19 +69,19 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 
 	if(isset($_GET['link']))
 	{
-		$file   ='addeditlink.php';	
-		$linkid = $_GET['link'];		
+		$file   ='addeditlink.php';
+		$linkid = $_GET['link'];
 		$where  = "SubLink_LinkID=" . $linkid." AND SubLink_CompID=" . $_POST['comp_id'];
 
 		if(isset($_POST['subcomp_id']) && !empty($_POST['subcomp_id']))
-		{	
+		{
 			$where .= " AND SubLink_SubCompID=" . $_POST['subcomp_id'];
 		}
 		else{
 			$where .= " AND SubLink_SubCompID=0";
 		}
 
-		$object = $functionsObj->SelectData ( array (), 'GAME_LINKAGE_SUB', array ($where), 
+		$object = $functionsObj->SelectData ( array (), 'GAME_LINKAGE_SUB', array ($where),
 			'', '', '', '', 0 );
 
 		if ($object->num_rows > 0)
@@ -222,7 +222,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 						);
 						$replaceresult1 = $functionsObj->InsertData('GAME_LINK_REPLACE', $replacearray1, 0, 0);
 					}
-					else					
+					else
 					{
 							//update into Replace table
 					}
@@ -402,7 +402,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 
 		if(isset($_POST['subcomp_id']))
 		{
-			$subcomp_id = $subcomp_id;
+			$subcomp_id = $_POST['subcomp_id'];
 		}
 		else
 		{
@@ -461,7 +461,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 				$details = $functionsObj->FetchObject($object);
 				$strexp  = $details->expression;
 				
-				echo $strexp;
+				// echo $strexp;
 				
 				if(isset($subcomp_id) && !empty($subcomp_id))
 					{	$strcheck = "subc_".$subcomp_id;

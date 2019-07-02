@@ -105,6 +105,15 @@
           $(this).attr('required',false);
         });
       }
+      else
+      {
+        if($('#SubLink_InputModeType').val() != 'mChoice')
+        {
+          $('.inputTypeUser').each(function(){
+            $(this).attr('required',false);
+          });
+        }
+      }
     },1000);
   });
   /*function label_choice(select){
@@ -315,7 +324,7 @@
               </div>
               <div class="col-md-4">
                 <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_area')){?>
-                  <select class="form-control" name="area_id" id="area_id" >
+                  <select class="form-control" name="area_id" id="area_id" required="">
                   <?php } else {?>
                     <input type="hidden" name="dis_area_id" value="<?php echo $linkdetails->SubLink_AreaID;?>">
                     <select class="form-control" name="area_id" id="area_id" disabled="" >

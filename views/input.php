@@ -63,7 +63,7 @@ include_once 'includes/header.php';
             <div id="input_loader" style="float:left; color:#2A8037;"></div>
             <button type="button" class="btn innerBtns hidden" name="execute_input" id="execute_input">Execute</button>
             <button type="submit" name="submit" id="submit" class="btn innerBtns hidden" value="Submit">Submit</button>
-            <button type="button" name="submit" id="submitBtn" class="btn innerBtns" value="Submit">Submit</button>
+            <button type="button" name="submit" id="submitBtn" class="btn btn-primary" value="Submit">Submit</button>
             <!--<button class="btn innerBtns">Save</button>
               <button class="btn innerBtns">Submit</button>-->
             </div>
@@ -1344,7 +1344,7 @@ include_once 'includes/header.php';
       <div class="">
         <button type="button" class="btn btn-primary pull-right" id="goForward">Go Forward</button>
         <button type="button" class="btn btn-primary pull-right hidden" id="submitBtn2">Submit</button>
-        <button type="button" class="btn btn-primary" id="goBackward">Go Backward</button>
+        <button type="button" class="btn btn-primary" id="goBackward">Go Back</button>
       </div>
       <!-- end of adding next and previous buttons -->
     </div>
