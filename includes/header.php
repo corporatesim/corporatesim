@@ -78,6 +78,9 @@
 					{
 						if(isset($_SESSION['username']) && !empty($_SESSION['username'])){ 
 							?>
+							<!-- show this text only when user review -->
+							<li class="hidden hoverAnchor" id="notifyText"><a href="javascript:void(0);" style="color: #ffffff !important; background-color: #C0392B !important;"><?php echo ucwords('click here for play mode');?></a></li>
+
 							<li class="hoverAnchor"><a href="<?php echo site_root."selectgame.php";?>" class="">Welcome <?php echo ucfirst(strtolower($_SESSION['username'])); ?></a></li>
 							<li class="hoverAnchor"><a href="<?php echo site_root."logout.php?q=Logout";?>" class="">Logout</a></li>
 						<?php }else{ ?>

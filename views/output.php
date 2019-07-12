@@ -75,10 +75,10 @@ include_once 'includes/header.php';
               //echo $i." ".$row['Area_Name'];
                  if($i==0)
                  {
-                  echo "<div role='tabpanel' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
+                  echo "<div role='tabpanel' data-tabId='".$row['Area_Name']."' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
                 }
                 else{
-                  echo "<div role='tabpanel' class='tab-pane' id='".$row['Area_Name']."Tab'>";
+                  echo "<div role='tabpanel' data-tabId='".$row['Area_Name']."' class='tab-pane' id='".$row['Area_Name']."Tab'>";
                 }
                 $i++;
 
@@ -815,6 +815,8 @@ include_once 'includes/header.php';
             }
             ?>
             <!-- adding next and previous buttons -->
+            <div class="clearfix"></div>
+            <br>
             <div class="">
               <button type="button" class="btn btn-primary pull-right" id="goForward">Go Forward</button>
               <button type="button" class="btn btn-primary pull-right hidden" id="submitBtn2">Next</button>
@@ -850,12 +852,33 @@ include_once 'includes/header.php';
 <script src="js/bootstrap.min.js"></script> 
 <script>
 	$(document).ready(function(){
-		$(".removeThis").each(function(){
-			$(this).remove();
-		});
-    $('#submitShow').on('click',function(){
-      $('#submit').trigger('click');
-    });
+		// hide area if there is no component or all of them are hidden
+   $('.tab-pane').each(function(i,e)
+   {
+    var tabId   = $(this).attr('data-tabId');
+    var hidden  = 0;
+    var element = $(e).find('div.scenariaListingDiv').length;
+    if(element > 0)
+    {
+      $(e).children('div.scenariaListingDiv').each(function(){
+        if($(this).hasClass('hidden'))
+        {
+          hidden++;
+        }
+      });
+      if(element == hidden)
+      {
+        $('#'+tabId).addClass('hidden');
+      }
+    }
+    else
+    {
+      $('#'+tabId).addClass('hidden');
+    }
+  });
+   $('#submitShow').on('click',function(){
+    $('#submit').trigger('click');
+  });
     // functionality to move forward and backward using 'go forward' and 'go back' buttons starts here
     id_count             = 0;
     backForward_id_array = {};

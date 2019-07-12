@@ -7,7 +7,7 @@ div.vertical-menu > a.active{
 	color           : #ffffff;
 }
 #video_player{
-	margin-top:1%;
+	margin-top: -1%;
 }
 
 .output_header{
@@ -777,6 +777,7 @@ flip card
 .hoverAnchor a:hover{
 	color           :#ffffff !important;
 	background-color: #C0392B !important;
+	border-radius   : 4px;
 }
 
 .hoverAnchor a{
@@ -915,6 +916,84 @@ flip card
 .reduce_flipspeed{
 	transition : transform 0.9s;
 	width:295px;
+}
+
+@media (min-width: 992px){
+	.manageContainer {
+		width: 85% !important;
+	}
+}
+
+@media (max-width: 1292px){
+	.manageContainer {
+		/*margin-right: 11%;*/
+	}
+}
+
+#left_scenario {
+	top: 20px;
+}
+
+/*for right side buttons*/
+#rightSidenav a {
+	margin-top     : 180px;
+	position       : fixed;
+	right          : -125px;
+	transition     : 0.3s;
+	padding        : 5px;
+	width          : 300px;
+	text-decoration: none;
+	font-size      : 20px;
+	color          : white;
+	border-radius  : 0 5px 5px 0;
+	font-weight    : bold;
+}
+
+.timer_clock {
+	/*margin-top     : 120px;*/
+	position       : fixed;
+	right          : -90px;
+	transition     : 0.3s;
+	padding        : 5px;
+	width          : 200px;
+	text-decoration: none;
+	font-size      : 14px;
+	color          : white;
+	border-radius  : 0 5px 5px 0;
+}
+
+.timer_clock_icon {
+	margin-top     : -25px;
+	position       : fixed;
+	right          : -125px;
+	transition     : 0.3s;
+	padding        : 5px;
+	width          : 200px;
+	text-decoration: none;
+	font-size      : 20px;
+	color          : white;
+	border-radius  : 0 5px 5px 0;
+}
+
+.leftsideNav {
+	margin-top     : 180px;
+	position       : fixed;
+	left           : -160px;
+	transition     : 0.3s;
+	/*padding        : 5px;*/
+	width          : 400px;
+	text-decoration: none;
+	font-size      : 20px;
+	color          : white;
+	border-radius  : 0 5px 5px 0;
+}
+
+.rotateComp{
+	transform: rotate(90deg);
+}
+
+.rotateCompAnti{
+	transform: rotate(-90deg);
 }
 /* .reduce_length
 {
