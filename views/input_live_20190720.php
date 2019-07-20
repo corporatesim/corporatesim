@@ -418,7 +418,7 @@ include_once 'includes/header.php';
             {
               $comp_input_lenght      = 'col-md-6';
               $comp_name_length       = 'col-md-6';
-              // $comp_limit_char        = 30;
+              $comp_limit_char        = 30;
               $comp_label_min_width   = '110px';
           // $comp_save_button_align = 'top: 50%; position: absolute;';
             }
@@ -426,7 +426,7 @@ include_once 'includes/header.php';
             {
               $comp_input_lenght      = 'col-md-4';
               $comp_name_length       = 'col-md-2';
-              // $comp_limit_char        = 55;
+              $comp_limit_char        = 55;
               $comp_label_min_width   = '122px';
           // $comp_save_button_align = 'top: 50%; position: absolute;';
             }
@@ -630,7 +630,8 @@ include_once 'includes/header.php';
 
                 echo "<input value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required $type $style_text ";
 
-                echo " onchange='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>";
+                echo "onchange='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' ";
+                echo " onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>";
                 ?>
                 <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 30%; margin-top: 1%; padding: 0.6px 4px;"></span>
                 <?php
@@ -668,7 +669,7 @@ include_once 'includes/header.php';
                     }
               // 'makeDefaultChecked' is the array key for default selection from admin and it's value is the text of the option for the particular question i.e. $wrow
               // title-removethis should be replaced with title when we need to show the title
-                    echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-flex; cursor: pointer;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
+                    echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
               // if db value is matched from option value then checked that option, otherwise make admin choice selected
                     if($flag && count($mChoice_details)>2)
                     {
@@ -691,9 +692,7 @@ include_once 'includes/header.php';
               //   echo 'checked';
               // }
                     }
-                    // echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>".(strlen($wrow) > $comp_limit_char?substr($wrow,0,$comp_limit_char).'...':$wrow)."</label></div>";
-                    // uncomment the above code if we need to use the limit and also $comp_limit_char must be uncommented
-                    echo " $style_text onchange='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>".$wrow."</label></div>";
+                    echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>".(strlen($wrow) > $comp_limit_char?substr($wrow,0,$comp_limit_char).'...':$wrow)."</label></div>";
                   }
                   ?>
                 </div>
@@ -704,7 +703,7 @@ include_once 'includes/header.php';
               {
           // $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
                 echo "<input type='text' value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' ";
-                echo "onchange='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $style_text></input>";
+                echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $style_text></input>";
               }
 
             }
@@ -713,6 +712,7 @@ include_once 'includes/header.php';
               $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
               echo $linkCarry;
               echo "<input type='text' value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' readonly></input>";
+          // echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' readonly></input>";
             }
           }
 
@@ -1229,9 +1229,9 @@ include_once 'includes/header.php';
 
                 echo "<input value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required $type ";
 
-                echo " onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." required ".$style_text."></input>";
+                echo "onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'";
 
-                // echo " onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
+                echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
                 ?>
                 <span class="range" style="float: left; background:#009aef; color:#ffffff; margin-left: 30%; margin-top: 1%; padding: 0.6px 4px;"></span>
                 <?php
@@ -1259,7 +1259,7 @@ include_once 'includes/header.php';
                       continue;
                     }
               // title-removethis should be replaced with title when we need to show the title
-                    echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-flex; cursor: pointer;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
+                    echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-flex;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
               // echo (($value == $wrow_value)?'checked':'');
                     if($flag)
                     {
@@ -1280,15 +1280,14 @@ include_once 'includes/header.php';
                 //   echo 'checked';
                 // }
                     }
-                    // echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
-                    echo " onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." required ".$style_text."></input>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
+                    echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
                   } ?>
                 </div>
               <?php }
               else
               {
                 echo "<input type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
-                echo "onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." required ".$style_text."></input>";
+                echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>";
               }
             }
             else
@@ -1296,6 +1295,7 @@ include_once 'includes/header.php';
               echo "<input type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
               $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
               echo " readonly></input>";
+        // echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' readonly></input>";
             }
           }
           ?>
@@ -1508,23 +1508,16 @@ include_once 'includes/header.php';
     // {
     //   $('#SaveInput_'+sublinkid).show();
     // }
+    $('#SaveInput_'+sublinkid).show();
+  //$('#SaveInput_'+sublinkid).click('onclick="alert('+ sublinkid,key,value +')"');
+  $('#SaveInput_'+sublinkid).attr('onclick','return SaveCurrent("'+sublinkid+'","'+key+'")');
+  <?php if($result->Branching){ ?>
+    componentBranchingDivId = 'branchComp_'+sublinkid;
+  <?php } ?>
+}
 
-    // $('#SaveInput_'+sublinkid).show();
-    // $('#SaveInput_'+sublinkid).attr('onclick','return SaveCurrent("'+sublinkid+'","'+key+'")');
-
-    // commenting the above line and adding the below line of code to direct click on change value for input field and not to show the save button
-    // $('#SaveInput_'+sublinkid).trigger('click');
-    
-    // either we can directly trigger event or call function, so I am calling function, coz If i need to trigger click then I need to add the event to save button
-    SaveCurrent(sublinkid,key);
-
-    <?php if($result->Branching){ ?>
-      componentBranchingDivId = 'branchComp_'+sublinkid;
-    <?php } ?>
-  }
-
-  function SaveCurrent(sublinkid,key)
-  {
+function SaveCurrent(sublinkid,key)
+{
   //alert(key);
   // checking if user has logged out or not in another tab
   $.ajax({
@@ -2273,11 +2266,7 @@ function element_not_found(key)
 {
   var exp       = '';
   var find      = 'link'+key;
-  if(input_field_keys[find] === undefined)
-  {
-    console.log(input_field_keys[find]+' and '+key+' not found');
-    console.log(input_field_keys);
-  }
+  // console.log(input_field_keys[find]+' and '+find);
   var ret_value = input_field_keys[find].split('_');
   return ret_value[0]+'_'+key;
 }
