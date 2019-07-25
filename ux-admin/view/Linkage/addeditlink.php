@@ -20,6 +20,11 @@
 <script type="text/javascript">
   $(document).ready(function()
   {
+    <?php if(empty($linkdetails) || $linkdetails->SubLink_SubCompID==0){ ?>
+      $('.onlyForSubcomponent').each(function(){
+        $(this).attr('disabled',true);
+      });
+    <?php } ?>
     // adding the font-style and size to demo text for user view
     $('#fontSize,#fontFamily').on('change',function(){
       // if integer then font-size else font-style
@@ -49,6 +54,10 @@
     $('input[type="radio"]').click(function(){
      if($(this).attr("value")=="subcomp"){
       var statusType = 0;
+      // if subcomponent then show all dropdowns
+      $('.onlyForSubcomponent').each(function(){
+        $(this).attr('disabled',false);
+      });
       $("#subcomponent").show();
       $.ajax({
         url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
@@ -62,6 +71,10 @@
     }
     if($(this).attr("value")=="comp"){
       var statusType = 1;
+      // if component then disable all dropdowns implemented for subcomponent only
+      $('.onlyForSubcomponent').each(function(){
+        $(this).attr('disabled',true);
+      });
       $("#subcomponent").hide();
       $.ajax({
         url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
@@ -421,27 +434,36 @@
                           <select class="form-control" name="SubLink_ViewingOrder" id="SubLink_ViewingOrder" disabled="">
                           <?php }?>
                           <option value="">-- SELECT --</option>
-                          <option value="1" <?php echo ($SubLink_ViewingOrder == 1?'selected':''); ?>>Name - Details/Chart - Input Fields</option>
-                          <option value="2" <?php echo ($SubLink_ViewingOrder == 2?'selected':''); ?>>Name - Input Fields - Details/Chart</option>
-                          <option value="3" <?php echo ($SubLink_ViewingOrder == 3?'selected':''); ?>>Details/Chart - Input Fields - Name</option>
-                          <option value="4" <?php echo ($SubLink_ViewingOrder == 4?'selected':''); ?>>Details/Chart - Name - Input Fields</option>
-                          <option value="5" <?php echo ($SubLink_ViewingOrder == 5?'selected':''); ?>>Input Fields - Details/Chart - Name</option>
-                          <option value="6" <?php echo ($SubLink_ViewingOrder == 6?'selected':''); ?>>Input Fields - Name - Details/Chart </option>
+                          <option value="1" <?php echo ($SubLink_ViewingOrder == 1?'selected':''); ?>>Name - Details/Chart(CkEditor) - Input Fields</option>
+                          <option value="2" <?php echo ($SubLink_ViewingOrder == 2?'selected':''); ?>>Name - Input Fields - Details/Chart(CkEditor)</option>
+                          <option value="3" <?php echo ($SubLink_ViewingOrder == 3?'selected':''); ?>>Details/Chart(CkEditor) - Input Fields - Name</option>
+                          <option value="4" <?php echo ($SubLink_ViewingOrder == 4?'selected':''); ?>>Details/Chart(CkEditor) - Name - Input Fields</option>
+                          <option value="5" <?php echo ($SubLink_ViewingOrder == 5?'selected':''); ?>>Input Fields - Details/Chart(CkEditor) - Name</option>
+                          <option value="6" <?php echo ($SubLink_ViewingOrder == 6?'selected':''); ?>>Input Fields - Name - Details/Chart(CkEditor) </option>
                           <option value="7" <?php echo ($SubLink_ViewingOrder == 7?'selected':''); ?>>Input Fields - Name - Full Length</option>
-                          <option value="8" <?php echo ($SubLink_ViewingOrder == 8?'selected':''); ?>>Input Fields - Details/Chart</option>
-                          <option value="9" <?php echo ($SubLink_ViewingOrder == 9?'selected':''); ?>>Name - Details/Chart</option>
+                          <option value="8" <?php echo ($SubLink_ViewingOrder == 8?'selected':''); ?>>Input Fields - Details/Chart(CkEditor)</option>
+                          <option value="9" <?php echo ($SubLink_ViewingOrder == 9?'selected':''); ?>>Name - Details/Chart(CkEditor)</option>
                           <option value="10" <?php echo ($SubLink_ViewingOrder == 10?'selected':''); ?>>Name - Input Fields - Full Length</option>
-                          <option value="11" <?php echo ($SubLink_ViewingOrder == 11?'selected':''); ?>>Details/Chart - Name</option>
-                          <option value="12" <?php echo ($SubLink_ViewingOrder == 12?'selected':''); ?>>Details/Chart - Input Fields</option>
+                          <option value="11" <?php echo ($SubLink_ViewingOrder == 11?'selected':''); ?>>Details/Chart(CkEditor) - Name</option>
+                          <option value="12" <?php echo ($SubLink_ViewingOrder == 12?'selected':''); ?>>Details/Chart(CkEditor) - Input Fields</option>
                           <option value="13" <?php echo ($SubLink_ViewingOrder == 13?'selected':''); ?>>Name - Input Fields - Half Length</option>
                           <option value="14" <?php echo ($SubLink_ViewingOrder == 14?'selected':''); ?>>Input Fields - Name - Half Length</option>
-                          <option value="15" <?php  echo ($SubLink_ViewingOrder == 15?'selected':''); ?>> CK Editor - Full Length</option> 
-                          <option value="16" <?php  echo ($SubLink_ViewingOrder == 16?'selected':''); ?>> CK Editor - Half Length</option> 
-                          <option value="17" <?php  echo ($SubLink_ViewingOrder == 17?'selected':''); ?>> CK Editor - Input Fields - Half Length</option> 
-                          <option value="18" <?php  echo ($SubLink_ViewingOrder == 18?'selected':''); ?>> Input Fields - CK Editor - Half Length</option> 
-                          <option value="19" <?php  echo ($SubLink_ViewingOrder == 19?'selected':''); ?>> Name - Details/Chart - Half Length</option> 
-                          <option value="20" <?php  echo ($SubLink_ViewingOrder == 20?'selected':''); ?>> CK-Editor 1/4 length(for SubComponent only)</option> 
-                          <option value="21" <?php  echo ($SubLink_ViewingOrder == 21?'selected':''); ?>> InputField 1/4 length(for SubComponent only)</option>
+                          <option value="15" <?php  echo ($SubLink_ViewingOrder == 15?'selected':''); ?>> Details/Chart(CkEditor) - Full Length</option> 
+                          <option value="16" <?php  echo ($SubLink_ViewingOrder == 16?'selected':''); ?>> Details/Chart(CkEditor) - Half Length</option> 
+                          <option value="17" <?php  echo ($SubLink_ViewingOrder == 17?'selected':''); ?>> Details/Chart(CkEditor) - Input Fields - Half Length</option> 
+                          <option value="18" <?php  echo ($SubLink_ViewingOrder == 18?'selected':''); ?>> Input Fields - Details/Chart(CkEditor) - Half Length</option> 
+                          <option value="19" <?php  echo ($SubLink_ViewingOrder == 19?'selected':''); ?>> Name - Details/Chart(CkEditor) - Half Length</option> 
+
+                          <!-- for subcomponent only -->
+                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="20" <?php  echo ($SubLink_ViewingOrder == 20?'selected':''); ?>> Details/Chart(CkEditor) 1/4 length (for SubComponent only)</option> 
+                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="21" <?php  echo ($SubLink_ViewingOrder == 21?'selected':''); ?>> InputField 1/4 length (for SubComponent only)</option>
+                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="22" <?php  echo ($SubLink_ViewingOrder == 22?'selected':''); ?>> Details/Chart(CkEditor) 75% (for SubComponent only)</option>
+                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="23" <?php  echo ($SubLink_ViewingOrder == 23?'selected':''); ?>>  Input Fields - Details/Chart(CkEditor) 75% (for SubComponent only)</option>
+                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="24" <?php  echo ($SubLink_ViewingOrder == 24?'selected':''); ?>>  Details/Chart(CkEditor) - Input Fields 75% (for SubComponent only)</option>
+                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="25" <?php  echo ($SubLink_ViewingOrder == 25?'selected':''); ?>> Details/Chart(CkEditor) 33% (for SubComponent only)</option>
+                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="26" <?php  echo ($SubLink_ViewingOrder == 26?'selected':''); ?>> Input Fields - Details/Chart(CkEditor) 33% (for SubComponent only)</option>
+                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="27" <?php  echo ($SubLink_ViewingOrder == 27?'selected':''); ?>> Details/Chart(CkEditor) - Input Fields 33% (for SubComponent only)</option>
+                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="28" <?php  echo ($SubLink_ViewingOrder == 28?'selected':''); ?>> Input Fields 33% (for SubComponent only)</option>
                         </select>
                       </div>
                       <br><br>

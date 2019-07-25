@@ -84,7 +84,7 @@ include_once 'includes/header.php';
 											<!-- adding 'hide_this' class to hide next and prev button to hide on screen size less -->
 											<div class="carousel-inner col-lg-12 col-md-6" role="listbox" >
 												<div class="col-sm-1 col-lg-1 col-md-1 text-right pull-left hide_this" style="margin-top: 15%;">
-													<a href ="#myCarousel" role="button" data-slide="prev"><img src="images/prevIcon.png" alt="Previous" title="Previous" style="width: 75%; background: #DCDCDC;"></img></a>
+													<!-- <a href ="#myCarousel" role="button" data-slide="prev"><img src="images/prevIcon.png" alt="Previous" title="Previous" style="width: 75%; background: #DCDCDC;"></img></a> -->
 												</div>
 												<?php
 												$i=1;
@@ -104,11 +104,11 @@ include_once 'includes/header.php';
 												}
 												?>											
 												<div class="col-sm-1 col-lg-1 col-md-1 text-left pull-right hide_this" style="margin-top: 15%;">
-													<a href ="#myCarousel" role="button" data-slide="next"><img src="images/nextIcon.png" alt="Next" title="Next" style="width: 75%;background:#DCDCDC;"></img></a>
+													<!-- <a href ="#myCarousel" role="button" data-slide="next"><img src="images/nextIcon.png" alt="Next" title="Next" style="width: 75%;background:#DCDCDC;"></img></a> -->
 												</div>
 											</div>
 										</div>
-										<?php if($i>1) { ?>
+										<!-- <?php if($i>1) { ?>
 											<div class="nextPrev nextPrevbottom no_padding regular col-sm-12 col-md-12 col-lg-12">
 
 												<div class="pull-left text-right col-md-6 col-sm-6">
@@ -118,7 +118,7 @@ include_once 'includes/header.php';
 													<a href ="#myCarousel" role="button" data-slide="next">Next <img src="images/nextIcon.png" alt="Previous"></img></a>
 												</div>
 											</div>
-										<?php } ?>
+										<?php } ?> -->
 									</div>
 
 									<div role="tabpanel" class="tab-pane" id="videosTab">

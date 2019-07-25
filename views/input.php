@@ -668,7 +668,7 @@ include_once 'includes/header.php';
                     }
               // 'makeDefaultChecked' is the array key for default selection from admin and it's value is the text of the option for the particular question i.e. $wrow
               // title-removethis should be replaced with title when we need to show the title
-                    echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-flex; cursor: pointer;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
+                    echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-table; cursor: pointer;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
               // if db value is matched from option value then checked that option, otherwise make admin choice selected
                     if($flag && count($mChoice_details)>2)
                     {
@@ -942,7 +942,7 @@ include_once 'includes/header.php';
             $addCenterPadding = "";
             break;
 
-          // CkEditor - FullLength
+          // Details/Chart - FullLength
             case 15:
             $SubCkEditor      = 'col-md-12';
             $SubcomponentName = "hidden";
@@ -953,7 +953,7 @@ include_once 'includes/header.php';
             $addCenterPadding = "";
             break;
 
-          // CkEditor - HalfLength
+          // Details/Chart - HalfLength
             case 16:
             $SubCkEditor      = 'col-md-12';
             $SubcomponentName = "hidden";
@@ -964,7 +964,7 @@ include_once 'includes/header.php';
             $addCenterPadding = "";
             break;
 
-          // ckEditor - InputFields - HalfLength
+          // Details/Chart - InputFields - HalfLength
             case 17:
             $SubCkEditor      = 'col-md-6';
             $SubcomponentName = "hidden";
@@ -975,7 +975,7 @@ include_once 'includes/header.php';
             $addCenterPadding = "";
             break;
 
-          // InputFields - ckEditor - HalfLength
+          // InputFields - Details/Chart - HalfLength
             case 18:
             $SubCkEditor      = 'col-md-6';
             $SubcomponentName = "hidden";
@@ -997,7 +997,7 @@ include_once 'includes/header.php';
             $addCenterPadding = "";
             break;
 
-          //ck-editor 1/4 length
+          // Details/Chart 1/4 length
             case 20:
             $SubCkEditor      = 'col-md-12';
             $SubcomponentName = "hidden";
@@ -1008,13 +1008,90 @@ include_once 'includes/header.php';
             $addCenterPadding = "";
             break;
 
-          // inputfields 1/4 length
+          // InputFields 1/4 length
             case 21:
             $SubCkEditor      = 'col-md-12';
             $SubcomponentName = "hidden";
             $DetailsChart     = "hidden";
             $InputFields      = "";
             $length           = "col-md-3";
+            $sImageMaxWidth   = "90%";
+            $addCenterPadding = "addCenterPadding";
+            break;
+
+            // Details/Chart 75%
+            case 22:
+            $SubCkEditor      = 'col-md-12';
+            $SubcomponentName = "hidden";
+            $DetailsChart     = "";
+            $InputFields      = "hidden";
+            $length           = "col-md-9";
+            $sImageMaxWidth   = "90%";
+            $addCenterPadding = "addCenterPadding";
+            break;
+
+            // InputFields - Details/Chart 75%
+            case 23:
+            $SubCkEditor      = 'col-md-8';
+            $SubcomponentName = "hidden";
+            $DetailsChart     = "pull-right";
+            $InputFields      = "col-md-3";
+            $length           = "col-md-9";
+            $sImageMaxWidth   = "90%";
+            $addCenterPadding = "addCenterPadding";
+            break;
+
+            // Details/Chart - InputFields 75%
+            case 24:
+            $SubCkEditor      = 'col-md-12';
+            $SubcomponentName = "hidden";
+            $DetailsChart     = "";
+            $InputFields      = "";
+            $length           = "col-md-9";
+            $sImageMaxWidth   = "90%";
+            $addCenterPadding = "addCenterPadding";
+            break;
+
+            // Details/Chart 33%
+            case 25:
+            $SubCkEditor      = 'col-md-12';
+            $SubcomponentName = "hidden";
+            $DetailsChart     = "";
+            $InputFields      = "hidden";
+            $length           = "col-md-4";
+            $sImageMaxWidth   = "90%";
+            $addCenterPadding = "addCenterPadding";
+            break;
+
+            // InputFields - Details/Chart 33%
+            case 26:
+            $SubCkEditor      = 'col-md-8';
+            $SubcomponentName = "hidden";
+            $DetailsChart     = "pull-right";
+            $InputFields      = "col-md-3";
+            $length           = "col-md-4";
+            $sImageMaxWidth   = "90%";
+            $addCenterPadding = "addCenterPadding";
+            break;
+
+            // Details/Chart - InputFields 33%
+            case 27:
+            $SubCkEditor      = 'col-md-12';
+            $SubcomponentName = "hidden";
+            $DetailsChart     = "";
+            $InputFields      = "pull-right";
+            $length           = "col-md-4";
+            $sImageMaxWidth   = "90%";
+            $addCenterPadding = "addCenterPadding";
+            break;
+
+            // InputFields 33%
+            case 28:
+            $SubCkEditor      = 'col-md-12';
+            $SubcomponentName = "hidden";
+            $DetailsChart     = "hidden";
+            $InputFields      = "";
+            $length           = "col-md-4";
             $sImageMaxWidth   = "90%";
             $addCenterPadding = "addCenterPadding";
             break;
@@ -1259,7 +1336,7 @@ include_once 'includes/header.php';
                       continue;
                     }
               // title-removethis should be replaced with title when we need to show the title
-                    echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-flex; cursor: pointer;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
+                    echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-table; cursor: pointer;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
               // echo (($value == $wrow_value)?'checked':'');
                     if($flag)
                     {
@@ -1694,7 +1771,7 @@ else
   echo "countdown(".$linkid.",".$userid.",".$min.",true);";
 }
 ?>
-$('input[type=range]').on('change',function(){
+$('input[type=range]').on('change input',function(e){
   var range_value = $(this).val();
   // console.log($(this).parent().attr('class') + ' and ' + range_value);
   $(this).parent('div.InlineBox').find('span.range').text(range_value);
