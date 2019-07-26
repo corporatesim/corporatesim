@@ -26,6 +26,7 @@ $_SESSION['id'] = $gameId;
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Enroll')
 {
+	echo ucwords("<h2>Currently you are not allowed to enroll by yourself.</h2> <h3>Please contact <a href='mailto:info@corporatesim.com'>info@corporatesim.com</a> </h3><a href='".site_root."'>Click Here</a> To go back."); exit();
     //reset game functionality....
 	$qry = "SELECT * FROM GAME_USERSTATUS WHERE `US_UserID`=$UserId AND `US_GameID`=$gameId AND `US_LinkID`=1";
 	$executeqry = $modelObj->ExecuteQuery($qry);

@@ -6,9 +6,10 @@ include_once doc_root.'config/functions.php';
 // echo 'Test message';
 // exit();
 
-$funObj      = new Functions(); // Create Object
-$maxFileSize = 2097152; // Set max upload file size [2MB]
-$validext    = array ('xls', 'xlsx', 'csv');  // Allowed Extensions
+$funObj         = new Functions(); // Create Object
+$maxFileSize    = 2097152; // Set max upload file size [2MB]
+$validext       = array ('xls', 'xlsx', 'csv');  // Allowed Extensions
+$User_UploadCsv = time();
 //$uid = $_SESSION['siteuser'];
 
 if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['name'] ) ){
@@ -60,6 +61,7 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 							"User_GameStartDate" => $GameStartDate,
 							"User_GameEndDate"   => $GameEndDate,
 							"User_datetime"      =>	date("Y-m-d H:i:s"),
+							'User_UploadCsv'     => $User_UploadCsv,
 						);
 						$result = $funObj->InsertData("GAME_SITE_USERS", $array, 0, 0);
 						$c++;
@@ -84,7 +86,7 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 								'UG_GameEndDate'   =>	$GameEndDate
 							);
 							$getdata = explode(',',$filesop[6]);
-							$total = count($getdata);
+							$total   = count($getdata);
 							if($total>1)
 							{
 								for ($i=0; $i<$total; $i++) {
@@ -95,7 +97,10 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 
 							else
 							{
-								$result1 = $funObj->InsertData('GAME_USERGAMES', $game_mapping, 0, 0);
+								if(!empty($filesop[6]))
+								{
+									$result1 = $funObj->InsertData('GAME_USERGAMES', $game_mapping, 0, 0);
+								}
 							}
 							$result1 = $funObj->InsertData('GAME_USER_AUTHENTICATION', $login_details, 0, 0);
 							if($result1){
@@ -130,7 +135,7 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 				//echo $c;
 			if (!empty($not_inserted_data))
 			{
-				$msg = "</br>Email id not imported -> ".implode(" , ",$not_inserted_data);
+				$msg = "</br>Email id not imported ".count($not_inserted_data)." -> ".implode(" , ",$not_inserted_data);
 			}
 
 			$result = array(
