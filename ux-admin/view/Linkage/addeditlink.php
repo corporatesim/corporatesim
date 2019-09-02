@@ -1337,16 +1337,22 @@
     var formula_id = $(this).val();
     //alert(comp_id);
     //$('#subcomp_id').html('<option value="">-- SELECT --</option>');
-
-    $.ajax({
-      url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
-      type: "POST",
-      data: { formula_id: formula_id },
-      success: function(data){
-        //alert(data);
-        $('#f_exp').html(data);
-      }
-    });
+    if(formula_id)
+    {
+      $.ajax({
+        url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
+        type: "POST",
+        data: { formula_id: formula_id },
+        success: function(data)
+        {
+          $('#f_exp').html(data);
+        }
+      });
+    }
+    else
+    {
+      console.log('Please select formula.');
+    }
   });
   
   
@@ -1501,6 +1507,13 @@
       console.log(adjecentRadioButton);
       $(adjecentRadioButton).val(textValue);
     });
+  }
+
+  // to show the formula by default while page load
+  var selectedFormula = $('#formula_id').val();
+  if(selectedFormula)
+  {
+    $('#formula_id').trigger('change');
   }
 
 </script>
