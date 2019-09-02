@@ -41,7 +41,7 @@ if($res_status->User_gameStatus == 1 || $res_status->User_GameStartDate > date('
 	$disable = 'disabled';
 	if($res_status->User_GameStartDate > date('Y-m-d'))
 	{
-		$game_status = 'You are allowed to play assigned simulations/games between <span style="color:#3c763d;">'.date('d-m-Y',strtotime($res_status->User_GameStartDate)).'</span> TO <span style="color:#3c763d;">'.date('d-m-Y',strtotime($res_status->User_GameEndDate)).'</span>';
+		$game_status = 'You have been assigned simulation game(s) from <span style="color:#3c763d;">'.date('d-m-Y',strtotime($res_status->User_GameStartDate)).'</span> TO <span style="color:#3c763d;">'.date('d-m-Y',strtotime($res_status->User_GameEndDate)).'</span>';
 	}
 	else
 	{

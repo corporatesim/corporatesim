@@ -7,7 +7,8 @@ $funObj = new Functions();
 if( isset( $_POST['formula'] ) && isset( $_POST['formula_string'] ) )
 {
 	// print_r($_POST); exit();
-	if(!empty($_POST['formula_id']))
+	$fid = $_POST['formula_id'];
+	if(!empty($fid))
 	{
 		$strresult = '';
 		$prev      = '';
@@ -43,7 +44,10 @@ if( isset( $_POST['formula'] ) && isset( $_POST['formula_string'] ) )
 			//str_replace(' ', '', $_POST['formula'])
 		);
 		
-		$result = $funObj->UpdateData(formulas, $array, 'f_id', $_POST['formula_id'], 0);
+		$result = $funObj->UpdateData(formulas, $array, 'f_id', $fid, 0);
+		// updating the GAME_LINKAGE_SUB as we made flat table to avoid joins
+		$funObj->UpdateData('GAME_LINKAGE_SUB', array('SubLink_FormulaExpression' => $strresult), 'SubLink_FormulaID', $fid);
+
 		if($result === true){
 			$_SESSION['msg']     = "Formula updated successfully";
 			$_SESSION['type[0]'] = "inputSuccess";

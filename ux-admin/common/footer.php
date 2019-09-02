@@ -75,7 +75,7 @@
 
 		$('#cnf_yes').click( function() {
 			var val = $(this).val();
-			var id = btoa(val);
+			var id  = btoa(val);
 			window.location.href = site_root + loc_url_del + id;
 		});
 
@@ -90,13 +90,15 @@
 			window.location.href = site_root + loc_url_stat + id;
 		});
 	// adding select2 function to make dropdown searchable
-	$('select').each(function(){
-		$('select').select2();
-	});
-	$('select').on('change',function(){
-	// alert($(this).val());
-	$('select').select2();
-});
+	<?php if($noSelect2=='dont'){ ?>
+		console.log('select2 is not triggered');
+	<?php } else{ ?>
+		$('select').each(function(){
+			$(this).on('mouseenter hover',function(){
+				$(this).select2();
+			});
+		});
+	<?php } ?>
 //-->
 </script>
 
@@ -212,22 +214,22 @@
 </script>
 
 <!-- dropdown for personalize outcome and scenario branching download in excel -->
-  <script type="text/javascript">
-  $('#game').change( function(){
-    var game = $(this).val();
+<script type="text/javascript">
+	$('#game').change( function(){
+		var game = $(this).val();
     //alert(game_id);
     $('#scenario').html('<option value="">-- SELECT --</option>');
-  
+
     $.ajax({
-      url: "<?php echo site_root; ?>ux-admin/model/ajax/populate_dropdown.php",
-      type: "POST",
-      data: { game: game },
-      success: function(data){
-        $('#scenario').html(data);
-      }
+    	url: "<?php echo site_root; ?>ux-admin/model/ajax/populate_dropdown.php",
+    	type: "POST",
+    	data: { game: game },
+    	success: function(data){
+    		$('#scenario').html(data);
+    	}
     });
   });
-  </script> 
+</script> 
 
 <div class="col-sm-12">
 	<div class="col-sm-8">

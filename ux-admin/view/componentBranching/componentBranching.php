@@ -24,11 +24,22 @@
 <?php if(isset($msg)){echo "<div class=\"form-group ". $type[1] ." \"><div align=\"center\" class=\"form-control\" id=". $type[0] ."><label class=\"control-label\" for=". $type[0] .">". $msg ."</label></div></div>";} ?>
 <div class="clearfix"></div>
 <div class="row">
-	<div class="col-md-6">
+	<div class="col-md-4">
 		<strong>Game: </strong><?php echo ucfirst($gameName);?>
 	</div>
-	<div class="col-md-6">
+	<div class="col-md-4">
 		<strong>Scenario: </strong><?php echo ucfirst($scenName);?>
+	</div>
+	<div class="col-md-4">
+		<span class="pull-right" data-toggle="tooltip" title="Download Component Branching"><a href="javascript:void(0);" id="downloadComponentBranching"><i class="fa fa-download"></i></a></span>
+		<div class="hidden">
+			<form action="" id="downloadBranchingData" method="post">
+				<input type="hidden" name="game_name" value="<?php echo $gameName;?>">
+				<input type="hidden" name="scen_name" value="<?php echo $scenName;?>">
+				<input type="hidden" name="downloadQuery" value="<?php echo $sqlComp;?>">
+				<button type="submit" value="downloadBranchingData" name="downloadData" id="downloadData">Download</button>
+			</form>
+		</div>
 	</div>
 </div>
 <br>	
@@ -59,8 +70,6 @@
 <form action="" method="post" id="branchingForm">
 	<!-- fetching records for editing -->
 	<?php 
-	$sqlComp = "SELECT gbc.*,gc.Comp_Name,gcn.Comp_Name AS NextCompName FROM GAME_BRANCHING_COMPONENT gbc LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID=gbc.CompBranch_CompId LEFT JOIN GAME_COMPONENT gcn ON gcn.Comp_ID=gbc.CompBranch_NextCompId WHERE gbc.CompBranch_LinkId = ".$linkId." ORDER BY gbc.CompBranch_Order";
-	// echo $sqlComp;
 	$sqlCompObj = $functionsObj->ExecuteQuery($sqlComp);
 	if($sqlCompObj->num_rows > 0)
 	{ 
@@ -95,9 +104,9 @@
 						$nextCompSql = "SELECT gls.SubLink_ID,gls.SubLink_CompID,gc.Comp_Name FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID=gls.SubLink_CompID WHERE gls.SubLink_SubCompID<1 AND gls.SubLink_AreaID=".$row->CompBranch_AreaId." AND gls.SubLink_LinkID=".$linkId." AND gls.SubLink_ID !=".$row->CompBranch_SublinkId;
 						$nextCompObj = $functionsObj->ExecuteQuery($nextCompSql);
 						while($nrow = $nextCompObj->fetch_object()){
-						?>
-						<option value="<?php echo $nrow->SubLink_CompID.','.$nrow->SubLink_ID; ?>" <?php echo ($nrow->SubLink_CompID == $row->CompBranch_NextCompId)?'selected':'';?>><?php echo $nrow->Comp_Name; ?></option>
-					<?php } ?>
+							?>
+							<option value="<?php echo $nrow->SubLink_CompID.','.$nrow->SubLink_ID; ?>" <?php echo ($nrow->SubLink_CompID == $row->CompBranch_NextCompId)?'selected':'';?>><?php echo $nrow->Comp_Name; ?></option>
+						<?php } ?>
 					</select>
 				</div>
 				<div class="col-md-1">
@@ -168,6 +177,10 @@
 		});
 		nextCompData();
 		removeDiv();
+		// downloadComponentBranching
+		$('#downloadComponentBranching').on('click',function(){
+			$('#downloadData').trigger('click');
+		});
 	});
 
 	function removeDiv()

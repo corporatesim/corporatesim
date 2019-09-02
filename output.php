@@ -82,11 +82,14 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 				}
 				else
 				{
-					// die('here');
+					$skipSql = "SELECT gl.*,glu.UsScen_IsEndScenario as endScenario FROM GAME_LINKAGE gl INNER JOIN GAME_LINKAGE_USERS glu ON glu.UsScen_LinkId=gl.Link_ID WHERE gl.Link_ScenarioID=$result1->US_ScenID AND glu.UsScen_UserId=$userid";
+					$skipSqlObj = $functionsObj->ExecuteQuery($skipSql);
+					// if enabled then rout to next input by auto submitting
+					$skipOutput = $functionsObj->FetchObject($skipSqlObj);
+					// echo "<pre>"; print_r($skipOutput); die();
 					//goto output page
 					//$url = site_root."output.php?Link=".$resultlink->Link_ID;		
 					//header("Location:".site_root."output.php?Link=".$resultlink->Link_ID);
-					//exit();
 					//Goto next scenario					
 				}
 			}
@@ -165,97 +168,101 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 	array_shift($_POST);
 	// removing element of array i.e. submit
 	array_shift($_POST);
-	// echo "<pre>"; print_r($_POST);
-	foreach ($_POST as $input_key => $input_current)
+	// echo "<pre>"; print_r($_POST); exit();
+	// echo "<pre>"; print_r($skipOutput);	die('here: '.$skipOutput->Link_Enabled);
+	if($skipOutput->Link_Enabled < 1 || $skipOutput->endScenario > 0)
 	{
-		$output_sql = " SELECT * FROM GAME_INPUT WHERE input_user=$userid AND input_key LIKE '".$input_key."'";
-		$output_res = $functionsObj->ExecuteQuery($output_sql);
-		if($output_res->num_rows > 0)
+		foreach ($_POST as $input_key => $input_current)
 		{
-			// update output data to game_input table
-			$update_array   = array(
-				'input_current' => $input_current,
-			);
-
-			$where      = " input_user=$userid AND input_key";
-			$update_res = $functionsObj->UpdateData( 'GAME_INPUT', $update_array, $where, $input_key  );
-		}
-		else
-		{
-			// find sublinkid from GAME_LINKAGE_SUB regarding comp or subc
-			$SubLink_CompID =  explode('_',$input_key);
-			$CompID         = end($SubLink_CompID);
-			// $CompID      = $SubLink_CompID[2];
-			$find_sublinkId = "SELECT SubLink_ID FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID=".$linkidSession;
-			if($SubLink_CompID[1] == 'comp')
+			$output_sql = " SELECT * FROM GAME_INPUT WHERE input_user=$userid AND input_key LIKE '".$input_key."'";
+			$output_res = $functionsObj->ExecuteQuery($output_sql);
+			if($output_res->num_rows > 0)
 			{
-				$find_sublinkId .= " AND SubLink_CompID=$CompID";
+					// update output data to game_input table
+				$update_array   = array(
+					'input_current' => $input_current,
+				);
+
+				$where      = " input_user=$userid AND input_key";
+				$update_res = $functionsObj->UpdateData( 'GAME_INPUT', $update_array, $where, $input_key  );
 			}
 			else
 			{
-				$find_sublinkId .= " AND SubLink_SubCompID=$CompID";
+				// find sublinkid from GAME_LINKAGE_SUB regarding comp or subc
+				$SubLink_CompID =  explode('_',$input_key);
+				$CompID         = end($SubLink_CompID);
+				// $CompID      = $SubLink_CompID[2];
+				$find_sublinkId = "SELECT SubLink_ID FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID=".$linkidSession;
+				if($SubLink_CompID[1] == 'comp')
+				{
+					$find_sublinkId .= " AND SubLink_CompID=$CompID";
+				}
+				else
+				{
+					$find_sublinkId .= " AND SubLink_SubCompID=$CompID";
+				}
+				$objectSublink   = $functionsObj->ExecuteQuery($find_sublinkId);
+				$sublinkObject   = $functionsObj->FetchObject($objectSublink);
+				$input_sublinkid = $sublinkObject->SubLink_ID;
+					// insert output data to game_input table
+				$insert_array    = array(
+					'input_user'      => $userid,
+					'input_sublinkid' => $input_sublinkid,
+					'input_key'       => $input_key,
+					'input_current'   => $input_current,
+				);
+
+				$insert_res = $functionsObj->InsertData( 'GAME_INPUT', $insert_array, 0, 0 );
 			}
-			$objectSublink   = $functionsObj->ExecuteQuery($find_sublinkId);
-			$sublinkObject   = $functionsObj->FetchObject($objectSublink);
-			$input_sublinkid = $sublinkObject->SubLink_ID;
-			// insert output data to game_input table
-			$insert_array    = array(
-				'input_user'      => $userid,
-				'input_sublinkid' => $input_sublinkid,
-				'input_key'       => $input_key,
-				'input_current'   => $input_current,
-			);
-
-			$insert_res = $functionsObj->InsertData( 'GAME_INPUT', $insert_array, 0, 0 );
 		}
+
+		// delete the existing data or report for that particular user
+		$delete_sql = "DELETE FROM GAME_SITE_USER_REPORT_NEW WHERE uid=$userid AND linkid=".$linkidSession;
+		$delete     = $functionsObj->ExecuteQuery($delete_sql);
+		$sqlComp12  = "SELECT ls.SubLink_ID,  CONCAT(c.Comp_Name, '/', COALESCE(s.SubComp_Name,'')) AS Comp_Subcomp 
+		FROM `GAME_LINKAGE_SUB` ls 
+		LEFT OUTER JOIN GAME_SUBCOMPONENT s ON SubLink_SubCompID=s.SubComp_ID
+		LEFT OUTER JOIN GAME_COMPONENT c on SubLink_CompID=c.Comp_ID
+		WHERE SubLink_LinkID=".$linkidSession." 
+		ORDER BY SubLink_ID";
+
+		$objcomp12 = $functionsObj->ExecuteQuery($sqlComp12);
+
+		while($rowinput = $objcomp12->fetch_object())
+		{
+			$title  = $rowinput->Comp_Subcomp;					
+			$check  = $functionsObj->SelectData(array(), 'GAME_INPUT', array("input_user='".$userid."' AND  input_sublinkid='".$rowinput->SubLink_ID."'"), '', '', '', '', 0);
+
+			$check1 = $functionsObj->SelectData(array(), 'GAME_OUTPUT', array("output_user='".$userid."' AND  output_sublinkid='".$rowinput->SubLink_ID."'"), '', '', '', '', 0);
+
+			if($check->num_rows > 0)
+			{
+				$result            = $functionsObj->FetchObject($check);
+				$userdate [$title] = $result->input_current;
+			}
+			elseif($check1->num_rows > 0)
+			{
+				$result1           = $functionsObj->FetchObject($check1);
+				$userdate [$title] = $result1->output_current;
+			}
+			else
+			{
+				$userdate [$title] = '';
+			}
+		}
+
+		$userreportdetails = (object) array(
+			'uid'            =>	$userid,
+			'user_name'      =>	$userName,
+			'game_name'      =>	$gameName,
+			'secenario_name' =>	$ScenarioName,
+			'linkid'         =>	$linkidSession,
+			'user_data'      =>	json_encode($userdate),
+			'date_time'      =>	date('Y-m-d H:i:s')
+		);
+		$result = $functionsObj->InsertData('GAME_SITE_USER_REPORT_NEW', $userreportdetails);
+		// report modification done
 	}
-
-	// delete the existing data or report for that particular user
-	$delete_sql = "DELETE FROM GAME_SITE_USER_REPORT_NEW WHERE uid=$userid AND linkid=".$linkidSession;
-	$delete     = $functionsObj->ExecuteQuery($delete_sql);
-	$sqlComp12  = "SELECT ls.SubLink_ID,  CONCAT(c.Comp_Name, '/', COALESCE(s.SubComp_Name,'')) AS Comp_Subcomp 
-	FROM `GAME_LINKAGE_SUB` ls 
-	LEFT OUTER JOIN GAME_SUBCOMPONENT s ON SubLink_SubCompID=s.SubComp_ID
-	LEFT OUTER JOIN GAME_COMPONENT c on SubLink_CompID=c.Comp_ID
-	WHERE SubLink_LinkID=".$linkidSession." 
-	ORDER BY SubLink_ID";
-
-	$objcomp12 = $functionsObj->ExecuteQuery($sqlComp12);
-
-	while($rowinput = $objcomp12->fetch_object())
-	{
-		$title  = $rowinput->Comp_Subcomp;					
-		$check  = $functionsObj->SelectData(array(), 'GAME_INPUT', array("input_user='".$userid."' AND  input_sublinkid='".$rowinput->SubLink_ID."'"), '', '', '', '', 0);
-
-		$check1 = $functionsObj->SelectData(array(), 'GAME_OUTPUT', array("output_user='".$userid."' AND  output_sublinkid='".$rowinput->SubLink_ID."'"), '', '', '', '', 0);
-
-		if($check->num_rows > 0)
-		{
-			$result            = $functionsObj->FetchObject($check);
-			$userdate [$title] = $result->input_current;
-		}
-		elseif($check1->num_rows > 0)
-		{
-			$result1           = $functionsObj->FetchObject($check1);
-			$userdate [$title] = $result1->output_current;
-		}
-		else
-		{
-			$userdate [$title] = '';
-		}
-	}
-
-	$userreportdetails = (object) array(
-		'uid'            =>	$userid,
-		'user_name'      =>	$userName,
-		'game_name'      =>	$gameName,
-		'secenario_name' =>	$ScenarioName,
-		'linkid'         =>	$linkidSession,
-		'user_data'      =>	json_encode($userdate),
-		'date_time'      =>	date('Y-m-d H:i:s')
-	);
-	$result = $functionsObj->InsertData('GAME_SITE_USER_REPORT_NEW', $userreportdetails);
-	// report modification done
 	// $sql = "SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$gameid." and Link_Order>
 	// (SELECT Link_Order FROM `GAME_LINKAGE`
 	// WHERE Link_GameID = ".$gameid." and Link_ScenarioID=".$scenid.")

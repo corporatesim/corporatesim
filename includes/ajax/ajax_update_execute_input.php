@@ -238,7 +238,7 @@ if($_POST['action']=='updateFormula')
 		}
 	}
 	
-// print_r($input_field_values); exit;
+	// print_r($input_field_values); exit;
 	// $object  = $funObj->ExecuteQuery($query);
 	// echo $query;
 	// when everything updated then modify user report
@@ -339,7 +339,7 @@ if($_POST['action']=='componentBranching')
 	$param      = $_POST['param'];
 	$idSublink  = explode('_',$param);
 	$SubLink_ID = $idSublink[1];
-	$branchSql = "SELECT gbc.*,gi.input_current FROM GAME_BRANCHING_COMPONENT gbc LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gbc.CompBranch_SublinkId AND input_user=".$userid." WHERE gbc.CompBranch_SublinkId=".$SubLink_ID." ORDER BY gbc.CompBranch_Order";
+	$branchSql  = "SELECT gbc.*,gi.input_current FROM GAME_BRANCHING_COMPONENT gbc LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gbc.CompBranch_SublinkId AND input_user=".$userid." WHERE gbc.CompBranch_SublinkId=".$SubLink_ID." ORDER BY gbc.CompBranch_Order";
 	// die($branchSql);
 	$branchObj = $funObj->ExecuteQuery($branchSql);
 	if($branchObj->num_rows > 0)

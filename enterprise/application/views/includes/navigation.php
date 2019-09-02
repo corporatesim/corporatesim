@@ -1,13 +1,13 @@
   <div class="left-side-bar">
     <div class="brand-logo">
-        <a href="<?php echo base_url('Dashboard');?>">
-          <?php if(isset($this->session->userdata('loginData')['User_profile_pic'])) { ?>
-            <img src="<?php echo base_url('common/Logo/'.$this->session->userdata('loginData')['User_profile_pic']); ?>" alt="CorporateSim">
-          <?php } else { ?>
-            <img src="<?php echo base_url('common/'); ?>vendors/images/cs_logo.jpg" alt="CorporateSim">
-          <?php } ?>
-        </a> 
-      </div>
+      <a href="<?php echo base_url('Dashboard');?>">
+        <?php if(isset($this->session->userdata('loginData')['User_profile_pic'])) { ?>
+          <img src="<?php echo base_url('common/Logo/'.$this->session->userdata('loginData')['User_profile_pic']); ?>" alt="CorporateSim">
+        <?php } else { ?>
+          <img src="<?php echo base_url('common/'); ?>vendors/images/cs_logo.jpg" alt="CorporateSim">
+        <?php } ?>
+      </a> 
+    </div>
     <div class="menu-block customscroll">
       <div class="sidebar-menu">
         <ul id="accordion-menu">
@@ -70,7 +70,13 @@
         </a>
       </li>
     <?php } ?>
-  </ul>
+    <!-- to manage user reports -->
+    <li class="dropdown">
+     <a href="<?php echo base_url('Reports/');?>" class="dropdown-toggle no-arrow">
+      <span class="fa fa-file"></span><span class="mtext">Simulation Reports</span>
+    </a>
+  </li>
+</ul>
 </div>
 </div>
 </div>

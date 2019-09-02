@@ -10,7 +10,7 @@ include_once 'includes/headerNav.php';
 
         <div class="tab" role="tabpanel">
           <!-- Nav tabs -->
-          <ul class="nav nav-tabs tab2 row col-md-12 col-sm-6 col-xs-12" role="tablist">
+          <ul class="nav nav-tabs tab2 row col-md-12 col-sm-6 col-xs-12" role="tablist" style="margin-top:1%;">
             <li role="presentation" class="row col-md-4 col-sm-12 col-xs-12 active simulation"><a href="#simulation" aria-controls="simulation" role="tab" data-toggle="tab" style="">Simulation</a></li>
             <li role="presentation" class="row col-md-4 col-sm-12 col-xs-12"><a href="#eLearning" aria-controls="eLearning" role="tab" data-toggle="tab" style="">eLearning</a></li>
 

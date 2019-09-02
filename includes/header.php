@@ -65,7 +65,7 @@
 				<!-- add image logo here -->
 				<div class="navbar-header">
 					<?php if(isset($_SESSION['logo'])) { ?>
-						<a href="<?php echo site_root;?>"><img src="<?php echo site_root."enterprise/common/Logo/".$_SESSION['logo'];?>" width="400px" height="40px"/></a>
+						<a href="<?php echo site_root;?>"><img src="<?php echo site_root."enterprise/common/Logo/".$_SESSION['logo'];?>" width="300px" height="40px"/></a>
 
 					<?php } else { ?>
 						<a href="<?php echo site_root;?>"><img src="<?php echo site_root."images/logo-main.png";?>"  width="40px"/></a>
@@ -101,7 +101,9 @@
 								</div>
 							</li> -->
 						<?php } }?>
-						<?php if(site_root == "http://develop.corporatesim.com/") {?>
+						<?php
+						$allowedDonmain = ['http://localhost/corp_simulation/','http://develop.corporatesim.com/'];
+						if(in_array(site_root,$allowedDonmain)) {?>
 							<li class="" id="google_translate_element"></li>
 						<?php } ?>
 					</ul>

@@ -7,10 +7,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 	if(!empty($_POST['Area_Name']))
 	{
 		$Area_Name = $_POST['Area_Name'];
-		if(strpos(trim($Area_Name),' '))
+		if(strpos(trim($Area_Name),' ') || strpos(trim($Area_Name),':'))
 		{
 			// don't allow spaces, hence show error message
-			$msg     = 'Space in the Area Name is not allowed';
+			$msg     = 'Space and ":" in the Area Name is not allowed';
 			$type[0] = 'inputError';
 			$type[1] = 'has-error';
 		}
@@ -52,10 +52,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 	if(!empty($_POST['Area_Name'])){
 		$Area_Name = $_POST['Area_Name'];
 		$Area_ID   = $_POST['id'];
-		if(strpos(trim($Area_Name),' '))
+		if(strpos(trim($Area_Name),' ') || strpos(trim($Area_Name),':'))
 		{
 			// don't allow spaces, hence show error message
-			$msg     = 'Space in the Area Name is not allowed';
+			$msg     = 'Space and ":" in the Area Name is not allowed';
 			$type[0] = 'inputError';
 			$type[1] = 'has-error';
 		}
@@ -76,6 +76,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 				);
 				//var_dump($array);
 				$result = $functionsObj->UpdateData('GAME_AREA', $array, 'Area_ID', $Area_ID);
+				// updating the GAME_LINKAGE_SUB as we made flat table to avoid joins
+				$functionsObj->UpdateData('GAME_LINKAGE_SUB', array('SubLink_AreaName' => ucfirst($Area_Name)), 'SubLink_AreaID', $Area_ID);
 				if($result){
 					$_SESSION['msg']     = 'Area Updated Successfully';
 					$_SESSION['type[0]'] = 'inputSuccess';

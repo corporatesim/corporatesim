@@ -43,7 +43,7 @@ if($_POST['action'] == 'game_users')
 	if($_POST['email_value'])
 	{
 		$searchEmail = $_POST['email_value'];
-		$filterSql   = " AND gu.User_email LIKE '%".$searchEmail."%' ";
+		$filterSql   = " AND (gu.User_email LIKE '%".$searchEmail."%' OR gu.User_username LIKE '%".$searchEmail."%')";
 	}
 	else
 	{
@@ -62,7 +62,7 @@ if($_POST['action'] == 'game_users')
 			$linkidArray .= $gameLinkid['Link_ID'].','; 
 		}
 		$linkidArray = trim($linkidArray,',');
-		$sql .= " AND linkid IN ($linkidArray)";
+		$sql .= " WHERE linkid IN ($linkidArray)";
 	}
 	else
 	{

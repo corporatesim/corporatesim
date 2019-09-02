@@ -47,7 +47,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'submit')
 			exit(0);
 		}
 		// $functionsObj->InsertData('GAME_BRANCHING_COMPONENT',$tableDataArray);
-	
+
 	}
 	if($_POST['update'] == 'update')
 	{
@@ -64,6 +64,84 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'submit')
 	$_SESSION['type[1]'] = "has-success";
 	header("Location: ".site_root."ux-admin/linkage");
 	exit(0);
+}
+// to download the component branching
+if(isset($_POST['downloadData']) && $_POST['downloadData'] == 'downloadBranchingData')
+{
+	$gameName      = $_POST['game_name'];
+	$scenarioName  = $_POST['scen_name'];
+	$downloadQuery = $_POST['downloadQuery'];
+	$objPHPExcel   = new PHPExcel;
+	$fileName      = 'Component Branching_'.date('d-m-Y').'.xlsx';
+	$objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
+	$objPHPExcel->getDefaultStyle()->getFont()->setSize(10);
+	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+	ob_end_clean();
+	$currencyFormat = '#,#0.## \€;[Red]-#,#0.## \€';
+	$numberFormat   = '#,#0.##;[Red]-#,#0.##';
+	$objSheet       = $objPHPExcel->getActiveSheet();
+
+	$objSheet->setTitle('Component Branching');
+	$objSheet->getStyle('A1:E1')->getFont()->setBold(true)->setSize(12);
+	$objSheet->getStyle('A2:F2')->getFont()->setBold(true)->setSize(10);
+
+	// print_r($downloadQuery); exit();
+	$objlink = $functionsObj->ExecuteQuery(trim($downloadQuery));
+	$objSheet->getCell('A1')->setValue('Game: '.$gameName);
+	$objSheet->getCell('B1')->setValue('Scenario: '.$scenarioName);
+	$objSheet->getCell('D1')->setValue('Component Branching Data');
+	$objSheet->getCell('A2')->setValue('Component Name');
+	$objSheet->getCell('B2')->setValue('Min Value');
+	$objSheet->getCell('C2')->setValue('Max Value');
+	$objSheet->getCell('D2')->setValue('Branching Order');
+	$objSheet->getCell('E2')->setValue('Next Component Name');
+	$objSheet->getCell('F2')->setValue('Area');
+		// validate here
+	if(empty($linkId) || $objlink->num_rows<1)
+	{
+		die('No record found');
+	}
+	else
+	{
+		if($objlink->num_rows > 0){
+			$i=3;
+			while($row= $objlink->fetch_object()){
+				//$objSheet->getCell('A'.$i)->setValue('Game');
+				// print_r($row);
+				$objSheet->getCell('A'.$i)->setValue($row->Comp_Name);
+				$objSheet->getCell('B'.$i)->setValue($row->CompBranch_MinVal);
+				$objSheet->getCell('C'.$i)->setValue($row->CompBranch_MaxVal);
+				$objSheet->getCell('D'.$i)->setValue($row->CompBranch_Order);
+				$objSheet->getCell('E'.$i)->setValue($row->NextCompName);
+				$objSheet->getCell('F'.$i)->setValue($row->Area_Name);
+				$i++;
+			}
+		}
+
+			 //$objPHPExcel->
+
+			//$objSheet->getColumnDimension('A')->setAutoSize(true);
+		$objSheet->getColumnDimension('A')->setWidth(20);	
+		$objSheet->getColumnDimension('B')->setWidth(20);	
+		$objSheet->getColumnDimension('C')->setWidth(10); 
+		$objSheet->getColumnDimension('D')->setWidth(30); 
+		$objSheet->getColumnDimension('E')->setWidth(10);
+		$objSheet->getColumnDimension('F')->setWidth(30);	
+
+		$objSheet->getStyle('B1:B'.$i)->getAlignment()->setWrapText(true);
+		$objSheet->getStyle('D1:D100')->getAlignment()->setWrapText(true);
+		$objSheet->getStyle('F1:F100')->getAlignment()->setWrapText(true);
+		$objSheet->getStyle('J1:J100')->getAlignment()->setWrapText(true);
+		$objSheet->getStyle('K1:K100')->getAlignment()->setWrapText(true);
+
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename='.$fileName);
+		header('Cache-Control: max-age=0');
+
+		$objWriter->save('php://output');
+	 		//$objWriter->save('testoutput.xlsx');
+	 		//$objWriter->save('testlinkage.csv'); 
+	}
 }
 
 if($queryObj->num_rows < 1)
@@ -93,6 +171,9 @@ else
 	$gameScen    = $functionsObj->FetchObject($gameScenObj);
 	$gameName    = $gameScen->Game_Name;
 	$scenName    = $gameScen->Scen_Name;
+	// query for getting the branching of component
+	$sqlComp     = "SELECT gbc.*,gc.Comp_Name,gcn.Comp_Name AS NextCompName, ga.Area_Name FROM GAME_BRANCHING_COMPONENT gbc LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID=gbc.CompBranch_CompId LEFT JOIN GAME_AREA ga ON ga.Area_ID=gbc.CompBranch_AreaId LEFT JOIN GAME_COMPONENT gcn ON gcn.Comp_ID=gbc.CompBranch_NextCompId WHERE gbc.CompBranch_LinkId = ".$linkId." ORDER BY gbc.CompBranch_Order";
+	// echo $sqlComp;
 }
 
 include_once doc_root.'ux-admin/view/componentBranching/'.$file;

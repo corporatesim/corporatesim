@@ -87,7 +87,7 @@
 
       <div class="col-md-2 hidden" id="search">
         <label>
-          <input type="search" id="searchBox" name="searchBox" class="form-control input-sm" placeholder="Serach By Email ID" aria-controls="" style="max-height: 23px; border-radius: 5px;">
+          <input type="search" id="searchBox" name="searchBox" class="form-control input-sm" placeholder="Serach By Email/Username" aria-controls="" style="max-height: 23px; border-radius: 5px;">
         </label>
       </div>
 
@@ -122,7 +122,8 @@
 
 <script>
   $(document).ready(function(){
-
+    // setting linkid here for global use
+    linkid = '';
     $('#game_game').on('change',function(){
       var Game_ID  = $(this).val();
       var gamename = $(this).find(':selected').data('gamename');
@@ -218,7 +219,7 @@
         }
         else
         {
-          var linkid = 'all scenario';
+          linkid = 'all scenario';
           $('#user_section').removeClass('hidden');
           // triggering ajax to show users linked with this game and scenario
           $.ajax({
@@ -286,6 +287,7 @@
 
 
     $('#searchBox').on('keyup',function(){
+      // console.log(linkid);
       var search = $(this).val().toLowerCase();
       var gameid = $('#game_game').val();
       $.ajax({

@@ -622,7 +622,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-12";
                       break;
 
-                      // CkEditor - FullLength
+                      // Details/Chart - FullLength
                       case 15:
                       $SubcomponentName  = "hidden";
                       $DetailsChart      = "";
@@ -631,7 +631,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-12";
                       break;
 
-                      // CkEditor - HalfLength
+                      // Details/Chart - HalfLength
                       case 16:
                       $SubcomponentName  = "hidden";
                       $DetailsChart      = "";
@@ -640,7 +640,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-12";
                       break;
 
-                      // ckEditor - InputFields - HalfLength
+                      // Details/Chart - InputFields - HalfLength
                       case 17:
                       $SubcomponentName  = "hidden";
                       $DetailsChart      = "";
@@ -649,7 +649,7 @@ include_once 'includes/header.php';
                       $cklength          = "col-md-6";
                       break;
 
-                      // InputFields - ckEditor - HalfLength
+                      // InputFields - Details/Chart - HalfLength
                       case 18:
                       $SubcomponentName = "hidden";
                       $DetailsChart     = "pull-right";
@@ -676,13 +676,76 @@ include_once 'includes/header.php';
                       $cklength         = 'col-md-12';
                       break;
 
-                      //inputfields 1/4 length
+                      //InputFields 1/4 length
                       case 21:
                       $SubcomponentName = "hidden";
                       $DetailsChart     = "hidden";
                       $InputFields      = "";
                       $length           = "col-md-3";
                       $cklength         = 'col-md-12';
+                      break;
+
+                      // Details/Chart 75%
+                      case 22:
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "";
+                      $InputFields      = "hidden";
+                      $length           = "col-md-9";
+                      $cklength         = 'col-md-12';
+                      break;
+
+                      // InputFields - Details/Chart 75%
+                      case 23:
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "";
+                      $InputFields      = "col-md-4";
+                      $length           = "col-md-9";
+                      $cklength         = 'col-md-8 pull-right';
+                      break;
+
+                      // Details/Chart - InputFields 75%
+                      case 24:
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "";
+                      $InputFields      = "col-md-4";
+                      $length           = "col-md-9";
+                      $cklength         = 'col-md-8';
+                      break;
+
+                      // Details/Chart 33%
+                      case 25:
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "";
+                      $InputFields      = "hidden";
+                      $length           = "col-md-4";
+                      $cklength         = 'col-md-12';
+                      break;
+
+                      // InputFields - Details/Chart 33%
+                      case 26:
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "col-md-8 pull-right";
+                      $InputFields      = "col-md-4";
+                      $length           = "col-md-4";
+                      $cklength         = '';
+                      break;
+
+                      // Details/Chart - InputFields 33%
+                      case 27:
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "col-md-8";
+                      $InputFields      = "col-md-4 pull-right";
+                      $length           = "col-md-4";
+                      $cklength         = '';
+                      break;
+
+                      // InputFields 33%
+                      case 28:
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "hidden";
+                      $InputFields      = "";
+                      $length           = "col-md-4";
+                      $cklength         = '';
                       break;
                     }
 
@@ -1006,5 +1069,15 @@ include_once 'includes/header.php';
     }
   });
 </script>
+<?php
+if($skipOutput->Link_Enabled > 0)
+{
+  // if enabled then auto submit for component branching most probably
+  echo "<script>setTimeout(function(){
+    $('#submitShow').trigger('click');
+    $('#loader').show();
+  },100);</script>";
+}
+?>
 </body>
 </html>

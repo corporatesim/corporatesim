@@ -124,7 +124,7 @@
 				</div> 
 
 				<div class="form-group row">
-					<label class="col-sm-12 col-md-4 col-form-label">State</label>
+					<label class="col-sm-12 col-md-4 col-form-label">State/Province</label>
 					<div class="col-sm-12 col-md-6">
 						<select class="custom-select2 form-control" name="SubEnterprise_State" id="state">
 							<option value="">--Select State--</option>
@@ -133,16 +133,16 @@
 					</div>
 				</div> 
 
-				<div class="form-group row">
-					<label class="col-sm-12 col-md-4 col-form-label"> SubEnterprize Province</label>
+				<div class="form-group row d-none">
+					<label class="col-sm-12 col-md-4 col-form-label"> Province</label>
 					<div class="col-sm-12 col-md-6">
-						<input class="form-control" required="" name="SubEnterprise_Province" value="<?php echo set_value('SubEnterprise_Province');?>" type="text" placeholder="Enter Province">
+						<input class="form-control" name="SubEnterprise_Province" value="<?php echo set_value('SubEnterprise_Province');?>" type="text" placeholder="Enter Province">
 						<span><?php echo form_error('SubEnterprise_Province'); ?></span>
 					</div>
 				</div> 
 
 				<div class="form-group row">
-					<label class="col-sm-12 col-md-4 col-form-label">Pincode</label>
+					<label class="col-sm-12 col-md-4 col-form-label">Zipcode</label>
 					<div class="col-sm-12 col-md-6">
 						<input class="form-control" required="" name="SubEnterprise_Pincode" value="<?php echo set_value('SubEnterprise_Pincode');?>" type="text" placeholder="Enter Pincode" >
 						<span><?php echo form_error('SubEnterprise_Pincode'); ?></span>

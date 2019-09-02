@@ -43,9 +43,9 @@ class Enterprise extends CI_Controller {
 		);
 		$Enterprise            = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where,'','Enterprise_Name');
 		$content['Enterprise'] = $Enterprise;
-		$query                 = "SELECT ge.*,concat(ga.fname,' ',ga.lname) AS User_Name, gd.Domain_Name, gc.Country_Name, gs.State_Name ,(SELECT count(*) FROM GAME_ENTERPRISE_GAME WHERE EG_EnterpriseID = ge.Enterprise_ID) as gamecount FROM GAME_ENTERPRISE ge LEFT JOIN GAME_ADMINUSERS ga ON ge.Enterprise_CreatedBy=ga.id LEFT JOIN GAME_COUNTRY gc ON gc.Country_Id= ge.Enterprise_Country LEFT JOIN GAME_STATE gs ON gs.State_Id=ge.Enterprise_State LEFT JOIN GAME_DOMAIN gd ON ge.Enterprise_ID = gd.Domain_EnterpriseId  WHERE Enterprise_Status = 0 ORDER BY Enterprise_CreatedOn DESC";
+		$query                 = "SELECT ge.*,concat(ga.fname,' ',ga.lname) AS User_Name, gd.Domain_Name, gc.Country_Name, gs.State_Name ,(SELECT count(*) FROM GAME_ENTERPRISE_GAME WHERE EG_EnterpriseID = ge.Enterprise_ID) as gamecount FROM GAME_ENTERPRISE ge LEFT JOIN GAME_ADMINUSERS ga ON ge.Enterprise_CreatedBy=ga.id LEFT JOIN GAME_COUNTRY gc ON gc.Country_Id= ge.Enterprise_Country LEFT JOIN GAME_STATE gs ON gs.State_Id=ge.Enterprise_State LEFT JOIN GAME_DOMAIN gd ON ge.Enterprise_ID = gd.Domain_EnterpriseId  WHERE Enterprise_Status = 0 GROUP BY ge.Enterprise_ID ORDER BY Enterprise_CreatedOn DESC";
 		$result                       = $this->Common_Model->executeQuery($query);
-	//echo "<pre>";print_r($result);exit;
+		// echo "$query<br><pre>";print_r($result);exit;
 		$content['EnterpriseDetails'] = $result;
 		$content['subview']           = 'manageEnterprise';
 		$this->load->view('main_layout',$content);

@@ -63,6 +63,9 @@ if (isset ( $_POST ['submit'] ) && $_POST ['submit'] == 'Update') {
 				'Comp_Name'   => ucfirst ( $Comp_Name ) 
 			);
 			$result = $functionsObj->UpdateData ( 'GAME_COMPONENT', $array, 'Comp_ID', $Comp_ID );
+			// updating the GAME_LINKAGE_SUB as we made flat table to avoid joins
+			$functionsObj->UpdateData('GAME_LINKAGE_SUB', array('SubLink_CompName' => ucfirst($Comp_Name)), 'SubLink_CompID', $Comp_ID);
+			
 			if ($result)
 			{
 				$_SESSION ['msg']     = 'Component Updated Successfully';
@@ -177,7 +180,7 @@ if(isset($_POST['download_excel']) && $_POST['download_excel'] == 'Download'){
 	//echo $fromdate;exit;
 
 	//echo "<pre>";print_r($_POST);exit;
-  $objPHPExcel = new PHPExcel;
+	$objPHPExcel = new PHPExcel;
 	$objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
 	$objPHPExcel->getDefaultStyle()->getFont()->setSize(10);
 	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
@@ -195,7 +198,7 @@ if(isset($_POST['download_excel']) && $_POST['download_excel'] == 'Download'){
 	
 	if($from == '' && $end == '' && $areaid == '')
 	{
-     $sql ="SELECT ga.Area_Name,gc.Comp_Name FROM GAME_AREA ga INNER JOIN GAME_COMPONENT gc ON ga.Area_ID = gc.Comp_AreaID ";	
+		$sql ="SELECT ga.Area_Name,gc.Comp_Name FROM GAME_AREA ga INNER JOIN GAME_COMPONENT gc ON ga.Area_ID = gc.Comp_AreaID ";	
 	}
 	elseif($from == '' && $end == '')
 	{

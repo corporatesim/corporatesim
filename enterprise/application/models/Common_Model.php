@@ -245,4 +245,20 @@ public function updateRecords($tableName=NULL,$data=NULL,$where=NULL)
   return $affectedRows;
 }
 
+public function softDelete($tableName=NULL,$data=NULL,$where=NULL)
+{
+  $this->db->where($where);
+  $affectedRows = $this->db->update($tableName,$data);
+  if($affectedRows>0)
+  {
+    $this->session->set_flashdata('tr_msg', 'Record Deleted Successfully');
+  }
+  else
+  {
+    $this->session->set_flashdata('er_msg', 'Data Error Occured. Please try later');
+  }
+  // print_r($this->db->last_query()); exit();
+  return $affectedRows;
+}
+
 }

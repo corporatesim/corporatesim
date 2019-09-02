@@ -3,7 +3,7 @@ require_once doc_root.'ux-admin/model/model.php';
 require_once doc_root.'includes/PHPExcel.php';
 //require_once doc_root.'includes/PHPExcel/Writer/Excel2007.php';
 //require('../../includes/PHPExcel.php');
-
+$noSelect2    = 'dont';
 $functionsObj = new Model();
 
 $object   = $functionsObj->SelectData(array(), 'GAME_SITESETTINGS', array('id=1'), '', '', '', '', 0);

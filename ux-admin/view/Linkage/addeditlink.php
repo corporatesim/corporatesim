@@ -14,7 +14,6 @@
     margin-left: 5px !important;
   }
 </style>
-<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script src="<?php echo site_root; ?>assets/components/ckeditor/ckeditor.js" type="text/javascript"></script>
 <!-- Generate alert box when select range & mChoice by user -->
 <script type="text/javascript">

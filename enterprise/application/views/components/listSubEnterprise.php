@@ -1,6 +1,6 @@
 <script type="text/javascript">
-  var func = " ";
-  var loc_url_del  = "<?php echo base_url('SubEnterprise/delete/');?>";
+  var func        = " ";
+  var loc_url_del = "<?php echo base_url('SubEnterprise/delete/');?>";
 </script>
 <div class="main-container">
   <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">

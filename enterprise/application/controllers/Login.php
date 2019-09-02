@@ -73,7 +73,7 @@ class Login extends CI_Controller {
 		{
 			$Users_Email    = $this->input->post('Users_Email');
 			$Users_Password = $this->input->post('Users_Password');
-			$result         = $this->Common_Model->verifyLogin($Users_Email,$Users_Password);
+			$result         = $this->Common_Model->verifyLogin(trim($Users_Email),trim($Users_Password));
 			// echo "<pre>"; print_r($result); exit;
 			if($result != 'error')
 			{

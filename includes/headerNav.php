@@ -55,7 +55,7 @@
 			</button>
 			<!-- <a style="padding: 2px 15px;" class="navbar-brand" href="<?php echo site_root;?>ux-admin/index">  -->
 				<?php if(isset($_SESSION['logo'])) { ?>
-					<a href="<?php echo site_root;?>"><img src="<?php echo site_root."enterprise/common/Logo/".$_SESSION['logo'];?>" width="40px" height="40px"/></a>
+					<a href="<?php echo site_root;?>"><img src="<?php echo site_root."enterprise/common/Logo/".$_SESSION['logo'];?>" width="300px" height="40px"/></a>
 
 				<?php } else { ?>
 					<a href="<?php echo site_root;?>"><img src="<?php echo site_root."images/logo-main.png";?>"  width="40px"/></a>
@@ -76,7 +76,9 @@
 			<?php }else{ ?>
 				<li class="hoverAnchor hidden"><a href="<?php echo site_root."registration.php";?>" class="">Register</a></li>
 			<?php } }?>
-			<?php if(site_root != "http://live.corporatesim.com/") {?>
+			<?php
+			$allowedDonmain = ['http://localhost/corp_simulation/','http://develop.corporatesim.com/'];
+			if(in_array(site_root,$allowedDonmain)) {?>
 				<li class="" id="google_translate_element"></li>
 			<?php } ?>
 		</ul>
@@ -90,6 +92,9 @@
 					</li>
 					<li>
 						<a style="color:#d1dae2;" href="gameCatalogue.php" class="<?php echo ($_SESSION['userpage'] == 'gameCatalogue')?'active':'';?>"><i style="padding-right:20px;" class="glyphicon glyphicon-knight"></i> Catalogue</a>
+					</li>
+					<li>
+						<a style="color:#d1dae2;" href="howToPlay.php" class="<?php echo ($_SESSION['userpage'] == 'howToPlay')?'active':'';?>"><i style="padding-right:20px;" class="glyphicon glyphicon-play"></i> How To Play</a>
 					</li>
 					<li>
 						<a style="color:#d1dae2;" href="settings.php" class="<?php echo ($_SESSION['userpage'] == 'settings')?'active':'';?>"><i style="padding-right:20px;" class="glyphicon glyphicon-cog"></i>  Settings</a>

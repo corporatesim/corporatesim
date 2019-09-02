@@ -59,7 +59,7 @@ class Users extends CI_Controller {
 	{
 		$where         = array();
 		$RequestMethod = $this->input->server('REQUEST_METHOD');
-		$query         = "SELECT gu.*, gua.Auth_password AS password, gs.*, ge.*,(SELECT count(UG_GameID) FROM GAME_USERGAMES WHERE UG_UserID = gu.User_id) AS gameCount, ge.Enterprise_Name FROM GAME_SITE_USERS AS gu LEFT JOIN GAME_SUBENTERPRISE AS gs ON gu.User_SubParentId = gs.SubEnterprise_ID LEFT JOIN GAME_ENTERPRISE AS ge ON gu.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_USER_AUTHENTICATION gua ON gua.Auth_userid = gu.User_id WHERE User_Delete = 0 AND User_Role = 2 ORDER BY User_datetime DESC";
+		$query         = "SELECT gu.*, gua.Auth_password AS password, gs.*, ge.*,(SELECT count(UG_GameID) FROM GAME_USERGAMES WHERE UG_UserID = gu.User_id) AS gameCount, ge.Enterprise_Name FROM GAME_SITE_USERS AS gu LEFT JOIN GAME_SUBENTERPRISE AS gs ON gu.User_SubParentId = gs.SubEnterprise_ID LEFT JOIN GAME_ENTERPRISE AS ge ON gu.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_USER_AUTHENTICATION gua ON gua.Auth_userid = gu.User_id WHERE User_Delete = 0 AND User_Role = 2 ";
 		if($this->session->userdata('loginData')['User_Role'] == 1)
 		{
 			// it means enterprise is logged in = only dependent subent users
@@ -91,6 +91,7 @@ class Users extends CI_Controller {
 				}
 			}
 		}
+		$query .= " ORDER BY User_datetime DESC ";
 		//show dropdownlist of Subenterprise
 		$where['SubEnterprise_Status'] = 0;
 		$Subenterprise                 = $this->Common_Model->fetchRecords('GAME_SUBENTERPRISE',$where,' ','SubEnterprise_ID');
@@ -348,17 +349,19 @@ class Users extends CI_Controller {
 			}
 
 			$userdata = array(
-				'User_fname'       =>	$this->input->post('User_fname'),
-				'User_lname'       =>	$this->input->post('User_lname'),
-				'User_mobile'      =>	$this->input->post('User_mobile'),
-				'User_email'       =>	$this->input->post('User_email'),
-				'User_companyid'   =>	$this->input->post('User_companyid'),
-				'User_username'    =>	$this->input->post('User_username'),
-				'User_Role'        =>	$User_Role,
-				'User_ParentId'    =>	$User_ParentId,
-				'User_SubParentId' =>	$User_SubParentId,
-				'User_csv_status'  =>	2,			
-				'User_datetime'    =>	date('Y-m-d H:i:s'),
+				'User_fname'         =>	$this->input->post('User_fname'),
+				'User_lname'         =>	$this->input->post('User_lname'),
+				'User_mobile'        =>	$this->input->post('User_mobile'),
+				'User_email'         =>	$this->input->post('User_email'),
+				'User_companyid'     =>	$this->input->post('User_companyid'),
+				'User_username'      =>	$this->input->post('User_username'),
+				'User_Role'          =>	$User_Role,
+				'User_ParentId'      =>	$User_ParentId,
+				'User_SubParentId'   =>	$User_SubParentId,
+				'User_csv_status'    =>	2,			
+				'User_GameStartDate' =>	date('Y-m-d H:i:s'),			
+				'User_GameEndDate'   =>	date('Y-m-d H:i:s', strtotime('+5 years')),			
+				'User_datetime'      =>	date('Y-m-d H:i:s'),
 			);
 			//print_r($userdata); exit();
 			if(!empty($this->input->post('User_fname')) && !empty($this->input->post('User_lname')) && !empty($this->input->post('User_username')) && !empty($this->input->post('User_mobile')) && !empty($this->input->post('User_email')))

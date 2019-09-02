@@ -53,7 +53,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 {
 	if(!empty($_POST['username']) && !empty($_POST['password']))
 	{
-		$username = $funObj->EscapeString($_POST['username']);
+		$username = $funObj->EscapeString(trim($_POST['username']));
 		$password = $_POST['password'];
 
 		$sql = "SELECT u.*, ge.Enterprise_Logo ,gse.SubEnterprise_Logo,gd.Domain_Name
@@ -63,8 +63,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 		or u.User_email='".$username."')
 		and ua.Auth_password='".$password."'
 		";
-		//echo $sql;
-		//exit();
+		// echo $sql; exit();
 		$object = $funObj->ExecuteQuery($sql);
 
 		if($object->num_rows > 0){
@@ -72,10 +71,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 		 /* echo "<pre>";
 			print_r($res);exit;*/
 			$domain = $res->Domain_Name;
-			if($domain != '')
+			if(($_SERVER['SERVER_NAME'] != 'localhost') && ($domain != '' && $domain != $enterpriseDomain))
 			{
-				$msg              = "Sorry, Please login to your own domain";
-				$type             = "alert alert-danger alert-dismissible";
+				$msg  = "Sorry, Please login to your own domain";
+				$type = "alert alert-danger alert-dismissible";
 			}
 			else
 			{

@@ -47,13 +47,17 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 // Update Sub Category
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 	if(!empty($_POST['area_id']) && !empty($_POST['comp_id']) && !empty($_POST['SubComp_Name'])){
-		$SubComp_ID = $_POST['SubComp_ID'];
-		$array      = array(
+		$SubComp_ID  = $_POST['SubComp_ID'];
+		$subCompName = $_POST['SubComp_Name'];
+		$array       = array(
 			'subcomp_areaid' => $_POST['area_id'],
 			'subcomp_compid' => $_POST['comp_id'],
-			'subcomp_name'   => $_POST['SubComp_Name']
+			'subcomp_name'   => $subCompName
 		);
 		$result = $functionsObj->UpdateData('GAME_SUBCOMPONENT', $array, 'SubComp_ID', $SubComp_ID, 0);
+		// updating the GAME_LINKAGE_SUB as we made flat table to avoid joins
+		$functionsObj->UpdateData('GAME_LINKAGE_SUB', array('SubLink_SubcompName' => $subCompName), 'SubLink_SubCompID', $SubComp_ID);
+
 		if( $result === true ){
 			$_SESSION['msg']     = 'Sub Component Updated Successfully';
 			$_SESSION['type[0]'] = 'inputSuccess';

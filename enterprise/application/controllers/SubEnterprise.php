@@ -38,7 +38,7 @@ class SubEnterprise extends CI_Controller {
 			redirect('Profile');
 		}
 		$RequestMethod = $this->input->server('REQUEST_METHOD');
-		$query         = "SELECT *, (SELECT count(*) FROM GAME_SUBENTERPRISE_GAME WHERE SG_SubEnterpriseID = gs.SubEnterprise_ID) as gamecount FROM GAME_SUBENTERPRISE gs LEFT JOIN GAME_ENTERPRISE ge ON gs.SubEnterprise_EnterpriseID = ge.Enterprise_ID LEFT JOIN GAME_ADMINUSERS ga ON ga.id = gs.SubEnterprise_CreatedBy OR ga.id = gs.SubEnterprise_UpdatedBy LEFT JOIN GAME_SITE_USERS gu ON gu.User_id = gs.SubEnterprise_CreatedBy OR gu.User_id = gs.SubEnterprise_UpdatedBy LEFT JOIN GAME_COUNTRY gc ON gc.Country_Id=gs.SubEnterprise_Country LEFT JOIN GAME_STATE gst ON gst.State_Id=gs.SubEnterprise_State WHERE SubEnterprise_Status = 0 ORDER BY SubEnterprise_CreatedOn DESC";
+		$query         = "SELECT *, (SELECT count(*) FROM GAME_SUBENTERPRISE_GAME WHERE SG_SubEnterpriseID = gs.SubEnterprise_ID) as gamecount FROM GAME_SUBENTERPRISE gs LEFT JOIN GAME_ENTERPRISE ge ON gs.SubEnterprise_EnterpriseID = ge.Enterprise_ID LEFT JOIN GAME_ADMINUSERS ga ON ga.id = gs.SubEnterprise_CreatedBy OR ga.id = gs.SubEnterprise_UpdatedBy LEFT JOIN GAME_SITE_USERS gu ON gu.User_id = gs.SubEnterprise_CreatedBy OR gu.User_id = gs.SubEnterprise_UpdatedBy LEFT JOIN GAME_COUNTRY gc ON gc.Country_Id=gs.SubEnterprise_Country LEFT JOIN GAME_STATE gst ON gst.State_Id=gs.SubEnterprise_State WHERE SubEnterprise_Status = 0 ";
 
 		if($this->session->userdata('loginData')['User_Role'] == 1)
 		{
@@ -78,6 +78,8 @@ class SubEnterprise extends CI_Controller {
 				}
 			}
 		}
+		// die($query);
+		$query .= " ORDER BY SubEnterprise_CreatedOn DESC";
 		$result = $this->Common_Model->executeQuery($query);	
 		if(!empty($filterID))
 		{
@@ -253,7 +255,7 @@ class SubEnterprise extends CI_Controller {
 
 			$this->form_validation->set_rules('SubEnterprise_State', 'State', 'required');
 
-			$this->form_validation->set_rules('SubEnterprise_Province', 'Province', 'trim|required');
+			// $this->form_validation->set_rules('SubEnterprise_Province', 'Province', 'trim|required');
 
 			$this->form_validation->set_rules('SubEnterprise_Pincode', 'Pincode', 'trim|required|numeric');
 
@@ -316,15 +318,15 @@ class SubEnterprise extends CI_Controller {
 					$result = $this->Common_Model->insert('GAME_SUBENTERPRISE',$subEnterprisedata);
 					if($result){
 						            //$Domain_EnterpriseId  = $UserID  ;
-						$Domain_SubEnterpriseId  = $result;
-						$Domain_Name          = $this->input->post('commonDomain');
-						$Domain_Logo          = $_FILES['logo']['name'];
-						$Domain_details = array(
-							'Domain_Name'             => $Domain_Name,
-							'Domain_EnterpriseId'     => $this->input->post('Enterprise_ID'),
-							'Domain_SubEnterpriseId'  => $Domain_SubEnterpriseId,
-							'Domain_Logo'             => $Domain_Logo,
-							'Domain_Status'           => 0,
+						$Domain_SubEnterpriseId = $result;
+						$Domain_Name            = $this->input->post('commonDomain');
+						$Domain_Logo            = $_FILES['logo']['name'];
+						$Domain_details         = array(
+							'Domain_Name'            => $Domain_Name,
+							'Domain_EnterpriseId'    => $this->input->post('Enterprise_ID'),
+							'Domain_SubEnterpriseId' => $Domain_SubEnterpriseId,
+							'Domain_Logo'            => $Domain_Logo,
+							'Domain_Status'          => 0,
 						);
                             //print_r($Domain_details);exit();
 						$this->Common_Model->insert('GAME_DOMAIN',$Domain_details);
@@ -333,30 +335,33 @@ class SubEnterprise extends CI_Controller {
 					{
 						$emailid  = $this->input->post('SubEnterprise_Email');
 						$password = $this->input->post('SubEnterprise_Password');
-						$domain = "https://live.corporatesim.com";
+						$domain   = "https://live.corporatesim.com";
 
 						$message  = "Thanks for your enrolling!\r\n\r\n";
-						$message .= 	"Your login and password for accessing our Simulation Games/eLearning programs/Assessments are provided below.\r\n\r\n";
+						$message .= "Your login and password for accessing our Simulation Games/eLearning programs/Assessments are provided below.\r\n\r\n";
 						$message .= "You will have to login at :$domain\r\n\r\n";
 						$message .= "login :$emailid\r\n";
 						$message .= "password :.$password\r\n\r\n";
 						$message .= "Regards,\r\n Admin";
 
-						$config['charset'] = 'utf-8';
+						$config['charset']  = 'utf-8';
 						$config['mailtype'] = 'text';
-						$config['newline'] = '\r\n';
+						$config['newline']  = '\r\n';
 
 
 						$this->email->initialize($config);
 						$this->email->to($emailid);
-						$this->email->from('support@corporatesim.com','corporatesim','support@corporatesim.com');
+						$this->email->from('support@corporatesim.com','Corporatesim','support@corporatesim.com');
 						$this->email->subject("Here is your email and password");
 						$this->email->message($message);
-
-						$this->email->send();
+						// stop sending email from localhost
+						if($this->input->server('HTTP_HOST') != 'localhost')
+						{
+							$this->email->send();
+						}
 					}
 				}
-				$this->session->set_flashdata("tr_msg","Details Insert Successfully" );
+				$this->session->set_flashdata("tr_msg","Record Saved Successfully" );
 				redirect("SubEnterprise","refresh");
 			}
 
@@ -404,14 +409,13 @@ class SubEnterprise extends CI_Controller {
 	{
 		$id    = base64_decode($this->uri->segment(3));
 		$where = array(
-			'SubEnterprise_ID'     => $id,
-			'SubEnterprise_Status' => 0,
+			'SubEnterprise_ID' => $id,
+			// 'SubEnterprise_Status' => 0,
 		);
-		$result            = $this->Common_Model->fetchRecords('GAME_SUBENTERprise',$where);
-		$content['result'] = $result;
-		$this->db->set('SubEnterprise_Status', 1);
-		$this->db->where('SubEnterprise_ID', $id);
-		$this->db->update('GAME_SUBENTERPRISE');
+		$update = array(
+			'SubEnterprise_Status' => 1,
+		);
+		$this->Common_Model->softDelete('GAME_SUBENTERPRISE',$update,$where);
 		redirect("SubEnterprise","refresh");
 	}
 }

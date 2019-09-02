@@ -2,9 +2,9 @@
 include_once 'includes/header.php'; 
 ?>
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.9.0/math.min.js"></script>-->
-<script src="js/jquery.js"></script>
+<!-- <script src="js/jquery.js"></script> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Chango">
 <!-- adding css for component branching componentBranching branchingOverlay -->
@@ -32,7 +32,6 @@ include_once 'includes/header.php';
   }
 
 </style>
-
 <!-- left side buttons adding here -->
 <div class="leftsideNav rotateCompAnti row">
 
@@ -197,23 +196,17 @@ include_once 'includes/header.php';
             echo "<div role='tabpanel' data-TabId='".$row['Area_Name']."' class='tab-pane' id='".$row['Area_Name']."Tab'>";
           }
 
-          $sqlcomp = "SELECT distinct gi.input_showComp, a.Area_ID as AreaID, c.Comp_ID as CompID, a.Area_Name as Area_Name, l.Link_Order as 'Order', l.Link_Branching as componentBranching,
-          c.Comp_Name as Comp_Name, ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode, 
-          f.expression as exp , ls.SubLink_ID as SubLinkID,ls.Sublink_AdminCurrent as AdminCurrent, 
+          $sqlcomp = "SELECT distinct gi.input_showComp, ls.SubLink_AreaID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_AreaName as Area_Name, l.Link_Order as 'Order', l.Link_Branching as componentBranching,
+          ls.SubLink_CompName as Comp_Name, ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode, 
+          ls.SubLink_FormulaExpression as exp , ls.SubLink_ID as SubLinkID,ls.Sublink_AdminCurrent as AdminCurrent, 
           ls.Sublink_AdminLast as AdminLast, ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff,
           ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
-          ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle
+          ls.SubLink_SubCompIDcarry as CarrySubCompID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle
           FROM GAME_LINKAGE l 
           INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
-          INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-          INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
-          INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-          INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
           LEFT JOIN GAME_INPUT gi on gi.input_sublinkid=ls.SubLink_ID and input_user=".$userid." 
-          LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
-          LEFT OUTER JOIN GAME_FORMULAS f on ls.SubLink_FormulaID=f.f_id 
           WHERE ls.SubLink_Type=0 AND ls.SubLink_SubCompID=0 and l.Link_ID=".$linkid." 
-          and a.Area_ID=".$row['AreaID']." ORDER BY ls.SubLink_Order";
+          and ls.SubLink_AreaID=".$row['AreaID']." ORDER BY ls.SubLink_Order";
           // echo "Component - ".$sqlcomp;
           //echo $userid;
           $component = $functionsObj->ExecuteQuery($sqlcomp);
@@ -437,7 +430,8 @@ include_once 'includes/header.php';
 
             if($row1['componentBranching'] > 0)
             {
-          // for show hide-> 0-show and 1-hide, if component is visible from admin end
+              // if component branching enabled then hide the review button
+              // for show hide-> 0-show and 1-hide, if component is visible from admin end
               if($row1['ShowHide'] < 1)
               {
                 if($firstComponent < 1)
@@ -727,7 +721,7 @@ include_once 'includes/header.php';
           WHERE SubLink_SubCompID = 0 AND SubLink_CompID=".$row1['CompID']." AND ls.SubLink_LinkID =
           (
           SELECT Link_ID FROM `GAME_LINKAGE`
-          WHERE Link_GameID=".$row1['GameID']." AND Link_ScenarioID != ".$row1['ScenID']." 
+          WHERE Link_GameID=".$gameid." AND Link_ScenarioID != ".$row1['ScenID']." 
           AND Link_Order < ".$row1['Order']." 
           ORDER BY Link_Order DESC LIMIT 1))";
           //echo $sqllast;
@@ -758,23 +752,16 @@ include_once 'includes/header.php';
         }
 
         echo "<div class='clearfix'></div>";
-
         //Get SubComponent for this Component, linkid
-        $sqlsubcomp = "SELECT distinct a.Area_ID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_SubCompID as SubCompID,  
-        a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, s.SubComp_Name as SubComp_Name, l.Link_Order AS 'Order', 
-        ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode , f.expression as exp, 
+        $sqlsubcomp = "SELECT distinct ls.SubLink_AreaID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_SubCompID as SubCompID,  
+        ls.SubLink_AreaName as Area_Name, ls.SubLink_CompName as Comp_Name, ls.SubLink_SubcompName as SubComp_Name, l.Link_Order AS 'Order', 
+        ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode , ls.SubLink_FormulaExpression as exp, 
         ls.SubLink_ID as SubLinkID ,ls.Sublink_AdminCurrent as AdminCurrent, ls.Sublink_AdminLast as AdminLast, 
         ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff , 
         ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
-        ls.SubLink_SubCompIDcarry as CarrySubCompID, g.Game_ID as GameID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle
+        ls.SubLink_SubCompIDcarry as CarrySubCompID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle
         FROM GAME_LINKAGE l 
         INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
-        INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-        INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
-        INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-        LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
-        INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
-        LEFT OUTER JOIN GAME_FORMULAS f on ls.SubLink_FormulaID=f.f_id 
         WHERE ls.SubLink_Type=0 AND ls.SubLink_SubCompID>0 and l.Link_ID=".$linkid
         ." AND ls.SubLink_CompID =".$row1['CompID']." ORDER BY ls.SubLink_Order";
         //echo "SubComponent - ".$sqlsubcomp;
@@ -1389,7 +1376,7 @@ include_once 'includes/header.php';
         AND ls.SubLink_LinkID =
         (
         SELECT Link_ID FROM `GAME_LINKAGE`
-        WHERE Link_GameID=".$row2['GameID']." AND Link_ScenarioID != ".$row2['ScenID']."
+        WHERE Link_GameID=".$gameid." AND Link_ScenarioID != ".$row2['ScenID']."
         AND Link_Order < ".$row2['Order']." 
         ORDER BY Link_Order DESC LIMIT 1))";
                 //echo $sqllast;
@@ -1529,15 +1516,16 @@ include_once 'includes/header.php';
     // alert(ref_tab); return false;
     var form    = $('#game_frm').get(0);
     $.ajax({
-      url:  "includes/ajax/ajax_addedit_input.php",
-      type: "POST",
-      data: new FormData(form),
+      url        :  "includes/ajax/ajax_addedit_input.php",
+      type       : "POST",
+      data       : new FormData(form),
       processData: false,
-      cache: false,
+      cache      : false,
       contentType: false,
-      beforeSend: function(){
+      beforeSend : function(){
       //alert("beforeSend");
-      $("#input_loader").html("<img src='images/loading.gif' height='30'> Inputs being saved, please wait.");
+      // $("#input_loader").html("<img src='images/loading.gif' height='30'> Inputs being saved, please wait.");
+      $("#input_loader").html("");
       $('#loader').addClass( 'loader' );
     },
     success: function( result ){
@@ -1593,14 +1581,15 @@ include_once 'includes/header.php';
     // $('#SaveInput_'+sublinkid).trigger('click');
     
     // either we can directly trigger event or call function, so I am calling function, coz If i need to trigger click then I need to add the event to save button
-    SaveCurrent(sublinkid,key);
+    // console.log('old: '+value);
+    SaveCurrent(sublinkid,key,value);
 
     <?php if($result->Branching){ ?>
       componentBranchingDivId = 'branchComp_'+sublinkid;
     <?php } ?>
   }
 
-  function SaveCurrent(sublinkid,key)
+  function SaveCurrent(sublinkid,key,value)
   {
   //alert(key);
   // checking if user has logged out or not in another tab
@@ -1620,8 +1609,17 @@ include_once 'includes/header.php';
 
   start_time         = new Date();
   var save_button_id = "SaveInput_"+sublinkid;
-  var value          = $("#"+key).val();
-  var ref_tab        = $("ul.nav-tabs li.active a").text(); //active tab slect
+  // or we can pass the value directly to SaveCurrent function from lookupcurrent function
+  // if($("#"+key).is(":radio"))
+  // {
+  //   var value = $("input[name='"+key+"']:checked").val();
+  // }
+  // else
+  // {
+  //   var value = $("#"+key).val();
+  // }
+  // console.log('new: '+value);
+  var ref_tab = $("ul.nav-tabs li.active a").text(); //active tab slect
   $('#'+save_button_id).hide();
   $('.overlay').show();
 
@@ -1630,7 +1628,8 @@ include_once 'includes/header.php';
     url : "includes/ajax/ajax_update_execute_input.php",
     data: '&action=updateInput&sublinkid='+sublinkid+'&key='+key+'&value='+value,
     beforeSend: function() {
-      $("#input_loader").html("<img src='images/loading.gif' height='30'> Inputs being updated, please wait.");
+      // $("#input_loader").html("<img src='images/loading.gif' height='30'> Inputs being updated, please wait.");
+      $("#input_loader").html("");
     },
     success: function(result) 
     {
@@ -1722,7 +1721,7 @@ $('#execute_input').click( function()
     </div>
   </div>
 </footer>
-<script src="js/jquery.min.js"></script>  
+<!-- <script src="js/jquery.min.js"></script>   -->
 <script src="js/bootstrap.min.js"></script>   
 <script src="js/function.js"></script>  
 <script type="text/javascript">
@@ -1791,6 +1790,9 @@ $('.range').each(function(i,e){
     $('#notifyText').on('click',function(){
       $('#continueBtn').trigger('click');
     });
+    <?php if($result->Branching) { ?>
+      $('#reviewBtn').addClass('hidden');
+    <?php } ?>
     preventInputChange = true;
   // toggle area tabs while click on reviewBtn
   $('#reviewBtn').on('click',function(){
@@ -1860,11 +1862,11 @@ $('.range').each(function(i,e){
     swalWithBootstrapButtons.fire({
     // title: 'Are you sure?',
     text: "Please press OK if you have provided all your inputs and are ready to submit else press Cancel. Please note that you can not come back to this page after clicking OK",
-    type: 'warning',
-    showCancelButton: true,
+    type             : 'warning',
+    showCancelButton : true,
     confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
-    reverseButtons: false
+    cancelButtonText : 'Cancel',
+    reverseButtons   : false
   }).then((result) => {
     if (result.value) {
       // swalWithBootstrapButtons.fire(
@@ -2352,7 +2354,7 @@ function element_not_found(key)
   var find      = 'link'+key;
   if(input_field_keys[find] === undefined)
   {
-    console.log(input_field_keys[find]+' and '+key+' not found');
+    console.log(input_field_keys[find]+' and '+key+' not found for:- '+find);
     console.log(input_field_keys);
   }
   var ret_value = input_field_keys[find].split('_');
@@ -2469,7 +2471,8 @@ function update_json_data(id,key,formula_json_expcomp,formula_json_expsubc,input
     url     : "includes/ajax/ajax_update_execute_input.php",
     // data       : '&action=updateFormula&formula_json_expcomp='+formula_expcomp+'&formula_json_expsubc='+formusubc+'&input_field_values='+input_values,
     beforeSend: function() {
-      $("#input_loader").html("<img src='images/loading.gif' height='30'> Executing Formula, please wait.");
+      // $("#input_loader").html("<img src='images/loading.gif' height='30'> Executing Formula, please wait.");
+      $("#input_loader").html("");
     },
     success: function(result) 
     {
@@ -2533,14 +2536,15 @@ function update_json_data(id,key,formula_json_expcomp,formula_json_expsubc,input
         final_time = (start_time.getTime() - end_time.getTime())/1000;
       // $("#"+id).show();
       
+      $("#input_loader").html('');
+      $('.overlay').hide();
+      
       // refreshing charts
       $('.graph_chart').each(function(index, el) {
         var new_src    = $(this).attr('src');
         $(this).attr('src',new_src);
       });
       
-      $("#input_loader").html('');
-      $('.overlay').hide();
       // var relocate = key.split('_');
       // window.location.href = "<?php // echo site_root.'input.php?ID='.$gameid.'&tab=';?>"+relocate[0];
       // console.log("<?php // echo site_root.'input.php?ID='.$gameid.'&tab=';?>"+);

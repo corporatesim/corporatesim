@@ -7,43 +7,43 @@
 </script>
 
 <style>
-<!--
-.undo_btn{
-	position: absolute;
-	bottom  : 15px; 
-}
-.formula_box{
-	display: flex;
-}
-
-.components, .operators, .subcomponents{
-	list-style: none;
-	margin    : 0;
-	padding   : 0;
-	border    : 1px solid #d8d8d8;
-	height    : 300px;
-	overflow-y: scroll;
-}
-
-.components li, .operators li, .subcomponents li{
-	cursor : pointer;
-	padding: 2px 10px;
-}
-
-.components li:hover, .operators li:hover, .subcomponents li:hover{
-	background-color: #f8f8f8;
-}
-
-@media only screen and (max-width:360px){
+	<!--
 	.undo_btn{
-		position: unset;
-		bottom  : auto;
+		position: absolute;
+		bottom  : 15px; 
 	}
 	.formula_box{
-		display: unset;
+		display: flex;
 	}
-}
--->
+
+	.components, .operators, .subcomponents{
+		list-style: none;
+		margin    : 0;
+		padding   : 0;
+		border    : 1px solid #d8d8d8;
+		height    : 300px;
+		overflow-y: scroll;
+	}
+
+	.components li, .operators li, .subcomponents li{
+		cursor : pointer;
+		padding: 2px 10px;
+	}
+
+	.components li:hover, .operators li:hover, .subcomponents li:hover{
+		background-color: #f8f8f8;
+	}
+
+	@media only screen and (max-width:360px){
+		.undo_btn{
+			position: unset;
+			bottom  : auto;
+		}
+		.formula_box{
+			display: unset;
+		}
+	}
+	-->
 </style>
 
 <div class="row">
