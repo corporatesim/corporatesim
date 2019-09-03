@@ -5,8 +5,8 @@
 	<!-- Basic -->
 	<meta charset="UTF-8">
 
-	<meta name="keywords" content="HTML5 Admin Template" />
-	<meta name="description" content="Porto Admin - Responsive HTML5 Template">
+	<meta name="keywords" content="CorporateSim Enterprise Login" />
+	<meta name="description" content="CorporateSim Enterprise Login">
 	<meta name="author" content="okler.net">
 
 	<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url('common/vendors');?>/images/favicon.ico">
@@ -41,7 +41,7 @@
 		<div class="center-sign">
 			<?php $this->load->view('components/trErMsg');?>
 			<a href="<?php echo base_url();?>" class="logo pull-left">
-				<img src="<?php echo base_url('common/loginSignup');?>/images/cs_logo.png" height="54" alt="Porto Admin" style="margin-top: 12%;"/>
+				<img src="<?php echo base_url('common/loginSignup');?>/images/cs_logo.png" height="54" alt="CorporateSim Logo" style="margin-top: 12%;"/>
 			</a>
 
 			<div class="panel panel-sign">
