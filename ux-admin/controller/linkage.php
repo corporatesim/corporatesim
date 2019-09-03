@@ -188,7 +188,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 				'SubLink_CreateDate'         => date('Y-m-d H:i:s')
 			);
 			
-			$result = $functionsObj->InsertData('GAME_LINKAGE_SUB', $linkdetails, 0, 0);
+			$result    = $functionsObj->InsertData('GAME_LINKAGE_SUB', $linkdetails, 0, 0);
+			// adding the below query to updat the newly added fields liek Area, Comp, SubComp name and formula exp to reduce joins
+			$updateSql = "UPDATE GAME_LINKAGE_SUB gls LEFT JOIN GAME_AREA ga ON ga.Area_ID = gls.SubLink_AreaID LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID LEFT JOIN GAME_FORMULAS gf ON gf.f_id = gls.SubLink_FormulaID SET gls.SubLink_AreaName = ga.Area_Name, gls.SubLink_CompName = gc.Comp_Name, gls.SubLink_SubcompName = gs.SubComp_Name, gls.SubLink_FormulaExpression = gf.expression	WHERE gls.SubLink_AreaID =".$_POST['area_id'];
+			$functionsObj->ExecuteQuery($updateSql);
 			if($result)
 			{
 				$id            = $functionsObj->InsertID();
@@ -339,7 +342,8 @@ else
 }
 }
 
-if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){	
+if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
+{	
 	// header('X-XSS-Protection:0');	echo "<pre>"; print_r($_POST); die('Update Linkage'); 
 	if(isset($_POST['game_id']) && !empty($_POST['game_id']))
 	{
@@ -557,17 +561,14 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 				'SubLink_InputFieldOrder'    => $_POST['SubLink_InputFieldOrder'],
 					//'SubLink_Details'	=> $_POST['details']
 			);
-
-
-				//echo $sublinkid;
-			
-			$object  = $functionsObj->SelectData(array(), 'GAME_LINKAGE_SUB', array('SubLink_id='.$sublinkid), '', '', '', '', 0);
-			$details = $functionsObj->FetchObject($object);
-			
-			$linkid  = $details->SubLink_LinkID;
-				//exit();
-			$result  = $functionsObj->UpdateData('GAME_LINKAGE_SUB', $linkdetails, 'SubLink_id', $sublinkid, 0);
-				//exit();
+			$object     = $functionsObj->SelectData(array(), 'GAME_LINKAGE_SUB', array('SubLink_id='.$sublinkid), '', '', '', '', 0);
+			$details    = $functionsObj->FetchObject($object);
+			$linkid     = $details->SubLink_LinkID;
+			$result     = $functionsObj->UpdateData('GAME_LINKAGE_SUB', $linkdetails, 'SubLink_id', $sublinkid, 0);
+			// adding the below query to updat the newly added fields liek Area, Comp, SubComp name and formula exp to reduce joins
+			$updateArea = ($_POST['area_id'])?$_POST['area_id']:$_POST['dis_area_id'];	
+			$updateSql  = "UPDATE GAME_LINKAGE_SUB gls LEFT JOIN GAME_AREA ga ON ga.Area_ID = gls.SubLink_AreaID LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID LEFT JOIN GAME_FORMULAS gf ON gf.f_id = gls.SubLink_FormulaID SET gls.SubLink_AreaName = ga.Area_Name, gls.SubLink_CompName = gc.Comp_Name, gls.SubLink_SubcompName = gs.SubComp_Name, gls.SubLink_FormulaExpression = gf.expression	WHERE gls.SubLink_AreaID =".$updateArea;
+			$functionsObj->ExecuteQuery($updateSql);
 			if($result === true){
 				if(isset($_POST['start1']) && isset($_POST['end1']) && isset($_POST['value1']))
 				{
