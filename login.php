@@ -68,8 +68,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 
 		if($object->num_rows > 0){
 			$res = $funObj->FetchObject($object);
-		 /* echo "<pre>";
-			print_r($res);exit;*/
+		  // echo "<pre>";	print_r($res);exit;
 			$domain = $res->Domain_Name;
 			if(($_SERVER['SERVER_NAME'] != 'localhost') && ($domain != '' && $domain != $enterpriseDomain))
 			{
@@ -78,45 +77,44 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 			}
 			else
 			{
-			
-			if($res->User_Delete == 0)
-			{
-				if($res->User_status == 1)
+				if($res->User_Delete == 0)
 				{
-
-					$_SESSION['userid']    = (int) $res->User_id;
-					$_SESSION['username']  = $res->User_username;
-					$_SESSION['companyid'] = $res->User_companyid;
-					if(empty($_SESSION['logo']))
+					if($res->User_status == 1)
 					{
-						if($res->User_Role == 1)
+						$_SESSION['userid']    = (int) $res->User_id;
+						$_SESSION['username']  = $res->User_username;
+						$_SESSION['companyid'] = $res->User_companyid;
+						if(empty($_SESSION['logo']))
 						{
-							$_SESSION['logo'] = $res->Enterprise_Logo;
+							if($res->User_Role == 1)
+							{
+								$_SESSION['logo'] = $res->Enterprise_Logo;
+							}
+							elseif($res->User_Role == 2)
+							{
+								$_SESSION['logo'] = $res->SubEnterprise_Logo;
+							}
 						}
-						elseif($res->User_Role == 2)
-						{
-							$_SESSION['logo'] = $res->SubEnterprise_Logo;
-						}
+						//unset($_SESSION['logo']);
+						//header("Location:".site_root."my_profile.php");
+						//echo '<script>window.location = "http://simulation.uxconsultant.in/my_profile.php"; </script>';
+						// echo "<pre>"; print_r($_SESSION);die('here');
+						echo '<script>window.location = "'.site_root.'selectgame.php"; </script>';
+						exit(0);
 					}
-					//unset($_SESSION['logo']);
-					//header("Location:".site_root."my_profile.php");
-					//echo '<script>window.location = "http://simulation.uxconsultant.in/my_profile.php"; </script>';
-					echo '<script>window.location = "'.site_root.'selectgame.php"; </script>';
-					exit(0);
+					else
+					{
+						$msg  = "Your account is pending for email id confirmation. Please confirm your email address by clicking on link sent to your email address.";
+						$type = "err";
+					}
 				}
+
 				else
 				{
-					$msg  = "Your account is pending for email id confirmation. Please confirm your email address by clicking on link sent to your email address.";
+					$msg  = "Your account has been deactivated by siteadmin";
 					$type = "err";
 				}
 			}
-
-			else
-			{
-				$msg  = "Your account has been deactivated by siteadmin";
-				$type = "err";
-			}
-		}
 		}
 		else
 		{

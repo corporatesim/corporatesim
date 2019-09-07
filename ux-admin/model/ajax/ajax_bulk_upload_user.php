@@ -12,14 +12,17 @@ $validext       = array ('xls', 'xlsx', 'csv');  // Allowed Extensions
 $User_UploadCsv = time();
 //$uid = $_SESSION['siteuser'];
 
-if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['name'] ) ){
+if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['name'] ) )
+{
 	$explode_filename = explode(".", $_FILES['upload_csv']['name']);
 	//echo $explode_filename[0];
 	//exit();
 	$ext = strtolower( end($explode_filename) );
 		//echo $ext."\n";
-	if(in_array( $ext, $validext ) ){
-		try{	
+	if(in_array( $ext, $validext ) )
+	{
+		try
+		{	
 			$file              = $_FILES['upload_csv']['tmp_name'];
 			$handle            = fopen($file, "r");
 			$not_inserted_data = array();
@@ -27,7 +30,8 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 			$c                 = 0;
 			$flag              = true;
 
-			while( ( $filesop = fgetcsv( $handle, 1000, "," ) ) !== false ){
+			while( ( $filesop = fgetcsv( $handle, 1000, "," ) ) !== false )
+			{
 				if($flag) { $flag = false; continue; }
 					//echo $filesop[1];
 				// echo "<pre>"; print_r($filesop); exit();
@@ -65,7 +69,8 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 						);
 						$result = $funObj->InsertData("GAME_SITE_USERS", $array, 0, 0);
 						$c++;
-						if($result){
+						if($result)
+						{
 							$uid = $funObj->InsertID();
 							$to  = $filesop[6];								
 
@@ -89,7 +94,8 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 							$total   = count($getdata);
 							if($total>1)
 							{
-								for ($i=0; $i<$total; $i++) {
+								for ($i=0; $i<$total; $i++)
+								{
 									$game_mapping['UG_GameID'] = $getdata[$i]; 
 									$result1 = $funObj->InsertData('GAME_USERGAMES', $game_mapping, 0, 0);
 								}
@@ -102,8 +108,11 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 									$result1 = $funObj->InsertData('GAME_USERGAMES', $game_mapping, 0, 0);
 								}
 							}
+
 							$result1 = $funObj->InsertData('GAME_USER_AUTHENTICATION', $login_details, 0, 0);
-							if($result1){
+
+							if($result1)
+							{
 								$from    = "support@corporatesim.com";
 								$subject = "New Account created for Simulation Game";
 								$message = "Dear User";
@@ -121,10 +130,12 @@ if( isset( $_FILES['upload_csv']['name'] ) && !empty( $_FILES['upload_csv']['nam
 								$_SESSION['type[1]'] = "has-success";
 									//header("Location: ".site_root."ux-admin/siteusers");
 									//exit(0);
-							}else{
+							}
+							else
+							{
 								$msg = "Error: ".$result1;
-									//echo $msg;
-									//exit();
+								//echo $msg;
+								//exit();
 								$type[0] = "inputError";
 								$type[1] = "has-error";
 							}	 

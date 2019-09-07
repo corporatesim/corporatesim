@@ -48,12 +48,12 @@
           <?php } ?>
         </a> 
       </div>
-     <!--  <div class="menu-icon">
+      <div class="menu-icon">
         <span></span>
         <span></span>
         <span></span>
         <span></span>
-      </div> -->
+      </div>
       <div class="user-info-dropdown">
         <div class="dropdown">
           <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -81,9 +81,9 @@
         </a>
         <div class="dropdown-menu dropdown-menu-right">
           <?php if($this->session->userdata('loginData')['User_Role'] > 0 )
-            {?>
-          <a class="dropdown-item" href="<?php echo base_url('Profile');?>"><i class="fa fa-user-md" aria-hidden="true"></i> Profile</a>
-        <?php }?>
+          {?>
+            <a class="dropdown-item" href="<?php echo base_url('Profile');?>"><i class="fa fa-user-md" aria-hidden="true"></i> Profile</a>
+          <?php }?>
           <!-- <a class="dropdown-item" href="#" data-toggle="modal"data-target="#Enterprisemodal"><i class="fa fa-edit" aria-hidden="true"></i> Choose Logo</a> -->
           <!-- <a class="dropdown-item" href="#"><i class="fa fa-question" aria-hidden="true"></i> Help</a> -->
           <a class="dropdown-item" href="<?php echo base_url('Dashboard/logout');?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>

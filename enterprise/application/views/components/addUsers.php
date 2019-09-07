@@ -267,46 +267,49 @@
   var Enterpriseid    = $('#Enterprise1').val();
   var SubEnterpriseid = $('#subenterprise1').val();
 
-  if(SubEnterpriseid != '' && SubEnterpriseid != undefined){
-
-   $url = '<?php echo base_url();?>Ajax/SubEnterpriseUsersCSV/'+Enterpriseid+'/'+SubEnterpriseid
- }
- else
- {
-   $url= '<?php echo base_url();?>Ajax/EnterpriseUsersCSV/'+Enterpriseid;
- }
-
- var form = $('#addByCsv').get(0);                     
- $.ajax({
-  url        : $url,
-  type       : "POST",
-  data       : new FormData(form),
-  cache      : false,
-  contentType: false,
-  processData: false,
-  beforeSend : function(){
-   $('#loader').addClass('loading');
- },
- success: function( result ){
-  try
+  if(SubEnterpriseid != '' && SubEnterpriseid != undefined)
   {
-    var response = JSON.parse( result );
-    //alert(response.status);
-    if( response.status == 1 ){
-      //alert('in status = 1 ');
-      $('#bulk_u_msg').html( response.msg );
-      $('#Modal_Bulkupload').modal( 'show' );
-    }
-    else
-    {
-      $('#bulk_u_err').html( response.msg );
-      $('#Modal_BulkuploadError').modal( 'show' );
-    }
-  } catch ( e ) {
-    console.log( result );
+    $url = '<?php echo base_url();?>Ajax/SubEnterpriseUsersCSV/'+Enterpriseid+'/'+SubEnterpriseid;
   }
-  $('#loader').removeClass('loading');
-}
+  else
+  {
+    $url = '<?php echo base_url();?>Ajax/EnterpriseUsersCSV/'+Enterpriseid;
+  }
+
+  var form = $('#addByCsv').get(0);                     
+  $.ajax({
+    url        : $url,
+    type       : "POST",
+    data       : new FormData(form),
+    cache      : false,
+    contentType: false,
+    processData: false,
+    beforeSend : function(){
+     // $('#loader').addClass('loading');
+     $('.pre-loader').show();
+   },
+   success: function( result ){
+    try
+    {
+      var response = JSON.parse( result );
+      //alert(response.status);
+      if( response.status == 1 )
+      {
+        //alert('in status = 1 ');
+        $('#bulk_u_msg').html( response.msg );
+        $('#Modal_Bulkupload').modal( 'show' );
+      }
+      else
+      {
+        $('#bulk_u_err').html( response.msg );
+        $('#Modal_BulkuploadError').modal( 'show' );
+      }
+    } catch ( e ) {
+      console.log( result );
+    }
+    // $('#loader').removeClass('loading');
+    $('.pre-loader').hide();
+  }
 });
 });
 

@@ -135,7 +135,6 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Enroll')
       //for simulation
 			$simulationSql = "SELECT * FROM GAME_GAME gg WHERE gg.Game_Status = 1 AND gg.Game_Delete = 0 AND gg.Game_ID NOT IN( SELECT gug.UG_GameID FROM GAME_USERGAMES gug LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID = gug.UG_GameID AND gug.UG_UserID = gus.US_UserID WHERE gug.UG_UserID = $UserId AND( gus.US_LinkID < 1 OR gus.US_LinkID IS NULL ) ) AND gg.Game_Elearning = 0";
 			$simulationGames = $FunctionsObj->ExecuteQuery($simulationSql);
-			// echo "<pre>"; print_r($simulationGames->fetch_object()); exit();
 
 			//for eLearning 
 			$eLearningSql = "SELECT * FROM GAME_GAME gg WHERE gg.Game_Status = 1 AND gg.Game_Delete = 0 AND gg.Game_ID NOT IN( SELECT gug.UG_GameID FROM GAME_USERGAMES gug LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID = gug.UG_GameID AND gug.UG_UserID = gus.US_UserID WHERE gug.UG_UserID = $UserId AND( gus.US_LinkID < 1 OR gus.US_LinkID IS NULL ) ) AND gg.Game_Elearning = 1";
@@ -144,5 +143,6 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Enroll')
 				//for Assessment
 			$assesmentSql = "SELECT * FROM GAME_GAME gg WHERE gg.Game_Status = 1 AND gg.Game_Delete = 0 AND gg.Game_ID NOT IN( SELECT gug.UG_GameID FROM GAME_USERGAMES gug LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID = gug.UG_GameID AND gug.UG_UserID = gus.US_UserID WHERE gug.UG_UserID = $UserId AND( gus.US_LinkID < 1 OR gus.US_LinkID IS NULL ) ) AND gg.Game_Elearning = 2";
 			$simulationAssesment = $FunctionsObj->ExecuteQuery($assesmentSql);
+			// echo $eLearningSql."<pre>"; print_r($simulationElearning); exit();
 
 			include_once doc_root.'views/gameCatalogue.php';

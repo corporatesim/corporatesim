@@ -2,7 +2,6 @@
 include_once 'includes/headerNav.php'; 
 // require_once 'eLearning.php'; 
 ?>
-
 <div class="row col-md-9" style="margin-left: 23%;">
   <div class="tab-content tabs tab-content1">
     <div role="tabpanel" class="tab-pane fade in active" id="intro">
