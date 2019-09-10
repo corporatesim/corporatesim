@@ -32,7 +32,7 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 	// creating game linkage for users depending upon the scenario for scenario branching
 	$updateValues   = array();
 	$updateSql      = " INSERT INTO GAME_LINKAGE_USERS (UsScen_UserId,UsScen_GameId,UsScen_ScenId,UsScen_LinkId,UsScen_IsEndScenario) VALUES";
-	$sqlQuery       = "SELECT gl.Link_ID, gl.Link_GameID, gl.Link_ScenarioID, gl.Link_Order, gu.UsScen_Id, gu.UsScen_GameId, gu.UsScen_ScenId,gu.UsScen_LinkId, gu.UsScen_UserId, gu.UsScen_Status FROM GAME_LINKAGE gl LEFT JOIN GAME_LINKAGE_USERS gu ON gu.UsScen_LinkId = gl.Link_ID AND gu.UsScen_UserId=".$userid." WHERE gl.Link_GameID =".$gameid." ORDER BY gl.Link_Order ASC";
+	$sqlQuery       = "SELECT gl.Link_ID, gl.Link_GameID, gl.Link_ScenarioID, gl.Link_Order, gu.UsScen_Id, gu.UsScen_GameId, gu.UsScen_ScenId,gu.UsScen_LinkId, gu.UsScen_UserId, gu.UsScen_Status FROM GAME_LINKAGE gl LEFT JOIN GAME_LINKAGE_USERS gu ON gu.UsScen_LinkId = gl.Link_ID AND gu.UsScen_UserId=".$userid." WHERE gl.Link_GameID =".$gameid." AND gl.Link_Status=1 ORDER BY gl.Link_Order ASC";
 	// die($sqlQuery);
 	$sqlQuerObject  = $functionsObj->ExecuteQuery($sqlQuery);
 	if($sqlQuerObject->num_rows == 1)
