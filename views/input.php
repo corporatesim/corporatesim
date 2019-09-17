@@ -1,4 +1,5 @@
 <?php 
+// echo "<pre>"; print_r($result); exit();
 include_once 'includes/header.php'; 
 ?>
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.9.0/math.min.js"></script>-->
@@ -13,7 +14,8 @@ include_once 'includes/header.php';
     /**/
   }
   /*for active area highlighting*/
-  .nav-tabs > li > a::after {
+  .nav-tabs > li > a::after
+  {
     content   : "";
     background: #009aef;
     height    : 4px;
@@ -25,10 +27,11 @@ include_once 'includes/header.php';
     transform : scale(0);
   }
 
-  input[type=text] {
+  input[type=text]
+  {
     border-radius: 12px;
     border       : none;
-    text-align   : center; 
+    text-align   : center;
   }
 
 </style>
@@ -47,7 +50,7 @@ include_once 'includes/header.php';
 
   <a class=" hidden" href="#" id="continueBtn"><button type="button" class="btn btn-default">Play Mode</button></a>
 
-  <a class="" href="#" id="submitBtn"><button type="button" class="btn btn-primary">Submit</button></a>
+  <a class="" href="#" id="submitBtn"><button type="button" class="btn btn-danger">Submit</button></a>
 
 </div>
 <!-- left side buttons ends here -->
@@ -58,11 +61,18 @@ include_once 'includes/header.php';
     <svg width="35px" height="35px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-lds-clock"><g transform="translate(50 50)"><g ng-attr-transform="scale({{config.scale}})" transform="scale(0.8)"><g transform="translate(-50 -50)"><path ng-attr-fill="{{config.c1}}" ng-attr-stroke="{{config.c1}}" ng-attr-stroke-width="{{config.width}}" d="M50,14c19.85,0,36,16.15,36,36S69.85,86,50,86S14,69.85,14,50S30.15,14,50,14 M50,10c-22.091,0-40,17.909-40,40 s17.909,40,40,40s40-17.909,40-40S72.091,10,50,10L50,10z" fill="#fc4309" stroke="#fc4309" stroke-width="0"></path><path ng-attr-fill="{{config.c3}}" d="M52.78,42.506c-0.247-0.092-0.415-0.329-0.428-0.603L52.269,40l-0.931-21.225C51.304,18.06,50.716,17.5,50,17.5 s-1.303,0.56-1.338,1.277L47.731,40l-0.083,1.901c-0.013,0.276-0.181,0.513-0.428,0.604c-0.075,0.028-0.146,0.063-0.22,0.093V44h6 v-1.392C52.925,42.577,52.857,42.535,52.78,42.506z" fill="#ffb646" transform="rotate(54.6898 50 50)"><animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="10s" begin="0s" repeatCount="indefinite"></animateTransform></path><path ng-attr-fill="{{config.c2}}" d="M58.001,48.362c-0.634-3.244-3.251-5.812-6.514-6.391c-3.846-0.681-7.565,1.35-9.034,4.941 c-0.176,0.432-0.564,0.717-1.013,0.744l-15.149,0.97c-0.72,0.043-1.285,0.642-1.285,1.383c0,0.722,0.564,1.321,1.283,1.363 l15.153,0.971c0.447,0.027,0.834,0.312,1.011,0.744c1.261,3.081,4.223,5.073,7.547,5.073c2.447,0,4.744-1.084,6.301-2.975 C57.858,53.296,58.478,50.808,58.001,48.362z M50,53.06c-1.688,0-3.06-1.373-3.06-3.06s1.373-3.06,3.06-3.06s3.06,1.373,3.06,3.06 S51.688,53.06,50,53.06z" fill="#ff765c" transform="rotate(13.6724 50 50)"><animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="60s" begin="0s" repeatCount="indefinite"></animateTransform></path></g></g></g></svg>
   </div>
   <div class="timer_clock" id="timer" style="margin-right: -30px; font-weight: bold;">0:00</div>
-  <div id="rightSidenav">
+  <div id="rightSidenav" class="row">
     <!-- <a href="javascript:void(0);" id="timer" class="pull-right"></a> -->
-    <a class="rotateCompAnti" href="#" id="left_scenario">
+    <a class="rotateCompAnti" href="#" id="left_scenario" style="margin-top: 303px;">
       <button class="btn btn-success" type="button"><?php  echo "Scenario: ".$result->Scenario; ?></button>
     </a>
+    
+    <?php if($result->Link_SaveStatic == 1 && $result->Link_Branching < 1 ){ ?>
+      <a class="rotateCompAnti" href="#" style="padding-left: 120px;">
+        <button class="btn btn-danger" type="button" id="execute_input_new">Execute Formula</button>
+      </a>
+    <?php } ?>
+
   </div>
 <?php } ?>
 
@@ -1322,8 +1332,17 @@ include_once 'includes/header.php';
                       $continue++;
                       continue;
                     }
+                    if($makeDefaultCheckedSub == $wrow)
+                    {
+                      // don't show this option if it is default from admin
+                      $hideDefault = 'hidden';
+                    }
+                    else
+                    {
+                      $hideDefault = '';
+                    }
               // title-removethis should be replaced with title when we need to show the title
-                    echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-table; cursor: pointer;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
+                    echo "<div class='col-md-12 align_radio text-left ".$hideDefault."' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$subcomp_label_min_width."; display: inline-table; cursor: pointer;'><input type='radio' value='".$wrow_value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' required ";
               // echo (($value == $wrow_value)?'checked':'');
                     if($flag)
                     {
@@ -1582,6 +1601,11 @@ include_once 'includes/header.php';
     
     // either we can directly trigger event or call function, so I am calling function, coz If i need to trigger click then I need to add the event to save button
     // console.log('old: '+value);
+    if(value == '')
+    {
+      alert("Field can't be left blank. Unless you want to use the previous input.");
+      return false;
+    }
     SaveCurrent(sublinkid,key,value);
 
     <?php if($result->Branching){ ?>
@@ -1591,24 +1615,24 @@ include_once 'includes/header.php';
 
   function SaveCurrent(sublinkid,key,value)
   {
-  //alert(key);
-  // checking if user has logged out or not in another tab
-  $.ajax({
-    type: "POST",
-    url : "<?php echo site_root;?>selectgame.php",
-    data: '&action=check_loggedIn_status&key='+key,
-    success: function(result) 
-    {
-      if(result.trim() == 'no')
+    //alert(key);
+    // checking if user has logged out or not in another tab
+    $.ajax({
+      type: "POST",
+      url : "<?php echo site_root;?>selectgame.php",
+      data: '&action=check_loggedIn_status&key='+key,
+      success: function(result) 
       {
-        location.reload();
-        return false;
+        if(result.trim() == 'no')
+        {
+          location.reload();
+          return false;
+        }
       }
-    }
-  });
+    });
 
-  start_time         = new Date();
-  var save_button_id = "SaveInput_"+sublinkid;
+    start_time         = new Date();
+    var save_button_id = "SaveInput_"+sublinkid;
   // or we can pass the value directly to SaveCurrent function from lookupcurrent function
   // if($("#"+key).is(":radio"))
   // {
@@ -1621,36 +1645,59 @@ include_once 'includes/header.php';
   // console.log('new: '+value);
   var ref_tab = $("ul.nav-tabs li.active a").text(); //active tab slect
   $('#'+save_button_id).hide();
-  $('.overlay').show();
+  // console.log(input_field_values);
+  // update the json at the same time, before value changed in database
+  if($('#'+key).parents('div').hasClass('align_radio'))
+  {
+    var value = $("input[name='"+key+"']:checked").val();
+  }
+  else
+  {
+    var value = $("#"+key).val();
+  }
+  input_field_values[key].values = value;
+  // end of updating json
 
   $.ajax({
     type: "POST",
     url : "includes/ajax/ajax_update_execute_input.php",
     data: '&action=updateInput&sublinkid='+sublinkid+'&key='+key+'&value='+value,
-    beforeSend: function() {
+    beforeSend: function(){
       // $("#input_loader").html("<img src='images/loading.gif' height='30'> Inputs being updated, please wait.");
       $("#input_loader").html("");
     },
     success: function(result) 
     {
-    //alert(result);
-    if(result.trim() == 'Yes')
-    {
-      //$('#step3').hide();
-      $('#thanks').show();
-      $("#input_loader").html('');
-      update_json_data(save_button_id,key,formula_json_expcomp,formula_json_expsubc,input_field_values);
-      // $(".closeSave").hide();
-      //window.location = "input.php?ID="+<?php // echo $gameid; ?> +"&tab="+ref_tab;
+      <?php if($result->Link_SaveStatic == 1 && $result->Link_Branching < 1){ ?>
+        $('.overlay').hide();
+        console.log('value saved and json updated, static save enabled');
+        return false;
+      <?php } ?>
+
+      $('.overlay').show();
+      if(result.trim() == 'Yes')
+      {
+        //$('#step3').hide();
+        $('#thanks').show();
+        $("#input_loader").html('');
+        update_json_data(save_button_id,key,formula_json_expcomp,formula_json_expsubc,input_field_values);
+        // $(".closeSave").hide();
+        //window.location = "input.php?ID="+<?php // echo $gameid; ?> +"&tab="+ref_tab;
+      }
+      else
+      {
+        alert('Connection problem, Please try later.');
+        $('.overlay').hide();
+      }
     }
-    else
-    {
-      alert('Connection problem, Please try later.');
-      $('.overlay').hide();
-    }
-  }
-});
+  });
 }
+
+// trigger click for static save option
+$('#execute_input_new').on('click',function(){
+  // add static save functionality here
+  staticSaveData(formula_json_expcomp,formula_json_expsubc,input_field_values);
+});
 
 $('#execute_input').click( function()
 {
@@ -1666,50 +1713,50 @@ $('#execute_input').click( function()
       cache      : false,
       contentType: false,
       beforeSend: function(){
-      //alert("beforeSend");
-      $("#input_loader").html("<img src='images/loading.gif' height='30'> Saving inputs, please wait.");
-      $('#loader').addClass( 'loader' );
-    },
-    success: function( result ){
-      try{
-      //alert (result);
-      var response = JSON.parse( result );
-      if( response.status == 1 ){
-        //alert(response.msg);
-        alert('Saved successfully.');
+        //alert("beforeSend");
+        $("#input_loader").html("<img src='images/loading.gif' height='30'> Saving inputs, please wait.");
+        $('#loader').addClass( 'loader' );
+      },
+      success: function( result )
+      {
+        try
+        {
+          //alert (result);
+          var response = JSON.parse( result );
+          if( response.status == 1 )
+          {
+            //alert(response.msg);
+            alert('Saved successfully.');
+            window.location = "input.php?ID="+<?php echo $gameid; ?>+"&tab="+ref_tab;
+            //$('#Modal_Success').modal('show', { backdrop: "static" } );
+          }
+          else
+          {
+            $('.option_err').html( result.msg );
+            $("#execute_input").attr('disabled',false);
+            $("#input_loader").html('');
+          }
+        } catch ( e )
+        {
+          alert(e + "\n" + result);
+          alert('Formulas could not be executed, please try again.');
+          console.log( e + "\n" + result );
+          window.location = "input.php?ID="+<?php echo $gameid; ?>+"&tab="+ref_tab;
+          $("#execute_input").attr('disabled',false);
+          $("#input_loader").html('');
+        }         
+        $('#loader').removeClass( 'loader' );
+      },
+      error: function(jqXHR, exception)
+      {
+        alert('error'+ jqXHR.status +" - "+exception);
+        alert('Formulas could not be executed, please try again.');
         window.location = "input.php?ID="+<?php echo $gameid; ?>+"&tab="+ref_tab;
-        //$('#Modal_Success').modal('show', { backdrop: "static" } );
-      } else {
-        $('.option_err').html( result.msg );
         $("#execute_input").attr('disabled',false);
         $("#input_loader").html('');
       }
-    } catch ( e ) {
-      alert(e + "\n" + result);
-      alert('Formulas could not be executed, please try again.');
-      console.log( e + "\n" + result );
-      window.location = "input.php?ID="+<?php echo $gameid; ?>+"&tab="+ref_tab;
-      $("#execute_input").attr('disabled',false);
-      $("#input_loader").html('');
-    }         
-    $('#loader').removeClass( 'loader' );
-  },
-  error: function(jqXHR, exception){
-    alert('error'+ jqXHR.status +" - "+exception);
-    alert('Formulas could not be executed, please try again.');
-    window.location = "input.php?ID="+<?php echo $gameid; ?>+"&tab="+ref_tab;
-    $("#execute_input").attr('disabled',false);
-    $("#input_loader").html('');
-  }
-});
+    });
   });
-
-  // writing code for execute 2 button start here
-  $('#execute_input_2').click( function()
-  {
-  //
-});
-  //  execute 2 button code ends here
 
 </script>
 <footer>
@@ -2124,69 +2171,69 @@ function create_json_expcomp_onload()
     {
       if((expression[i]).indexOf('comp') != -1)
       {
-      // finding wheather it is depending to any other comp or subcomp
-      if($('#'+str[0]+'_link'+expression[i]).parent('div').find('input.json_expcomp').length > 0)
-      {
-        expression[i] = find_function_expression(str[0]+'_exp'+expression[i]);
-      }
-      else
-      {
-      // find wheater this component or subcomponent exist or not
-      if($('#'+str[0]+'_'+expression[i]).length > 0)
-      {
-        expression[i] = str[0]+'_'+expression[i];
-      }
-      else
-      {
-        // trigger ajax if that component or subcomponent doesn't exist
-        var new_id = element_not_found(expression[i]);
-        new_id     = new_id.split('_');
-        if($('#'+new_id[0]+'_link'+new_id[1]+'_'+new_id[2]).parent('div').find('input.json_expcomp').length > 0)
+        // finding wheather it is depending to any other comp or subcomp
+        if($('#'+str[0]+'_link'+expression[i]).parent('div').find('input.json_expcomp').length > 0)
         {
-          expression[i] = find_function_expression(new_id[0]+'_exp'+new_id[1]+'_'+new_id[2]);
+          expression[i] = find_function_expression(str[0]+'_exp'+expression[i]);
         }
         else
         {
-          expression[i] = new_id.join('_');
+          // find wheater this component or subcomponent exist or not
+          if($('#'+str[0]+'_'+expression[i]).length > 0)
+          {
+            expression[i] = str[0]+'_'+expression[i];
+          }
+          else
+          {
+            // trigger ajax if that component or subcomponent doesn't exist
+            var new_id = element_not_found(expression[i]);
+            new_id     = new_id.split('_');
+            if($('#'+new_id[0]+'_link'+new_id[1]+'_'+new_id[2]).parent('div').find('input.json_expcomp').length > 0)
+            {
+              expression[i] = find_function_expression(new_id[0]+'_exp'+new_id[1]+'_'+new_id[2]);
+            }
+            else
+            {
+              expression[i] = new_id.join('_');
+            }
+          }
         }
       }
-    }
-  }
-  else if((expression[i]).indexOf('subc') != -1)
-  {
-      // finding wheather it is depending to any other comp or subcomp
-      if($('#'+str[0]+'_link'+expression[i]).parent('div').find('input.json_expsubc').length > 0)
+      else if((expression[i]).indexOf('subc') != -1)
       {
-        expression[i] = find_function_expression(str[0]+'_exp'+expression[i]);
-      }
-      else
-      {
-      // find wheater this component or subcomponent exist or not
-      if($('#'+str[0]+'_'+expression[i]).length > 0)
-      {
-        expression[i] = str[0]+'_'+expression[i];
-      }
-      else
-      {
-        // trigger ajax if that component or subcomponent doesn't exist
-        var new_id = element_not_found(expression[i]);
-        new_id     = new_id.split('_');
-        if($('#'+new_id[0]+'_link'+new_id[1]+'_'+new_id[2]).parent('div').find('input.json_expsubc').length > 0)
+        // finding wheather it is depending to any other comp or subcomp
+        if($('#'+str[0]+'_link'+expression[i]).parent('div').find('input.json_expsubc').length > 0)
         {
-          expression[i] = find_function_expression(new_id[0]+'_exp'+new_id[1]+'_'+new_id[2]);
+          expression[i] = find_function_expression(str[0]+'_exp'+expression[i]);
         }
         else
         {
-          expression[i] = new_id.join('_');
+          // find wheater this component or subcomponent exist or not
+          if($('#'+str[0]+'_'+expression[i]).length > 0)
+          {
+            expression[i] = str[0]+'_'+expression[i];
+          }
+          else
+          {
+            // trigger ajax if that component or subcomponent doesn't exist
+            var new_id = element_not_found(expression[i]);
+            new_id     = new_id.split('_');
+            if($('#'+new_id[0]+'_link'+new_id[1]+'_'+new_id[2]).parent('div').find('input.json_expsubc').length > 0)
+            {
+              expression[i] = find_function_expression(new_id[0]+'_exp'+new_id[1]+'_'+new_id[2]);
+            }
+            else
+            {
+              expression[i] = new_id.join('_');
+            }
+          }
         }
       }
-    }
-  }
-  else
-  {
-    expression[i] = expression[i];
-  }
-});
+      else
+      {
+        expression[i] = expression[i];
+      }
+    });
     formula_json_expcomp[str[0]+'_fcomp_'+str[2]] = expression.join(' ');
   });
 }
@@ -2232,13 +2279,13 @@ function create_json_expsubc_onload()
   }
   else if((expression[i]).indexOf('subc') != -1)
   {
-      // finding wheather it is depending to any other comp or subcomp
-      if($('#'+str[0]+'_link'+expression[i]).parent('div').find('input.json_expsubc').length > 0)
-      {
-        expression[i] = find_function_expression(str[0]+'_exp'+expression[i]);
-      }
-      else
-      {
+    // finding wheather it is depending to any other comp or subcomp
+    if($('#'+str[0]+'_link'+expression[i]).parent('div').find('input.json_expsubc').length > 0)
+    {
+      expression[i] = find_function_expression(str[0]+'_exp'+expression[i]);
+    }
+    else
+    {
       // find wheater this component or subcomponent exist or not
       if($('#'+str[0]+'_'+expression[i]).length > 0)
       {
@@ -2564,6 +2611,53 @@ function update_json_data(id,key,formula_json_expcomp,formula_json_expsubc,input
     }
   }
 });
+}
+
+function staticSaveData(formula_json_expcomp,formula_json_expsubc,input_field_values)
+{
+  // console.log(input_field_values);
+  $.ajax({
+    type    : "POST",
+    dataType: "json",
+    data    :{'action':'updateFormula','carry_field_data':carry_field_data,formula_json_expcomp:formula_json_expcomp,formula_json_expsubc:formula_json_expsubc,input_field_values:input_field_values},
+    url     : "includes/ajax/ajax_update_execute_input.php",
+    beforeSend: function() {
+      $('.overlay').show();
+      $("#input_loader").html("");
+    },
+    success: function(result) 
+    {
+      if(result != 'no')
+      {
+        $.each(result, function (index, val){
+          input_field_values[index].values   = result[index].values;
+          input_field_values[index].input_id = result[index].input_id;
+          if(!$('#'+index).parents('div').hasClass('align_radio'))
+          {
+            $('#'+index).val(result[index].values);
+          }
+        });
+        end_time   = new Date();
+        // final_time = (start_time.getTime() - end_time.getTime())/1000;
+        $("#input_loader").html('');
+        $('.overlay').hide();
+        $('.graph_chart').each(function(index, el)
+        {
+          var new_src = $(this).attr('src');
+          $(this).attr('src',new_src);
+        });
+      }
+    },
+    error: function(jqXHR, exception)
+    {
+      {
+        $('.overlay').hide();
+        alert(jqXHR.responseText);
+        $("#input_loader").html('');
+        $('.overlay').hide();
+      }
+    }
+  });
 }
 </script>
 <?php include_once 'includes/footer.php' ?>

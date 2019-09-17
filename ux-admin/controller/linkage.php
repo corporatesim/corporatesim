@@ -304,6 +304,7 @@ else
 		'Link_Description'      =>	$Link_Description,
 		'Link_DescriptionLink'  =>	$Link_DescriptionLink,
 		'Link_BackToIntro'      =>  $Link_BackToIntro,
+		'Link_SaveStatic'       =>	isset($_POST['Link_Branching']) ? 0 : isset($_POST['Link_SaveStatic']) ? 1 : 0,
 		'Link_Status'           =>	1,			
 		'Link_CreateDate'       =>	date('Y-m-d H:i:s')
 	);
@@ -719,14 +720,14 @@ else
 		'Link_DescriptionLink'  =>	$Link_DescriptionLink,
 		'Link_BackToIntro'      =>  $Link_BackToIntro,
 		'Link_Enabled'          =>	isset($_POST['enabled']) ? 1 : 0,
+		'Link_SaveStatic'       =>	isset($_POST['Link_Branching']) ? 0 : isset($_POST['Link_SaveStatic']) ? 1 : 0,
 		'Link_Status'           =>	1,			
 		'Link_CreateDate'       =>	date('Y-m-d H:i:s')
 	);
 
 	// check default/skip status from game and allow/disallow accordingly
 
-	// echo $_POST['Mode'];
-	//	exit();
+	// echo '<pre>'; print_r($linkdetails);	exit();
 
 	if( !empty($_POST['game_id']) && !empty($_POST['scen_id']) && !empty($_POST['order']) )
 	{

@@ -61,33 +61,58 @@ public function getAgents()
   $subEnterpriseId = $this->input->post('subEnterpriseId');
   $gameId          = $this->input->post('gameId');
   $searchFilter    = trim($this->input->post('searchFilter'));
-  $agentsSql       = "SELECT gu.* FROM GAME_SITE_USER_REPORT_NEW gr INNER JOIN GAME_SITE_USERS gu ON gu.User_id=gr.uid WHERE User_Delete=0 AND gr.linkid IN(SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$gameId.")";
-
+  // creating subquery 
+  $userDataQuery   = " SELECT gsu.User_id, gsu.User_fname, gsu.User_lname, gsu.User_email, gsu.User_Delete, gsu.User_ParentId, gus.US_LinkID FROM GAME_SITE_USERS gsu
+  LEFT JOIN GAME_USERSTATUS gus ON gus.US_UserID = gsu.User_id WHERE gsu.User_Delete=0";
+  // adding filters here
   if($filterValue == 'superadminUsers')
   {
-    $agentsSql .= " AND gu.User_MasterParentId=21 AND gu.User_ParentId=-1 AND gu.User_SubParentId=-2 ";
+    $userDataQuery .= " AND gsu.User_MasterParentId=21 AND gsu.User_ParentId=-1 AND gsu.User_SubParentId=-2 ";
   }
 
   if($filterValue == 'enterpriseUsers')
   {
-    $agentsSql .= " AND gu.User_ParentId=".$enterpriseId;
+    $userDataQuery .= " AND gsu.User_ParentId=".$enterpriseId;
   }
 
   if($filterValue == 'subEnterpriseUsers')
   {
-    $agentsSql .= " AND gu.User_ParentId=".$enterpriseId." AND gu.User_SubParentId=".$subEnterpriseId;
+    $userDataQuery .= " AND gsu.User_ParentId=".$enterpriseId." AND gsu.User_SubParentId=".$subEnterpriseId;
   }
 
   if(isset($searchFilter) && !empty($searchFilter))
   {
-    $agentsSql .= " AND (gu.User_email LIKE '%".$searchFilter."%' OR gu.User_username LIKE '%".$searchFilter."%') ";
+    $userDataQuery .= " AND (gsu.User_email LIKE '%".$searchFilter."%' OR gsu.User_username LIKE '%".$searchFilter."%') ";
   }
 
-  $agentsSql .= " GROUP BY gu.User_id ";
+  // adding the above subquery to main query
+  $agentsSql = "SELECT
+  ud.User_id AS User_id,
+  ud.User_fname AS User_fname,
+  ud.User_lname AS User_lname,
+  ud.User_email AS User_email,
+  ud.US_LinkID
+  FROM
+  GAME_SITE_USER_REPORT_NEW gr
+  INNER JOIN($userDataQuery) ud
+  ON
+  ud.User_id = gr.uid
+  WHERE
+  ud.User_Delete = 0 AND gr.linkid IN(
+  SELECT
+  Link_ID
+  FROM
+  GAME_LINKAGE
+  WHERE
+  Link_GameID = '25'
+) AND ud.User_ParentId = '8'
+GROUP BY
+ud.User_id  
+ORDER BY `ud`.`US_LinkID` DESC";
 
-  $agentsResult = $this->Common_Model->executeQuery($agentsSql);
-  // die($agentsSql);
-  echo json_encode($agentsResult);
+$agentsResult = $this->Common_Model->executeQuery($agentsSql);
+// die($agentsSql);
+echo json_encode($agentsResult);
 }
 
 public function get_states($Country_Id=NULL)

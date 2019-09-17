@@ -423,14 +423,32 @@
 											result = JSON.parse(result);
 											if(result.length > 0)
 											{
-												var userCount = 0;
+												var userCount         = 0;
+												var notSbumittedCount = 0;
+												var makeUsersRed      = '';
 												$(result).each(function(i,e)
 												{
-													siteUsers += ('<div class="custom-control custom-checkbox col-sm-12 col-md-2 col-lg-2" title="'+result[i].User_email+'"><input type="checkbox" class="custom-control-input" value="'+result[i].User_id+'" id="'+result[i].User_id+'_user" name="siteUsers[]"><label class="custom-control-label" for="'+result[i].User_id+'_user">'+result[i].User_fname+" "+result[i].User_lname+'</label></div>');
+													if(result[i].US_LinkID < 1)
+													{
+														notSbumittedCount++;
+														makeUsersRed = "style='color:#ff0000;'";
+													}
+													else
+													{
+														makeUsersRed = '';
+													}
+													siteUsers += ('<div class="custom-control custom-checkbox col-sm-12 col-md-2 col-lg-2" title="'+result[i].User_email+'"><input type="checkbox" class="custom-control-input" value="'+result[i].User_id+'" id="'+result[i].User_id+'_user" name="siteUsers[]"><label class="custom-control-label" for="'+result[i].User_id+'_user" '+makeUsersRed+'>'+result[i].User_fname+" "+result[i].User_lname+'</label></div>');
 													userCount++;
 												});
 												$('#addUsersHere').html(siteUsers);
-												$('#showUserCount').html('<span class="alert-success">'+userCount+' Users Found</span>');
+												if(notSbumittedCount>0)
+												{
+													$('#showUserCount').html('<span class="alert-success">Total <b>'+userCount+'</b> Users Played, In Which <b>'+notSbumittedCount+'</b> Users(<b>showing in red</b>) Did Not Submitted</span>');
+												}
+												else
+												{
+													$('#showUserCount').html('<span class="alert-success">Total <b>'+userCount+'</b> Users Played</span>');
+												}
 												// if any of the checkbox is not checked then uncheck the selectAll checkbox
 												$('input[type="checkbox"]').on('click', function(){
 													if(!$(this).is(':checked'))

@@ -18,11 +18,12 @@ class Dashboard extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
-
+	private $loginData;
 	public function __construct()
 	{
 		parent::__construct();
-		if($this->session->userdata('loginData') == NULL)
+		$this->loginData = $this->session->userdata('loginData');
+		if($this->loginData == NULL)
 		{
 			$this->session->set_flashdata('er_msg', 'You need to login to see the dashboard');
 			redirect('Login/login');
@@ -49,14 +50,14 @@ class Dashboard extends CI_Controller {
 
 	public function uploadLogo()
 	{ 
-		$EnterpriseId = $this->session->userdata('loginData')['User_ParentId'];
-		$SubEnterpriseId = $this->session->userdata('loginData')['User_SubParentId'];
+		$EnterpriseId    = $this->loginData['User_ParentId'];
+		$SubEnterpriseId = $this->loginData['User_SubParentId'];
 		
-		if($this->session->userdata('loginData')['User_Role']==1)
+		if($this->loginData['User_Role']==1)
 		{  
 			$EnterpriseLogo = array(
-				'Enterprise_ID'  => $EnterpriseId,
-				'Enterprise_Logo'=> $_FILES['logo']['name'],
+				'Enterprise_ID'   => $EnterpriseId,
+				'Enterprise_Logo' => $_FILES['logo']['name'],
 			);
        //print_r($EnterpriseData);
 			$this->do_upload();

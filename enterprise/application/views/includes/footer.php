@@ -235,8 +235,32 @@
 		},
 		dom    : 'Bfrtip',
 		buttons: [
-		'copy', 'csv', 'pdf', 'print'
-		]
+		
+		{
+			extend: 'copy',
+			footer: false
+			
+		},
+		{
+			extend: 'csv',
+			footer: true,
+			exportOptions: {
+				columns: "thead th:not(.noExport)"
+			}
+		},
+		// {
+		// 	extend: 'pdf',
+		// 	footer: true,
+		// },
+		{
+			extend: 'print',
+			footer: false
+		},
+		// {
+		// 	extend: 'excel',
+		// 	footer: false
+		// }
+		] 
 	});
 </script>
 <!-- For delete record-->

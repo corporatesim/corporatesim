@@ -54,7 +54,7 @@
 												<th>Password</th>
 												<th>Contact</th>
 												<th class="datatable-nosort">Games</th>
-												<th class="datatable-nosort">Action</th>
+												<th class="datatable-nosort noExport">Action</th>
 											</tr>
 										</thead>
 										<tbody>

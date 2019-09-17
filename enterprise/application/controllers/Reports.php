@@ -61,7 +61,7 @@ class Reports extends CI_Controller {
 				}
 			}
 			$userId    = implode(',',$userId);
-			$reportSql = 'SELECT gi.input_current, CONCAT( gc.Comp_Name, "/", IF( gs.SubComp_Name, gs.SubComp_Name, "" ) ) AS Comp_SubComp, CONCAT( gu.User_fname, " ", gu.User_lname, "/", gu.User_username ) AS userName FROM GAME_INPUT gi INNER JOIN GAME_SITE_USERS gu ON gu.User_id = gi.input_user INNER JOIN GAME_LINKAGE_SUB gls ON gi.input_sublinkid = gls.SubLink_ID LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID WHERE ( gls.SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = '.$selectedGame.' ) AND gls.SubLink_Type = 1 ) AND gi.input_user IN('.$userId.')';
+			$reportSql = 'SELECT gi.input_current, CONCAT( gc.Comp_Name, "/", IF( gs.SubComp_Name, gs.SubComp_Name, "" ) ) AS Comp_SubComp, CONCAT( gu.User_fname, " ", gu.User_lname) AS fullName, gu.User_username AS userName, gu.User_email AS userEmail FROM GAME_INPUT gi INNER JOIN GAME_SITE_USERS gu ON gu.User_id = gi.input_user INNER JOIN GAME_LINKAGE_SUB gls ON gi.input_sublinkid = gls.SubLink_ID LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID WHERE ( gls.SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = '.$selectedGame.' ) AND gls.SubLink_Type = 1 ) AND gi.input_user IN('.$userId.')';
 			$reportData = $this->Common_Model->executeQuery($reportSql);
 
 			$gameRes = $this->Common_Model->fetchRecords('GAME_GAME',array('Game_ID' => $selectedGame),'Game_Name');
@@ -87,25 +87,31 @@ class Reports extends CI_Controller {
 			$objSheet->getStyle('A1:L1')->getFont()->setBold(true)->setSize(16);
 
 			$objSheet->getCell('A1')->setValue('Game:'.$gameName);
-			$objSheet->getCell('A2')->setValue('Name/UserName');
+			$objSheet->getCell('A2')->setValue('Name');
+			$objSheet->getCell('B2')->setValue('UserName');
+			$objSheet->getCell('C2')->setValue('UserEmail');
 
-			$putComp     = 'B';
-			$numComp     = '2';
-			$putUser     = 'A';
-			$numUser     = 3;
-			$tempUser    = array();
-			$compSubComp = array();
-			$filename    = 'UserReport_'.date('d-m-Y').'.xlsx';
+			$putUser      = 'A';
+			$putUserName  = 'B';
+			$putUserEmail = 'C';
+			$numUserData  = 3;
+			$putComp      = 'D';
+			$numComp      = '2';
+			$tempUser     = array();
+			$compSubComp  = array();
+			$filename     = 'UserReport_'.date('d-m-Y').'.xlsx';
 
 			// echo "<pre>"; print_r($reportData); exit();
-			// colName will be like B2,C2,D2,E2 like this, and userName will be like A3, A4, A5, A6 like this
+			// colName will be like B2,C2,D2,E2 like this, and fullName will be like A3, A4, A5, A6 like this
 			foreach ($reportData as $userGameData)
 			{
-				if(!in_array($userGameData->userName, $tempUser))
+				if(!in_array($userGameData->fullName, $tempUser))
 				{
-					$tempUser[] = $userGameData->userName;
-					$objSheet->getCell($putUser.$numUser)->setValue($userGameData->userName);
-					$numUser++;
+					$tempUser[] = $userGameData->fullName;
+					$objSheet->getCell($putUser.$numUserData)->setValue($userGameData->fullName);
+					$objSheet->getCell($putUserName.$numUserData)->setValue($userGameData->userName);
+					$objSheet->getCell($putUserEmail.$numUserData)->setValue($userGameData->userEmail);
+					$numUserData++;
 				}
 				if(!in_array($userGameData->Comp_SubComp, $compSubComp))
 				{
@@ -118,7 +124,7 @@ class Reports extends CI_Controller {
 			foreach ($reportData as $row)
 			{
 				$col = array_search($row->Comp_SubComp,$compSubComp);
-				$val = array_search($row->userName,$tempUser)+3; // so that we can start from the *3, where * is A,B,C...
+				$val = array_search($row->fullName,$tempUser)+3; // so that we can start from the *3, where * is A,B,C...
 				$objSheet->getCell($col.$val)->setValue($row->input_current);
 				// echo $col.$val.' : '.$row->input_current.'<br>';
 			}

@@ -33,6 +33,8 @@
 				<li> <span class="glyphicon glyphicon-pencil">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Edit the Record"> Edit		</a></li>
 				<li> <span class="glyphicon glyphicon-trash">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Delete the Record"> Delete	</a></li>
 				<li> <span class="fa fa-code-fork">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="Component Branching"> Branching	</a></li>
+				<li> <span class="fa fa-save">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="Manual Save Enabled"> Manual Save Button </a></li>
+				<li> <span class="fa fa-paper-plane">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="This will auto Submit O/P Page"> Skip Output </a></li>
 			</ul>
 		</div>
 	</div>
@@ -43,10 +45,10 @@
 		<div class="panel-heading">
 			<label style="padding-top:7px;">Linkage List</label>
 			<div class="pull-right">
-				<?php if($functionsObj->checkModuleAuth('linkage','add')){?>
+				<?php if($functionsObj->checkModuleAuth('linkage','add')){ ?>
 					<input class="btn btn-primary" type="button" name="addlink" value="Add Linkage"
 					onclick="window.location.href='<?php echo site_root."ux-admin/linkage/add/1"; ?>';"/>
-				<?php }?>
+				<?php } ?>
 			</div>
 			<div class="clearfix"></div>
 		</div>
@@ -82,7 +84,7 @@
 								<td><?php echo ($row->Link_DescriptionLink>0)?'Skipped':'Default';?></td>
 								<td><?php echo ($row->Link_BackToIntro>0)?'Skipped':'Default';?></td>
 
-								<td><?php if($row->Link_Mode == 0) echo "Automatic"; else { echo "Manual</br>";if($row->Link_Enabled==0) echo "Not Enabled"; else echo "Enabled";}?></td>
+								<td><?php if($row->Link_Mode == 0) echo "Automatic"; else { echo "Manual</br>";if($row->Link_Enabled==0) echo "Not Enabled"; else echo "Enabled";} ?></td>
 
 								<td class="text-center">
 									<a href="<?php echo site_root."ux-admin/linkage/tab/".$row->Link_ID; ?>" 
@@ -90,23 +92,29 @@
 										<?php if($functionsObj->checkModuleAuth('innerlinkage','enable')){ ?>
 											<a href="<?php echo site_root."ux-admin/linkage/link/".$row->Link_ID; ?>" 
 												data-toggle="tooltip" title="Link Game - Comp/Subcomp"><span class="fa fa-link"></span></a>
-											<?php }?>
-											<?php if($row->Link_Status == 0){?>
+											<?php } ?>
+											<?php if($row->Link_Status == 0){ ?>
 												<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Link_ID; ?>"
 													data-toggle="tooltip" title="Deactive"><span class="fa fa-times"></span></a>
-												<?php }else{?>
+												<?php }else{ ?>
 													<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Link_ID; ?>"
 														data-toggle="tooltip" title="Active"><span class="fa fa-check"></span></a>
-													<?php }?>
+													<?php } ?>
 													<?php if($functionsObj->checkModuleAuth('linkage','edit')){ ?>
 														<a href="<?php echo site_root."ux-admin/linkage/edit/".$row->Link_ID; ?>"
 															data-toggle="tooltip" title="Edit"><span class="fa fa-pencil"></span></a>
 														<?php } if($functionsObj->checkModuleAuth('linkage','delete')){ ?>
 															<a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->Link_ID; ?>"
 																data-toggle="tooltip" title="Delete"><span class="fa fa-trash"></span></a>
-															<?php }?>
+															<?php } ?>
 															<?php if($row->Link_Branching == 1){ ?>
 																&nbsp;<a href="<?php echo site_root."ux-admin/componentBranching/link/".$row->Link_ID; ?>" data-toggle="tooltip" title="Component Branching"><span class="fa fa-code-fork"></span></a>
+															<?php } ?>
+															<?php if($row->Link_SaveStatic == 1){ ?>
+																&nbsp;<a href="javascript:void(0);" data-toggle="tooltip" title="Static Save Button Enabled"><span class="fa fa-save"></span></a>
+															<?php } ?>
+															<?php if($row->Link_Enabled == 1){ ?>
+																&nbsp;<a href="javascript:void(0);" data-toggle="tooltip" title="AutoSubmit O/P Page"><span class="fa fa-paper-plane"></span></a>
 															<?php } ?>
 														</td>
 													</tr>

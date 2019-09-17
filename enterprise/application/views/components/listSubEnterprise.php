@@ -77,7 +77,7 @@
                     <th>Address</th>
                     <th>Games</th>
                     <th>Duration (DD-MM-YYYY)</th>
-                    <th class="datatable-nosort">Action</th>
+                    <th class="datatable-nosort noExport">Action</th>
                   </tr>
                 </thead>
                 <tbody>

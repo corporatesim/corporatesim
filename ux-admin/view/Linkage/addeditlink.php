@@ -774,6 +774,9 @@
                             <label for="No of questions">Enter Question:</label>
                             <input name="question" id="question" type="text" value="<?php echo $question;?>" class="form-control inputTypeUser" placeholder="Enter Question" required="">
                           </div>
+                          <div class="form-group col-md-3 alert-danger">
+                            Note: Default selected option will not be visible to user
+                          </div>
                           <div class="form-group col-md-3" style="float: right;">
                             <button class="btn-primary" type="button" id="add_options" data-toggle="tooltip" title="Add More Options" style="margin-top: 16%;">+</button>
                           </div>
@@ -793,7 +796,7 @@
                                 <div class="form-group col-md-6"><input name="option[]" type="text" value="<?php echo $option[$i];?>" placeholder="Text" class="form-control optionTextBox"></div>
                                 <div class="form-group col-md-3"><input name="option_value[]" type="text" value="<?php echo $option_value[$i];?>" placeholder="Value" class="form-control" required=""></div>
                                 <div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" data-toggle="tooltip" title="Remove Option">-</button>
-                                  <input class="checkedDefault" type="radio" name="makeDefaultChecked[]" data-toggle="tooltip" title="Make This Default Checked" value="<?php echo $option[$i];?>" <?php echo ($makeDefaultChecked == $option[$i])?'checked':'';?>/>
+                                  <input class="checkedDefault" type="radio" name="makeDefaultChecked[]" data-toggle="tooltip" title="Make This Default Checked" value="<?php echo $option[$i];?>" <?php echo ($makeDefaultChecked == $option[$i])?'checked':'';?> required/>
                                 </div>
                               </div>
                             <?php } } ?>
@@ -1255,7 +1258,7 @@
 <script type="text/javascript">
 
   $('#add_options').on('click',function(){
-    $('#add_here').append('<div class="col-md-12 parentDefault"><div class="form-group col-md-6"><input name="option[]" type="text" placeholder="Enter Option Text" class="form-control inputTypeUser optionTextBox" value="Option-" required=""></div> <div class="form-group col-md-3"><input name="option_value[]" type="text" placeholder="Value" value="" required="" class="form-control inputTypeUser "></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" data-toggle="tooltip" title="Remove Option">-</button><input class="checkedDefault" type="radio" name="makeDefaultChecked[]" data-toggle="tooltip" title="Make This Default Checked" value="" /></div></div>');
+    $('#add_here').append('<div class="col-md-12 parentDefault"><div class="form-group col-md-6"><input name="option[]" type="text" placeholder="Enter Option Text" class="form-control inputTypeUser optionTextBox" value="Option-" required=""></div> <div class="form-group col-md-3"><input name="option_value[]" type="text" placeholder="Value" value="" required="" class="form-control inputTypeUser "></div><div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" data-toggle="tooltip" title="Remove Option">-</button><input class="checkedDefault" type="radio" name="makeDefaultChecked[]" data-toggle="tooltip" title="Make This Default Checked" value="" required/></div></div>');
     removeDiv();
     makeDefaultChecked();
     changeValueOnChangingText();
@@ -1278,6 +1281,9 @@
       });
       $('#user').addClass('hidden');
       $('#question').attr('required',false);
+      $('input[name*="makeDefaultChecked"]').each(function(){
+        $(this).attr('required',false);
+      });
     }
     else
     {
@@ -1315,6 +1321,9 @@
     // $('#user_default_value').removeClass('hidden');
     $('#mChoice').addClass('hidden');
     $('#range').addClass('hidden');
+    $('input[name*="makeDefaultChecked"]').each(function(){
+      $(this).attr('required',false);
+    });
   }
   if(input_type == 'mChoice')
   {
@@ -1324,12 +1333,18 @@
     $('.inputTypeUser').each(function(){
       $(this).attr('required',true);
     });
+    $('input[name*="makeDefaultChecked"]').each(function(){
+      $(this).attr('required',true);
+    });
   }
   if(input_type == 'range')
   {
     $('#range').removeClass('hidden');
     $('#mChoice').addClass('hidden');
     $('#user_default_value').addClass('hidden');
+    $('input[name*="makeDefaultChecked"]').each(function(){
+      $(this).attr('required',false);
+    });
   }
 });
   

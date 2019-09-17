@@ -40,7 +40,7 @@
 		<form method="POST" action="" id="siteuser_frm" name="siteuser_frm">
 			<div class="row">
 				<!-- adding this checkbox for component branching -->
-				<div class="row name col-md-2 col-lg-2 col-sm-12 col-xs-12" id="branchingCheckbox">
+				<div class="row name col-md-4 col-lg-3 col-sm-6 col-xs-12" id="branchingCheckbox">
 					<div class="form-group" data-toggle="tooltip" title="If checked, then only component branching enabled scenario will be visible">
 						<div class="form-check">
 							<label class="form-check-label containerCheckbox" for="Link_Branching">
@@ -52,7 +52,7 @@
 				</div>
 				<!-- end of checkbox for component branching -->
 				<!-- adding checkbox to skip introduction and description -->
-				<div class="row name col-md-2 col-lg-2 col-sm-12 col-xs-12" id="skipIntroduction">
+				<div class="row name col-md-4 col-lg-3 col-sm-6 col-xs-12" id="skipIntroduction">
 					<div class="form-group">
 						<div class="form-check" data-toggle="tooltip" title="If checked, then skipped for current game">
 							<label class="form-check-label containerCheckbox" for="Link_Introduction">
@@ -63,7 +63,7 @@
 					</div>
 				</div>
 
-				<div class="row name col-md-2 col-lg-2 col-sm-12 col-xs-12" id="skipDescription">
+				<div class="row name col-md-4 col-lg-3 col-sm-6 col-xs-12" id="skipDescription">
 					<div class="form-group">
 						<div class="form-check" data-toggle="tooltip" title="If checked, then skipped for current scenario">
 							<label class="form-check-label containerCheckbox" for="Link_Description">
@@ -74,7 +74,7 @@
 					</div>
 				</div>
 
-				<div class="row name col-md-2 col-lg-2 col-sm-12 col-xs-12" id="skipDescription">
+				<div class="row name col-md-4 col-lg-3 col-sm-6 col-xs-12" id="skipDescription">
 					<div class="form-group">
 						<div class="form-check" data-toggle="tooltip" title="If checked, then skipped for current scenario">
 							<label class="form-check-label containerCheckbox" for="Link_IntroductionLink">
@@ -85,7 +85,7 @@
 					</div>
 				</div>
 
-				<div class="row name col-md-2 col-lg-2 col-sm-12 col-xs-12" id="skipDescription">
+				<div class="row name col-md-4 col-lg-3 col-sm-6 col-xs-12" id="skipDescription">
 					<div class="form-group">
 						<div class="form-check" data-toggle="tooltip" title="If checked, then skipped for current scenario">
 							<label class="form-check-label containerCheckbox" for="Link_DescriptionLink">
@@ -96,11 +96,22 @@
 					</div>
 				</div>
 
-				<div class="row name col-md-2 col-lg-2 col-sm-12 col-xs-12" id="skipBackToIntro">
+				<div class="row name col-md-4 col-lg-3 col-sm-6 col-xs-12" id="skipBackToIntro">
 					<div class="form-group">
 						<div class="form-check" data-toggle="tooltip" title="If checked, then skipped for current scenario">
 							<label class="form-check-label containerCheckbox" for="Link_BackToIntro">
 								<input type="checkbox" class="form-check-input" id="Link_BackToIntro" name="Link_BackToIntro" value="1" <?php echo ($linkdetails->Link_BackToIntro == 1)?'checked':'';?>> Hide Back To Intro
+								<span class="checkmark"></span>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row name col-md-4 col-lg-3 col-sm-6 col-xs-12" id="skipBackToIntro">
+					<div class="form-group">
+						<div class="form-check" data-toggle="tooltip" title="This feature will work only if component branching is not enabled">
+							<label class="form-check-label containerCheckbox" for="Link_SaveStatic">
+								<input type="checkbox" class="form-check-input" id="Link_SaveStatic" name="Link_SaveStatic" value="1" <?php echo ($linkdetails->Link_SaveStatic == 1)?'checked':'';?>> Enable Manual Save Button
 								<span class="checkmark"></span>
 							</label>
 						</div>
@@ -162,12 +173,12 @@
 	<div class="row">
 		<div class="col-md-3" >
 			<label><span class="alert-danger">*</span>Hour</label> 
-			<input type="text" name="hour" id="hour" value="<?php if(!empty($linkdetails->Link_Hour)) echo $linkdetails->Link_Hour; ?>"
+			<input type="text" name="hour" id="hour" value="<?php echo ($linkdetails->Link_Hour)?$linkdetails->Link_Hour:0; ?>"
 			class="form-control"	required>
 		</div>
 		<div class="col-md-3" >
 			<label><span class="alert-danger">*</span>Minutes</label> 
-			<input type="text" name="minute" id="minute" value="<?php if(!empty($linkdetails->Link_Min)) echo $linkdetails->Link_Min; ?>"
+			<input type="text" name="minute" id="minute" value="<?php echo ($linkdetails->Link_Min)?$linkdetails->Link_Min:0; ?>"
 			class="form-control"	required>			
 		</div>
 		<div class="col-md-3">
@@ -188,8 +199,8 @@
 		</div>
 		<div class="col-md-3">
 			<div class="checkbox" <?php if(!empty($linkdetails) && $linkdetails->Link_Mode == 1){} else { echo "style='display:none;'";}?>>
-				<label for="enabledR" class="containerCheckbox">
-					<input type='checkbox' id="enabledR" name='enabled' <?php if(!empty($linkdetails) && $linkdetails->Link_Enabled == 1){ echo "checked"; } ?>> Enabled
+				<label for="enabledR" class="containerCheckbox" data-toggle="tooltip" title="This will auto submit the o/p page">
+					<input type='checkbox' id="enabledR" name='enabled' <?php if(!empty($linkdetails) && $linkdetails->Link_Enabled == 1){ echo "checked"; } ?>> Skip Output
 					<span class="checkmark"></span>
 				</label>
 			</div>
