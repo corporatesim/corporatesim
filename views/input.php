@@ -670,9 +670,18 @@ include_once 'includes/header.php';
                       $continue++;
                       continue;
                     }
+                    if($makeDefaultChecked == $wrow)
+                    {
+                      // don't show this option if it is default from admin
+                      $hideDefaultComp = 'hidden';
+                    }
+                    else
+                    {
+                      $hideDefaultComp = '';
+                    }
               // 'makeDefaultChecked' is the array key for default selection from admin and it's value is the text of the option for the particular question i.e. $wrow
               // title-removethis should be replaced with title when we need to show the title
-                    echo "<div class='col-md-12 align_radio text-left' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-table; cursor: pointer;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
+                    echo "<div class='col-md-12 align_radio text-left ".$hideDefaultComp."' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-table; cursor: pointer;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
               // if db value is matched from option value then checked that option, otherwise make admin choice selected
                     if($flag && count($mChoice_details)>2)
                     {
@@ -1646,17 +1655,6 @@ include_once 'includes/header.php';
   var ref_tab = $("ul.nav-tabs li.active a").text(); //active tab slect
   $('#'+save_button_id).hide();
   // console.log(input_field_values);
-  // update the json at the same time, before value changed in database
-  if($('#'+key).parents('div').hasClass('align_radio'))
-  {
-    var value = $("input[name='"+key+"']:checked").val();
-  }
-  else
-  {
-    var value = $("#"+key).val();
-  }
-  input_field_values[key].values = value;
-  // end of updating json
 
   $.ajax({
     type: "POST",
@@ -1670,6 +1668,17 @@ include_once 'includes/header.php';
     {
       <?php if($result->Link_SaveStatic == 1 && $result->Link_Branching < 1){ ?>
         $('.overlay').hide();
+        // update the json at the same time, before value changed in database
+        if($('#'+key).parents('div').hasClass('align_radio'))
+        {
+          var value = $("input[name='"+key+"']:checked").val();
+        }
+        else
+        {
+          var value = $("#"+key).val();
+        }
+        input_field_values[key].values = value;
+        // end of updating json
         console.log('value saved and json updated, static save enabled');
         return false;
       <?php } ?>
@@ -1898,6 +1907,10 @@ $('.range').each(function(i,e){
   });
   // adding alert box while submitting the form to submit the inputs
   $('#submitBtn').on('click',function(){
+    // if user doesn't execute the formula and submit, to prevent, we execute formula every time when user submit, for manual save enabled scenario only, as per the below condition
+    <?php if($result->Link_SaveStatic == 1 && $result->Link_Branching < 1 ){ ?>
+      staticSaveData(formula_json_expcomp,formula_json_expsubc,input_field_values);
+    <?php } ?>
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
