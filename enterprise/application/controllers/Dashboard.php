@@ -44,7 +44,34 @@ class Dashboard extends CI_Controller {
 		$content['totalSubEnterprise']      = $this->Common_Model->findCount('GAME_SUBENTERPRISE',array('SubEnterprise_Status' => 0));
 		$content['totalEnterpriseUsers']    = $this->Common_Model->findCount('GAME_SITE_USERS',array('User_Role' => 1));
 		$content['totalSubEnterpriseUsers'] = $this->Common_Model->findCount('GAME_SITE_USERS',array('User_Role' => 2));
-		$content['subview']                 = 'homePage';
+		if($this->loginData['User_Role']=='superadmin')
+		{
+			$content['subview'] = 'homePage';
+		}
+		else
+		{
+			// echo "<pre>"; print_r($this->loginData['User_Role']); exit();
+			// for enterprise login
+			if($this->loginData['User_Role'] == 1)
+			{
+				$gameSql = "SELECT * FROM GAME_ENTERPRISE_GAME geg JOIN GAME_GAME gg ON gg.Game_ID = geg.`EG_GameID` WHERE geg.`EG_EnterpriseID` =".$this->loginData['User_Id'];
+				$gameResult = $this->Common_Model->executeQuery($gameSql);
+				// echo "<pre>"; print_r($gameResult); exit();
+				$profilePic = $this->loginData['User_profile_pic'];
+			}
+			// for subEnterprise login
+			if($this->loginData['User_Role'] == 2)
+			{
+				$gameSql = "SELECT * FROM GAME_SUBENTERPRISE_GAME gsg JOIN GAME_GAME gg ON gg.Game_ID = gsg.`SG_GameID` WHERE gsg.`SG_EnterpriseID`=".$this->loginData['User_ParentId']." AND SG_SubEnterpriseID=".$this->loginData['User_Id'];
+				$gameResult = $this->Common_Model->executeQuery($gameSql);
+				// echo "<pre>"; print_r($gameResult); exit();
+				$profilePic = $this->loginData['User_profile_pic'];
+			}
+			
+			$content['profilePic'] = $profilePic;
+			$content['gameData']   = $gameResult;
+			$content['subview']    = 'dashboard';
+		}
 		$this->load->view('main_layout',$content);
 	}
 
