@@ -5,84 +5,92 @@
     <div class="row clearfix progress-box">
       <!-- total enterprise -->
       <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
-        <div class="card border-success mb-3" style="max-width: 18rem;">
-          <div class="card-header bg-transparent border-success"><b>Total Enterprize</b></div>
-          <div class="card-body text-success">
-            <!-- <h5 class="card-title"></h5> -->
-            <div class="project-info clearfix">
-              <div class="project-info-left">
-                <div class="icon box-shadow bg-blue text-white">
-                  <i class="fa fa-institution"></i>
+        <a href="<?php echo base_url('Enterprise'); ?>">
+          <div class="card border-success mb-3" style="max-width: 18rem;">
+            <div class="card-header bg-transparent border-success"><b>Total Enterprize</b></div>
+            <div class="card-body text-success">
+              <!-- <h5 class="card-title"></h5> -->
+              <div class="project-info clearfix">
+                <div class="project-info-left">
+                  <div class="icon box-shadow bg-blue text-white">
+                    <i class="fa fa-institution"></i>
+                  </div>
+                </div>
+                <div class="project-info-right">
+                  <span class="no text-blue weight-500 font-24"><?php echo $totalEnterprise; ?></span>
+                  <!-- <p class="weight-400 font-18">Projects Complete</p> -->
                 </div>
               </div>
-              <div class="project-info-right">
-                <span class="no text-blue weight-500 font-24"><?php echo $totalEnterprise; ?></span>
-                <!-- <p class="weight-400 font-18">Projects Complete</p> -->
-              </div>
             </div>
+            <!-- <div class="card-footer bg-transparent border-success">Footer</div> -->
           </div>
-          <!-- <div class="card-footer bg-transparent border-success">Footer</div> -->
-        </div>
+        </a>
       </div>
       <!-- Enterprise users -->
       <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
-        <div class="card border-success mb-3" style="max-width: 18rem;">
-          <div class="card-header bg-transparent border-success"><b>Total Enterprize Users</b></div>
-          <div class="card-body text-success">
-            <div class="project-info clearfix">
-              <div class="project-info-left">
-                <div class="icon box-shadow bg-light-green text-white">
-                  <i class="fa fa-users"></i>
+        <a href="<?php echo base_url('Users/EnterpriseUsers'); ?>">
+          <div class="card border-success mb-3" style="max-width: 18rem;">
+            <div class="card-header bg-transparent border-success"><b>Total Enterprize Users</b></div>
+            <div class="card-body text-success">
+              <div class="project-info clearfix">
+                <div class="project-info-left">
+                  <div class="icon box-shadow bg-light-green text-white">
+                    <i class="fa fa-users"></i>
+                  </div>
+                </div>
+                <div class="project-info-right">
+                  <span class="no text-light-green weight-500 font-24"><?php echo $totalEnterpriseUsers; ?></span>
+                  <!-- <p class="weight-400 font-18">Projects Complete</p> -->
                 </div>
               </div>
-              <div class="project-info-right">
-                <span class="no text-light-green weight-500 font-24"><?php echo $totalEnterpriseUsers; ?></span>
-                <!-- <p class="weight-400 font-18">Projects Complete</p> -->
-              </div>
             </div>
+            <!-- <div class="card-footer bg-transparent border-success">Footer</div> -->
           </div>
-          <!-- <div class="card-footer bg-transparent border-success">Footer</div> -->
-        </div>
+        </a>
       </div>
       <!-- total subenterprise -->
       <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
-        <div class="card border-success mb-3" style="max-width: 18rem;">
-          <div class="card-header bg-transparent border-success"><b>Total Sub Enterprize</b></div>
-          <div class="card-body text-success">
-            <div class="project-info clearfix">
-              <div class="project-info-left">
-                <div class="icon box-shadow bg-light-orange text-white">
-                  <i class="fa fa-building"></i>
+        <a href="<?php echo base_url('SubEnterprise'); ?>">
+          <div class="card border-success mb-3" style="max-width: 18rem;">
+            <div class="card-header bg-transparent border-success"><b>Total Sub Enterprize</b></div>
+            <div class="card-body text-success">
+              <div class="project-info clearfix">
+                <div class="project-info-left">
+                  <div class="icon box-shadow bg-light-orange text-white">
+                    <i class="fa fa-building"></i>
+                  </div>
+                </div>
+                <div class="project-info-right">
+                  <span class="no text-light-orange weight-500 font-24"><?php echo $totalSubEnterprise; ?></span>
+                  <!-- <p class="weight-400 font-18">Projects Complete</p> -->
                 </div>
               </div>
-              <div class="project-info-right">
-                <span class="no text-light-orange weight-500 font-24"><?php echo $totalSubEnterprise; ?></span>
-                <!-- <p class="weight-400 font-18">Projects Complete</p> -->
-              </div>
             </div>
+            <!-- <div class="card-footer bg-transparent border-success">Footer</div> -->
           </div>
-          <!-- <div class="card-footer bg-transparent border-success">Footer</div> -->
-        </div>
+        </a>
       </div>
       <!-- subenterprise users -->
       <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
-        <div class="card border-success mb-3" style="max-width: 18rem;">
-          <div class="card-header bg-transparent border-success"><b>Total Sub Enterprize Users</b></div>
-          <div class="card-body text-success">
-            <div class="project-info clearfix">
-              <div class="project-info-left">
-                <div class="icon box-shadow bg-light-purple text-white">
-                  <i class="fa fa-user-circle-o"></i>
+        <a href="<?php echo base_url('Users/SubEnterpriseUsers'); ?>">
+          <div class="card border-success mb-3" style="max-width: 18rem;">
+            <div class="card-header bg-transparent border-success"><b>Total Sub Enterprize Users</b></div>
+            <div class="card-body text-success">
+              <div class="project-info clearfix">
+                <div class="project-info-left">
+                  <div class="icon box-shadow bg-light-purple text-white">
+                    <i class="fa fa-user-circle-o"></i>
+                  </div>
+                </div>
+                <div class="project-info-right">
+                  <span class="no text-light-purple weight-500 font-24"><?php echo $totalSubEnterpriseUsers; ?></span>
+                  <!-- <p class="weight-400 font-18">Projects Complete</p> -->
                 </div>
               </div>
-              <div class="project-info-right">
-                <span class="no text-light-purple weight-500 font-24"><?php echo $totalSubEnterpriseUsers; ?></span>
-                <!-- <p class="weight-400 font-18">Projects Complete</p> -->
-              </div>
             </div>
+            <!-- <div class="card-footer bg-transparent border-success">Footer</div> -->
           </div>
-          <!-- <div class="card-footer bg-transparent border-success">Footer</div> -->
-        </div>
+        </a>
       </div>
     </div>
     <div class="bg-white pd-20 box-shadow border-radius-5 mb-30">

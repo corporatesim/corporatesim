@@ -34,6 +34,7 @@
 				<li> <span class="glyphicon glyphicon-trash">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Delete the Record"> Delete	</a></li>
 				<li> <span class="fa fa-code-fork">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="Component Branching"> Branching	</a></li>
 				<li> <span class="fa fa-save">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="Manual Save Enabled"> Manual Save Button </a></li>
+				<li> <span class="fa fa-bell">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="Skip Confirmation Alert For I/P Page Submit"> Skip Submit Alert </a></li>
 				<li> <span class="fa fa-paper-plane">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="This will auto Submit O/P Page"> Skip Output </a></li>
 			</ul>
 		</div>
@@ -112,6 +113,9 @@
 															<?php } ?>
 															<?php if($row->Link_SaveStatic == 1){ ?>
 																&nbsp;<a href="javascript:void(0);" data-toggle="tooltip" title="Static Save Button Enabled"><span class="fa fa-save"></span></a>
+															<?php } ?>
+															<?php if($row->Link_SkipAlert == 1){ ?>
+																&nbsp;<a href="javascript:void(0);" data-toggle="tooltip" title="Confirmation Alert For I/P Page Submission Skipped"><span class="fa fa-bell"></span></a>
 															<?php } ?>
 															<?php if($row->Link_Enabled == 1){ ?>
 																&nbsp;<a href="javascript:void(0);" data-toggle="tooltip" title="AutoSubmit O/P Page"><span class="fa fa-paper-plane"></span></a>

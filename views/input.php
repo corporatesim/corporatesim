@@ -1908,9 +1908,16 @@ $('.range').each(function(i,e){
   // adding alert box while submitting the form to submit the inputs
   $('#submitBtn').on('click',function(){
     // if user doesn't execute the formula and submit, to prevent, we execute formula every time when user submit, for manual save enabled scenario only, as per the below condition
-    <?php if($result->Link_SaveStatic == 1 && $result->Link_Branching < 1 ){ ?>
+    <?php if($result->Link_SkipAlert == 1 && $result->Link_Branching < 1 ){ ?>
       staticSaveData(formula_json_expcomp,formula_json_expsubc,input_field_values);
     <?php } ?>
+    // if submit alert is skipped then
+    <?php if($result->Link_SkipAlert == 1 ){ ?>
+      $('#submit').trigger('click');
+      $('.overlay').show();
+      return false;
+    <?php } ?>
+
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',

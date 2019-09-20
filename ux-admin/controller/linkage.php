@@ -305,6 +305,7 @@ else
 		'Link_DescriptionLink'  =>	$Link_DescriptionLink,
 		'Link_BackToIntro'      =>  $Link_BackToIntro,
 		'Link_SaveStatic'       =>	isset($_POST['Link_Branching']) ? 0 : isset($_POST['Link_SaveStatic']) ? 1 : 0,
+		'Link_SkipAlert'        =>	$_POST['Link_SkipAlert'],
 		'Link_Status'           =>	1,			
 		'Link_CreateDate'       =>	date('Y-m-d H:i:s')
 	);
@@ -721,6 +722,7 @@ else
 		'Link_BackToIntro'      =>  $Link_BackToIntro,
 		'Link_Enabled'          =>	isset($_POST['enabled']) ? 1 : 0,
 		'Link_SaveStatic'       =>	isset($_POST['Link_Branching']) ? 0 : isset($_POST['Link_SaveStatic']) ? 1 : 0,
+		'Link_SkipAlert'        =>	$_POST['Link_SkipAlert'],
 		'Link_Status'           =>	1,			
 		'Link_CreateDate'       =>	date('Y-m-d H:i:s')
 	);

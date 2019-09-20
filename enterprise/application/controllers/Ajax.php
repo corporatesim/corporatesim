@@ -104,8 +104,8 @@ public function getAgents()
   FROM
   GAME_LINKAGE
   WHERE
-  Link_GameID = '25'
-) AND ud.User_ParentId = '8'
+  Link_GameID = $gameId
+)
 GROUP BY
 ud.User_id  
 ORDER BY `ud`.`US_LinkID` DESC";

@@ -1,4 +1,4 @@
-
+<!-- <?php // die('here');?> -->
 <style type="text/css">
 	span.alert-danger {
 		background-color: #ffffff;
@@ -112,6 +112,17 @@
 						<div class="form-check" data-toggle="tooltip" title="This feature will work only if component branching is not enabled">
 							<label class="form-check-label containerCheckbox" for="Link_SaveStatic">
 								<input type="checkbox" class="form-check-input" id="Link_SaveStatic" name="Link_SaveStatic" value="1" <?php echo ($linkdetails->Link_SaveStatic == 1)?'checked':'';?>> Enable Manual Save Button
+								<span class="checkmark"></span>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row name col-md-4 col-lg-3 col-sm-6 col-xs-12" id="skipBackToIntro">
+					<div class="form-group">
+						<div class="form-check" data-toggle="tooltip" title="This feature will work only if component branching is not enabled">
+							<label class="form-check-label containerCheckbox" for="Link_SkipAlert">
+								<input type="checkbox" class="form-check-input" id="Link_SkipAlert" name="Link_SkipAlert" value="1" <?php echo ($linkdetails->Link_SkipAlert == 1)?'checked':'';?>> Skip Submit Alert
 								<span class="checkmark"></span>
 							</label>
 						</div>
