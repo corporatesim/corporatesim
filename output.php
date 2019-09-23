@@ -292,6 +292,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 				while ($subObj = $functionsObj->FetchObject($subRes))
 				{
 					// echo "<pre>"; print_r($subObj);
+					if($subObj->input_current == '')
+					{
+						$subObj->input_current = 0;
+					}
 					if($subObj->input_current >= $subObj->Branch_MinVal && $subObj->input_current <= $subObj->Branch_MaxVal && $subObj->UsScen_Status<1)
 					{
 						// die('jumped to next scen '.$subObj->Branch_NextScen);

@@ -233,8 +233,8 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	}
 
 	$sqlexist = "SELECT * FROM `GAME_INPUT` i WHERE i.input_user=".$userid." and i.input_sublinkid in 
-	(SELECT s.SubLink_ID FROM GAME_LINKAGE_SUB s WHERE s.SubLink_LinkID=".$linkid.")";
-//echo $sqlexist;
+	(SELECT s.SubLink_ID FROM GAME_LINKAGE_SUB s WHERE s.SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$gameid."))";
+	// die($sqlexist);
 	$object = $functionsObj->ExecuteQuery($sqlexist);
 //echo $object->num_rows;
 	if($object->num_rows > 0)
@@ -270,11 +270,12 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	{
 		// die('else: '.$addedit);
 		$sql = "SELECT views_sublinkid AS input_sublinkid, views_current AS input_current, views_key AS input_key FROM GAME_VIEWS WHERE views_Game_ID = $gameid";
+		// die($sql);
 		// $sql = "SELECT * FROM GAME_VIEWS gv INNER JOIN GAME_INPUT gi ON gi.input_sublinkid=gv.views_sublinkid WHERE views_Game_ID = $gameid AND gi.input_user=$userid";
 		$view_object = $functionsObj->ExecuteQuery($sql);
 
 		// delete all existing record from input table before inserting
-		$delSql = "DELETE FROM GAME_INPUT WHERE input_user = $userid AND input_sublinkid IN( SELECT gls.SubLink_ID FROM GAME_LINKAGE_SUB gls WHERE gls.SubLink_LinkID IN( SELECT gl.Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_GameID = $gameid ) ) ";
+		$delSql = "DELETE FROM GAME_INPUT WHERE input_user = $userid AND input_sublinkid IN( SELECT gls.SubLink_ID FROM GAME_LINKAGE_SUB gls WHERE gls.SubLink_LinkID IN( SELECT gl.Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_ID = $linkid ) ) ";
 		$delObj = $functionsObj->ExecuteQuery($delSql);
 
 		while($snap_view = mysqli_fetch_object($view_object))
@@ -282,7 +283,7 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 			$snapCurrent       = ($snap_view->input_current != '')?$snap_view->input_current:'NULL';
 			$bulkInsertArray[] = "($userid,$snap_view->input_sublinkid,$snapCurrent,'".$snap_view->input_key."')";
 		}
-		// print_r($bulkInsertArray); echo "<br>";
+		// echo "<pre>"; print_r($bulkInsertArray); die();
 		if(count($bulkInsertArray) > 0)
 		{
 			$bulkValues      = implode(',',$bulkInsertArray);

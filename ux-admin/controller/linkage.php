@@ -188,13 +188,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 				'SubLink_CreateDate'         => date('Y-m-d H:i:s')
 			);
 			
-			$result    = $functionsObj->InsertData('GAME_LINKAGE_SUB', $linkdetails, 0, 0);
+			$result = $functionsObj->InsertData('GAME_LINKAGE_SUB', $linkdetails, 0, 0);
+			$id     = $functionsObj->InsertID();
 			// adding the below query to updat the newly added fields liek Area, Comp, SubComp name and formula exp to reduce joins
 			$updateSql = "UPDATE GAME_LINKAGE_SUB gls LEFT JOIN GAME_AREA ga ON ga.Area_ID = gls.SubLink_AreaID LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID LEFT JOIN GAME_FORMULAS gf ON gf.f_id = gls.SubLink_FormulaID SET gls.SubLink_AreaName = ga.Area_Name, gls.SubLink_CompName = gc.Comp_Name, gls.SubLink_SubcompName = gs.SubComp_Name, gls.SubLink_FormulaExpression = gf.expression	WHERE gls.SubLink_AreaID =".$_POST['area_id'];
 			$functionsObj->ExecuteQuery($updateSql);
 			if($result)
 			{
-				$id            = $functionsObj->InsertID();
 				// filling data in game_views table for snapshot
 				$query         = "SELECT Link_GameID FROM GAME_LINKAGE WHERE Link_ID=$linkid";
 				$game_object   = $functionsObj->ExecuteQuery($query);
@@ -677,10 +677,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 						//else delete all if exist
 				}
 				$game_views_key = array(
-					'views_key'  => $_POST['input_key'],
-					'is_updated' => 1,
+					'views_key'       => $_POST['input_key'],
+					'views_sublinkid' => $sublinkid,
+					'is_updated'      => 1,
 				);
 				$updtae_table        = $functionsObj->UpdateData('GAME_VIEWS', $game_views_key, 'views_sublinkid', $sublinkid, 0);
+				// die('here');
 				$_SESSION['msg']     = "Link updated successfully";
 				$_SESSION['type[0]'] = "inputSuccess";
 				$_SESSION['type[1]'] = "has-success";
