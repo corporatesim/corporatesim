@@ -153,6 +153,14 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 			{
 				$SubLink_InputModeTypeValue = '';
 			}
+			// adding chart type name into game_linkage_sub table, to remove chart query in input_page
+			if(isset($_POST['chart_id']))
+			{
+				$chartSql            = "SELECT Chart_Type FROM GAME_CHART WHERE Chart_Status=1 and Chart_ID =".$_POST['chart_id'];
+				$chartObj            = $functionsObj->ExecuteQuery($chartSql);
+				$chartType           = $functionsObj->FetchObject($chartObj);
+				$charttypeComp       = $chartType->Chart_Type; 
+			}
 
 			$linkdetails = (object) array(
 				'SubLink_LinkID'             => $linkid,
@@ -174,7 +182,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 				'SubLink_Condition'          => $_POST['conditionformulaid'],
 				'SubLink_Roundoff'           => isset($_POST['chkround']) ? 1:0,
 				'SubLink_ChartID'            => $_POST['chart_id'],
-				'SubLink_ChartType'          => $_POST['chart_type'],
+				'SubLink_ChartType'          => ($charttypeComp)?$charttypeComp:null,
 				'SubLink_Details'            => $_POST['details'],
 				'SubLink_Status'             => 1,
 				'SubLink_ViewingOrder'       => (!empty($_POST['SubLink_ViewingOrder'])) ? $_POST['SubLink_ViewingOrder']:1,
@@ -346,6 +354,7 @@ else
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 {	
+	// echo "<pre>"; print_r($_POST); exit();
 	// header('X-XSS-Protection:0');	echo "<pre>"; print_r($_POST); die('Update Linkage'); 
 	if(isset($_POST['game_id']) && !empty($_POST['game_id']))
 	{
@@ -530,6 +539,15 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 				$_POST['SubLink_InputModeType'] = '';
 			}
 
+			// adding chart type name into game_linkage_sub table, to remove chart query in input_page
+			if(isset($_POST['chart_id']))
+			{
+				$chartSql            = "SELECT Chart_Type FROM GAME_CHART WHERE Chart_Status=1 and Chart_ID =".$_POST['chart_id'];
+				$chartObj            = $functionsObj->ExecuteQuery($chartSql);
+				$chartType           = $functionsObj->FetchObject($chartObj);
+				$charttypeComp       = $chartType->Chart_Type;
+			}
+
 			// print_r($SubLink_InputModeTypeValue); exit; 
 			// if area is disabled then take area value from $_POST['dis_area_id'],
 			$linkdetails = (object) array(
@@ -551,7 +569,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 				'SubLink_Condition'          => $_POST['conditionformulaid'],
 				'SubLink_Roundoff'           => isset($_POST['chkround']) ? 1:0,
 				'SubLink_ChartID'            => $_POST['chart_id'],
-				'SubLink_ChartType'          => $_POST['chart_type'],
+				'SubLink_ChartType'          => ($charttypeComp)?$charttypeComp:null,
 				'SubLink_Details'            => $_POST['details'],
 				'SubLink_ViewingOrder'       => (!empty($ViewingOrder)) ? $ViewingOrder:1,
 				'SubLink_BackgroundColor'    => $_POST['SubLink_BackgroundColor'],

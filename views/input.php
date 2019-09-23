@@ -207,7 +207,7 @@ include_once 'includes/header.php';
           }
 
           $sqlcomp = "SELECT distinct gi.input_showComp, ls.SubLink_AreaID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_AreaName as Area_Name, l.Link_Order as 'Order', l.Link_Branching as componentBranching,
-          ls.SubLink_CompName as Comp_Name, ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode, 
+          ls.SubLink_CompName as Comp_Name, ls.SubLink_ChartID as ChartID, ls.SubLink_ChartType as Chart_Type, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode, 
           ls.SubLink_FormulaExpression as exp , ls.SubLink_ID as SubLinkID,ls.Sublink_AdminCurrent as AdminCurrent, 
           ls.Sublink_AdminLast as AdminLast, ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff,
           ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
@@ -483,14 +483,14 @@ include_once 'includes/header.php';
             }
             else
             {
-              $sqlchartComp           = "SELECT Chart_Type FROM GAME_CHART WHERE Chart_Status=1 and Chart_ID =".$row1['ChartID'];
-              $chartDetailscomp       = $functionsObj->ExecuteQuery($sqlchartComp);
-              $ResultchartDetailsComp = $functionsObj->FetchObject($chartDetailscomp);
-              $charttypeComp          = $ResultchartDetailsComp->Chart_Type; 
-          // adding a refresh icon
+              // $sqlchartComp           = "SELECT Chart_Type FROM GAME_CHART WHERE Chart_Status=1 and Chart_ID =".$row1['ChartID'];
+              // $chartDetailscomp       = $functionsObj->ExecuteQuery($sqlchartComp);
+              // $ResultchartDetailsComp = $functionsObj->FetchObject($chartDetailscomp);
+              // $charttypeComp          = $ResultchartDetailsComp->Chart_Type; 
+             // adding a refresh icon
               echo '<a class="refreshChart" data-redirect="'.site_root.'input.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row1['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
               ?>  
-              <img class="graph_chart showImageModal comp_chart col-md-12" src="<?php echo site_root;?>chart/<?=$charttypeComp?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>" style="max-width:<?php echo $ImageMaxWidth; ?>;">
+              <img class="graph_chart showImageModal comp_chart col-md-12" src="<?php echo site_root;?>chart/<?=$row1['Chart_Type']?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>" style="max-width:<?php echo $ImageMaxWidth; ?>;">
               <?php
             }
             echo "</div>";
@@ -774,7 +774,7 @@ include_once 'includes/header.php';
         //Get SubComponent for this Component, linkid
         $sqlsubcomp = "SELECT distinct ls.SubLink_AreaID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_SubCompID as SubCompID,  
         ls.SubLink_AreaName as Area_Name, ls.SubLink_CompName as Comp_Name, ls.SubLink_SubcompName as SubComp_Name, l.Link_Order AS 'Order', 
-        ls.SubLink_ChartID as ChartID, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode , ls.SubLink_FormulaExpression as exp, 
+        ls.SubLink_ChartID as ChartID, ls.SubLink_ChartType as Chart_Type, ls.SubLink_Details as Description, ls.SubLink_InputMode as Mode , ls.SubLink_FormulaExpression as exp, 
         ls.SubLink_ID as SubLinkID ,ls.Sublink_AdminCurrent as AdminCurrent, ls.Sublink_AdminLast as AdminLast, 
         ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff , 
         ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
@@ -1147,18 +1147,18 @@ include_once 'includes/header.php';
           }
           else
           {
-            $dataChart          = GetChartData($gameid,$userid,$row2['ChartID']);
-            $sqlchart           = "SELECT * FROM GAME_CHART WHERE Chart_Status=1 and Chart_ID =".$row2['ChartID'];
-            $chartDetails       = $functionsObj->ExecuteQuery($sqlchart);
-            $ResultchartDetails = $functionsObj->FetchObject($chartDetails);
-            $chartname          = $ResultchartDetails->Chart_Name;
-            $charttype          = $ResultchartDetails->Chart_Type;
-          //print_r($dataChart);
-          // adding a refresh icon
+            // $dataChart          = GetChartData($gameid,$userid,$row2['ChartID']);
+            // $sqlchart           = "SELECT * FROM GAME_CHART WHERE Chart_Status=1 and Chart_ID =".$row2['ChartID'];
+            // $chartDetails       = $functionsObj->ExecuteQuery($sqlchart);
+            // $ResultchartDetails = $functionsObj->FetchObject($chartDetails);
+            // $chartname          = $ResultchartDetails->Chart_Name;
+            // $charttype          = $ResultchartDetails->Chart_Type;
+           //print_r($dataChart);
+           // adding a refresh icon
             echo '<a class="refreshChart" data-redirect="'.site_root.'input.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row2['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
             ?>
             <!-- adding this section to make comp chart insert into subcomp as discussed -->
-            <img class="graph_chart showImageModal subcomp_chart col-md-12" src="<?php echo site_root;?>chart/<?=$charttype?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row2['ChartID']?>" style="max-width:<?php echo $sImageMaxWidth; ?>;">
+            <img class="graph_chart showImageModal subcomp_chart col-md-12" src="<?php echo site_root;?>chart/<?=$row2['Chart_Type']?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row2['ChartID']?>" style="max-width:<?php echo $sImageMaxWidth; ?>;">
             <!-- Edn of adding section to make comp chart insert into subcomp as discussed -->
             <?php
           }
