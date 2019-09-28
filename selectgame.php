@@ -1,7 +1,8 @@
 <?php 
 include_once 'config/settings.php'; 
 include_once 'config/functions.php'; 
-
+$localIP = getHostByName(getHostName());
+// echo '<pre>'; print_r($_SERVER); var_dump($localIP); exit();
 // checking login status of user while user execute or save via ajax
 if($_POST['action'] == 'check_loggedIn_status')
 {

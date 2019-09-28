@@ -154,7 +154,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 				$SubLink_InputModeTypeValue = '';
 			}
 			// adding chart type name into game_linkage_sub table, to remove chart query in input_page
-			if(isset($_POST['chart_id']))
+			if(isset($_POST['chart_id']) && !empty($_POST['chart_id']))
 			{
 				$chartSql            = "SELECT Chart_Type FROM GAME_CHART WHERE Chart_Status=1 and Chart_ID =".$_POST['chart_id'];
 				$chartObj            = $functionsObj->ExecuteQuery($chartSql);
@@ -540,7 +540,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 			}
 
 			// adding chart type name into game_linkage_sub table, to remove chart query in input_page
-			if(isset($_POST['chart_id']))
+			if(isset($_POST['chart_id']) && !empty($_POST['chart_id']))
 			{
 				$chartSql            = "SELECT Chart_Type FROM GAME_CHART WHERE Chart_Status=1 and Chart_ID =".$_POST['chart_id'];
 				$chartObj            = $functionsObj->ExecuteQuery($chartSql);

@@ -18,10 +18,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 			$type [1] = 'has-error';
 		} else {		
 			$array = array(
-				'subcomp_areaid' => $_POST['area_id'],
-				'subcomp_compid' => $_POST['comp_id'],
-				'subcomp_name'   => $_POST['SubComp_Name'],
-				'subcomp_date'   => date('Y-m-d H:i:s')
+				'subcomp_areaid'    => $_POST['area_id'],
+				'subcomp_compid'    => $_POST['comp_id'],
+				'subcomp_name'      => $_POST['SubComp_Name'],
+				'SubComp_NameAlias' => $_POST['SubComp_NameAlias'],
+				'subcomp_date'      => date('Y-m-d H:i:s')
 			);
 			
 			// Insert Values in db
@@ -50,9 +51,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 		$SubComp_ID  = $_POST['SubComp_ID'];
 		$subCompName = $_POST['SubComp_Name'];
 		$array       = array(
-			'subcomp_areaid' => $_POST['area_id'],
-			'subcomp_compid' => $_POST['comp_id'],
-			'subcomp_name'   => $subCompName
+			'subcomp_areaid'    => $_POST['area_id'],
+			'subcomp_compid'    => $_POST['comp_id'],
+			'SubComp_NameAlias' => $_POST['SubComp_NameAlias'],
+			'subcomp_name'      => $subCompName
 		);
 		$result = $functionsObj->UpdateData('GAME_SUBCOMPONENT', $array, 'SubComp_ID', $SubComp_ID, 0);
 		// updating the GAME_LINKAGE_SUB as we made flat table to avoid joins
@@ -126,7 +128,7 @@ $area = $functionsObj->SelectData(array(), 'GAME_AREA', array('Area_Delete=0'), 
 $areaforexcel = $functionsObj->SelectData(array(), 'GAME_AREA', array('Area_Delete=0'), 'Area_Name', '', '', '', 0);
 // Fetch Sub Categories List
 $sql  = "SELECT 
-SubComp_ID, SubComp_Name, (
+SubComp_ID, SubComp_Name, SubComp_NameAlias, (
 SELECT Comp_Name FROM GAME_COMPONENT WHERE comp_id = sub.subcomp_compid
 ) as c_name, (
 SELECT Area_name FROM GAME_AREA WHERE area_id = sub.subcomp_areaid

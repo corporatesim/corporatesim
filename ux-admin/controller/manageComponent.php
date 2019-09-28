@@ -17,9 +17,10 @@ if (isset ( $_POST ['submit'] ) && $_POST ['submit'] == 'Submit') {
 			$type [1] = 'has-error';
 		} else {
 			$array = array (
-				'Comp_AreaID' => $Area_ID,
-				'Comp_Name'   => ucfirst ( $Comp_Name ),
-				'Comp_Date'   => date ( 'Y-m-d H:i:s' ) 
+				'Comp_AreaID'    => $Area_ID,
+				'Comp_NameAlias' => $_POST['Comp_NameAlias'],
+				'Comp_Name'      => ucfirst ( $Comp_Name ),
+				'Comp_Date'      => date ( 'Y-m-d H:i:s' ) 
 			);
 			$result = $functionsObj->InsertData ( 'GAME_COMPONENT', $array, 0, 0 );
 			if ($result)
@@ -59,8 +60,9 @@ if (isset ( $_POST ['submit'] ) && $_POST ['submit'] == 'Update') {
 		else
 		{
 			$array = array (
-				'Comp_AreaID' => $Area_ID,
-				'Comp_Name'   => ucfirst ( $Comp_Name ) 
+				'Comp_AreaID'    => $Area_ID,
+				'Comp_Name'      => ucfirst ( $Comp_Name ),
+				'Comp_NameAlias' => $_POST['Comp_NameAlias'],
 			);
 			$result = $functionsObj->UpdateData ( 'GAME_COMPONENT', $array, 'Comp_ID', $Comp_ID );
 			// updating the GAME_LINKAGE_SUB as we made flat table to avoid joins
@@ -150,7 +152,7 @@ echo "</pre>"; */
 $sql = "SELECT 
 Comp_ID, 
 (SELECT Area_Name FROM GAME_AREA WHERE Area_ID= c.Comp_AreaID) as Area_Name,
-Comp_Name,
+Comp_Name, Comp_NameAlias, 
 Comp_date
 FROM 
 GAME_COMPONENT as c WHERE Comp_Delete =0";

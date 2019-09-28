@@ -39,8 +39,8 @@
 						<div class="col-sm-12">
 							<form method="post" action="" enctype="multipart/form-data">
 								<div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
-									<label>Select Area</label> <select class="form-control"
-									name="area_id" id="area_id">
+									<label>Select Area</label>
+									<select class="form-control" name="area_id" id="area_id" required>
 									<option value="">-- SELECT --</option>
 									<?php while($row = $area->fetch_object()){ ?>
 										<option value="<?php echo $row->Area_ID; ?>"
@@ -52,8 +52,8 @@
 							</div>
 
 							<div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
-								<label>Select Component</label> <select class="form-control"
-								name="comp_id" id="comp_id">
+								<label>Select Component</label>
+								<select class="form-control" name="comp_id" id="comp_id" required>
 								<option value="">-- SELECT --</option>
 								<?php
 								
@@ -74,8 +74,16 @@
 								<label>Sub-Component Name</label> <input type="hidden" name="SubComp_ID"
 								value="<?php if(isset($_GET['Edit'])){ echo $result->SubComp_ID; } ?>">
 								<input class="form-control" type="text" name="SubComp_Name"
-								value="<?php if(isset($_GET['Edit'])){ echo $result->SubComp_Name; } ?>">
+								value="<?php if(isset($_GET['Edit'])){ echo $result->SubComp_Name; } ?>" required>
 							</div>
+
+							<div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
+								<label>Sub-Component Alias</label> <input type="hidden" name="SubComp_ID"
+								value="<?php if(isset($_GET['Edit'])){ echo $result->SubComp_ID; } ?>">
+								<input class="form-control" type="text" name="SubComp_NameAlias"
+								value="<?php if(isset($_GET['Edit'])){ echo $result->SubComp_NameAlias; } ?>">
+							</div>
+
 							<div class="clearfix"></div>
 							<div class="form-group col-sm-12 text-center"
 							style="margin-top: 22px;">
@@ -179,9 +187,10 @@
 								<thead>
 									<tr>
 										<th>#</th>
-										<th>Sub Component Name</th>
-										<th>Component Name</th>
 										<th>Area Name</th>
+										<th>Component Name</th>
+										<th>Sub Component Name</th>
+										<th>Sub Component Alias</th>
 										<th class="no-sort">Action</th>
 									</tr>
 								</thead>
@@ -193,9 +202,10 @@
 											?>
 											<tr>
 												<th><?php echo $i;?></th>
-												<td><?php echo $row->SubComp_Name;?></td>
-												<td><?php echo $row->c_name;?></td>
 												<td><?php echo $row->s_name;?></td>
+												<td><?php echo $row->c_name;?></td>
+												<td><?php echo $row->SubComp_Name;?></td>
+												<td><?php echo $row->SubComp_NameAlias;?></td>
 												<td class="text-center">
 													<?php if($functionsObj->checkModuleAuth('sub component','edit')){ ?>
 														<a
