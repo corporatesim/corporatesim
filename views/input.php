@@ -38,11 +38,11 @@ include_once 'includes/header.php';
 <!-- left side buttons adding here -->
 <div class="leftsideNav rotateCompAnti row">
 
-  <?php if($skipRes->Link_IntroductionLink < 1){ ?>
+  <?php if($result->Link_IntroductionLink < 1){ ?>
     <a title="This will open in new tab" class="" target="_blank" href="<?php echo $gameurl; ?>" id="introduction"><button class="btn btn-info"> Introduction</button></a>
   <?php } ?>
 
-  <?php if($skipRes->Link_DescriptionLink < 1){ ?>
+  <?php if($result->Link_DescriptionLink < 1){ ?>
     <a title="This will open in new tab" class="" target="_blank" href="<?php echo $scenurl; ?>" id="description"><button class="btn btn-warning"> Description</button></a>
   <?php } ?>
 

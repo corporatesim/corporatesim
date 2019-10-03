@@ -92,7 +92,7 @@ if(isset($_POST['downloadReport']) && $_POST['downloadReport'] == 'DownloadUserR
 	}
 
 	// $dateStr for date filter (date_time BETWEEN '2010-01-30 14:15:55' AND '2010-09-29 10:15:55')
-	$sql .= " order by id desc";
+	$sql .= " AND gu.User_ParentId=-1 AND gu.User_SubParentId=-2 order by id desc";
 
 	//die($sql);
 

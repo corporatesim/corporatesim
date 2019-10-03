@@ -166,18 +166,16 @@ if(isset($_POST['formula_id']))
 	echo $formula->expression_string;
 }
 
+// this is used in formula for component
 if(isset($_POST['comp_scen_id']))
 {
 	$link_id = $_POST['comp_scen_id'];
-	
 	$sqlcomp = "SELECT DISTINCT c.Comp_ID, c.Comp_Name, a.Area_Name
 	FROM `GAME_LINKAGE_SUB` ls INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID
 	INNER JOIN GAME_AREA a ON ls.SubLink_AreaID=a.Area_ID
 	WHERE SubLink_LinkID=".$link_id." 
 	ORDER BY c.Comp_Name";	
-
 	$components = $funObj->ExecuteQuery($sqlcomp);
-	
 	if( $components->num_rows > 0 ) 
 	{
 		while( $rows = $components->fetch_object() ){ ?>
@@ -188,6 +186,7 @@ if(isset($_POST['comp_scen_id']))
 		}
 	}
 
+	// this is used in formula for subComponent
 	if(isset($_POST['subcomp_scen_id']))
 	{
 		$link_id = $_POST['subcomp_scen_id'];
@@ -197,9 +196,7 @@ if(isset($_POST['comp_scen_id']))
 		INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID
 		WHERE SubLink_LinkID=".$link_id." 
 		ORDER BY s.SubComp_Name";	
-		
 		$subcomponents = $funObj->ExecuteQuery($sqlcomp);
-		
 		if( $subcomponents->num_rows > 0 ) 
 		{
 			while( $rows = $subcomponents->fetch_object() ){ ?>
@@ -209,22 +206,99 @@ if(isset($_POST['comp_scen_id']))
 				}
 			}	
 		}
-		// for populating the game chart dropdown 
-		if(isset($_POST['gameId']) && isset($_POST['statusType']))
+
+		// this is used in charts for Area
+		if(isset($_POST['areaScenId']) && isset($_POST['type_dropdown']))
 		{
 			// print_r($_POST);
-			$gameId     = $_POST['gameId'];
-			$statusType = $_POST['statusType'];
-			// $chartSql   = "SELECT * FROM `GAME_CHART` WHERE `Chart_GameID`=".$result->Link_GameID." AND Chart_Type_Status=".$statusType;
-			$chartObject  = $funObj->SelectData(array(), 'GAME_CHART', array('Chart_GameID='.$gameId, 'Chart_Type_Status='.$statusType), 'Chart_Name', '', '', '', 0);
-			?>
-			<option value="">-- Select Chart --</option>
-			<?php 
-
-			if($chartObject->num_rows > 0)
-			{
-				while($wrow = $chartObject->fetch_object()){ ?>
-					<option value="<?php echo $wrow->Chart_ID; ?>"><?php echo $wrow->Chart_Name; ?></option>
-				<?php }
+			$Scen_ID = $_POST['areaScenId'];
+			$game_id = $_POST['areaGameId'];
+			$sqlarea = "SELECT DISTINCT gls.SubLink_AreaID, gls.SubLink_AreaName FROM GAME_LINKAGE_SUB gls WHERE gls.SubLink_LinkID=(SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$game_id." AND Link_ScenarioID=".$Scen_ID.") ORDER BY gls.SubLink_AreaName";
+			$subcomponents = $funObj->ExecuteQuery($sqlarea);
+			// die($sqlarea);
+			if( $subcomponents->num_rows > 0 ) 
+				{ ?>
+					<option value="">--Select Area--</option>
+					<?php
+					while( $rows = $subcomponents->fetch_object() ){ ?>
+						<option id="area_<?php echo $rows->SubLink_AreaID ; ?>" value="<?php echo $rows->SubLink_AreaID ; ?>"><?php echo $rows->SubLink_AreaName; ?></option>
+						<?php 
+					}
+				}	
 			}
-		}
+
+		// this is used in charts for component
+			if(isset($_POST['compScenId']) && isset($_POST['type_dropdown']))
+			{
+				$Scen_ID = $_POST['compScenId'];
+				$game_id = $_POST['compGameId'];
+				$sqlcomp = "SELECT gls.SubLink_AreaName, gls.SubLink_CompID,gls.SubLink_CompName,gls.SubLink_ChartID FROM GAME_LINKAGE_SUB gls WHERE gls.SubLink_SubCompID<1 AND gls.SubLink_LinkID=(SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$game_id." AND Link_ScenarioID=".$Scen_ID.") ORDER BY gls.SubLink_CompName";
+				$subcomponents = $funObj->ExecuteQuery($sqlcomp);
+			// die($sqlcomp);
+
+				if( $subcomponents->num_rows > 0 ) 
+				{
+					while( $rows = $subcomponents->fetch_object() ){ ?>
+						<option id="comp_<?php echo $rows->SubLink_CompID; ?>" title="<?php echo $rows->SubLink_AreaName; ?>" value="<?php echo $rows->SubLink_CompID;?>" <?php echo ($rows->SubLink_ChartID)?'selected':''?>><?php echo $rows->SubLink_CompName; ?></option>
+						<?php 
+					}
+				}	
+			}
+
+		// this is used in charts for subComponent
+			if(isset($_POST['subcompScenId']) && isset($_POST['type_dropdown']))
+			{
+				$Scen_ID    = $_POST['subcompScenId'];
+				$game_id    = $_POST['subcompGameId'];
+				$sqlsubcomp = "SELECT gls.SubLink_SubCompID, gls.SubLink_SubcompName, gls.SubLink_AreaName, gls.SubLink_CompName,gls.SubLink_ChartID FROM GAME_LINKAGE_SUB gls WHERE gls.SubLink_SubCompID>1 AND gls.SubLink_LinkID=(SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$game_id." AND Link_ScenarioID=".$Scen_ID.") ORDER BY gls.SubLink_SubcompName";
+				$subcomponents = $funObj->ExecuteQuery($sqlsubcomp);
+			// die($sqlsubcomp);
+
+				if( $subcomponents->num_rows > 0 ) 
+				{
+					while( $rows = $subcomponents->fetch_object() ){ ?>
+						<option id="subc_<?php echo $rows->SubLink_SubCompID ; ?>" title="<?php echo 'Area:- '.$rows->SubLink_AreaName.', Comp:- '.$rows->SubLink_CompName; ?>" value="<?php echo $rows->SubLink_SubCompID ; ?>" <?php echo ($rows->SubLink_ChartID)?'selected':''?>><?php echo $rows->SubLink_SubcompName; ?></option>
+						<?php 
+					}
+				}	
+			}
+		// get scenario for charts 
+			if(isset($_POST['scenGameId']))
+			{
+				$game_id = $_POST['scenGameId'];
+				$sqlscen = "SELECT s.Scen_ID,s.Scen_Name, Link_ID  
+				FROM `GAME_LINKAGE` INNER JOIN GAME_SCENARIO s ON Link_ScenarioID=s.Scen_ID
+				WHERE Link_GameID=".$game_id;
+				$object = $funObj->ExecuteQuery($sqlscen);
+
+				?>
+				<option value="">-- SELECT --</option>
+				<?php 
+
+				if($object->num_rows > 0)
+				{
+					while($row = $object->fetch_object()){ ?>
+						<option value="<?php echo $row->Scen_ID; ?>"><?php echo $row->Scen_Name; ?></option>
+					<?php }
+				}
+			}
+
+		// for populating the game chart dropdown 
+			if(isset($_POST['gameId']) && isset($_POST['statusType']))
+			{
+			// print_r($_POST);
+				$gameId     = $_POST['gameId'];
+				$statusType = $_POST['statusType'];
+			// $chartSql   = "SELECT * FROM `GAME_CHART` WHERE `Chart_GameID`=".$result->Link_GameID." AND Chart_Type_Status=".$statusType;
+				$chartObject  = $funObj->SelectData(array(), 'GAME_CHART', array('Chart_GameID='.$gameId, 'Chart_Type_Status='.$statusType), 'Chart_Name', '', '', '', 0);
+				?>
+				<option value="">-- Select Chart --</option>
+				<?php 
+
+				if($chartObject->num_rows > 0)
+				{
+					while($wrow = $chartObject->fetch_object()){ ?>
+						<option value="<?php echo $wrow->Chart_ID; ?>"><?php echo $wrow->Chart_Name; ?></option>
+					<?php }
+				}
+			}

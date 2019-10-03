@@ -332,7 +332,7 @@ var formula_string = [];
 	});
 
 //-->
-$("#game_id").select2();
+// $("#game_id").select2();
 
 
 

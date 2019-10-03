@@ -107,14 +107,14 @@ include_once 'includes/header.php';
                 go.output_current AS CURRENT,
                 gls.SubLink_BackgroundColor AS BackgroundColor,
                 gls.SubLink_TextColor AS TextColor,
-                gls.SubLink_InputMode as Mode,
-                gls.Sublink_AdminCurrent as AdminCurrent,
-                gls.SubLink_LinkIDcarry as CarryLinkID,
-                gls.SubLink_CompIDcarry as CarryCompID,
-                gls.SubLink_SubCompIDcarry as CarrySubCompID,
-                gls.SubLink_ID as SubLinkID,
-                gls.SubLink_FontSize as fontSize,
-                gls.SubLink_FontStyle as fontStyle
+                gls.SubLink_InputMode AS Mode,
+                gls.Sublink_AdminCurrent AS AdminCurrent,
+                gls.SubLink_LinkIDcarry AS CarryLinkID,
+                gls.SubLink_CompIDcarry AS CarryCompID,
+                gls.SubLink_SubCompIDcarry AS CarrySubCompID,
+                gls.SubLink_ID AS SubLinkID,
+                gls.SubLink_FontSize AS fontSize,
+                gls.SubLink_FontStyle AS fontStyle
                 FROM GAME_LINKAGE_SUB gls 
                 LEFT JOIN GAME_LINKAGE gl ON gl.Link_ID=gls.SubLink_LinkID
                 LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID=gls.SubLink_CompID
@@ -477,12 +477,12 @@ include_once 'includes/header.php';
                    echo "<div class='clearfix'></div>";
 
                   //Get SubComponent for this Component, linkid
-                   $sqlsubcomp = "SELECT distinct a.Area_ID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_SubCompID as SubCompID,  
+                   $sqlsubcomp = "SELECT distinct a.Area_ID AS AreaID, ls.SubLink_CompID AS CompID, ls.SubLink_SubCompID AS SubCompID,  
                    go.output_current AS outputValue,
-                   a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, s.SubComp_Name as SubComp_Name,ls.SubLink_ViewingOrder as ViewingOrder,
-                   ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast,ls.SubLink_InputFieldOrder as InputFieldOrder,
-                   ls.subLink_ShowHide as ShowHide,
-                   ls.SubLink_Details as Description ,ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle, ls.SubLink_InputMode as Mode, ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, ls.SubLink_SubCompIDcarry as CarrySubCompID
+                   a.Area_Name AS Area_Name, c.Comp_Name AS Comp_Name, s.SubComp_Name AS SubComp_Name,ls.SubLink_ViewingOrder AS ViewingOrder,
+                   ls.SubLink_LabelCurrent AS LabelCurrent, ls.SubLink_LabelLast AS LabelLast,ls.SubLink_InputFieldOrder AS InputFieldOrder,
+                   ls.subLink_ShowHide AS ShowHide,
+                   ls.SubLink_Details AS Description ,ls.SubLink_BackgroundColor AS BackgroundColor, ls.SubLink_TextColor AS TextColor, ls.SubLink_FontSize AS fontSize, ls.SubLink_FontStyle AS fontStyle, ls.SubLink_InputMode AS Mode, ls.SubLink_LinkIDcarry AS CarryLinkID, ls.SubLink_CompIDcarry AS CarryCompID, ls.SubLink_SubCompIDcarry AS CarrySubCompID
                    FROM GAME_LINKAGE l 
                    INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
                    INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 

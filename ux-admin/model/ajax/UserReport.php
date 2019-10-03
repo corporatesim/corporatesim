@@ -70,6 +70,7 @@ if($_POST['action'] == 'game_users')
 	}
 
 	$sql .= $filterSql;
+	$sql .= " AND gu.User_ParentId=-1 AND gu.User_SubParentId=-2 ";
 	// die($sql);
 	$Object = $funObj->ExecuteQuery($sql);
 	if($Object->num_rows > 0)

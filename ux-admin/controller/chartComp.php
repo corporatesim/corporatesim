@@ -15,28 +15,28 @@ $file         = 'list.php';
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 {
-	$component    = implode(',',$_POST['component']);
-	$subcomponent = implode(',',$_POST['subcomponent']);
-	$chartdetails = (object) array(
-		'Chart_GameID'        =>	$_POST['game_id'],
-		'Chart_ScenarioID'    =>	$_POST['scen_id'],
-		'Chart_AreaID'        =>	$_POST['area_id'],
-		'Chart_Name'          =>	$_POST['chartName'],
-		'Chart_Type'          =>	$_POST['chartType'],
-		'Chart_Axis'          =>	$_POST['axis_placement'],
-		'Chart_Components'    =>	$component,
-		'Chart_Subcomponents' =>	$subcomponent,
-		'Chart_Status'        =>	1,			
-		'Chart_Type_Status'   =>	1,			
-		'Chart_CreateDate'    =>	date('Y-m-d H:i:s')
-	);
-
 	if( !empty($_POST['game_id']) && !empty($_POST['scen_id']) && !empty($_POST['chartType']) )
 	{
+		$component    = implode(',',$_POST['component']);
+		$subcomponent = implode(',',$_POST['subcomponent']);
+		$chartdetails = (object) array(
+			'Chart_GameID'        =>	$_POST['game_id'],
+			'Chart_ScenarioID'    =>	$_POST['scen_id'],
+			'Chart_AreaID'        =>	$_POST['area_id'],
+			'Chart_Name'          =>	$_POST['chartName'],
+			'Chart_Type'          =>	$_POST['chartType'],
+			'Chart_Axis'          =>	$_POST['axis_placement'],
+			'Chart_Components'    =>	$component,
+			'Chart_Subcomponents' =>	$subcomponent,
+			'Chart_Status'        =>	1,			
+			'Chart_Type_Status'   =>	1,			
+			'Chart_CreateDate'    =>	date('Y-m-d H:i:s')
+		);
+
 		$result = $functionsObj->InsertData('GAME_CHART', $chartdetails, 0, 0);
 		if($result)
 		{
-			$_SESSION['msg']     = "Link created successfully";
+			$_SESSION['msg']     = "Component chart added successfully";
 			$_SESSION['type[0]'] = "inputSuccess";
 			$_SESSION['type[1]'] = "has-success";
 			header("Location: ".site_root."ux-admin/chartComp");
@@ -53,28 +53,28 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 {	
-	$component    = implode(',',$_POST['component']);
-	$subcomponent = implode(',',$_POST['subcomponent']);
-	$chartdetails = (object) array(
-		'Chart_GameID'        =>	$_POST['game_id'],
-		'Chart_ScenarioID'    =>	$_POST['scen_id'],
-		'Chart_AreaID'        =>	$_POST['area_id'],
-		'Chart_Name'          =>	$_POST['chartName'],
-		'Chart_Type'          =>	$_POST['chartType'],
-		'Chart_Axis'          =>	$_POST['axis_placement'],
-		'Chart_Components'    =>	$component,
-		'Chart_Subcomponents' =>	$subcomponent,
-		'Chart_Status'        =>	1,						
-		'Chart_CreateDate'    =>	date('Y-m-d H:i:s')
-	);
-
 	if( !empty($_POST['game_id']) && !empty($_POST['scen_id']) && !empty($_POST['chartType']) )
 	{
+		$component    = implode(',',$_POST['component']);
+		$subcomponent = implode(',',$_POST['subcomponent']);
+		$chartdetails = (object) array(
+			'Chart_GameID'        =>	$_POST['game_id'],
+			'Chart_ScenarioID'    =>	$_POST['scen_id'],
+			'Chart_AreaID'        =>	$_POST['area_id'],
+			'Chart_Name'          =>	$_POST['chartName'],
+			'Chart_Type'          =>	$_POST['chartType'],
+			'Chart_Axis'          =>	$_POST['axis_placement'],
+			'Chart_Components'    =>	$component,
+			'Chart_Subcomponents' =>	$subcomponent,
+			'Chart_Status'        =>	1,						
+			'Chart_CreateDate'    =>	date('Y-m-d H:i:s')
+		);
+
 		$linkid = $_GET['edit'];
 		$result = $functionsObj->UpdateData('GAME_CHART', $chartdetails, 'Chart_ID', $linkid, 0);
 		if($result === true)
 		{
-			$_SESSION['msg']     = "Link updated successfully";
+			$_SESSION['msg']     = "Component chart updated successfully";
 			$_SESSION['type[0]'] = "inputSuccess";
 			$_SESSION['type[1]'] = "has-success";
 			header("Location: ".site_root."ux-admin/chartComp");
@@ -86,6 +86,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 			$type[0] = "inputError";
 			$type[1] = "has-error";
 		}
+	}
+	else
+	{
+		$msg     = "Field(s) can not be empty";
+		$type[0] = "inputError";
+		$type[1] = "has-error";
 	}
 }
 // Edit Siteuser
@@ -167,12 +173,39 @@ else
 }
 
 // Fetch Services list
-
-$area         = $functionsObj->SelectData(array(), 'GAME_AREA', array('Area_Delete=0'), 'Area_Name', '', '', '', 0);
 $game         = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), 'Game_Name', '', '', '', 0);
-$scenario     = $functionsObj->SelectData(array(), 'GAME_SCENARIO', array('Scen_Delete=0'), 'Scen_Name', '', '', '', 0);
-$component    = $functionsObj->SelectData(array(), 'GAME_COMPONENT', array('Comp_Delete=0'), 'Comp_Name', '', '', '', 0);
-$subcomponent = $functionsObj->SelectData(array(), 'GAME_SUBCOMPONENT', array('SubComp_Delete=0'),'SubComp_Name','','','',0);
-$formula      = $functionsObj->SelectData(array(), 'GAME_FORMULAS', array(), 'formula_title', '', '', '', 0);
+
+// if in edit mode and contain the chart id
+if(isset($_GET['edit']))
+{
+	$sqlscen = "SELECT s.Scen_ID,s.Scen_Name, Link_ID  
+	FROM `GAME_LINKAGE` INNER JOIN GAME_SCENARIO s ON Link_ScenarioID=s.Scen_ID
+	WHERE Link_GameID=".$chartdetails->Chart_GameID;
+	$scenario = $functionsObj->ExecuteQuery($sqlscen);
+	// echo "<pre>"; print_r($scenario); exit();
+	$sqlArea = "SELECT DISTINCT gls.SubLink_AreaID AS Area_ID, gls.SubLink_AreaName AS Area_Name FROM GAME_LINKAGE_SUB gls WHERE gls.SubLink_LinkID=(SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$chartdetails->Chart_GameID." AND Link_ScenarioID=".$chartdetails->Chart_ScenarioID.") ORDER BY Area_Name";	
+	$area = $functionsObj->ExecuteQuery($sqlArea);
+
+	$sqlcomp = "SELECT DISTINCT c.Comp_ID, c.Comp_Name, a.Area_Name
+	FROM `GAME_LINKAGE_SUB` ls INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID
+	INNER JOIN GAME_AREA a ON ls.SubLink_AreaID=a.Area_ID
+	WHERE SubLink_LinkID=(SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$chartdetails->Chart_GameID." AND Link_ScenarioID=".$chartdetails->Chart_ScenarioID.")	ORDER BY c.Comp_Name";	
+	$component = $functionsObj->ExecuteQuery($sqlcomp);
+
+	$sqlcomp = "SELECT DISTINCT s.SubComp_ID, c.Comp_Name, s.SubComp_Name, a.Area_Name
+	FROM `GAME_LINKAGE_SUB` ls INNER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID
+	INNER JOIN GAME_AREA a ON ls.SubLink_AreaID=a.Area_ID
+	INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID
+	WHERE SubLink_LinkID=(SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$chartdetails->Chart_GameID." AND Link_ScenarioID=".$chartdetails->Chart_ScenarioID.") ORDER BY s.SubComp_Name";	
+	$subcomponent = $functionsObj->ExecuteQuery($sqlcomp);
+}
+else
+{
+	$scenario     = $functionsObj->SelectData(array(), 'GAME_SCENARIO', array('Scen_Delete=0'), '', 'Scen_Name', '','', 0);
+	$component    = $functionsObj->SelectData(array(), 'GAME_COMPONENT', array('Comp_Delete=0'),'Comp_Name', '','','', 0);
+	$subcomponent = $functionsObj->SelectData(array(), 'GAME_SUBCOMPONENT', array('SubComp_Delete=0'),'SubComp_Name', '','','', 0);
+	$area         = $functionsObj->SelectData(array(), 'GAME_AREA', array('Area_Delete=0'),'', 'Area_Name','','', 0);
+}
+// $formula = $functionsObj->SelectData(array(), 'GAME_FORMULAS', array(), 'formula_title', '', '', '', 0);
 
 include_once doc_root.'ux-admin/view/chartComp/'.$file;
