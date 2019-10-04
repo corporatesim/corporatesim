@@ -170,8 +170,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 	array_shift($_POST);
 	// echo "<pre>"; print_r($_POST); exit();
 	// echo "<pre>"; print_r($skipOutput);	die('here: '.$skipOutput->Link_Enabled);
-	if($skipOutput->Link_Enabled < 1 || $skipOutput->endScenario > 0)
-	{
+	// if($skipOutput->Link_Enabled < 1 || $skipOutput->endScenario > 0){
 		foreach ($_POST as $input_key => $input_current)
 		{
 			$output_sql = " SELECT * FROM GAME_INPUT WHERE input_user=$userid AND input_key LIKE '".$input_key."'";
@@ -262,7 +261,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 		);
 		$result = $functionsObj->InsertData('GAME_SITE_USER_REPORT_NEW', $userreportdetails);
 		// report modification done
-	}
+	// }
 	// $sql = "SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$gameid." and Link_Order>
 	// (SELECT Link_Order FROM `GAME_LINKAGE`
 	// WHERE Link_GameID = ".$gameid." and Link_ScenarioID=".$scenid.")

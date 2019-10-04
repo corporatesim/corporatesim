@@ -1,4 +1,5 @@
 <?php
+// echo "<pre>";
 include_once '../config/settings.php'; 
 include_once '../config/functions.php'; 
 set_time_limit(300);
@@ -38,7 +39,7 @@ $charttype = $ResultchartDetails->Chart_Type;
 
 $arrayComp    = explode(',',$comp);
 $arraysubcomp = explode(',',$subcomp);
-	//print_r($arrayComp);
+// echo $sqlchart.'<br>'.$sqlexist.'<pre>'; print_r($arrayComp); print_r($arraysubcomp); exit();
 
 	//echo $object->num_rows;
 if($object->num_rows > 0){
@@ -76,6 +77,7 @@ foreach($dataChart as $key=>$val)
 
 }
 
+// echo "<pre>"; print_r($dataChart); print_r($labels); print_r($data); exit();
 # The data for the bar chart
 //$data = array(85, 156, 179, 211, 123, 189, 166);
 
@@ -108,7 +110,7 @@ $layer->setBorderColor(Transparent, barLighting(0.8, 1.15));
 $layer->setRoundedCorners();
 
 # Set the labels on the x axis.
-//$c->xAxis->setLabels($labels);
+$c->xAxis->setLabels($labels);
 
 # For the automatic y-axis labels, set the minimum spacing to 40 pixels.
 $c->yAxis->setTickDensity(40);
