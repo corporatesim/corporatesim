@@ -6,7 +6,7 @@ $functionsObj = new Model();
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 	if(!empty($_POST['Area_Name']))
 	{
-		$Area_Name = $_POST['Area_Name'];
+		$Area_Name = trim($_POST['Area_Name']);
 		if(strpos(trim($Area_Name),' ') || strpos(trim($Area_Name),':'))
 		{
 			// don't allow spaces, hence show error message
@@ -52,7 +52,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 	if(!empty($_POST['Area_Name'])){
 		$Area_Name = $_POST['Area_Name'];
 		$Area_ID   = $_POST['id'];
-		if(strpos(trim($Area_Name),' ') || strpos(trim($Area_Name),':'))
+		if(strpos($Area_Name,' ') || strpos(trim($Area_Name),':'))
 		{
 			// don't allow spaces, hence show error message
 			$msg     = 'Space and ":" in the Area Name is not allowed';
