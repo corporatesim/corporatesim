@@ -203,6 +203,10 @@ include_once 'includes/header.php';
 				{
 					// adding a confirmation box while click on proceed
 					$('#proceedBtn').on('click',function(){
+						// removing alert
+						window.location='<?php echo $url; ?>';
+						return false;
+						// remove above 2 lines to show alert
 						const swalWithBootstrapButtons = Swal.mixin({
 							customClass: {
 								confirmButton: 'btn btn-success',
