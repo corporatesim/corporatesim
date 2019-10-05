@@ -31,8 +31,11 @@ if(isset($_POST['Link_id']) && isset($_POST['Game_id']) && isset($_POST['Scen_id
 			$linkdetails = (object) array(
 				'SubLink_LinkID'             => $_POST['Link_id'],
 				'SubLink_AreaID'             => $row->SubLink_AreaID,
+				'SubLink_AreaName'           => $row->SubLink_AreaName,
 				'SubLink_CompID'             => $row->SubLink_CompID,
+				'SubLink_CompName'           => $row->SubLink_CompName,
 				'SubLink_SubCompID'          => $row->SubLink_SubCompID,
+				'SubLink_SubcompName'        => $row->SubLink_SubcompName,
 				'SubLink_LinkIDcarry'        => $row->SubLink_LinkIDcarry,
 				'SubLink_CompIDcarry'        => $row->SubLink_CompIDcarry,
 				'SubLink_SubCompIDcarry'     => $row->SubLink_SubCompIDcarry,
@@ -42,6 +45,7 @@ if(isset($_POST['Link_id']) && isset($_POST['Game_id']) && isset($_POST['Scen_id
 				'SubLink_Charts'             => $row->SubLink_Charts,
 				'SubLink_Type'               => $row->SubLink_Type,			
 				'SubLink_FormulaID'          => $row->SubLink_FormulaID,
+				'SubLink_FormulaExpression'  => $row->SubLink_FormulaExpression,
 				'SubLink_AdminCurrent'       => $row->SubLink_AdminCurrent,
 				'SubLink_AdminLast'          => $row->SubLink_AdminLast,
 				'SubLink_User'               => $row->SubLink_User,
@@ -57,9 +61,11 @@ if(isset($_POST['Link_id']) && isset($_POST['Game_id']) && isset($_POST['Scen_id
 				'SubLink_ViewingOrder'       => $row->SubLink_ViewingOrder,
 				'SubLink_LabelCurrent'       => $row->SubLink_LabelCurrent,
 				'SubLink_LabelLast'          => $row->SubLink_LabelLast,
+				'SubLink_FontStyle'          => $row->SubLink_FontStyle,
+				'SubLink_FontSize'           => $row->SubLink_FontSize,
 				'SubLink_InputFieldOrder'    => $row->SubLink_InputFieldOrder,
+				'SubLink_CreateDate'         => date('Y-m-d H:i:s'),
 				'SubLink_Status'             => 1,
-				'SubLink_CreateDate'         => date('Y-m-d H:i:s')
 			);
 			
 			$result = $funObj->InsertData('GAME_LINKAGE_SUB', $linkdetails, 0, 0);
