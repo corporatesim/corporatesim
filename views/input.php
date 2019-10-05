@@ -50,7 +50,13 @@ include_once 'includes/header.php';
 
   <a class=" hidden" href="#" id="continueBtn"><button type="button" class="btn btn-default">Play Mode</button></a>
 
-  <a class="" href="#" id="submitBtn"><button type="button" class="btn btn-danger">Submit</button></a>
+  <!-- adding execute formula button to right and hiding the submit button -->
+  <?php if($result->Link_SaveStatic == 1 && $result->Link_Branching < 1 ){ ?>
+    <a class="" href="#">
+      <button class="btn btn-danger" type="button" id="execute_input_new">Execute Formula</button>
+    </a>
+  <?php } ?>
+  <!-- <a class="" href="#" id="submitBtn"><button type="button" class="btn btn-danger">Submit</button></a> -->
 
 </div>
 <!-- left side buttons ends here -->
@@ -67,26 +73,30 @@ include_once 'includes/header.php';
       <button class="btn btn-success" type="button"><?php  echo "Scenario: ".$result->Scenario; ?></button>
     </a>
     
-    <?php if($result->Link_SaveStatic == 1 && $result->Link_Branching < 1 ){ ?>
+   <!--  <?php if($result->Link_SaveStatic == 1 && $result->Link_Branching < 1 ){ ?>
       <a class="rotateCompAnti" href="#" style="padding-left: 120px;">
         <button class="btn btn-danger" type="button" id="execute_input_new">Execute Formula</button>
       </a>
-    <?php } ?>
+      <?php } ?> -->
+      <!-- adding submit button to right and hiding the execute formula button -->
+      <a class="rotateCompAnti" href="#" style="padding-left: 120px;">
+        <button class="btn btn-danger" id="submitBtn" type="button">Submit</button>
+      </a>
 
-  </div>
-<?php } ?>
+    </div>
+  <?php } ?>
 
-<section id="video_player">
-  <div class="container manageContainer">
-    <div class="row">
-      <div class="clearfix"></div>
-      <form method="POST" action="" id="game_frm" name="game_frm" novalidate="">
-        <div class="col-sm-12 no_padding shadow">
-          <div class="col-sm-6  text-right" style="padding: 2px 2px 5px 0px;">
-            <div id="input_loader" style="float:left; color:#2A8037;"></div>
-            <button type="button" class="btn innerBtns hidden" name="execute_input" id="execute_input">Execute</button>
-            <button type="submit" name="submit" id="submit" class="btn innerBtns hidden" value="Submit">Submit</button>
-            <!-- <button type="button" name="submit" id="submitBtn" class="btn btn-primary hidden" value="Submit">Submit</button> -->
+  <section id="video_player">
+    <div class="container manageContainer">
+      <div class="row">
+        <div class="clearfix"></div>
+        <form method="POST" action="" id="game_frm" name="game_frm" novalidate="">
+          <div class="col-sm-12 no_padding shadow">
+            <div class="col-sm-6  text-right" style="padding: 2px 2px 5px 0px;">
+              <div id="input_loader" style="float:left; color:#2A8037;"></div>
+              <button type="button" class="btn innerBtns hidden" name="execute_input" id="execute_input">Execute</button>
+              <button type="submit" name="submit" id="submit" class="btn innerBtns hidden" value="Submit">Submit</button>
+              <!-- <button type="button" name="submit" id="submitBtn" class="btn btn-primary hidden" value="Submit">Submit</button> -->
       <!--<button class="btn innerBtns">Save</button>
         <button class="btn innerBtns">Submit</button>-->
       </div>

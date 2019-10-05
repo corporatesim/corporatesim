@@ -949,6 +949,30 @@ flip card
 	font-weight    : bold;
 }
 
+.submitShowRight {
+	margin-top     : 180px;
+	position       : fixed;
+	right          : -25px;
+	transition     : 0.3s;
+	padding        : 5px;
+	width          : 100px;
+	text-decoration: none;
+	font-size      : 20px;
+	color          : white;
+	border-radius  : 0 5px 5px 0;
+	font-weight    : bold;
+	border-radius  : 4px;
+}
+
+@media (max-width: 900px){
+	#submitShow {
+		display: block!important;
+	}
+	#submitShowRight {
+		display: none;
+	}
+}
+
 .timer_clock {
 	/*margin-top     : 120px;*/
 	position       : fixed;

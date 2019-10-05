@@ -15,7 +15,8 @@ include_once 'includes/header.php';
         	<div class="col-sm-3 col-md-2 text-center timer">hh:mm:ss</div>-->
           <div class="col-md-12 InnerPageHeader">
             <?php if(!empty($result)){ echo $result->Scenario ; }?>
-            <button type="button" name="submit" id="submitShow" class="btn btn-primary pull-right" value="Submit">Next</button>
+            <button type="button" name="submit" id="submitShow" class="btn btn-danger pull-right" value="Submit" style="display: none;">Submit</button>
+            <button type="button" name="submit" id="submitShowRight" class="btn btn-danger rotateCompAnti submitShowRight" value="Submit">Submit</button>
           </div>
           <form method="POST" action="" id="game_frm" name="game_frm">
             <input type="hidden" name="ScenarioId" id="ScenarioId" value="<?php echo $result->Link_ScenarioID; ?>">
@@ -939,7 +940,7 @@ include_once 'includes/header.php';
       $('#'+tabId).addClass('hidden');
     }
   });
-   $('#submitShow').on('click',function(){
+   $('#submitShow, #submitShowRight').on('click',function(){
     $('#submit').trigger('click');
   });
     // functionality to move forward and backward using 'go forward' and 'go back' buttons starts here
