@@ -1383,7 +1383,8 @@ include_once 'includes/header.php';
                 // }
                     }
                     // echo " onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' required ".$style_text."></input>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
-                    echo " onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." required ".$style_text."></input>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
+                    // echo " onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." required ".$style_text."></input>".(strlen($wrow) > $limit_char?substr($wrow,0,$limit_char).'...':$wrow)."</label></div>";
+                    echo " onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." required ".$style_text."></input>".$wrow."</label></div>";
                   } ?>
                 </div>
               <?php }
