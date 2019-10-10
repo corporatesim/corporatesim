@@ -2469,7 +2469,7 @@ function create_json_input_field()
       var data_element = $(this).parents('div.InlineBox').find('input.data_element');
       var sublink_id   = data_element.val();
       var genenrate_id = $(this).attr('id').split('_');
-      var value        = $("input[type='radio']:checked").val();
+      var value        = $("input[name='"+$(this).attr('id')+"']:checked").val();
     }
     else
     {
