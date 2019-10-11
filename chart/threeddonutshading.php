@@ -92,28 +92,35 @@ $c->set3D(20);
 # Demonstrates various shading modes
 if ($chartIndex == 0) {
     // $c->addTitle("Default Shading", "bold", 12, 0xffffff);
-    $c->addTitle("", "bold", 12, 0xffffff);
+	$c->addTitle($chartname, "bold", 12, 0xffffff);
 } else if ($chartIndex == 1) {
-    $c->addTitle("Flat Gradient", "bold", 12, 0xffffff);
-    $c->setSectorStyle(FlatShading);
+	$c->addTitle($chartname, "bold", 12, 0xffffff);
+    // $c->addTitle("Flat Gradient", "bold", 12, 0xffffff);
+	$c->setSectorStyle(FlatShading);
 } else if ($chartIndex == 2) {
-    $c->addTitle("Local Gradient", "bold", 12, 0xffffff);
-    $c->setSectorStyle(LocalGradientShading);
+	$c->addTitle($chartname, "bold", 12, 0xffffff);
+    // $c->addTitle("Local Gradient", "bold", 12, 0xffffff);
+	$c->setSectorStyle(LocalGradientShading);
 } else if ($chartIndex == 3) {
-    $c->addTitle("Global Gradient", "bold", 12, 0xffffff);
-    $c->setSectorStyle(GlobalGradientShading);
+	$c->addTitle($chartname, "bold", 12, 0xffffff);
+    // $c->addTitle("Global Gradient", "bold", 12, 0xffffff);
+	$c->setSectorStyle(GlobalGradientShading);
 } else if ($chartIndex == 4) {
-    $c->addTitle("Concave Shading", "bold", 12, 0xffffff);
-    $c->setSectorStyle(ConcaveShading);
+	$c->addTitle($chartname, "bold", 12, 0xffffff);
+    // $c->addTitle("Concave Shading", "bold", 12, 0xffffff);
+	$c->setSectorStyle(ConcaveShading);
 } else if ($chartIndex == 5) {
-    $c->addTitle("Rounded Edge", "bold", 12, 0xffffff);
-    $c->setSectorStyle(RoundedEdgeShading);
+	$c->addTitle($chartname, "bold", 12, 0xffffff);
+    // $c->addTitle("Rounded Edge", "bold", 12, 0xffffff);
+	$c->setSectorStyle(RoundedEdgeShading);
 } else if ($chartIndex == 6) {
-    $c->addTitle("Radial Gradient", "bold", 12, 0xffffff);
-    $c->setSectorStyle(RadialShading);
+	$c->addTitle($chartname, "bold", 12, 0xffffff);
+    // $c->addTitle("Radial Gradient", "bold", 12, 0xffffff);
+	$c->setSectorStyle(RadialShading);
 } else if ($chartIndex == 7) {
-    $c->addTitle("Ring Shading", "bold", 12, 0xffffff);
-    $c->setSectorStyle(RingShading);
+	$c->addTitle($chartname, "bold", 12, 0xffffff);
+    // $c->addTitle("Ring Shading", "bold", 12, 0xffffff);
+	$c->setSectorStyle(RingShading);
 }
 
 # Disable the sector labels by setting the color to Transparent
