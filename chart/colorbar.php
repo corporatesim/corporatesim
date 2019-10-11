@@ -92,7 +92,7 @@ $c = new XYChart(800, 300);
 
 # Set the plotarea at (70, 20) and of size 500 x 300 pixels, with transparent background and border
 # and light grey (0xcccccc) horizontal grid lines
-$c->setPlotArea(70, 20, 700, 250, Transparent, -1, Transparent, 0xcccccc);
+$c->setPlotArea(100, 20, 700, 230, Transparent, -1, Transparent, 0xcccccc);
 
 # Set the x and y axis stems to transparent and the label font to 12pt Arial
 $c->xAxis->setColors(Transparent);
@@ -116,7 +116,7 @@ $c->xAxis->setLabels($labels);
 $c->yAxis->setTickDensity(40);
 
 # Add a title to the y axis using dark grey (0x555555) 14pt Arial font
-$c->yAxis->setTitle("Y-Axis Title Placeholder", "arial.ttf", 14, 0x555555);
+$c->yAxis->setTitle($chartname, "arial.ttf", 14, 0x555555);
 
 # Output the chart
 header("Content-type: image/png");
