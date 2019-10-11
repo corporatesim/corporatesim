@@ -540,7 +540,7 @@ include_once 'includes/header.php';
                 $formulaValue     = 0;
               }
 
-              echo "<label class='scenariaLabel ".$hide_label."'>".$row1['LabelCurrent']."</label>";
+              echo "<label class='scenariaLabel ".$hide_label."' style='font-size: ".$row1['fontSize']."px; font-family: ".$row1['fontStyle'].";'>".$row1['LabelCurrent']."</label>";
               echo "<input $comp_data_id_key type='hidden' id='".$areaname."_linkcomp_".$row1['CompID']."' name='".$areaname."_linkcomp_".$row1['CompID']."' value='".$row1['SubLinkID']."'></input>";
 
           // getting the value here for iput field
@@ -742,7 +742,7 @@ include_once 'includes/header.php';
 
           echo "</div>";
           echo "<div class='InlineBox ".(($row1['InputFieldOrder']==3)?'hidden':'')."'>";
-          echo "<label class='scenariaLabel'>".$row1['LabelLast']."</label>";
+          echo "<label class='scenariaLabel' style='font-size: ".$row1['fontSize']."px; font-family: ".$row1['fontStyle'].";'>".$row1['LabelLast']."</label>";
           $sqllast = "SELECT * FROM `GAME_INPUT`
           WHERE input_user=".$userid." AND input_sublinkid = 
           (SELECT ls.SubLink_ID
@@ -1194,7 +1194,7 @@ include_once 'includes/header.php';
             {
               $hide_label = '';
             }
-            echo "<label class='scenariaLabel $hide_label'>".$row2['LabelCurrent']."</label>";
+            echo "<label class='scenariaLabel $hide_label' style='font-size: ".$row2['fontSize']."px; font-family: ".$row2['fontStyle'].";'>".$row2['LabelCurrent']."</label>";
             $subcomp_query = "SELECT * FROM GAME_INPUT WHERE input_user=$userid AND input_sublinkid='".$row2['SubLinkID']."' AND input_key LIKE '%subc_".$row2['SubCompID']."'";
           // echo $subcomp_query;
             $query_result = $functionsObj->ExecuteQuery($subcomp_query);
@@ -1406,7 +1406,7 @@ include_once 'includes/header.php';
         <?php
         echo "<div class='InlineBox ".(($row2['InputFieldOrder']==3)?'hidden':'')."'>";
               //echo "<label class='scenariaLabel'>Last</label>";
-        echo "<label class='scenariaLabel'>".$row2['LabelLast']."</label>";
+        echo "<label class='scenariaLabel' style='font-size: ".$row2['fontSize']."px; font-family: ".$row2['fontStyle'].";'>".$row2['LabelLast']."</label>";
         $sqllast = "SELECT * FROM `GAME_INPUT`
         WHERE input_user=".$userid." AND input_sublinkid = 
         (SELECT ls.SubLink_ID
