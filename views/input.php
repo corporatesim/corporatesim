@@ -1677,23 +1677,25 @@ include_once 'includes/header.php';
     },
     success: function(result) 
     {
+      // update the json at the same time, before value changed in database
+      if($('#'+key).parents('div').hasClass('align_radio'))
+      {
+        var value = $("input[name='"+key+"']:checked").val();
+        // console.log('input '+key+' and '+value);
+      }
+      else
+      {
+        var value = $("#"+key).val();
+      }
+      input_field_values[key].values = value;
+      // end of updating json
       <?php if($result->Link_SaveStatic == 1 && $result->Link_Branching < 1){ ?>
         $('.overlay').hide();
-        // update the json at the same time, before value changed in database
-        if($('#'+key).parents('div').hasClass('align_radio'))
-        {
-          var value = $("input[name='"+key+"']:checked").val();
-        }
-        else
-        {
-          var value = $("#"+key).val();
-        }
-        input_field_values[key].values = value;
-        // end of updating json
         console.log('value saved and json updated, static save enabled');
+        // console.log(input_field_values);
         return false;
       <?php } ?>
-
+      // console.log(input_field_values);
       $('.overlay').show();
       if(result.trim() == 'Yes')
       {
@@ -2465,47 +2467,47 @@ function create_json_input_field()
       // // console.log($(this).prev().attr('id'));
       if($(this).parents('div').hasClass('align_radio'))
       {
-      // if multiple choice or radio button
-      var data_element = $(this).parents('div.InlineBox').find('input.data_element');
-      var sublink_id   = data_element.val();
-      var genenrate_id = $(this).attr('id').split('_');
-      var value        = $("input[name='"+$(this).attr('id')+"']:checked").val();
-    }
-    else
-    {
-      var value        = $(this).val();
-      var data_element = $(this).parent('div.InlineBox').find('input.data_element');
-      var sublink_id   = data_element.val();
-      var genenrate_id = $(this).attr('id').split('_');
-    }
-
-    if(data_element.attr('data-input_key') || data_element.attr('data-input_id'))
-    {
-      var key_input = data_element.attr('data-input_key');
-      var id_input  = data_element.attr('data-input_id');
-    }
-    else
-    {
-      if(genenrate_id[1].indexOf('comp') != -1)
-      {
-        var key_input = genenrate_id[0]+'_comp_'+genenrate_id[2];
-        var id_input  = 0;
+        // if multiple choice or radio button
+        var data_element = $(this).parents('div.InlineBox').find('input.data_element');
+        var sublink_id   = data_element.val();
+        var genenrate_id = $(this).attr('id').split('_');
+        var value        = $("input[name='"+$(this).attr('id')+"']:checked").val();
       }
-      if(genenrate_id[1].indexOf('subc') != -1)
+      else
       {
-        var key_input = genenrate_id[0]+'_subc_'+genenrate_id[2];
-        var id_input  = 0;
+        var value        = $(this).val();
+        var data_element = $(this).parent('div.InlineBox').find('input.data_element');
+        var sublink_id   = data_element.val();
+        var genenrate_id = $(this).attr('id').split('_');
       }
-    }
 
-    input_field_values[$(this).attr('id')] = {
-      values         :value,
-      input_id       :id_input,
-      input_sublinkid:sublink_id,
-      input_key      :key_input,
-    };
+      if(data_element.attr('data-input_key') || data_element.attr('data-input_id'))
+      {
+        var key_input = data_element.attr('data-input_key');
+        var id_input  = data_element.attr('data-input_id');
+      }
+      else
+      {
+        if(genenrate_id[1].indexOf('comp') != -1)
+        {
+          var key_input = genenrate_id[0]+'_comp_'+genenrate_id[2];
+          var id_input  = 0;
+        }
+        if(genenrate_id[1].indexOf('subc') != -1)
+        {
+          var key_input = genenrate_id[0]+'_subc_'+genenrate_id[2];
+          var id_input  = 0;
+        }
+      }
+
+      input_field_values[$(this).attr('id')] = {
+        values         :value,
+        input_id       :id_input,
+        input_sublinkid:sublink_id,
+        input_key      :key_input,
+      };
+    }
   }
-}
 });
   // console.log(input_field_values);
 }
