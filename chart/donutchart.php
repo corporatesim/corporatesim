@@ -75,7 +75,7 @@ $c = new PieChart(600, 320, brushedSilverColor(), Transparent, 2);
 $c->setRoundedFrame(0xffffff, 20);
 
 # Add a title using 18pt Times New Roman Bold Italic font. #Set top/bottom margins to 8 pixels.
-$title = $c->addTitle("Donut Chart Demonstration", "timesbi.ttf", 18);
+$title = $c->addTitle($chartname, "timesbi.ttf", 18);
 $title->setMargin2(0, 0, 8, 8);
 
 # Add a 2 pixels wide separator line just under the title
