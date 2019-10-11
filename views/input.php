@@ -383,7 +383,7 @@ include_once 'includes/header.php';
               $DetailsChart   = "";
               $InputFields    = "hidden";
               $comp_length    = "col-md-12";
-              $ImageMaxWidth  = "30%";
+              $ImageMaxWidth  = "40%";
               break;
 
           // CkEditor - HalfLength
