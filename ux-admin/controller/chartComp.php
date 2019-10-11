@@ -70,8 +70,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 			'Chart_CreateDate'    =>	date('Y-m-d H:i:s')
 		);
 
-		$linkid = $_GET['edit'];
-		$result = $functionsObj->UpdateData('GAME_CHART', $chartdetails, 'Chart_ID', $linkid, 0);
+		$linkid             = $_GET['edit'];
+		$result             = $functionsObj->UpdateData('GAME_CHART', $chartdetails, 'Chart_ID', $linkid, 0);
+		$updateChartNameSql = " UPDATE `GAME_LINKAGE_SUB` SET `SubLink_ChartType` = '".$_POST['chartType']."' WHERE SubLink_ChartID =".$linkid;
+		$functionsObj->ExecuteQuery($updateChartNameSql);
+		
 		if($result === true)
 		{
 			$_SESSION['msg']     = "Component chart updated successfully";
