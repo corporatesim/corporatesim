@@ -105,14 +105,14 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 					else
 					{
 						$msg  = "Your account is pending for email id confirmation. Please confirm your email address by clicking on link sent to your email address.";
-						$type = "err";
+						$type = "alert alert-danger alert-dismissible";
 					}
 				}
 
 				else
 				{
 					$msg  = "Your account has been deactivated by siteadmin";
-					$type = "err";
+					$type = "alert alert-danger alert-dismissible";
 				}
 			}
 		}

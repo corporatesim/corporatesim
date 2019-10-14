@@ -20,6 +20,7 @@ if($_SESSION['username'] == NULL)
 	$_SESSION['type'] = $type;
 	header("Location:".site_root."login.php");
 }
+
 $functionsObj         = new Functions();
 $_SESSION['userpage'] = 'selectgame';
 $uid                  = $_SESSION['userid'];
@@ -41,34 +42,31 @@ $sql_status = "SELECT User_gameStatus,User_GameStartDate,User_GameEndDate FROM G
 $res        = $functionsObj->ExecuteQuery($sql_status);
 $res_status = $functionsObj->FetchObject($res);
 
-if($res_status->User_gameStatus == 1 || $res_status->User_GameStartDate > date('Y-m-d'))
-{
-	$disable = 'disabled';
-	if($res_status->User_GameStartDate > date('Y-m-d'))
-	{
-		$game_status = 'You have been assigned simulation game(s) from <span style="color:#3c763d;">'.date('d-m-Y',strtotime($res_status->User_GameStartDate)).'</span> TO <span style="color:#3c763d;">'.date('d-m-Y',strtotime($res_status->User_GameEndDate)).'</span>';
-	}
-	else
-	{
-		$game_status = 'Assigned simulations/games have been disabled or not assigned yet. If required, please contact the administration.';
-	}
-}
+// if($res_status->User_gameStatus == 1 || $res_status->User_GameStartDate > date('Y-m-d'))
+// {
+// 	$disable = 'disabled';
+// 	if($res_status->User_GameStartDate > date('Y-m-d'))
+// 	{
+// 		$game_status = 'You have been assigned simulation game(s) from <span style="color:#3c763d;">'.date('d-m-Y',strtotime($res_status->User_GameStartDate)).'</span> TO <span style="color:#3c763d;">'.date('d-m-Y',strtotime($res_status->User_GameEndDate)).'</span>';
+// 	}
+// 	else
+// 	{
+// 		$game_status = 'Assigned simulations/games have been disabled or not assigned yet. If required, please contact the administration.';
+// 	}
+// }
 
-else
-{
-	$sql = "SELECT *
-	FROM
-	`GAME_USERGAMES` UG
-	INNER JOIN
-	GAME_GAME G ON UG.`UG_GameID` = G.Game_ID
-	WHERE
-	G.Game_Delete = 0 AND UG.`UG_UserID` = ".$uid." group by UG.`UG_GameID`";
+// else
+// {
+// 	$sql = "SELECT gug.UG_GameStartDate AS startDate, gug.UG_GameEndDate AS endDate,gug.UG_ReplayCount, gg.* FROM GAME_USERGAMES gug LEFT JOIN GAME_GAME gg ON gg.Game_ID = gug.UG_GameID WHERE gug.UG_UserID = $uid";
 
-// echo $sql;
-// exit();
-	$result      = $functionsObj->ExecuteQuery($sql);
-	$game_status = 'Assigned simulations/games have been disabled or not assigned yet. If required, please contact the administration.';
-}
+// 	// echo $sql; exit();
+// 	$result      = $functionsObj->ExecuteQuery($sql);
+// 	$game_status = 'Assigned simulations/games have been disabled or not assigned yet. If required, please contact the administration.';
+// }
 
+// commenting the above old code, check the user disable/end date functionality later
+$sql = "SELECT gug.UG_GameStartDate AS startDate, gug.UG_GameEndDate AS endDate,gug.UG_ReplayCount, gg.* FROM GAME_USERGAMES gug LEFT JOIN GAME_GAME gg ON gg.Game_ID = gug.UG_GameID WHERE gug.UG_UserID = $uid";
+// echo $sql; exit();
+$result = $functionsObj->ExecuteQuery($sql);
 
 include_once doc_root.'views/selectgame.php';
