@@ -176,7 +176,7 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 			
 			$url = site_root."result.php?Link=".$result1->US_LinkID;
 
-			header("Location:".site_root."result.php?Game=".$gameid);
+			header("Location:".site_root."result.php?ID=".$gameid);
 			exit();
 		}
 	}

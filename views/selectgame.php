@@ -135,18 +135,13 @@ else
   $url       =  site_root."game_description.php?Game=".$row['Game_ID'];
   $returnUrl = "<a class='icons' href='game_description.php?Game=".$row['Game_ID']."' style='margin-left:27px;'><img src='images/play1.png' style='width:80px; height:80px;'></a>";
 }
-// echo date('d-m-Y h:i:s',strtotime($row['startDate'])).' '.date('d-m-Y h:i:s',strtotime($row['endDate'])).' '.$row['Game_ID'];die(' mksahu '.date('d-m-Y H:i:s'));
-// check for user game start and end date
-if((time() >= strtotime($row['startDate'])) && (time() <= strtotime($row['endDate'])))
-{
-  $url       =  site_root."game_description.php?Game=".$row['Game_ID'];
-  $returnUrl = "<a class='icons' href='game_description.php?Game=".$row['Game_ID']."' style='margin-left:27px;'><img src='images/play1.png' style='width:80px; height:80px;'></a>";
-}
-else
+
+// if date is not set accordingly then don't allow user to play the game
+// if( ((strtotime($row['startDate']) >= time()) && (strtotime($row['endDate']) >= time())) || ((strtotime($row['startDate']) <= time()) && (strtotime($row['endDate']) <= time())))
+if( (strtotime($row['startDate']) > time()) || (strtotime($row['endDate']) < time()) )
 {
   $url       = "'return false;'";
-  // generated error from above line to stop propogation
-  $returnUrl = "<a class='icons notInDateRange' href='#' style='margin-left:27px;' data-startdate='".date('d-m-Y',strtotime($row['startDate']))."' data-enddate='".date('d-m-Y',strtotime($row['endDate']))."'><img src='images/play1.png' style='width:80px; height:80px;'></a>";
+  $returnUrl = "<a class='icons notInDateRange' data-gamename='".$row['Game_Name']."' href='#' style='margin-left:27px;' data-startdate='".date('d-M-Y',strtotime($row['startDate']))."' data-endDate='".date('d-M-Y',strtotime($row['endDate']))."'><img src='images/Close.png' style='width:40px; height:40px; margin: 15px;'></a>";
 }
 ?>
 <div class="col-md-4 col-xs-12 col-sm-6 col-lg-3 reduce_width" title="<?php echo $row['Game_Name']; ?>">
@@ -196,7 +191,8 @@ else
     $(this).on('click',function(){
       var startdate = $(this).data('startdate');
       var enddate   = $(this).data('enddate');
-      Swal.fire('You are allowed to play this simulation from '+startdate+' to '+enddate);
+      var gamename  = $(this).data('gamename');
+      Swal.fire('You are allowed to play "'+gamename+'" from '+startdate+' to '+enddate);
     });
   });
 </script>
