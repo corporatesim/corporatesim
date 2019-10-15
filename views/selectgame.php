@@ -41,7 +41,7 @@ include_once 'includes/headerNav.php';
        $skipIntroObj = $functionsObj->SelectData(array (),'GAME_LINKAGE',$whereSkipIntro,'Link_Order', '', '1', '', 0 );
        // echo "<pre>"; print_r($functionsObj->FetchObject ( $skipIntroObj )); exit();
        if ($obj->num_rows > 0 || $skipIntroObj->num_rows > 0)
-       {    
+       {
         // if there are more than 1 scen id for single users, check in future reference
         $resultSkipIntro = $functionsObj->FetchObject ( $skipIntroObj );
         $result1         = $functionsObj->FetchObject ( $obj );
@@ -111,14 +111,10 @@ include_once 'includes/headerNav.php';
     $returnUrl  = "<a class='icons' href='".$url."' style='margin-left:40px;'><img src='images/report.png' style='width:80px; height:80px;'></a>";
     // echo "<pre>"; print_r($result1); echo "</pre>";
     // finding user company id if it is 21 then allow replay $result1->US_UserID
-    $compSql        = "SELECT User_companyid FROM GAME_SITE_USERS WHERE User_companyid = '21' AND User_id=".$result1->US_UserID;
-    $compObj        = $functionsObj->ExecuteQuery($compSql);
+    $compSql = "SELECT User_companyid FROM GAME_SITE_USERS WHERE User_companyid = '21' AND User_id=".$result1->US_UserID;
+    $compObj = $functionsObj->ExecuteQuery($compSql);
 
-    $replaySql      = "SELECT UG_ReplayCount FROM GAME_USERGAMES WHERE UG_GameID = ".$row['Game_ID']." AND UG_UserID=".$result1->US_UserID;
-    $replayObj      = $functionsObj->ExecuteQuery($replaySql);
-    $UG_ReplayCount = $functionsObj->FetchObject($replayObj);
-
-    if(($compObj->num_rows > 0) || ($UG_ReplayCount->UG_ReplayCount == '-1') || ($UG_ReplayCount->UG_ReplayCount > 0))
+    if(($compObj->num_rows > 0) || ($row->UG_ReplayCount == '-1') || ($row->UG_ReplayCount > 0))
     {
       $allowReplay = true;
     }
@@ -138,6 +134,19 @@ else
   // to complete div clickable..
   $url       =  site_root."game_description.php?Game=".$row['Game_ID'];
   $returnUrl = "<a class='icons' href='game_description.php?Game=".$row['Game_ID']."' style='margin-left:27px;'><img src='images/play1.png' style='width:80px; height:80px;'></a>";
+}
+// echo date('d-m-Y h:i:s',strtotime($row['startDate'])).' '.date('d-m-Y h:i:s',strtotime($row['endDate'])).' '.$row['Game_ID'];die(' mksahu '.date('d-m-Y H:i:s'));
+// check for user game start and end date
+if((time() >= strtotime($row['startDate'])) && (time() <= strtotime($row['endDate'])))
+{
+  $url       =  site_root."game_description.php?Game=".$row['Game_ID'];
+  $returnUrl = "<a class='icons' href='game_description.php?Game=".$row['Game_ID']."' style='margin-left:27px;'><img src='images/play1.png' style='width:80px; height:80px;'></a>";
+}
+else
+{
+  $url       = "'return false;'";
+  // generated error from above line to stop propogation
+  $returnUrl = "<a class='icons notInDateRange' href='#' style='margin-left:27px;' data-startdate='".date('d-m-Y',strtotime($row['startDate']))."' data-enddate='".date('d-m-Y',strtotime($row['endDate']))."'><img src='images/play1.png' style='width:80px; height:80px;'></a>";
 }
 ?>
 <div class="col-md-4 col-xs-12 col-sm-6 col-lg-3 reduce_width" title="<?php echo $row['Game_Name']; ?>">
@@ -182,3 +191,12 @@ else
   </div>
 </footer>
 <?php include_once 'includes/footer.php' ?>
+<script>
+  $('.notInDateRange').each(function(){
+    $(this).on('click',function(){
+      var startdate = $(this).data('startdate');
+      var enddate   = $(this).data('enddate');
+      Swal.fire('You are allowed to play this simulation from '+startdate+' to '+enddate);
+    });
+  });
+</script>
