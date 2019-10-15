@@ -1912,10 +1912,14 @@ $('.range').each(function(i,e){
     });
   <?php } ?>
   // while pressing the refresh button then redirect to same page and same element
+  var pathname    = window.location.pathname; // Returns path only (/path/example.html)
+  var current_url = window.location.href; // Returns full URL (https://example.com/path/example.html)
+  var origin      = window.location.origin; // Returns base URL (https://example.com)
   $('.refreshChart').each(function(){
     var redirect = $(this).data('redirect');
     $(this).on('click',function(){
       $(location).attr('href',redirect);
+      location.reload();
     });
   });
   // adding alert box while submitting the form to submit the inputs
