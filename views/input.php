@@ -498,7 +498,7 @@ include_once 'includes/header.php';
               // $ResultchartDetailsComp = $functionsObj->FetchObject($chartDetailscomp);
               // $charttypeComp          = $ResultchartDetailsComp->Chart_Type; 
              // adding a refresh icon
-              echo '<a class="refreshChart" data-redirect="'.site_root.'input.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row1['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
+              echo '<a class="refreshChart" data-redirect="'.site_root.'input.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row1['SubLinkID'].'" data-reload="ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row1['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
               ?>  
               <img class="graph_chart showImageModal comp_chart col-md-12" src="<?php echo site_root;?>chart/<?=$row1['Chart_Type']?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>" style="max-width:<?php echo $ImageMaxWidth; ?>;">
               <?php
@@ -1141,7 +1141,7 @@ include_once 'includes/header.php';
           {
             $input_lenght = 'col-md-12';
           }
-          echo "<div class='".$length." subCompnent ".$hide."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor']."; border:none;'";
+          echo "<div class='".$length." subCompnent ".$hide."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor'].";'";
           // if ($row2['ShowHide']==1){
           //   echo "style='display:none;'";
           // }
@@ -1165,7 +1165,7 @@ include_once 'includes/header.php';
             // $charttype          = $ResultchartDetails->Chart_Type;
            //print_r($dataChart);
            // adding a refresh icon
-            echo '<a class="refreshChart" data-redirect="'.site_root.'input.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row2['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
+            echo '<a class="refreshChart" data-redirect="'.site_root.'input.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row2['SubLinkID'].'" data-reload="ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row2['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
             ?>
             <!-- adding this section to make comp chart insert into subcomp as discussed -->
             <img class="graph_chart showImageModal subcomp_chart col-md-12" src="<?php echo site_root;?>chart/<?=$row2['Chart_Type']?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row2['ChartID']?>" style="max-width:<?php echo $sImageMaxWidth; ?>;">
@@ -1916,17 +1916,21 @@ $('.range').each(function(i,e){
   // var current_url = window.location.href; // Returns full URL (https://example.com/path/example.html)
   var origin      = window.location.origin; // Returns base URL (https://example.com)
   $('.refreshChart').each(function(){
-    var redirect = $(this).data('redirect');
     $(this).on('click',function(){
+      var redirect    = $(this).data('redirect');
+      var reload      = $(this).data('reload');
+      $(location).attr('href',redirect);
       var current_url = window.location.href;
       if(current_url == redirect)
       {
+        // console.log(pathname+' and '+origin+' and '+current_url);
         location.reload();
       }
       else
       {
+        //never come to else, coz already redirected and then compared above
         $(location).attr('href',redirect);
-        location.reload();
+        // location.reload();
       }
     });
   });
