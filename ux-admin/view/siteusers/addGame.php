@@ -38,12 +38,23 @@
 
 <div class="col-sm-10">
 	<form method="POST" action="" id="siteuser_frm" name="siteuser_frm">
-		<div class="row">
-			<div class="col-md-6">
-				<label for="name"><span class="alert-danger">*</span>Select Games</label>
-				<input type="hidden" name="id" value="<?php if(isset($_GET['edit'])){ echo $userdetails->User_id; } ?>">
+		<input type="hidden" name="User_ParentId" value="<?php echo $userData->User_ParentId;?>">
+		<input type="hidden" name="User_SubParentId" value="<?php echo $userData->User_SubParentId;?>">
+
+		<div class="row" id="sandbox-container">
+			<div class="col-md-4">
+				<label for="Game Duration"><span class="alert-danger">*</span>User Account Duration</label>
 			</div>
+			<!-- user account date reange -->
 			<div class="col-md-6">
+				<div class="input-daterange input-group" id="datepicker">
+					<input type="text" class="input-sm form-control" id="User_GameStartDate" name="User_GameStartDate" value="<?php echo $userData->User_GameStartDate; ?>" placeholder="Select Start Date" required readonly/>
+					<span class="input-group-addon">to</span>
+					<input type="text" class="input-sm form-control" id="User_GameEndDate" name="User_GameEndDate" value="<?php echo $userData->User_GameEndDate; ?>" placeholder="Select End Date" required readonly/>
+				</div>
+			</div>
+			<!-- select all checkBox -->
+			<div class="col-md-2">
 				<label for="name" class="checkbox containerCheckbox" id="select_all_checkbox">
 					<input type="checkbox" name="select_all" id="select_all">
 					Selecte All
@@ -51,80 +62,61 @@
 				</label>
 			</div>
 		</div>
+		<marquee behavior="alternate" direction="" onmouseover="this.stop();" onmouseout="this.start();"><span class='alert-danger'>Game Start-Date and End-Date Can Not Exceed User Account Duration (if you choose, then automatically adjusted)</span></marquee>
+		<hr/>
+		<!-- header row -->
+		<div class="row">
+			<div class="col-md-4">
+				<label for="name"><span class="alert-danger">*</span>Select Games</label>
+				<input type="hidden" name="id" value="<?php if(isset($_GET['edit'])){ echo $userdetails->User_id; } ?>">
+			</div>
+
+			<div class="col-md-3">
+				<label for="name"><span class="alert-danger">*</span>Choose Start Date</label>
+			</div>
+			<div class="col-md-3">
+				<label for="name"><span class="alert-danger">*</span>Choose End Date</label>
+			</div>
+			<div class="col-md-2">
+				<label for="name"><span class="alert-danger">*</span>Replay</label>
+			</div>
+		</div>
+		<!-- game data div -->
 		<div class="row">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<?php
-		//$sql = 'select name from STUDENT';
-		//$result = mysqli_query($connection_object,$sql);
+					<?php	while($row = mysqli_fetch_array($userGameResult)) { ?>
+						<div class="row">
+							<!-- game name -->
+							<div class='col-sm-4'>
+								<label class='checkbox containerCheckbox' <?php echo ($row['UG_ID'])?'style=background:#ccc;':''; ?> data-toggle="tooltip" title='"<?php echo $row['Game_Comments']; ?>"'>
+									<input type='checkbox' class='usergame' name='usergame[]' value='<?php echo $row['Game_ID'];?>' <?php echo ($row['UG_ID'])?'checked':''; ?> >
+									<?php echo ($row['Game_Elearning'])?$row['Game_Name'].' <b>(eLearning)</b>':$row['Game_Name'];?>
+									<span class='checkmark'></spam>
+									</label>
+								</div>
+								<!-- game date reange -->
+								<div class="col-sm-6" id="sandbox-container">
 
-					$id     = base64_decode($_GET['edit']);		
-					$result = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), '', '', '', '', 0);
-					//print_r($result);exit;
-					while($row = mysqli_fetch_array($result)) {
-					//print_r($row);exit;
-						$object = $functionsObj->SelectData(array(), 'GAME_USERGAMES', array('UG_UserID='.$id, 'UG_GameID='.$row['Game_ID']), '', '', '', '', 0);
+									<div class="input-daterange input-group" id="datepicker">
+										<input type="text" class="input-sm form-control" id="<?php echo $row['Game_ID'];?>_startdate" name="<?php echo $row['Game_ID'];?>_startdate" value="<?php echo date('Y-m-d',strtotime($row['UG_GameStartDate'])); ?>" placeholder="Select Start Date" required readonly data-startdate="<?php echo date('Y-m-d',strtotime($userData->User_GameStartDate)); ?>" data-enddate="<?php echo date('Y-m-d',strtotime($userData->User_GameEndDate)); ?>" />
 
-						echo "<div class='col-sm-4'><label class='checkbox containerCheckbox'";
-						if($object->num_rows > 0)
-						{
-							if($row['Game_Elearning'] == 1)
-							{
-								echo "style='background:#ccc;'><input type='checkbox' checked='checked' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name']." <b>(Elearning)</b>";
-							}else
-							{
-								echo "style='background:#ccc;'><input type='checkbox' checked='checked' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name'];
-							}
-						}
-						else{
+										<span class="input-group-addon">to</span>
 
-							if($row['Game_Elearning'] == 1)
-							{
-								echo "><input type='checkbox' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name']." <b>(eLearning)</b>";
-							}
-							else{
-								echo "><input type='checkbox' class='usergame' name='usergame[]' value='{$row['Game_ID']}'>" . $row['Game_Name'];
-							}
-						}
-						echo "<span class='checkmark'></label></div>";
-					}
-					?>
+										<input type="text" class="input-sm form-control" id="<?php echo $row['Game_ID'];?>_enddate" name="<?php echo $row['Game_ID'];?>_enddate" value="<?php echo date('Y-m-d',strtotime($row['UG_GameEndDate'])); ?>" placeholder="Select End Date" required readonly data-startdate="<?php echo date('Y-m-d',strtotime($userData->User_GameStartDate)); ?>" data-enddate="<?php echo date('Y-m-d',strtotime($userData->User_GameEndDate)); ?>" />
+									</div>
+
+								</div>
+								<!-- game replay count -->
+								<div class="col-md-2">
+									<input type="number" class="input-sm form-control" id="<?php echo $row['Game_ID'];?>_replayCount" name="<?php echo $row['Game_ID'];?>_replayCount" value="<?php echo ($row['UG_ReplayCount']>0)?$row['UG_ReplayCount']:0; ?>" placeholder="Replay" required min="-1"/>
+								</div>
+
+							</div>
+						<?php }	?>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="row" id="sandbox-container">
-			<div class="col-md-4">
-				<label for="Game Duration"><span class="alert-danger">*</span>Select Account Duration</label>
-			</div>
-				<!-- <div class="col-md-4">
-					<input type="text" name="User_GameStartDate" id="User_GameStartDate" class="form-control" placeholder="Select Start Date" required>
-				</div>
-				<div class="col-md-4">
-					<input type="text" name="User_GameEndDate" id="User_GameEndDate" class="form-control" placeholder="Select Start Date" required>
-				</div>
-				<br> -->
-				<?php
-				$res = $functionsObj->ExecuteQuery("SELECT User_GameStartDate,User_GameEndDate FROM GAME_SITE_USERS WHERE User_id=$id");
-				if ($res->num_rows > 0)
-				{
-					$date = $functionsObj->FetchObject($res);
-					// echo "<pre>"; print_r($date); exit;
-					$User_GameStartDate = $date->User_GameStartDate;
-					$User_GameEndDate   = $date->User_GameEndDate;
-				}
-				else
-				{
-					$User_GameStartDate = '';
-					$User_GameEndDate   = '';
-				}
-				?>
-				<div class="input-daterange input-group" id="datepicker">
-					<input type="text" class="input-sm form-control" id="User_GameStartDate" name="User_GameStartDate" value="<?php echo $User_GameStartDate; ?>" placeholder="Select Start Date" required readonly/>
-					<span class="input-group-addon">to</span>
-					<input type="text" class="input-sm form-control" id="User_GameEndDate" name="User_GameEndDate" value="<?php echo $User_GameEndDate; ?>" placeholder="Select End Date" required readonly/>
-				</div>
-			</div>
-			<br>
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="form-group text-center">
@@ -150,4 +142,3 @@
 	</div>
 	<div class="clearfix"></div>
 
-	
