@@ -55,7 +55,7 @@
 			</button>
 			<!-- <a style="padding: 2px 15px;" class="navbar-brand" href="<?php echo site_root;?>ux-admin/index">  -->
 				<?php if(isset($_SESSION['logo'])) { ?>
-					<a href="<?php echo site_root;?>"><img src="<?php echo site_root."enterprise/common/Logo/".$_SESSION['logo'];?>" width="300px" height="40px"/></a>
+					<a href="<?php echo site_root;?>"><img src="<?php echo site_root."enterprise/common/Logo/".$_SESSION['logo'];?>" width="300px" height="85px"/></a>
 
 				<?php } else { ?>
 					<a href="<?php echo site_root;?>"><img src="<?php echo site_root."images/logo-main.png";?>"  width="40px"/></a>
