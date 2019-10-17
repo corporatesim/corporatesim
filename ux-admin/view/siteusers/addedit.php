@@ -1,3 +1,4 @@
+<!-- <?php // echo "<pre>"; print_r($userdetails); exit(); ?> -->
 <style type="text/css">
 	span.alert-danger {
 		background-color: #ffffff;
@@ -48,28 +49,22 @@
 					<div class="form-group">
 						<input type="text" name="fname"
 						value="<?php if(!empty($userdetails->User_fname)) echo $userdetails->User_fname; ?>"class="form-control" 
-						placeholder="First Name" required>
+						placeholder="First Name" required >
 					</div>
 				</div>
 				<div class="col-sm-6">
 					<div class="form-group">
-						<input type="text" name="lname" class="form-control"
-						placeholder="Last Name" value="<?php if(!empty($userdetails->User_lname)) echo $userdetails->User_lname; ?>"
-						required>
+						<input type="text" name="lname" class="form-control" placeholder="Last Name" value="<?php if(!empty($userdetails->User_lname)) echo $userdetails->User_lname; ?>" required >
 					</div>
 				</div>
 				<div class="col-sm-6">
 					<div class="form-group">
-						<input type="text" name="username" class="form-control"
-						placeholder="User Name" value="<?php if(!empty($userdetails->User_username)) echo $userdetails->User_username; ?>"
-						required>
+						<input type="text" name="username" class="form-control" placeholder="User Name" value="<?php if(!empty($userdetails->User_username)) echo $userdetails->User_username; ?>" required >
 					</div>
 				</div>
 				<div class="col-sm-6">
 					<div class="form-group">
-						<input type="text" name="company" class="form-control"
-						placeholder="Company Name" value="<?php if(!empty($userdetails->User_companyid)) echo $userdetails->User_companyid; ?>"
-						>
+						<input type="text" name="company" class="form-control" placeholder="Company Name" value="<?php if(!empty($userdetails->User_companyid)) echo $userdetails->User_companyid; ?>">
 					</div>
 				</div>			
 			</div>
@@ -80,9 +75,7 @@
 					<div class="form-group">
 						<div class="input-group">
 							<span class="input-group-addon">+91</span>
-							<input type="text" name="mobile" id="mobile" class="form-control"
-							placeholder="Mobile Number" value="<?php if(!empty($userdetails->User_mobile)) echo $userdetails->User_mobile; ?>"
-							required>
+							<input type="text" name="mobile" id="mobile" class="form-control" placeholder="Mobile Number" value="<?php if(!empty($userdetails->User_mobile)) echo $userdetails->User_mobile; ?>" required>
 						</div>
 						<div class="contact_error"></div>
 					</div>
@@ -90,10 +83,7 @@
 				<div class="col-sm-6">
 					<label for="email"><span class="alert-danger">*</span>E-mail</label>
 					<div class="form-group">
-						<input type="email" name="email" id="email" class="form-control"
-						placeholder="E-mail"
-						value="<?php  if(!empty($userdetails->User_email)) echo $userdetails->User_email; ?>"
-						required>
+						<input type="email" name="email" id="email" class="form-control" placeholder="E-mail" value="<?php  if(!empty($userdetails->User_email)) echo $userdetails->User_email; ?>" required>
 					</div>
 				</div>
 			</div>
@@ -122,14 +112,21 @@
 				<input type="hidden" name="SubEnterpriseName" id="SubEnterpriseName">
 			</div><br>
 		</div>
+
+		<div class="col-sm-6" id="sandbox-container">
+			<label for="Game Duration"><span class="alert-danger">*</span>Account Duration</label>
+			<div class="input-daterange input-group" id="datepicker">
+				<input type="text" class="input-sm form-control" id="User_GameStartDate" name="User_GameStartDate" value="<?php  if(!empty($userdetails->User_GameStartDate)) echo $userdetails->User_GameStartDate; ?>" placeholder="Select Start Date" required readonly/>
+				<span class="input-group-addon">to</span>
+				<input type="text" class="input-sm form-control" id="User_GameEndDate" name="User_GameEndDate" value="<?php  if(!empty($userdetails->User_GameEndDate)) echo $userdetails->User_GameEndDate; ?>" placeholder="Select End Date" required readonly/>
+			</div>
+		</div>
+
 		<?php if(isset($_GET['edit'])){ ?>
 			<div class="col-sm-6">
 				<label for="password"><span class="alert-danger">*</span>Password</label>
 				<div class="form-group">
-					<input type="text" name="password" id="password" class="form-control"
-					placeholder="E-mail"
-					value="<?php  if(!empty($userauth->Auth_password)) echo $userauth->Auth_password; ?>"
-					required>
+					<input type="text" name="password" id="password" class="form-control"	placeholder="password" value="<?php  if(!empty($userauth->Auth_password)) echo $userauth->Auth_password; ?>" required>
 				</div>
 			</div>
 		<?php } ?>
@@ -249,17 +246,13 @@
 //	}
 //});
 
-$('#siteuser_btn').click( function(){
-//	if($("#siteuser_frm").valid()){		
-	$( "#siteuser_sbmit" ).trigger( "click" );
-//	}
-});
+// $('#siteuser_btn').click( function(){
+// 	$( "#siteuser_sbmit" ).trigger( "click" );
+// });
 
-$('#siteuser_btn_update').click( function(){
-//	if($("#siteuser_frm").valid()){
-	$( "#siteuser_update" ).trigger( "click" );
-//	}
-});
+// $('#siteuser_btn_update').click( function(){
+// 	$( "#siteuser_update" ).trigger( "click" );
+// });
 
 });
 // -->

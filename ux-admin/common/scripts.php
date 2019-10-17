@@ -41,6 +41,7 @@ $("#selectAll").change(function () {
 <script src="<?php echo site_root; ?>assets/js/datetimepicker/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
 	<!--
+		// $enableEndDate = 'enableEndDate';
 		if('<?php echo $enableEndDate; ?>')
 		{
 			$('#sandbox-container input').datepicker({

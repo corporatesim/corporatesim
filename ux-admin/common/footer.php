@@ -128,19 +128,38 @@
 	});
 
 	$('#siteuser_btn').click( function(){
-		$( "#siteuser_sbmit" ).trigger( "click" );
+		if(checkDate())
+		{
+			$( "#siteuser_sbmit" ).trigger( "click" );
+		}
 	});
 	$('#siteuser_btn_update').click( function(){
+		if(checkDate())
+		{
+			$("#siteuser_update").trigger("click");
+		}
+	});
+
+	function checkDate()
+	{
 		var User_GameStartDate = $('#User_GameStartDate').val();
 		var User_GameEndDate   = $('#User_GameEndDate').val();
-		if(User_GameEndDate < User_GameStartDate)
+		if(User_GameEndDate.length < 1 || User_GameStartDate.length < 1)
+		{
+			alert('Date Is Mandatory');
+			return false;
+		}
+		else if(User_GameEndDate < User_GameStartDate)
 		{
 			alert('End date must be greate than start date.');
 			return false;
 		}
+		else
+		{
+			return true;
+		}
 
-		$("#siteuser_update").trigger("click");
-	});
+	}
 	// changing back ground color of checkbox for checked and not checked
 	$('.usergame').each(function(index, el)
 	{
@@ -187,7 +206,7 @@
 				//alert(enddate);
 				if(fromdate == '' || enddate == '')
 				{//alert("empty");
-			var yes = confirm("Startdate and Enddate is empty,This will download all data");
+			var yes = confirm("Start Date and End Date is empty,This will download all data");
 			if(yes)
 			{
 				return true;

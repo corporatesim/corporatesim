@@ -31,6 +31,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		// if 'game end date' is greater than 'user account end date' then 'game end date' == 'user account end date'
 		$enddate   = (strtotime($_POST[$usergame[$i].'_enddate']) > strtotime($User_GameEndDate))?$User_GameEndDate:$_POST[$usergame[$i].'_enddate'];
 
+		if(strtotime($_POST[$usergame[$i].'_enddate']) < strtotime($_POST[$usergame[$i].'_startdate']))
+		{
+			$enddate = $User_GameEndDate;
+		}
+
 		$gamedetails = (object) array(
 			'UG_UserID'        => $userid,
 			'UG_GameID'        => $usergame[$i],

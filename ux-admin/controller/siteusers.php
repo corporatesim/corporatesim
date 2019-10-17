@@ -4,9 +4,9 @@ require_once doc_root.'includes/PHPExcel.php';
 $functionsObj = new Model();
 
 // gameSite details
-$object   = $functionsObj->SelectData(array(), 'GAME_SITESETTINGS', array('id=1'), '', '', '', '', 0);
-$sitename = $functionsObj->FetchObject($object);
-
+$object        = $functionsObj->SelectData(array(), 'GAME_SITESETTINGS', array('id=1'), '', '', '', '', 0);
+$sitename      = $functionsObj->FetchObject($object);
+$enableEndDate = 'enableEndDate';
 // select Enterprise details
 $object = $functionsObj->SelectData(array('Enterprise_ID','Enterprise_Name'), 'GAME_ENTERPRISE', array('Enterprise_Status=0'), '', '', '', '', 0);
 if($object->num_rows > 0);
@@ -58,7 +58,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 		$User_ParentId = -1;
 	}
 
- if($_POST['SubEnterprise'])
+	if($_POST['SubEnterprise'])
 	{
 		$User_SubParentId = $_POST['SubEnterprise'];
 	}
@@ -68,20 +68,22 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 	}
 
 	$userdetails = (object) array(
-		'User_fname'       =>	$_POST['fname'],
-		'User_lname'       =>	$_POST['lname'],
-		'User_mobile'      =>	$_POST['mobile'],
-		'User_email'       =>	$_POST['email'],
-		'User_companyid'   =>	$_POST['company'],
-		'User_username'    =>	$_POST['username'],
-		'User_Role'        =>	$User_Role,
-		'User_ParentId'    =>	$User_ParentId,
-		'User_SubParentId' =>	$User_SubParentId,
-		'User_csv_status'  =>	2,			
-		'User_datetime'    =>	date('Y-m-d H:i:s')
+		'User_fname'         =>	$_POST['fname'],
+		'User_lname'         =>	$_POST['lname'],
+		'User_mobile'        =>	$_POST['mobile'],
+		'User_email'         =>	$_POST['email'],
+		'User_companyid'     =>	$_POST['company'],
+		'User_username'      =>	$_POST['username'],
+		'User_GameStartDate' =>	$_POST['User_GameStartDate'],
+		'User_GameEndDate'   =>	$_POST['User_GameEndDate'],
+		'User_Role'          =>	$User_Role,
+		'User_ParentId'      =>	$User_ParentId,
+		'User_SubParentId'   =>	$User_SubParentId,
+		'User_csv_status'    =>	2,			
+		'User_datetime'      =>	date('Y-m-d H:i:s')
 	);
 	//print_r($userdetails); exit();
-	if( !empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['mobile'])	&& !empty($_POST['email']) )
+	if( !empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']) && !empty($_POST['mobile'])	&& !empty($_POST['email']) && !empty($_POST['User_GameStartDate']) && !empty($_POST['User_GameEndDate']))
 	{
 		$where  = array("`User_email` ='".$_POST['email']."' OR `User_username` ='".$_POST['username']."'");
 		$object = $functionsObj->SelectData(array(), 'GAME_SITE_USERS', $where, '', '', '', '', 0);
@@ -188,7 +190,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		$User_ParentId = -1;
 	}
 
- if($_POST['SubEnterprise'])
+	if($_POST['SubEnterprise'])
 	{
 		$User_SubParentId = $_POST['SubEnterprise'];
 	}
@@ -197,19 +199,21 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		$User_SubParentId = -2;
 	}
 	$userdetails = (object) array(
-		'User_fname'       =>	$_POST['fname'],
-		'User_lname'       =>	$_POST['lname'],
-		'User_mobile'      =>	$_POST['mobile'],
-		'User_email'       =>	$_POST['email'],
-		'User_companyid'   =>	$_POST['company'],
-		'User_username'    =>	$_POST['username'],
-		'User_Role'        =>	$User_Role,
-		'User_ParentId'    =>	$User_ParentId,
-		'User_SubParentId' =>	$User_SubParentId,			
-		'User_datetime'    =>	date('Y-m-d H:i:s')
+		'User_fname'         =>	$_POST['fname'],
+		'User_lname'         =>	$_POST['lname'],
+		'User_mobile'        =>	$_POST['mobile'],
+		'User_email'         =>	$_POST['email'],
+		'User_companyid'     =>	$_POST['company'],
+		'User_username'      =>	$_POST['username'],
+		'User_GameStartDate' =>	$_POST['User_GameStartDate'],
+		'User_GameEndDate'   =>	$_POST['User_GameEndDate'],
+		'User_Role'          =>	$User_Role,
+		'User_ParentId'      =>	$User_ParentId,
+		'User_SubParentId'   =>	$User_SubParentId,			
+		'User_datetime'      =>	date('Y-m-d H:i:s')
 	);
 	//print_r($userdetails); exit();
-	if( !empty($_POST['fname']) && !empty($_POST['lname'])  && !empty($_POST['mobile'])	&& !empty($_POST['email']) && !empty($_POST['username']))
+	if( !empty($_POST['fname']) && !empty($_POST['lname'])  && !empty($_POST['mobile'])	&& !empty($_POST['email']) && !empty($_POST['username']) && !empty($_POST['User_GameStartDate']) && !empty($_POST['User_GameEndDate']) )
 	{
 		$uid = $_POST['id'];
 
@@ -332,7 +336,7 @@ if(isset($_GET['edit']))
 
 	$sql         = " SELECT gu.*,gs.* FROM `GAME_SITE_USERS`gu LEFT JOIN GAME_SUBENTERPRISE gs ON gs.SubEnterprise_ID=gu.User_SubParentId WHERE User_id = $uid ";
 	$subObj      = $functionsObj->ExecuteQuery($sql);
-  $subObjRes   = $functionsObj->FetchObject($subObj);
+	$subObjRes   = $functionsObj->FetchObject($subObj);
 	$url         = site_root."ux-admin/siteusers";
 	$file        = 'addedit.php';
 }
