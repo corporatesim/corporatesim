@@ -468,13 +468,13 @@ include_once 'includes/header.php';
               }
               else
               {
-            // it means component is hide from admin end
+                // it means component is hide from admin end
                 $showComp    = 'hidden';
-            // add a class to component div, to find wheather we have to show the div after execute or not
+                // add a class to component div, to find wheather we have to show the div after execute or not
                 $hideByAdmin = 'hideByAdmin';
               }
               echo "<div class='".$comp_length." scenariaListingDiv componentBranching ".$showComp." ".$hideByAdmin."' style='background:".$row1['BackgroundColor']."; color:".$row1['TextColor'].";' id='branchComp_".$row1['SubLinkID']."'>";
-          // adding div to create overlay, to prevent clicking after execute or click on save
+              // adding div to create overlay, to prevent clicking after execute or click on save
               echo "<div class='branchingOverlay' id='overlay_".$row1['SubLinkID']."'>";
             }
             else
@@ -689,13 +689,13 @@ include_once 'includes/header.php';
                     {
                       $hideDefaultComp = '';
                     }
-              // 'makeDefaultChecked' is the array key for default selection from admin and it's value is the text of the option for the particular question i.e. $wrow
-              // title-removethis should be replaced with title when we need to show the title
+                    // 'makeDefaultChecked' is the array key for default selection from admin and it's value is the text of the option for the particular question i.e. $wrow
+                    // title-removethis should be replaced with title when we need to show the title
                     echo "<div class='col-md-12 align_radio text-left ".$hideDefaultComp."' data-toggle='tooltip' title-removethis='".$wrow."'><label style='min-width:".$comp_label_min_width."; display: inline-table; cursor: pointer;'><input type='radio' value='".$wrow_value."' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' required ";
-              // if db value is matched from option value then checked that option, otherwise make admin choice selected
+                    // if db value is matched from option value then checked that option, otherwise make admin choice selected
                     if($flag && count($mChoice_details)>2)
                     {
-              // echo (($value == $wrow_value)?"checked":($makeDefaultChecked==$wrow)?"checked":($continue==1)?"checked":'');
+                      // echo (($value == $wrow_value)?"checked":($makeDefaultChecked==$wrow)?"checked":($continue==1)?"checked":'');
                       if($value == $wrow_value)
                       {
                         $flag = false;
@@ -708,11 +708,11 @@ include_once 'includes/header.php';
                         echo 'checked';
                       }
 
-              // else
-              // { 
-              //   // $flag = false;
-              //   echo 'checked';
-              // }
+                      // else
+                      // { 
+                      //   // $flag = false;
+                      //   echo 'checked';
+                      // }
                     }
                     // echo " $style_text onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $type $style_text></input>".(strlen($wrow) > $comp_limit_char?substr($wrow,0,$comp_limit_char).'...':$wrow)."</label></div>";
                     // uncomment the above code if we need to use the limit and also $comp_limit_char must be uncommented
@@ -725,7 +725,7 @@ include_once 'includes/header.php';
 
               else
               {
-          // $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
+                // $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
                 echo "<input type='text' value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' ";
                 echo "onchange='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $style_text></input>";
               }
@@ -1629,7 +1629,8 @@ include_once 'includes/header.php';
     SaveCurrent(sublinkid,key,value);
 
     <?php if($result->Branching){ ?>
-      componentBranchingDivId = 'branchComp_'+sublinkid;
+      componentBranchingDivId       = 'branchComp_'+sublinkid;
+      componentBranchingDivIdStatus = 'branchComp_'+sublinkid;
     <?php } ?>
   }
 
@@ -1882,7 +1883,8 @@ $('.range').each(function(i,e){
     $('#backForwardDiv').toggleClass('hidden');
   });
 
-  componentBranchingDivId = "";
+  componentBranchingDivId       = "";
+  componentBranchingDivIdStatus = "";
   // writing this to hide the already played component by user
   <?php if($result->Branching){ 
     $hideShowSql = "SELECT input_sublinkid,input_showComp FROM GAME_INPUT WHERE input_user=$userid AND input_showComp>0 AND input_sublinkid IN (SELECT SubLink_ID FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID=$linkid)";
@@ -1903,7 +1905,7 @@ $('.range').each(function(i,e){
     $('div.scenariaListingDiv').each(function(){
       if($(this).hasClass('hidden'))
       {
-        $(this).find('input').prop('required',false);
+        $(this).find('input[type!="radio"]').prop('required',false);
       }
       else
       {
@@ -2595,36 +2597,41 @@ function update_json_data(id,key,formula_json_expcomp,formula_json_expsubc,input
         // console.log(componentBranchingDivId);
         // if('branchComp_'+result[index].input_sublinkid == componentBranchingDivId)
         // {
-        // trigger ajax for component branching
-        $.ajax({
-          url    :  "includes/ajax/ajax_update_execute_input.php",
-          type   : "POST",
-          data   : 'action=componentBranching&param='+componentBranchingDivId+'&name=mohit',
-          success: function( branchResult ){
-            if(branchResult != 'no')
-            {
-            // result is=> (hide)branchComp_sublinkid,overlay_sublinkid,branchComp_sublinkid(show)
-            var resultBranch = branchResult.split(',');
-            var hideComp     = resultBranch[0];
-            var overlayComp  = resultBranch[1];
-            var showComp     = resultBranch[2];
-            // remove rquired from hidden and add required to non hidden comp/subcomp
-            $('div.scenariaListingDiv').each(function(){
-              $(this).find('input').prop('required',false);
-            });
-            $('#'+hideComp).addClass('hidden');
-            if(!($('#'+showComp).hasClass('hideByAdmin')))
-            {
-              $('#'+showComp).removeClass('hidden');
-              $('#'+showComp).find('input').prop('required',true);
+        // trigger ajax for component branching only once
+        if(componentBranchingDivIdStatus == componentBranchingDivId)
+        {
+          componentBranchingDivIdStatus = 'stopAjax';
+          // trigger ajax for component branching
+          $.ajax({
+            url    :  "includes/ajax/ajax_update_execute_input.php",
+            type   : "POST",
+            data   : 'action=componentBranching&param='+componentBranchingDivId+'&name=mohit',
+            success: function( branchResult ){
+              if(branchResult != 'no')
+              {
+                // result is=> (hide)branchComp_sublinkid,overlay_sublinkid,branchComp_sublinkid(show)
+                var resultBranch = branchResult.split(',');
+                var hideComp     = resultBranch[0];
+                var overlayComp  = resultBranch[1];
+                var showComp     = resultBranch[2];
+                // remove rquired from hidden and add required to non hidden comp/subcomp
+                $('div.scenariaListingDiv').each(function(){
+                  $(this).find('input').prop('required',false);
+                });
+                $('#'+hideComp).addClass('hidden');
+                if(!($('#'+showComp).hasClass('hideByAdmin')))
+                {
+                  $('#'+showComp).removeClass('hidden');
+                  $('#'+showComp).find('input').prop('required',true);
+                }
+              }
+              else
+              {
+                console.log('No component branching found, for the selected component');
+              }
             }
-          }
-          else
-          {
-            console.log('No component branching found, for the selected component');
-          }
+          });
         }
-      });
         // }
       <?php } ?>
     });
