@@ -883,7 +883,7 @@ include_once 'includes/header.php';
             <br>
             <div class="">
               <button type="button" class="btn btn-primary pull-right" id="goForward">Go Forward</button>
-              <button type="button" class="btn btn-primary pull-right hidden" id="submitBtn2">Next</button>
+              <button type="button" class="btn btn-primary pull-right hidden" id="submitBtn2">Submit</button>
               <button type="button" class="btn btn-primary" id="goBackward">Go Back</button>
             </div>
             <!-- end of adding next and previous buttons -->
