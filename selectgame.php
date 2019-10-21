@@ -14,7 +14,7 @@ if($_POST['action'] == 'check_loggedIn_status')
 // if user is logout then redirect to login page as we're unsetting the username from session
 if($_SESSION['username'] == NULL)
 {
-	$msg              = "Please login form your account.";
+	$msg              = "Please login from your account.";
 	$_SESSION['msg']  = $msg;
 	$type             = "alert alert-danger alert-dismissible";
 	$_SESSION['type'] = $type;

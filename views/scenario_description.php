@@ -131,6 +131,7 @@ include_once 'includes/header.php';
 										//echo "'></iframe> ";
 											if($row['ScenVdo_Type'] < 1)
 											{
+												// url 
 												echo "<video width='100%' height='240' controls><source src='";
 												echo $row['ScenVdo_Name'];
 												//videos/example.mp4
@@ -138,6 +139,7 @@ include_once 'includes/header.php';
 											}
 											else
 											{
+												// embed 
 												echo base64_decode($row['ScenVdo_Name']);
 											}
 
