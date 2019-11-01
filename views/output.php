@@ -1,9 +1,10 @@
-<style>
- input[type=text] {
-  border-radius: 12px;
-  /*border       : none;*/
-  text-align   : center !important; 
-}
+<!-- <?php // echo "<pre>"; print_r($result); exit(); ?> -->
+  <style>
+   input[type=text] {
+    border-radius: 12px;
+    /*border       : none;*/
+    text-align   : center !important; 
+  }
 </style>
 <?php 
 include_once 'includes/header.php'; 
@@ -21,7 +22,11 @@ include_once 'includes/header.php';
           <form method="POST" action="" id="game_frm" name="game_frm">
             <input type="hidden" name="ScenarioId" id="ScenarioId" value="<?php echo $result->Link_ScenarioID; ?>">
             <input type="hidden" name="LinkId" id="LinkId" value="<?php echo ($result->Link_ID)?$result->Link_ID:$linkid; ?>">
-            <div class="col-sm-12 no_padding shadow">
+            <?php if($result->BackgroundImage){ ?>
+              <div class="col-sm-12 no_padding shadow" style="background: url(<?php echo site_root.'images/'.$result->BackgroundImage;?>);">
+              <?php } else { ?>
+                <div class="col-sm-12 no_padding shadow">
+                <?php } ?>
           <!--
             <div class="col-sm-6 ">
               <span style="margin-right:20px;"><a href="<?php echo $gameurl; ?>" target="_blank" class="innerPageLink">Game Description</a></span>
@@ -820,6 +825,7 @@ include_once 'includes/header.php';
                   {
                     $opValue = $row2['outputValue'];
                   }
+
                   echo "<div class='".$length." subCompnent ".$hidden."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor'].";'>";
                   echo "<div class='col-sm-2 ".$width." regular text-center ".$SubcomponentName."' style='font-size: ".$row2['fontSize']."px; font-family: ".$row2['fontStyle'].";'>";
                   echo $row2['SubComp_Name'];

@@ -85,6 +85,7 @@
 							<th>Header</th>
 							<th class="no-sort">Upload Option</th>
 							<th>I/P Button Status</th>
+							<th>Background Image</th>
 							<th class="no-sort">Action</th>
 						</tr>
 					</thead>
@@ -110,6 +111,7 @@
 												<td>
 													<?php echo ($row->Scen_InputButton == 0)?'Hidden':'Show';?>
 												</td>
+												<td><?php echo ($row->Scen_Image)?"<img src='".site_root."/images/".$row->Scen_Image."' width='90'>":'No Image';?></td>
 												<td class="text-center">
 													<?php if($row->Scen_Status == 0){?>
 														<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Scen_ID; ?>"

@@ -15,9 +15,45 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 	{
 		$Scen_Branching = 0;
 	}
-	$gamedetails = (object) array(
+	if(isset($_FILES['Scen_Image']['name']) && !empty($_FILES['Scen_Image']['name']))
+	{
+		$errors     = array();
+		$file_name  = base64_encode($_FILES['Scen_Image']['name']);
+		$file_size  = $_FILES['Scen_Image']['size'];
+		$file_tmp   = $_FILES['Scen_Image']['tmp_name'];
+		$file_type  = $_FILES['Scen_Image']['type'];
+		$ext        = explode('.',$_FILES['Scen_Image']['name']);
+		$file_ext   = strtolower(end($ext));
+		$Scen_Image = $file_name;
+		$expensions = array("jpeg","jpg","png");
+
+		if(in_array($file_ext,$expensions)=== false)
+		{
+			$errors[] = "extension not allowed, please choose a JPEG or PNG file.";
+		}
+		if($_FILES['Scen_Image']['error'] > 0)
+		{
+			$error[] = "'Error while uploading file ".$_FILES['Scen_Image']['error']."'.";
+		}
+
+		if(empty($errors)==true)
+		{
+			move_uploaded_file($file_tmp,doc_root."images/".$file_name);
+		}
+		else{
+			$_SESSION['msg']     = implode('. ', $errors);
+			$_SESSION['type[0]'] = "inputError";
+			$_SESSION['type[1]'] = "has-error";
+			header("Location: ".site_root."ux-admin/ManageScenario/edit/".$_GET['edit']);
+		}
+	}
+
+	$existingImageName = ($_POST['Scen_Back_Image'])?$_POST['Scen_Back_Image']:'';
+	$Scen_Image        = ($Scen_Image)?$Scen_Image:$existingImageName;
+	$gamedetails       = (object) array(
 		'Scen_Name'        => $_POST['name'],
 		'Scen_Comments'    => $_POST['comments'],
+		'Scen_Image'       => $Scen_Image,
 		'Scen_Header'      => $_POST['Scen_Header'],
 		'Scen_Datetime'    => date('Y-m-d H:i:s'),
 		'Scen_Status'      => 1,
@@ -63,19 +99,57 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 	{
 		$Scen_Branching = 0;
 	}
-	$gamedetails = (object) array(
+	$Scen_Image = '';
+	// uploading image 
+	if(isset($_FILES['Scen_Image']['name']) && !empty($_FILES['Scen_Image']['name']))
+	{
+		$errors     = array();
+		$file_name  = base64_encode($_FILES['Scen_Image']['name']);
+		$file_size  = $_FILES['Scen_Image']['size'];
+		$file_tmp   = $_FILES['Scen_Image']['tmp_name'];
+		$file_type  = $_FILES['Scen_Image']['type'];
+		$ext        = explode('.',$_FILES['Scen_Image']['name']);
+		$file_ext   = strtolower(end($ext));
+		$Scen_Image = $file_name;
+		$expensions = array("jpeg","jpg","png");
+
+		if(in_array($file_ext,$expensions)=== false)
+		{
+			$errors[] = "extension not allowed, please choose a JPEG or PNG file.";
+		}
+		if($_FILES['Scen_Image']['error'] > 0)
+		{
+			$error[] = "'Error while uploading file ".$_FILES['Scen_Image']['error']."'.";
+		}
+
+		if(empty($errors)==true)
+		{
+			move_uploaded_file($file_tmp,doc_root."images/".$file_name);
+		}
+		else{
+			$_SESSION['msg']     = implode('. ', $errors);
+			$_SESSION['type[0]'] = "inputError";
+			$_SESSION['type[1]'] = "has-error";
+			header("Location: ".site_root."ux-admin/ManageScenario/edit/".$_GET['edit']);
+		}
+	}
+
+	$existingImageName = ($_POST['Scen_Back_Image'])?$_POST['Scen_Back_Image']:'';
+	$Scen_Image        = ($Scen_Image)?$Scen_Image:$existingImageName;
+	$gamedetails       = (object) array(
 		'Scen_Name'        => $_POST['name'],
 		'Scen_Comments'    => $_POST['comments'],
+		'Scen_Image'       => $Scen_Image,
 		'Scen_Header'      => $_POST['Scen_Header'],
 		'Scen_Datetime'    => date('Y-m-d H:i:s'),
 		'Scen_Status'      => 1,
 		'Scen_InputButton' => $_POST['Scen_InputButton'],
 		'Scen_Branching'   => $Scen_Branching
 	);
-
+	// echo $existingImageName.' and '.$Scen_Image."<pre>"; print_r($gamedetails); exit();
 	if( !empty($_POST['name']) && !empty($_POST['comments']) )
 	{
-		$uid = $_POST['id'];
+		$uid    = $_POST['id'];
 		$result = $functionsObj->UpdateData('GAME_SCENARIO', $gamedetails, 'Scen_ID', $uid, 0);
 		// updating game_linkage table while updating sceanrio status of default/compBranching
 		// die('SELECT * FROM GAME_LINKAGE WHERE Link_ScenarioID='.$uid);

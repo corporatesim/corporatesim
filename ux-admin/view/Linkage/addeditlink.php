@@ -492,7 +492,7 @@
                     <!-- adding font-size box for label name -->
                     <div class="row">
                       <div class="col-md-2">
-                        <label><span class="alert-danger">*</span>Label Font Size</label> (In Pixal)
+                        <label><span class="alert-danger">*</span>Label Font Size</label> (px)
                         <input type="number" name="SubLink_FontSize" id="fontSize" class="form-control"  value="<?php echo (!empty($SubLink_FontSize))?$SubLink_FontSize:'14';?>" placeholder="Font Size In Pixal">
                       </div>
                       <div class="col-md-2">
@@ -550,8 +550,12 @@
                          <input type="color" id="changeMe" name="SubLink_BackgroundColor" id="SubLink_BackgroundColor" value="<?php echo ($SubLink_BackgroundColor == NULL)?'#ffffff':$SubLink_BackgroundColor;?>" onchange="hexToRgb(this.value)" disabled="">
                        <?php }?>
                        <!-- <button id="change" style='color:white;background-color: blue; width: 40px; height:20px' onclick="hexToRgb('#fbafff')"></button> -->
-                     </div>
-                     <div class="col-md-6">
+                       <label for="makeTransparent" class='containerCheckbox'>
+                        <input type='checkbox' name='makeTransparent' id='makeTransparent' value="makeTransparent" <?php echo ($linkdetails->SubLink_BackgroundColor == '#0000ff00')?'checked':''; ?>> Transparent
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                    <div class="col-md-6">
                       <label>Text Color</label>
                       <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_textbgcolor')){?>
                         <input type="color" name="SubLink_TextColor" id="SubLink_TextColor" value="<?php echo ($SubLink_TextColor == NULL)?'#000000':$SubLink_TextColor;?>">

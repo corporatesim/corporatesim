@@ -49,7 +49,7 @@
           <?php } ?>
           <!-- DISPLAY ERROR MESSAGE END -->
           <div class="col-sm-10">
-            <form method="POST" action="" id="scen_frm" name="scen_frm">
+            <form method="POST" action="" id="scen_frm" name="scen_frm" enctype="multipart/form-data">
               <div class="row name" id="name">
                 <div class="col-sm-6">
                   <input type="hidden" name="id" value="<?php if(isset($_GET['edit'])){ echo $scendetails->Scen_ID; } ?>">
@@ -91,6 +91,7 @@
                   </div>
                 </div>
               </div>
+
               <div class="row name" id="comments">
                 <div class="col-sm-6">
                   <div class="form-group">
@@ -99,6 +100,7 @@
                   </div>
                 </div>
               </div>
+
               <div class="row name" id="Header">
                 <div class="col-sm-6">
                   <div class="form-group">
@@ -107,6 +109,25 @@
                   </div>
                 </div>
               </div>
+
+              <div class="row name" id="Header">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="name">Background Image</label>
+                    <input name="Scen_Image" type="file" id="Scen_Image" class="form-control" value="<?php if(isset($_GET['tab'])){ echo $resultdoc->ScenImg_Name; } ?>">
+                  </div>
+                </div>
+                <?php if(!empty($scendetails->Scen_Image)){ ?>
+                  <div class="col-sm-6" data-toggle="tooltip" title="Uncheck to remove the existing image">
+                    <label class="form-check-label containerCheckbox" for="Scen_Back_Image">
+                      <input type="checkbox" class="form-check-input" id="Scen_Back_Image" name="Scen_Back_Image" value="<?php echo $scendetails->Scen_Image;?>" checked>
+                      <span class="checkmark"></span>
+                    </label>
+                    <img src="<?php echo site_root.'/images/'.$scendetails->Scen_Image; ?>" alt="Scenario Background Image" width=150>
+                  </div>
+                <?php } ?>
+              </div>
+              <div class="clearfix"><br></div>
               <div class="row">
                 <div class="col-sm-12">
                   <div class="form-group text-center">

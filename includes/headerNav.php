@@ -78,9 +78,13 @@
 			<?php } }?>
 			<?php
 			$allowedDonmain = ['http://localhost/corp_simulation/','http://develop.corporatesim.com/'];
-			if(in_array(site_root,$allowedDonmain)) {?>
+			if(in_array(site_root,$allowedDonmain)) { ?>
 				<li class="" id="google_translate_element"></li>
-			<?php } ?>
+			<?php } else {
+				echo '<script>$(document).on("contextmenu", function() {
+					return false;
+				});</script>';
+			}?>
 		</ul>
 		<div class="clearfix"></div>
 		<!-- Left Side Main Navigation -->
@@ -134,13 +138,9 @@
 				// $('#imageModal').hide('slow');
 				$('#imageModal').slideUp(1000);
 			});
-			$('img').on('contextmenu', function() {
-				return false;
-			})
-		});
-		function googleTranslateElementInit() {
-			new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-		}
+			function googleTranslateElementInit() {
+				new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+			}
 		// on language change set the default language for user
 		setTimeout(function(){
 			$('select.goog-te-combo').on('change',function(){
@@ -152,4 +152,5 @@
 			// 	$(".goog-te-gadget").html().replace('Powered by ', '')
 			// 	);
 		},1000);
-	</script>
+	});
+</script>

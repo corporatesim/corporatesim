@@ -818,8 +818,8 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 		exit(0);
 	}
 
-	$sql = "SELECT g.game_name as Game,sc.Scen_Name as Scenario, sc.Scen_Branching as Branching, ls.SubLink_AreaName as Area, 
-	ls.SubLink_CompName as Component, ls.SubLink_SubcompName as Subcomponent, l.*,ls.* 
+	$sql = "SELECT g.game_name AS Game,sc.Scen_Name AS Scenario, sc.Scen_Branching AS Branching, sc.Scen_Image AS BackgroundImage, ls.SubLink_AreaName AS Area, 
+	ls.SubLink_CompName AS Component, ls.SubLink_SubcompName AS Subcomponent, l.*,ls.* 
 	FROM GAME_LINKAGE l 
 	INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
 	INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
@@ -834,8 +834,8 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	//$url = site_root."scenario_description.php?Link=".$result->Link_ID;
 	}
 
-	$sqlarea="SELECT DISTINCT a.Area_ID as AreaID, a.Area_Name as Area_Name, a.Area_BackgroundColor as BackgroundColor, a.Area_TextColor as TextColor
-	, SUM(ls.SubLink_ShowHide) as ShowHide, COUNT(ls.SubLink_ShowHide) as countlnk 
+	$sqlarea="SELECT DISTINCT a.Area_ID AS AreaID, a.Area_Name AS Area_Name, a.Area_BackgroundColor AS BackgroundColor, a.Area_TextColor AS TextColor
+	, SUM(ls.SubLink_ShowHide) AS ShowHide, COUNT(ls.SubLink_ShowHide) AS countlnk 
 	FROM GAME_LINKAGE l 
 	INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
 	INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 

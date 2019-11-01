@@ -140,8 +140,8 @@ else
 // if( ((strtotime($row['startDate']) >= time()) && (strtotime($row['endDate']) >= time())) || ((strtotime($row['startDate']) <= time()) && (strtotime($row['endDate']) <= time())))
 if( (strtotime($row['startDate']) > time()) || (strtotime($row['endDate']) < time()) )
 {
-  $url       = "'return false;'";
-  $returnUrl = "<a class='icons notInDateRange' data-gamename='".$row['Game_Name']."' href='#' style='margin-left:27px;' data-startdate='".date('d-M-Y',strtotime($row['startDate']))."' data-endDate='".date('d-M-Y',strtotime($row['endDate']))."'><img src='images/Close.png' style='width:40px; height:40px; margin: 15px;'></a>";
+  $url       = "notAllow";
+  $returnUrl = "<a class='icons notInDateRange' data-gamename='".$row['Game_Name']."' href='#' style='margin-left:27px;' data-startdate='".date('d-M-Y',strtotime($row['startDate']))."' data-endDate='".date('d-M-Y',strtotime($row['endDate']))."'><img src='images/timer.gif' style='width:40px; height:40px; margin: 15px;'></a>";
 }
 ?>
 <div class="col-md-4 col-xs-12 col-sm-6 col-lg-3 reduce_width" title="<?php echo $row['Game_Name']; ?>">
@@ -155,12 +155,12 @@ if( (strtotime($row['startDate']) > time()) || (strtotime($row['endDate']) < tim
           <!-- <a style="margin-left:70px; color:#ffffff !important;" href="#" class="text-center">How to Play</a> -->
         </div>
         <!-- <a style="margin-left:120px;" href="javascript:void(0)" class="btn btn-danger">Register</a> -->
-        <div style="margin-top:-30px; margin-left: -35px;">
+        <div class="returnUrlDiv" style="margin-top:-30px; margin-left: -35px;">
           <?php echo $returnUrl; ?>
         </div>
       </div>
     </div>
-    <div class="card-back bg-primary reduce_flipspeed" onclick="window.location.href='<?php echo $url?>'" style="width:222px;height:310px; background-color: #263238;">
+    <div class="card-back bg-primary reduce_flipspeed cardClick" data-href="<?php echo $url?>" style="width:222px;height:310px; background-color: #263238;">
       <div class="card-body">
         <h3 style="margin-left:10px;" class="card-title text-center">Know More</h3>
         <p class="card-text text-center" style="margin-left:20px"> <?php echo $row['Game_Comments'];?></p>
@@ -193,6 +193,24 @@ if( (strtotime($row['startDate']) > time()) || (strtotime($row['endDate']) < tim
       var enddate   = $(this).data('enddate');
       var gamename  = $(this).data('gamename');
       Swal.fire('You are allowed to play "'+gamename+'" from '+startdate+' to '+enddate);
+    });
+  });
+
+  $('.cardClick').each(function(){
+    $(this).on('click',function(){
+      var dataHref = $(this).data('href');
+      if(dataHref != 'notAllow')
+      {
+        window.location.href = dataHref;
+      }
+      else
+      {
+        // console.log($(this).parent('div').find('a.notInDateRange').data('gamename'));
+        var startdate = $(this).parent('div').find('a.notInDateRange').data('startdate');
+        var enddate   = $(this).parent('div').find('a.notInDateRange').data('enddate');
+        var gamename  = $(this).parent('div').find('a.notInDateRange').data('gamename');
+        Swal.fire('You are allowed to play "'+gamename+'" from '+startdate+' to '+enddate);
+      }
     });
   });
 </script>

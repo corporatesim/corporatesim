@@ -186,7 +186,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 				'SubLink_Details'            => $_POST['details'],
 				'SubLink_Status'             => 1,
 				'SubLink_ViewingOrder'       => (!empty($_POST['SubLink_ViewingOrder'])) ? $_POST['SubLink_ViewingOrder']:1,
-				'SubLink_BackgroundColor'    => $_POST['SubLink_BackgroundColor'],
+				'SubLink_BackgroundColor'    => (isset($_POST['makeTransparent']))?'#0000ff00':$_POST['SubLink_BackgroundColor'],
 				'SubLink_TextColor'          => $_POST['SubLink_TextColor'],
 				'SubLink_LabelCurrent'       => $_POST['SubLink_LabelCurrent'],
 				'SubLink_LabelLast'          => $_POST['SubLink_LabelLast'],
@@ -195,6 +195,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 				'SubLink_InputFieldOrder'    => $_POST['SubLink_InputFieldOrder'],
 				'SubLink_CreateDate'         => date('Y-m-d H:i:s')
 			);
+			// echo "<pre>"; print_r($linkdetails); exit();
 			
 			$result = $functionsObj->InsertData('GAME_LINKAGE_SUB', $linkdetails, 0, 0);
 			$id     = $functionsObj->InsertID();
@@ -572,7 +573,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 				'SubLink_ChartType'          => ($charttypeComp)?$charttypeComp:null,
 				'SubLink_Details'            => $_POST['details'],
 				'SubLink_ViewingOrder'       => (!empty($ViewingOrder)) ? $ViewingOrder:1,
-				'SubLink_BackgroundColor'    => $_POST['SubLink_BackgroundColor'],
+				'SubLink_BackgroundColor'    => (isset($_POST['makeTransparent']))?'#0000ff00':$_POST['SubLink_BackgroundColor'],
 				'SubLink_TextColor'          => $_POST['SubLink_TextColor'],
 				'SubLink_LabelCurrent'       => $_POST['SubLink_LabelCurrent'],
 				'SubLink_LabelLast'          => $_POST['SubLink_LabelLast'],
@@ -581,6 +582,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 				'SubLink_InputFieldOrder'    => $_POST['SubLink_InputFieldOrder'],
 					//'SubLink_Details'	=> $_POST['details']
 			);
+			// echo "<pre>"; print_r($linkdetails); exit();
 			$object     = $functionsObj->SelectData(array(), 'GAME_LINKAGE_SUB', array('SubLink_id='.$sublinkid), '', '', '', '', 0);
 			$details    = $functionsObj->FetchObject($object);
 			$linkid     = $details->SubLink_LinkID;

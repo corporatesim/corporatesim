@@ -91,12 +91,16 @@ include_once 'includes/header.php';
       <div class="row">
         <div class="clearfix"></div>
         <form method="POST" action="" id="game_frm" name="game_frm" novalidate="">
-          <div class="col-sm-12 no_padding shadow">
-            <div class="col-sm-6  text-right" style="padding: 2px 2px 5px 0px;">
-              <div id="input_loader" style="float:left; color:#2A8037;"></div>
-              <button type="button" class="btn innerBtns hidden" name="execute_input" id="execute_input">Execute</button>
-              <button type="submit" name="submit" id="submit" class="btn innerBtns hidden" value="Submit">Submit</button>
-              <!-- <button type="button" name="submit" id="submitBtn" class="btn btn-primary hidden" value="Submit">Submit</button> -->
+          <?php if($result->BackgroundImage){ ?>
+            <div class="col-sm-12 no_padding shadow" style="background: url(<?php echo site_root.'images/'.$result->BackgroundImage?>);">
+            <?php } else { ?>
+              <div class="col-sm-12 no_padding shadow">
+              <?php } ?>
+              <div class="col-sm-6  text-right" style="padding: 2px 2px 5px 0px;">
+                <div id="input_loader" style="float:left; color:#2A8037;"></div>
+                <button type="button" class="btn innerBtns hidden" name="execute_input" id="execute_input">Execute</button>
+                <button type="submit" name="submit" id="submit" class="btn innerBtns hidden" value="Submit">Submit</button>
+                <!-- <button type="button" name="submit" id="submitBtn" class="btn btn-primary hidden" value="Submit">Submit</button> -->
       <!--<button class="btn innerBtns">Save</button>
         <button class="btn innerBtns">Submit</button>-->
       </div>
@@ -446,7 +450,7 @@ include_once 'includes/header.php';
           // if ($row1['ShowHide']==1){
           //   echo "style='display:none;'";
           // }
-          // component branching, if branching enabled then make the first component of the area visible and then as per the component branching conditions, show the next component
+            // component branching, if branching enabled then make the first component of the area visible and then as per the component branching conditions, show the next component
 
             if($row1['componentBranching'] > 0)
             {
@@ -1859,6 +1863,11 @@ $('.range').each(function(i,e){
   $(document).ready(function(){
     $('#notifyText').on('click',function(){
       $('#continueBtn').trigger('click');
+    });
+    // to make the background color according to ck-editor
+    $('.superseedColor').each(function(){
+      var superseed = $(this).data('superseed');
+      $(this).parent('div').css({'background':superseed});
     });
     <?php if($result->Branching) { ?>
       $('#reviewBtn').addClass('hidden');

@@ -105,7 +105,11 @@
 						$allowedDonmain = ['http://localhost/corp_simulation/','http://develop.corporatesim.com/'];
 						if(in_array(site_root,$allowedDonmain)) {?>
 							<li class="" id="google_translate_element"></li>
-						<?php } ?>
+						<?php } else {
+							echo '<script>$(document).on("contextmenu", function() {
+								return false;
+							});</script>';
+						}?>
 					</ul>
 				</div>
 			</nav>
@@ -139,8 +143,5 @@
 					// $('#imageModal').hide('slow');
 					$('#imageModal').slideUp(1000);
 				});
-				$('img').on('contextmenu', function() {
-					return false;
-				})
 			});
 		</script>

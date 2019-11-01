@@ -118,91 +118,87 @@ include_once 'includes/header.php';
 													<a href ="#myCarousel" role="button" data-slide="next">Next <img src="images/nextIcon.png" alt="Previous"></img></a>
 												</div>
 											</div>
-										<?php } ?> -->
-									</div>
+											<?php } ?> -->
+										</div>
 
-									<div role="tabpanel" class="tab-pane" id="videosTab">
-										<?php 
-										while($row = mysqli_fetch_array($video)) {
-											echo "<div class='col-sm-6 videoDiv'>";										
+										<div role="tabpanel" class="tab-pane" id="videosTab">
+											<?php 
+											while($row = mysqli_fetch_array($video)) {
+												echo "<div class='col-sm-6 videoDiv'>";										
+												//echo "<iframe width='100%' height='240' autoplay='false' src='";
+												//echo $row['ScenVdo_Name']."?autoplay=1";
+												//echo "'></iframe> ";
+												if($row['ScenVdo_Type'] < 1)
+												{
+													// url 
+													echo "<video width='100%' height='240' controls controlsList='nodownload'><source src='".$row['ScenVdo_Name']."' type='video/mp4'></video>";
+												}
+												else
+												{
+													// embed 
+													echo base64_decode($row['ScenVdo_Name']);
+												}
 
-										//echo "<iframe width='100%' height='240' autoplay='false' src='";
-										//echo $row['ScenVdo_Name']."?autoplay=1";
-										//echo "'></iframe> ";
-											if($row['ScenVdo_Type'] < 1)
-											{
-												// url 
-												echo "<video width='100%' height='240' controls><source src='";
-												echo $row['ScenVdo_Name'];
-												//videos/example.mp4
-												echo "' type='video/mp4'></video>";
+												echo "<div class='col-sm-12 no_padding videoName'>";
+												echo "<h4 class=''>";
+												echo $row['ScenVdo_Title'];
+												echo "</h4><span class='videoDiscription'>";
+												echo $row['ScenVdo_Comments'];
+												echo "</span></div><div class='clearfix'></div></div>";
 											}
-											else
-											{
-												// embed 
-												echo base64_decode($row['ScenVdo_Name']);
+											?>
+										</div>
+
+										<div role="tabpanel" class="tab-pane" id="imagesTab">
+											<?php 
+											while($row = mysqli_fetch_array($image)) {
+												echo "<div class='col-sm-6 ImageDiv gallery'>";
+												echo "<div class='img-container '>";
+												echo "<img src='";
+												echo "ux-admin/upload/".$row['ScenImg_Name'];
+												echo "' alt='Image' class='img-cntr showImageModal'></img>";
+												echo "</div><div class='col-sm-12 no_padding ImageName'><h4 class=''>";
+												echo $row['ScenImg_Title'];
+												echo "</h4><span class='videoDiscription'>";
+												echo $row['ScenImg_Comments'];
+												echo "</span></div></div>";
+											}									
+											?>
+										</div>
+
+										<div role="tabpanel" class="tab-pane" id="documentsTab">
+											<?php 
+											while($row = mysqli_fetch_array($document)) {
+												echo "<div class='col-sm-12 documentDownload regular'>";
+												echo $row['ScenDoc_Title'];
+												echo "<span class='pull-right'>";
+												echo "<a href='scenario_description.php?Scen=".$row['ScenDoc_ScenID']."&File=".$row['ScenDoc_ID']."'>".$row['ScenDoc_Name']." <img src='images/downloadIcon.png' alt=''></img></a>";
+												echo "</span></div>";
 											}
-
-											echo "<div class='col-sm-12 no_padding videoName'>";
-											echo "<h4 class=''>";
-											echo $row['ScenVdo_Title'];
-											echo "</h4><span class='videoDiscription'>";
-											echo $row['ScenVdo_Comments'];
-											echo "</span></div><div class='clearfix'></div></div>";
-										}
-										?>
-									</div>
-
-									<div role="tabpanel" class="tab-pane" id="imagesTab">
-										<?php 
-										while($row = mysqli_fetch_array($image)) {
-											echo "<div class='col-sm-6 ImageDiv gallery'>";
-											echo "<div class='img-container '>";
-											echo "<img src='";
-											echo "ux-admin/upload/".$row['ScenImg_Name'];
-											echo "' alt='Image' class='img-cntr showImageModal'></img>";
-											echo "</div><div class='col-sm-12 no_padding ImageName'><h4 class=''>";
-											echo $row['ScenImg_Title'];
-											echo "</h4><span class='videoDiscription'>";
-											echo $row['ScenImg_Comments'];
-											echo "</span></div></div>";
-										}									
-										?>
-									</div>
-
-									<div role="tabpanel" class="tab-pane" id="documentsTab">
-										<?php 
-										while($row = mysqli_fetch_array($document)) {
-											echo "<div class='col-sm-12 documentDownload regular'>";
-											echo $row['ScenDoc_Title'];
-											echo "<span class='pull-right'>";
-											echo "<a href='scenario_description.php?Scen=".$row['ScenDoc_ScenID']."&File=".$row['ScenDoc_ID']."'>".$row['ScenDoc_Name']." <img src='images/downloadIcon.png' alt=''></img></a>";
-											echo "</span></div>";
-										}
-										?>
-										<div class="clearfix"></div>
+											?>
+											<div class="clearfix"></div>
+										</div>
 									</div>
 								</div>
-							</div>
 
-							<div class="clearix"></div>
-						</div>			
-					</div>
-				</div>
-			</section>	
-
-			<footer>
-				<div class="container">
-					<div class="row">
-						<div class="col-sm-12 text-center">
-							<span></span>
+								<div class="clearix"></div>
+							</div>			
 						</div>
 					</div>
-				</div>
-			</footer>
-			<script>
-				$(document).ready(function()
-				{
+				</section>	
+
+				<footer>
+					<div class="container">
+						<div class="row">
+							<div class="col-sm-12 text-center">
+								<span></span>
+							</div>
+						</div>
+					</div>
+				</footer>
+				<script>
+					$(document).ready(function()
+					{
 					// adding a confirmation box while click on proceed
 					$('#proceedBtn').on('click',function(){
 						// removing alert
@@ -247,9 +243,6 @@ include_once 'includes/header.php';
 				})
 
 			});
-					$('img').on('contextmenu', function() {
-						return false;
-					})
 				});
 			</script>
 			<script src="js/jquery.min.js"></script>	
