@@ -1,6 +1,6 @@
 <?php
 
-// phpinfo();
+phpinfo();
 include_once 'config/settings.php'; 
 include_once 'config/functions.php'; 
 // using domPdf library

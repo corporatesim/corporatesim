@@ -229,6 +229,10 @@
 			$("#downloadCompo").removeClass("hidden");
 			$("#downloadSubCompo").removeClass("hidden");*/
 		});
+		$('marquee').each(function(){
+			$(this).on('mouseover',function(){this.stop();});
+			$(this).on('mouseout',function(){this.start();});
+		});
 	});
 </script>
 
