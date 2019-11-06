@@ -203,21 +203,21 @@ include_once 'includes/header.php';
           {
             if($i == 0)
             {
-              echo "<div role='tabpanel' data-TabId='".$row['Area_Name']."' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
+              echo "<div role='tabpanel' style='height: 480px;' data-TabId='".$row['Area_Name']."' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
             }
             else
             {
-              echo "<div role='tabpanel' data-TabId='".$row['Area_Name']."' class='tab-pane' id='".$row['Area_Name']."Tab'>";
+              echo "<div role='tabpanel' style='height: 480px;' data-TabId='".$row['Area_Name']."' class='tab-pane' id='".$row['Area_Name']."Tab'>";
             }
             $i++;
           }
           else if ($tab == $row['Area_Name'])
           {
-            echo "<div role='tabpanel' data-TabId='".$row['Area_Name']."' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
+            echo "<div role='tabpanel' style='height: 480px;' data-TabId='".$row['Area_Name']."' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
           }
           else              
           {
-            echo "<div role='tabpanel' data-TabId='".$row['Area_Name']."' class='tab-pane' id='".$row['Area_Name']."Tab'>";
+            echo "<div role='tabpanel' style='height: 480px;' data-TabId='".$row['Area_Name']."' class='tab-pane' id='".$row['Area_Name']."Tab'>";
           }
 
           $sqlcomp = "SELECT distinct gi.input_showComp, ls.SubLink_AreaID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_AreaName as Area_Name, l.Link_Order as 'Order', l.Link_Branching as componentBranching,
