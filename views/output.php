@@ -17,7 +17,9 @@ include_once 'includes/header.php';
           <div class="col-md-12 InnerPageHeader">
             <?php if(!empty($result)){ echo $result->Scenario ; }?>
             <button type="button" name="submit" id="submitShow" class="btn btn-danger pull-right" value="Submit" style="display: none;">Submit</button>
-            <button type="button" name="submit" id="submitShowRight" class="btn btn-danger rotateCompAnti submitShowRight" value="Submit">Submit</button>
+            <?php if(!$skipOutput->Link_Enabled > 0){ ?>
+              <button type="button" name="submit" id="submitShowRight" class="btn btn-danger rotateCompAnti submitShowRight" value="Submit">Submit</button>
+            <?php } ?>
           </div>
           <form method="POST" action="" id="game_frm" name="game_frm">
             <input type="hidden" name="ScenarioId" id="ScenarioId" value="<?php echo $result->Link_ScenarioID; ?>">
@@ -81,10 +83,10 @@ include_once 'includes/header.php';
               //echo $i." ".$row['Area_Name'];
                  if($i==0)
                  {
-                  echo "<div role='tabpanel' data-tabId='".$row['Area_Name']."' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
+                  echo "<div role='tabpanel' style='height:480px;' data-tabId='".$row['Area_Name']."' class='tab-pane active' id='".$row['Area_Name']."Tab'>";
                 }
                 else{
-                  echo "<div role='tabpanel' data-tabId='".$row['Area_Name']."' class='tab-pane' id='".$row['Area_Name']."Tab'>";
+                  echo "<div role='tabpanel' style='height:480px;' data-tabId='".$row['Area_Name']."' class='tab-pane' id='".$row['Area_Name']."Tab'>";
                 }
                 $i++;
 

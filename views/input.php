@@ -104,7 +104,7 @@ include_once 'includes/header.php';
       <!--<button class="btn innerBtns">Save</button>
         <button class="btn innerBtns">Submit</button>-->
       </div>
-      <div class="col-sm-12">
+      <div class="col-sm-12 hidden">
         <hr style="margin: 5px 0;">
       </hr>
     </div>
