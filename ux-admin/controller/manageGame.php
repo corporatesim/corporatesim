@@ -8,12 +8,11 @@ $file   = 'GameList.php';
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 {	
-	echo "<pre>"; print_r($_POST); 
+	// echo "<pre>"; print_r($_POST); exit();
 	if(isset($_POST['Game_Type']))
 	{
 		echo ' add bot enabled ';
 	}
-	exit();
 	$Game_Introduction     = ($_POST['Game_Introduction'])?$_POST['Game_Introduction']:0;
 	$Game_Description      = ($_POST['Game_Description'])?$_POST['Game_Description']:0;
 	$Game_IntroductionLink = ($_POST['Game_IntroductionLink'])?$_POST['Game_IntroductionLink']:0;
@@ -39,6 +38,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 		'Game_DescriptionLink'  => $Game_DescriptionLink,
 		'Game_BackToIntro'      => $Game_BackToIntro,
 		'Game_HideScenarioLink' => $Game_HideScenarioLink,
+		'Game_CreatedBy'        => $_SESSION['ux-admin-id'],
 	);
 	
 	if( !empty($_POST['name']) && !empty($_POST['comments']))
@@ -207,7 +207,6 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		'Game_longDescription'  => $_POST['Game_longDescription'],
 		'Game_prise'            => $_POST['Game_prize'],
 		'Game_discount'         => $_POST['Game_discount'],
-		'Game_Datetime'         => date('Y-m-d H:i:s'),
 		'Game_Status'           => (isset($_POST['Game_Status']))?$_POST['Game_Status']:0,
 		'Game_Elearning'        => $_POST['eLearning'],
 		'Game_Type'             => (isset($_POST['Game_Type']))?$_POST['Game_Type']:0,
@@ -217,9 +216,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		'Game_DescriptionLink'  => $Game_DescriptionLink,
 		'Game_BackToIntro'      => $Game_BackToIntro,
 		'Game_HideScenarioLink' => $Game_HideScenarioLink,
+		'Game_UpdatedBy'        => $_SESSION['ux-admin-id'],
+		'Game_UpdatedOn'        => date('Y-m-d H:i:s'),
 	);
 
-// echo "<pre>"; print_r($_POST); print_r($gamedetails); exit();
+	// echo "<pre>"; print_r($_POST); print_r($gamedetails); exit();
 	if( !empty($_POST['name']) && !empty($_POST['comments']) )
 	{
 		$uid = $_POST['id'];
