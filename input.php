@@ -834,16 +834,16 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	//$url = site_root."scenario_description.php?Link=".$result->Link_ID;
 	}
 
-	$sqlarea="SELECT DISTINCT a.Area_ID AS AreaID, a.Area_Name AS Area_Name, a.Area_BackgroundColor AS BackgroundColor, a.Area_TextColor AS TextColor
-	, SUM(ls.SubLink_ShowHide) AS ShowHide, COUNT(ls.SubLink_ShowHide) AS countlnk 
+	$sqlarea="SELECT DISTINCT a.Area_ID AS AreaID, a.Area_Name AS Area_Name, a.Area_BackgroundColor AS BackgroundColor, a.Area_TextColor AS TextColor, SUM(ls.SubLink_ShowHide) AS ShowHide, COUNT(ls.SubLink_ShowHide) AS countlnk, gas.Sequence_Order AS Area_Sequencing
 	FROM GAME_LINKAGE l 
 	INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
 	INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
 	INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
 	INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
+	LEFT JOIN GAME_AREA_SEQUENCE gas on a.Area_ID=gas.Sequence_AreaId
 	WHERE ls.SubLink_Type=0 AND l.Link_ID=".$linkid." GROUP BY a.Area_ID,a.Area_Name 
-	ORDER BY a.Area_Sequencing";
-//echo $sqlarea;
+	ORDER BY gas.Sequence_Order";
+	// echo $sqlarea; exit();
 	$area          = $functionsObj->ExecuteQuery($sqlarea);	
 	$sqlcompSanNew =  "SELECT distinct ls.SubLink_AreaID as AreaID, ls.SubLink_CompID as CompID, ls.SubLink_SubCompID as SubCompID, 
 	ls.SubLink_AreaName as Area_Name, ls.SubLink_SubcompName as SubComp_Name, l.Link_Order as 'Order',  

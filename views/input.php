@@ -366,7 +366,7 @@ include_once 'includes/header.php';
               $ComponentName  = "";
               $DetailsChart   = "hidden";
               $InputFields    = "";
-              $comp_length    = "col-sm-6";
+              $comp_length    = "col-md-6";
               $ImageMaxWidth  = "90%";
               break;
 
@@ -376,7 +376,7 @@ include_once 'includes/header.php';
               $ComponentName  = "pull-right";
               $DetailsChart   = "hidden";
               $InputFields    = "";
-              $comp_length    = "col-sm-6";
+              $comp_length    = "col-md-6";
               $ImageMaxWidth  = "90%";
               break;
 
@@ -1869,6 +1869,46 @@ $('.range').each(function(i,e){
       var superseed = $(this).data('superseed');
       $(this).parent('div').css({'background':superseed});
     });
+
+    // when form is submitted then trigger ajax
+    $('#game_frm').on('submit',function(e){
+      e.preventDefault();
+      // alert('form submitted');
+      // triggering ajax for testing the new algo
+      $.ajax({
+        type    : "POST",
+        dataType: "json",
+        data    :{'skipOutput':<?php echo $result->Link_Enabled;?>,'userName':"<?php echo $_SESSION['username'];?>"},
+        url     : "<?php echo site_root;?>bot/CorpsimFormulaCalculation/submitInput/"+<?php echo $linkid;?>+"/"+<?php echo $gameid;?>+"/"+<?php echo $userid;?>,
+        beforeSend: function() {
+          $('.overlay').show();
+          $("#input_loader").html("");
+        },
+        success: function(result) 
+        {
+          console.log(result);
+          if(result.status == 200)
+          {
+            window.location = "<?php echo site_root;?>"+result.message;
+          }
+          else
+          {
+            Swal.fire(result.message);
+            $('.overlay').hide();
+          }
+        },
+        error: function(jqXHR, exception)
+        {
+          {
+            $('.overlay').hide();
+            Swal.fire(jqXHR.responseText);
+            $("#input_loader").html('');
+            $('.overlay').hide();
+          }
+        }
+      });
+    });
+
     <?php if($result->Branching) { ?>
       $('#reviewBtn').addClass('hidden');
     <?php } ?>
@@ -1969,7 +2009,7 @@ $('.range').each(function(i,e){
     swalWithBootstrapButtons.fire({
     // title: 'Are you sure?',
     text: "Please press OK if you have provided all your inputs and are ready to submit else press Cancel. Please note that you can not come back to this page after clicking OK",
-    type             : 'warning',
+    icon             : 'warning',
     showCancelButton : true,
     confirmButtonText: 'OK',
     cancelButtonText : 'Cancel',

@@ -76,7 +76,7 @@
 						$i=1; while($row = $object->fetch_object()){ ?>
 							<tr>
 								<th><?php echo $i;?></th>
-								<td><?php echo $row->Game; ?></td>
+								<td><?php echo ($row->BotEnabled==1)?$row->Game.' (<strong>Bot</strong>)':$row->Game   ; ?></td>
 								<td><?php echo $row->Scenario;?></td>
 								<td><?php echo $row->Link_Order;?></td>
 								<td><?php echo ($row->Link_Introduction>0)?'Skipped':'Default';?></td>

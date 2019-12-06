@@ -114,7 +114,7 @@ include_once 'includes/headerNav.php';
     $compSql = "SELECT User_companyid FROM GAME_SITE_USERS WHERE User_companyid = '21' AND User_id=".$result1->US_UserID;
     $compObj = $functionsObj->ExecuteQuery($compSql);
 
-    if(($compObj->num_rows > 0) || ($row->UG_ReplayCount == '-1') || ($row->UG_ReplayCount > 0))
+    if(($compObj->num_rows > 0) || ($row['UG_ReplayCount'] == '-1') || ($row['UG_ReplayCount'] > 0))
     {
       $allowReplay = true;
     }

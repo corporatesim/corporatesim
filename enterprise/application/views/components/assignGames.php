@@ -14,20 +14,20 @@
  									<li class="breadcrumb-item active" aria-current="page">Game Allocation/Deallocation</li>
  									<li class="breadcrumb-item active" aria-current="page">
  										<?php switch($type)
- 									{
- 										case 'Enterprise':
- 										echo "Enterprise : $Games->Enterprise_Name ($Games->Enterprise_ID) ";
- 										break;
- 										case 'SubEnterprise':
- 										echo "SubEnterprise: $Games->SubEnterprise_Name ($Games->SubEnterprise_ID) ";
- 										break;
- 										case 'EnterpriseUsers':
- 										echo "Enterprise User: $Games->User_username ($Games->User_id) ";
- 										break;
- 										case  'SubEnterpriseUsers':
- 										echo "SubEnterprise: $Games->SubEnterprise_Name <br> User: $Games->User_username ($Games->User_id) ";
- 										break;		
- 									}?>
+ 										{
+ 											case 'Enterprise':
+ 											echo "Enterprise : $Games->Enterprise_Name ($Games->Enterprise_ID) ";
+ 											break;
+ 											case 'SubEnterprise':
+ 											echo "SubEnterprise: $Games->SubEnterprise_Name ($Games->SubEnterprise_ID) ";
+ 											break;
+ 											case 'EnterpriseUsers':
+ 											echo "Enterprise User: $Games->User_username ($Games->User_id) ";
+ 											break;
+ 											case  'SubEnterpriseUsers':
+ 											echo "SubEnterprise: $Games->SubEnterprise_Name <br> User: $Games->User_username ($Games->User_id) ";
+ 											break;		
+ 										}?>
  									</li>
  								</ol>
  							</nav>
@@ -61,10 +61,10 @@
  										<label for="name"><span class="alert-danger">*</span>End Date</label>
  									</div>
  									<?php if($type!='Enterprise'&& $type!='SubEnterprise'){ ?>
-                                     <div class="col-md-2">
-                                         <label for="name">Replay Count (Unlimited -1)</label>
-                                     </div>
-                                 <?php }?>
+ 										<div class="col-md-2">
+ 											<label for="name">Replay Count (Unlimited -1)</label>
+ 										</div>
+ 									<?php }?>
  								</div>
  								<form action="" method="post" enctype="multipart/form-data">
  									<?php foreach ($assignGames as $games) { ?>
@@ -98,7 +98,7 @@
  												case 'SubEnterprise':
  												echo "<input type='hidden' name='EnterpriseID' value=' $games->SubEnterprise_EnterpriseID'>";
  												$GameStartDate = $games->SubEnterprise_StartDate;
- 												$GameEndDate   = $games->SubEnterprise_EndDate;
+ 												$GameEndDate   = $games->EG_Game_End_Date;
  												$ReplayCount   = 0;
 
  												if($games->EG_GameID == $games->SG_GameID)
@@ -151,7 +151,7 @@
  												echo "<input type='hidden' name='Enterprise_ID' value=' $games->SubEnterprise_EnterpriseID'>";
  												echo "<input type='hidden' name='SubEnterprise_ID' value=' $games->SubEnterprise_ID'>";
  												$GameStartDate = $games->SubEnterprise_StartDate;
- 												$GameEndDate   = $games->SubEnterprise_EndDate; 
+ 												$GameEndDate   = $games->SG_Game_End_Date; 
  												$ReplayCount   = $games->UG_ReplayCount;
 
  												if($games->SG_GameID == $games->UG_GameID) 
@@ -180,70 +180,70 @@
  												<?php if($games->Game_Elearning == 1)
  												{
  													?>
- 												<strong> <?php echo $games->Game_Name." (eLearning)";?>
+ 													<strong> <?php echo $games->Game_Name." (eLearning)";?>
+ 												</strong>
+ 												<?php
+ 											}
+ 											else{?>
+ 												<strong> <?php echo $games->Game_Name;?>
  											</strong>
  											<?php
- 									   	}
- 									   	else{?>
-                            <strong> <?php echo $games->Game_Name;?>
- 											</strong>
- 										<?php
- 										 }
- 										 ?>
- 										</div>
- 										<div id="assignDate"class="col-md-6">
- 											<input type="hidden"name="gameID[]" value="<?php echo $games->Game_ID;?>">
- 											<div class="input-group" name="gamedate" id="datepicker">
- 												<input type="text" class="form-control datepicker-here" id="<?php echo $games->Game_ID;?>_startDate" name="gamestartdate[]" value="<?php echo $startDate ?>" data-value="<?php echo strtotime($startDate);?>" placeholder="Select Start Date" required="" readonly="" data-startDate="<?php echo strtotime($GameStartDate);?>" data-endDate="<?php echo strtotime($GameEndDate);?>" data-language='en' data-date-format="dd-mm-yyyy">
-
- 												<span class="input-group-addon" >To</span>
-
- 												<input type ="text" class="form-control datepicker-here" id="<?php echo $games->Game_ID;?>_endDate" name="gameenddate[]" value="<?php echo $endDate ?>" data-value="<?php echo strtotime($endDate);?>" placeholder="Select End Date" required="" readonly="" data-startDate="<?php echo strtotime($GameStartDate);?>" data-endDate="<?php echo strtotime($GameEndDate);?>" data-language='en' data-date-format="dd-mm-yyyy">
- 											</div>
- 										</div>
- 										<?php if($type!='Enterprise'&& $type!='SubEnterprise'){ ?>
- 											<div class="col-md-2">
- 												<input type="text" class="form-control" name="UG_ReplayCount[]" id="UG_ReplayCount_<?php echo $games->Game_ID;?>" value="<?php echo $ReplayCount;?>" placeholder="Rep-Count">
- 											</div>
- 										<?php }?>
+ 										}
+ 										?>
  									</div>
- 								<?php }?>	
- 								<div class="clearfix"></div>
- 								<br><br>
- 								<div class="text-center">
- 									<button type="submit" class="btn btn-primary" name="submit" value="submit" id="submit">SUBMIT</button>
- 									<?php if($type=='Enterprise'){?>
- 										<a href="<?php echo base_url('Enterprise/');?>" class="btn btn-primary ">CANCEL</a>
- 									<?php } elseif($type=='SubEnterprise')
- 									{?><a href="<?php echo base_url('SubEnterprise/');?>" class="btn btn-primary ">CANCEL</a>
- 								<?php }else{?>
- 									<a href="<?php echo base_url('Users/').base64_decode($this->uri->segment(4));?>" class="btn btn-primary ">CANCEL</a>
- 								<?php }?>				
- 							</div>
- 						</form>
- 					<?php } ?>
- 				</div>
- 				<div class="clearfix"></div>
+ 									<div id="assignDate"class="col-md-6">
+ 										<input type="hidden"name="gameID[]" value="<?php echo $games->Game_ID;?>">
+ 										<div class="input-group" name="gamedate" id="datepicker">
+ 											<input type="text" class="form-control datepicker-here" id="<?php echo $games->Game_ID;?>_startDate" name="gamestartdate[]" value="<?php echo $startDate ?>" data-value="<?php echo strtotime($startDate);?>" placeholder="Select Start Date" required="" readonly="" data-startDate="<?php echo strtotime($GameStartDate);?>" data-endDate="<?php echo strtotime($GameEndDate);?>" data-language='en' data-date-format="dd-mm-yyyy">
+
+ 											<span class="input-group-addon" >To</span>
+
+ 											<input type ="text" class="form-control datepicker-here" id="<?php echo $games->Game_ID;?>_endDate" name="gameenddate[]" value="<?php echo $endDate ?>" data-value="<?php echo strtotime($endDate);?>" placeholder="Select End Date" required="" readonly="" data-startDate="<?php echo strtotime($GameStartDate);?>" data-endDate="<?php echo strtotime($GameEndDate);?>" data-language='en' data-date-format="dd-mm-yyyy">
+ 										</div>
+ 									</div>
+ 									<?php if($type!='Enterprise'&& $type!='SubEnterprise'){ ?>
+ 										<div class="col-md-2">
+ 											<input type="text" class="form-control" name="UG_ReplayCount[]" id="UG_ReplayCount_<?php echo $games->Game_ID;?>" value="<?php echo $ReplayCount;?>" placeholder="Rep-Count">
+ 										</div>
+ 									<?php }?>
+ 								</div>
+ 							<?php }?>	
+ 							<div class="clearfix"></div>
+ 							<br><br>
+ 							<div class="text-center">
+ 								<button type="submit" class="btn btn-primary" name="submit" value="submit" id="submit">SUBMIT</button>
+ 								<?php if($type=='Enterprise'){?>
+ 									<a href="<?php echo base_url('Enterprise/');?>" class="btn btn-primary ">CANCEL</a>
+ 								<?php } elseif($type=='SubEnterprise')
+ 								{?><a href="<?php echo base_url('SubEnterprise/');?>" class="btn btn-primary ">CANCEL</a>
+ 							<?php }else{?>
+ 								<a href="<?php echo base_url('Users/').base64_decode($this->uri->segment(4));?>" class="btn btn-primary ">CANCEL</a>
+ 							<?php }?>				
+ 						</div>
+ 					</form>
+ 				<?php } ?>
  			</div>
+ 			<div class="clearfix"></div>
  		</div>
  	</div>
  </div>
- <script type="text/javascript">
- 	$(document).ready(function(){
- 		$('#select_all').click(function(i,e){
- 			if($(this).is(':checked'))
- 			{
- 				$('input[type=checkbox]').each(function(i,e){
- 					$(this).prop('checked',true);
- 				});
- 			}
- 			else
- 			{
- 				$('input[type=checkbox]').each(function(i,e){
- 					$(this).prop('checked',false);
- 				});
- 			}
- 		});
- 	});
- </script>
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#select_all').click(function(i,e){
+			if($(this).is(':checked'))
+			{
+				$('input[type=checkbox]').each(function(i,e){
+					$(this).prop('checked',true);
+				});
+			}
+			else
+			{
+				$('input[type=checkbox]').each(function(i,e){
+					$(this).prop('checked',false);
+				});
+			}
+		});
+	});
+</script>
 

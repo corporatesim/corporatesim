@@ -112,7 +112,7 @@ include_once 'includes/header.php';
                 gls.SubLink_LabelLast AS LabelLast,
                 gls.SubLink_InputFieldOrder AS InputFieldOrder,
                 gls.Sublink_ShowHide AS ShowHide,
-                go.output_current AS CURRENT,
+                gi.input_current AS CURRENT,
                 gls.SubLink_BackgroundColor AS BackgroundColor,
                 gls.SubLink_TextColor AS TextColor,
                 gls.SubLink_InputMode AS Mode,
@@ -122,16 +122,18 @@ include_once 'includes/header.php';
                 gls.SubLink_SubCompIDcarry AS CarrySubCompID,
                 gls.SubLink_ID AS SubLinkID,
                 gls.SubLink_FontSize AS fontSize,
-                gls.SubLink_FontStyle AS fontStyle
+                gls.SubLink_FontStyle AS fontStyle,
+                gls.SubLink_ChartID AS ChartID,
+                gls.SubLink_ChartType AS Chart_Type
                 FROM GAME_LINKAGE_SUB gls 
                 LEFT JOIN GAME_LINKAGE gl ON gl.Link_ID=gls.SubLink_LinkID
                 LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID=gls.SubLink_CompID
                 LEFT JOIN GAME_SUBCOMPONENT gsc ON gsc.SubComp_ID=gls.SubLink_SubCompID
                 LEFT JOIN GAME_AREA ga ON ga.Area_ID=gls.SubLink_AreaID
-                LEFT JOIN GAME_OUTPUT go ON go.output_sublinkid=gls.SubLink_ID AND go.output_user=$userid
+                LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=$userid
                 WHERE
                 gls.SubLink_Type = 1 AND gls.SubLink_SubCompID = 0 AND gls.SubLink_LinkID=".$linkid." AND gls.SubLink_AreaID=".$row['AreaID']."	GROUP BY gls.SubLink_ID ORDER BY gls.SubLink_Order";
-                  // echo $sqlcomp; exit;
+                  // echo $sqlcomp;// exit;
                 $component = $functionsObj->ExecuteQuery($sqlcomp);
               //Get Component for this area for this linkid
                 while($row1 = mysqli_fetch_array($component)){ 
@@ -307,7 +309,7 @@ include_once 'includes/header.php';
                    $cklength       = 'col-md-6';
                    break;
                  }
-
+                 $lengthComponent = $length;
                  if($length == 'col-sm-6')
                  {
                    $width  = "col-md-6";
@@ -433,7 +435,20 @@ include_once 'includes/header.php';
 
                       echo $row1['Comp_Name'];
                       echo "</div>";
-                      echo "<div class='col-sm-4 ".$cklength." no_padding ".$DetailsChart."'>".$row1['Description']."</div>";
+                      // for ck-editor or chart
+                      echo "<div class='col-sm-4 ".$cklength." no_padding ".$DetailsChart."'>";
+                      if(empty($row1['ChartID']))
+                      {
+                        echo $row1['Description'];
+                      }
+                      else
+                      {
+                        // echo '<a class="refreshChart" data-redirect="'.site_root.'output.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row1['SubLinkID'].'" data-reload="ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row1['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
+                        ?>  
+                        <img class="graph_chart showImageModal comp_chart col-md-12" src="<?php echo site_root;?>chart/<?=$row1['Chart_Type']?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>" style="max-width:100%;">
+                        <?php
+                      }
+                      echo "</div>";
 
                       echo "<div class=' col-sm-6 ".$width1." text-center ".$InputFields." ".$ShowHide."'>";
                       $sqlOutcome = "SELECT * FROM GAME_PERSONALIZE_OUTCOME gpo WHERE gpo.Outcome_CompId=".$row1['CompID']." AND gpo.Outcome_LinkId=".$linkid." AND ".$value.">=gpo.Outcome_MinVal AND ".$value."<=gpo.Outcome_MaxVal AND gpo.Outcome_IsActive=0 ORDER BY Outcome_Order";
@@ -486,21 +501,21 @@ include_once 'includes/header.php';
 
                   //Get SubComponent for this Component, linkid
                    $sqlsubcomp = "SELECT distinct a.Area_ID AS AreaID, ls.SubLink_CompID AS CompID, ls.SubLink_SubCompID AS SubCompID,  
-                   go.output_current AS outputValue,
+                   gi.input_current AS outputValue,
                    a.Area_Name AS Area_Name, c.Comp_Name AS Comp_Name, s.SubComp_Name AS SubComp_Name,ls.SubLink_ViewingOrder AS ViewingOrder,
                    ls.SubLink_LabelCurrent AS LabelCurrent, ls.SubLink_LabelLast AS LabelLast,ls.SubLink_InputFieldOrder AS InputFieldOrder,
                    ls.subLink_ShowHide AS ShowHide,
-                   ls.SubLink_Details AS Description ,ls.SubLink_BackgroundColor AS BackgroundColor, ls.SubLink_TextColor AS TextColor, ls.SubLink_FontSize AS fontSize, ls.SubLink_FontStyle AS fontStyle, ls.SubLink_InputMode AS Mode, ls.SubLink_LinkIDcarry AS CarryLinkID, ls.SubLink_CompIDcarry AS CarryCompID, ls.SubLink_SubCompIDcarry AS CarrySubCompID
+                   ls.SubLink_Details AS Description ,ls.SubLink_BackgroundColor AS BackgroundColor, ls.SubLink_TextColor AS TextColor, ls.SubLink_FontSize AS fontSize, ls.SubLink_FontStyle AS fontStyle, ls.SubLink_InputMode AS Mode, ls.SubLink_LinkIDcarry AS CarryLinkID, ls.SubLink_CompIDcarry AS CarryCompID, ls.SubLink_SubCompIDcarry AS CarrySubCompID, ls.SubLink_ChartID AS ChartID, ls.SubLink_ChartType AS Chart_Type
                    FROM GAME_LINKAGE l 
                    INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
                    INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
                    INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
                    INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-                   LEFT JOIN GAME_OUTPUT go ON go.output_sublinkid=ls.SubLink_ID AND go.output_user=$userid
+                   LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=ls.SubLink_ID AND gi.input_user=$userid
                    LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
                    INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
-                   WHERE ls.SubLink_Type=1 AND ls.SubLink_SubCompID>0 and ls.SubLink_CompID=".$row1['CompID']." ORDER BY ls.SubLink_Order";
-                    //echo $sqlsubcomp;exit;
+                   WHERE ls.SubLink_Type=1 AND ls.SubLink_SubCompID>0 AND ls.SubLink_CompID=".$row1['CompID']." AND ls.SubLink_LinkID=".$linkid." ORDER BY ls.SubLink_Order";
+                    // echo $sqlsubcomp;
 
                    $subcomponent = $functionsObj->ExecuteQuery($sqlsubcomp);
                   //Get Component for this area for this linkid
@@ -833,7 +848,16 @@ include_once 'includes/header.php';
                   echo $row2['SubComp_Name'];
                   echo "</div>";
                   echo "<div class='col-sm-4 ".$cklength." no_padding ".$DetailsChart."'>";
-                  echo $row2['Description'];
+                  if(empty($row2['ChartID']))
+                  {
+                    echo $row2['Description'];
+                  }
+                  else
+                  {
+                    ?>  
+                    <img class="graph_chart showImageModal comp_chart col-md-12" src="<?php echo site_root;?>chart/<?=$row2['Chart_Type']?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row2['ChartID']?>" style="max-width:100%;">
+                    <?php
+                  }
                   echo "</div>";
                   echo "<div class=' col-sm-6 ".$width1." text-center ".$InputFields."'>";
                   echo "<div class='InlineBox ".$labelC."'>";
@@ -869,7 +893,7 @@ include_once 'includes/header.php';
                 if(!empty($Outcome_Description)){
                   ?>
                   <!-- adding this div here to show the description for outcome badges -->
-                  <div class="scenariaListingDiv <?php echo $length;?>">
+                  <div class="scenariaListingDiv <?php echo $lengthComponent;?>">
                     <center>
                       <?php echo $Outcome_Description;?>
                     </center>
@@ -1084,6 +1108,10 @@ if($skipOutput->Link_Enabled > 0)
   // if enabled then auto submit for component branching most probably
   echo "<script>setTimeout(function(){
     $('#submitShow').trigger('click');
+    $('.dbl-spinner').hide();
+    $('#showOverlayText').html('<img src=".site_root."images/loader_transParent.gif style=width:10%>');
+    $('.overlay').css({'background':'#000000'});
+
     $('#loader').show();
   },100);</script>";
 }

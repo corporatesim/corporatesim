@@ -6,13 +6,14 @@ $funObj = new Functions();
 
 if(isset($_POST['Link_id']) && isset($_POST['Game_id']) && isset($_POST['Scen_id']) )
 {
+	$count = 0;
 	//echo $_POST['Scen_id'];
 	
 	$sql = "SELECT * FROM `GAME_LINKAGE_SUB` WHERE Sublink_linkid in 
 	(SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID= ".$_POST['Game_id']." and Link_ScenarioID=".$_POST['Scen_id'].")";
-		//echo $sql; exit();
+	//echo $sql; exit();
 	$object = $funObj->ExecuteQuery($sql);
-//	$result1 = $functionsObj->FetchObject($object);
+	//	$result1 = $functionsObj->FetchObject($object);
 	
 	while($row = $object->fetch_object())
 	{
@@ -28,6 +29,7 @@ if(isset($_POST['Link_id']) && isset($_POST['Game_id']) && isset($_POST['Scen_id
 		}
 		else
 		{
+			$count++;
 			$linkdetails = (object) array(
 				'SubLink_LinkID'             => $_POST['Link_id'],
 				'SubLink_AreaID'             => $row->SubLink_AreaID,
@@ -88,12 +90,20 @@ if(isset($_POST['Link_id']) && isset($_POST['Game_id']) && isset($_POST['Scen_id
 					$resultrep = $funObj->InsertData('GAME_LINK_REPLACE', $repdetails, 0, 0);
 					
 				}
+				// adding area sequencing from GAME_AREA_SEQUENCE table
+				$SequenceOrderSql = "SELECT Sequence_Order FROM GAME_AREA_SEQUENCE WHERE Sequence_LinkId =".$row->SubLink_LinkID." AND Sequence_AreaId=".$row->SubLink_AreaID;
+				$Sequence_Order   = $funObj->RunQueryFetchObject($SequenceOrderSql);
+				$funObj->AreaSequencing($_POST['Link_id'], $row->SubLink_AreaID, $Sequence_Order[0]->Sequence_Order);
+				// $insertRowSql = "INSERT INTO GAME_AREA_SEQUENCE (Sequence_LinkId,Sequence_AreaId,Sequence_Order,Sequence_CreatedBy) SELECT ".$_POST['Link_id'].", Sequence_AreaId, Sequence_Order, ".$_SESSION['ux-admin-id']." FROM GAME_AREA_SEQUENCE WHERE Sequence_LinkId =".$row->SubLink_LinkID." AND Sequence_AreaId=".$row->SubLink_AreaID;
+				 // VALUES ($linkid,$areaId,$Sequence_Order,".$_SESSION['ux-admin-id'].")";
+
 				$result = array(
-					"msg"    => "Success",
+					"msg"    => "$count Success",
 					"status" => 1
 				);
 			}
-			else{
+			else
+			{
 				$result = array(
 					"msg"    => "Error",
 					"status" => 0
@@ -103,7 +113,7 @@ if(isset($_POST['Link_id']) && isset($_POST['Game_id']) && isset($_POST['Scen_id
 	}
 	
 	$result = array(
-		"msg"    => "Success",
+		"msg"    => "$count rows added successfully",
 		"status" => 1
 	);
 	

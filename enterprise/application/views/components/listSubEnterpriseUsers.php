@@ -58,139 +58,142 @@
 											</div>
 										</div>
 									</form>
-								<?php } ?> -->
-							</div>
-							<div class="row">
-								<table class="stripe hover multiple-select-row data-table-export nowrap" >
-									<thead>
-										<tr>
-											<th>Sr.No.</th>
-											<th class="datatable-nosort">Enterprize</th>
-											<th class="datatable-nosort">SubEnterprize</th>
-											<th class="table-plus">User Name</th>
-											<th>Email</th>
-											<th>Password</th>
-											<th class="datatable-nosort">Contact</th>
-											<th class="datatable-nosort">Games</th>
-											<th class="datatable-nosort noExport">Action</th>
-										</tr>
-									</thead>
-									<tbody>
-										<?php $i=1;
-										foreach ($userDetails as $userDetails) { ?>
+									<?php } ?> -->
+								</div>
+								<div class="row">
+									<table class="stripe hover multiple-select-row data-table-export nowrap" >
+										<thead>
 											<tr>
-												<td><?php echo $i; ?></td>
-												<td><?php echo $userDetails->Enterprise_Name; ?></td>
-												<td class="table-plus"><?php echo $userDetails->SubEnterprise_Name ; ?></td>
-												<td><?php echo $userDetails->User_username;?>
-											</td>
-											<td><?php echo $userDetails->User_email; ?></td>
-											<td><?php echo $userDetails->password; ?></td>
-											<td><?php echo $userDetails->User_mobile; ?></td>
-											<td>
-												<a href="<?php echo base_url('Games/assignGames/').base64_encode($userDetails->User_id).'/'.base64_encode($this->uri->segment(2)); ?>" title="Allocate/Deallocate Games"><?php echo "<b style='color:#0029ff;'>".$userDetails->gameCount."</b>"; ?></a>
-											</td>
-											<td>
-												<div class="dropdown">
-													<a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-														<i class="fa fa-ellipsis-h"></i>
-													</a>
-													<div class="dropdown-menu dropdown-menu-left">
-														<!-- <a class="dropdown-item" href="#"><i class="fa fa-eye"></i> View</a> -->
-														<a class="dropdown-item" href="<?php echo base_url('Users/user/').base64_encode($userDetails->User_id).'/'.$this->uri->segment(2);?>"><i class="fa fa-pencil"></i> Edit</a>
-														<!-- <a class="dropdown-item" href="<?php //echo base_url('Users/assignGames/');?><?php //echo base64_encode($userDetails->User_id); ?>" title="Allocate/Deallocate Games"><i class="fa fa-gamepad"></i> Allocate/Deallocate Games</a> -->
-														<a class="dropdown-item dl_btn" href="javascript:void(0);" class="btn btn-primary dl_btn" id="<?php echo 
-														$userDetails->User_id; ?>" title="Delete"><i class="fa fa-trash"></i> Delete</a>
-													</div>
-												</div>
-											</td>
-										</tr>
-										<?php $i++; }?>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-					<div id="Modal_Bulkupload" class="modal fade" role="dialog">
-						<div class="modal-dialog">
-							<!-- Modal content-->
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal">&times;</button>
-									<h4 class="modal-title">Import Success</h4>
-								</div>
-								<div class="modal-body">
-									<p id="bulk_u_msg"></p>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- Modal -->
-					<div id="Modal_BulkuploadError" class="modal fade" role="dialog">
-						<div class="modal-dialog">
-							<!-- Modal content-->
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal">&times;</button>
-									<h4 class="modal-title"></h4>
-								</div>
-								<div class="modal-body">
-									<p id="bulk_u_err"></p>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+												<th>Sr.No.</th>
+												<th class="datatable-nosort">Enterprize</th>
+												<th class="datatable-nosort">SubEnterprize</th>
+												<th class="table-plus">User Name</th>
+												<th>Email</th>
+												<th>Password</th>
+												<th class="datatable-nosort">Contact</th>
+												<th class="datatable-nosort">Games</th>
+												<th>Duration</th>
+												<th class="datatable-nosort noExport">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php $i=1;
+											foreach ($userDetails as $userDetails) { ?>
+												<tr>
+													<td><?php echo $i; ?></td>
+													<td><?php echo $userDetails->Enterprise_Name; ?></td>
+													<td class="table-plus"><?php echo $userDetails->SubEnterprise_Name ; ?></td>
+													<td><?php echo $userDetails->User_username;?>
+												</td>
+												<td><?php echo $userDetails->User_email; ?></td>
+												<td><?php echo $userDetails->password; ?></td>
+												<td><?php echo $userDetails->User_mobile; ?></td>
+												<td>
+													<a href="<?php echo base_url('Games/assignGames/').base64_encode($userDetails->User_id).'/'.base64_encode($this->uri->segment(2)); ?>" title="Allocate/Deallocate Games"><?php echo "<b style='color:#0029ff;'>".$userDetails->gameCount."</b>"; ?></a>
+												</td>
+												<td><?php echo date('d-m-Y',strtotime($userDetails->User_GameStartDate))." <b>To</b> ".date('d-m-Y',strtotime($userDetails->User_GameEndDate)); ?></td>
+												<td>
+													<td>
+														<div class="dropdown">
+															<a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+																<i class="fa fa-ellipsis-h"></i>
+															</a>
+															<div class="dropdown-menu dropdown-menu-left">
+																<!-- <a class="dropdown-item" href="#"><i class="fa fa-eye"></i> View</a> -->
+																<a class="dropdown-item" href="<?php echo base_url('Users/user/').base64_encode($userDetails->User_id).'/'.$this->uri->segment(2);?>"><i class="fa fa-pencil"></i> Edit</a>
+																<!-- <a class="dropdown-item" href="<?php //echo base_url('Users/assignGames/');?><?php //echo base64_encode($userDetails->User_id); ?>" title="Allocate/Deallocate Games"><i class="fa fa-gamepad"></i> Allocate/Deallocate Games</a> -->
+																<a class="dropdown-item dl_btn" href="javascript:void(0);" class="btn btn-primary dl_btn" id="<?php echo 
+																$userDetails->User_id; ?>" title="Delete"><i class="fa fa-trash"></i> Delete</a>
+															</div>
+														</div>
+													</td>
+												</tr>
+												<?php $i++; }?>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-					<script type="text/javascript">
-						$(document).ready(function(){
-							$('#subenterprise').on('change',function(){
-								$('#filterForm').submit();
-							});
-						});
-					</script>
-					<script type="text/javascript">
-						$('#upload-file').on('click',function(){
-							<?php	if($filterID < 1){ ?>
-								alert('Please select Subenterprise to upload users');
-								return false;
-							<?php } ?>
-						});
-						$('#upload-file').change( function(){
-							var form = $('#uploadUser').get(0);
-							$.ajax({
-								url        : "<?php echo base_url('Users/SubenterpriseUsersCSV/'.$filterID);?>",
-								type       : "POST",
-								data       : new FormData(form),
-								cache      : false,
-								contentType: false,
-								processData: false,
-								beforeSend : function(){
-									$('#loader').addClass('loading');
-								},
-								success: function( result ){
-									try {   
-										var response = JSON.parse( result );
-										if( response.status == 1 ){
-											$('#bulk_u_msg').html( response.msg );
-											$('#Modal_Bulkupload').modal( 'show' );
-										} 
-										else
-										{
-											$('#bulk_u_err').html( response.msg );
-											$('#Modal_BulkuploadError').modal( 'show' );
+							<div id="Modal_Bulkupload" class="modal fade" role="dialog">
+								<div class="modal-dialog">
+									<!-- Modal content-->
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<h4 class="modal-title">Import Success</h4>
+										</div>
+										<div class="modal-body">
+											<p id="bulk_u_msg"></p>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Modal -->
+							<div id="Modal_BulkuploadError" class="modal fade" role="dialog">
+								<div class="modal-dialog">
+									<!-- Modal content-->
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<h4 class="modal-title"></h4>
+										</div>
+										<div class="modal-body">
+											<p id="bulk_u_err"></p>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<script type="text/javascript">
+								$(document).ready(function(){
+									$('#subenterprise').on('change',function(){
+										$('#filterForm').submit();
+									});
+								});
+							</script>
+							<script type="text/javascript">
+								$('#upload-file').on('click',function(){
+									<?php	if($filterID < 1){ ?>
+										alert('Please select Subenterprise to upload users');
+										return false;
+									<?php } ?>
+								});
+								$('#upload-file').change( function(){
+									var form = $('#uploadUser').get(0);
+									$.ajax({
+										url        : "<?php echo base_url('Users/SubenterpriseUsersCSV/'.$filterID);?>",
+										type       : "POST",
+										data       : new FormData(form),
+										cache      : false,
+										contentType: false,
+										processData: false,
+										beforeSend : function(){
+											$('#loader').addClass('loading');
+										},
+										success: function( result ){
+											try {   
+												var response = JSON.parse( result );
+												if( response.status == 1 ){
+													$('#bulk_u_msg').html( response.msg );
+													$('#Modal_Bulkupload').modal( 'show' );
+												} 
+												else
+												{
+													$('#bulk_u_err').html( response.msg );
+													$('#Modal_BulkuploadError').modal( 'show' );
+												}
+											} 
+											catch ( e )
+											{
+												console.log( result );
+											}
+											$('#loader').removeClass('loading');
 										}
-									} 
-									catch ( e )
-									{
-										console.log( result );
-									}
-									$('#loader').removeClass('loading');
-								}
-							});
-						});
-					</script>
+									});
+								});
+							</script>

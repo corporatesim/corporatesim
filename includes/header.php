@@ -19,10 +19,11 @@
 	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,600,700" rel="stylesheet"> 
 	<script src="js/jquery.min.js"></script>	
 	<script src="js/bootstrap.min.js"></script>		
-	<!-- adding sweetalert -->
-	<!-- <script src="<?php echo site_root;?>dist/sweetalert.js"></script> -->
-	<script src="<?php echo site_root;?>dist/sweetalert2.all.min.js"></script>
-	<link rel="stylesheet" href="<?php echo site_root;?>dist/sweetalert2.min.css" id="theme-styles">
+	<!-- adding sweet alert -->
+	<link href="<?php echo site_root;?>dist/sweetalert/sweetalert2.min.css" rel="stylesheet" type="text/css">
+	<link href="<?php echo site_root;?>dist/sweetalert/animate.min.css" rel="stylesheet" type="text/css">
+	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"> -->
+	<script src="<?php echo site_root;?>dist/sweetalert/sweetalert2.all.min.js"></script>
 	
 	<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 	<style>
@@ -54,7 +55,7 @@
 		<div class="dbl-spinner"></div>
 		<div class="dbl-spinner"></div> 
 		<div class="overlay-content">
-			<span>Please Wait...</span>
+			<span id="showOverlayText">Please Wait...</span>
 		</div>
 		<!-- <div style="margin: 20% 0 0 50%;">Please Wait...</div> -->
 	</div>

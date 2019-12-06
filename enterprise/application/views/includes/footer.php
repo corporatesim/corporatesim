@@ -39,6 +39,7 @@
 <script src="<?php echo base_url('common/'); ?>src/plugins/datatables/media/js/button/pdfmake.min.js"></script>
 <script src="<?php echo base_url('common/'); ?>src/plugins/datatables/media/js/button/vfs_fonts.js">
 </script>
+<script src="<?php echo base_url('common/vendors/bootgrid/');?>jquery.bootgrid.min.js"></script>
 <script src="<?php echo base_url('common/'); ?>src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
 <script src="<?php echo base_url('common/'); ?>src/plugins/highcharts-6.0.7/code/highcharts-more.js"></script>
 <!-- datepicker js -->
@@ -198,7 +199,138 @@
 				searchPlaceholder: "Search"
 			},
 		});
+
+		//Show Subenterprise on change of enterprise
+		$('.Enterprise').on('change',function(){
+			$this             = $(this);
+			var option        = '<option value="">--Select SubEnterprise--</option>';
+			var Enterprise_ID = $(this).val();
+			if($(this).val())
+			{ 
+      	// triggering ajax to show the subenterprise linked with this enterprise
+      	$.ajax({
+      		url :"<?php echo base_url();?>Ajax/get_subenterprise/"+Enterprise_ID,
+      		type: "POST",
+      		success: function( result )
+      		{
+      			result = JSON.parse(result);
+      			if(result.length > 0)
+      			{
+      				$(result).each(function(i,e)
+      				{
+      					option += ("<option value='"+result[i].SubEnterprise_ID+"'>"+result[i].SubEnterprise_Name+"</option>");
+      				});
+      				$this.parents('form').find('select.subenterprise').html(option);
+      				option = '<option value="">--Select SubEnterprise--</option>';
+            	// $('.SubEnterprise').html(option);
+            }
+            else
+            {
+            	$this.parents('form').find('select.subenterprise').html(option);
+            	// alert('No SubEnterprise Associated With The Selected Enterprise');
+            }
+          },
+        });          
+      }
+      else
+      {
+      	$this.parents('form').find('select.subenterprise').html(option);
+      	alert('Please Select Enterprise...');
+      	return false;
+      }
+    });
+
+		// to manage allocate and de-allocate the games
+		$('.allocateDeallocate').each(function(){
+			$(this).on('click', function(){
+				var gamedata  = $(this).data('gamedata');
+				var startdate = $(this).prev().data('startdate');
+				var enddate   = $(this).prev().data('enddate');
+				// console.log(startdate+' and '+enddate);
+				showPopup(gamedata,startdate,enddate);
+			});
+		});
+		$('#select_all').click(function(i,e){
+			if($(this).is(':checked'))
+			{
+				$('input[type=checkbox]').each(function(i,e){
+					if($(this).is(":not(:disabled)"))
+					{
+						$(this).prop('checked',true);
+					}
+				});
+			}
+			else
+			{
+				$('input[type=checkbox]').each(function(i,e){
+					if($(this).is(":not(:disabled)"))
+					{
+						$(this).prop('checked',false);
+					}
+				});
+			}
+		});
 	});
+	// document.ready function ends here
+
+	function showPopup(gamedata,startdate,enddate)
+	{
+		// if logged-in as superAdmin then show 4 options to allocate/de-allocate games
+		<?php if($this->session->userdata('loginData')['User_Role'] == 'superadmin'){ ?>
+			Swal.fire({
+				title: 'Allocate/De-Allocate Game To',
+				html:
+				'<a href="<?php echo base_url('AllocateDeallocateGame/index/');?>'+gamedata+'/'+btoa('enterprise')+'" id="enterprise" class="btn btn-outline-primary">' +
+				'Enterprise' +
+				'</a><br/>' +
+				'<a href="<?php echo base_url('AllocateDeallocateGame/index/');?>'+gamedata+'/'+btoa('subEnterprise')+'" id="subEnterprise" class="btn btn-outline-info">' +
+				'Subenterprise' +
+				'</a><br/>' +
+				'<a href="<?php echo base_url('AllocateDeallocateGame/index/');?>'+gamedata+'/'+btoa('entErpriseUsers')+'" id="entErpriseUsers" class="btn btn-outline-warning">' +
+				'Enterprise Users' +
+				'</a><br/>' +
+				'<a href="<?php echo base_url('AllocateDeallocateGame/index/');?>'+gamedata+'/'+btoa('subEnterpriseUsers')+'" id="subEnterpriseUsers" class="btn btn-outline-dark">' +
+				'Subenterprise Users' +
+				'</a>',
+				showConfirmButton: false,
+				showCancelButton : true,
+				cancelButtonColor: '#dc3545',
+			})
+		<?php } ?>
+		// if logged-in as enterpruse then show 3 options to allocate/de-allocate games
+		<?php if($this->session->userdata('loginData')['User_Role'] == 1){ ?>
+			Swal.fire({
+				title: 'Allocate/De-Allocate Game To',
+				html:
+				'<a href="<?php echo base_url('AllocateDeallocateGame/index/');?>'+gamedata+'/'+btoa('entErpriseUsers')+'/'+btoa(startdate)+'/'+btoa(enddate)+'" id="entErpriseUsers" class="btn btn-outline-warning">' +
+				'My Users' +
+				'</a><br/>' +
+				'<a href="<?php echo base_url('AllocateDeallocateGame/index/');?>'+gamedata+'/'+btoa('subEnterprise')+'/'+btoa(startdate)+'/'+btoa(enddate)+'" id="subEnterprise" class="btn btn-outline-info">' +
+				'Subenterprise' +
+				'</a><br/>' +
+				'<a href="<?php echo base_url('AllocateDeallocateGame/index/');?>'+gamedata+'/'+btoa('subEnterpriseUsers')+'/'+btoa(startdate)+'/'+btoa(enddate)+'" id="subEnterpriseUsers" class="btn btn-outline-dark">' +
+				'Subenterprise Users' +
+				'</a>',
+				showConfirmButton: false,
+				showCancelButton : true,
+				cancelButtonColor: '#dc3545',
+			})
+		<?php } ?>
+		// if logged-in as subEnterprise then show 1 options to allocate/de-allocate games
+		<?php if($this->session->userdata('loginData')['User_Role'] == 2){ ?>
+			Swal.fire({
+				title: 'Allocate/De-Allocate Game To',
+				html:
+				'<a href="<?php echo base_url('AllocateDeallocateGame/index/');?>'+gamedata+'/'+btoa('subEnterpriseUsers')+'/'+btoa(startdate)+'/'+btoa(enddate)+'" id="subEnterpriseUsers" class="btn btn-outline-dark">' +
+				'My Users' +
+				'</a>',
+				showConfirmButton: false,
+				showCancelButton : true,
+				cancelButtonColor: '#dc3545',
+			})
+		<?php } ?>
+	}
+
 	// add datepicker here
 	function datepickerBindHere()
 	{
@@ -277,296 +409,5 @@
 	});
 </script>
 <!-- End Delete -->
-
-<script type="text/javascript">
-	Highcharts.chart('areaspline-chart', {
-		chart: {
-			type: 'areaspline'
-		},
-		title: {
-			text: ''
-		},
-		legend: {
-			layout         : 'vertical',
-			align          : 'left',
-			verticalAlign  : 'top',
-			x              : 70,
-			y              : 20,
-			floating       : true,
-			borderWidth    : 1,
-			backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-		},
-		xAxis: {
-			categories: [
-			'Monday',
-			'Tuesday',
-			'Wednesday',
-			'Thursday',
-			'Friday',
-			'Saturday',
-			'Sunday'
-			],
-			plotBands: [{
-				from: 4.5,
-				to  : 6.5,
-			}],
-			gridLineDashStyle: 'longdash',
-			gridLineWidth    : 1,
-			crosshair        : true
-		},
-		yAxis: {
-			title: {
-				text: ''
-			},
-			gridLineDashStyle: 'longdash',
-		},
-		tooltip: {
-			shared     : true,
-			valueSuffix: ' units'
-		},
-		credits: {
-			enabled: false
-		},
-		plotOptions: {
-			areaspline: {
-				fillOpacity: 0.6
-			}
-		},
-		series: [{
-			name : 'John',
-			data : [0, 5, 8, 6, 3, 10, 8],
-			color: '#f5956c'
-		}, {
-			name : 'Jane',
-			data : [0, 3, 6, 3, 7, 5, 9],
-			color: '#f56767'
-		}, {
-			name : 'Johnny',
-			data : [0, 2, 5, 3, 2, 4, 0],
-			color: '#a683eb'
-		}, {
-			name : 'Daniel',
-			data : [0, 4, 7, 3, 0, 7, 4],
-			color: '#41ccba'
-		}]
-	});
-
-
-		// Device Usage chart
-		Highcharts.chart('device-usage', {
-			chart: {
-				type: 'pie'
-			},
-			title: {
-				text: ''
-			},
-			subtitle: {
-				text: ''
-			},
-			credits: {
-				enabled: false
-			},
-			plotOptions: {
-				series: {
-					dataLabels: {
-						enabled: false,
-						format : '{point.name}: {point.y:.1f}%'
-					}
-				},
-				pie: {
-					innerSize: 127,
-					depth    : 45
-				}
-			},
-
-			tooltip: {
-				headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-				pointFormat : '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
-			},
-			series: [{
-				name        : 'Brands',
-				colorByPoint: true,
-				data: [{
-					name : 'IE',
-					y    : 10,
-					color: '#ecc72f'
-				}, {
-					name: 'Chrome',
-					y    : 40,
-					color: '#46be8a'
-				}, {
-					name: 'Firefox',
-					y    : 30,
-					color: '#f2a654'
-				}, {
-					name: 'Safari',
-					y    : 10,
-					color: '#62a8ea'
-				}, {
-					name: 'Opera',
-					y    : 10,
-					color: '#e14e50'
-				}]
-			}]
-		});
-
-		// gauge chart
-		Highcharts.chart('ram', {
-
-			chart: {
-				type               : 'gauge',
-				plotBackgroundColor: null,
-				plotBackgroundImage: null,
-				plotBorderWidth    : 0,
-				plotShadow         : false
-			},
-			title: {
-				text: ''
-			},
-			credits: {
-				enabled: false
-			},
-			pane: {
-				startAngle: -150,
-				endAngle  : 150,
-				background: [{
-					borderWidth: 0,
-					outerRadius: '109%'
-				}, {
-					borderWidth: 0,
-					outerRadius: '107%'
-				}, {
-				}, {
-					backgroundColor: '#fff',
-					borderWidth    : 0,
-					outerRadius    : '105%',
-					innerRadius    : '103%'
-				}]
-			},
-
-			yAxis: {
-				min              : 0,
-				max              : 200,
-				
-				minorTickInterval: 'auto',
-				minorTickWidth   : 1,
-				minorTickLength  : 10,
-				minorTickPosition: 'inside',
-				minorTickColor   : '#666',
-				
-				tickPixelInterval: 30,
-				tickWidth        : 2,
-				tickPosition     : 'inside',
-				tickLength       : 10,
-				tickColor        : '#666',
-				labels           : {
-					step    : 2,
-					rotation: 'auto'
-				},
-				title: {
-					text: 'RAM'
-				},
-				plotBands: [{
-					from : 0,
-					to   : 120,
-					color: '#55BF3B'
-				}, {
-					from : 120,
-					to   : 160,
-					color: '#DDDF0D'
-				}, {
-					from : 160,
-					to   : 200,
-					color: '#DF5353'
-				}]
-			},
-
-			series: [{
-				name   : 'Speed',
-				data   : [80],
-				tooltip: {
-					valueSuffix: '%'
-				}
-			}]
-		});
-		Highcharts.chart('cpu', {
-
-			chart: {
-				type               : 'gauge',
-				plotBackgroundColor: null,
-				plotBackgroundImage: null,
-				plotBorderWidth    : 0,
-				plotShadow         : false
-			},
-			title: {
-				text: ''
-			},
-			credits: {
-				enabled: false
-			},
-			pane: {
-				startAngle: -150,
-				endAngle  : 150,
-				background: [{
-					borderWidth: 0,
-					outerRadius: '109%'
-				}, {
-					borderWidth: 0,
-					outerRadius: '107%'
-				}, {
-				}, {
-					backgroundColor: '#fff',
-					borderWidth    : 0,
-					outerRadius    : '105%',
-					innerRadius    : '103%'
-				}]
-			},
-
-			yAxis: {
-				min: 0,
-				max: 200,
-
-				minorTickInterval: 'auto',
-				minorTickWidth   : 1,
-				minorTickLength  : 10,
-				minorTickPosition: 'inside',
-				minorTickColor   : '#666',
-
-				tickPixelInterval: 30,
-				tickWidth        : 2,
-				tickPosition     : 'inside',
-				tickLength       : 10,
-				tickColor        : '#666',
-				labels: {
-					step: 2,
-					rotation: 'auto'
-				},
-				title: {
-					text: 'CPU'
-				},
-				plotBands: [{
-					from : 0,
-					to   : 120,
-					color: '#55BF3B'
-				}, {
-					from : 120,
-					to   : 160,
-					color: '#DDDF0D'
-				}, {
-					from : 160,
-					to   : 200,
-					color: '#DF5353'
-				}]
-			},
-
-			series: [{
-				name: 'Speed',
-				data: [120],
-				tooltip: {
-					valueSuffix: ' %'
-				}
-			}]
-		});
-	</script>
 </body>
 </html>

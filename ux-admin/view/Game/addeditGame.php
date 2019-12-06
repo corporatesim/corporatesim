@@ -22,10 +22,11 @@
 				<li class="active"><a
 					href="<?php echo site_root."ux-admin/ManageGame"; ?>"> Manage 
 				Game</a></li>
-				<li class="active"><?php echo $header; ?></li>
+				<li class="active"><?php echo $header; ?> <?php echo ($gamedetails->Game_Name)?"<b>(".$gamedetails->Game_Name.")</b>":'';?></li>
 			</ul>
 		</div>
 	</div>
+
 	<?php if(isset($_GET['edit'])){ ?>
 		<div class="row">
 			<div class="col-sm-12">
@@ -61,25 +62,25 @@
 						<div class="col-sm-12">
 							<form method="POST" action="" id="game_frm" name="game_frm" enctype="multipart/form-data">
 								<div class="row col-md-12">
-									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12">
+									<div class="row name col-md-3 col-lg-3 col-sm-12 col-xs-12">
 										<div class="form-group">
-											<?php if($gamedetails->Game_Elearning == 1)
-											{
-												$checked = checked;
-											}
-											else
-											{
-												$checked = '';
-											}
-											?>
-											<label for="eLearning" class="containerCheckbox">
-												<input type="checkbox" class="" name="eLearning" id="eLearning" value="1" <?php echo $checked;?>> eLearning
+											<label for="Game_Type" class="containerCheckbox">
+												<input type="checkbox" class="" name="Game_Type" id="Game_Type" value="1" <?php echo ($gamedetails->Game_Type == 1)?'checked':'';?>> Bot-Enabled
 												<span class="checkmark"></span>
 											</label>
 										</div>
 									</div>
 
-									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipIntroduction">
+									<div class="row name col-md-3 col-lg-3 col-sm-12 col-xs-12">
+										<div class="form-group">
+											<label for="eLearning" class="containerCheckbox">
+												<input type="checkbox" class="" name="eLearning" id="eLearning" value="1" <?php echo ($gamedetails->Game_Elearning == 1)?'checked':'';?>> eLearning
+												<span class="checkmark"></span>
+											</label>
+										</div>
+									</div>
+
+									<div class="row name col-md-3 col-lg-3 col-sm-12 col-xs-12" id="skipIntroduction" data-toggle="tooltip" title="This will skip introduction from all scenario for this game">
 										<div class="form-group">
 											<div class="form-check" data-toggle="tooltip">
 												<label class="form-check-label containerCheckbox" for="Game_Introduction">
@@ -90,7 +91,7 @@
 										</div>
 									</div>
 
-									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipDescription">
+									<div class="row name col-md-3 col-lg-3 col-sm-12 col-xs-12" id="skipDescription" data-toggle="tooltip" title="This will skip description from all scenario for this game">
 										<div class="form-group">
 											<div class="form-check" data-toggle="tooltip">
 												<label class="form-check-label containerCheckbox" for="Game_Description">
@@ -101,7 +102,7 @@
 										</div>
 									</div>
 
-									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipIntroductionLink">
+									<div class="row name col-md-3 col-lg-3 col-sm-12 col-xs-12" id="skipIntroductionLink" data-toggle="tooltip" title="This will hide introduction link from all scenario for this game">
 										<div class="form-group">
 											<div class="form-check" data-toggle="tooltip">
 												<label class="form-check-label containerCheckbox" for="Game_IntroductionLink">
@@ -112,7 +113,7 @@
 										</div>
 									</div>
 
-									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipDescriptionLink">
+									<div class="row name col-md-3 col-lg-3 col-sm-12 col-xs-12" id="skipDescriptionLink" data-toggle="tooltip" title="This will hide description link from all scenario for this game">
 										<div class="form-group">
 											<div class="form-check" data-toggle="tooltip">
 												<label class="form-check-label containerCheckbox" for="Game_DescriptionLink">
@@ -123,7 +124,7 @@
 										</div>
 									</div>
 
-									<div class="row name col-md-4 col-lg-4 col-sm-12 col-xs-12" id="skipBackToIntro">
+									<div class="row name col-md-3 col-lg-3 col-sm-12 col-xs-12" id="skipBackToIntro" data-toggle="tooltip" title="This will hide back to introduction link from all scenario for this game">
 										<div class="form-group">
 											<div class="form-check" data-toggle="tooltip">
 												<label class="form-check-label containerCheckbox" for="Game_BackToIntro">
@@ -133,6 +134,18 @@
 											</div>
 										</div>
 									</div>
+
+									<div class="row name col-md-3 col-lg-3 col-sm-12 col-xs-12" id="skipHideScenarioLink" data-toggle="tooltip" title="Hide scenario link from introduction/game_description page">
+										<div class="form-group">
+											<div class="form-check" data-toggle="tooltip">
+												<label class="form-check-label containerCheckbox" for="Game_HideScenarioLink">
+													<input type="checkbox" class="form-check-input" id="Game_HideScenarioLink" name="Game_HideScenarioLink" value="1" <?php echo ($gamedetails->Game_HideScenarioLink == 1)?'checked':'';?>> Hide Scenario Link
+													<span class="checkmark"></span>
+												</label>
+											</div>
+										</div>
+									</div>
+
 								</div>
 
 								<div class="row name" id="name">
@@ -217,7 +230,7 @@
 									</div>
 									<?php if(!empty($gamedetails->Game_Image)) { ?>
 										<div class="col-md-6 col-xs-12">
-											<img src="<?php echo site_root.'images/'.$gamedetails->Game_Image;?>" alt="Game Image">
+											<img src="<?php echo site_root.'images/'.$gamedetails->Game_Image;?>" alt="Game Image" width="150">
 										</div>
 									<?php } ?>
 								</div>
@@ -300,6 +313,37 @@
 			//	}
 		});
 
+		disableCheckboxIfBotEnabled();
+		makeCheckBoxDisable();
+
 	});
+
+	function disableCheckboxIfBotEnabled()
+	{
+		// if game is bot-enabled then disable all checkboxes
+		$('#Game_Type').on('click',function(){
+			makeCheckBoxDisable();
+		});
+	}
+
+	function makeCheckBoxDisable()
+	{
+		if($('#Game_Type').is(':checked'))
+		{
+			$('#Game_IntroductionLink').prop({"disabled": true, "checked" : false});
+			$('#Game_Introduction').prop({"disabled"    : true, "checked" : false});
+			$('#Game_Description').prop({"disabled"     : true, "checked" : false});
+			$('#Game_DescriptionLink').prop({"disabled" : true, "checked" : false});
+			$('#Game_BackToIntro').prop({"disabled"     : true, "checked" : false});
+		}
+		else
+		{
+			$('#Game_IntroductionLink').prop({"disabled": false});
+			$('#Game_Introduction').prop({"disabled"    : false});
+			$('#Game_Description').prop({"disabled"     : false});
+			$('#Game_DescriptionLink').prop({"disabled" : false});
+			$('#Game_BackToIntro').prop({"disabled"     : false});
+		}
+	}
 // -->
 </script>

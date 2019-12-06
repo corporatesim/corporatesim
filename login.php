@@ -21,7 +21,7 @@ if($_SESSION['username'] != NULL)
 $funObj = new Functions();
 
 // fetch logo to show for b2c modal
-$sql = " SELECT * FROM GAME_DOMAIN WHERE Domain_Name='".$enterpriseDomain."' AND Domain_Status=0";
+$sql     = " SELECT * FROM GAME_DOMAIN WHERE Domain_Name='".$enterpriseDomain."' AND Domain_Status=0";
 $logoObj = $funObj->ExecuteQuery($sql);
 // echo $sql.'<br>'; print_r($logoObj->num_rows); exit();
 if($logoObj->num_rows > 0)
@@ -58,11 +58,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 
 		$sql = "SELECT u.*, ge.Enterprise_Logo ,gse.SubEnterprise_Logo,gd.Domain_Name
 		FROM GAME_SITE_USERS u INNER JOIN GAME_USER_AUTHENTICATION ua
-		ON u.User_id = ua.Auth_userid LEFT JOIN GAME_ENTERPRISE ge ON u.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_SUBENTERPRISE gse ON u.User_SubParentId=gse.SubEnterprise_ID LEFT JOIN GAME_DOMAIN gd ON ge.Enterprise_ID = gd.Domain_EnterpriseId 
-		WHERE (u.User_username='".$username."'
-		or u.User_email='".$username."')
-		and ua.Auth_password='".$password."'
-		";
+		ON u.User_id = ua.Auth_userid LEFT JOIN GAME_ENTERPRISE ge ON u.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_SUBENTERPRISE gse ON u.User_SubParentId=gse.SubEnterprise_ID LEFT JOIN GAME_DOMAIN gd ON ge.Enterprise_ID = gd.Domain_EnterpriseId AND gd.Domain_Status=0  AND( CASE WHEN u.User_Role = 1 THEN gd.Domain_EnterpriseId = u.User_ParentId WHEN u.User_Role = 2 THEN gd.Domain_SubEnterpriseId = u.User_SubParentId END ) WHERE (u.User_username='".$username."' OR u.User_email='".$username."')	AND ua.Auth_password='".$password."'";
 		// echo $sql; exit();
 		$object = $funObj->ExecuteQuery($sql);
 

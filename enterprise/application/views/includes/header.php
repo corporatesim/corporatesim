@@ -27,6 +27,15 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script src="<?php echo base_url('common/'); ?>src/jquery/dist/jquery.min.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+  <!-- material icons for bootgrid -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+  <link href="<?php echo base_url('common/vendors/bootgrid/');?>jquery.bootgrid.min.css" rel="stylesheet" type="text/css">
+  <link href="<?php echo base_url('common/vendors/sweetalert/');?>sweetalert2.min.css" rel="stylesheet" type="text/css">
+  <script src="<?php echo base_url('common/vendors/sweetalert/');?>sweetalert2.all.min.js"></script>
+  <!-- adding these links to include chart.js -->
+  <script src="<?php echo base_url('common/vendors/chartjs/chart.bundle.min.js');?>"></script>
+  <link href="<?php echo base_url('common/vendors/chartjs/chart.min.css');?>" rel="stylesheet" type="text/css">
+  <script src="<?php echo base_url('common/vendors/chartjs/chart.min.js');?>"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -178,4 +187,24 @@
 </div>
 </div>
 </div>
+<!-- general purpose modal -->
+<div id="randomModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"></h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 </div>

@@ -29,7 +29,6 @@
 									<h5 class="text-blue">Choose To Download</h5>
 								</div>
 
-
 								<form action="" method="post" class="" id="">
 									<!-- add filters accordingly, as per the roles if user is superadmin-->
 									<?php if($this->session->userdata('loginData')['User_Role']=='superadmin'){ ?>
@@ -220,6 +219,9 @@
 								</form>
 							</div>
 						</div>
+						<br>
+						<br>
+						<br>
 
 						<script>
 							$(document).ready(function(){
@@ -440,15 +442,9 @@
 													siteUsers += ('<div class="custom-control custom-checkbox col-sm-12 col-md-2 col-lg-2" title="'+result[i].User_email+'"><input type="checkbox" class="custom-control-input" value="'+result[i].User_id+'" id="'+result[i].User_id+'_user" name="siteUsers[]"><label class="custom-control-label" for="'+result[i].User_id+'_user" '+makeUsersRed+'>'+result[i].User_fname+" "+result[i].User_lname+'</label></div>');
 													userCount++;
 												});
+												console.log(userCount);
 												$('#addUsersHere').html(siteUsers);
-												if(notSbumittedCount>0)
-												{
-													$('#showUserCount').html('<span class="alert-success">Total <b>'+userCount+'</b> Users Played, In Which <b>'+notSbumittedCount+'</b> Users(<b>showing in red</b>) Did Not Submitted</span>');
-												}
-												else
-												{
-													$('#showUserCount').html('<span class="alert-success">Total <b>'+userCount+'</b> Users Played</span>');
-												}
+												$('#showUserCount').html('<span class="alert-success">Total Users Played: <b>'+userCount+'</b>, Completed: <b>'+parseInt(userCount-notSbumittedCount)+'</b>, Incompleted(in red): <b>'+notSbumittedCount+'</b></span>');
 												// if any of the checkbox is not checked then uncheck the selectAll checkbox
 												$('input[type="checkbox"]').on('click', function(){
 													if(!$(this).is(':checked'))

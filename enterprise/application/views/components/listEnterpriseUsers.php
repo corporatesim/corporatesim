@@ -1,3 +1,4 @@
+<!-- <?php // echo "<pre>"; print_r($enterpriseusersDetails); exit;?> -->
 <script type="text/javascript">
 	var loc_url_del = "<?php echo base_url('Users/delete/');?>";
 	var func        = "<?php echo $this->uri->segment(2);?>";
@@ -11,7 +12,7 @@
 					<div class="col-md-6 col-sm-12">
 						<div class="title">
 							<h1><a href="<?php echo base_url('Users/addUsers/entuser');?>" data-toggle="tooltip" title="Add User"><i class="fa fa-plus-circle text-blue"> 
-              </i></a> Enterprize Users</h1>
+							</i></a> Enterprize Users</h1>
 						</div>
 						<nav aria-label="breadcrumb" role="navigation">
 							<ol class="breadcrumb">
@@ -39,40 +40,42 @@
 										</span>
 									</form>
 									 <a href="<?php echo base_url()."csvdemofiles/user-enterprise-upload-csv-demo-file.csv"; ?>" download="DemoEnterpriseUsers.csv"><u>Demo Enterprise Users</u></a>
-								</div> -->
-								<div class="clearfix mb-20">
-									<h5 class="text-blue">Enterprize Users Details</h5>
-								</div>
-								<div class="row">
-									<table class="stripe hover multiple-select-row data-table-export nowrap">
-										<thead>
-											<tr>
-												<th>Sr.No.</th>
-												<th>Enterprize</th>
-												<th class="table-plus">UserName</th>
-												<th>Email</th>
-												<th>Password</th>
-												<th>Contact</th>
-												<th class="datatable-nosort">Games</th>
-												<th class="datatable-nosort noExport">Action</th>
-											</tr>
-										</thead>
-										<tbody>
-											<?php $i=1;
-											foreach ($enterpriseusersDetails as $enterpriseusersDetails) { ?>
+									</div> -->
+									<div class="clearfix mb-20">
+										<h5 class="text-blue">Enterprize Users Details</h5>
+									</div>
+									<div class="row">
+										<table class="stripe hover multiple-select-row data-table-export nowrap">
+											<thead>
 												<tr>
+													<th>Sr.No.</th>
+													<th>Enterprize</th>
+													<th class="table-plus">UserName</th>
+													<th>Email</th>
+													<th>Password</th>
+													<th>Contact</th>
+													<th class="datatable-nosort">Games</th>
+													<th>Duration</th>
+													<th class="datatable-nosort noExport">Action</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php $i=1;
+												foreach ($enterpriseusersDetails as $enterpriseusersDetails) { ?>
+													<tr>
 														<td><?php echo $i; ?></td>
-													<td class="table-plus"><?php echo $enterpriseusersDetails->Enterprise_Name ; ?></td>
-													<td><?php echo $enterpriseusersDetails->User_username;?>
-												</td>
-												<td ><?php echo $enterpriseusersDetails->User_email; ?></td>
-												<td ><?php echo $enterpriseusersDetails->password; ?></td>
-												<td><?php echo $enterpriseusersDetails->User_mobile; ?></td>
-												<td>
-													<a href="<?php echo base_url('Games/assignGames/');?>
-													<?php echo base64_encode($enterpriseusersDetails->User_id).'/'.base64_encode($this->uri->segment(2));?>" title="Allocate/Deallocate Games"><?php echo "<b style='color:#0029ff;'>".$enterpriseusersDetails->gameCount."</b>";?>
+														<td class="table-plus"><?php echo $enterpriseusersDetails->Enterprise_Name ; ?></td>
+														<td><?php echo $enterpriseusersDetails->User_username;?>
+													</td>
+													<td ><?php echo $enterpriseusersDetails->User_email; ?></td>
+													<td ><?php echo $enterpriseusersDetails->password; ?></td>
+													<td><?php echo $enterpriseusersDetails->User_mobile; ?></td>
+													<td>
+														<a href="<?php echo base_url('Games/assignGames/');?>
+														<?php echo base64_encode($enterpriseusersDetails->User_id).'/'.base64_encode($this->uri->segment(2));?>" title="Allocate/Deallocate Games"><?php echo "<b style='color:#0029ff;'>".$enterpriseusersDetails->gameCount."</b>";?>
 													</a>
 												</td>
+												<td><?php echo date('d-m-Y',strtotime($enterpriseusersDetails->User_GameStartDate))." <b>To</b> ".date('d-m-Y',strtotime($enterpriseusersDetails->User_GameEndDate)); ?></td>
 												<td>
 													<div class="dropdown">
 														<a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -95,59 +98,59 @@
 							</div>
 						</div>
 
-						  <div id="Modal_Bulkupload" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Import Success</h4>
-              </div>
-              <div class="modal-body">
-                <p id="bulk_u_msg"></p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Modal -->
-        <div id="Modal_BulkuploadError" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"></h4>
-              </div>
-              <div class="modal-body">
-                <p id="bulk_u_err"></p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
+						<div id="Modal_Bulkupload" class="modal fade" role="dialog">
+							<div class="modal-dialog">
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="modal-title">Import Success</h4>
+									</div>
+									<div class="modal-body">
+										<p id="bulk_u_msg"></p>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Modal -->
+						<div id="Modal_BulkuploadError" class="modal fade" role="dialog">
+							<div class="modal-dialog">
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="modal-title"></h4>
+									</div>
+									<div class="modal-body">
+										<p id="bulk_u_err"></p>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
 
-          <script type="text/javascript">
-          <!--
+						<script type="text/javascript">
+							<!--
 
-            $('#upload-file').change( function(){
-              var form = $('#uploadUser').get(0);                     
-              $.ajax({
-                url        : "<?php echo base_url();?>Users/EnterpriseUsersCSV",
-                type       : "POST",
-                data       : new FormData(form),
-                cache      : false,
-                contentType: false,
-                processData: false,
-                beforeSend : function(){
-                  $('#loader').addClass('loading');
-                },
-                success: function( result ){
-                  try {   
+								$('#upload-file').change( function(){
+									var form = $('#uploadUser').get(0);                     
+									$.ajax({
+										url        : "<?php echo base_url();?>Users/EnterpriseUsersCSV",
+										type       : "POST",
+										data       : new FormData(form),
+										cache      : false,
+										contentType: false,
+										processData: false,
+										beforeSend : function(){
+											$('#loader').addClass('loading');
+										},
+										success: function( result ){
+											try {   
                 //alert(result);                            
                 var response = JSON.parse( result );
                 //alert(response.status);
@@ -156,16 +159,16 @@
                   $('#bulk_u_msg').html( response.msg );
                   $('#Modal_Bulkupload').modal( 'show' );
                 } else {
-                  $('#bulk_u_err').html( response.msg );
-                  $('#Modal_BulkuploadError').modal( 'show' );
+                	$('#bulk_u_err').html( response.msg );
+                	$('#Modal_BulkuploadError').modal( 'show' );
                 }
               } catch ( e ) {
-                console.log( result );
+              	console.log( result );
               }
               $('#loader').removeClass('loading');
             }
           });
-            });
+								});
           //-->
         </script>
 

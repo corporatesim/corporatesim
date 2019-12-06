@@ -6,17 +6,41 @@ require_once doc_root.'includes/PHPExcel.php';
 $noSelect2    = 'dont';
 $functionsObj = new Model();
 
-$object   = $functionsObj->SelectData(array(), 'GAME_SITESETTINGS', array('id=1'), '', '', '', '', 0);
-$sitename = $functionsObj->FetchObject($object);
-$file     = 'list.php';
+$object        = $functionsObj->SelectData(array(), 'GAME_SITESETTINGS', array('id=1'), '', '', '', '', 0);
+$sitename      = $functionsObj->FetchObject($object);
+$file          = 'list.php';
 // include PHPExcel
-
 //echo $_POST['chkround'];
 //exit();
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 {
 	// echo "<pre>"; print_r($_POST); exit();
+
+	// check that this is input of bot enabled game and then check that only one area is there for input side, we can keep multiple areas for output side
+	$Game_Type = $_POST['Game_Type'];
+	if($Game_Type > 0 && $_POST['Type']=='input')
+	{
+		$botAreaId = $_POST['area_id'];
+		$botLinkId = $_POST['link'];
+		$botObj    = $functionsObj->SelectData(array(), 'GAME_LINKAGE_SUB', array('SubLink_LinkID='.$botLinkId.' AND SubLink_Type=0'), '', '', '', '', 0);
+		if($botObj->num_rows > 0)
+		{
+			$rowOne = $functionsObj->FetchObject($botObj);
+			if($rowOne->SubLink_AreaID != $botAreaId)
+			{
+				$_SESSION['msg']     =  "Bot enabled game can not have more than one area(".$rowOne->SubLink_AreaName.") in input side.  ";
+				$_SESSION['type[0]'] =  "inputError";
+				$_SESSION['type[1]'] =  "has-error";
+				header("Location: ".site_root."ux-admin/linkage/link/".$botLinkId);
+				exit(0);
+			}
+		}
+	}
+
+	// if multiple choice then input value should be the default value instead of 0
+	$views_current = $_POST['defaultCheckedValue'];
+
 	if(!isset($_GET['tab']))
 	{
 		if(isset($_POST['game_id']) && !empty($_POST['game_id']))
@@ -38,6 +62,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 		$Game_DescriptionLink  = $gameSkipStatus->Game_DescriptionLink;
 		$Game_BackToIntro      = $gameSkipStatus->Game_BackToIntro;
 		$Game_Introduction     = $gameSkipStatus->Game_Introduction;
+		$Game_Type             = $gameSkipStatus->Game_Type;
 
 		$Link_Description      = isset($_POST['Link_Description'])?$_POST['Link_Description']:0;
 		$Link_IntroductionLink = isset($_POST['Link_IntroductionLink'])?$_POST['Link_IntroductionLink']:0;
@@ -197,9 +222,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 			);
 			// echo "<pre>"; print_r($linkdetails); exit();
 			
-			$result = $functionsObj->InsertData('GAME_LINKAGE_SUB', $linkdetails, 0, 0);
-			$id     = $functionsObj->InsertID();
-			// adding the below query to updat the newly added fields liek Area, Comp, SubComp name and formula exp to reduce joins
+			// $result = $functionsObj->InsertData('GAME_LINKAGE_SUB', $linkdetails, 0, 0);
+			// $id     = $functionsObj->InsertID();
+			// adding area to game_area_sequencing table if not exist $linkid and $_POST['area_id']
+			$areaSequencing = $functionsObj->AreaSequencing($linkid,$_POST['area_id']);
+			// echo $linkid.' , '.$_POST['area_id']."<pre>"; print_r($areaSequencing); exit;
+
+			// adding the below query to updat the newly added fields like Area, Comp, SubComp name and formula exp to reduce joins
 			$updateSql = "UPDATE GAME_LINKAGE_SUB gls LEFT JOIN GAME_AREA ga ON ga.Area_ID = gls.SubLink_AreaID LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID LEFT JOIN GAME_FORMULAS gf ON gf.f_id = gls.SubLink_FormulaID SET gls.SubLink_AreaName = ga.Area_Name, gls.SubLink_CompName = gc.Comp_Name, gls.SubLink_SubcompName = gs.SubComp_Name, gls.SubLink_FormulaExpression = gf.expression	WHERE gls.SubLink_AreaID =".$_POST['area_id'];
 			$functionsObj->ExecuteQuery($updateSql);
 			if($result)
@@ -213,6 +242,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 					'views_sublinkid' => $id,
 					'views_key'       => $_POST['input_key'],
 					'views_Game_ID'   => $views_Game_ID->Link_GameID,
+					'views_current'   => $views_current,
 				);
 				$snap_view = $functionsObj->InsertData('GAME_VIEWS', $game_views_array, 0, 0);
 				// filling data to snap view end here for game views table
@@ -307,7 +337,8 @@ else
 		'Link_Order'            =>	$_POST['order'],
 		'Link_Mode'             =>	$_POST['Mode'],
 		'Link_Enabled'          =>	isset($_POST['enabled']) ? 1 : 0,
-		'Link_Branching'        =>	isset($_POST['Link_Branching'])?$_POST['Link_Branching']:0,
+		// if game is bot-enabled then branching will always be enabled
+		'Link_Branching'        =>	isset($_POST['Link_Branching'])?$_POST['Link_Branching']:($Game_Type == 1)?1:0,
 		'Link_Introduction'     =>	$Link_Introduction,
 		'Link_IntroductionLink' =>	$Link_IntroductionLink,
 		'Link_Description'      =>	$Link_Description,
@@ -357,6 +388,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 {	
 	// echo "<pre>"; print_r($_POST); exit();
 	// header('X-XSS-Protection:0');	echo "<pre>"; print_r($_POST); die('Update Linkage'); 
+
+	// if multiple choice then input value should be the default value instead of 0
+	$views_current = $_POST['defaultCheckedValue'];
+	
 	if(isset($_POST['game_id']) && !empty($_POST['game_id']))
 	{
 		$id_game = $_POST['game_id'];
@@ -377,6 +412,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 	$Game_DescriptionLink  = $gameSkipStatus->Game_DescriptionLink;
 	$Game_BackToIntro      = $gameSkipStatus->Game_BackToIntro;
 	$Game_Introduction     = $gameSkipStatus->Game_Introduction;
+	$Game_Type             = $gameSkipStatus->Game_Type;
 
 	$Link_Description      = isset($_POST['Link_Description'])?$_POST['Link_Description']:0;
 	$Link_IntroductionLink = isset($_POST['Link_IntroductionLink'])?$_POST['Link_IntroductionLink']:0;
@@ -452,7 +488,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 
 		$object = $functionsObj->SelectData ( array (), 'GAME_LINKAGE_SUB', array ($where), 
 			'', '', '', '', 0 );
-//exit();
+		//exit();
 		if ($object->num_rows > 0)
 		{
 			$msg      = 'Entered Link already present';
@@ -462,7 +498,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 
 		$compBranchSql = "SELECT * FROM GAME_BRANCHING_COMPONENT WHERE CompBranch_SublinkId=".$sublinkid." OR CompBranch_NextCompSublinkId=".$sublinkid;
 		$compBranchObj = $functionsObj->ExecuteQuery($compBranchSql);
-			// echo "<pre>"; print_r($compBranchObj); die('here');
+		// echo "<pre>"; print_r($compBranchObj); die('here');
 		if($compBranchObj->num_rows > 0 && $_POST['ShowHide']>0 )
 		{
 			$msg      = 'This linkage is used in component branching so show/hide status can not be changed';
@@ -700,6 +736,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 					'views_key'       => $_POST['input_key'],
 					'views_sublinkid' => $sublinkid,
 					'is_updated'      => 1,
+					'views_current'   => $views_current,
 				);
 				$updtae_table        = $functionsObj->UpdateData('GAME_VIEWS', $game_views_key, 'views_sublinkid', $sublinkid, 0);
 				// die('here');
@@ -736,7 +773,7 @@ else
 		'Link_Min'              =>	$_POST['minute'],
 		'Link_Order'            =>	$_POST['order'],
 		'Link_Mode'             =>	$_POST['Mode'],
-		'Link_Branching'        =>	isset($_POST['Link_Branching'])?$_POST['Link_Branching']:0,
+		'Link_Branching'        =>	isset($_POST['Link_Branching'])?$_POST['Link_Branching']:($Game_Type == 1)?1:0,
 		'Link_Introduction'     =>	$Link_Introduction,
 		'Link_IntroductionLink' =>	$Link_IntroductionLink,
 		'Link_Description'      =>	$Link_Description,
@@ -1105,16 +1142,17 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'UserDownload'){
 if(isset($_GET['edit'])){
 	$header      = 'Edit Links';
 	$uid         = $_GET['edit'];
-	
+	$noSelect2   = '';
 	$object      = $functionsObj->SelectData(array(), 'GAME_LINKAGE', array('Link_ID='.$uid), '', '', '', '', 0);
 	$linkdetails = $functionsObj->FetchObject($object);
 	$url         = site_root."ux-admin/linkage";
 	$file        = 'addedit.php';
 }elseif(isset($_GET['add'])){
 	// Add Siteuser
-	$header = 'Add Links';
-	$url    = site_root."ux-admin/linkage";	
-	$file   = 'addedit.php';
+	$header    = 'Add Links';
+	$url       = site_root."ux-admin/linkage";	
+	$file      = 'addedit.php';
+	$noSelect2 = '';
 }
 elseif(isset($_GET['del'])){
 	// Delete Siteuser
@@ -1166,6 +1204,7 @@ elseif(isset($_GET['del'])){
 	$sql    = "SELECT
 	L.*,
 	(SELECT `Game_Name`  FROM  GAME_GAME WHERE  `Game_ID` = L.Link_GameID) as Game,
+	(SELECT `Game_Type`  FROM  GAME_GAME WHERE  `Game_ID` = L.Link_GameID) as Game_Type,
 	(SELECT `Scen_Name`  FROM  GAME_SCENARIO WHERE  `Scen_ID` = L.`Link_ScenarioID`) as Scenario
 	FROM
 	`GAME_LINKAGE`as L
@@ -1210,33 +1249,38 @@ elseif(isset($_GET['del'])){
 }
 elseif(isset($_GET['tab']))
 {
-	$header  = 'Area Tab Sequencing';
-	$file    ='addeditarea.php';
+	$scenNameSql = "SELECT gs.Scen_Name FROM GAME_LINKAGE gl LEFT JOIN GAME_SCENARIO gs ON gl.Link_ScenarioID=gs.Scen_ID WHERE gl.Link_ID=".$_GET['tab'];
+	$scenNameObj = $functionsObj->RunQueryFetchObject($scenNameSql);
+	$header  = "Area Tab Sequencing (<b>".$scenNameObj[0]->Scen_Name."</b>)";
+	$file    = 'addeditarea.php';
 	
-	$linkid  = $_GET['tab'];
-	$where   = 'Link_ID='.$linkid;
-	$url     = site_root."ux-admin/linkage";	
+	$linkid = $_GET['tab'];
+	$url    = site_root."ux-admin/linkage";
 	
-	$sqlarea = "SELECT DISTINCT a.Area_ID as AreaID, a.Area_Name as Area_Name, a.Area_Sequencing
-	FROM GAME_LINKAGE l 
-	INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
-	INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-	INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
-	INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-	LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
-	INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
-	WHERE ls.SubLink_Type=0 AND l.Link_ID=".$linkid." GROUP BY a.Area_ID,a.Area_Name 
-	ORDER BY a.Area_Name";
+	// $sqlarea = "SELECT DISTINCT a.Area_ID as AreaID, a.Area_Name as Area_Name, a.Area_Sequencing
+	// FROM GAME_LINKAGE l 
+	// INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
+	// INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
+	// INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
+	// INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+	// LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+	// INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
+	// WHERE ls.SubLink_Type=0 AND l.Link_ID=".$linkid." GROUP BY a.Area_ID,a.Area_Name 
+	// ORDER BY a.Area_Name";
+	$sqlarea = "SELECT ga.Area_ID as AreaID, ga.Area_Name as Area_Name, gas.Sequence_Order AS Area_Sequencing, gls.SubLink_Type FROM GAME_AREA_SEQUENCE gas LEFT JOIN GAME_AREA ga ON ga.Area_ID=gas.Sequence_AreaId LEFT JOIN GAME_LINKAGE_SUB gls ON gls.SubLink_AreaID=ga.Area_ID AND gls.SubLink_LinkID=".$linkid." WHERE gas.Sequence_LinkId=".$linkid." GROUP BY AreaID ORDER BY gas.Sequence_Order";
+	// echo $sqlarea;
 	$area = $functionsObj->ExecuteQuery($sqlarea);
 	
 	// set seq in area tab
 	
 	if( !empty($_POST['areaTab']))
 	{
-		
 		foreach ($_POST as $key => $value)
 		{
-			$result = $functionsObj->UpdateData('GAME_AREA', array('Area_Sequencing'=> $value), 'Area_ID', $key, 0);
+			if(!($key == 'areaTab' || $key == 'submit'))
+			{
+				$result = $functionsObj->UpdateData('GAME_AREA_SEQUENCE', array('Sequence_Order'=> $value, 'Sequence_UpdatedBy' => $_SESSION['ux-admin-id'], 'Sequence_UpdatedOn' => date('Y-m-d H:i:s')), "Sequence_LinkId=$linkid AND Sequence_AreaId", $key, 0);
+			}
 		}
 
 		$_SESSION['msg']     = "Area sequencing updated successfully";
@@ -1371,18 +1415,16 @@ elseif(isset($_GET['linkedit']))
 		$type[0] = "inputSuccess";
 		$type[1] = "has-success";
 	}
-}else{
+}
+else
+{
 	// fetch siteuser list from db
-	$sql="SELECT
-	L.*,
-	(SELECT `Game_Name`  FROM  GAME_GAME WHERE  `Game_ID` = L.Link_GameID) as Game,
+	$sql = "SELECT	L.*, (SELECT `Game_Name`  FROM  GAME_GAME WHERE  `Game_ID` = L.Link_GameID) as Game, (SELECT `Game_Type`  FROM  GAME_GAME WHERE  `Game_ID` = L.Link_GameID) as BotEnabled,
 	(SELECT `Scen_Name`  FROM  GAME_SCENARIO WHERE  `Scen_ID` = L.`Link_ScenarioID`) as Scenario
-	FROM
-	`GAME_LINKAGE`as L";
+	FROM `GAME_LINKAGE`as L ORDER BY L.Link_CreateDate DESC";
 	$object = $functionsObj->ExecuteQuery($sql);
 	$file   = 'list.php';
 }
-
 
 // Fetch Services list
 if(isset($_GET['linkedit']))

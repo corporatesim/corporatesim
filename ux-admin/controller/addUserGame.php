@@ -94,7 +94,7 @@ else
 
 // fetch game list from db
 $userid      = base64_decode($_GET['edit']);
-$userGameSql = "SELECT gg.Game_ID, gg.Game_Name,gg.Game_Elearning, gg.Game_Comments,gug.UG_ID, gug.UG_GameStartDate, gug.UG_GameEndDate, gug.UG_ReplayCount, gsu.User_GameStartDate AS User_StartDate, gsu.User_GameEndDate AS User_EndDate FROM GAME_GAME gg LEFT JOIN GAME_USERGAMES gug ON gg.Game_ID = gug.UG_GameID AND gug.UG_UserID =".$userid." LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_id = gug.UG_UserID WHERE gg.Game_Delete = 0 ORDER BY `gug`.`UG_ID` DESC, gg.Game_Name ASC";
+$userGameSql = "SELECT gg.Game_ID, gg.Game_Name, gg.Game_Type,gg.Game_Elearning, gg.Game_Comments,gug.UG_ID, gug.UG_GameStartDate, gug.UG_GameEndDate, gug.UG_ReplayCount, gsu.User_GameStartDate AS User_StartDate, gsu.User_GameEndDate AS User_EndDate FROM GAME_GAME gg LEFT JOIN GAME_USERGAMES gug ON gg.Game_ID = gug.UG_GameID AND gug.UG_UserID =".$userid." LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_id = gug.UG_UserID WHERE gg.Game_Delete = 0 ORDER BY `gug`.`UG_ID` DESC, gg.Game_Name ASC";
 $userGameResult = $functionsObj->ExecuteQuery($userGameSql);
 // fetcing user details
 $userDataObject = $functionsObj->SelectData(array('User_id,User_fname,User_lname,User_email,User_GameStartDate,User_GameEndDate,User_ParentId,User_SubParentId'), 'GAME_SITE_USERS', array('User_id='.$userid), '', '', '', '' ,0);

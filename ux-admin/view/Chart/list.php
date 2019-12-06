@@ -14,7 +14,7 @@
 		<ul class="breadcrumb">
 			<li class="completed"><a
 				href="<?php echo site_root."ux-admin/Dashboard"; ?>">Home</a></li>
-				<li class="active">Manage Chart</li>
+				<li class="active">Manage Subcomponent Chart</li>
 			</ul>
 		</div>
 	</div>
@@ -36,11 +36,13 @@
 	<div class="row">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<label style="padding-top:7px;">Chart List</label>
-				<div class="pull-right">
-					<input class="btn btn-primary" type="button" name="addlink" value="Add Chart"
-					onclick="window.location.href='<?php echo site_root."ux-admin/chart/add/1"; ?>';"/>
-				</div>
+				<label style="padding-top:7px;">Chart Subcomponent List</label>
+				<?php if($functionsObj->checkModuleAuth('chart','add')){ ?>
+					<div class="pull-right">
+						<input class="btn btn-primary" type="button" name="addlink" value="Add Chart"
+						onclick="window.location.href='<?php echo site_root."ux-admin/chart/add/1"; ?>';"/>
+					</div>
+				<?php } ?>
 				<div class="clearfix"></div>
 			</div>
 			<div class="panel-body">
@@ -66,26 +68,30 @@
 									<td><?php echo ucfirst($row->Chart_Name)?></td>
 									<td><?php echo $row->Chart_Type;?></td>
 									<td class="text-center">
-										<?php if($row->Chart_Status == 0){?>
-											<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Chart_ID; ?>"
-												title="Deactive"><span class="fa fa-times"></span></a>
-											<?php }else{?>
-												<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Chart_ID; ?>"
-													title="Active"><span class="fa fa-check"></span></a>
-												<?php }?>
-												<a href="<?php echo site_root."ux-admin/chart/edit/".$row->Chart_ID; ?>"
-													title="Edit"><span class="fa fa-pencil"></span></a>
-													<a href="<?php echo site_root."chart.php?act=chart&ID=".$row->Chart_GameID; ?>"
-														title="Chart" target='_blank'><span class="fa fa-bar-chart"></span></a>
-														<a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->Chart_ID; ?>"
-															title="Delete"><span class="fa fa-trash"></span></a>
-														</td>
-													</tr>
-													<?php $i++; } ?>
-												</tbody>
-											</table>
-										</div>
+										<?php if($functionsObj->checkModuleAuth('chart','edit')){ ?>
+											<?php if($row->Chart_Status == 0) { ?>
+												<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Chart_ID; ?>" data-toggle="tooltip" title="Deactive">
+													<span class="fa fa-times"></span></a>
+												<?php } else { ?>
+													<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Chart_ID; ?>" data-toggle="tooltip"	title="Active">
+														<span class="fa fa-check"></span></a>
+													<?php } ?>
+													<a href="<?php echo site_root."ux-admin/chart/edit/".$row->Chart_ID; ?>" data-toggle="tooltip" title="Edit">
+														<span class="fa fa-pencil"></span></a>
+													<?php } ?>
+													<a href="<?php echo site_root."chart.php?act=chart&ID=".$row->Chart_GameID; ?>" data-toggle="tooltip" title="Chart" target='_blank'><span class="fa fa-bar-chart">
+													</span></a>
+													<?php if($functionsObj->checkModuleAuth('chart','delete')){ ?>
+														<a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->Chart_ID; ?>" data-toggle="tooltip" title="Delete">
+															<span class="fa fa-trash"></span></a>
+														<?php } ?>
+													</td>
+												</tr>
+												<?php $i++; } ?>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
-							<div class="clearfix"></div>
+						</div>
+						<div class="clearfix"></div>

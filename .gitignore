@@ -1,3 +1,5 @@
 enterprise/common/Logo/*
 .project
 .buildpath
+images/
+ux-admin/upload/

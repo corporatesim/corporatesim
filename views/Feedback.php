@@ -37,7 +37,7 @@ include_once 'includes/headerNav.php';
           <center>
             <div class="form-group row">
               <div class="col-lg-12">
-                <input type="submit" class="update btn btn-danger" name="submit" value="Sumbit" id="sumbit">
+                <input type="submit" class="update btn btn-danger" name="submit" value="Submit" id="submit">
               </div>
             </div>
           </center>

@@ -30,8 +30,21 @@
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 	<![endif]-->
 </head>
-
-<body>
+<?php
+$bodyArray  = array('mksahu', 'localhost', 'develop.corporatesim.com');
+$colorArray = array('mksahu', 'rgba(217, 83, 79, 1)', 'rgba(51, 122, 183, 1)');
+$bgcolor    = array_search($_SERVER['HTTP_HOST'],$bodyArray);
+if($bgcolor)
+{
+	$bgcolor = "style='background:".$colorArray[$bgcolor].";'";
+}
+else
+{
+	$bgcolor = '';
+}
+// echo $_SERVER['HTTP_HOST']; var_dump(array_search($_SERVER['HTTP_HOST'],$bodyArray,true));
+?>
+<body <?php echo $bgcolor;?> >
 	<div class="container">
 		<div class="row">
 			<div class="col-md-4 col-md-offset-4">

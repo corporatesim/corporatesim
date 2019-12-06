@@ -6,11 +6,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Login')
 {
 	if(!empty($_POST['username']) && !empty($_POST['password']))
 	{
-		$username = $functionsObj->EscapeString($_POST['username']);
+		$username = $functionsObj->EscapeString(trim($_POST['username']));
 		$password = md5($_POST['password']);
-		$where    = array("BINARY username='".$username."'", "password='".$password."'", "status='1'");
+		$where    = array("BINARY (username='".$username."' OR email='".$username."')", "password='".$password."'", "status='1'");
 		$object   = $functionsObj->SelectData(array(), 'GAME_ADMINUSERS', $where, "", "", "", "", 0);
-		
+		// die();
 		if($object->num_rows > 0)
 		{
 			$result = $functionsObj->FetchObject($object);

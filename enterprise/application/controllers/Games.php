@@ -24,7 +24,7 @@ public function __construct()
 	parent::__construct();
 	if($this->session->userdata('loginData') == NULL)
 	{
-		$this->session->set_flashdata('er_msg', 'You need to login to see the dashboard');
+		$this->session->set_flashdata('er_msg', 'Session Expired. Please Login');
 		redirect('Login/login');
 	}
 }
@@ -144,8 +144,7 @@ public function assignGames($ID=NULL,$userType=NULL)
 		{
 			//delete enterprise game 
 			$where['EG_EnterpriseID'] = $ID ;
-			$this->Common_Model->deleteRecords('GAME_ENTERPRISE_GAME',
-				$where);
+			$this->Common_Model->deleteRecords('GAME_ENTERPRISE_GAME', $where);
 			$query = "DELETE GAME_SUBENTERPRISE_GAME,GAME_USERGAMES FROM GAME_SUBENTERPRISE_GAME INNER JOIN GAME_USERGAMES ON GAME_USERGAMES.UG_ParentId=GAME_SUBENTERPRISE_GAME.SG_EnterpriseID WHERE SG_EnterpriseID=$ID";
 			$this->Common_Model->executeQuery($query,'noReturn');
 
@@ -191,6 +190,11 @@ public function assignGames($ID=NULL,$userType=NULL)
 						redirect($controller);
 					}
 				}
+			}
+			else
+			{
+				$this->session->set_flashdata('tr_msg', 'Game De-allocated Successfully');
+				redirect($controller);
 			}
 		}
 		//insert Game for SubEnterprise
@@ -242,25 +246,30 @@ public function assignGames($ID=NULL,$userType=NULL)
 				if($Update)
 				{
 					$this->session->set_flashdata("tr_msg","Details Insert/Update Successfully" );
-					if($controller=='SubEnterprise')
+					if($controller == 'SubEnterprise')
 					{
 						redirect($controller);
 					}
 				}
 			}
+			else
+			{
+				$this->session->set_flashdata('tr_msg', 'Game De-allocated Successfully');
+				redirect($controller);
+			}
 		}
 		//insert Game for Enterprise and Subenterprise User
 		else
 		{
-			if($this->input->post('Enterprise_ID')&&$this->input->post('SubEnterprise_ID'))
+			if($this->input->post('Enterprise_ID') && $this->input->post('SubEnterprise_ID'))
 			{
-				$UG_ParentId=$this->input->post('Enterprise_ID');
-				$UG_SubParentId=$this->input->post('SubEnterprise_ID');
+				$UG_ParentId    = $this->input->post('Enterprise_ID');
+				$UG_SubParentId = $this->input->post('SubEnterprise_ID');
 			}
 			else
 			{
-				$UG_ParentId=$this->input->post('Enterprise_ID');
-				$UG_SubParentId=-2;
+				$UG_ParentId    = $this->input->post('Enterprise_ID');
+				$UG_SubParentId = -2;
 			}
 			//Delete already existing data of EnterpriseUser and SubenterpriseUser
 			$where = array (
@@ -292,8 +301,8 @@ public function assignGames($ID=NULL,$userType=NULL)
 				$data  = array(
 					'User_games'         => $Usergameid,
 					'User_gameStatus'    => 0,
-					'User_GameStartDate' => date('Y-m-d'),
-					'User_GameEndDate'   => date('Y-m-d', strtotime("+3 days")),
+					// 'User_GameStartDate' => date('Y-m-d'),
+					// 'User_GameEndDate'   => date('Y-m-d', strtotime("+3 days")),
 
 				);
 				$where = array(
@@ -305,6 +314,11 @@ public function assignGames($ID=NULL,$userType=NULL)
 					$this->session->set_flashdata("tr_msg","Details Insert/Update Successfully" );
 					redirect($controller.'/'.$type);
 				}
+			}
+			else
+			{
+				$this->session->set_flashdata('tr_msg', 'Game De-allocated Successfully');
+				redirect($controller.'/'.$type);
 			}	
 		}
 	}

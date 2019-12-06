@@ -29,10 +29,11 @@
 	<script src="<?php echo site_root;?>js/jquery.min.js"></script>	
 	<script src="<?php echo site_root;?>js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-	<!-- adding sweetalert -->
-	<!-- <script src="<?php echo site_root;?>dist/sweetalert.js"></script> -->
-	<script src="<?php echo site_root;?>dist/sweetalert2.all.min.js"></script>
-	<link rel="stylesheet" href="<?php echo site_root;?>dist/sweetalert2.min.css" id="theme-styles">
+	<!-- adding sweet alert -->
+	<link href="<?php echo site_root;?>dist/sweetalert/sweetalert2.min.css" rel="stylesheet" type="text/css">
+	<link href="<?php echo site_root;?>dist/sweetalert/animate.min.css" rel="stylesheet" type="text/css">
+	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"> -->
+	<script src="<?php echo site_root;?>dist/sweetalert/sweetalert2.all.min.js"></script>
 	
 	<center>
 		<div id="imageModal" class="modal">

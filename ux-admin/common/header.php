@@ -126,8 +126,7 @@
 		</li>
 
 		<!--  Outcome management -->
-		<li id="manageCMS"><a href="#"><i class="fa fa-tasks fa-fw"></i> Outcome 
-			Management <span class="fa arrow"></span></a>
+		<li id="manageCMS"><a href="#"><i class="fa fa-tasks fa-fw"></i> Outcome Management <span class="fa arrow"></span></a>
 			<ul class="nav nav-second-level">
 				<?php if($functionsObj->checkModuleAuth('ScenarioBranching','enable')){ ?>
 					<li><a 

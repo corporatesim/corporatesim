@@ -70,13 +70,34 @@
         </a>
       </li>
     <?php } ?>
-    <!-- to manage user reports -->
+    <!-- to see the mis and analytics -->
     <li class="dropdown">
-     <a href="<?php echo base_url('Reports/');?>" class="dropdown-toggle no-arrow">
-      <span class="fa fa-file"></span><span class="mtext">Simulation Reports</span>
-    </a>
-  </li>
+      <a href="javascript:;" class="dropdown-toggle">
+        <span class="fa fa-book fa-fw"></span><span class="mtext">MIS & Analytics</span>
+      </a>
+
+      <ul class="submenu">
+        <li>
+         <a href="<?php echo base_url('OfflineReports/');?>">
+          <span class="fa fa-file"></span> Offline Reports
+        </a>
+      </li>
+      <li>
+        <a href="<?php echo base_url('OnlineReport');?>">
+          <span class='fa fa-file-code-o'></span> Online Reports
+        </a>
+      </li>
+      <li class="d-none">
+        <a href="<?php echo base_url('Analytics/');?>">
+        <span class="fa fa-bar-chart"></span> Analytics
+      </a>
+    </li>
+  </ul>
+
+</li>
+
 </ul>
+
 </div>
 </div>
 </div>

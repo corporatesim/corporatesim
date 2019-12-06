@@ -13,14 +13,32 @@
 		.morris-hover.morris-default-style .morris-hover-point{white-space:nowrap;margin:0.1em 0}
 	</style>
 	<div class="clearfix"></div>
+	<?php
+	$bodyArray      = array('mksahu', 'localhost', 'develop.corporatesim.com');
+	$colorArray     = array('mksahu', 'rgba(153, 102, 255, 1)', 'rgba(75, 192, 192, 1)');
+	$dashBoardArray = array('mksahu', 'Local Dashboard', 'Develop Dashboard');
+	$bgcolor        = array_search($_SERVER['HTTP_HOST'],$bodyArray);
+	// echo $_SERVER['HTTP_HOST'].' and '.$bgcolor.' and '.$dashBoardArray[$bgcolor];
+
+	if($bgcolor)
+	{
+		$Dashboard = $dashBoardArray[$bgcolor];
+		$bgcolor   = "style='background:".$colorArray[$bgcolor].";'";
+	}
+	else
+	{
+		$bgcolor   = '';
+		$Dashboard = 'Dashboard';
+	}
+	// echo $_SERVER['HTTP_HOST']; var_dump(array_search($_SERVER['HTTP_HOST'],$bodyArray,true));
+	?>
 
 	<div class="row">
 		<div class="col-sm-12">
-			<h1 class="page-header">Dashboard</h1>
+			<h1 class="page-header"><?php echo $Dashboard?></h1>
 		</div>
 	</div>
-
-	<div class="row">
+	<div class="row" <?php echo $bgcolor?> >
 		<div class="col-sm-3">
 			<div class="panel panel-primary panel_blue">
 				<div class="panel-heading">
@@ -91,101 +109,127 @@
 		</div>
 	</div>
 	<!-- /.row -->
-	<div class="row">
-		<div class="col-lg-8">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<i class="fa fa-bar-chart-o fa-fw"></i>Example Text
-				<!-- <div class="pull-right">
-					<div class="btn-group">
-						<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-							Actions
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu pull-right" role="menu">
-							<li><a href="#">Action</a>
-							</li>
-							<li><a href="#">Another action</a>
-							</li>
-							<li><a href="#">Something else here</a>
-							</li>
-							<li class="divider"></li>
-							<li><a href="#">Separated link</a>
-							</li>
-						</ul>
-					</div>
-				</div> -->
-			</div>
-			<!-- /.panel-heading -->
-			<div class="panel-body">
-				<div id="area" style="height: 300px;"></div>
-			</div>
-			<!-- /.panel-body -->
-		</div>
-		<!-- /.panel -->
+	<div class="row col-md-6">
+		<canvas id="barChart" width="400" height="400"></canvas>
+		<!-- <canvas id="lineChart" width="400" height="400"></canvas> -->
 	</div>
-	<!-- /.col-lg-8 -->
-</div>
 
-<script type="text/javascript">
-	<!--
-//Morris charts snippet - js
-$.getScript('http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',function(){
-	$.getScript('http://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.0/morris.min.js',function(){
-		Morris.Area({
-			element: 'area',
-			data: [
-			{ y: '1.1.', a: 100, b: 90 },
-			{ y: '2.1.', a: 75,  b: 65 },
-			{ y: '3.1.', a: 50,  b: 40 },
-			{ y: '4.1.', a: 75,  b: 65 },
-			{ y: '5.1.', a: 50,  b: 40 },
-			{ y: '6.1.', a: 75,  b: 65 },
-			{ y: '7.1.', a: 100, b: 90 }
-			],
-			xkey: 'y',
-			ykeys: ['a', 'b'],
-			labels: ['Series A', 'Series B']
-		});
-		
-		Morris.Line({
-			element: 'line-example',
-			data: [
-			{year: '2010', value: 20},
-			{year: '2011', value: 10},
-			{year: '2012', value: 5},
-			{year: '2013', value: 2},
-			{year: '2014', value: 20}
-			],
-			xkey: 'year',
-			ykeys: ['value'],
-			labels: ['Value']
-		});
-		
-		Morris.Donut({
-			element: 'donut-example',
-			data: [
-			{label: "Android", value: 12},
-			{label: "iPhone", value: 30},
-			{label: "Other", value: 20}
-			]
-		});
-		
-		Morris.Bar({
-			element: 'bar-example',
-			data: [
-			{y: 'Jan 2014', a: 100},
-			{y: 'Feb 2014', a: 75},
-			{y: 'Mar 2014', a: 50},
-			{y: 'Apr 2014', a: 75},
-			{y: 'May 2014', a: 50},
-			{y: 'Jun 2014', a: 75}
-			],
-			xkey: 'y',
-			ykeys: ['a'],
-			labels: ['Visitors', 'Conversions']
-		});
-	});
-});
-//-->
-</script>
+	<script>
+		var ctx = $('#barChart');
+		var myBarChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: ['2017', '2018', '2019', '2020', '2021', '2022'],
+				datasets: [
+				<?php
+				for($i=0; $i<count($chartData); $i++)
+				{
+					echo "{label: '".$chartData[$i][0]->Title."',";
+					$dataCount            = '';
+					$fetchBackgroundColor = '';
+					$fetchBorderColor     = '';
+
+					for($j=0; $j<count($chartData[$i]); $j++)
+					{
+						$dataCount            .= $chartData[$i][$j]->Count.',';
+						$fetchBackgroundColor .= "'".$backgroundColor[$i]."',";
+						$fetchBorderColor     .= "'".$borderColor[$i]."',";
+					}
+					echo "data: [".trim($dataCount,',')."],";
+					echo "backgroundColor: [".trim($fetchBackgroundColor,',')."],";
+					echo "borderColor: [".trim($fetchBorderColor,',')."],";
+					echo "borderWidth: 1 },";
+				}
+				?>
+					// label: 'Game',
+					// data: [12, 19, 3, 5, 2, 3],
+					// backgroundColor: [
+					// 'rgba(255, 99, 132, 0.2)',
+					// ],
+					// borderColor: [
+					// 'rgba(255, 99, 132, 1)',
+					// ],
+					]
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}]
+					}
+				}
+			});
+		// var ctx = $('#lineChart');
+		// var myChart = new Chart(ctx, {
+		// 	type: 'line',
+		// 	data: {
+		// 		labels: ['2017', '2018', '2019', '2020', '2021'],
+		// 		datasets: [{
+		// 			label: 'Game',
+		// 			data: [102, 19, 3, 5, 2, 3],
+		// 			backgroundColor: [
+		// 			'rgba(255, 99, 132, 0.2)',
+		// 			],
+		// 			borderColor: [
+		// 			'rgba(255, 99, 132, 1)',
+		// 			],
+		// 			borderWidth: 1
+		// 		},
+		// 		{
+		// 			label: 'Scenario',
+		// 			data: [10, 109, 74, 7, 85, 1],
+		// 			backgroundColor: [
+		// 			'rgba(54, 162, 235, 0.2)',
+		// 			],
+		// 			borderColor: [
+		// 			'rgba(54, 162, 235, 1)',
+		// 			],
+		// 			borderWidth: 1
+		// 		},
+		// 		{
+		// 			label: 'Area',
+		// 			data: [25, 5, 93, 23, 83, 18],
+		// 			backgroundColor: [
+		// 			'rgba(255, 206, 86, 0.2)',
+		// 			],
+		// 			borderColor: [
+		// 			'rgba(255, 206, 86, 1)',
+		// 			],
+		// 			borderWidth: 1
+		// 		},
+		// 		{
+		// 			label: 'Component',
+		// 			data: [36, 25, 39, 15, 92, 83],
+		// 			backgroundColor: [
+		// 			'rgba(75, 192, 192, 0.2)',
+		// 			],
+		// 			borderColor: [
+		// 			'rgba(75, 192, 192, 1)',
+		// 			],
+		// 			borderWidth: 1
+		// 		},
+		// 		{
+		// 			label: 'Subcomponent',
+		// 			data: [1, 19, 31, 51, 21, 31],
+		// 			backgroundColor: [
+		// 			'rgba(255, 159, 64, 0.2)'
+		// 			],
+		// 			borderColor: [
+		// 			'rgba(255, 159, 64, 1)'
+		// 			],
+		// 			borderWidth: 1
+		// 		}]
+		// 	},
+		// 	options: {
+		// 		scales: {
+		// 			yAxes: [{
+		// 				ticks: {
+		// 					beginAtZero: true
+		// 				}
+		// 			}]
+		// 		}
+		// 	}
+		// });
+	</script>

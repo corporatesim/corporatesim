@@ -1,63 +1,63 @@
 <!-- <?php // echo "<pre>"; print_r($object->fetch_object()); exit; ?> -->
   <script type="text/javascript">
     <!--
-     var loc_url_del  = "ux-admin/ScenarioBranching/delete/";
+     var loc_url_del = "ux-admin/ScenarioBranching/delete/";
      //var loc_url_stat = "ux-admin/ScenarioBranching/linkstat/";
   //-->
 </script>
 <!-- scenario branching Data table CSS -->
 <style>
-<!--
-.dropdown-menu > li > button {
-  display    : block;
-  padding    : 3px 20px;
-  clear      : both;
-  font-weight: 400;
-  line-height: 1.42857143;
-  color      : #ffffff;
-  white-space: nowrap;
-}
-#contact
-{
-  width: auto!important;
-}
-#password
-{
-  width: auto!important;
-}
-#action
-{
-  width: 70px!important;
-}
-.drop_down{
-  padding: 0 5px !important;
-}
-
-#upload-file-selector {
-  display:none;
-}
-.margin-correction {
-  margin-right: 10px;
-}
-
-@media screen and ( min-width: '361px' ){
-  .resp_pull_right{
-    float: right;
+  <!--
+  .dropdown-menu > li > button {
+    display    : block;
+    padding    : 3px 20px;
+    clear      : both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color      : #ffffff;
+    white-space: nowrap;
   }
-}
-
-@media screen and ( max-width: '360px' ){
-  .resp_pull_right{
-    float     : none;
-    text-align: center;
-    width     : 100%;
-    padding   : 0 15px;
+  #contact
+  {
+    width: auto!important;
   }
-}
--->
-#update-file-selector {
-  display:none;
-}
+  #password
+  {
+    width: auto!important;
+  }
+  #action
+  {
+    width: 70px!important;
+  }
+  .drop_down{
+    padding: 0 5px !important;
+  }
+
+  #upload-file-selector {
+    display:none;
+  }
+  .margin-correction {
+    margin-right: 10px;
+  }
+
+  @media screen and ( min-width: '361px' ){
+    .resp_pull_right{
+      float: right;
+    }
+  }
+
+  @media screen and ( max-width: '360px' ){
+    .resp_pull_right{
+      float     : none;
+      text-align: center;
+      width     : 100%;
+      padding   : 0 15px;
+    }
+  }
+  -->
+  #update-file-selector {
+    display:none;
+  }
 </style>
 <!-- scenario branching Data table CSS ends -->
 <div class="row">
@@ -83,46 +83,46 @@
 <?php } ?>
 <!-- DISPLAY ERROR MESSAGE END -->
 <style>
-span.alert-danger {
-  background-color: #ffffff;
-  font-size       : 18px;
-}
+  span.alert-danger {
+    background-color: #ffffff;
+    font-size       : 18px;
+  }
 </style>
 
 <!-- data table starts here -->
 <form method="post" action="">
-<div class="row">
+  <div class="row">
    <div class="col-md-6">
 
      <a id="HideDownloadIcon"><i class="fa fa-download" aria-hidden="true" data-toggle="tooltip" title="Download Scenario Branching"></i></a>
      <br>
      <div id="downloadScenarioBranching">
        <div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
-            <label>Select Game</label> 
-            <select class="form-control"
-            name="game" id="game">
-            <option value="">-- SELECT --</option>
-            <?php while($row = $execute->fetch_object()){?>
-              <option value="<?php echo $row->Game_ID;?>">
-                <?php echo $row->Game_Name;?>
-              </option>
-              <?php }?>
-          </select>
-        </div>
-
-        <div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
-          <label>Select Scenario</label> <select class="form-control"
-          name="scenario[]" id="scenario" multiple>
-          <option value="">-- SELECT --</option>
-              <option value="">
-                </option>
-          </select>
-        </div>
-      <button type="submit" name="download_excel" id="download_excel" class="btn btn-primary" value="Download"> Download </button>
+        <label>Select Game</label> 
+        <select class="form-control"
+        name="game" id="game">
+        <option value="">-- SELECT --</option>
+        <?php while($row = $execute->fetch_object()){?>
+          <option value="<?php echo $row->Game_ID;?>">
+            <?php echo $row->Game_Name;?>
+          </option>
+        <?php }?>
+      </select>
     </div>
 
+    <div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
+      <label>Select Scenario</label> <select class="form-control"
+      name="scenario[]" id="scenario" multiple>
+      <option value="">-- SELECT --</option>
+      <option value="">
+      </option>
+    </select>
   </div>
-  <div class="col-md-6">
+  <button type="submit" name="download_excel" id="download_excel" class="btn btn-primary" value="Download"> Download </button>
+</div>
+
+</div>
+<div class="col-md-6">
   <div class="col-lg-12">
     <div class="pull-right legend">
       <ul>
@@ -148,7 +148,9 @@ span.alert-danger {
         <!-- <form action="" method="post">
           <button class="btn btn-primary btn-lg btn-block" type="submit" value="addBranching" name="addBranching">Add Branching</button>
         </form> -->
-        <a href="<?php echo site_root."ux-admin/ScenarioBranching/add/add";?>" class="btn btn-primary btn-lg btn-block">Add Branching</a>
+        <?php if($functionsObj->checkModuleAuth('ScenarioBranching','add')){ ?>
+          <a href="<?php echo site_root."ux-admin/ScenarioBranching/add/add";?>" class="btn btn-primary btn-lg btn-block">Add Branching</a>
+        <?php } ?>
       </div>
       <div class="clearfix"></div>
       <div class="panel-body">
@@ -184,13 +186,17 @@ span.alert-danger {
                   <td><?php echo $row->Branch_Order;?></td>
                   <td><?php echo $row->NextSceneName;?></td>
                   <td>
-                    <a href="<?php echo site_root."ux-admin/ScenarioBranching/edit/".$row->Branch_Id;?>" title="Edit"><span class="fa fa-pencil"></span></a> 
+                    <?php if($functionsObj->checkModuleAuth('ScenarioBranching','edit')){ ?>
+                      <a href="<?php echo site_root."ux-admin/ScenarioBranching/edit/".$row->Branch_Id;?>" data-toggle="tooltip" title="Edit"><span class="fa fa-pencil"></span></a> 
+                    <?php } ?>
                     &nbsp;
-                   <!--  <a href="<?php //echo site_root."ux-admin/ScenarioBranching/delete/".$row->Branch_Id;?>" title="Delete"><span class="fa fa-trash"></span></a> -->
-                    <a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->Branch_Id;?>" title="Delete"><span class="fa fa-trash"></span></a></a>
+                    <!--  <a href="<?php //echo site_root."ux-admin/ScenarioBranching/delete/".$row->Branch_Id;?>" title="Delete"><span class="fa fa-trash"></span></a> -->
+                    <?php if($functionsObj->checkModuleAuth('ScenarioBranching','delete')){ ?>
+                      <a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->Branch_Id;?>" data-toggle="tooltip" title="Delete"><span class="fa fa-trash"></span></a></a>
+                    <?php } ?>
                     &nbsp;
                     <?php if($row->Branch_IsEndScenario == 1){ ;?>
-                      <a href="javascript:void(0);" title="End Scenario"><span class="fa fa-ban"></span></a>
+                      <a href="javascript:void(0);" data-toggle="tooltip" title="End Scenario"><span class="fa fa-ban"></span></a>
                     <?php } ?>
                   </td>
                 </tr>

@@ -10,18 +10,17 @@ class Common_Model extends CI_Model {
   // }
 
   // finding the count of num_rows
-  public function findCount($tableName=NULL,$where=NULL,$columnName=NULL,$order=NULL,$limit=NULL)
+  public function findCount($tableName=NULL,$where=NULL)
   {
     $this->db->where($where);
     $result = $this->db->get($tableName);
     // echo "<pre>"; print_r($this->db->last_query()); exit();
     // echo "<pre>"; print_r($result->num_rows()); exit();
-    $count  = $result->num_rows();
-    return $count;
+    return $result->num_rows();
   }
 
 //fetch record of login Enterprise
-  public function fetchRecords($tableName=NULL,$where=NULL,$columnName=NULL,$order=NULL,$limit=NULL)
+  public function fetchRecords($tableName=NULL,$where=NULL,$columnName=NULL,$order=NULL,$limit=NULL,$printQuery=NULL)
   {
     // die('in modal');
     if($columnName)
@@ -38,10 +37,16 @@ class Common_Model extends CI_Model {
       $this->db->limit($limit[1],$limit[0]);
     }
     $this->db->from($tableName);
-    $this->db->where($where);
+    if($where)
+    {
+      $this->db->where($where);
+    }
     $query  = $this->db->get();
     $result = $query->result();
-    //print_r($this->db->last_query()); exit();
+    if($printQuery)
+    {
+      print_r($this->db->last_query()); // exit();
+    }
     return $result;
   }
 
@@ -138,31 +143,31 @@ class Common_Model extends CI_Model {
     // {
     //   return 'error';
     // }
+    }
+    else
+    {
+      return $resultAdmin[0];
+    }
   }
-  else
-  {
-    return $resultAdmin[0];
-  }
-}
 
   //insert users of Enterprise/SubEnterprise
-public  function insert($tableName=NULL,$data=NULL,$check=NULL)
-{
-  $this->db->insert($tableName,$data);
+  public  function insert($tableName=NULL,$data=NULL,$check=NULL)
+  {
+    $this->db->insert($tableName,$data);
     // print_r($this->db->last_query());exit();
-  $userId = $this->db->insert_id();
-  return $userId;
-}
+    $userId = $this->db->insert_id();
+    return $userId;
+  }
 
 //edit password
-public function editPassword($id)
-{   
-  $this->db->select('*');
-  $this->db->from('GAME_USER_AUTHENTICATION');
-  $this->db->where('Auth_userid',$id);  
-  $query=$this->db->get();
-  $result = $query->result();
-  return $result;
+  public function editPassword($id)
+  {   
+    $this->db->select('*');
+    $this->db->from('GAME_USER_AUTHENTICATION');
+    $this->db->where('Auth_userid',$id);  
+    $query=$this->db->get();
+    $result = $query->result();
+    return $result;
     /*print_r($this->db->last_query());
     die(' here');*/
   }

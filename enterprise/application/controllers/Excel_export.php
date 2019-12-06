@@ -7,7 +7,7 @@ class Excel_export extends CI_Controller {
     parent::__construct();
     if($this->session->userdata('loginData') == NULL)
     {
-      $this->session->set_flashdata('er_msg', 'You need to login to see the dashboard');
+      $this->session->set_flashdata('er_msg', 'Session Expired. Please Login');
       redirect('Login/login');
     }
   }

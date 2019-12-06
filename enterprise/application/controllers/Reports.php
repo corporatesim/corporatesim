@@ -24,7 +24,7 @@ class Reports extends CI_Controller {
 		parent::__construct();
 		if($this->session->userdata('loginData') == NULL)
 		{
-			$this->session->set_flashdata('er_msg', 'You need to login to see the dashboard');
+			$this->session->set_flashdata('er_msg', 'Session Expired. Please Login');
 			redirect('Login/login');
 		}
 		$this->load->library('PHPExcel');
@@ -61,7 +61,7 @@ class Reports extends CI_Controller {
 				}
 			}
 			$userId    = implode(',',$userId);
-			$reportSql = 'SELECT gi.input_current, CONCAT( gc.Comp_Name, "/", IF( gs.SubComp_Name, gs.SubComp_Name, "" ) ) AS Comp_SubComp, CONCAT( gu.User_fname, " ", gu.User_lname) AS fullName, gu.User_username AS userName, gu.User_email AS userEmail FROM GAME_INPUT gi INNER JOIN GAME_SITE_USERS gu ON gu.User_id = gi.input_user INNER JOIN GAME_LINKAGE_SUB gls ON gi.input_sublinkid = gls.SubLink_ID LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID WHERE ( gls.SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = '.$selectedGame.' ) AND gls.SubLink_Type = 1 ) AND gi.input_user IN('.$userId.')';
+			$reportSql = 'SELECT gi.input_current, CONCAT( IF(gc.Comp_NameAlias != "" AND gc.Comp_NameAlias IS NOT NULL,gc.Comp_NameAlias,gc.Comp_Name), "/", IF( gs.SubComp_NameAlias != "" AND gs.SubComp_NameAlias IS NOT NULL, gs.SubComp_NameAlias, IF(gs.SubComp_Name IS NOT NULL,gs.SubComp_Name,"") ) ) AS Comp_SubComp, CONCAT( gu.User_fname, " ", gu.User_lname) AS fullName, gu.User_username AS userName, gu.User_email AS userEmail FROM GAME_INPUT gi INNER JOIN GAME_SITE_USERS gu ON gu.User_id = gi.input_user INNER JOIN GAME_LINKAGE_SUB gls ON gi.input_sublinkid = gls.SubLink_ID LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID WHERE ( gls.SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = '.$selectedGame.' ) AND gls.SubLink_Type = 1 ) AND gi.input_user IN('.$userId.')';
 			$reportData = $this->Common_Model->executeQuery($reportSql);
 
 			$gameRes = $this->Common_Model->fetchRecords('GAME_GAME',array('Game_ID' => $selectedGame),'Game_Name');

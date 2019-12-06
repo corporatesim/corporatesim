@@ -54,10 +54,10 @@
 					swalWithBootstrapButtons.fire({
 					// title: 'Are you sure?',
 					text             : "Press YES to confirm your wish to play this simulation again else press NO",
-					type             : 'warning',
+					icon             : 'warning',
 					showCancelButton : true,
-					confirmButtonText: 'Yes, Reset!',
-					cancelButtonText : 'No, cancel!',
+					confirmButtonText: 'Yes, Reset !',
+					cancelButtonText : 'No, cancel !',
 					reverseButtons   : false
 				}).then((result) => {
 					if (result.value) {

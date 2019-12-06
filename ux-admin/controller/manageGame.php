@@ -7,20 +7,19 @@ $object = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0')
 $file   = 'GameList.php';
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
-{
-	if(isset($_POST['Game_Status']))
+{	
+	echo "<pre>"; print_r($_POST); 
+	if(isset($_POST['Game_Type']))
 	{
-		$Game_Status = $_POST['Game_Status'];
+		echo ' add bot enabled ';
 	}
-	else
-	{
-		$Game_Status = 0;
-	}
+	exit();
 	$Game_Introduction     = ($_POST['Game_Introduction'])?$_POST['Game_Introduction']:0;
 	$Game_Description      = ($_POST['Game_Description'])?$_POST['Game_Description']:0;
 	$Game_IntroductionLink = ($_POST['Game_IntroductionLink'])?$_POST['Game_IntroductionLink']:0;
 	$Game_DescriptionLink  = ($_POST['Game_DescriptionLink'])?$_POST['Game_DescriptionLink']:0;
 	$Game_BackToIntro      = ($_POST['Game_BackToIntro'])?$_POST['Game_BackToIntro']:0;
+	$Game_HideScenarioLink = ($_POST['Game_HideScenarioLink'])?$_POST['Game_HideScenarioLink']:0;
 	$gamedetails           = (object) array(
 		'Game_Name'             => $_POST['name'],
 		'Game_Comments'         => $_POST['comments'],
@@ -31,13 +30,15 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 		'Game_prise'            => $_POST['Game_prize'],
 		'Game_discount'         => $_POST['Game_discount'],
 		'Game_Datetime'         => date('Y-m-d H:i:s'),
-		'Game_Status'           => $Game_Status,
+		'Game_Status'           => (isset($_POST['Game_Status']))?$_POST['Game_Status']:0,
 		'Game_Elearning'        => $_POST['eLearning'],
+		'Game_Type'             => (isset($_POST['Game_Type']))?$_POST['Game_Type']:0,
 		'Game_Introduction'     => $Game_Introduction,
 		'Game_Description'      => $Game_Description,
 		'Game_IntroductionLink' => $Game_IntroductionLink,
 		'Game_DescriptionLink'  => $Game_DescriptionLink,
 		'Game_BackToIntro'      => $Game_BackToIntro,
+		'Game_HideScenarioLink' => $Game_HideScenarioLink,
 	);
 	
 	if( !empty($_POST['name']) && !empty($_POST['comments']))
@@ -150,13 +151,45 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 {
-	if(isset($_POST['Game_Status']))
+	// if game is bot enabled then check that this doesn't contains multiple areas in i/p side and doesn't have any subcomponent
+	if(isset($_POST['Game_Type']))
 	{
-		$Game_Status = $_POST['Game_Status'];
-	}
-	else
-	{
-		$Game_Status = 0;
+		$checkSql = "SELECT * FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID =".$_POST['id']." ) ORDER BY SubLink_SubCompID DESC, SubLink_AreaID";
+		$checkSqlObj = $functionsObj->ExecuteQuery($checkSql);
+
+		if($checkSqlObj->num_rows > 0)
+		{
+			$areaID = '';
+			while($row = $checkSqlObj->fetch_object())
+			{
+				if($row->SubLink_SubCompID > 1)
+				{
+					$_SESSION['msg']     = 'This game can not be converted to Bot. Because this is having subcomponents';
+					$_SESSION['type[0]'] = "inputError";
+					$_SESSION['type[1]'] = "has-error";
+					header("Location: ".site_root."ux-admin/ManageGame/edit/".base64_encode($_POST['id']));
+					exit(0);
+				}
+				else
+				{
+					if($row->SubLink_Type == 0)
+					{
+						if(empty($areaID))
+						{
+							$areaID = $row->SubLink_AreaID;
+						}
+						if($areaID != $row->SubLink_AreaID)
+						{
+							$_SESSION['msg']     = 'This game can not be converted to Bot. Because this is having multiple areas in input side';
+							$_SESSION['type[0]'] = "inputError";
+							$_SESSION['type[1]'] = "has-error";
+							header("Location: ".site_root."ux-admin/ManageGame/edit/".base64_encode($_POST['id']));
+							exit(0);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	$Game_Introduction     = ($_POST['Game_Introduction'])?$_POST['Game_Introduction']:0;
@@ -164,7 +197,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 	$Game_IntroductionLink = ($_POST['Game_IntroductionLink'])?$_POST['Game_IntroductionLink']:0;
 	$Game_DescriptionLink  = ($_POST['Game_DescriptionLink'])?$_POST['Game_DescriptionLink']:0;
 	$Game_BackToIntro      = ($_POST['Game_BackToIntro'])?$_POST['Game_BackToIntro']:0;
-	$gamedetails = (object) array(
+	$Game_HideScenarioLink = ($_POST['Game_HideScenarioLink'])?$_POST['Game_HideScenarioLink']:0;
+	$gamedetails           = (object) array(
 		'Game_Name'             => $_POST['name'],
 		'Game_Comments'         => $_POST['comments'],
 		'Game_Header'           => $_POST['Game_Header'],
@@ -176,17 +210,19 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		'Game_Datetime'         => date('Y-m-d H:i:s'),
 		'Game_Status'           => (isset($_POST['Game_Status']))?$_POST['Game_Status']:0,
 		'Game_Elearning'        => $_POST['eLearning'],
+		'Game_Type'             => (isset($_POST['Game_Type']))?$_POST['Game_Type']:0,
 		'Game_Introduction'     => $Game_Introduction,
 		'Game_Description'      => $Game_Description,
 		'Game_IntroductionLink' => $Game_IntroductionLink,
 		'Game_DescriptionLink'  => $Game_DescriptionLink,
 		'Game_BackToIntro'      => $Game_BackToIntro,
+		'Game_HideScenarioLink' => $Game_HideScenarioLink,
 	);
 
 // echo "<pre>"; print_r($_POST); print_r($gamedetails); exit();
 	if( !empty($_POST['name']) && !empty($_POST['comments']) )
 	{
-		$uid    = $_POST['id'];
+		$uid = $_POST['id'];
 		// if there is file in the form
 		if(!empty($_FILES['Game_Image']['name']))
 		{
@@ -441,7 +477,7 @@ if(isset($_POST['download_excel']) && $_POST['download_excel'] == 'Download'){
 	
 	if($objlink->num_rows > 0){
 		$i=2;
-		while($row= $objlink->fetch_object()){
+		while($row = $objlink->fetch_object()){
 			//$objSheet->getCell('A'.$i)->setValue('Game');
 			if($row->Game_Elearning == 1)
 			{

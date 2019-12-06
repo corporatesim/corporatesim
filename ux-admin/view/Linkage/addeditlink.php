@@ -57,6 +57,7 @@
       $('.onlyForSubcomponent').each(function(){
         $(this).attr('disabled',false);
       });
+      $('#subcomp_id').attr('required',true);
       $("#subcomponent").show();
       $.ajax({
         url : site_root + "ux-admin/model/ajax/populate_dropdown.php",
@@ -69,6 +70,7 @@
       });
     }
     if($(this).attr("value")=="comp"){
+      $('#subcomp_id').attr('required',false);
       var statusType = 1;
       // if component then disable all dropdowns implemented for subcomponent only
       $('.onlyForSubcomponent').each(function(){
@@ -188,33 +190,36 @@
 <div class="row">
   <div class="col-sm-12">
     <ul class="breadcrumb">
-      <li class="completed"><a
-        href="<?php echo site_root."ux-admin/Dashboard"; ?>">Home</a></li>
-        <li class="active"><a href="javascript:void(0);">Manage Linkage</a></li>
-        <li class="active"><?php echo $header; ?></li>
-      </ul>
-    </div>
+      <li class="completed">
+        <a href="<?php echo site_root."ux-admin/Dashboard"; ?>">Home</a>
+      </li>
+      <li class="active">
+        <a href="<?php echo site_root."ux-admin/linkage"; ?>">Manage Linkage</a>
+      </li>
+      <li class="active"><?php echo $header; ?></li>
+    </ul>
   </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="panel panel-default">
-        <div class="panel-heading"></div>
-        <div class="panel-body">
-          <div class="col-sm-12">
-            <input type="hidden" name="linkid" id="linkid" 
-            value="<?php if(isset($result)){ echo $result->Link_ID; } ?>">                
-            <div class="col-sm-6">
-              <input type="hidden" name="gameid" id="gameid" value="<?php echo $result->Link_GameID ; ?>">
-              <div class="form-group">
-                <label>Game : </label><?php echo $result->Game; ?>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Scenario : </label><?php echo $result->Scenario; ?>
-              </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading"></div>
+      <div class="panel-body">
+        <div class="col-sm-12">
+          <input type="hidden" name="linkid" id="linkid" 
+          value="<?php if(isset($result)){ echo $result->Link_ID; } ?>">                
+          <div class="col-sm-6">
+            <input type="hidden" name="gameid" id="gameid" value="<?php echo $result->Link_GameID ; ?>">
+            <div class="form-group">
+              <label>Game : </label><?php echo $result->Game; ?>
             </div>
           </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Scenario : </label><?php echo $result->Scenario; ?>
+            </div>
+          </div>
+        </div>
         <?php //if(isset($_GET['link'])) { 
           if($linkscenario->num_rows>0) {
             ?>
@@ -330,6 +335,9 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <form method="POST" action="" id="siteuser_frm" name="siteuser_frm">
+            <input type="hidden" name="defaultCheckedValue" id="defaultCheckedValue" value="0">
+            <input type="hidden" name="Game_Type" id="Game_Type" value="<?php echo $result->Game_Type; ?>">
+            
             <div class="row">
               <div class="col-md-4">
                 <label><span class="alert-danger">*</span>Select Area</label>
@@ -373,9 +381,9 @@
                         <span class="checkmarkRadio"></span>
                       </label>
 
-                      <label for="Modesubcomp" class="containerRadio">
+                      <label for="Modesubcomp" class="containerRadio" <?php echo ($result->Game_Type == 1)?"title='SubComponent not allowed for bot-enabled games'":''; ?>>
                         <input type="radio" name="Mode" value="subcomp" id="Modesubcomp"
-                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID>0){ echo "checked"; } ?> > Sub Component
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID>0){ echo "checked"; } ?> <?php echo ($result->Game_Type == 1)?'disabled':''; ?> > Sub Component
                         <span class="checkmarkRadio"></span>
                       </label>
                     </div>
@@ -384,9 +392,9 @@
               <div class="row">-->
                 <div class="col-md-4" id="component" name="component">
                   <!--<label><span class="alert-danger">*</span>Select Component</label> -->
-                  <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_compo')){?>
-                    <select class="form-control" name="comp_id" id="comp_id">
-                    <?php } else {?>
+                  <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_compo')){ ?>
+                    <select class="form-control" name="comp_id" id="comp_id" required="">
+                    <?php } else { ?>
                       <input type="hidden" name="dis_comp_id" value="<?php echo $linkdetails->SubLink_CompID; ?>">
                       <select class="form-control" name="comp_id" id="comp_id" disabled="">
                         <!-- as due to permissions component dropdown will be disabled so no value will be passed, that's why adding a hidden field to send comp id in the controller -->
@@ -1073,23 +1081,17 @@
         <div class="col-sm-12">
           <div class="form-group text-center">        
             <?php if(isset($_GET['linkedit']) && !empty($_GET['linkedit'])){?>
-              <button type="button" id="siteuser_btn_update" class="btn btn-primary"
-              > Update </button>
-              <button type="submit" name="submit" id="siteuser_update" class="btn btn-primary hidden"
-              value="Update"> Update </button>
-              <button type="button" class="btn btn-primary"
-              onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
+              <button type="button" id="siteuser_btn_update" class="btn btn-primary"> Update </button>
+              <button type="submit" name="submit" id="siteuser_update" class="btn btn-primary hidden" value="Update"> Update </button>
+              <button type="button" class="btn btn-danger" onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
             <?php }else{?>
               <?php if($functionsObj->checkModuleAuth('innerlinkage','add')){?>
                 <button type="button" id="siteuser_btn" class="btn btn-primary"
                 value="Submit"> Submit </button>
               <?php } ?>
-              <button type="button" id="siteuser_btn" class="btn btn-primary hidden"
-              value="Submit"> Submit </button>
-              <button type="submit" name="submit" id="siteuser_sbmit"
-              class="btn btn-primary hidden" value="Submit"> Submit </button>
-              <button type="button" class="btn btn-primary"
-              onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
+              <button type="button" id="siteuser_btn" class="btn btn-primary hidden" value="Submit"> Submit </button>
+              <button type="submit" name="submit" id="siteuser_sbmit" class="btn btn-primary hidden" value="Submit"> Submit </button>
+              <button type="button" class="btn btn-danger" onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
             <?php }?>
           </div>
         </div>
@@ -1183,20 +1185,20 @@
                   ?> </code>
                 </td>
                 <td class="text-center">
-                  <?php if($row->SubLink_Status == 0){?>
-                    <a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->SubLink_ID; ?>"
-                      title="Deactive"><span class="fa fa-times"></span></a>
-                    <?php }else{?>
-                      <a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->SubLink_ID; ?>"
-                        title="Active"><span class="fa fa-check"></span></a>
-                      <?php }?>
-                      <?php if($functionsObj->checkModuleAuth('innerlinkage','edit')){ ?>
-                        <a href="<?php echo site_root."ux-admin/linkage/linkedit/".$row->SubLink_ID; ?>"
-                          title="Edit"><span class="fa fa-pencil"></span></a>
-                        <?php } if($functionsObj->checkModuleAuth('innerlinkage','delete')){ ?>
-                          <a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->SubLink_ID; ?>"
-                            title="Delete"><span class="fa fa-trash"></span></a>
-                          <?php }?>
+                  <?php if($row->SubLink_Status == 0){ ?>
+                    <a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->SubLink_ID; ?>" title="Deactive">
+                      <span class="fa fa-times"></span></a>
+                    <?php } else { ?>
+                      <a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->SubLink_ID; ?>" title="Active">
+                        <span class="fa fa-check"></span></a>
+                      <?php } ?>
+                      <?php if($functionsObj->checkModuleAuth('innerlinkage','edit')) { ?>
+                        <a href="<?php echo site_root."ux-admin/linkage/linkedit/".$row->SubLink_ID; ?>" title="Edit">
+                          <span class="fa fa-pencil"></span></a>
+                        <?php } if($functionsObj->checkModuleAuth('innerlinkage','delete')) { ?>
+                          <a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->SubLink_ID; ?>" title="Delete">
+                            <span class="fa fa-trash"></span></a>
+                          <?php } ?>
                         </td>
                       </tr>
                       <?php $i++; } ?>
@@ -1306,7 +1308,10 @@
     {
      if($('#SubLink_InputFieldOrder').val()== 1 || $('#SubLink_InputFieldOrder').val()== 2)
      {
-       alert("You have seleted both the labels");
+       Swal.fire({
+        icon: 'error',
+        text:"Since you have selected both the labels, user input is not possible for last label",
+      });
      }
    }
    $('.inputTypeUser').each(function(){
@@ -1470,7 +1475,10 @@
     var scen_id = $('#scenid').val();
     if($('#scen_id').val() == '')
     {
-      alert('Please Select Scenario');
+      Swal.fire({
+        icon: 'error',
+        text: 'Please Select Scenario',
+      });
       return false;
     }
     //alert(link_id);
@@ -1486,24 +1494,25 @@
       success: function( result ){
         try{
           //alert("SUCCESS");
-          alert (result);
           var response = JSON.parse( result );
           
           if( response.status == 1 ){
             //alert("Linkage added");
+            // console.log(response); console.log(result);
+            Swal.fire (response.msg);
             $('#Modal_Success').modal('show', { backdrop: "static" } );
           } else {
             $('.option_err').html( result.msg );
           }
         } catch ( e ) {
-          alert(e + "\n" + result);
+          Swal.fire(e + "\n" + result);
           console.log( e + "\n" + result );
         }
         
         $('#loader').removeClass( 'loader' );
       },
       error: function(jqXHR, exception){
-        alert('error'+ jqXHR.status +" - "+exception);
+        Swal.fire('error'+ jqXHR.status +" - "+exception);
       }
     });
   });
@@ -1512,8 +1521,11 @@
   {
     $('.checkedDefault').on('click',function(){
       var defaultRadioButton = $(this);
-      var inputValue         = $(this).parents('div.parentDefault').find('input[name*="option"]').val();
-      $(defaultRadioButton).val(inputValue);
+      var defaultOptionText  = $(this).parents('div.parentDefault').find('input[name*="option"]').val();
+      var defaultOptionValue = $(this).parents('div.parentDefault').find('input[name*="option_value"]').val();
+      $(defaultRadioButton).val(defaultOptionText);
+      $('#defaultCheckedValue').val(defaultOptionValue);
+      // alert('default:- '+defaultOptionText+' value:- '+defaultOptionValue);
     });
   }
 

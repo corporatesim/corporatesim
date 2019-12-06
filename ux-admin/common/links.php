@@ -40,7 +40,17 @@
 
 <link href="<?php echo site_root; ?>ux-admin/common/styleFile.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
-<!--
-	var site_root = '<?php echo site_root; ?>';
+	<!--
+		var site_root = '<?php echo site_root; ?>';
 //-->
 </script>
+
+<!-- adding these links to include chart.js -->
+<script src="<?php echo site_root; ?>chartjs/chart.bundle.min.js"></script>
+<link href="<?php echo site_root; ?>chartjs/chart.min.css" rel="stylesheet" type="text/css">
+<script src="<?php echo site_root; ?>chartjs/chart.min.js"></script>
+<!-- adding sweet alert -->
+<link href="<?php echo site_root;?>dist/sweetalert/sweetalert2.min.css" rel="stylesheet" type="text/css">
+<link href="<?php echo site_root;?>dist/sweetalert/animate.min.css" rel="stylesheet" type="text/css">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"> -->
+<script src="<?php echo site_root;?>dist/sweetalert/sweetalert2.all.min.js"></script>

@@ -37,8 +37,24 @@ class Login extends CI_Controller {
 	public function login()
 	{
 		// show login page
+		// removing enterprise/ from the base_url to check the enterprise url
+		$checkUrl = substr(base_url(),0,-12);
+		$where    = array(
+			'Domain_Name' => $checkUrl,
+		);
+		$urlCount = $this->Common_Model->fetchRecords('GAME_DOMAIN',$where,'Domain_Logo');
+		// echo "$checkUrl<br>";print_r($urlCount);
+		if(count($urlCount) > 0)
+		{
+			$content['logo'] = base_url('common/Logo/'.$urlCount[0]->Domain_Logo);
+		}
+		else
+		{
+			$content['logo'] = base_url('common/vendors/images/cs_logo.jpg');
+		}
+		// echo "<pre>"; print_r($urlCount); exit();
 		$content['subview'] = 'login';
-		$this->load->view('components/login');
+		$this->load->view('components/login',$content);
 	}
 
 	public function signUp()
@@ -132,7 +148,7 @@ class Login extends CI_Controller {
 			}
 			else
 			{
-				$this->session->set_flashdata('er_msg', 'Invalid Credintials');
+				$this->session->set_flashdata('er_msg', 'Invalid Credentials');
 				redirect('login');
 			}
 		}

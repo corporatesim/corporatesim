@@ -69,20 +69,14 @@
 									<div class="row">
 										<div class="col-xs-6 col-sm-6">
 											<div class="form-group">
-												<input type="hidden" name="userid" class="form-control"
-												value="<?php if(isset($_GET['edit']) && isset($userdetails)){echo $userdetails->id;}?>" />
-												<input type="text" name="fname" class="form-control"
-												pattern="[a-zA-Z]{3,}" placeholder="First Name"
-												value="<?php if(!empty($userdetails->fname)){ echo $userdetails->fname; } ?>"
-												required />
+												<input type="hidden" name="userid" class="form-control" value="<?php if(isset($_GET['edit']) && isset($userdetails)){echo $userdetails->id;}?>" />
+												<input type="text" name="fname" class="form-control" pattern="[a-zA-Z]{3,}" placeholder="First Name"
+												value="<?php if(!empty($userdetails->fname)){ echo $userdetails->fname; } ?>" required />
 											</div>
 										</div>
 										<div class="col-xs-6 col-sm-6">
 											<div class="form-group">
-												<input type="text" name="lname" class="form-control"
-												pattern="[a-zA-Z]{3,}" placeholder="Last Name"
-												value="<?php if(!empty($userdetails->lname)){ echo $userdetails->lname; } ?>"
-												required />
+												<input type="text" name="lname" class="form-control" pattern="[a-zA-Z]{3,}" placeholder="Last Name" value="<?php if(!empty($userdetails->lname)){ echo $userdetails->lname; } ?>" required />
 											</div>
 										</div>
 									</div>
@@ -91,19 +85,14 @@
 									<div class="row">
 										<div class="col-xs-6 col-sm-6">
 											<div class="form-group">
-												<input type="text" pattern=".{5,}" name="username" id="username"
-												class="form-control" placeholder="Username"
-												value="<?php if(!empty($userdetails->username)){ echo $userdetails->username; } ?>"
-												required />
+												<input type="text" pattern=".{5,}" name="username" id="username" class="form-control" placeholder="Username" value="<?php if(!empty($userdetails->username)){ echo $userdetails->username; } ?>" required />
 											</div>
 										</div>
 										
 										<div class="col-xs-6 col-sm-6">
 											<div class="form-group">
 												<input type="email"
-												pattern="[\Sa-zA-Z0-9]{3,}@[a-zA-Z]{3,}.[a-zA-Z]{2,}"
-												name="email" class="form-control" placeholder="Email"
-												value="<?php if(!empty($userdetails->email)){ echo $userdetails->email; } ?>"
+												pattern="[\Sa-zA-Z0-9]{3,}@[a-zA-Z]{3,}.[a-zA-Z]{2,}" name="email" class="form-control" placeholder="Email" value="<?php if(!empty($userdetails->email)){ echo $userdetails->email; } ?>"
 												<?php if(isset($_GET['edit'])){ echo 'disabled'; }else{ echo 'required'; } ?> />
 											</div>
 										</div>
@@ -111,22 +100,19 @@
 									<div class="username_error"></div>
 									<div class="clearfix"></div>
 									
-									
+									<input type="hidden" name="password_view" id="password_view" value="<?php if(!empty($userdetails->password_view)){ echo $userdetails->password_view; } ?>">
+
 									<div class="row">
 										<div class="col-xs-6 col-sm-6">
 											<div class="form-group">
-												<input type="password" pattern=".{5,}" name="password"
-												class="form-control" value=""
-												placeholder="<?php if(isset($_GET['edit'])){ echo "New Password";}else{echo "Password";} ?>"
+												<input type="password" pattern=".{5,}" name="password" class="form-control" value="" placeholder="<?php if(isset($_GET['edit'])){ echo "New Password";}else{echo "Password, Min 5 Char";} ?>"
 												<?php if(!isset($_GET['edit'])){echo 'required'; } ?>>
 											</div>
 										</div>
 										
 										<div class="col-xs-6 col-sm-6">
 											<div class="form-group">
-												<input type="password" pattern=".{5,}" name="retypepass"
-												class="form-control" placeholder="Re-Type Password"
-												<?php if(!isset($_GET['edit'])){echo 'required'; } ?>>
+												<input type="password" pattern=".{5,}" name="retypepass" class="form-control" placeholder="Re-Type Password" <?php if(!isset($_GET['edit'])){echo 'required'; } ?>>
 											</div>
 										</div>
 										
@@ -155,7 +141,7 @@
 													<th >Menu</th>
 													<th width="180">Enable/Disable</th>
 													<th>Add</th>
-													<th>Edit</th>
+													<th>Edit (Active/Deactive)</th>
 													<th>Delete</th>
 												</tr>
 											</thead>
@@ -418,10 +404,192 @@
 														</div>
 													</td>
 												</tr>
+
+												<tr>
+													<td>Chart Component</td>
+													<td>
+														<div class="col-md-2">
+															<label for="chartComp_enable" class="containerCheckbox">
+																<input type="checkbox" id="chartComp_enable" name="chartComp_enable" value="yes" <?=$rights['chartComp']['enable']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="chartComp_add" class="containerCheckbox">
+																<input type="checkbox" id="chartComp_add" name="chartComp_add" value="yes" <?=$rights['chartComp']['add']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="chartComp_edit" class="containerCheckbox">
+																<input type="checkbox" id="chartComp_edit" name="chartComp_edit" value="yes" <?=$rights['chartComp']['edit']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="chartComp_delete" class="containerCheckbox">
+																<input type="checkbox" id="chartComp_delete" name="chartComp_delete" value="yes" <?=$rights['chartComp']['delete']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+												</tr>
+
+												<tr>
+													<td>Chart Sub-Component</td>
+													<td>
+														<div class="col-md-2">
+															<label for="chartSubComp_enable" class="containerCheckbox">
+																<input type="checkbox" id="chartSubComp_enable" name="chartSubComp_enable" value="yes" <?=$rights['chart']['enable']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="chartSubComp_add" class="containerCheckbox">
+																<input type="checkbox" id="chartSubComp_add" name="chartSubComp_add" value="yes" <?=$rights['chart']['add']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="chartSubComp_edit" class="containerCheckbox">
+																<input type="checkbox" id="chartSubComp_edit" name="chartSubComp_edit" value="yes" <?=$rights['chart']['edit']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="chartSubComp_delete" class="containerCheckbox">
+																<input type="checkbox" id="chartSubComp_delete" name="chartSubComp_delete" value="yes" <?=$rights['chart']['delete']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+												</tr>
+
+												<tr>
+													<td>Outcome Badges</td>
+													<td>
+														<div class="col-md-2">
+															<label for="outcomeBadges_enable" class="containerCheckbox">
+																<input type="checkbox" id="outcomeBadges_enable" name="outcomeBadges_enable" value="yes" <?=$rights['outcomeBadges']['enable']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="outcomeBadges_add" class="containerCheckbox">
+																<input type="checkbox" id="outcomeBadges_add" name="outcomeBadges_add" value="yes" <?=$rights['outcomeBadges']['add']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="outcomeBadges_edit" class="containerCheckbox">
+																<input type="checkbox" id="outcomeBadges_edit" name="outcomeBadges_edit" value="yes" <?=$rights['outcomeBadges']['edit']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="outcomeBadges_delete" class="containerCheckbox">
+																<input type="checkbox" id="outcomeBadges_delete" name="outcomeBadges_delete" value="yes" <?=$rights['outcomeBadges']['delete']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+												</tr>
+
+												<tr>
+													<td>Personalize Outcome</td>
+													<td>
+														<div class="col-md-2">
+															<label for="personalizeOutcome_enable" class="containerCheckbox">
+																<input type="checkbox" id="personalizeOutcome_enable" name="personalizeOutcome_enable" value="yes" <?=$rights['personalizeOutcome']['enable']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="personalizeOutcome_add" class="containerCheckbox">
+																<input type="checkbox" id="personalizeOutcome_add" name="personalizeOutcome_add" value="yes" <?=$rights['personalizeOutcome']['add']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="personalizeOutcome_edit" class="containerCheckbox">
+																<input type="checkbox" id="personalizeOutcome_edit" name="personalizeOutcome_edit" value="yes" <?=$rights['personalizeOutcome']['edit']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="personalizeOutcome_delete" class="containerCheckbox">
+																<input type="checkbox" id="personalizeOutcome_delete" name="personalizeOutcome_delete" value="yes" <?=$rights['personalizeOutcome']['delete']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+												</tr>
+
+												<!-- adding branching permissions -->
+												<tr>
+													<td>Scenario Branching</td>
+													<td>
+														<div class="col-md-2">
+															<label for="scenarioBranching_enable" class="containerCheckbox">
+																<input type="checkbox" id="scenarioBranching_enable" name="scenarioBranching_enable" value="yes" <?=$rights['ScenarioBranching']['enable']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="scenarioBranching_add" class="containerCheckbox">
+																<input type="checkbox" id="scenarioBranching_add" name="scenarioBranching_add" value="yes" <?=$rights['ScenarioBranching']['add']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="scenarioBranching_edit" class="containerCheckbox">
+																<input type="checkbox" id="scenarioBranching_edit" name="scenarioBranching_edit" value="yes" <?=$rights['ScenarioBranching']['edit']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="scenarioBranching_delete" class="containerCheckbox">
+																<input type="checkbox" id="scenarioBranching_delete" name="scenarioBranching_delete" value="yes" <?=$rights['ScenarioBranching']['delete']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+												</tr>
+												<!-- branching permissions ends here -->
 												<!-- adding inner linage -->
 												<tr>
-													<td><i class="glyphicon glyphicon-plus-sign" id="showMore"> Inner Linkage</i>
-														<i class="glyphicon glyphicon-minus-sign hidden" id="showLess"> Inner Linkage</i>
+													<td><i class="glyphicon glyphicon-plus-sign" id="showMore" style="cursor: pointer;"> Inner Linkage</i>
+														<i class="glyphicon glyphicon-minus-sign hidden" id="showLess" style="cursor: pointer;"> Inner Linkage</i>
 													</td>
 													<td>
 														<div class="col-md-2">
@@ -642,21 +810,19 @@
 					<div class="col-sm-12">
 						<div class="form-group" align="center">
 							<?php if(isset($_GET['edit'])){?>
-								<input type="submit" name="submit" value="Update" 
-								class="btn btn-primary" />
-								<a href="<?php echo site_root."ux-admin/AdminUsers";?>"
-									class="btn btn-primary">Cancel</a>
-								<?php }else{?>
-									<input type="submit" name="submit" value="Submit" id="submit"
-									class="btn btn-primary" />
-								<?php }?>
-							</div>
+								<input type="submit" name="submit" value="Update" class="btn btn-primary" />
+								<a href="<?php echo site_root."ux-admin/adminlist";?>"	class="btn btn-danger">Cancel</a>
+							<?php }else{?>
+								<input type="submit" name="submit" value="Submit" id="submit"	class="btn btn-primary" />
+								<a href="<?php echo site_root."ux-admin/adminlist";?>"	class="btn btn-danger">Cancel</a>
+							<?php }?>
 						</div>
 					</div>
 				</div>
 			</div>
-		</form>
-	</div>
+		</div>
+	</form>
+</div>
 </div>
 </div>
 <script type="text/javascript">

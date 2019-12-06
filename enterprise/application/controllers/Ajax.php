@@ -25,7 +25,7 @@ class Ajax extends CI_Controller {
     $this->loginDataLocal = $this->session->userdata('loginData');
     if($this->session->userdata('loginData') == NULL)
     {
-     $this->session->set_flashdata('er_msg', 'You need to login to see the dashboard');
+     $this->session->set_flashdata('er_msg', 'Session Expired. Please Login');
      redirect('Login/login');
    }
  }
@@ -62,8 +62,8 @@ public function getAgents()
   $gameId          = $this->input->post('gameId');
   $searchFilter    = trim($this->input->post('searchFilter'));
   // creating subquery 
-  $userDataQuery   = " SELECT gsu.User_id, gsu.User_fname, gsu.User_lname, gsu.User_email, gsu.User_Delete, gsu.User_ParentId, gus.US_LinkID FROM GAME_SITE_USERS gsu
-  LEFT JOIN GAME_USERSTATUS gus ON gus.US_UserID = gsu.User_id WHERE gsu.User_Delete=0";
+  $userDataQuery   = " SELECT gsu.User_id, gsu.User_fname, gsu.User_lname, gsu.User_email, gsu.User_ParentId, gus.US_LinkID FROM GAME_SITE_USERS gsu
+  INNER JOIN GAME_USERSTATUS gus ON gus.US_UserID = gsu.User_id AND gus.US_GameID=$gameId WHERE gsu.User_Delete=0";
   // adding filters here
   if($filterValue == 'superadminUsers')
   {
@@ -98,7 +98,7 @@ public function getAgents()
   ON
   ud.User_id = gr.uid
   WHERE
-  ud.User_Delete = 0 AND gr.linkid IN(
+  gr.linkid IN(
   SELECT
   Link_ID
   FROM
@@ -106,8 +106,6 @@ public function getAgents()
   WHERE
   Link_GameID = $gameId
 )
-GROUP BY
-ud.User_id  
 ORDER BY `ud`.`US_LinkID` DESC";
 
 $agentsResult = $this->Common_Model->executeQuery($agentsSql);
@@ -333,6 +331,7 @@ public function EnterpriseUsersCSV($Enterpriseid=NULL)
         {
           if($flag)
           {
+            // to skip the 1st row that is title/header in file
             $flag = false;
             continue;
           }
@@ -340,10 +339,10 @@ public function EnterpriseUsersCSV($Enterpriseid=NULL)
           if( !empty($filesop) )
           {
             //convert the date format 
-            $date          = $filesop[6];
-            $GameStartDate = date("Y-m-d", strtotime($date));
-            $newdate       = $filesop[7];
-            $GameEndDate   = date("Y-m-d", strtotime($newdate));
+            $startDate     = $filesop[6];
+            $endDate       = $filesop[7];
+            $userStartDate = date("Y-m-d", strtotime($startDate));
+            $userEndDate   = date("Y-m-d", strtotime($endDate));
             $email         = $filesop[4];
             $mobile        = $filesop[3];
             $where         = array(
@@ -360,7 +359,6 @@ public function EnterpriseUsersCSV($Enterpriseid=NULL)
               // exit();
             }
 
-            $User_role = 1;
             if($Enterpriseid == 0)
             {
               $entid = $this->session->userdata('loginData')['User_ParentId'];
@@ -376,14 +374,14 @@ public function EnterpriseUsersCSV($Enterpriseid=NULL)
               "User_mobile"        => $filesop[3],
               "User_email"         => $filesop[4],
               "User_companyid"     => $filesop[5],
-              "User_Role"          => $User_role,
+              "User_Role"          => 1,
               "User_ParentId"      => $entid,
-              "User_GameStartDate" => $GameStartDate,
-              "User_GameEndDate"   => $GameEndDate,
+              "User_GameStartDate" => $userStartDate,
+              "User_GameEndDate"   => $userEndDate,
               "User_datetime"      => date("Y-m-d H:i:s"),
               'User_UploadCsv'     => $User_UploadCsv,
             );
-            // print_r($filesop); echo $GameStartDate. ' and '.$GameEndDate; print_r($insertArray);exit();
+            // print_r($filesop); echo $userStartDate. ' and '.$userEndDate; print_r($insertArray);exit();
             $result = $this->Common_Model->insert("GAME_SITE_USERS", $insertArray, 0, 0);
             // print_r($this->db->last_query());exit;
             $c++;
@@ -423,6 +421,13 @@ public function EnterpriseUsersCSV($Enterpriseid=NULL)
           "status" => 0
         );
       }
+    }
+    else
+    {
+      $result = array(
+        "msg"    => "Please select CSV or Excel file only",
+        "status" => 0
+      );
     }
   }
   else
@@ -532,7 +537,7 @@ public function subenterprisecsv($enterpriseid=NULL)
               $header            = "From:" . $from . "\r\n";
               $header           .= "MIME-Version: 1.0\r\n";
               $header           .= "Content-type: text/html; charset: utf8\r\n";
-              mail($to,$from,$subject,$message,$header);
+              // mail($to,$from,$subject,$message,$header);
             }
           }
 
@@ -550,6 +555,13 @@ public function subenterprisecsv($enterpriseid=NULL)
         );
       }
     }
+    else
+    {
+      $result = array(
+        "msg"    => "Please select CSV or Excel file only",
+        "status" => 0
+      );
+    }
 
   }
   else
@@ -563,7 +575,7 @@ public function subenterprisecsv($enterpriseid=NULL)
 }
 
 //csv upload for subenterprise users
-public function SubEnterpriseUsersCSV($Enterpriseid=NULL,$SubEnterpriseid)
+public function SubEnterpriseUsersCSV($Enterpriseid=NULL,$SubEnterpriseid=NULL)
 {
   // Set max upload file size [2MB]
   $maxFileSize    = 2097152;
@@ -593,10 +605,10 @@ public function SubEnterpriseUsersCSV($Enterpriseid=NULL,$SubEnterpriseid)
           if( !empty($filesop) )
           {
             //convert the date format 
-            $date          = $filesop[6];
-            $GameStartDate = date("Y-m-d", strtotime($date));
-            $newdate       = $filesop[7];
-            $GameEndDate   = date("Y-m-d", strtotime($newdate));
+            $startDate     = $filesop[6];
+            $endDate       = $filesop[7];
+            $userStartDate = date("Y-m-d", strtotime($startDate));
+            $userEndDate   = date("Y-m-d", strtotime($endDate));
             $mobile        = $filesop[3];
             $email         = $filesop[4];
             $where         = array(
@@ -630,7 +642,6 @@ public function SubEnterpriseUsersCSV($Enterpriseid=NULL,$SubEnterpriseid)
             {
               $subentid = $SubEnterpriseid;
             }
-            $user_role = 2;
 
             $insertArray = array(
               "User_fname"         => $filesop[0],
@@ -639,11 +650,11 @@ public function SubEnterpriseUsersCSV($Enterpriseid=NULL,$SubEnterpriseid)
               "User_mobile"        => $filesop[3],
               "User_email"         => $filesop[4],
               "User_companyid"     => $filesop[5],
-              "User_Role"          => $user_role,
+              "User_Role"          => 2,
               "User_ParentId"      => $entid,
               "User_SubParentId"   => $subentid,
-              "User_GameStartDate" => $GameStartDate,
-              "User_GameEndDate"   => $GameEndDate,
+              "User_GameStartDate" => $userStartDate,
+              "User_GameEndDate"   => $userEndDate,
               "User_datetime"      => date("Y-m-d H:i:s"),
               'User_UploadCsv'     => $User_UploadCsv,
             );
@@ -685,6 +696,13 @@ public function SubEnterpriseUsersCSV($Enterpriseid=NULL,$SubEnterpriseid)
         );
       }
     }
+    else
+    {
+      $result = array(
+        "msg"    => "Please select CSV or Excel file only",
+        "status" => 0
+      );
+    }
 
   }
   else
@@ -715,6 +733,11 @@ public function getDomainName($Domain_Name=NULL)
   {
     echo 'success';
   }
+}
+
+public function userReportData()
+{
+  print_r($this->input->post());
 }
 
 }

@@ -1,9 +1,9 @@
 <!-- <?php //echo "<pre>"; print_r($header); exit;?>  -->
- 
-  <script type="text/javascript">
-    <!--
-     var loc_url_del  = "ux-admin/personalizeOutcome/linkdel/";
-     var loc_url_stat = "ux-admin/personalizeOutcome/linkstat/";
+ <script src="<?php echo site_root.'assets/components/ckeditor/ckeditor.js'?>"></script>
+ <script type="text/javascript">
+  <!--
+   var loc_url_del  = "ux-admin/personalizeOutcome/linkdel/";
+   var loc_url_stat = "ux-admin/personalizeOutcome/linkstat/";
   //-->
 </script>
 <!-- css for overlay div -->
@@ -235,7 +235,9 @@
   $(document).ready(function(){
    $("#ComponentName").select2();
    $("#outcome").select2();
-  });
+   // adding ckEditor to description box, this will replace the name="Outcome_Description" to ck-editor text
+   CKEDITOR.replace('Outcome_Description');
+ });
 </script>
 
 

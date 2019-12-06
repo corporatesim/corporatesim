@@ -7,57 +7,57 @@
 </script>
 
 <style>
-<!--
-.dropdown-menu > li > button {
-  display    : block;
-  padding    : 3px 20px;
-  clear      : both;
-  font-weight: 400;
-  line-height: 1.42857143;
-  color      : #ffffff;
-  white-space: nowrap;
-}
-#contact
-{
-  width: auto!important;
-}
-#password
-{
-  width: auto!important;
-}
-#action
-{
-  width: 70px!important;
-}
-.drop_down{
-  padding: 0 5px !important;
-}
-
-#upload-file-selector {
-  display:none;
-}
-.margin-correction {
-  margin-right: 10px;
-}
-
-@media screen and ( min-width: '361px' ){
-  .resp_pull_right{
-    float: right;
+  <!--
+  .dropdown-menu > li > button {
+    display    : block;
+    padding    : 3px 20px;
+    clear      : both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color      : #ffffff;
+    white-space: nowrap;
   }
-}
-
-@media screen and ( max-width: '360px' ){
-  .resp_pull_right{
-    float     : none;
-    text-align: center;
-    width     : 100%;
-    padding   : 0 15px;
+  #contact
+  {
+    width: auto!important;
   }
-}
--->
-#update-file-selector {
-  display:none;
-}
+  #password
+  {
+    width: auto!important;
+  }
+  #action
+  {
+    width: 70px!important;
+  }
+  .drop_down{
+    padding: 0 5px !important;
+  }
+
+  #upload-file-selector {
+    display:none;
+  }
+  .margin-correction {
+    margin-right: 10px;
+  }
+
+  @media screen and ( min-width: '361px' ){
+    .resp_pull_right{
+      float: right;
+    }
+  }
+
+  @media screen and ( max-width: '360px' ){
+    .resp_pull_right{
+      float     : none;
+      text-align: center;
+      width     : 100%;
+      padding   : 0 15px;
+    }
+  }
+  -->
+  #update-file-selector {
+    display:none;
+  }
 </style>
 <div class="row">
   <div class="col-lg-12">
@@ -82,10 +82,10 @@
 <?php } ?>
 <!-- DISPLAY ERROR MESSAGE END -->
 <style>
-span.alert-danger {
-  background-color: #ffffff;
-  font-size       : 18px;
-}
+  span.alert-danger {
+    background-color: #ffffff;
+    font-size       : 18px;
+  }
 </style>
 
 <!-- data table starts here -->
@@ -97,46 +97,46 @@ span.alert-danger {
      <br>
      <div id="downloadPersonalizeOutcome">
       <div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
-            <label>Select Game</label> 
-            <select class="form-control"
-            name="game" id="game">
-            <option value="">-- SELECT --</option>
-            <?php while($row = $execute->fetch_object()){?>
-              <option value="<?php echo $row->Game_ID;?>">
-                <?php echo $row->Game_Name;?>
-              </option>
-              <?php }?>
-          </select>
-        </div>
-
-        <div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
-          <label>Select Scenario</label> <select class="form-control"
-          name="scenario[]" id="scenario" multiple>
-          <option value="">-- SELECT --</option>
-              <option value="">
-                </option>
-          </select>
-        </div>
-      <button type="submit" name="download_excel" id="download_excel" class="btn btn-primary" value="Download"> Download </button>
+        <label>Select Game</label> 
+        <select class="form-control"
+        name="game" id="game">
+        <option value="">-- SELECT --</option>
+        <?php while($row = $execute->fetch_object()){?>
+          <option value="<?php echo $row->Game_ID;?>">
+            <?php echo $row->Game_Name;?>
+          </option>
+        <?php }?>
+      </select>
     </div>
 
+    <div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
+      <label>Select Scenario</label> <select class="form-control"
+      name="scenario[]" id="scenario" multiple>
+      <option value="">-- SELECT --</option>
+      <option value="">
+      </option>
+    </select>
   </div>
-  <div class="col-md-6">
-    <div class="col-sm-12">
-      <div class="pull-right legend">
-        <ul>
-          <li><b>Legend : </b></li>
-          <!-- <li> <span class="glyphicon glyphicon-ok">    </span><a href="javascript:void(0);" data-toggle="tooltip" title="This is Active Status"> Active  </a></li> -->
-          <!-- <li> <span class="glyphicon glyphicon-remove">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="This Deactive Status"> Deactive </a></li> -->
-          <!-- <li> <span class="glyphicon glyphicon-search">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can View the Record"> View   </a></li> -->
-          <li> <span class="glyphicon glyphicon-pencil">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Edit the Record"> Edit   </a></li>
-          <li> <span class="glyphicon glyphicon-trash"> </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Delete the Record"> Delete </a></li>
-          <!-- <li> <span class="glyphicon glyphicon-refresh"> </span><a href="javascript:void(0);" data-toggle="tooltip" title="User can replay the Game"> Replay </a></li> -->
-          <!-- <li> <span class="glyphicon glyphicon-ban-circle">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="User games have been disabled"> Disable </a></li> -->
-        </ul>
-      </div>
+  <button type="submit" name="download_excel" id="download_excel" class="btn btn-primary" value="Download"> Download </button>
+</div>
+
+</div>
+<div class="col-md-6">
+  <div class="col-sm-12">
+    <div class="pull-right legend">
+      <ul>
+        <li><b>Legend : </b></li>
+        <!-- <li> <span class="glyphicon glyphicon-ok">    </span><a href="javascript:void(0);" data-toggle="tooltip" title="This is Active Status"> Active  </a></li> -->
+        <!-- <li> <span class="glyphicon glyphicon-remove">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="This Deactive Status"> Deactive </a></li> -->
+        <!-- <li> <span class="glyphicon glyphicon-search">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can View the Record"> View   </a></li> -->
+        <li> <span class="glyphicon glyphicon-pencil">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Edit the Record"> Edit   </a></li>
+        <li> <span class="glyphicon glyphicon-trash"> </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Delete the Record"> Delete </a></li>
+        <!-- <li> <span class="glyphicon glyphicon-refresh"> </span><a href="javascript:void(0);" data-toggle="tooltip" title="User can replay the Game"> Replay </a></li> -->
+        <!-- <li> <span class="glyphicon glyphicon-ban-circle">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="User games have been disabled"> Disable </a></li> -->
+      </ul>
     </div>
   </div>
+</div>
 </div>
 </form>
 <br>
@@ -147,7 +147,9 @@ span.alert-danger {
         <!-- <form action="" method="post">
           <button class="btn btn-primary btn-lg btn-block" type="submit" value="addBranching" name="addBranching">Add Branching</button>
         </form> -->
-        <a href="<?php echo site_root."ux-admin/personalizeOutcome/add/add";?>" class="btn btn-primary btn-lg btn-block">Add Outcome</a>
+        <?php if($functionsObj->checkModuleAuth('personalizeOutcome','add')){ ?>
+          <a href="<?php echo site_root."ux-admin/personalizeOutcome/add/add";?>" class="btn btn-primary btn-lg btn-block">Add Outcome</a>
+        <?php } ?>
       </div>
       <div class="clearfix"></div>
       <div class="panel-body">
@@ -183,9 +185,13 @@ span.alert-danger {
                 <td><?php echo $row->Outcome_Name;?></td>
                 <td><?php echo $row->Outcome_FileName;?></td>
                 <td>
-                  <a href="<?php echo site_root."ux-admin/personalizeOutcome/edit/".$row->OutcomeID;?>" title="Edit"><span class="fa fa-pencil"></span></a> &nbsp;
+                  <?php if($functionsObj->checkModuleAuth('personalizeOutcome','edit')){ ?>
+                    <a href="<?php echo site_root."ux-admin/personalizeOutcome/edit/".$row->OutcomeID;?>" title="Edit"><span class="fa fa-pencil"></span></a> &nbsp;
+                  <?php } ?>
                   <!--  <a href="<?php //echo site_root."ux-admin/personalizeOutcome/delete/".$row->OutcomeID;?>" title="Delete"><span class="fa fa-trash"></span></a> -->
-                  <a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->OutcomeID;?>" title="Delete"><span class="fa fa-trash"></span></a></a>
+                  <?php if($functionsObj->checkModuleAuth('personalizeOutcome','delete')){ ?>
+                    <a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->OutcomeID;?>" title="Delete"><span class="fa fa-trash"></span></a></a>
+                  <?php } ?>
                 </td>
               </tr>
               <?php $i++; } ?>

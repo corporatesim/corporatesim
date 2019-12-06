@@ -24,7 +24,7 @@ class Users extends CI_Controller {
 		parent::__construct();
 		if($this->session->userdata('loginData') == NULL)
 		{
-			$this->session->set_flashdata('er_msg', 'You need to login to see the dashboard');
+			$this->session->set_flashdata('er_msg', 'Session Expired. Please Login');
 			redirect('Login/login');
 		}
 	}
@@ -136,7 +136,7 @@ class Users extends CI_Controller {
     //Show Subenterprize dropdown list When Admin login
 		else
 		{
-			$query = "SELECT gs.SubEnterprise_Name,gs.SubEnterprise_ID FROM GAME_SITE_USERS gsu LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID=gsu.User_ParentId LEFT JOIN game_subenterprise gs ON gs.SubEnterprise_EnterpriseID=ge.Enterprise_ID WHERE User_id=$id AND SubEnterprise_Status=0";
+			$query = "SELECT gs.SubEnterprise_Name,gs.SubEnterprise_ID FROM GAME_SITE_USERS gsu LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID=gsu.User_ParentId LEFT JOIN GAME_SUBENTERPRISE gs ON gs.SubEnterprise_EnterpriseID=ge.Enterprise_ID WHERE User_id=$id AND SubEnterprise_Status=0";
 			$Subenterprise            = $this->Common_Model->executeQuery($query);
 			$content['Subenterprise'] = $Subenterprise;
 			

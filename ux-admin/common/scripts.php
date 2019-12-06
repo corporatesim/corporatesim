@@ -79,6 +79,22 @@ $("#selectAll").change(function () {
 					"orderable" : false,
 				} ]
 			});
+
+			// for server side enabled tables
+			$('#dataTables-serverSide').DataTable({
+				responsive: true,
+				"columnDefs": [ {
+					"targets"   : 'no-sort',
+					"orderable" : false,
+				} ],
+				"processing": true,
+				"serverSide": true,
+				"ajax": {
+					url: "<?php echo site_root.'ux-admin/model/ajax/siteusers.php';?>",
+					type: 'POST',
+					data: {action: 'siteusers'},
+				}
+			});
 		});
 // -->
 </script>

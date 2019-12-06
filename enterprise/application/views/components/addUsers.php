@@ -218,50 +218,6 @@
   </div>
 </div>
 <script type="text/javascript">
-  $(document).ready(function() {
-  //Show Subenterprise on change of enterprise
-  $('.Enterprise').on('change',function(){
-    $this             = $(this);
-    var option        = '<option value="">--Select SubEnterprise--</option>';
-    var Enterprise_ID = $(this).val();
-    if($(this).val())
-    { 
-      // triggering ajax to show the subenterprise linked with this enterprise
-      $.ajax({
-        url :"<?php echo base_url();?>Ajax/get_subenterprise/"+Enterprise_ID,
-        type: "POST",
-        success: function( result )
-        {
-          result = JSON.parse(result);
-          if(result.length > 0)
-          {
-            $(result).each(function(i,e)
-            {
-              option += ("<option value='"+result[i].SubEnterprise_ID+"'>"+result[i].SubEnterprise_Name+"</option>");
-            });
-            $this.parents('form').find('select.subenterprise').html(option);
-            option = '<option value="">--Select SubEnterprise--</option>';
-            // $('.SubEnterprise').html(option);
-          }
-          else
-          {
-            $this.parents('form').find('select.subenterprise').html(option);
-            // alert('No SubEnterprise Associated With The Selected Enterprise');
-          }
-        },
-      });          
-    }
-    else
-    {
-      $this.parents('form').find('select.subenterprise').html(option);
-      alert('Please Select Enterprise...');
-      return false;
-    }
-  });
-});
-</script>
-<script type="text/javascript">
-
  $('#clickButton').on( 'click',function(e){
   e.preventDefault();
   var Enterpriseid    = $('#Enterprise1').val();

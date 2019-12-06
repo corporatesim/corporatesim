@@ -25,7 +25,7 @@ class Profile extends CI_Controller {
 		// $this->load->helper(array('form', 'url'));
 		if($this->session->userdata('loginData') == NULL)
 		{
-			$this->session->set_flashdata('er_msg', 'You need to login to see the dashboard');
+			$this->session->set_flashdata('er_msg', 'Session Expired. Please Login');
 			redirect('Login/login');
 		}
 		elseif($this->session->userdata('loginData')['User_Role'] == 'superadmin')

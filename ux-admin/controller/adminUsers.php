@@ -144,9 +144,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 // ------------------------  edit chart inside inner linkage --------------------------------
 	$chart               = $_POST['chart_edit']!=''?$_POST['chart_edit']:'no';
 	$edit_chart          = array('edit_chart' => $chart);
-  
+
 	$value               = $edit_area + $edit_compo + $edit_subcompo + $edit_viewingorder + $edit_labelC + $edit_labelOrder + $edit_bgColor + $edit_textbgColor + $edit_type + $edit_order + $edit_showhide + $edit_replace + $edit_chart;
-	 $innerlinkagedata   = $value;
+	$innerlinkagedata    = $value;
 	$edit_innerlinkage   = array('edit' => $innerlinkage_edit,'innerPermission' =>$innerlinkagedata);
 	//print_r($edit_innerlinkage);exit;
 	$innerlinkage_delete =  $_POST['innerlinkage_delete']!=''?$_POST['innerlinkage_delete']:'no';
@@ -154,24 +154,93 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 	
 	$innerlinkage        = $enable_innerlinkage + $add_innerlinkage + $edit_innerlinkage + $delete_innerlinkage;
 	$val8                = array('innerlinkage' => $innerlinkage);
- 
-	// ------------------------  end -----------------------------------------
+
+	// ------------------------  Outcome Badges -----------------------------------------
+	$outcomeBadges_enable = $_POST['outcomeBadges_enable']!=''?$_POST['outcomeBadges_enable']:'no';
+	$enable_outcomeBadges = array('enable' => $outcomeBadges_enable);
+	$outcomeBadges_add    =  $_POST['outcomeBadges_add']!=''?$_POST['outcomeBadges_add']:'no';
+	$add_outcomeBadges    = array('add' => $outcomeBadges_add);
+	$outcomeBadges_edit   =  $_POST['outcomeBadges_edit']!=''?$_POST['outcomeBadges_edit']:'no';
+	$edit_outcomeBadges   = array('edit' => $outcomeBadges_edit);
+	$outcomeBadges_delete =  $_POST['outcomeBadges_delete']!=''?$_POST['outcomeBadges_delete']:'no';
+	$delete_outcomeBadges = array('delete' => $outcomeBadges_delete);
 	
-	$userrights = $val1 + $val2 + $val3 + $val4 + $val5 + $val6 + $val7 +$val8;
+	$outcomeBadges        = $enable_outcomeBadges + $add_outcomeBadges + $edit_outcomeBadges + $delete_outcomeBadges;
+	$val9                 = array('outcomeBadges' => $outcomeBadges);
+
+	// ------------------------  Personalize Outcome  -----------------------------------------
+	$personalizeOutcome_enable = $_POST['personalizeOutcome_enable']!=''?$_POST['personalizeOutcome_enable']:'no';
+	$enable_personalizeOutcome = array('enable' => $personalizeOutcome_enable);
+	$personalizeOutcome_add    =  $_POST['personalizeOutcome_add']!=''?$_POST['personalizeOutcome_add']:'no';
+	$add_personalizeOutcome    = array('add' => $personalizeOutcome_add);
+	$personalizeOutcome_edit   =  $_POST['personalizeOutcome_edit']!=''?$_POST['personalizeOutcome_edit']:'no';
+	$edit_personalizeOutcome   = array('edit' => $personalizeOutcome_edit);
+	$personalizeOutcome_delete =  $_POST['personalizeOutcome_delete']!=''?$_POST['personalizeOutcome_delete']:'no';
+	$delete_personalizeOutcome = array('delete' => $personalizeOutcome_delete);
+	
+	$personalizeOutcome = $enable_personalizeOutcome + $add_personalizeOutcome + $edit_personalizeOutcome + $delete_personalizeOutcome;
+	$val10 = array('personalizeOutcome' => $personalizeOutcome);
+
+	// ------------------------  Scenario Branching -----------------------------------------
+	$scenarioBranching_enable = $_POST['scenarioBranching_enable']!=''?$_POST['scenarioBranching_enable']:'no';
+	$enable_scenarioBranching = array('enable' => $scenarioBranching_enable);
+	$scenarioBranching_add    =  $_POST['scenarioBranching_add']!=''?$_POST['scenarioBranching_add']:'no';
+	$add_scenarioBranching    = array('add' => $scenarioBranching_add);
+	$scenarioBranching_edit   =  $_POST['scenarioBranching_edit']!=''?$_POST['scenarioBranching_edit']:'no';
+	$edit_scenarioBranching   = array('edit' => $scenarioBranching_edit);
+	$scenarioBranching_delete =  $_POST['scenarioBranching_delete']!=''?$_POST['scenarioBranching_delete']:'no';
+	$delete_scenarioBranching = array('delete' => $scenarioBranching_delete);
+	
+	$ScenarioBranching = $enable_scenarioBranching + $add_scenarioBranching + $edit_scenarioBranching + $delete_scenarioBranching;
+	$val11 = array('ScenarioBranching' => $ScenarioBranching);
+
+	
+	// ------------------------  Chart Component -----------------------------------------
+	$chartComp_enable = $_POST['chartComp_enable']!=''?$_POST['chartComp_enable']:'no';
+	$enable_chartComp = array('enable' => $chartComp_enable);
+	$chartComp_add    =  $_POST['chartComp_add']!=''?$_POST['chartComp_add']:'no';
+	$add_chartComp    = array('add' => $chartComp_add);
+	$chartComp_edit   =  $_POST['chartComp_edit']!=''?$_POST['chartComp_edit']:'no';
+	$edit_chartComp   = array('edit' => $chartComp_edit);
+	$chartComp_delete =  $_POST['chartComp_delete']!=''?$_POST['chartComp_delete']:'no';
+	$delete_chartComp = array('delete' => $chartComp_delete);
+	
+	$chartComp        = $enable_chartComp + $add_chartComp + $edit_chartComp + $delete_chartComp;
+	$val12            = array('chartComp' => $chartComp);
+
+	// ------------------------  Chart Sub-Component  -----------------------------------------
+	$chartSubComp_enable = $_POST['chartSubComp_enable']!=''?$_POST['chartSubComp_enable']:'no';
+	$enable_chartSubComp = array('enable' => $chartSubComp_enable);
+	$chartSubComp_add    =  $_POST['chartSubComp_add']!=''?$_POST['chartSubComp_add']:'no';
+	$add_chartSubComp    = array('add' => $chartSubComp_add);
+	$chartSubComp_edit   =  $_POST['chartSubComp_edit']!=''?$_POST['chartSubComp_edit']:'no';
+	$edit_chartSubComp   = array('edit' => $chartSubComp_edit);
+	$chartSubComp_delete =  $_POST['chartSubComp_delete']!=''?$_POST['chartSubComp_delete']:'no';
+	$delete_chartSubComp = array('delete' => $chartSubComp_delete);
+	
+	$chartSubComp        = $enable_chartSubComp + $add_chartSubComp + $edit_chartSubComp + $delete_chartSubComp;
+	$val13               = array('chart' => $chartSubComp);
+
+
+	// ------------------------  end -----------------------------------------
+
+	$userrights = $val1 + $val2 + $val3 + $val4 + $val5 + $val6 + $val7  + $val8  + $val9  + $val10  + $val11  + $val12  + $val13;
 
 	//Get values in array
 	$userdetails = (object) array(
-		'fname'        =>	$_POST['fname'],
-		'lname'        =>	$_POST['lname'],
-		'username'     =>	$_POST['username'],
-		'email'        =>	$_POST['email'],
-		'usertype'     =>	'admin',
-		'password'     =>	md5($_POST['password']),
-		'admin_access' =>	1,
-		'status'       =>	1,
-		'admin_rights' =>	json_encode($userrights),	
-		'date_time'    =>	date('Y-m-d H:i:s')
+		'fname'         =>	$_POST['fname'],
+		'lname'         =>	$_POST['lname'],
+		'username'      =>	$_POST['username'],
+		'email'         =>	$_POST['email'],
+		'usertype'      =>	'admin',
+		'password'      =>	md5($_POST['password']),
+		'password_view' =>	$_POST['password'],
+		'admin_access'  =>	1,
+		'status'        =>	1,
+		'admin_rights'  =>	json_encode($userrights),	
+		'date_time'     =>	date('Y-m-d H:i:s')
 	);
+	// echo "<pre>"; print_r($userdetails); exit();
 	
 	// Validate fields not empty
 	if(!empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username'])
@@ -320,7 +389,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 	$formulas        = $enable_formulas + $add_formulas + $edit_formulas + $delete_formulas;
 	$val6            = array('formulas' => $formulas);
 
-		// ------------------------  Linkage -----------------------------------------
+	// ------------------------  Linkage -----------------------------------------
 	$linkage_enable = $_POST['linkage_enable']!=''?$_POST['linkage_enable']:'no';
 	$enable_linkage = array('enable' => $linkage_enable);
 	$linkage_add    =  $_POST['linkage_add']!=''?$_POST['linkage_add']:'no';
@@ -333,55 +402,56 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 	$linkage        = $enable_linkage + $add_linkage + $edit_linkage + $delete_linkage;
 	$val7           = array('linkage' => $linkage);
 
- // ------------------------  Inner Linkage -----------------------------------------
+  // ------------------------  Inner Linkage -----------------------------------------
 	$innerlinkage_enable = $_POST['innerlinkage_enable']!=''?$_POST['innerlinkage_enable']:'no';
 	$enable_innerlinkage = array('enable' => $innerlinkage_enable);
 	$innerlinkage_add    = $_POST['innerlinkage_add']!=''?$_POST['innerlinkage_add']:'no';
 	$add_innerlinkage    = array('add' => $innerlinkage_add);
 	$innerlinkage_edit   = $_POST['innerlinkage_edit']!=''?$_POST['innerlinkage_edit']:'no';
-// ---------------------  edit area inside inner linkage -------------------------
+	// ---------------------  edit area inside inner linkage -------------------------
 	$areaL               = $_POST['areaL_edit']!=''?$_POST['areaL_edit']:'no';
 	$edit_area           = array('edit_area' => $areaL);
- // ---------------------  edit component inside inner linkage -------------------
+	// ---------------------  edit component inside inner linkage -------------------
 	$componentL          = $_POST['componentL_edit']!=''?$_POST['componentL_edit']:'no';
 	$edit_compo          = array('edit_compo' => $componentL);
-// ----------------------  edit subcompo inside inner linkage ----------------------
+	// ----------------------  edit subcompo inside inner linkage ----------------------
 	$subcompoL           = $_POST['subcompoL_edit']!=''?$_POST['subcompoL_edit']:'no';
 	$edit_subcompo       = array('edit_subcompo' => $subcompoL);
 	// ----------------------  edit viewingorder inside inner linkage ----------------------
 	$viewingorder        = $_POST['viewingorder_edit']!=''?$_POST['viewingorder_edit']:'no';
 	$edit_viewingorder   = array('edit_viewingorder' => $viewingorder);
-// ------------------  edit label current/last inside inner linkage ---------------
+	// ------------------  edit label current/last inside inner linkage ---------------
 	$labelC              = $_POST['labelC_edit']!=''?$_POST['labelC_edit']:'no';
 	$edit_labelC         = array('edit_label' => $labelC);
-// ------------------------  edit order inside inner linkage --------------------------
+	// ------------------------  edit order inside inner linkage --------------------------
 	$labelOrder          = $_POST['labelOrder_edit']!=''?$_POST['labelOrder_edit']:'no';
 	$edit_labelOrder     = array('edit_labelOrder' => $labelOrder);
-// ----------------------  edit bgcolor inside inner linkage -----------------------
+	// ----------------------  edit bgcolor inside inner linkage -----------------------
 	$bgColor             = $_POST['bgColor_edit']!=''?$_POST['bgColor_edit']:'no';
 	$edit_bgColor        = array('edit_bgcolor' => $bgColor);
-// ------------------------  edit textcolor inside inner linkage -----------------------
+	// ------------------------  edit textcolor inside inner linkage -----------------------
 	$textbgColor         = $_POST['textbgColor_edit']!=''?$_POST['textbgColor_edit']:'no';
 	$edit_textbgColor    = array('edit_textbgcolor' => $textbgColor);
-// ------------------------  edit type inside inner linkage ---------------------------
+	// ------------------------  edit type inside inner linkage ---------------------------
 	$type                = $_POST['type_edit']!=''?$_POST['type_edit']:'no';
 	$edit_type           = array('edit_type' => $type);
-// ------------------------  edit order inside inner linkage -----------------------
+	// ------------------------  edit order inside inner linkage -----------------------
 	$order               = $_POST['order_edit']!=''?$_POST['order_edit']:'no';
 	$edit_order          = array('edit_order' => $order);
 	// ------------------------  edit showhide inside inner linkage -----------------------
-	$showhide               = $_POST['showhide_edit']!=''?$_POST['showhide_edit']:'no';
-	$edit_showhide          = array('edit_showhide' => $showhide);
-// ------------------------  edit replace inside inner linkage -----------------------------
+	$showhide            = $_POST['showhide_edit']!=''?$_POST['showhide_edit']:'no';
+	$edit_showhide       = array('edit_showhide' => $showhide);
+	// ------------------------  edit replace inside inner linkage -----------------------------
 	$replace             = $_POST['replace_edit']!=''?$_POST['replace_edit']:'no';
 	$edit_replace        = array('edit_replace' => $replace);
-// ------------------------  edit chart inside inner linkage --------------------------------
+	// ------------------------  edit chart inside inner linkage --------------------------------
 	$chart               = $_POST['chart_edit']!=''?$_POST['chart_edit']:'no';
 	$edit_chart          = array('edit_chart' => $chart);
-  
-	$value               = $edit_area + $edit_compo + $edit_subcompo + $edit_labelC + $edit_viewingorder + $edit_labelOrder + $edit_bgColor + $edit_textbgColor + $edit_type + $edit_order + $edit_showhide + $edit_replace + $edit_chart;
 
-	 $innerlinkagedata = $value;
+
+	$value = $edit_area + $edit_compo + $edit_subcompo + $edit_labelC + $edit_viewingorder + $edit_labelOrder + $edit_bgColor + $edit_textbgColor + $edit_type + $edit_order + $edit_showhide + $edit_replace + $edit_chart;
+
+	$innerlinkagedata = $value;
 	 //print_r($value);exit;
 	//$areaL               = array('areaL_edit' => $areaL,'componentL_edit' => $componentL);
 	//$areaedit            = json_encode($areaL);
@@ -393,53 +463,126 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 	
 	$innerlinkage        = $enable_innerlinkage + $add_innerlinkage + $edit_innerlinkage + $delete_innerlinkage;
 	$val8                = array('innerlinkage' => $innerlinkage);
+
+	// ------------------------  Outcome Badges -----------------------------------------
+	$outcomeBadges_enable = $_POST['outcomeBadges_enable']!=''?$_POST['outcomeBadges_enable']:'no';
+	$enable_outcomeBadges = array('enable' => $outcomeBadges_enable);
+	$outcomeBadges_add    =  $_POST['outcomeBadges_add']!=''?$_POST['outcomeBadges_add']:'no';
+	$add_outcomeBadges    = array('add' => $outcomeBadges_add);
+	$outcomeBadges_edit   =  $_POST['outcomeBadges_edit']!=''?$_POST['outcomeBadges_edit']:'no';
+	$edit_outcomeBadges   = array('edit' => $outcomeBadges_edit);
+	$outcomeBadges_delete =  $_POST['outcomeBadges_delete']!=''?$_POST['outcomeBadges_delete']:'no';
+	$delete_outcomeBadges = array('delete' => $outcomeBadges_delete);
 	
-		// ------------------------  end -----------------------------------------
-  
-	$userrights = $val1 + $val2 + $val3 + $val4 + $val5 + $val6 + $val7  + $val8;
+	$outcomeBadges        = $enable_outcomeBadges + $add_outcomeBadges + $edit_outcomeBadges + $delete_outcomeBadges;
+	$val9                 = array('outcomeBadges' => $outcomeBadges);
+
+	// ------------------------  Personalize Outcome  -----------------------------------------
+	$personalizeOutcome_enable = $_POST['personalizeOutcome_enable']!=''?$_POST['personalizeOutcome_enable']:'no';
+	$enable_personalizeOutcome = array('enable' => $personalizeOutcome_enable);
+	$personalizeOutcome_add    =  $_POST['personalizeOutcome_add']!=''?$_POST['personalizeOutcome_add']:'no';
+	$add_personalizeOutcome    = array('add' => $personalizeOutcome_add);
+	$personalizeOutcome_edit   =  $_POST['personalizeOutcome_edit']!=''?$_POST['personalizeOutcome_edit']:'no';
+	$edit_personalizeOutcome   = array('edit' => $personalizeOutcome_edit);
+	$personalizeOutcome_delete =  $_POST['personalizeOutcome_delete']!=''?$_POST['personalizeOutcome_delete']:'no';
+	$delete_personalizeOutcome = array('delete' => $personalizeOutcome_delete);
+	
+	$personalizeOutcome        = $enable_personalizeOutcome + $add_personalizeOutcome + $edit_personalizeOutcome + $delete_personalizeOutcome;
+	$val10                     = array('personalizeOutcome' => $personalizeOutcome);
+
+	// ------------------------  Scenario Branching -----------------------------------------
+	$scenarioBranching_enable = $_POST['scenarioBranching_enable']!=''?$_POST['scenarioBranching_enable']:'no';
+	$enable_scenarioBranching = array('enable' => $scenarioBranching_enable);
+	$scenarioBranching_add    =  $_POST['scenarioBranching_add']!=''?$_POST['scenarioBranching_add']:'no';
+	$add_scenarioBranching    = array('add' => $scenarioBranching_add);
+	$scenarioBranching_edit   =  $_POST['scenarioBranching_edit']!=''?$_POST['scenarioBranching_edit']:'no';
+	$edit_scenarioBranching   = array('edit' => $scenarioBranching_edit);
+	$scenarioBranching_delete =  $_POST['scenarioBranching_delete']!=''?$_POST['scenarioBranching_delete']:'no';
+	$delete_scenarioBranching = array('delete' => $scenarioBranching_delete);
+	
+	$ScenarioBranching        = $enable_scenarioBranching + $add_scenarioBranching + $edit_scenarioBranching + $delete_scenarioBranching;
+	$val11                    = array('ScenarioBranching' => $ScenarioBranching);
+
+	// ------------------------  Chart Component -----------------------------------------
+	$chartComp_enable = $_POST['chartComp_enable']!=''?$_POST['chartComp_enable']:'no';
+	$enable_chartComp = array('enable' => $chartComp_enable);
+	$chartComp_add    =  $_POST['chartComp_add']!=''?$_POST['chartComp_add']:'no';
+	$add_chartComp    = array('add' => $chartComp_add);
+	$chartComp_edit   =  $_POST['chartComp_edit']!=''?$_POST['chartComp_edit']:'no';
+	$edit_chartComp   = array('edit' => $chartComp_edit);
+	$chartComp_delete =  $_POST['chartComp_delete']!=''?$_POST['chartComp_delete']:'no';
+	$delete_chartComp = array('delete' => $chartComp_delete);
+	
+	$chartComp        = $enable_chartComp + $add_chartComp + $edit_chartComp + $delete_chartComp;
+	$val12            = array('chartComp' => $chartComp);
+
+	// ------------------------  Chart Sub-Component  -----------------------------------------
+	$chartSubComp_enable = $_POST['chartSubComp_enable']!=''?$_POST['chartSubComp_enable']:'no';
+	$enable_chartSubComp = array('enable' => $chartSubComp_enable);
+	$chartSubComp_add    =  $_POST['chartSubComp_add']!=''?$_POST['chartSubComp_add']:'no';
+	$add_chartSubComp    = array('add' => $chartSubComp_add);
+	$chartSubComp_edit   =  $_POST['chartSubComp_edit']!=''?$_POST['chartSubComp_edit']:'no';
+	$edit_chartSubComp   = array('edit' => $chartSubComp_edit);
+	$chartSubComp_delete =  $_POST['chartSubComp_delete']!=''?$_POST['chartSubComp_delete']:'no';
+	$delete_chartSubComp = array('delete' => $chartSubComp_delete);
+	
+	$chartSubComp        = $enable_chartSubComp + $add_chartSubComp + $edit_chartSubComp + $delete_chartSubComp;
+	$val13               = array('chart' => $chartSubComp);
+
+
+	// ------------------------  end -----------------------------------------
+
+	$userrights = $val1 + $val2 + $val3 + $val4 + $val5 + $val6 + $val7  + $val8  + $val9  + $val10  + $val11  + $val12  + $val13;
  // echo "<pre>"; print_r(json_encode($userrights));exit;
 	
 		//Get values in array
 	$userdetails   = (object) array(
-		'fname'        =>	$_POST['fname'],
-		'lname'        =>	$_POST['lname'],
-		'username'     =>	$_POST['username'],
-		'usertype'     =>	'admin',
-		'admin_access' =>	1,
-		'status'       =>	1,
-		'admin_rights' =>	json_encode($userrights),
-		'date_time'    =>	date('Y-m-d H:i:s')
+		'fname'         =>	$_POST['fname'],
+		'lname'         =>	$_POST['lname'],
+		'username'      =>	$_POST['username'],
+		'usertype'      =>	'admin',
+		'password_view' =>	($_POST['password'])?$_POST['password']:$_POST['password_view'],
+		'admin_access'  =>	1,
+		'status'        =>	1,
+		'admin_rights'  =>	json_encode($userrights),
+		'date_time'     =>	date('Y-m-d H:i:s')
 	);
 
+	// echo "<pre>"; print_r($userdetails); exit();
 	$uid = $_POST['userid'];
 	// Validate fields not empty
-	if(!empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username'])
-){
-		
-		if(!empty($_POST['password']) && !empty($_POST['retypepass'])){
-			if($_POST['password'] == $_POST['retypepass']){
-				$userdetails->password	=	md5($_POST['password']);
-				
-				$result = $functionsObj->UpdateData('GAME_ADMINUSERS', $userdetails, 'id', $uid, 0);
-				if($result === true){
-					
+	if(!empty($_POST['fname']) && !empty($_POST['lname']) && !empty($_POST['username']))
+	{
+		if(!empty($_POST['password']) && !empty($_POST['retypepass']))
+		{
+			if($_POST['password'] == $_POST['retypepass'])
+			{
+				$userdetails->password =	md5($_POST['password']);
+				$result                = $functionsObj->UpdateData('GAME_ADMINUSERS', $userdetails, 'id', $uid, 0);
+				if($result === true)
+				{
 					$_SESSION['msg']     = "Password and Details Updated";
 					$_SESSION['type[0]'] = "inputSuccess";
 					$_SESSION['type[1]'] = "has-success";
 					header("Location:".site_root."ux-admin/adminlist");
-					exit(0);
-					
-				}else{
+					exit(0);					
+				}
+				else
+				{
 					$msg     = "Error : ". $result;
 					$type[0] = "inputError";
 					$type[1] = "has-error";
 				}
-			}else{
+			}
+			else
+			{
 				$msg     = "Password and Re-type password do not match";
 				$type[0] = "inputError";
 				$type[1] = "has-error";
 			}
-		}else{
+		}
+		else
+		{
 			$result = $functionsObj->UpdateData('GAME_ADMINUSERS', $userdetails, 'id', $uid, 0);
 			if($result === true){
 				
@@ -449,14 +592,18 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 				header("Location:".site_root."ux-admin/adminlist");
 				exit(0);
 				
-			}else{
+			}
+			else
+			{
 				$msg     = "Error : ". $result;
 				$type[0] = "inputError";
 				$type[1] = "has-error";
 			}
 		}
 		
-	}else{
+	}
+	else
+	{
 		$msg     = "Field cannot be empty";
 		$type[0] = "inputError";
 		$type[1] = "has-error";

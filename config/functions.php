@@ -36,6 +36,49 @@ class Functions extends database
 		return $value;
 	}
 
+	function RunQueryFetchCount($sql)
+	{
+		$object = $this->conn->query($sql) or die($this->conn->error."<br>".$sql);
+		$data   = $object->num_rows or die($this->conn->error);
+		return $data;
+	}
+
+	function RunQueryFetchObject($sql)
+	{
+		$returnData = array();
+		$object     = $this->conn->query($sql) or die($this->conn->error."<br>".$sql);
+		// $data       = $object->fetch_object() or die($this->conn->error);
+		while($data = $object->fetch_object())
+		{
+			$returnData[] = $data;
+		}
+		return $returnData;
+	}
+
+	function AreaSequencing($linkid=NULL,$areaId=NULL,$Sequence_Order=NULL)
+	{
+		$Sequence_Order = (isset($Sequence_Order))?$Sequence_Order:1;
+		$query          = "SELECT * FROM GAME_AREA_SEQUENCE WHERE Sequence_LinkId=".$linkid;
+		$sql            = $query." AND Sequence_AreaId=".$areaId;
+		$object         = $this->conn->query($sql) or die($this->conn->error."<br>".$sql);
+
+		if($object->num_rows < 1)
+		{
+			$query    .= " ORDER BY Sequence_Order DESC LIMIT 0,1";
+			$linkExist = $this->RunQueryFetchObject($query);
+			if(count($linkExist) > 0)
+			{
+				$Sequence_Order += $linkExist[0]->Sequence_Order;
+			}
+
+			$insertRowSql = "INSERT INTO GAME_AREA_SEQUENCE (Sequence_LinkId, Sequence_AreaId, Sequence_Order, Sequence_CreatedBy) VALUES ($linkid,$areaId,$Sequence_Order,".$_SESSION['ux-admin-id'].")";
+
+			$this->conn->query($insertRowSql) or die($this->conn->error."<br>".$insertRowSql);
+			$insertObj = $this->InsertID();
+			return $insertObj;
+		}
+	}
+
 	function FetchData($object)
 	{
 		if($object->num_rows > 0)

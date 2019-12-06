@@ -25,7 +25,7 @@ class Dashboard extends CI_Controller {
 		$this->loginData = $this->session->userdata('loginData');
 		if($this->loginData == NULL)
 		{
-			$this->session->set_flashdata('er_msg', 'You need to login to see the dashboard');
+			$this->session->set_flashdata('er_msg', 'Session Expired. Please Login');
 			redirect('Login/login');
 		}
 	}
@@ -44,9 +44,61 @@ class Dashboard extends CI_Controller {
 		$content['totalSubEnterprise']      = $this->Common_Model->findCount('GAME_SUBENTERPRISE',array('SubEnterprise_Status' => 0));
 		$content['totalEnterpriseUsers']    = $this->Common_Model->findCount('GAME_SITE_USERS',array('User_Role' => 1));
 		$content['totalSubEnterpriseUsers'] = $this->Common_Model->findCount('GAME_SITE_USERS',array('User_Role' => 2));
+
+		$content['backgroundColor'] = array('rgba(51, 122, 183, 1)', 'rgba(92, 184, 92, 1)', 'rgba(240, 173, 78, 1)', 'rgba(217, 83, 79, 1)', 'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)');
+
+		$content['borderColor']     = array('rgba(51, 122, 183, 1)', 'rgba(92, 184, 92, 1)', 'rgba(240, 173, 78, 1)', 'rgba(217, 83, 79, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)');
+
+		$years = array('2017', '2018', '2019', '2020', '2021', '2022');
+
 		if($this->loginData['User_Role']=='superadmin')
 		{
-			$content['subview'] = 'homePage';
+			// graph data-set
+			$titleArray = array('Enterprise','Sub-Enterprise','Enterprise-Users','SubEnterprise-Users');
+			$colArray   = array('Enterprise_CreatedOn','SubEnterprise_CreatedOn','User_datetime','User_datetime');
+			$tableArray = array('GAME_ENTERPRISE','GAME_SUBENTERPRISE','GAME_SITE_USERS','GAME_SITE_USERS');
+			$chartData  = array();
+
+			for($i=0; $i<count($titleArray); $i++)
+			{
+				$graphSql = "SELECT '".$titleArray[$i]."' AS Title, COUNT(*) AS Count, EXTRACT(YEAR FROM ".$colArray[$i].") AS Year FROM `".$tableArray[$i]."`";
+				switch ($titleArray[$i]) {
+					case 'Enterprise-Users':
+					$graphSql .= " WHERE User_Role=1 ";
+					break;
+					case 'SubEnterprise-Users':
+					$graphSql .= " WHERE User_Role=2 ";
+					break;					
+				}
+				$graphSql    .= " GROUP BY Year ORDER BY Year ASC";
+				$dataChart    = $this->Common_Model->executeQuery($graphSql);
+				$dataNotFound = array_search($dataChart[0]->Year, $years);
+				// echo ($dataNotFound)?$dataNotFound.' and '.$dataChart[0]->Title.'<br>':'';
+				switch ($dataNotFound) {
+					case 1:
+					array_unshift($dataChart, (object)array('Title' => $dataChart[0]->Title, 'Count' => 0, 'Year' => 2017));
+					break;
+
+					case 2:
+					array_unshift($dataChart, (object)array('Title' => $dataChart[0]->Title, 'Count' => 0, 'Year' => 2018));
+					array_unshift($dataChart, (object)array('Title' => $dataChart[0]->Title, 'Count' => 0, 'Year' => 2017));
+					break;
+				}
+
+				$chartData[]  = $dataChart;
+			}
+
+			// echo "<pre>"; print_r($chartData); exit();
+			$content['chartData'] = $chartData;
+
+			$where = array(
+				'Game_Delete' => 0,
+			);
+			$content['years']        = $years;
+			$gameResult              = $this->Common_Model->fetchRecords('GAME_GAME',$where,NULL, 'Game_Name ASC');
+			$gameFeedback            = $this->Common_Model->fetchRecords('GAME_FEEDBACK',NULL,NULL,'Feedback_id DESC',NULL);
+			$content['gameFeedback'] = $gameFeedback;
+			$content['subview']      = 'adminDashboard';
 		}
 		else
 		{
@@ -54,7 +106,7 @@ class Dashboard extends CI_Controller {
 			// for enterprise login
 			if($this->loginData['User_Role'] == 1)
 			{
-				$gameSql = "SELECT * FROM GAME_ENTERPRISE_GAME geg JOIN GAME_GAME gg ON gg.Game_ID = geg.`EG_GameID` WHERE geg.`EG_EnterpriseID` =".$this->loginData['User_Id'];
+				$gameSql    = "SELECT * FROM GAME_ENTERPRISE_GAME geg JOIN GAME_GAME gg ON gg.Game_ID = geg.`EG_GameID` WHERE geg.`EG_EnterpriseID` =".$this->loginData['User_Id']." ORDER BY gg.Game_Name";
 				$gameResult = $this->Common_Model->executeQuery($gameSql);
 				// echo "<pre>"; print_r($gameResult); exit();
 				$profilePic = $this->loginData['User_profile_pic'];
@@ -62,16 +114,16 @@ class Dashboard extends CI_Controller {
 			// for subEnterprise login
 			if($this->loginData['User_Role'] == 2)
 			{
-				$gameSql = "SELECT * FROM GAME_SUBENTERPRISE_GAME gsg JOIN GAME_GAME gg ON gg.Game_ID = gsg.`SG_GameID` WHERE gsg.`SG_EnterpriseID`=".$this->loginData['User_ParentId']." AND SG_SubEnterpriseID=".$this->loginData['User_Id'];
+				$gameSql    = "SELECT * FROM GAME_SUBENTERPRISE_GAME gsg JOIN GAME_GAME gg ON gg.Game_ID = gsg.`SG_GameID` WHERE gsg.`SG_EnterpriseID`=".$this->loginData['User_ParentId']." AND SG_SubEnterpriseID=".$this->loginData['User_Id']." ORDER BY gg.Game_Name";
 				$gameResult = $this->Common_Model->executeQuery($gameSql);
 				// echo "<pre>"; print_r($gameResult); exit();
 				$profilePic = $this->loginData['User_profile_pic'];
-			}
-			
+			}			
 			$content['profilePic'] = $profilePic;
-			$content['gameData']   = $gameResult;
 			$content['subview']    = 'dashboard';
 		}
+
+		$content['gameData'] = $gameResult;
 		$this->load->view('main_layout',$content);
 	}
 

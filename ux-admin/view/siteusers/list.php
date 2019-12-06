@@ -5,57 +5,57 @@
   //-->
 </script>
 <style>
-<!--
-.dropdown-menu > li > button {
-	display    : block;
-	padding    : 3px 20px;
-	clear      : both;
-	font-weight: 400;
-	line-height: 1.42857143;
-	color      : #ffffff;
-	white-space: nowrap;
-}
-#contact
-{
-	width: auto!important;
-}
-#password
-{
-	width: auto!important;
-}
-#action
-{
-	width: 70px!important;
-}
-.drop_down{
-	padding: 0 5px !important;
-}
-
-#upload-file-selector {
-	display:none;
-}
-.margin-correction {
-	margin-right: 10px;
-}
-
-@media screen and ( min-width: '361px' ){
-	.resp_pull_right{
-		float: right;
+	<!--
+	.dropdown-menu > li > button {
+		display    : block;
+		padding    : 3px 20px;
+		clear      : both;
+		font-weight: 400;
+		line-height: 1.42857143;
+		color      : #ffffff;
+		white-space: nowrap;
 	}
-}
-
-@media screen and ( max-width: '360px' ){
-	.resp_pull_right{
-		float     : none;
-		text-align: center;
-		width     : 100%;
-		padding   : 0 15px;
+	#contact
+	{
+		width: auto!important;
 	}
-}
--->
-#update-file-selector {
-	display:none;
-}
+	#password
+	{
+		width: auto!important;
+	}
+	#action
+	{
+		width: 70px!important;
+	}
+	.drop_down{
+		padding: 0 5px !important;
+	}
+
+	#upload-file-selector {
+		display:none;
+	}
+	.margin-correction {
+		margin-right: 10px;
+	}
+
+	@media screen and ( min-width: '361px' ){
+		.resp_pull_right{
+			float: right;
+		}
+	}
+
+	@media screen and ( max-width: '360px' ){
+		.resp_pull_right{
+			float     : none;
+			text-align: center;
+			width     : 100%;
+			padding   : 0 15px;
+		}
+	}
+	-->
+	#update-file-selector {
+		display:none;
+	}
 </style>
 <div class="row">
 	<div class="col-lg-12">
@@ -238,91 +238,26 @@
     </div>
     <div class="panel-body">
     	<div class="dataTable_wrapper">
-    		<table class="table table-striped table-bordered table-hover" id="dataTables-example">
+    		<table class="table table-striped table-bordered table-hover" id="dataTables-serverSide">
     			<thead>
     				<tr>
-    					<th>Sr. No</th>
+    					<th class="no-sort">Sr. No</th>
     					<th>User Id</th>
     					<th>Name</th>
-    					<th>User Type</th>
+    					<th class="no-sort">User Type</th>
     					<th>E-mail</th>
-    					<th id="password">Password</th>
-    					<th id="contact">Contact</th>
+    					<th class="no-sort" id="password">Password</th>
+    					<th class="no-sort" id="contact">Contact</th>
     					<!--<th>Last Login</th>-->
     					<th>Date</th>
     					<th class="no-sort">Games</th>
     					<th class="no-sort" id="action">Action</th>
     				</tr>
     			</thead>
-    			<tbody>
-    				<?php 
-    				$i=1; while($row = $object->fetch_object()){ ?>
-    					<tr>
-    						<th><?php echo $i;?></th>
-    						<th><?php echo $row->User_id;?></th>
-    						<td><?php echo ucfirst($row->User_fname)." ".ucfirst($row->User_lname); ?></td>
-    						<td><?php if($row->User_Role ==2){ echo "<code>SubEnterpriseUser</code><br><b>Ent-</b> ".$row->Enterprise_Name."<br><b>SubEnt-</b> ".$row->SubEnterprise_Name;} elseif ($row->User_Role ==1) {
-    							echo "<code>EnterpriseUser</code><br><b>Ent-</b> ".$row->Enterprise_Name;
-    						} else echo "HumanLinks User"; ?></td>
-    						<td><?php echo $row->User_email;?></td>
-    						<td><?php echo $row->pwd;?></td>
-    						<td><?php echo "+91".$row->User_mobile;?></td>
-    						<!--<td><?php if(!empty($row->User_last_login)){ echo date("Y-m-d H:i:s", strtotime($row->User_last_login)); }else{ echo "-"; } ?></td>-->
-    						<td><?php echo date('d-m-Y',strtotime($row->User_datetime)); ?></td>
-    						<td class="text-center">
-    							<a href="<?php echo site_root."ux-admin/addUserGame/edit/".base64_encode($row->User_id); ?>"
-    								title="Game"><?php if($row->gamecount >0){ echo $row->gamecount;} else echo "0"; ?></a>
-    							</td>
-    							<td class="text-center">
-    								<?php if($row->User_status == 0){?>
-    									<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->User_id; ?>"
-    										title="Deactive"><span class="fa fa-times"></span></a>
-    									<?php }else{?>
-    										<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->User_id; ?>"
-    											title="Active"><span class="fa fa-check"></span></a>
-    										<?php }?>
-    										<a href="<?php echo site_root."ux-admin/siteusers/edit/".base64_encode($row->User_id); ?>"
-    											title="Edit"><span class="fa fa-pencil"></span></a>
-    											<a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->User_id; ?>"
-    												title="Delete"><span class="fa fa-trash"></span></a>
-    												<!-- for replay status -->
-    												<?php
-    												$statusSql = "SELECT Game_Name FROM GAME_USERSTATUS LEFT JOIN GAME_GAME ON Game_ID=US_GameID WHERE US_UserID=$row->User_id AND US_ReplayStatus=1";
-
-														$resObject = $functionsObj->ExecuteQuery($statusSql);
-														$count     = $resObject->num_rows;
-    												if($resObject->num_rows > 0) { ?>
-    													<?php
-    														$gameName = [];
-    														while($nameGame = $resObject->fetch_object())
-    														{
-    															$gameName[] = $nameGame->Game_Name;
-    														}
-    														// print_r($gameName);
-    														if(count($gameName) > 1)
-    														{
-																	$userGames = implode(', ',$gameName);
-																	$title     = 'Replay allowed for '.$userGames.' games';
-    														}
-    														else
-    														{
-																	$userGames = $gameName[0];
-																	$title     = 'Replay allowed only for '.$userGames;
-    														}
-    													?>
-    													<a href="javascript:void(0)" data-toggle="tooltip" title="<?php echo $title; ?>" id="replay_<?php echo $row->User_id; ?>"><span class="glyphicon glyphicon-refresh"></span></a>
-    												<?php } ?>
-    												<!-- for game enable/disable status -->
-    												<?php if($row->User_gameStatus == 1) { ?>
-    													<a href="javascript:void(0)" title="Disabled" id="disable_<?php echo $row->User_id; ?>"><span class="glyphicon glyphicon-ban-circle"></span></a>
-    												<?php } ?>
-    											</td>
-    										</tr>
-    										<?php $i++; } ?>
-    									</tbody>
-    								</table>
-    							</div>
-    						</div>
-    					</div>
-    				</div>
-    				<div class="clearfix"></div>
+    			
+    		</table>
+    	</div>
+    </div>
+  </div>
+</div>
+<div class="clearfix"></div>

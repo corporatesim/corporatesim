@@ -25,9 +25,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 		$ext        = explode('.',$_FILES['Scen_Image']['name']);
 		$file_ext   = strtolower(end($ext));
 		$Scen_Image = $file_name;
-		$expensions = array("jpeg","jpg","png");
+		$extensions = array("jpeg","jpg","png","gif");
 
-		if(in_array($file_ext,$expensions)=== false)
+		if(in_array($file_ext,$extensions)=== false)
 		{
 			$errors[] = "extension not allowed, please choose a JPEG or PNG file.";
 		}
@@ -111,9 +111,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		$ext        = explode('.',$_FILES['Scen_Image']['name']);
 		$file_ext   = strtolower(end($ext));
 		$Scen_Image = $file_name;
-		$expensions = array("jpeg","jpg","png");
+		$extensions = array("jpeg","jpg","png","gif");
 
-		if(in_array($file_ext,$expensions)=== false)
+		if(in_array($file_ext,$extensions)=== false)
 		{
 			$errors[] = "extension not allowed, please choose a JPEG or PNG file.";
 		}
