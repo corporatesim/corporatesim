@@ -183,7 +183,7 @@
                 <td><?php echo $row->Outcome_Description;?></td>
                 <td><?php echo $row->Outcome_Order;?></td>
                 <td><?php echo $row->Outcome_Name;?></td>
-                <td><?php echo $row->Outcome_FileName;?></td>
+                <td><?php echo ($row->Outcome_FileName)?"<img src='".site_root.'ux-admin/upload/Badges/'.$row->Outcome_FileName."' alt='No Image' width='50' height='50'>":'No Image';?></td>
                 <td>
                   <?php if($functionsObj->checkModuleAuth('personalizeOutcome','edit')){ ?>
                     <a href="<?php echo site_root."ux-admin/personalizeOutcome/edit/".$row->OutcomeID;?>" title="Edit"><span class="fa fa-pencil"></span></a> &nbsp;
