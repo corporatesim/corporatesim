@@ -127,16 +127,42 @@
 		}
 	});
 
-	$('#siteuser_btn').click( function(){
-		if(checkDate())
+	// show image model on click
+	$('img').on('click',function(){
+		var imageUrl = $(this).attr('src');
+		// alert(this.width + 'x' + this.height);
+		Swal.fire({
+			imageUrl         : imageUrl,
+			// imageWidth       : 200,
+			// imageHeight      : 100,
+			imageAlt         : 'Custom image',
+			icon             : 'success',
+			title            : '',
+			showConfirmButton: true,
+			// html             : 'You are allowed to play <b>"'+gameName+'"</b> from <b>"'+startDate+'"</b> to <b>"'+endDate+'"</b>',
+			// footer           : '<a href>Why do I have this issue?</a>'
+			// showCancelButton : false,
+			// cancelButtonColor: '#3085d6',
+			// footer           : ''
+		});
+	});
+
+	$('#siteuser_btn').on('click', function(){
+		if($(this).data('checkdate') == 'checkDate')
 		{
-			$( "#siteuser_sbmit" ).trigger( "click" );
+			if(checkDate())
+			{
+				$( "#siteuser_sbmit" ).trigger( "click" );
+			}
 		}
 	});
-	$('#siteuser_btn_update').click( function(){
-		if(checkDate())
+	$('#siteuser_btn_update').on('click', function(){
+		if($(this).data('checkdate') == 'checkDate')
 		{
-			$("#siteuser_update").trigger("click");
+			if(checkDate())
+			{
+				$("#siteuser_update").trigger("click");
+			}
 		}
 	});
 
@@ -151,7 +177,7 @@
 		}
 		else if(User_GameEndDate < User_GameStartDate)
 		{
-			alert('End date must be greate than start date.');
+			alert('End date must be greater than start date.');
 			return false;
 		}
 		else

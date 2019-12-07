@@ -222,8 +222,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 			);
 			// echo "<pre>"; print_r($linkdetails); exit();
 			
-			// $result = $functionsObj->InsertData('GAME_LINKAGE_SUB', $linkdetails, 0, 0);
-			// $id     = $functionsObj->InsertID();
+			$result = $functionsObj->InsertData('GAME_LINKAGE_SUB', $linkdetails, 0, 0);
+			$id     = $functionsObj->InsertID();
 			// adding area to game_area_sequencing table if not exist $linkid and $_POST['area_id']
 			$areaSequencing = $functionsObj->AreaSequencing($linkid,$_POST['area_id']);
 			// echo $linkid.' , '.$_POST['area_id']."<pre>"; print_r($areaSequencing); exit;
