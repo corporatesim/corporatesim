@@ -871,42 +871,64 @@
                      </div>
                    </div>
                    <br>
-                   <div class="row">
-                    <div class="col-md-12">
-                      <div class="col-md-6">
-                        <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_showhide')){?>
-                          <label class="containerRadio" for="ShowHide0">
-                            <input type="radio" name="ShowHide" id="ShowHide0" value="0"
-                            <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 0){ echo "checked"; } ?> > Show
-                            <span class="checkmarkRadio"></span>
-                          </label>
-                          <label class="containerRadio" for="ShowHide1">
-                            <input type="radio" name="ShowHide" id="ShowHide1" value="1"
-                            <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 1){ echo "checked"; } ?> > Hide
-                            <span class="checkmarkRadio"></span>
-                          </label>
-                        <?php } else {?>
-                          <label class="containerRadio" for="ShowHide0">
-                           <input type="radio" name="ShowHide" id="ShowHide0" value="0"
-                           <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 0){ echo "checked"; } ?> disabled=""> Show
-                           <span class="checkmarkRadio"></span>
-                         </label>
-                         <label class="containerRadio" for="ShowHide1">
-                           <input type="radio" name="ShowHide" id="ShowHide1" value="1"
-                           <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 1){ echo "checked"; } ?> disabled=""> Hide
-                           <span class="checkmarkRadio"></span>
-                         </label>
-                       <?php }?>
-                     </div>
-                     <div class="col-md-6">
-                      <label for="chkround" class='containerCheckbox'>
+
+                   <div class="row col-md-12">
+
+                    <div class="col-md-4">
+                      <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_showhide')){?>
+                        <label class="containerRadio col-md-6" for="ShowHide0">
+                          <input type="radio" name="ShowHide" id="ShowHide0" value="0"
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 0){ echo "checked"; } ?> > Show
+                          <span class="checkmarkRadio"></span>
+                        </label>
+                        <label class="containerRadio col-md-6" for="ShowHide1">
+                          <input type="radio" name="ShowHide" id="ShowHide1" value="1"
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 1){ echo "checked"; } ?> > Hide
+                          <span class="checkmarkRadio"></span>
+                        </label>
+                      <?php } else {?>
+                        <label class="containerRadio col-md-6" for="ShowHide0">
+                         <input type="radio" name="ShowHide" id="ShowHide0" value="0"
+                         <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 0){ echo "checked"; } ?> disabled=""> Show
+                         <span class="checkmarkRadio"></span>
+                       </label>
+                       <label class="containerRadio col-md-6" for="ShowHide1">
+                         <input type="radio" name="ShowHide" id="ShowHide1" value="1"
+                         <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 1){ echo "checked"; } ?> disabled=""> Hide
+                         <span class="checkmarkRadio"></span>
+                       </label>
+                     <?php }?>
+                   </div>
+
+                   <div class="col-md-8">
+                      <!-- <label for="chkround <?php echo $linkdetails->SubLink_Roundoff;?>" class='containerCheckbox'>
                         <input type='checkbox' <?php if(!empty($linkdetails) && $linkdetails->SubLink_Roundoff == 1) { ?> checked='checked' <?php } ?> name='chkround' id='chkround'> Round Off
                         <span class="checkmark"></span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
+                      </label> -->
+
+                      <label class="containerRadio col-md-3" for="default">
+                       <input type="radio" name="chkround" id="default" value="0"
+                       <?php if(!empty($linkdetails) && $linkdetails->SubLink_Roundoff == 0) { ?> checked='checked' <?php } ?>> Default
+                       <span class="checkmarkRadio"></span>
+                     </label>
+
+                     <label class="containerRadio col-md-3" for="roundUp">
+                       <input type="radio" name="chkround" id="roundUp" value="1"
+                       <?php if(!empty($linkdetails) && $linkdetails->SubLink_Roundoff == 1) { ?> checked='checked' <?php } ?>> Round Up
+                       <span class="checkmarkRadio"></span>
+                     </label>
+
+                     <label class="containerRadio col-md-3" for="roundDown">
+                       <input type="radio" name="chkround" id="roundDown" value="2"
+                       <?php if(!empty($linkdetails) && $linkdetails->SubLink_Roundoff == 2) { ?> checked='checked' <?php } ?>> Round Down
+                       <span class="checkmarkRadio"></span>
+                     </label>
+
+                   </div>
+
+                 </div>
+
+                 <div class="row">
                   <div class="col-md-4">
                     <label>Replace</label>
                   </div>

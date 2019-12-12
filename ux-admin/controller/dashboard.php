@@ -49,5 +49,12 @@ $backgroundColor = array('rgba(51, 122, 183, 1)', 'rgba(92, 184, 92, 1)', 'rgba(
 
 $borderColor     = array('rgba(51, 122, 183, 1)', 'rgba(92, 184, 92, 1)', 'rgba(240, 173, 78, 1)', 'rgba(217, 83, 79, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)');
 
+// creating agents data of game creator
+$gameDataSql = "SELECT gg.Game_ID, gg.Game_Name, gg.Game_CreatedBy, CONCAT(gau.fname, ' ', gau.lname) AS Creator, gg.Game_Datetime AS Created_On, IF( gg.Game_Elearning > 0, 'eLearning', 'Game' ) AS Game_eLearning, IF( gg.Game_Type > 0, 'Bot', 'Game' ) AS Game_Type, IF( gg.Game_Complete > 0, 'Complete', 'In-Progress' ) AS Game_Status, gg.Game_UpdatedBy, CONCAT(ga.fname,' ',ga.lname) AS Completed_By, gg.Game_UpdatedOn, IF( gg.Game_Complete > 0, DATEDIFF( gg.Game_UpdatedOn, gg.Game_Datetime ), DATEDIFF( NOW(), gg.Game_Datetime ) ) AS Time_Taken, gau.email, gg.Game_Associates AS Associates FROM GAME_GAME gg LEFT JOIN GAME_ADMINUSERS gau ON gau.id = gg.Game_CreatedBy LEFT JOIN GAME_ADMINUSERS ga ON ga.id = gg.Game_UpdatedBy WHERE gg.Game_Delete = 0 ORDER BY Created_On DESC";
+
+$agentGameData = $functionsObj->RunQueryFetchObject($gameDataSql);
+
+// echo $gameDataSql."<pre>"; print_r($agentGameData); exit();
+
 include_once doc_root.'ux-admin/view/dashboard.php';
 ?>

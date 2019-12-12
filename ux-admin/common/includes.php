@@ -174,6 +174,10 @@ switch($_GET['q']){
 	$showfile = 'competencyFormula.php';
 	break;
 
+	case 'notification':
+	$showfile = 'notification.php';
+	break;
+
 		// Logout
 	case 'Logout':
 	$showfile = 'logout.php';

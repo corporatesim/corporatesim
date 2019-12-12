@@ -202,6 +202,29 @@
 			}
 		});
 	});
+	// only allow the crator or admin to make changes to game and linkage
+	if(<?php echo $_SESSION['ux-admin-id'];?> != 1)
+	{
+		$('a').each(function(i,e){
+			var element = $(this);
+			var creator = $(this).data('createdby');
+			if(typeof creator !== typeof undefined && creator !== false)
+			{
+				// console.log($(this).data('createdby'));
+				if(creator != <?php echo $_SESSION['ux-admin-id'];?>)
+				{
+					$(this).unbind('click');
+					$(this).attr('href','javascript:void(0);');
+					$(this).on('click',function(e)
+					{
+						e.preventDefault();
+						Swal.fire("Only creator or admin can make changes");
+						return false;
+					});
+				}
+			}
+		});
+	}
 });
 
 // -->

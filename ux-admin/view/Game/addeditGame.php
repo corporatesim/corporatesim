@@ -148,6 +148,18 @@
 
 								</div>
 
+								<div class="row">
+									<div class="col-md-6 form-group" data-toggle="tooltip" title="Selected user can only change the design">
+										<label for="name"><span class="alert-danger">*</span>Associate Access</label>
+										<select name="Game_Associates" id="Game_Associates" class="form-control" required="">
+											<option value="-1">--Select Users--</option>
+											<?php foreach($userObj as $userObjRow){ ?>
+												<option value="<?php echo $userObjRow->id;?>" <?php echo ($gamedetails->Game_Associates == $userObjRow->id)?'selected':'';?> ><?php echo $userObjRow->fname.' '.$userObjRow->lname;?></option>
+											<?php } ?>
+										</select>
+									</div>
+								</div>
+
 								<div class="row name" id="name">
 									<div class="col-sm-6">
 										<input type="hidden" name="id"

@@ -706,8 +706,33 @@ class Ajax extends MY_Controller {
 			foreach ($carryArray as $carryArrayKey => $carryArrayValues)
 			{
 				// check if formula array has the value for the $carryArrayValues(sublink_id), if not then it means that check/verify from the game_input table or it may be default (0);
-				$carryArray[$carryArrayKey]   = $formulaArray[$carryArrayValues];
-				$formulaArray[$carryArrayKey] = $formulaArray[$carryArrayValues];
+				// $carryArray[$carryArrayKey]   = $formulaArray[$carryArrayValues];
+				// $formulaArray[$carryArrayKey] = $formulaArray[$carryArrayValues];
+				
+				// if key exist, i.e. if carry forwarded from same scenario
+				if(array_key_exists($carryArrayValues, $formulaArray))
+				{
+					$carryArray[$carryArrayKey]   = $formulaArray[$carryArrayValues];
+					$formulaArray[$carryArrayKey] = $formulaArray[$carryArrayValues];
+				}
+				else
+				{
+					$where_sublink_id = array(
+						'input_sublinkid' => $carryArrayValues,
+						'input_user'      => $UserID,
+					);
+					$input_current = $this->Ajax_Model->fetchRecords('GAME_INPUT',$where_sublink_id);
+					if(count($input_current)>0)
+					{
+						$carryArray[$carryArrayKey]   = $input_current[0]->input_current;
+						$formulaArray[$carryArrayKey] = $input_current[0]->input_current;
+					}
+					else
+					{
+						$carryArray[$carryArrayKey]   = 0;
+						$formulaArray[$carryArrayKey] = 0;
+					}
+				}
 			}
 
 			// checking for replace values again, for carry forwarded values

@@ -3,8 +3,10 @@ require_once doc_root.'ux-admin/model/model.php';
 require_once doc_root.'includes/PHPExcel.php';
 $functionsObj = new Model();
 
-$object = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), 'Game_datetime DESC', '', '', '', 0);
-$file   = 'GameList.php';
+$userSql = "SELECT * FROM GAME_ADMINUSERS WHERE status=1";
+$userObj = $functionsObj->RunQueryFetchObject($userSql);
+$object  = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), 'Game_datetime DESC', '', '', '', 0);
+$file    = 'GameList.php';
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 {	
@@ -39,6 +41,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 		'Game_BackToIntro'      => $Game_BackToIntro,
 		'Game_HideScenarioLink' => $Game_HideScenarioLink,
 		'Game_CreatedBy'        => $_SESSION['ux-admin-id'],
+		'Game_Associates'       => $_POST['Game_Associates'],
 	);
 	
 	if( !empty($_POST['name']) && !empty($_POST['comments']))
@@ -218,6 +221,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		'Game_HideScenarioLink' => $Game_HideScenarioLink,
 		'Game_UpdatedBy'        => $_SESSION['ux-admin-id'],
 		'Game_UpdatedOn'        => date('Y-m-d H:i:s'),
+		'Game_Associates'       => $_POST['Game_Associates'],
 	);
 
 	// echo "<pre>"; print_r($_POST); print_r($gamedetails); exit();
@@ -432,8 +436,11 @@ elseif(isset($_GET['stat']))
 else
 {
 	// fetch siteuser list from db
-	$object = $functionsObj->SelectData(array(), 'GAME_GAME', array(), 'Game_datetime DESC', '', '', '', 0);
-	$file   = 'GameList.php';
+	// $object = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), 'Game_datetime DESC', '', '', '', 0);
+	$gameSql = "SELECT gg.*, concat(ga.fname,' ',ga.lname,', ',ga.email) AS nameEmail, concat(ga.fname,' ',ga.lname) AS name FROM GAME_GAME gg LEFT JOIN GAME_ADMINUSERS ga ON ga.id=gg.Game_CreatedBy WHERE Game_Delete=0 ORDER BY Game_datetime DESC";
+	// echo '<pre>'.$gameSql; print_r($_SESSION);
+	$object  = $functionsObj->ExecuteQuery($gameSql);
+	$file    = 'GameList.php';
 }
 
 //download Game in excelsheet..

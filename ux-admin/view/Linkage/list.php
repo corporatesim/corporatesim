@@ -67,7 +67,7 @@
 							<th>Description</th>
 							<th>Description Link</th>
 							<th>Back To Intro Link</th>
-							<th>Mode</th>
+							<th>Creator/Status</th>
 							<th class="no-sort">Action</th>
 						</tr>
 					</thead>
@@ -85,48 +85,122 @@
 								<td><?php echo ($row->Link_DescriptionLink>0)?'Skipped':'Default';?></td>
 								<td><?php echo ($row->Link_BackToIntro>0)?'Skipped':'Default';?></td>
 
-								<td><?php if($row->Link_Mode == 0) echo "Automatic"; else { echo "Manual</br>";if($row->Link_Enabled==0) echo "Not Enabled"; else echo "Enabled";} ?></td>
+								<td>
+									<?php if(empty($row->name)) $row->name='Admin'; echo ($row->Game_Complete)?'Creator: <b>'.$row->name.'</b> <span class="alert-success">(Completed)</span>':'Creator: <b>'.$row->name.'</b> <span class="alert-danger">(In-Progress)</span>' ?>
+								</td>
 
 								<td class="text-center">
-									<a href="<?php echo site_root."ux-admin/linkage/tab/".$row->Link_ID; ?>" 
-										data-toggle="tooltip" title="Area Tab Sequencing"><span class="fa fa-gear fa-fw"></span></a>
-										<?php if($functionsObj->checkModuleAuth('innerlinkage','enable')){ ?>
-											<a href="<?php echo site_root."ux-admin/linkage/link/".$row->Link_ID; ?>" 
-												data-toggle="tooltip" title="Link Game - Comp/Subcomp"><span class="fa fa-link"></span></a>
-											<?php } ?>
-											<?php if($row->Link_Status == 0){ ?>
-												<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Link_ID; ?>"
-													data-toggle="tooltip" title="Deactive"><span class="fa fa-times"></span></a>
-												<?php }else{ ?>
-													<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Link_ID; ?>"
-														data-toggle="tooltip" title="Active"><span class="fa fa-check"></span></a>
-													<?php } ?>
-													<?php if($functionsObj->checkModuleAuth('linkage','edit')){ ?>
-														<a href="<?php echo site_root."ux-admin/linkage/edit/".$row->Link_ID; ?>"
-															data-toggle="tooltip" title="Edit"><span class="fa fa-pencil"></span></a>
-														<?php } if($functionsObj->checkModuleAuth('linkage','delete')){ ?>
-															<a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->Link_ID; ?>"
-																data-toggle="tooltip" title="Delete"><span class="fa fa-trash"></span></a>
-															<?php } ?>
-															<?php if($row->Link_Branching == 1){ ?>
-																&nbsp;<a href="<?php echo site_root."ux-admin/componentBranching/link/".$row->Link_ID; ?>" data-toggle="tooltip" title="Component Branching"><span class="fa fa-code-fork"></span></a>
-															<?php } ?>
-															<?php if($row->Link_SaveStatic == 1){ ?>
-																&nbsp;<a href="javascript:void(0);" data-toggle="tooltip" title="Static Save Button Enabled"><span class="fa fa-save"></span></a>
-															<?php } ?>
-															<?php if($row->Link_SkipAlert == 1){ ?>
-																&nbsp;<a href="javascript:void(0);" data-toggle="tooltip" title="Confirmation Alert For I/P Page Submission Skipped"><span class="fa fa-bell"></span></a>
-															<?php } ?>
-															<?php if($row->Link_Enabled == 1){ ?>
-																&nbsp;<a href="javascript:void(0);" data-toggle="tooltip" title="AutoSubmit O/P Page"><span class="fa fa-paper-plane"></span></a>
-															<?php } ?>
-														</td>
-													</tr>
-													<?php $i++; } ?>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="clearfix"></div>
+									<!-- if game is completed then don't allow to edit, also allow only creator or superadmin to make changes Creator, Game_Complete, nameEmail -->
+									<?php
+									if($row->Game_Complete)
+									{
+										// if game is completed then no one can make any changes
+										$allowEdit    = "data-gamedata='This game is completed. So, no changes are allowed.'";
+										if(($row->Creator == $_SESSION['ux-admin-id']) || $_SESSION['ux-admin-id'] == 1)
+										{
+											$activeDelete = " ";
+										}
+										else
+										{
+											$activeDelete = "data-gamedata='Only admin or creator (".$row->nameEmail.") can make the changes.'";
+										}
+									}
+									else
+									{
+										// if game is not completed then only creater or superadmin can make the changes
+										if(($row->Creator == $_SESSION['ux-admin-id']) || $_SESSION['ux-admin-id'] == 1)
+										{
+											$allowEdit    = ' ';
+											$activeDelete = " ";
+										}
+										else
+										{
+											$allowEdit    = "data-gamedata='Only admin or creator (".$row->nameEmail.") can make the changes.'";
+											$activeDelete = $allowEdit;
+										}
+
+										// if game is completed then no one can make any changes, apart from associates like designers
+										if($row->AssociateAccess == $_SESSION['ux-admin-id'])
+										{
+											$allowEdit = ' ';
+										}
+									}
+									?>
+									<a href="<?php echo site_root."ux-admin/linkage/tab/".$row->Link_ID; ?>" <?php echo $allowEdit;?> data-toggle="tooltip" title="Area Tab Sequencing">
+										<span class="fa fa-gear fa-fw"></span>
+									</a>
+									<?php if($functionsObj->checkModuleAuth('innerlinkage','enable')){ ?>
+										<a href="<?php echo site_root."ux-admin/linkage/link/".$row->Link_ID; ?>" <?php echo $allowEdit;?> data-toggle="tooltip" title="Link Game - Comp/Subcomp">
+											<span class="fa fa-link"></span>
+										</a>
+									<?php } ?>
+									<?php if($row->Link_Status == 0){ ?>
+										<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Link_ID; ?>" <?php echo $activeDelete;?> data-toggle="tooltip" title="Deactive">
+											<span class="fa fa-times"></span>
+										</a>
+									<?php } else { ?>
+										<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Link_ID; ?>" <?php echo $activeDelete;?> data-toggle="tooltip" title="Active">
+											<span class="fa fa-check"></span>
+										</a>
+									<?php } ?>
+									<?php if($functionsObj->checkModuleAuth('linkage','edit')){ ?>
+										<a href="<?php echo site_root."ux-admin/linkage/edit/".$row->Link_ID; ?>" <?php echo $allowEdit;?> data-toggle="tooltip" title="Edit">
+											<span class="fa fa-pencil"></span>
+										</a>
+									<?php } if($functionsObj->checkModuleAuth('linkage','delete')){ ?>
+										<a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->Link_ID; ?>" <?php echo $activeDelete;?> data-toggle="tooltip" title="Delete">
+											<span class="fa fa-trash"></span>
+										</a>
+									<?php } ?>
+									<?php if($row->Link_Branching == 1){ ?>
+										&nbsp;
+										<a href="<?php echo site_root."ux-admin/componentBranching/link/".$row->Link_ID; ?>" <?php echo $allowEdit;?> data-toggle="tooltip" title="Component Branching">
+											<span class="fa fa-code-fork"></span>
+										</a>
+									<?php } ?>
+									<?php if($row->Link_SaveStatic == 1){ ?>
+										&nbsp;
+										<a href="javascript:void(0);" data-toggle="tooltip" title="Static Save Button Enabled">
+											<span class="fa fa-save"></span>
+										</a>
+									<?php } ?>
+									<?php if($row->Link_SkipAlert == 1){ ?>
+										&nbsp;
+										<a href="javascript:void(0);" data-toggle="tooltip" title="Confirmation Alert For I/P Page Submission Skipped">
+											<span class="fa fa-bell"></span>
+										</a>
+									<?php } ?>
+									<?php if($row->Link_Enabled == 1){ ?>
+										&nbsp;
+										<a href="javascript:void(0);" data-toggle="tooltip" title="AutoSubmit O/P Page">
+											<span class="fa fa-paper-plane"></span>
+										</a>
+									<?php } ?>
+								</td>
+							</tr>
+							<?php $i++; } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+	<script>
+		$(document).ready(function(){
+			$("a").each(function(){
+				var gamedata = $(this).data('gamedata');
+				if(typeof gamedata !== typeof undefined && gamedata !== false)
+				{
+					$(this).unbind('click');
+					$(this).on('click',function(e)
+					{
+						e.preventDefault();
+						Swal.fire($(this).data('gamedata'));
+						// console.log(gamedata+' and '+ typeof gamedata)
+						return false;
+					});
+				}
+			});
+		});
+	</script>

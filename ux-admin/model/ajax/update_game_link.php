@@ -120,4 +120,192 @@ if(isset($_POST['Link_id']) && isset($_POST['Game_id']) && isset($_POST['Scen_id
 	//echo $_POST['Scen_id'];
 	echo json_encode($result);
 }
+
+// to change the game status, from complete to in-progress or in-progress to complete
+if(isset($_POST['Game_Complete']) && $_POST['Game_Complete']=='updateStatus')
+{
+	// print_r($_POST); exit();
+	$status = $funObj->UpdateData("GAME_GAME",array('Game_Complete' => $_POST['gameStatus'], 'Game_UpdatedBy' => $_SESSION['ux-admin-id'], 'Game_UpdatedOn' => date('Y-m-d H:i:s')),'Game_ID',$_POST['Game_ID'],0);
+	if($status)
+	{
+		die(json_encode(["status" => "200","message" => 'Game status has been changed.']));
+	}
+	else
+	{
+		die(json_encode(["status" => "201","message" => 'Some error occured, Please try later.']));
+	}
+}
+
+// to get the game comments/messages
+if(isset($_POST['game_comments']) && $_POST['game_comments']=='game_comments')
+{
+	// print_r($_POST); exit();
+	$gameid       = base64_decode($_POST['gameid']);
+	$userid       = $_POST['userid'];
+	$commentSql   = "SELECT * FROM GAME_COMMENT_USER WHERE Comment_Delete=0 AND Comment_GameId=".$gameid;
+	$gameComments = $funObj->RunQueryFetchObject($commentSql);
+	// echo gettype($gameComments); exit();
+	if(count($gameComments) > 0)
+	{
+		// print_r($gameComments);
+		$message = '<table>';
+		foreach ($gameComments as $gameCommentsRow)
+		{
+			// $gameCommentsRow->Comment_UpdatedOn;			$gameCommentsRow->Comment_CreatedOn;
+			if($gameCommentsRow->Comment_UpdatedOn)
+			{
+				$title = "Created On: ".date('d-m-Y H:i:s',strtotime($gameCommentsRow->Comment_CreatedOn))." And Updated On: ".date('d-m-Y H:i:s',strtotime($gameCommentsRow->Comment_UpdatedOn));
+			}
+			else
+			{
+				$title = "Created On: ".date('d-m-Y H:i:s',strtotime($gameCommentsRow->Comment_CreatedOn));
+			}
+
+			$message .= '<tr class="textMessageRow" data-toggle="tooltip" title="'.$title.'"><td class="textMessage">'.$gameCommentsRow->Comment_Message.'</td> <td style="cursor:pointer; display:none;" class="actionIcon" data-creator="'.$gameCommentsRow->Comment_CreatedBy.'"> <a data-toggle="tooltip" title="Edit Comment" href="javascript:void(0);" class="editComment" data-modify="edit" data-gameid="'.$gameCommentsRow->Comment_GameId.'" data-commentid="'.$gameCommentsRow->Comment_Id.'"><i class="fa fa-pencil"></i></a> <a data-toggle="tooltip" title="Delete Comment" href="javascript:void(0);" class="deleteComment" data-modify="delete" data-gameid="'.$gameCommentsRow->Comment_GameId.'" data-commentid="'.$gameCommentsRow->Comment_Id.'"><i class="fa fa-trash"></i></a></td></tr>';
+		}
+		$message .= '</table>';
+	}
+	else
+	{
+		$message = "No comments for the current game.";
+	}
+	// echo $gameid.' and '.$userid;die();
+	// $status = $funObj->UpdateData("GAME_GAME",array('Game_Complete' => $_POST['gameStatus'], 'Game_UpdatedBy' => $_SESSION['ux-admin-id'], 'Game_UpdatedOn' => date('Y-m-d H:i:s')),'Game_ID',$_POST['Game_ID'],0);
+	if(gettype($gameComments) == 'array')
+	{
+		die(json_encode(["status" => "200", "message" => $message ]));
+	}
+	else
+	{
+		die(json_encode(["status" => "201", "message" => 'Some error occured, Please try later.']));
+	}
+}
+
+if(isset($_POST['addComment']) && $_POST['addComment']=='addComment')
+{
+	// print_r($_POST);
+	$Comment_Message  = ($_POST['Comment_Message'])?'<b>'.$_SESSION['admin_fname'].' '.$_SESSION['admin_lname'].':-</b> '.$_POST['Comment_Message']:'';
+	$Comment_GameId   = ($_POST['Comment_GameId'])?$_POST['Comment_GameId']:'';
+	$Comment_Id       = ($_POST['Comment_Id'])?$_POST['Comment_Id']:'';
+	$modificationType = ($_POST['modificationType'])?$_POST['modificationType']:'';
+	$notificationTo   = ($_POST['notificationTo'])?$_POST['notificationTo']:'';
+	$gamename         = ($_POST['gamename'])?$_POST['gamename']:'';
+
+	if($Comment_Id)
+	{
+		if($modificationType == 'edit')
+		{
+			// edit existing comment
+			$editObj = $funObj->UpdateData("GAME_COMMENT_USER",array('Comment_Message' => $Comment_Message, 'Comment_UpdatedBy' => $_SESSION['ux-admin-id'], 'Comment_UpdatedOn' => date('Y-m-d H:i:s')),'Comment_Id',$Comment_Id,0);
+
+			if($editObj)
+			{
+				sendNotification($notificationTo,base64_decode($Comment_GameId),$gamename,'updated');
+				die(json_encode(["status" => "200", "message" => 'Comment edited successfully to the game.']));
+			}
+			else
+			{
+				die(json_encode(["status" => "201", "message" => 'Error with database, while editing comments to the game.']));
+			}
+		}
+
+		elseif($modificationType == 'delete')
+		{
+			// delete the existing comment
+			$deleteObj = $funObj->UpdateData("GAME_COMMENT_USER",array('Comment_Delete ' => 1, 'Comment_UpdatedBy' => $_SESSION['ux-admin-id'], 'Comment_UpdatedOn' => date('Y-m-d H:i:s')),'Comment_Id',$Comment_Id,0);
+			if($deleteObj)
+			{
+				die(json_encode(["status" => "200", "message" => 'Comment deleted successfully to the game.']));
+			}
+			else
+			{
+				die(json_encode(["status" => "201", "message" => 'Error with database, while deleting comments to the game.']));
+			}
+		}
+		else
+		{
+			// show error message, to specify the modification type
+			die(json_encode(["status" => "201", "message" => 'Unable to undestand that you want to edit or delete.']));
+		}
+	}
+	else
+	{
+		// add record to database
+		$insertArr = (object) array(
+			'Comment_GameId'    => base64_decode($Comment_GameId),
+			'Comment_Message'   => $Comment_Message,
+			'Comment_CreatedBy' => $_SESSION['ux-admin-id'],
+		);
+		$addObj = $funObj->InsertData('GAME_COMMENT_USER', $insertArr, 0, 0);
+		if($addObj)
+		{
+			sendNotification($notificationTo,base64_decode($Comment_GameId),$gamename,'added');
+			die(json_encode(["status" => "200", "message" => 'Comment added successfully to the game']));
+		}
+		else
+		{
+			die(json_encode(["status" => "201", "message" => 'Error with database, while adding comments to the game.']));
+		}
+	}
+}
+
+if(isset($_POST['notificationUpdate']) && $_POST['notificationUpdate']=='notificationUpdate')
+{
+	// print_r($_POST); Notification_Delete Notification_Seen
+	$modify = $_POST['modify'];
+	switch($modify)
+	{
+		case 'seen':
+		$updateCol = 'Notification_Seen';
+		$retMsg    = "Marked as seen.";
+		break;
+
+		case 'delete':
+		$updateCol = 'Notification_Delete';
+		$retMsg    = "Deleted.";
+		break;
+	}
+	$Notification_Id = $_POST['Notification_Id'];
+	$updtaeObj       = $funObj->UpdateData("GAME_NOTIFICATION",array($updateCol => 1, 'Notification_UpdatedOn' => date('Y-m-d H:i:s')),'Notification_Id',$Notification_Id,0);
+	if($updtaeObj)
+	{
+		die(json_encode(["status" => "200", "message" => 'Successfully '.$retMsg]));
+	}
+	else
+	{
+		die(json_encode(["status" => "201", "message" => 'Error with database, while updating notifications.']));
+	}
+}
+
+// add custom functions here
+function sendNotification($notificationTo=NULL,$gameid=NULL,$gamename=NULL,$modificationType=NULL)
+{
+	$funObj = new Functions();
+	if(isset($notificationTo) && !empty($notificationTo))
+	{
+		$notificationTo   = explode(',',$notificationTo);
+		$notificationTo[] = 1;
+		$notificationTo   = array_unique($notificationTo);
+		if(count($notificationTo) > 0)
+		{
+			for($i=0; $i<count($notificationTo); $i++)
+			{
+				if($notificationTo[$i] == $_SESSION['ux-admin-id'])
+				{
+					// don't send the notification to current logged in user
+					continue;
+				}
+				$msg = '<b>'.$_SESSION['admin_fname'].' '.$_SESSION['admin_lname'].'</b> has '.$modificationType.' comment for <b>'.$gamename.'</b>';
+				$notifyInsertArr = (object) array(
+					'Notification_From'    => $_SESSION['ux-admin-id'],
+					'Notification_To'      => $notificationTo[$i],
+					'Notification_Message' => $msg,
+				);
+				$addNotificationObj = $funObj->InsertData('GAME_NOTIFICATION', $notifyInsertArr, 0, 0);
+			}
+		}
+	}
+}
+
+
 ?>

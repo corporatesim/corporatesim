@@ -35,6 +35,12 @@
 	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"> -->
 	<script src="<?php echo site_root;?>dist/sweetalert/sweetalert2.all.min.js"></script>
 	
+	<style>
+		.swal2-container.swal2-backdrop-show{
+			background: #00000066;
+		}
+	</style>
+
 	<center>
 		<div id="imageModal" class="modal">
 			<span class="close" id="close" style="font-size: 50px; opacity: 1; color:#f00;">

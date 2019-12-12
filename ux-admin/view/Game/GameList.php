@@ -52,6 +52,8 @@
 						<li> <span class="fa fa-file-o">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="To Add/ Edit Document"> Document	</a></li>
 						<li> <span class="fa fa-image">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="To Add/ Edit Image"> Image	</a></li>
 						<li> <span class="fa fa-video-camera">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="To Add/ Edit Video"> Video	</a></li>
+						<li> <span class="fa fa-thumbs-o-up">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="Game Completed"> Completed	</a></li>
+						<li> <span class="fa fa-thumbs-o-down">	</span><a href="javascript:void(0);" data-toggle="tooltip" title="Game In Progress"> Not Completed	</a></li>
 					</ul>
 				</div>
 			</div>
@@ -82,8 +84,8 @@
 							<th>Name</th>
 							<th>Comments</th>
 							<th>Header</th>
-							<th>Game/eLearning</th>
-							<th>Game Type</th>
+							<th>Type</th>
+							<th>Bot</th>
 							<th>Introduction</th>
 							<th>Introduction Link</th>
 							<th>Description</th>
@@ -91,6 +93,7 @@
 							<th>Back To Intro Link</th>
 							<th>Game Image</th>
 							<th class="no-sort">Upload Option</th>
+							<th>Creator/Status</th>
 							<th class="no-sort">Action</th>
 						</tr>
 					</thead>
@@ -111,42 +114,154 @@
 								<td><?php echo ($row->Game_DescriptionLink>0)?'Skipped':'Default';?></td>
 								<td><?php echo ($row->Game_BackToIntro>0)?'Skipped':'Default';?></td>
 								<td>
-									<img src="<?php echo site_root.'images/'.$row->Game_Image;?>" alt="No Image" width='50' height='50'>
+									<?php if($row->Game_Image){ ?>
+										<img src="<?php echo site_root.'images/'.$row->Game_Image;?>" alt="No Image" width='25' height='25'>
+									<?php } else { ?>
+										No image
+									<?php } ?>
+								</td>
+
+								<td>
+									<?php if(empty($row->name)) $row->name='Admin'; echo ($row->Game_Complete)?'Creator: <b>'.$row->name.'</b> <span class="alert-success">(Completed)</span>':'Creator: <b>'.$row->name.'</b> <span class="alert-danger">(In-Progress)</span>' ?>
 								</td>
 
 								<td class="text-center">
-									<a href="<?php echo site_root."ux-admin/ManageGameContent/Edit/".base64_encode($row->Game_ID); ?>"
-										title="General"><span class="fa fa-book"></span></a>
-										<a href="<?php echo site_root."ux-admin/ManageGameDocument/Edit/".base64_encode($row->Game_ID); ?>"
-											title="Document"><span class="fa fa-file-o"></span></a>
-											<a href="<?php echo site_root."ux-admin/ManageGameImage/Edit/".base64_encode($row->Game_ID); ?>"
-												title="Image"><span class="fa fa-image"></span></a>								
-												<a href="<?php echo site_root."ux-admin/ManageGameVideo/Edit/".base64_encode($row->Game_ID); ?>"
-													title="Video"><span class="fa fa-video-camera"></span></a>
-												</td>
-												<td class="text-center">
-													<?php if($row->Game_Delete > 0){?>
-														<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Game_ID; ?>"
-															title="Deactive"><span class="fa fa-times"></span></a>
-														<?php }else{?>
-															<a href="javascript:void(0);" class="cs_btn" id="<?php echo $row->Game_ID; ?>"
-																title="Active"><span class="fa fa-check"></span></a>
-															<?php }?>
-															<?php if($functionsObj->checkModuleAuth('game','edit')){?>
-																<a href="<?php echo site_root."ux-admin/ManageGame/edit/".base64_encode($row->Game_ID); ?>"
-																	title="Edit"><span class="fa fa-pencil"></span></a>
-																<?php }
-																if($functionsObj->checkModuleAuth('game','delete')){?>
-																	<a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->Game_ID; ?>"
-																		title="Delete"><span class="fa fa-trash"></span></a>
-																	<?php } ?>
-																</td>
-															</tr>
-															<?php $i++; } ?>
-														</tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="clearfix"></div>
+									<a href="<?php echo site_root."ux-admin/ManageGameContent/Edit/".base64_encode($row->Game_ID); ?>" data-toggle="tooltip" title="General"><span class="fa fa-book"></span></a>
+									<a href="<?php echo site_root."ux-admin/ManageGameDocument/Edit/".base64_encode($row->Game_ID); ?>" data-toggle="tooltip" title="Document"><span class="fa fa-file-o"></span></a>
+									<a href="<?php echo site_root."ux-admin/ManageGameImage/Edit/".base64_encode($row->Game_ID); ?>" data-toggle="tooltip" title="Image"><span class="fa fa-image"></span></a>								
+									<a href="<?php echo site_root."ux-admin/ManageGameVideo/Edit/".base64_encode($row->Game_ID); ?>" data-toggle="tooltip" title="Video"><span class="fa fa-video-camera"></span></a>
+								</td>
+								<td class="text-center">
+									<?php if($row->Game_Delete > 0){?>
+										<a href="javascript:void(0);" data-createdby="<?php echo $row->Game_CreatedBy;?>" class="cs_btn" id="<?php echo $row->Game_ID; ?>" data-toggle="tooltip" title="Deactive"><span class="fa fa-times"></span></a>
+									<?php }else{?>
+										<a href="javascript:void(0);" data-createdby="<?php echo $row->Game_CreatedBy;?>" class="cs_btn" id="<?php echo $row->Game_ID; ?>" data-toggle="tooltip" title="Active"><span class="fa fa-check"></span></a>
+									<?php }?>
+									<?php if($functionsObj->checkModuleAuth('game','edit')){?>
+										<a href="<?php echo ($row->Game_Complete<1)?site_root."ux-admin/ManageGame/edit/".base64_encode($row->Game_ID):'javascript:void(0);'; ?>" data-createdby="<?php echo $row->Game_CreatedBy;?>" data-toggle="tooltip" title="Edit" class="editGame"><span class="fa fa-pencil"></span></a>
+									<?php }
+									if($functionsObj->checkModuleAuth('game','delete')){?>
+										<a href="javascript:void(0);" data-createdby="<?php echo $row->Game_CreatedBy;?>" class="dl_btn" id="<?php echo $row->Game_ID; ?>" data-toggle="tooltip" title="Delete"><span class="fa fa-trash"></span></a>
+									<?php } ?>
+									<?php if($row->Game_Complete) { ?>
+										<a href="javascript:void(0);" data-toggle="tooltip" title="Game: Completed" class="completed" data-gameid="<?php echo $row->Game_ID;?>" data-createdby="<?php echo $row->Game_CreatedBy;?>" data-creator="<?php echo $row->name;?>" data-completedby="<?php echo $row->nameEmail;?>" data-completedon="<?php echo date('d-m-Y H:i:s',strtotime($row->Game_UpdatedOn));?>">
+											<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+										</a>
+									<?php } else { ?>
+										<a href="javascript:void(0);" data-toggle="tooltip" title="Game: In-Progress" id="progress_<?php echo $row->Game_ID;?>" class="<?php echo (($row->Game_CreatedBy == $_SESSION['ux-admin-id']) || ($_SESSION['admin_usertype'] == 'superadmin'))?'progress':'notAllow';?>" data-cancomplete="<?php echo $row->nameEmail;?>">
+											<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+										</a>
+									<?php } ?>
+								</td>
+							</tr>
+							<?php $i++; } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+	<script>
+		$(document).ready(function(){
+			$(".progress").each(function(){
+				$(this).on('click',function(){
+					var creator = $(this).data('cancomplete')
+					var eid     = $(this).attr('id').split('_');
+					var Game_ID = eid[1];
+					var textMsg = "You won't be able to make any changes to this game, after you complete!";
+					confirmAndTriggerAjax(Game_ID,1,textMsg,creator);
+				});
+			});
+			$(".completed").each(function()
+			{
+				$(this).on('click',function()
+				{
+					var Game_ID     = $(this).data('gameid');
+					var createdby   = $(this).data('createdby');
+					var creator     = $(this).data('creator');	
+					var completedby = $(this).data('completedby');
+					var textMsg     = "This game was completed by "+completedby+". Do you really want to make it incomplete?"
+
+					// console.log(createdby+' '+creator+' '+completedby);
+					if(creator == <?php echo $_SESSION['ux-admin-id']; ?> || <?php echo $_SESSION['ux-admin-id']; ?> == 1)
+					{
+						// if creator or super admin, then only allow to change the status to incomplete
+						confirmAndTriggerAjax(Game_ID,0,textMsg,creator);
+					}
+					else
+					{
+						Swal.fire('Completed By:- '+$(this).data('completedby')+'<br>Completed On:- '+$(this).data('completedon'));
+					}
+				});
+			});
+
+			$(".notAllow").each(function()
+			{
+				$(this).on('click',function()
+				{
+					Swal.fire('Only ('+$(this).data('cancomplete')+') or superadmin can change the status of this game as complete.');
+				});
+			});
+			// if game is completed then don't allow user to edit, only active/deactive/delete will be allowed
+			$(".editGame").each(function()
+			{
+				$(this).on('click',function()
+				{
+					if($(this).attr('href') == 'javascript:void(0);')
+					{
+						Swal.fire('This game is completed. So, editing is not allowed.');
+					}
+				});
+			});
+		});
+
+		function confirmAndTriggerAjax(Game_ID,gameStatus,textMsg,creator)
+		{
+			Swal.fire({
+				title             : 'Are you sure?',
+				text              : textMsg,
+				icon              : 'warning',
+				showCancelButton  : true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor : '#d33',
+				confirmButtonText : 'Yes, Proceed!',
+				cancelButtonText  : 'No, Cancel!',
+				footer            : "<b>Creator: "+creator+"</b>"
+			}).then((result) => {
+				if (result.value)
+				{
+					// trigger ajax to change the status to mark as complted
+					$.ajax({
+						type    : "POST",
+						dataType: "json",
+						data    : {'Game_Complete':'updateStatus','Game_ID':Game_ID,'gameStatus':gameStatus},
+						url     : "<?php echo site_root;?>ux-admin/model/ajax/update_game_link.php",
+						success: function(result) 
+						{
+							if(result.status == 200)
+							{
+								Swal.fire(
+									'Success!',
+									result.message,
+									'success'
+									)
+								window.location = " ";
+							}
+							else
+							{
+								Swal.fire(result.message);
+							}
+						},
+						error: function(jqXHR, exception)
+						{
+							{
+								Swal.fire(jqXHR.responseText);
+							}
+						}
+					});
+				}
+			})
+		}
+
+	</script>

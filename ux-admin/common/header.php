@@ -1,3 +1,8 @@
+<style>
+	.swal2-container.swal2-backdrop-show{
+		background: #00000066;
+	}
+</style>
 <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -11,7 +16,71 @@
 	</div>
 	<!-- Profile & SeoSetting Drop down Navigation -->
 	<ul class="nav navbar-top-links navbar-right text-right">
-		<li><a href="<?php echo site_root."login.php"; ?>" target="_blank">View Website</a></li>
+		<!-- <li><a href="<?php echo site_root."login.php"; ?>" target="_blank">View Website</a></li> -->
+
+		<!-- dropdown div for notification starts here -->
+		<!-- below li will open Counter - Alerts -->
+		<!-- <li class="nav-item dropdown no-arrow mx-1">
+			<a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<i class="fas fa-bell fa-fw"></i>
+				<span class="badge badge-danger badge-counter">3+</span>
+			</a> -->
+
+			<!-- Dropdown - Alerts -->
+			<!-- <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+				<h6 class="dropdown-header">
+					Alerts Center
+				</h6>
+				<a class="dropdown-item d-flex align-items-center" href="#">
+					<div class="mr-3">
+						<div class="icon-circle bg-primary">
+							<i class="fas fa-file-alt text-white"></i>
+						</div>
+					</div>
+					<div>
+						<div class="small text-gray-500">December 12, 2019</div>
+						<span class="font-weight-bold">A new monthly report is ready to download!</span>
+					</div>
+				</a>
+				<a class="dropdown-item d-flex align-items-center" href="#">
+					<div class="mr-3">
+						<div class="icon-circle bg-success">
+							<i class="fas fa-donate text-white"></i>
+						</div>
+					</div>
+					<div>
+						<div class="small text-gray-500">December 7, 2019</div>
+						$290.29 has been deposited into your account!
+					</div>
+				</a>
+				<a class="dropdown-item d-flex align-items-center" href="#">
+					<div class="mr-3">
+						<div class="icon-circle bg-warning">
+							<i class="fas fa-exclamation-triangle text-white"></i>
+						</div>
+					</div>
+					<div>
+						<div class="small text-gray-500">December 2, 2019</div>
+						Spending Alert: We've noticed unusually high spending for your account.
+					</div>
+				</a>
+				<a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+			</div>
+		</li> -->
+		<!-- dropdown div for notification starts here -->
+
+		<li class="nav-item dropdown no-arrow mx-1"><a href="javascript:void(0);">Hi, <?php echo $_SESSION['admin_fname'].' '.$_SESSION['admin_lname'];?></a></li>
+		<?php
+		$notificationSql = "SELECT * FROM GAME_NOTIFICATION WHERE Notification_Delete=0 AND Notification_Seen=0 AND Notification_To=".$_SESSION['ux-admin-id'];
+		$notificationCount = $functionsObj->RunQueryFetchCount($notificationSql);
+		?>
+		<li class="nav-item dropdown no-arrow mx-1" title="Show Notification">
+			<a href="<?php echo site_root.'ux-admin/notification';?>" id="showNotification" class="nav-link dropdown-toggle">
+				<i class="fa fa-bell"></i>
+				<span class="badge badge-danger badge-counter"><?php echo $notificationCount;?></span>
+			</a>
+		</li>
+
 		<li class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-user fa-fw"></i>
 				<i class="fa fa-caret-down"></i>
@@ -164,3 +233,12 @@
 </div>
 </div>
 </nav>
+<script>
+	$(document).ready(function(){
+		countInclick   = 0;
+		countOutclick  = 0;
+		animateInArray = ['bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'flipInX', 'flipInY', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight', 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'lightSpeedIn', 'bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello', 'heartBeat', 'flip', 'hinge', 'jackInTheBox', 'rollIn'];
+
+		animateOutArray = ['bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'flipOutX', 'flipOutY', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'lightSpeedOut', 'rollOut'];
+	});
+</script>

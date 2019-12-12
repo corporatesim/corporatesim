@@ -74,15 +74,35 @@ $("#selectAll").change(function () {
 		$(document).ready(function() {
 			$('#dataTables-example').DataTable({
 				responsive: true,
+				"scrollX": true,
 				"columnDefs": [ {
 					"targets"   : 'no-sort',
 					"orderable" : false,
 				} ]
 			});
 
+			// making the data-table clickable
+			// var table = $('#dataTables-example').DataTable();
+			// $('#dataTables-example tbody').on( 'click', 'tr', function () {
+			// 	if ( $(this).hasClass('selected') ) {
+			// 		$(this).removeClass('selected');
+			// 		$(this).css({'background':''});
+			// 	}
+			// 	else {
+			// 		// table.$('tr.selected').removeClass('selected');
+			// 		$(this).addClass('selected');
+			// 		$(this).css({'background':'#aab7d1'});
+			// 	}
+			// });
+
+			// $('#button').click( function () {
+			// 	table.row('.selected').remove().draw( false );
+			// } );
+
 			// for server side enabled tables
 			$('#dataTables-serverSide').DataTable({
 				responsive: true,
+				"scrollX": true,
 				"columnDefs": [ {
 					"targets"   : 'no-sort',
 					"orderable" : false,

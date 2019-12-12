@@ -17,7 +17,7 @@ if($_SESSION['username'] == NULL)
 }
 
 // if user is not assigned the game then redirect to home page ,game_site_users
-$game_sql = "SELECT * FROM GAME_SITE_USERS WHERE LOCATE($gameid, User_games) AND User_id=$userid";
+$game_sql = "SELECT * FROM GAME_USERGAMES WHERE UG_UserID=$userid AND UG_GameID=$gameid";
 $res_game = $functionsObj->ExecuteQuery($game_sql);
 // echo "<pre>"; print_r($res_game); exit;
 

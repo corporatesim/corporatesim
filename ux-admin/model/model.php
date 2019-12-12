@@ -33,7 +33,7 @@ class Model extends database{
 	function RunQueryFetchCount($sql)
 	{
 		$object = $this->conn->query($sql) or die($this->conn->error."<br>".$sql);
-		$data   = $object->num_rows or die($this->conn->error);
+		$data   = $object->num_rows; // or die($this->conn->error);
 		return $data;
 	}
 

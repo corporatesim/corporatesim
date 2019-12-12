@@ -205,7 +205,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 				'SubLink_CompIDcarry'        => $_POST['inputType']=='carry' ? $_POST['carry_compid']: null,
 				'SubLink_SubCompIDcarry'     => $_POST['inputType']=='carry' ? $_POST['carry_subcompid']: null,
 				'SubLink_Condition'          => $_POST['conditionformulaid'],
-				'SubLink_Roundoff'           => isset($_POST['chkround']) ? 1:0,
+				'SubLink_Roundoff'           => isset($_POST['chkround']) ?$_POST['chkround']:0,
 				'SubLink_ChartID'            => $_POST['chart_id'],
 				'SubLink_ChartType'          => ($charttypeComp)?$charttypeComp:null,
 				'SubLink_Details'            => $_POST['details'],
@@ -218,7 +218,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 				'SubLink_FontSize'           => $_POST['SubLink_FontSize'],
 				'SubLink_FontStyle'          => $_POST['SubLink_FontStyle'],
 				'SubLink_InputFieldOrder'    => $_POST['SubLink_InputFieldOrder'],
-				'SubLink_CreateDate'         => date('Y-m-d H:i:s')
+				'SubLink_CreateDate'         => date('Y-m-d H:i:s'),
+				'Sublink_CreatedBy'          => $_SESSION['ux-admin-id']
 			);
 			// echo "<pre>"; print_r($linkdetails); exit();
 			
@@ -604,7 +605,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 				'SubLink_CompIDcarry'        => $_POST['inputType']=='carry' ? $_POST['carry_compid']: null,
 				'SubLink_SubCompIDcarry'     => $_POST['inputType']=='carry' ? $_POST['carry_subcompid']: null,
 				'SubLink_Condition'          => $_POST['conditionformulaid'],
-				'SubLink_Roundoff'           => isset($_POST['chkround']) ? 1:0,
+				'SubLink_Roundoff'           => isset($_POST['chkround']) ?$_POST['chkround']:0,
 				'SubLink_ChartID'            => $_POST['chart_id'],
 				'SubLink_ChartType'          => ($charttypeComp)?$charttypeComp:null,
 				'SubLink_Details'            => $_POST['details'],
@@ -616,6 +617,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 				'SubLink_FontSize'           => $_POST['SubLink_FontSize'],
 				'SubLink_FontStyle'          => $_POST['SubLink_FontStyle'],
 				'SubLink_InputFieldOrder'    => $_POST['SubLink_InputFieldOrder'],
+				'Sublink_UpdatedOn'          => date('Y-m-d H:i:s'),
+				'Sublink_UpdtaedBy'          => $_SESSION['ux-admin-id']
 					//'SubLink_Details'	=> $_POST['details']
 			);
 			// echo "<pre>"; print_r($linkdetails); exit();
@@ -1418,10 +1421,9 @@ elseif(isset($_GET['linkedit']))
 }
 else
 {
-	// fetch siteuser list from db
-	$sql = "SELECT	L.*, (SELECT `Game_Name`  FROM  GAME_GAME WHERE  `Game_ID` = L.Link_GameID) as Game, (SELECT `Game_Type`  FROM  GAME_GAME WHERE  `Game_ID` = L.Link_GameID) as BotEnabled,
-	(SELECT `Scen_Name`  FROM  GAME_SCENARIO WHERE  `Scen_ID` = L.`Link_ScenarioID`) as Scenario
-	FROM `GAME_LINKAGE`as L ORDER BY L.Link_CreateDate DESC";
+	// fetch game-linkage list from db
+	$sql = "SELECT gl.*, gg.Game_Name AS Game, gg.Game_Type AS BotEnabled, gg.Game_Complete, gs.Scen_Name AS Scenario, gg.Game_CreatedBy AS Creator, gg.Game_Associates AS AssociateAccess, CONCAT( gau.fname, ' ', gau.lname, ', ', gau.email ) AS nameEmail, CONCAT( gau.fname, ' ', gau.lname) AS name FROM GAME_LINKAGE gl LEFT JOIN GAME_GAME gg ON gg.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Link_ScenarioID LEFT JOIN GAME_ADMINUSERS gau ON gau.id = gg.Game_CreatedBy ORDER BY gl.Link_CreateDate DESC";
+	// echo $sql;
 	$object = $functionsObj->ExecuteQuery($sql);
 	$file   = 'list.php';
 }

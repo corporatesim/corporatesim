@@ -60,7 +60,8 @@ class CorpsimFormulaCalculation extends CI_Controller {
 		// likely selected all the components, some to form and calcuate formula, some for carryforward purpose, and also taken user type as well, to update the carryForward values if forwarded any from user actual values
 		$this->db->trans_start();
 
-		$findFormulaCompSubcomp = "SELECT * FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=$UserID WHERE gls.SubLink_LinkID=$linkid AND (gls.SubLink_InputMode='formula' OR gls.SubLink_InputMode='carry' OR gls.SubLink_InputMode='user')";
+		$findFormulaCompSubcomp = "SELECT SubLink_ID, SubLink_FormulaID, SubLink_InputMode, SubLink_FormulaExpression, SubLink_CompName, SubLink_SubcompName, SubLink_LinkIDcarry, SubLink_CompIDcarry, SubLink_SubCompIDcarry, SubLink_Roundoff, input_current FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=$UserID WHERE gls.SubLink_LinkID=$linkid AND (gls.SubLink_InputMode='formula' OR gls.SubLink_InputMode='carry' OR gls.SubLink_InputMode='user' OR gls.SubLink_InputMode='admin')";
+		// die($findFormulaCompSubcomp);
 		$getFormulaCompSubcomp  = $this->Ajax_Model->executeQuery($findFormulaCompSubcomp);
 		// find formula expression and calculate
 		foreach ($getFormulaCompSubcomp as $getFormulaCompSubcompRow)
@@ -68,14 +69,31 @@ class CorpsimFormulaCalculation extends CI_Controller {
 			// if type is formula then calculate the formula
 			if($getFormulaCompSubcompRow->SubLink_FormulaID > 1 || $getFormulaCompSubcompRow->SubLink_InputMode == 'formula')
 			{
-				$formulaArray[$getFormulaCompSubcompRow->SubLink_ID] = eval('return '.$this->formulaExpressionCalculate($linkid,$getFormulaCompSubcompRow->SubLink_ID,$getFormulaCompSubcompRow->SubLink_FormulaExpression,$UserID).';');
 
 				if(eval('return '.$this->formulaExpressionCalculate($linkid,$getFormulaCompSubcompRow->SubLink_ID,$getFormulaCompSubcompRow->SubLink_FormulaExpression,$UserID).';') === FALSE)
 				{
 					$status  = 201;
 					$error[] = '<br>Error: SubLink_ID:- '.$getFormulaCompSubcompRow->SubLink_ID.' ,comp:- '.$getFormulaCompSubcompRow->SubLink_CompName.' ,subComp:- '.$getFormulaCompSubcompRow->SubLink_SubcompName.' andFormula:- '.$this->formulaExpressionCalculate($linkid,$getFormulaCompSubcompRow->SubLink_ID,$getFormulaCompSubcompRow->SubLink_FormulaExpression,$UserID);
-					// echo '<br>Error: SubLink_ID:- '.$getFormulaCompSubcompRow->SubLink_ID.' ,comp:- '.$getFormulaCompSubcompRow->SubLink_CompName.' ,subComp:- '.$getFormulaCompSubcompRow->SubLink_SubcompName.' andFormula:- '.$this->formulaExpressionCalculate($linkid,$getFormulaCompSubcompRow->SubLink_ID,$getFormulaCompSubcompRow->SubLink_FormulaExpression,$UserID);
+					// die(json_encode(["status" => $status, "message" => $error]));
+					echo '<br>Error: SubLink_ID:- '.$getFormulaCompSubcompRow->SubLink_ID.' ,comp:- '.$getFormulaCompSubcompRow->SubLink_CompName.' ,subComp:- '.$getFormulaCompSubcompRow->SubLink_SubcompName.' andFormula:- '.$this->formulaExpressionCalculate($linkid,$getFormulaCompSubcompRow->SubLink_ID,$getFormulaCompSubcompRow->SubLink_FormulaExpression,$UserID);
 				}
+
+				if($getFormulaCompSubcompRow->SubLink_Roundoff == 1)
+				{
+					// round up
+					$formulaArray[$getFormulaCompSubcompRow->SubLink_ID] = round(eval('return '.$this->formulaExpressionCalculate($linkid,$getFormulaCompSubcompRow->SubLink_ID,$getFormulaCompSubcompRow->SubLink_FormulaExpression,$UserID).';'),0,PHP_ROUND_HALF_UP);
+				}
+				elseif($getFormulaCompSubcompRow->SubLink_Roundoff == 2)
+				{
+					// round down
+					$formulaArray[$getFormulaCompSubcompRow->SubLink_ID] = round(eval('return '.$this->formulaExpressionCalculate($linkid,$getFormulaCompSubcompRow->SubLink_ID,$getFormulaCompSubcompRow->SubLink_FormulaExpression,$UserID).';'),0,PHP_ROUND_HALF_DOWN);
+				}
+				else
+				{
+					// if nothing selected then default
+					$formulaArray[$getFormulaCompSubcompRow->SubLink_ID] = round(eval('return '.$this->formulaExpressionCalculate($linkid,$getFormulaCompSubcompRow->SubLink_ID,$getFormulaCompSubcompRow->SubLink_FormulaExpression,$UserID).';'),2);
+				}
+
 				// else
 				// {
 				// 	echo '<br>Success: SubLink_ID:- '.$getFormulaCompSubcompRow->SubLink_ID.' ,comp:- '.$getFormulaCompSubcompRow->SubLink_CompName.' ,subComp:- '.$getFormulaCompSubcompRow->SubLink_SubcompName.' andValue:- '.eval('return '.$this->formulaExpressionCalculate($linkid,$getFormulaCompSubcompRow->SubLink_ID,$getFormulaCompSubcompRow->SubLink_FormulaExpression,$UserID).';');
@@ -159,13 +177,36 @@ class CorpsimFormulaCalculation extends CI_Controller {
 			}
 		}
 		// check for carry forward values
+		// print_r($formulaArray); print_r($carryArray);
 		if(count($carryArray) > 0)
 		{
 			foreach ($carryArray as $carryArrayKey => $carryArrayValues)
 			{
 				// check if formula array has the value for the $carryArrayValues(sublink_id), if not then it means that check/verify from the game_input table or it may be default (0);
-				$carryArray[$carryArrayKey]   = $formulaArray[$carryArrayValues];
-				$formulaArray[$carryArrayKey] = $formulaArray[$carryArrayValues];
+				// if key exist, i.e. if carry forwarded from same scenario
+				if(array_key_exists($carryArrayValues, $formulaArray))
+				{
+					$carryArray[$carryArrayKey]   = $formulaArray[$carryArrayValues];
+					$formulaArray[$carryArrayKey] = $formulaArray[$carryArrayValues];
+				}
+				else
+				{
+					$where_sublink_id = array(
+						'input_sublinkid' => $carryArrayValues,
+						'input_user'      => $UserID,
+					);
+					$input_current = $this->Ajax_Model->fetchRecords('GAME_INPUT',$where_sublink_id);
+					if(count($input_current)>0)
+					{
+						$carryArray[$carryArrayKey]   = $input_current[0]->input_current;
+						$formulaArray[$carryArrayKey] = $input_current[0]->input_current;
+					}
+					else
+					{
+						$carryArray[$carryArrayKey]   = 0;
+						$formulaArray[$carryArrayKey] = 0;
+					}
+				}
 			}
 
 			// checking for replace values again, for carry forwarded values
