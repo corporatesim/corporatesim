@@ -221,7 +221,7 @@
 			Swal.fire({
 				title             : 'Are you sure?',
 				text              : textMsg,
-				icon              : 'warning',
+				icon              : 'question',
 				showCancelButton  : true,
 				confirmButtonColor: '#3085d6',
 				cancelButtonColor : '#d33',

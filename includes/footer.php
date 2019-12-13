@@ -29,6 +29,8 @@
 		$(document).ready(function() {
 			$('.restart').each(function(){
 				$(this).on('click',function(e){
+					// var effectIn  = animateInArray[countInclick];
+					// var effectOut = animateOutArray[countOutclick];
 					e.stopPropagation();
 					// var senderElement = e.target;
 					// // if it has div.reduce_width then, if senderElement is img tag then stop event propagation for parent, i.e. not to redirect to result.php
@@ -58,7 +60,15 @@
 					showCancelButton : true,
 					confirmButtonText: 'Yes, Reset !',
 					cancelButtonText : 'No, cancel !',
-					reverseButtons   : false
+					reverseButtons   : false,
+					showClass: {
+						popup: 'animated rotateInDownLeft faster'
+						// popup: 'animated '+effectIn+' faster'
+					},
+					hideClass: {
+						popup: 'animated rotateOutDownLeft faster'
+						// popup: 'animated '+effectOut+' faster'
+					}
 				}).then((result) => {
 					if (result.value) {
 						$.ajax({
@@ -101,6 +111,10 @@
 					//         )
 					//     }
 				})
+				// countInclick++;
+				// countOutclick++;
+				// countInclick  = (countInclick == animateInArray.length)?0:countInclick;
+				// countOutclick = (countOutclick == animateOutArray.length)?0:countOutclick;
 			}); 
 			});
 		});

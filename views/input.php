@@ -2025,7 +2025,13 @@ $('.range').each(function(i,e){
     showCancelButton : true,
     confirmButtonText: 'OK',
     cancelButtonText : 'Cancel',
-    reverseButtons   : false
+    reverseButtons   : false,
+    showClass: {
+      popup: 'animated zoomInDown faster'
+    },
+    hideClass: {
+      popup: 'animated zoomOutUp faster'
+    }
   }).then((result) => {
     if (result.value) {
       // swalWithBootstrapButtons.fire(

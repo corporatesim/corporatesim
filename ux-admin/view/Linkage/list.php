@@ -193,11 +193,28 @@
 				if(typeof gamedata !== typeof undefined && gamedata !== false)
 				{
 					$(this).unbind('click');
+					$(this).attr('href','javascript:void(0);');
 					$(this).on('click',function(e)
 					{
 						e.preventDefault();
-						Swal.fire($(this).data('gamedata'));
+						var effectIn  = animateInArray[countInclick];
+						var effectOut = animateOutArray[countOutclick];
+						Swal.fire({
+							icon : 'error',
+							title: 'Game Comments',
+							html : $(this).data('gamedata'),
+							showClass: {
+								popup: 'animated '+effectIn+' faster'
+							},
+							hideClass: {
+								popup: 'animated '+effectOut+' faster'
+							}
+						});
 						// console.log(gamedata+' and '+ typeof gamedata)
+						countInclick++;
+						countOutclick++;
+						countInclick  = (countInclick == animateInArray.length)?0:countInclick;
+						countOutclick = (countOutclick == animateOutArray.length)?0:countOutclick;
 						return false;
 					});
 				}

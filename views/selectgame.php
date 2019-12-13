@@ -192,7 +192,16 @@ if( (strtotime($row['startDate']) > time()) || (strtotime($row['endDate']) < tim
       var startdate = $(this).data('startdate');
       var enddate   = $(this).data('enddate');
       var gamename  = $(this).data('gamename');
-      Swal.fire('You are allowed to play "'+gamename+'" from '+startdate+' to '+enddate);
+      Swal.fire({
+        text: 'You are allowed to play "'+gamename+'" from '+startdate+' to '+enddate,
+        icon: 'error',
+        showClass: {
+          popup: 'animated flipInY faster'
+        },
+        hideClass: {
+          popup: 'animated flipOutY faster'
+        }
+      });
     });
   });
 
@@ -209,7 +218,16 @@ if( (strtotime($row['startDate']) > time()) || (strtotime($row['endDate']) < tim
         var startdate = $(this).parent('div').find('a.notInDateRange').data('startdate');
         var enddate   = $(this).parent('div').find('a.notInDateRange').data('enddate');
         var gamename  = $(this).parent('div').find('a.notInDateRange').data('gamename');
-        Swal.fire('You are allowed to play "'+gamename+'" from '+startdate+' to '+enddate);
+        Swal.fire({
+          text: 'You are allowed to play "'+gamename+'" from '+startdate+' to '+enddate,
+          icon: 'error',
+          showClass: {
+            popup: 'animated flipInY faster'
+          },
+          hideClass: {
+            popup: 'animated flipOutY faster'
+          }
+        });
       }
     });
   });

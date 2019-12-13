@@ -129,22 +129,34 @@
 
 	// show image model on click
 	$('img').on('click',function(){
-		var imageUrl = $(this).attr('src');
+		var imageUrl  = $(this).attr('src');
+		var effectIn  = animateInArray[countInclick];
+		var effectOut = animateOutArray[countOutclick];
 		// alert(this.width + 'x' + this.height);
 		Swal.fire({
-			imageUrl         : imageUrl,
 			// imageWidth       : 200,
 			// imageHeight      : 100,
+			imageUrl         : imageUrl,
 			imageAlt         : 'Custom image',
 			icon             : 'success',
 			title            : '',
 			showConfirmButton: true,
+			showClass: {
+				popup: 'animated '+effectIn+' faster'
+			},
+			hideClass: {
+				popup: 'animated '+effectOut+' faster'
+			}
 			// html             : 'You are allowed to play <b>"'+gameName+'"</b> from <b>"'+startDate+'"</b> to <b>"'+endDate+'"</b>',
 			// footer           : '<a href>Why do I have this issue?</a>'
 			// showCancelButton : false,
 			// cancelButtonColor: '#3085d6',
 			// footer           : ''
 		});
+		countInclick++;
+		countOutclick++;
+		countInclick  = (countInclick == animateInArray.length)?0:countInclick;
+		countOutclick = (countOutclick == animateOutArray.length)?0:countOutclick;
 	});
 
 	$('#siteuser_btn').on('click', function(){

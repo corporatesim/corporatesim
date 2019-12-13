@@ -478,11 +478,11 @@ INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID
 INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
 INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
 INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
-LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
 INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
 LEFT JOIN GAME_AREA_SEQUENCE gas on a.Area_ID=gas.Sequence_AreaId
-WHERE ls.SubLink_Type=1 AND l.Link_ID=".$linkid." ORDER BY gas.Sequence_Order";
-////echo $sqlarea;
+LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+WHERE ls.SubLink_Type=1 AND gas.Sequence_LinkId=".$linkid." AND l.Link_ID=".$linkid." ORDER BY gas.Sequence_Order";
+// echo $sqlarea; // exit();
 $area    = $functionsObj->ExecuteQuery($sqlarea);
 
 $sqlcomp = "SELECT distinct a.Area_Name as Area_Name, c.Comp_Name as Comp_Name, ls.SubLink_Details as Description 

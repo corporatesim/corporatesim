@@ -216,11 +216,17 @@ include_once 'includes/header.php';
 						swalWithBootstrapButtons.fire({
 					// title: 'Are you sure?',
 					text             : "Please confirm that you have gone through all the content by clicking YES else press NO",
-					type             : 'warning',
+					icon             : 'warning',
 					showCancelButton : true,
 					confirmButtonText: 'YES',
 					cancelButtonText : 'NO',
-					reverseButtons   : false
+					reverseButtons   : false,
+					showClass: {
+						popup: 'animated fadeInRight faster'
+					},
+					hideClass: {
+						popup: 'animated fadeOutRight faster'
+					}
 				}).then((result) => {
 					if (result.value) {
 						window.location='<?php echo $url; ?>';
