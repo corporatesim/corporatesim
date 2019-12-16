@@ -11,10 +11,6 @@ $file    = 'GameList.php';
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 {	
 	// echo "<pre>"; print_r($_POST); exit();
-	if(isset($_POST['Game_Type']))
-	{
-		echo ' add bot enabled ';
-	}
 	$Game_Introduction     = ($_POST['Game_Introduction'])?$_POST['Game_Introduction']:0;
 	$Game_Description      = ($_POST['Game_Description'])?$_POST['Game_Description']:0;
 	$Game_IntroductionLink = ($_POST['Game_IntroductionLink'])?$_POST['Game_IntroductionLink']:0;
