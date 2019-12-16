@@ -123,10 +123,10 @@
 	<br>
 
 	<div class="row col-md-12">
-		<table class="table table-striped table-bordered table-hover" id="dataTables-example">
+		<table class="table table-striped table-bordered table-hover text-center" id="dataTables-serverSide" data-url="<?php echo site_root.'ux-admin/model/ajax/dataTables.php';?>" data-action="Dashboard" data-function="addClickHandlerToGetComments();">
 			<thead>
 				<tr>
-					<th>S.N.</th>
+					<th class="no-sort">S.N.</th>
 					<th>ID</th>
 					<th>Game Name</th>
 					<th>Game/eLearning: Type</th>
@@ -137,101 +137,44 @@
 					<th>Status</th>
 					<th>Completed On</th>
 					<th>Time Taken</th>
-					<th>Action</th>
+					<th class="no-sort">Action</th>
 				</tr>
 			</thead>
-			<tbody>
-				<?php $i=1; foreach ($agentGameData as $agentGameDataRow) { ?>
-					<tr>
-						<td>
-							<?php echo $i; ?>
-						</td>
-						<td>
-							<?php echo $agentGameDataRow->Game_ID; ?>
-						</td>
-						<td>
-							<?php echo $agentGameDataRow->Game_Name; ?>
-						</td>
-						<td>
-							<?php echo $agentGameDataRow->Game_eLearning.'<b>:-</b> '.$agentGameDataRow->Game_Type ; ?>
-						</td>
-						<td>
-							<?php echo $agentGameDataRow->Creator; ?>
-						</td>
-						<td>
-							<?php echo $agentGameDataRow->Created_On; ?>
-						</td>
-						<!-- <td>
-							<?php echo $agentGameDataRow->Game_eLearning; ?>
-						</td>
-						<td>
-							<?php echo $agentGameDataRow->Game_Type; ?>
-						</td> -->
-						<td>
-							<?php
-							if($agentGameDataRow->Game_Status == 'Complete')
-							{
-								echo "<span class='alert-success'>".$agentGameDataRow->Game_Status."<br></span><b>".$agentGameDataRow->Completed_By."</b>";
-							}
-							else
-							{
-								echo "<span class='alert-danger'>".$agentGameDataRow->Game_Status."</span>";
-							}
-							?>
-						</td>
-						<td>
-							<?php echo $agentGameDataRow->Game_UpdatedOn; ?>
-						</td>
-						<td>
-							<?php echo ($agentGameDataRow->Time_Taken < 8)?$agentGameDataRow->Time_Taken.' Days':'<span class="alert-danger">'.$agentGameDataRow->Time_Taken.' Days</span>'; ?>
-						</td>
-						<td>
-							<?php if(($_SESSION['ux-admin-id'] == $agentGameDataRow->Associates) || ($_SESSION['ux-admin-id'] == $agentGameDataRow->Game_CreatedBy) || ($_SESSION['ux-admin-id'] == 1) ) { ?>
-								<!-- if user has access or created the game then only show comments -->
-								<a href="javascript:void(0);" class="comments" id="<?php echo base64_encode($agentGameDataRow->Game_ID);?>" data-toggle="tooltip" title="Comments" data-gamename="<?php echo $agentGameDataRow->Game_Name; ?>" data-notification="<?php echo $agentGameDataRow->Game_CreatedBy.','.$agentGameDataRow->Associates;?>">
-									<i class="fa fa-eye"></i>
-								</a>
-								<!-- if user is neither Associates nor creator then don't show the view/add/edit/delete comments option -->
-							<?php } else { ?>
-								<a href="javascript:void(0);" class="comments" data-toggle="tooltip" title="Comments">
-									<i class="fa fa-eye"></i>
-								</a>
-							<?php } ?>
-						</td>
-					</tr>
-					<?php $i++; } ?>
-				</tbody>
-			</table>
-		</div>
+		</table>
+	</div>
 
-		<script>
-			$(document).ready(function(){
+	<script>
+		$(document).ready(function(){
 				// countInclick   = 0;
 				// countOutclick  = 0;
 				// animateInArray = ['bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'flipInX', 'flipInY', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight', 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'lightSpeedIn', 'bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello', 'heartBeat', 'flip', 'hinge', 'jackInTheBox', 'rollIn'];
 
 				// animateOutArray = ['bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'flipOutX', 'flipOutY', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'lightSpeedOut', 'rollOut'];
-
-				$('.comments').each(function(){
-					$(this).on('click',function(){
-						if($(this).attr('id'))
-						{
-							var gameid       = $(this).attr('id');
-							var notification = $(this).data('notification');
-							var gamename     = $(this).data('gamename');
-							callAjaxForGameComments(gameid,notification,gamename);
-						}
-						else
-						{
-							callAjaxForGameComments();
-						}
-					});
-				});
+				addClickHandlerToGetComments();
 				// addEdieDeleteGameComments('Comment_Id','modificationType');
 			});
 
-			function callAjaxForGameComments(gameid,notificationTo,gamename)
-			{
+		function addClickHandlerToGetComments()
+		{
+			$('.comments').each(function(){
+				$(this).on('click',function(){
+					if($(this).attr('id'))
+					{
+						var gameid       = $(this).attr('id');
+						var notification = $(this).data('notification');
+						var gamename     = $(this).data('gamename');
+						callAjaxForGameComments(gameid,notification,gamename);
+					}
+					else
+					{
+						callAjaxForGameComments();
+					}
+				});
+			});
+		}
+
+		function callAjaxForGameComments(gameid,notificationTo,gamename)
+		{
 				// triggering ajax to get the game comments
 				var effectIn  = animateInArray[countInclick];
 				var effectOut = animateOutArray[countOutclick];

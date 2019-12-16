@@ -100,6 +100,9 @@ $("#selectAll").change(function () {
 			// } );
 
 			// for server side enabled tables
+			var ajaxUrl      = $('#dataTables-serverSide').data('url');
+			var action       = $('#dataTables-serverSide').data('action');
+			var runFunctions = $('#dataTables-serverSide').data('function');
 			$('#dataTables-serverSide').DataTable({
 				responsive: true,
 				"scrollX": true,
@@ -110,9 +113,31 @@ $("#selectAll").change(function () {
 				"processing": true,
 				"serverSide": true,
 				"ajax": {
-					url: "<?php echo site_root.'ux-admin/model/ajax/siteusers.php';?>",
+					url : ajaxUrl,
 					type: 'POST',
-					data: {action: 'siteusers'},
+					data: {action: action},
+					complete: function(){
+						$('[data-toggle="tooltip"]').tooltip();
+						// run these functions
+						if(runFunctions)
+						{
+							// print(runFunctions);
+							eval(runFunctions);
+
+							// console.log(runFunctions);
+							// addClickHandlerToGetComments();
+						}
+						$('.dl_btn').click( function() {
+							$('#cnf_yes').val($(this).attr('id'));
+							$('#cnf_del_modal').modal('show');
+						});
+
+						$('#cnf_yes').click( function() {
+							var val = $(this).val();
+							var id  = btoa(val);
+							window.location.href = site_root + loc_url_del + id;
+						});
+					}
 				}
 			});
 		});

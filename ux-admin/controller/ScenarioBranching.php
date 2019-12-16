@@ -191,9 +191,9 @@ if(isset($_GET['delete']) && !empty($_GET['delete']))
 	exit();
 }
 
-// for table data
-$dataQuery = "SELECT gb.*,gg.Game_Name,gc.Scen_Name,gcn.Scen_Name AS NextSceneName,gcomp.Comp_Name FROM GAME_BRANCHING_SCENARIO gb LEFT JOIN GAME_GAME gg ON gg.Game_ID = gb.Branch_GameId LEFT JOIN GAME_SCENARIO gc ON gc.Scen_ID = gb.Branch_ScenId LEFT JOIN GAME_COMPONENT gcomp ON gcomp.Comp_ID = gb.Branch_CompId LEFT JOIN GAME_SCENARIO gcn ON gcn.Scen_ID = gb.Branch_NextScen WHERE Branch_IsActive = 0";
-$object = $functionsObj->ExecuteQuery($dataQuery);
+// for table data, moved to serverSide dataTable
+// $dataQuery = "SELECT gb.*,gg.Game_Name,gc.Scen_Name,gcn.Scen_Name AS NextSceneName,gcomp.Comp_Name FROM GAME_BRANCHING_SCENARIO gb LEFT JOIN GAME_GAME gg ON gg.Game_ID = gb.Branch_GameId LEFT JOIN GAME_SCENARIO gc ON gc.Scen_ID = gb.Branch_ScenId LEFT JOIN GAME_COMPONENT gcomp ON gcomp.Comp_ID = gb.Branch_CompId LEFT JOIN GAME_SCENARIO gcn ON gcn.Scen_ID = gb.Branch_NextScen WHERE Branch_IsActive = 0";
+// $object = $functionsObj->ExecuteQuery($dataQuery);
 // print_r($object); exit;
 
 //download scenario branching in excelsheet..

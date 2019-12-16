@@ -134,10 +134,10 @@
   <br>
   <div class="row" id="sandbox-container" style="margin-left: 25%">
     <div class="col-md-3 text-center">
-      <button type="submit" class="btn btn-primary btn-lg btn-block" name="submit" value="submit" id="submit">SUBMIT</button>
+      <button type="submit" class="btn btn-primary btn-block" name="submit" value="submit" id="submit">SUBMIT</button>
     </div>
     <div class="col-md-3 text-center">
-      <a href="<?php echo site_root.'ux-admin/ReplayPermission'; ?>" class="btn btn-primary btn-lg btn-block">CANCEL</a>
+      <a href="<?php echo site_root.'ux-admin/ReplayPermission'; ?>" class="btn btn-danger btn-block">CANCEL</a>
     </div>
   </div>
 </div>

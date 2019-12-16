@@ -238,7 +238,7 @@
     </div>
     <div class="panel-body">
     	<div class="dataTable_wrapper">
-    		<table class="table table-striped table-bordered table-hover" id="dataTables-serverSide">
+    		<table class="table table-striped table-bordered table-hover text-center" id="dataTables-serverSide" data-url="<?php echo site_root.'ux-admin/model/ajax/dataTables.php';?>" data-action="siteusers">
     			<thead>
     				<tr>
     					<th class="no-sort">Sr. No</th>

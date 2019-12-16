@@ -62,7 +62,7 @@
 							<div class="form-group text-center">
 								<?php if(isset($_GET['edit'])){ ?>
 									<button class="btn btn-primary" type="submit" name="submit" value="Update">Update</button>
-									<button class="btn btn-primary" type="button" onclick="window.location='<?php echo site_root."ux-admin/ManageComponent"; ?>';">Cancel</button>
+									<button class="btn btn-danger" type="button" onclick="window.location='<?php echo site_root."ux-admin/ManageComponent"; ?>';">Cancel</button>
 								<?php }else{ ?>
 									<button class="btn btn-primary" type="submit" name="submit" value="Submit">Submit</button>
 								<?php } ?>
@@ -130,17 +130,17 @@
 		<div class="panel-heading">Component List</div>
 		<div class="panel-body">
 			<div class="dataTable_wrapper">
-				<table class="table table-striped table-bordered table-hover" id="dataTables-example">
+				<table class="table table-striped table-bordered table-hover text-center" id="dataTables-serverSide" data-url="<?php echo site_root.'ux-admin/model/ajax/dataTables.php';?>" data-action="ManageComponent">
 					<thead>
 						<tr>
-							<th>#</th>
+							<th>S.N.</th>
 							<th>Area</th>
 							<th>Component Name</th>
 							<th>Component Alias</th>
 							<th class="no-sort">Action</th>
 						</tr>
 					</thead>
-					<tbody>
+					<!-- <tbody>
 						<?php
 						if($object->num_rows > 0){
 							$i=1;
@@ -164,7 +164,7 @@
 							<?php $i++;
 						}
 					} ?>
-				</tbody>
+				</tbody> -->
 			</table>
 		</div>
 	</div>

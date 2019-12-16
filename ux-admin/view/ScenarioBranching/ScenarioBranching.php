@@ -155,7 +155,7 @@
       <div class="clearfix"></div>
       <div class="panel-body">
         <div class="dataTable_wrapper">
-          <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+          <table class="table table-striped table-bordered table-hover text-center" id="dataTables-serverSide" data-url="<?php echo site_root.'ux-admin/model/ajax/dataTables.php';?>" data-action="ScenarioBranching">
             <thead>
               <tr>
                 <th>Sr. No</th>
@@ -165,57 +165,26 @@
                 <th id="password">Component</th>
                 <!--<th>Last Login</th>-->
                 <th>Minimum Value</th>
-                <th class="no-sort">Maximum Value</th>
-                <th class="no-sort">Order</th>
+                <th class="">Maximum Value</th>
+                <th class="">Order</th>
                 <th id="contact">Next Scenario</th>
                 <th class="no-sort" id="action">Action</th>
               </tr>
             </thead>
-            <tbody>
-              <?php 
-              $i=1; while($row = $object->fetch_object()){ ?>
-                <tr>
-                  <th><?php echo $i;?></th>
-                  <!-- <th><?php echo $row->Branch_Id;?></th> -->
-                  <!-- <td><?php echo ucfirst($row->User_fname)." ".ucfirst($row->User_lname); ?></td> -->
-                  <td><?php echo $row->Game_Name;?></td>
-                  <td><?php echo $row->Scen_Name;?></td>
-                  <td><?php echo $row->Comp_Name;?></td>
-                  <td><?php echo $row->Branch_MinVal;?></td>
-                  <td><?php echo $row->Branch_MaxVal;?></td>
-                  <td><?php echo $row->Branch_Order;?></td>
-                  <td><?php echo $row->NextSceneName;?></td>
-                  <td>
-                    <?php if($functionsObj->checkModuleAuth('ScenarioBranching','edit')){ ?>
-                      <a href="<?php echo site_root."ux-admin/ScenarioBranching/edit/".$row->Branch_Id;?>" data-toggle="tooltip" title="Edit"><span class="fa fa-pencil"></span></a> 
-                    <?php } ?>
-                    &nbsp;
-                    <!--  <a href="<?php //echo site_root."ux-admin/ScenarioBranching/delete/".$row->Branch_Id;?>" title="Delete"><span class="fa fa-trash"></span></a> -->
-                    <?php if($functionsObj->checkModuleAuth('ScenarioBranching','delete')){ ?>
-                      <a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->Branch_Id;?>" data-toggle="tooltip" title="Delete"><span class="fa fa-trash"></span></a></a>
-                    <?php } ?>
-                    &nbsp;
-                    <?php if($row->Branch_IsEndScenario == 1){ ;?>
-                      <a href="javascript:void(0);" data-toggle="tooltip" title="End Scenario"><span class="fa fa-ban"></span></a>
-                    <?php } ?>
-                  </td>
-                </tr>
-                <?php $i++; } ?>
-              </tbody>
-            </table>
-          </div>
+          </table>
         </div>
       </div>
     </div>
-    <div class="clearfix"></div>
-    <!-- end of data table -->
-    <?php 
-    if($_SESSION['tr_msg'])
-    {
-      unset($_SESSION['tr_msg']);
-    }
-    if($_SESSION['er_msg'])
-    {
-      unset($_SESSION['er_msg']);
-    }
-    ?>
+  </div>
+  <div class="clearfix"></div>
+  <!-- end of data table -->
+  <?php 
+  if($_SESSION['tr_msg'])
+  {
+    unset($_SESSION['tr_msg']);
+  }
+  if($_SESSION['er_msg'])
+  {
+    unset($_SESSION['er_msg']);
+  }
+  ?>

@@ -48,7 +48,7 @@
                 <div class="form-group text-center">
                   <?php if(isset($_GET['Edit'])){ ?>
                     <button class="btn btn-primary" type="submit" name="submit" value="Update">Update</button>
-                    <button class="btn btn-primary" type="button" onclick="window.location='<?php echo site_root."ux-admin/ManageArea"; ?>';">Cancel</button>
+                    <button class="btn btn-danger" type="button" onclick="window.location='<?php echo site_root."ux-admin/ManageArea"; ?>';">Cancel</button>
                   <?php }else{ ?>
                     <button class="btn btn-primary" type="submit" name="submit" value="Submit">Submit</button>
                   <?php } ?>
@@ -67,13 +67,13 @@
            <a id="HideDownloadIcon"><i class="fa fa-download" aria-hidden="true" title="Download"></i></a>
            <div id="downloadArea">
             <div class="row" id="sandbox-container">
-            <div class="input-daterange input-group" id="datepicker">
-          <input type="text" class="input-sm form-control" id="fromdate" name="fromdate" placeholder="Select Start Date" required readonly/>
-          <span class="input-group-addon">to</span>
-          <input type="text" class="input-sm form-control" id="enddate" name="enddate" placeholder="Select End Date" required readonly/>
-        </div>
-        </div>
-        <br>
+              <div class="input-daterange input-group" id="datepicker">
+                <input type="text" class="input-sm form-control" id="fromdate" name="fromdate" placeholder="Select Start Date" required readonly/>
+                <span class="input-group-addon">to</span>
+                <input type="text" class="input-sm form-control" id="enddate" name="enddate" placeholder="Select End Date" required readonly/>
+              </div>
+            </div>
+            <br>
             <button type="submit" name="download_excel" id="download_excel" class="btn btn-primary" value="Download"> Download </button>
           </div>
 
@@ -99,43 +99,19 @@
       <div class="panel-heading">Area List</div>
       <div class="panel-body">
         <div class="dataTable_wrapper">
-          <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+          <table class="table table-striped table-bordered table-hover text-center" id="dataTables-serverSide" data-url="<?php echo site_root.'ux-admin/model/ajax/dataTables.php';?>" data-action="manageArea">
             <thead>
               <tr>
-                <th>#</th>
-                <th>Area</th>
+                <th class="no-sort">S.N.</th>
+                <th>Area Name</th>
+                <th>Background Color</th>
+                <th>Text Color</th>
                 <th class="no-sort">Action</th>
               </tr>
             </thead>
-            <tbody>
-              <?php							
-              if($object->num_rows > 0){	
-               $i=1;
-               while($row = $object->fetch_object()){ ?>
-                <tr>
-                  <th><?php echo $i;?></th>
-                  <td><?php echo $row->Area_Name;?></td>
-                  <td class="text-center">
-                    <?php if($functionsObj->checkModuleAuth('area','edit')){ ?>
-                      <a href="<?php echo site_root."ux-admin/ManageArea/Edit/".base64_encode($row->Area_ID);?>"
-                        title="Edit">
-                        <span class="fa fa-pencil"></span>
-                      </a>
-                    <?php } if($functionsObj->checkModuleAuth('area','delete')){ ?>
-                      <a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->Area_ID; ?>"
-                        title="Delete">
-                        <span class="fa fa-trash"></span>
-                      </a>
-                    <?php }?>
-                  </td>
-                </tr>
-                <?php $i++;
-              }
-            } ?>
-          </tbody>
-        </table>
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>

@@ -97,9 +97,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 
 if(isset($_GET['Edit']) && $_GET['q'] = "ManageArea"){
 	$id                   = base64_decode($_GET['Edit']);
-	$fields               = array();
 	$where                = array('Area_ID='.$id);
-	$obj                  = $functionsObj->SelectData($fields, 'GAME_AREA', $where, '', '', '');
+	$obj                  = $functionsObj->SelectData(array(), 'GAME_AREA', $where, '', '', '');
 	$result               = $functionsObj->FetchObject($obj);
 	$Area_BackgroundColor = $result->Area_BackgroundColor;
 	$Area_TextColor       = $result->Area_TextColor;
@@ -107,9 +106,8 @@ if(isset($_GET['Edit']) && $_GET['q'] = "ManageArea"){
 }
 elseif(isset($_GET['Delete'])){
 	$id     = base64_decode($_GET['Delete']);
-	$fields = array();
 	$where  = array('Comp_AreaID='.$id, "Comp_Delete = 0");
-	$obj    = $functionsObj->SelectData($fields, 'GAME_COMPONENT', $where, '', '', '', '', 0);
+	$obj    = $functionsObj->SelectData(array(), 'GAME_COMPONENT', $where, '', '', '', '', 0);
 	if($obj->num_rows > 0){
 		$msg     = 'Can not Delete Area! Area not empty';
 		$type[0] = 'inputError';
@@ -129,10 +127,9 @@ elseif(isset($_GET['Delete'])){
 		//}
 	}
 }
-
-$fields = array();
+// moved to serverSide dataTable
 $where  = array('Area_Delete = 0');
-$object = $functionsObj->SelectData($fields, 'GAME_AREA', $where, '', '', '', '', 0);
+// $object = $functionsObj->SelectData(array(), 'GAME_AREA', $where, '', '', '', '', 0);
 
 //download area in excelsheet..
 if(isset($_POST['download_excel']) && $_POST['download_excel'] == 'Download'){
