@@ -562,7 +562,7 @@ if($_POST['action'] == 'Dashboard')
 
 	if(!empty($search))
 	{
-		$dashboardDataSql .= " AND (Game_Name LIKE '%".$search."%' OR Scen_Name LIKE '%".$search."%' OR Comp_Name LIKE '%".$search."%' OR NextSceneName LIKE '%".$search."%') ";
+		$dashboardDataSql .= " AND (gg.Game_Name LIKE '%".$search."%' OR gau.fname LIKE '%".$search."%' OR gau.lname LIKE '%".$search."%') ";
 		$filterRecord = true;
 	}
 	// to get the filter user record

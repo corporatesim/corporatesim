@@ -1439,14 +1439,14 @@ include_once 'includes/header.php';
         if($row2['Mode']=="admin"){
           echo " value ='".$row2['AdminLast']."' ";                         
         }
-        else{
-
+        else
+        {
           $objlast = $functionsObj->ExecuteQuery($sqllast);
           $reslast = $functionsObj->FetchObject($objlast);
           echo " value ='".$reslast->input_current."' ";
         }
         echo " readonly></input>";
-              //echo "<input type='text' class='scenariaInput' readonly></input>";
+        //echo "<input type='text' class='scenariaInput' readonly></input>";
         echo "</div>";
         echo "</div>";
 
@@ -1455,7 +1455,7 @@ include_once 'includes/header.php';
 
         echo "</div>";
       }
-             // writing this to show only for alignmenet of viewing order to show component name in middle
+      // writing this to show only for alignmenet of viewing order to show component name in middle
 
       if($row2['ViewingOrder'] == 6)
       {
@@ -1608,8 +1608,12 @@ include_once 'includes/header.php';
     $('#loader').removeClass( 'loader' );
   },
   error: function(jqXHR, exception){
+    Swal.fire({
+      icon: 'error',
+      html: jqXHR.responseText,
+    });
       //alert('error'+ jqXHR.status +" - "+exception);
-      alert('Inputs could not be saved, please try again.');
+      // alert('Inputs could not be saved, please try again.');
       //$("#save_input").attr('disabled',false);
       $("#input_loader").html('');
     }
@@ -1788,8 +1792,12 @@ $('#execute_input').click( function()
       },
       error: function(jqXHR, exception)
       {
-        alert('error'+ jqXHR.status +" - "+exception);
-        alert('Formulas could not be executed, please try again.');
+        Swal.fire({
+          icon: 'error',
+          html: jqXHR.responseText,
+        });
+        // alert('error'+ jqXHR.status +" - "+exception);
+        // alert('Formulas could not be executed, please try again.');
         window.location = "input.php?ID="+<?php echo $gameid; ?>+"&tab="+ref_tab;
         $("#execute_input").attr('disabled',false);
         $("#input_loader").html('');
@@ -1913,7 +1921,11 @@ $('.range').each(function(i,e){
         {
           {
             $('.overlay').hide();
-            Swal.fire(jqXHR.responseText);
+            // alert(alert('error'+ jqXHR.status +" - "+exception));
+            Swal.fire({
+              icon: 'error',
+              html: jqXHR.responseText,
+            });
             $("#input_loader").html('');
             $('.overlay').hide();
           }
@@ -2729,7 +2741,11 @@ function update_json_data(id,key,formula_json_expcomp,formula_json_expsubc,input
   error: function(jqXHR, exception){
     {
       $('.overlay').hide();
-      alert(jqXHR.responseText);
+      Swal.fire({
+        icon: 'error',
+        html: jqXHR.responseText,
+      });
+      // alert(jqXHR.responseText);
       // console.log(exception);
       // $("#"+id).show();
       $("#input_loader").html('');
@@ -2778,7 +2794,11 @@ function staticSaveData(formula_json_expcomp,formula_json_expsubc,input_field_va
     {
       {
         $('.overlay').hide();
-        alert(jqXHR.responseText);
+        // alert(jqXHR.responseText);
+        Swal.fire({
+          icon: 'error',
+          html: jqXHR.responseText,
+        });
         $("#input_loader").html('');
         $('.overlay').hide();
       }
