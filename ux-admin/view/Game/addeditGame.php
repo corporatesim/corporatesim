@@ -149,7 +149,7 @@
 								</div>
 
 								<div class="row">
-									<div class="col-md-6 form-group" data-toggle="tooltip" title="Selected user can only change the design">
+									<div class="col-md-6 form-group" data-toggle="tooltip" title="Selected user can only change the design. And Creator can not be the Associate">
 										<label for="name"><span class="alert-danger">*</span>Associate Access</label>
 										<select name="Game_Associates" id="Game_Associates" class="form-control" required="">
 											<option value="-1">--Select Users--</option>

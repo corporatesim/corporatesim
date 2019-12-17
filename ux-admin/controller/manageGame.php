@@ -3,8 +3,6 @@ require_once doc_root.'ux-admin/model/model.php';
 require_once doc_root.'includes/PHPExcel.php';
 $functionsObj = new Model();
 
-$userSql = "SELECT * FROM GAME_ADMINUSERS WHERE status=1";
-$userObj = $functionsObj->RunQueryFetchObject($userSql);
 $object  = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), 'Game_datetime DESC', '', '', '', 0);
 $file    = 'GameList.php';
 
@@ -339,6 +337,8 @@ if(isset($_GET['edit']))
 	$uid         = base64_decode($_GET['edit']);
 	$object      = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_ID='.$uid), '', '', '', '', 0);
 	$gamedetails = $functionsObj->FetchObject($object);
+	$userSql     = "SELECT * FROM GAME_ADMINUSERS WHERE id != ".$gamedetails->Game_CreatedBy." AND status=1";
+	$userObj     = $functionsObj->RunQueryFetchObject($userSql);
 	//print_r($gamedetails);exit;
 	$url         = site_root."ux-admin/ManageGame";
 	$file        = 'addeditGame.php';
@@ -356,9 +356,11 @@ if(isset($_GET['edit']))
 elseif(isset($_GET['add']))
 {
 	// Add Siteuser
-	$header = 'Add Game';
-	$url    = site_root."ux-admin/ManageGame";	
-	$file   = 'addeditGame.php';
+	$userSql = "SELECT * FROM GAME_ADMINUSERS WHERE id != ".$_SESSION['ux-admin-id']." AND status=1";
+	$userObj = $functionsObj->RunQueryFetchObject($userSql);
+	$header  = 'Add Game';
+	$url     = site_root."ux-admin/ManageGame";	
+	$file    = 'addeditGame.php';
 }
 elseif(isset($_GET['del']))
 {
