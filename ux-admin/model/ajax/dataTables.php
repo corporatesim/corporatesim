@@ -456,7 +456,7 @@ if($_POST['action'] == 'ScenarioBranching')
 
 	if(!empty($search))
 	{
-		$scenBranchingSql .= " AND (Game_Name LIKE '%".$search."%' OR Scen_Name LIKE '%".$search."%' OR Comp_Name LIKE '%".$search."%' OR NextSceneName LIKE '%".$search."%') ";
+		$scenBranchingSql .= " AND (gg.Game_Name LIKE '%".$search."%' OR gc.Scen_Name LIKE '%".$search."%' OR Comp_Name LIKE '%".$search."%' OR gcn.Scen_Name LIKE '%".$search."%') ";
 		$filterRecord = true;
 	}
 	// to get the filter user record
