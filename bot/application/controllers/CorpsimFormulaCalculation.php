@@ -404,7 +404,7 @@ class CorpsimFormulaCalculation extends CI_Controller {
 		if(count($endScenStatus) > 0)
 		{
 			// it means -> this is the end scenario, SO, redirect to result page and also setting game user status to completed
-			$userStatusWher = array(
+			$userStatusWhere = array(
 				'US_UserID' => $UserID,
 				'US_GameID' => $gameid,
 			);
@@ -412,7 +412,7 @@ class CorpsimFormulaCalculation extends CI_Controller {
 				'US_LinkID' => 1,
 			);
 
-			$updateScenStatus = $this->Ajax_Model->updateRecords('GAME_USERSTATUS',$userStatusData,$userStatusWher);
+			$updateScenStatus = $this->Ajax_Model->updateRecords('GAME_USERSTATUS',$userStatusData,$userStatusWhere);
 			$message          = "result.php?ID=$gameid";
 			$status           = 200;
 		}
@@ -454,7 +454,7 @@ class CorpsimFormulaCalculation extends CI_Controller {
 							$message       = "input.php?ID=$gameid";
 							$status        = 200;
 							// also update GAME_USERSTATUS according to next moving scenario
-							$modifyUserStatusWher = array(
+							$modifyUserStatusWhere = array(
 								'US_UserID' => $UserID,
 								'US_GameID' => $gameid,
 							);
@@ -463,7 +463,7 @@ class CorpsimFormulaCalculation extends CI_Controller {
 								'US_ScenID' => $checkBranchingRow->Branch_NextScen,
 								'US_Output' => 0,
 							);
-							$updateScenStatus = $this->Ajax_Model->updateRecords('GAME_USERSTATUS',$modifyUserStatusData,$modifyUserStatusWher);
+							$updateScenStatus = $this->Ajax_Model->updateRecords('GAME_USERSTATUS',$modifyUserStatusData,$modifyUserStatusWhere);
 							$message          = "input.php?ID=$gameid";
 							$status           = 200;
 							// if this is the end scenario, also mark this as end scenario in GAME_LINKAGE_USERS table
@@ -492,12 +492,67 @@ class CorpsimFormulaCalculation extends CI_Controller {
 				}
 				else
 				{
-					// discuss it, if branching doesn't exist for the current scenario // also $this->db->trans_rollback(); reset above executed queries
-					// print_r($gameScenName->Link_Order); // find the next linear scenario, next to $gameScenName->Link_Order
-					// $checkBranching = $this->Ajax_Model->fetchRecords('GAME_LINKAGE',$branchWhere,'','Branch_Order');
-					$status         = 201;
-					$message        = "There are multiple scenarios but branching doesn't exist for the current scenario.";
-					// $redirectUrl = 'set url here, next scenario';
+					// // discuss it, if branching doesn't exist for the current scenario // also $this->db->trans_rollback(); reset above executed queries
+					// // print_r($gameScenName->Link_Order); // find the next linear scenario, next to $gameScenName->Link_Order
+					// // $checkBranching = $this->Ajax_Model->fetchRecords('GAME_LINKAGE',$branchWhere,'','Branch_Order');
+					// $status         = 201;
+					// $message        = "There are multiple scenarios but branching doesn't exist for the current scenario.";
+					// // $redirectUrl = 'set url here, next scenario';
+
+					// commenting the above code and adding coding for linear branching, with the below query
+					// SELECT gl.* FROM `GAME_LINKAGE` gl WHERE gl.Link_GameID=48 AND gl.Link_Order > (SELECT glo.Link_Order FROM GAME_LINKAGE glo WHERE glo.Link_ID=96) ORDER BY gl.Link_Order ASC LIMIT 1
+
+					$linearBranchingSql = "SELECT gl.* FROM GAME_LINKAGE gl WHERE gl.Link_GameID=".$gameid." AND gl.Link_Order > (SELECT glo.Link_Order FROM GAME_LINKAGE glo WHERE glo.Link_ID=".$linkid.") ORDER BY gl.Link_Order ASC LIMIT 1";
+
+					$linearBranching    = $this->Ajax_Model->executeQuery($linearBranchingSql);
+					// echo $linearBranchingSql; print_r($linearBranching[0]); exit;
+					if(count($linearBranching) > 0)
+					{
+						// also update GAME_USERSTATUS according to next moving scenario
+						$modifyUserStatusWhere = array(
+							'US_UserID' => $UserID,
+							'US_GameID' => $gameid,
+						);
+						$modifyUserStatusData = array(
+							'US_LinkID' => 0,
+							'US_ScenID' => $linearBranching[0]->Link_ScenarioID,
+							'US_Output' => 0,
+						);
+						$updateScenStatus = $this->Ajax_Model->updateRecords('GAME_USERSTATUS',$modifyUserStatusData,$modifyUserStatusWhere);
+						// as this is not present in scenario branching table, so not sure about the end scenario, so commented the below code
+						// if this is the end scenario, also mark this as end scenario in GAME_LINKAGE_USERS table
+						// if($linearBranching[0]->Branch_IsEndScenario == 1)
+						// {
+						// 	$userLinkageStatusWhere = array(
+						// 		'UsScen_UserId' => $UserID,
+						// 		'UsScen_GameId' => $gameid,
+						// 		'UsScen_LinkId' => $linearBranching[0]->Branch_NextLinkId,
+						// 	);
+						// 	$userLinkageStatusData  = array(
+						// 		'UsScen_IsEndScenario' => 1,
+						// 	);
+						// 	$updateScenStatus = $this->Ajax_Model->updateRecords('GAME_LINKAGE_USERS',$userLinkageStatusData,$userLinkageStatusWhere);
+						// }
+
+						$message = "input.php?ID=$gameid";
+						$status  = 200;
+					}
+					else
+					{
+						// if there is no scenario found then this is the end scenario, so complete the game
+						$userStatusWhere = array(
+							'US_UserID' => $UserID,
+							'US_GameID' => $gameid,
+						);
+						$userStatusData = array(
+							'US_LinkID' => 1,
+						);
+
+						$updateScenStatus = $this->Ajax_Model->updateRecords('GAME_USERSTATUS',$userStatusData,$userStatusWhere);
+						$message          = "result.php?ID=$gameid";
+						$status           = 200;
+					}
+					// end of linear branching
 				}
 				// also update GAME_USERSTATUS according to next moving scenario
 			}
