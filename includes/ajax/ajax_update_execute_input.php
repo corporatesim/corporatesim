@@ -128,7 +128,7 @@ if($_POST['action']=='updateFormula')
 					$cvalue[]  = $crow;
 				}
 			}
-			// echo $expcomp_key.' and '.implode('', $cvalue).'<br>';
+			// echo $expcomp_key.' and '.implode('', $cvalue).'<br><br>';
 			if(eval('return '.implode('',$cvalue).';') || eval('return '.implode('',$cvalue).';')==0)
 			{
 				// round up
@@ -145,6 +145,8 @@ if($_POST['action']=='updateFormula')
 				}
 				else
 				{
+					// echo $expcomp_key.' and '.implode('', $cvalue).'<br>';
+					// echo $expcomp_key. 'and '.round(eval('return '.implode('',$cvalue).';'),2).'<br><br>';
 					$expcomp_array_values[$expcomp_key]         = round(eval('return '.implode('',$cvalue).';'),2);
 					$input_field_values[$expcomp_key]['values'] = round(eval('return '.implode('',$cvalue).';'),2);
 				}
@@ -184,7 +186,7 @@ if($_POST['action']=='updateFormula')
 					$cvalue[]  = $srow;
 				}
 			}
-			// echo $expsubc_key.' and '.implode('', $cvalue).'<br>';
+			// echo $expsubc_key.' and '.implode('', $cvalue).'<br><br>';
 			if(eval('return '.implode('',$cvalue).';') || eval('return '.implode('',$cvalue).';')==0)
 			{
 				// echo "<br>".$expsubc_key.' and '.round(eval('return '.implode('',$cvalue).';'),0,PHP_ROUND_HALF_DOWN)."<br>";
@@ -202,6 +204,7 @@ if($_POST['action']=='updateFormula')
 				}
 				else
 				{
+					// echo $expsubc_key. 'and '.round(eval('return '.implode('',$cvalue).';'),2).'<br><br>';
 					$expsubc_array_values[$expsubc_key]         = round(eval('return '.implode('',$cvalue).';'),2);
 					$input_field_values[$expsubc_key]['values'] = round(eval('return '.implode('',$cvalue).';'),2);
 				}

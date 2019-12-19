@@ -393,7 +393,11 @@ include_once 'includes/header.php';
                         if($row1['CarrySubCompID']>0)         
                         {
                           $sqlcurrent .= " AND SubLink_SubCompID = ".$row1['CarrySubCompID'];
-                        }          
+                        }
+                        else
+                        {
+                          $sqlcurrent .= " AND SubLink_SubCompID<1";
+                        }
                         $sqlcurrent .= ")";
                         // echo $sqlcurrent;
                         $objcarrycurrent = $functionsObj->ExecuteQuery($sqlcurrent);

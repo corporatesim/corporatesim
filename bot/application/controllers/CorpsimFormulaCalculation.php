@@ -608,6 +608,7 @@ class CorpsimFormulaCalculation extends CI_Controller {
 					if(count($inputValue)>0)
 					{
 						$returnFormula .= ' '.$inputValue[0]->input_current.' ';
+						// echo ' Not depends '.$inputValue[0]->input_sublinkid.' and '.$inputValue[0]->input_current.'<br><br>';
 					}
 					else
 					{

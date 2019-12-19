@@ -667,20 +667,20 @@
                     <div class="col-md-4">
                       <!--<label>Current Input</label>-->
                       <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
-                        <input type="text" name="current" id="current" value="<?php if(!empty($linkdetails->SubLink_AdminCurrent)) echo $linkdetails->SubLink_AdminCurrent;  ?>" 
+                        <input type="text" name="current" id="current" data-toggle="tooltip" title="Only 2 digits after decimal are allowed" pattern="^\d*(\.\d{0,2})?$" value="<?php if(!empty($linkdetails->SubLink_AdminCurrent)) echo $linkdetails->SubLink_AdminCurrent;  ?>" 
                         class="form-control">
                       <?php } else {?>
-                        <input type="text" name="current" id="current" value="<?php if(!empty($linkdetails->SubLink_AdminCurrent)) echo $linkdetails->SubLink_AdminCurrent;  ?>" 
+                        <input type="text" name="current" id="current" data-toggle="tooltip" title="Only 2 digits after decimal are allowed" pattern="^\d*(\.\d{0,2})?$" value="<?php if(!empty($linkdetails->SubLink_AdminCurrent)) echo $linkdetails->SubLink_AdminCurrent;  ?>" 
                         class="form-control" disabled="">
                       <?php }?>
                     </div>
                     <div class="col-md-4">
                       <!--<label>Last Stored Input</label>-->
                       <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
-                        <input type="text" name="last" id="last" placeholder="Last Stored Input" value="<?php if(!empty($linkdetails->SubLink_AdminLast)) echo $linkdetails->SubLink_AdminLast; ?>"
+                        <input type="text" name="last" id="last" data-toggle="tooltip" title="Only 2 digits after decimal are allowed" pattern="^\d*(\.\d{0,2})?$" placeholder="Last Stored Input" value="<?php if(!empty($linkdetails->SubLink_AdminLast)) echo $linkdetails->SubLink_AdminLast; ?>"
                         class="form-control">
                       <?php } else {?>
-                        <input type="text" name="last" id="last" placeholder="Last Stored Input" value="<?php if(!empty($linkdetails->SubLink_AdminLast)) echo $linkdetails->SubLink_AdminLast; ?>"
+                        <input type="text" name="last" id="last" data-toggle="tooltip" title="Only 2 digits after decimal are allowed" pattern="^\d*(\.\d{0,2})?$" placeholder="Last Stored Input" value="<?php if(!empty($linkdetails->SubLink_AdminLast)) echo $linkdetails->SubLink_AdminLast; ?>"
                         class="form-control" disabled="">
                       <?php }?>
                     </div>
