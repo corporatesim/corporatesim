@@ -76,7 +76,7 @@ include_once 'includes/header.php';
 										</div> -->
 										<!-- adding 'hide_this' class to hide next and prev button to hide on screen size less -->
 										<div class="carousel-inner" role="listbox" >
-											<div class="col-sm-1 col-lg-1 text-right pull-left hide_this" style="margin-top: 15%;">
+											<div class="col-sm-1 col-lg-1 text-right pull-left hide_this hidden" style="margin-top: 15%;">
 												<a href ="#myCarousel" role="button" data-slide="prev"><img src="images/prevIcon.png" alt="Previous" title="Previous" style="width: 75%; background: #DCDCDC;"></img></a>
 											</div>
 											<?php
@@ -96,13 +96,13 @@ include_once 'includes/header.php';
 												echo "</div></div>";
 											}
 											?>
-											<div class="col-sm-1 col-lg-1 text-left pull-right hide_this" style="margin-top: 15%;">
+											<div class="col-sm-1 col-lg-1 text-left pull-right hide_this hidden" style="margin-top: 15%;">
 												<a href ="#myCarousel" role="button" data-slide="next"><img src="images/nextIcon.png" alt="Next" title="Next" style="width: 75%; background: #DCDCDC;"></img></a>
 											</div>
 										</div>
 									</div>
 									<?php if($i>2) { ?>
-										<div class="nextPrev nextPrevbottom no_padding regular col-sm-12">
+										<div class="nextPrev nextPrevbottom no_padding regular col-sm-12 hidden">
 
 											<div class="col-md-6 col-sm-6 pull-left text-right">
 												<a href ="#myCarousel" role="button" data-slide="prev"><img src="images/prevIcon.png" alt="Previous"></img> Prev</a>
