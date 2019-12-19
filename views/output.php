@@ -46,7 +46,7 @@ include_once 'includes/header.php';
             
             <!-- Nav tabs --> 
             <div class=" TabMain col-sm-12">
-            	<ul class="nav nav-tabs" role="tablist">
+            	<ul class="nav nav-tabs hidden" role="tablist">
             		<?php 
             		$i=0;
             		while($row = mysqli_fetch_array($area)) {
