@@ -7,7 +7,7 @@
 ?>
 
 <div class="" id="outerDiv">
-  <h2>Welcome To Bot Simulation</h2>
+  <h2>Welcome To Mobile Simulation</h2>
 
   <form class="needs-validation" action="" autocomplete="off" id="loginForm">
     <?php $this->load->view('components/trErAlert'); ?>

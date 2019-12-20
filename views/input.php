@@ -1899,7 +1899,7 @@ $('.range').each(function(i,e){
         type    : "POST",
         dataType: "json",
         data    :{'skipOutput':<?php echo $result->Link_Enabled;?>,'userName':"<?php echo $_SESSION['username'];?>"},
-        url     : "<?php echo site_root;?>bot/CorpsimFormulaCalculation/submitInput/"+<?php echo $linkid;?>+"/"+<?php echo $gameid;?>+"/"+<?php echo $userid;?>,
+        url     : "<?php echo site_root;?>mobile/CorpsimFormulaCalculation/submitInput/"+<?php echo $linkid;?>+"/"+<?php echo $gameid;?>+"/"+<?php echo $userid;?>,
         beforeSend: function() {
           $('.overlay').show();
           $("#input_loader").html("");
