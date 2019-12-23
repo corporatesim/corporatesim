@@ -88,14 +88,14 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 				// if no error then upload the file to the specific folders
 				if(!empty($_FILES['User_Resume']['name']))
 				{
-					$fileName                   = $_FILES['User_Resume']['name'];
+					$fileName                   = md5($_FILES['User_Resume']['name'].$uid);
 					$updateArray['User_Resume'] = $fileName;
 					$tmp                        = $_FILES['User_Resume']['tmp_name'];
 					$moveResume = move_uploaded_file($tmp, 'images/userResume/'.$fileName);
 				}
 				if(!empty($_FILES['User_profile_pic']['name']))
 				{
-					$fileName                        = $_FILES['User_profile_pic']['name'];
+					$fileName                        = md5($_FILES['User_profile_pic']['name'].$uid);
 					$updateArray['User_profile_pic'] = $fileName;
 					$tmp                             = $_FILES['User_profile_pic']['tmp_name'];
 					$moveProfile = move_uploaded_file($tmp, 'images/userProfile/'.$fileName);
@@ -123,9 +123,15 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		{
 			$result = $functionsObj->UpdateData('GAME_SITE_USERS', $userdetails, 'User_id', $uid, 0);
 			if($result === true){
-				$_SESSION['msg']     = "User details updated successfully";
-				$_SESSION['type[0]'] = "inputSuccess";
-				$_SESSION['type[1]'] = "has-success";
+				$_SESSION['msg']              = "User details updated successfully";
+				$_SESSION['type[0]']          = "inputSuccess";
+				$_SESSION['type[1]']          = "has-success";
+
+				// update file name of user profile pic when user update it
+				if(isset($_FILES['User_profile_pic']['name']) && !empty($_FILES['User_profile_pic']['name']))
+				{
+					$_SESSION['User_profile_pic'] = md5($_FILES['User_profile_pic']['name'].$uid);
+				}
 				//$msg = "User details updated successfully";
 				//$type[0] = "inputSuccess";
 				//$type[1] = "has-success";

@@ -5,6 +5,12 @@
 //-->
 </script>
 
+<style>
+	.swal-size-sm{
+		width: auto;
+	}
+</style>
+
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">Game</h1>
@@ -144,11 +150,11 @@
 										<a href="javascript:void(0);" data-createdby="<?php echo $row->Game_CreatedBy;?>" class="dl_btn" id="<?php echo $row->Game_ID; ?>" data-toggle="tooltip" title="Delete"><span class="fa fa-trash"></span></a>
 									<?php } ?>
 									<?php if($row->Game_Complete) { ?>
-										<a href="javascript:void(0);" data-toggle="tooltip" title="Game: Completed" class="completed" data-gameid="<?php echo $row->Game_ID;?>" data-createdby="<?php echo $row->Game_CreatedBy;?>" data-creator="<?php echo $row->name;?>" data-completedby="<?php echo $row->nameEmail;?>" data-completedon="<?php echo date('d-m-Y H:i:s',strtotime($row->Game_UpdatedOn));?>">
+										<a href="javascript:void(0);" data-toggle="tooltip" title="Game: Completed" class="completed" data-gameid="<?php echo $row->Game_ID;?>" data-createdby="<?php echo $row->Game_CreatedBy;?>" data-creator="<?php echo $row->name;?>" data-completedby="<?php echo $row->nameEmail;?>" data-completedon="<?php echo date('d-m-Y H:i:s',strtotime($row->Game_UpdatedOn));?>" <?php echo ($row->ScenarioCount>2)?"data-scenbranching='".$row->ScenarioCount."'":''?>>
 											<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
 										</a>
 									<?php } else { ?>
-										<a href="javascript:void(0);" data-toggle="tooltip" title="Game: In-Progress" id="progress_<?php echo $row->Game_ID;?>" class="<?php echo (($row->Game_CreatedBy == $_SESSION['ux-admin-id']) || ($_SESSION['admin_usertype'] == 'superadmin'))?'progress':'notAllow';?>" data-cancomplete="<?php echo $row->nameEmail;?>">
+										<a href="javascript:void(0);" data-toggle="tooltip" title="Game: In-Progress" id="progress_<?php echo $row->Game_ID;?>" class="<?php echo (($row->Game_CreatedBy == $_SESSION['ux-admin-id']) || ($_SESSION['admin_usertype'] == 'superadmin'))?'progress':'notAllow';?>" data-cancomplete="<?php echo $row->nameEmail;?>" <?php echo ($row->ScenarioCount>2)?"data-scenbranching='".$row->ScenarioCount."'":''?>>
 											<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
 										</a>
 									<?php } ?>
@@ -164,12 +170,21 @@
 	<div class="clearfix"></div>
 	<script>
 		$(document).ready(function(){
+			// end of ajax for finding the scenario branching
 			$(".progress").each(function(){
 				$(this).on('click',function(){
-					var creator = $(this).data('cancomplete')
-					var eid     = $(this).attr('id').split('_');
-					var Game_ID = eid[1];
-					var textMsg = "You won't be able to make any changes to this game, after you complete!";
+					var creator       = $(this).data('cancomplete')
+					var eid           = $(this).attr('id').split('_');
+					var Game_ID       = eid[1];
+					var scenbranching = ($(this).data('scenbranching'))?$(this).data('scenbranching'):'';
+					if(scenbranching>2)
+					{
+						var textMsg = "You won't be able to make any changes to this game, after you complete!<br><a onclick='return checkScenarioBranching("+Game_ID+")'; href='javascript:void(0);' id='scenarioBranching_"+Game_ID+"'>Check Scenario Branching</a>";
+					}
+					else
+					{
+						var textMsg = "You won't be able to make any changes to this game, after you complete!";
+					}
 					confirmAndTriggerAjax(Game_ID,1,textMsg,creator);
 				});
 			});
@@ -177,11 +192,19 @@
 			{
 				$(this).on('click',function()
 				{
-					var Game_ID     = $(this).data('gameid');
-					var createdby   = $(this).data('createdby');
-					var creator     = $(this).data('creator');	
-					var completedby = $(this).data('completedby');
-					var textMsg     = "This game was completed by "+completedby+". Do you really want to make it incomplete?"
+					var Game_ID       = $(this).data('gameid');
+					var createdby     = $(this).data('createdby');
+					var creator       = $(this).data('creator');	
+					var completedby   = $(this).data('completedby');
+					var scenbranching = ($(this).data('scenbranching'))?$(this).data('scenbranching'):'';
+					if(scenbranching>2)
+					{
+						var textMsg = "This game was completed by "+completedby+". Do you really want to make it incomplete?<br><a onclick='return checkScenarioBranching("+Game_ID+")'; href='javascript:void(0);' id='scenarioBranching_"+Game_ID+"'>Check Scenario Branching</a>";
+					}
+					else
+					{
+						var textMsg = "This game was completed by "+completedby+". Do you really want to make it incomplete?"
+					}
 
 					// console.log(createdby+' '+creator+' '+completedby);
 					if(creator == <?php echo $_SESSION['ux-admin-id']; ?> || <?php echo $_SESSION['ux-admin-id']; ?> == 1)
@@ -220,7 +243,7 @@
 		{
 			Swal.fire({
 				title             : 'Are you sure?',
-				text              : textMsg,
+				html              : textMsg,
 				icon              : 'question',
 				showCancelButton  : true,
 				confirmButtonColor: '#3085d6',
@@ -262,6 +285,47 @@
 					});
 				}
 			})
+		}
+
+		function checkScenarioBranching(Game_ID)
+		{
+			// triggering ajax to check the scenario branching for the game exist or not if yes then show branching
+			$.ajax({
+				type    : "POST",
+				dataType: "json",
+				data    : {'branchingStatus':'branchingStatus', 'Game_ID':Game_ID},
+				url     : "<?php echo site_root;?>ux-admin/model/ajax/update_game_link.php",
+				success: function(result) 
+				{
+					if(result.status == 200)
+					{
+						Swal.fire({
+							title             : 'Check Scenario Branching For {'+result.gamename+'}',
+							html              : result.message,
+							icon              : 'success',
+							showCancelButton  : false,
+							confirmButtonColor: '#3085d6',
+							cancelButtonColor : '#d33',
+							customClass       : 'swal-size-sm',
+							// confirmButtonText : 'Yes, Proceed!',
+							// cancelButtonText  : 'No, Cancel!',
+							// footer            : "<b>Creator: "+creator+"</b>",
+						});
+					}
+					else
+					{
+						console.log('no scenario branching found for the games');
+						console.log(result);
+					}
+				},
+				error: function(jqXHR, exception)
+				{
+					{
+						Swal.fire(jqXHR.responseText);
+					}
+				}
+			});
+
 		}
 
 	</script>

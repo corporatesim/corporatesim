@@ -3,8 +3,8 @@ require_once doc_root.'ux-admin/model/model.php';
 require_once doc_root.'includes/PHPExcel.php';
 $functionsObj = new Model();
 
-$object  = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), 'Game_datetime DESC', '', '', '', 0);
-$file    = 'GameList.php';
+// $object  = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), 'Game_datetime DESC', '', '', '', 0);
+// $file    = 'GameList.php';
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 {	
@@ -435,7 +435,7 @@ else
 {
 	// fetch siteuser list from db
 	// $object = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), 'Game_datetime DESC', '', '', '', 0);
-	$gameSql = "SELECT gg.*, concat(ga.fname,' ',ga.lname,', ',ga.email) AS nameEmail, concat(ga.fname,' ',ga.lname) AS name FROM GAME_GAME gg LEFT JOIN GAME_ADMINUSERS ga ON ga.id=gg.Game_CreatedBy WHERE Game_Delete=0 ORDER BY Game_datetime DESC";
+	$gameSql = "SELECT ( SELECT COUNT(*) FROM GAME_LINKAGE gl WHERE gl.Link_GameID = gg.Game_ID ) AS ScenarioCount, gg.*, CONCAT( ga.fname, ' ', ga.lname, ', ', ga.email ) AS nameEmail, CONCAT(ga.fname, ' ', ga.lname) AS NAME FROM GAME_GAME gg LEFT JOIN GAME_ADMINUSERS ga ON ga.id = gg.Game_CreatedBy WHERE Game_Delete = 0 ORDER BY Game_datetime DESC";
 	// echo '<pre>'.$gameSql; print_r($_SESSION);
 	$object  = $functionsObj->ExecuteQuery($gameSql);
 	$file    = 'GameList.php';

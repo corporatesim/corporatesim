@@ -77,9 +77,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 				{
 					if($res->User_status == 1)
 					{
-						$_SESSION['userid']    = (int) $res->User_id;
-						$_SESSION['username']  = $res->User_username;
-						$_SESSION['companyid'] = $res->User_companyid;
+						$_SESSION['userid']           = (int) $res->User_id;
+						$_SESSION['username']         = $res->User_username;
+						$_SESSION['companyid']        = $res->User_companyid;
+						$_SESSION['User_profile_pic'] = $res->User_profile_pic;
+						
 						if(empty($_SESSION['logo']))
 						{
 							if($res->User_Role == 1)

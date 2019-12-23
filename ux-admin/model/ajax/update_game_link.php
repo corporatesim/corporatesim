@@ -277,6 +277,42 @@ if(isset($_POST['notificationUpdate']) && $_POST['notificationUpdate']=='notific
 	}
 }
 
+if(isset($_POST['branchingStatus']) && $_POST['branchingStatus']=='branchingStatus')
+{
+	// print_r($_POST); exit();
+	$Game_ID = $_POST['Game_ID'];
+	// check that game has multiple scenario and scenario branching done or not
+	$scenSql = "SELECT gg.Game_Name, gcs.Scen_Name, gc.Comp_Name, gbs.Branch_MinVal AS minval, gbs.Branch_MaxVal AS maxval, gbs.Branch_Order AS ordering, gns.Scen_Name AS NextSceneName, gbs.Branch_IsEndScenario AS endScenario FROM GAME_LINKAGE gl LEFT JOIN GAME_GAME gg ON gg.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gcs ON gcs.Scen_ID = gl.Link_ScenarioID LEFT JOIN GAME_BRANCHING_SCENARIO gbs ON gbs.Branch_ScenId = gl.Link_ScenarioID AND gbs.Branch_IsActive = 0 LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gbs.Branch_ScenId LEFT JOIN GAME_SCENARIO gns ON gns.Scen_ID = gbs.Branch_NextScen LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gbs.Branch_CompId WHERE gl.Link_GameID =".$Game_ID." ORDER BY gcs.Scen_Name, gbs.Branch_Order ASC";
+	$scenData = $funObj->RunQueryFetchObject($scenSql);
+	// print_r($scenData);
+	if(count($scenData) > 2)
+	{
+		$returnBranchingData = "<table class='table table-striped table-bordered table-hover'><thead><th>Scenario Name</th> <th>Component Name</th> <th>Min Value</th>  <th>Max Value</th> <th>Order</th> <th>Next Scenario Name</th> <th>End Scenario</th></thead><tbody>";
+		$gameNameFlag = TRUE;
+
+		foreach ($scenData as $scenDataRow)
+		{
+			if($gameNameFlag)
+			{
+				$gamename = $scenDataRow->Game_Name;
+			}
+			$gameNameFlag = FALSE;
+
+			$endScen = ($scenDataRow->endScenario > 0)?'<span class="alert-danger">End Scenario</span>':(($scenDataRow->endScenario === NULL)?'<span class="alert-success">Linear</span>':'Not End Scenario');
+			$returnBranchingData .= "<tr><td>".$scenDataRow->Scen_Name."</td> <td>".$scenDataRow->Comp_Name."</td> <td>".$scenDataRow->minval."</td> <td>".$scenDataRow->maxval."</td> <td>".$scenDataRow->ordering."</td> <td>".$scenDataRow->NextSceneName."</td> <td>".$endScen."</td> </tr>";
+		}
+
+		$returnBranchingData .= "</tbody></table>";
+
+		die(json_encode(["status" => "200", "message" => $returnBranchingData, 'gamename' => $gamename]));
+	}
+	else
+	{
+		die(json_encode(["status" => "201", "message" => 'No branching exist for the selected game.']));
+	}
+}
+
+
 // add custom functions here
 function sendNotification($notificationTo=NULL,$gameid=NULL,$gamename=NULL,$modificationType=NULL)
 {

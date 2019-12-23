@@ -117,6 +117,33 @@
 				// countOutclick = (countOutclick == animateOutArray.length)?0:countOutclick;
 			}); 
 			});
+			// show image pop up into alert form
+			$('.showImagePopUp').each(function(){
+				$(this).on('click', function(){
+					var imageUrl = $(this).attr('src');
+					// alert(this.width + 'x' + this.height);
+					Swal.fire({
+						// imageWidth       : 200,
+						// imageHeight      : 100,
+						imageUrl         : imageUrl,
+						imageAlt         : 'Profile image',
+						icon             : 'success',
+						title            : '',
+						showConfirmButton: true,
+						showClass: {
+							popup: 'animated flip faster'
+						},
+						hideClass: {
+							popup: 'animated lightSpeedOut faster'
+						}
+						// html             : 'You are allowed to play <b>"'+gameName+'"</b> from <b>"'+startDate+'"</b> to <b>"'+endDate+'"</b>',
+						// footer           : '<a href>Why do I have this issue?</a>'
+						// showCancelButton : false,
+						// cancelButtonColor: '#3085d6',
+						// footer           : ''
+					});
+				});
+			});
 		});
 	});
 </script>
