@@ -63,7 +63,7 @@ include_once 'includes/headerNav.php';
 								</h2>
 								<strong>
 									<p>
-										Based on your results we have drawn a lini-chart to show your performance for repeat plays that you undertook.
+										Based on your results we have drawn a line-chart to show your performance for repeat plays that you undertook.
 										<br><br>
 										Your performance has been compared with the top score as per the leaderboard at this point in time.
 										<br><br>
