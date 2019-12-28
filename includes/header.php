@@ -74,7 +74,7 @@
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
 				<!-- add image logo here -->
-				<div class="navbar-header">
+				<div class="navbar-header" style="margin: 5px 0px 5px 0px;">
 					<?php if(isset($_SESSION['logo'])) { ?>
 						<a href="<?php echo site_root;?>"><img src="<?php echo site_root."enterprise/common/Logo/".$_SESSION['logo'];?>" width="300px" height="85px"/></a>
 

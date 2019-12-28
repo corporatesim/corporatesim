@@ -126,7 +126,7 @@
 			$.ajax({
 				url : "includes/ajax/ajax_replay.php",
 				type: "POST",
-				data: {'action':'leaderboard', 'gameid':<?php echo $gameid; ?>},
+				data: {'action':'leaderboard', 'gameid':<?php echo ($gameid)?$gameid:'0'; ?>},
 				complete: function(){
 					$('[data-toggle="tooltip"]').tooltip();
 					showImagePopUp();
