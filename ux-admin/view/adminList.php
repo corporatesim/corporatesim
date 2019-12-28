@@ -29,7 +29,12 @@
 
 <div class="row">
 	<div class="col-sm-12">
-		<h1 class="page-header">Admin Users</h1>
+		<h1 class="page-header">
+			<a href="<?php echo site_root."ux-admin/AdminUsers"; ?>" data-toggle="tooltip" title="Add Admin Users">
+				<i class="fa fa-plus-circle"></i>
+			</a>
+			Admin Users
+		</h1>
 	</div>
 </div>
 
@@ -60,10 +65,6 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<b>Admin Users List</b>
-						<div class="pull-right">
-							<input class="btn btn-primary" type="button" name="addsiteuser" value="Add Admin User"
-							onclick="window.location.href='<?php echo site_root."ux-admin/AdminUsers"; ?>';"/>
-						</div>
 					</div>
 					<div class="panel-body">
 						<div class="dataTable_wrapper">

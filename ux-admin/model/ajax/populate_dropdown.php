@@ -283,13 +283,13 @@ if(isset($_POST['comp_scen_id']))
 				}
 			}
 
-		// for populating the game chart dropdown 
+			// for populating the game chart dropdown 
 			if(isset($_POST['gameId']) && isset($_POST['statusType']))
 			{
-			// print_r($_POST);
+				// print_r($_POST);
 				$gameId     = $_POST['gameId'];
 				$statusType = $_POST['statusType'];
-			// $chartSql   = "SELECT * FROM `GAME_CHART` WHERE `Chart_GameID`=".$result->Link_GameID." AND Chart_Type_Status=".$statusType;
+				// $chartSql   = "SELECT * FROM `GAME_CHART` WHERE `Chart_GameID`=".$result->Link_GameID." AND Chart_Type_Status=".$statusType;
 				$chartObject  = $funObj->SelectData(array(), 'GAME_CHART', array('Chart_GameID='.$gameId, 'Chart_Type_Status='.$statusType), 'Chart_Name', '', '', '', 0);
 				?>
 				<option value="">-- Select Chart --</option>
@@ -300,5 +300,167 @@ if(isset($_POST['comp_scen_id']))
 					while($wrow = $chartObject->fetch_object()){ ?>
 						<option value="<?php echo $wrow->Chart_ID; ?>"><?php echo $wrow->Chart_Name; ?></option>
 					<?php }
+				}
+			}
+
+			// for getting the game drop-down data for leaderboard-collaboration
+			if(isset($_POST['action']) && $_POST['action'] == 'leaderboard_collaboration')
+			{
+				// print_r($_POST);
+				$options         = '<option value="">--Select Game--</option>';
+				$optionsArray    = array();
+				$leaderCollabSql = "SELECT gg.Game_ID, gg.Game_Name, gl.Lead_Id, gl.Lead_GameId, gl.Lead_BelongTo FROM GAME_GAME gg LEFT JOIN GAME_LEADERBOARD gl ON gl.Lead_GameId = gg.Game_ID AND gl.Lead_Status = 0 WHERE gg.Game_Delete = 0 ORDER BY gg.Game_Name";
+				$leaderCollabData = $funObj->RunQueryFetchObject($leaderCollabSql);
+
+				if(count($leaderCollabData)>0)
+				{
+					foreach ($leaderCollabData as $leaderCollabDataRow)
+					{
+						// if(!empty($leaderCollabDataRow->Lead_GameId)) continue;
+						// $options += "<option value='".$leaderCollabDataRow->."'>".$leaderCollabDataRow->."</option>";
+						if($leaderCollabDataRow->Lead_BelongTo != NULL)
+						{
+							if($leaderCollabDataRow->Lead_BelongTo == 0)
+							{
+								$optionsArray[$leaderCollabDataRow->Game_ID]['leaderboard'] = 'exist';
+								$optionsArray[$leaderCollabDataRow->Game_ID]['gamename']    = $leaderCollabDataRow->Game_Name;
+							}
+							if($leaderCollabDataRow->Lead_BelongTo == 1)
+							{
+								$optionsArray[$leaderCollabDataRow->Game_ID]['collaboration'] = 'exist';
+								$optionsArray[$leaderCollabDataRow->Game_ID]['gamename']      = $leaderCollabDataRow->Game_Name;
+							}
+						}
+						else
+						{
+							$optionsArray[$leaderCollabDataRow->Game_ID]['gamename'] = $leaderCollabDataRow->Game_Name;
+						}
+					}
+					foreach ($optionsArray as $optionsArrayKey => $optionsArrayValue)
+					{
+						// print_r($optionsArrayRow);
+						// echo $optionsArrayValue['gamename'].' and '.$optionsArrayValue['collaboration'].' and '.$optionsArrayValue['leaderboard'].'<br>';
+						if($optionsArrayValue['leaderboard'] && $optionsArrayValue['collaboration'])
+						{
+							$options .= "<option value='".$optionsArrayKey."' data-leaderboard='".$optionsArrayValue['leaderboard']."' data-collaboration='".$optionsArrayValue['collaboration']."' disabled title='collaboration and leaderboard already exist for this game'>".$optionsArrayValue['gamename']."</option>";
+						}
+						else
+						{
+							$options .= "<option value='".$optionsArrayKey."' data-leaderboard='".$optionsArrayValue['leaderboard']."' data-collaboration='".$optionsArrayValue['collaboration']."'>".$optionsArrayValue['gamename']."</option>";
+						}
+					}
+					die(json_encode(['status' => 200, 'message' => 'Count exist and array merged with values', 'options' => $options]));
+				}
+				else
+				{
+					die(json_encode(['status' => 201, 'message' => 'All games are associated']));
+				}
+
+			}
+
+			// fetch game scenario for the leaderboard and collaboration to show via dropdown
+			if(isset($_POST['action']) && $_POST['action'] == 'leaderboard_collaboration_scenario')
+			{
+				// print_r($_POST);
+				$options     = '<option value="">--Select Scenario--</option>';
+				$Link_GameID = $_POST['gameid'];
+				$scenSql     = "SELECT gs.Scen_ID, gs.Scen_Name FROM GAME_LINKAGE gl LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Link_ScenarioID AND gs.Scen_Delete = 0 WHERE gl.Link_GameID =".$Link_GameID." AND gl.Link_Status = 1";
+				$scenData = $funObj->RunQueryFetchObject($scenSql);
+				if(count($scenData) > 0)
+				{
+					foreach ($scenData as $scenDataRow)
+					{
+						$options .= "<option value='".$scenDataRow->Scen_ID."'>".$scenDataRow->Scen_Name."</option>";
+					}
+					die(json_encode(['status' => 200, 'message' => 'Count exist and array merged with values', 'options' => $options]));
+				}
+				else
+				{
+					die(json_encode(['status' => 201, 'message' => 'No Scenario Found.']));
+				}
+			}
+
+			if(isset($_POST['action']) && $_POST['action'] == 'leaderboard_collaboration_component')
+			{
+				// print_r($_POST);
+				$options         = '<option value="">--Select O/P Component--</option>';
+				$Link_GameID     = $_POST['gameid'];
+				$Link_ScenarioID = $_POST['scenid'];
+				$compSql         = "SELECT gls.SubLink_CompID AS comp_id, gls.SubLink_CompName AS comp_name FROM GAME_LINKAGE_SUB gls WHERE gls.SubLink_LinkID =( SELECT gl.Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_GameID = ".$Link_GameID." AND gl.Link_ScenarioID = ".$Link_ScenarioID." ) AND gls.SubLink_SubCompID < 1 AND gls.SubLink_Status = 1 AND gls.SubLink_ShowHide = 0 AND gls.SubLink_Type = 1";
+
+				$compData = $funObj->RunQueryFetchObject($compSql);
+				if(count($compData) > 0)
+				{
+					foreach ($compData as $compDataRow)
+					{
+						$options .= "<option value='".$compDataRow->comp_id."'>".$compDataRow->comp_name."</option>";
+					}
+					die(json_encode(['status' => 200, 'message' => 'Count exist and array merged with values', 'options' => $options]));
+				}
+				else
+				{
+					die(json_encode(['status' => 201, 'message' => 'No O/P Component Found.']));
+				}
+
+			}
+
+			if(isset($_POST['action']) && $_POST['action'] == 'saveResponse')
+			{
+				// print_r($_POST);
+				$Lead_GameId   = $_POST['Lead_GameId'];
+				$Lead_ScenId   = $_POST['Lead_ScenId'];
+				$Lead_CompId   = $_POST['Lead_CompId'];
+				$Lead_Order    = $_POST['Lead_Order'];
+				$Lead_BelongTo = $_POST['Lead_BelongTo'];
+				if(empty($Lead_GameId) || empty($Lead_ScenId) || empty($Lead_CompId) || $Lead_BelongTo == NULL)
+				{
+					die(json_encode(['status' => 201, 'message' => 'All fields are mandatory.']));
+				}
+				else
+				{
+					$insertArray = (object) array(
+						'Lead_GameId'    => $Lead_GameId,
+						'Lead_ScenId'    => $Lead_ScenId,
+						'Lead_CompId'    => $Lead_CompId,
+						'Lead_BelongTo'  => $Lead_BelongTo,
+						'Lead_Order'     => $Lead_Order,
+						'Lead_CreatedBy' => $_SESSION['ux-admin-id']
+					);
+					$insertData  = $funObj->InsertData('GAME_LEADERBOARD', $insertArray);
+					if($insertData)
+					{
+						die(json_encode(['status' => 200, 'message' => 'Data Saved Successfully.']));
+					}
+					else
+					{
+						die(json_encode(['status' => 201, 'message' => 'Connection Error, Please Try Later.']));
+					}
+				}
+			}
+
+			if(isset($_POST['action']) && $_POST['action'] == 'deleteResponse')
+			{
+				// print_r($_POST);
+				$Lead_Id = $_POST['Lead_Id'];
+				if(empty($Lead_Id))
+				{
+					die(json_encode(['status' => 201, 'message' => 'Element is not defined.']));
+				}
+				else
+				{
+					$arrFieldValue = array(
+						'Lead_Status'    => 1,
+						'Lead_UpdatedBy' => $_SESSION['ux-admin-id'],
+						'Lead_UpdatedOn' => date('Y-m-d H:i:s'),
+					);
+					$deleteData  = $funObj->UpdateData('GAME_LEADERBOARD',$arrFieldValue,'Lead_Id',$Lead_Id,0);
+					if($deleteData)
+					{
+						die(json_encode(['status' => 200, 'message' => 'Data Deleted Successfully.']));
+					}
+					else
+					{
+						die(json_encode(['status' => 201, 'message' => 'Connection Error, Please Try Later.']));
+					}
 				}
 			}

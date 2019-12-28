@@ -6,7 +6,14 @@
 </script>
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Chart Sub-Component</h1>
+		<h1 class="page-header">
+			<?php if($functionsObj->checkModuleAuth('chart','add')){ ?>
+				<a href="<?php echo site_root."ux-admin/chart/add/1"; ?>" data-toggle="tooltip" title="Add Chart Sub-Component">
+					<i class="fa fa-plus-circle"></i>
+				</a>
+			<?php } ?>
+			Chart Sub-Component
+		</h1>
 	</div>
 </div>
 <div class="row">
@@ -37,12 +44,6 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<label style="padding-top:7px;">Chart Subcomponent List</label>
-				<?php if($functionsObj->checkModuleAuth('chart','add')){ ?>
-					<div class="pull-right">
-						<input class="btn btn-primary" type="button" name="addlink" value="Add Chart"
-						onclick="window.location.href='<?php echo site_root."ux-admin/chart/add/1"; ?>';"/>
-					</div>
-				<?php } ?>
 				<div class="clearfix"></div>
 			</div>
 			<div class="panel-body">

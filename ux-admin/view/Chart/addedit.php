@@ -146,19 +146,13 @@
 				<div class="col-sm-12">
 					<div class="form-group text-center">
 						<?php if(isset($_GET['edit']) && !empty($_GET['edit'])){?>
-							<button type="button" id="siteuser_btn_update" class="btn btn-primary"
-							> Update </button>
-							<button type="submit" name="submit" id="siteuser_update" class="btn btn-primary hidden"
-							value="Update"> Update </button>
-							<button type="button" class="btn btn-primary"
-							onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
+							<button type="button" id="siteuser_btn_update" class="btn btn-primary"> Update </button>
+							<button type="submit" name="submit" id="siteuser_update" class="btn btn-primary hidden" value="Update"> Update </button>
+							<button type="button" class="btn btn-danger" onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
 						<?php }else{?>
-							<button type="button" id="siteuser_btn" class="btn btn-primary"
-							value="Submit"> Submit </button>
-							<button type="submit" name="submit" id="siteuser_sbmit"
-							class="btn btn-primary hidden" value="Submit"> Submit </button>
-							<button type="button" class="btn btn-primary"
-							onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
+							<button type="button" id="siteuser_btn" class="btn btn-primary" value="Submit"> Submit </button>
+							<button type="submit" name="submit" id="siteuser_sbmit" class="btn btn-primary hidden" value="Submit"> Submit </button>
+							<button type="button" class="btn btn-danger" onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
 						<?php }?>
 					</div>
 				</div>

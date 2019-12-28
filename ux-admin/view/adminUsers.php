@@ -549,6 +549,44 @@
 													</td>
 												</tr>
 
+												<!-- leaderboard/collaboration add -->
+												<tr>
+													<td>Leaderboard/Collaboration</td>
+													<td>
+														<div class="col-md-2">
+															<label for="leaderboard_enable" class="containerCheckbox">
+																<input type="checkbox" id="leaderboard_enable" name="leaderboard_enable" value="yes" <?=$rights['leaderboard']['enable']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="leaderboard_add" class="containerCheckbox">
+																<input type="checkbox" id="leaderboard_add" name="leaderboard_add" value="yes" <?=$rights['leaderboard']['add']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="leaderboard_edit" class="containerCheckbox">
+																<input type="checkbox" id="leaderboard_edit" name="leaderboard_edit" value="yes" <?=$rights['leaderboard']['edit']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-2">
+															<label for="leaderboard_delete" class="containerCheckbox">
+																<input type="checkbox" id="leaderboard_delete" name="leaderboard_delete" value="yes" <?=$rights['leaderboard']['delete']=='yes'?'checked="yes"':''?>>
+																<span class="checkmark"></span>
+															</label>
+														</div>
+													</td>
+												</tr>
+												<!-- leaderboard/collaboration end -->
+
 												<!-- adding branching permissions -->
 												<tr>
 													<td>Scenario Branching</td>

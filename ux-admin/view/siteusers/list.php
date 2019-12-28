@@ -59,7 +59,12 @@
 </style>
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Site Users</h1>
+		<h1 class="page-header">
+			<a href="<?php echo site_root."ux-admin/siteusers/add/1"; ?>" data-toggle="tooltip" title="Add Site Users">
+				<i class="fa fa-plus-circle"></i>
+			</a>			
+			Site Users
+		</h1>
 	</div>
 </div>
 <div class="row">
@@ -94,8 +99,6 @@
 				<label style="padding-top:7px;">Site Users List</label>
 				<div class="pull-right">
 					<form method="post"  action="" enctype="multipart/form-data">
-						<input class="btn btn-primary" type="button" name="addsiteuser" value="Add Site User"
-						onclick="window.location.href='<?php echo site_root."ux-admin/siteusers/add/1"; ?>';"/>
 						<button type="submit" name="submit" id="user_download" class="btn btn-primary"
 						value="Download"> Download </button>
 					</form>

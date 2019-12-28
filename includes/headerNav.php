@@ -36,6 +36,11 @@
 		<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"> -->
 		<script src="<?php echo site_root;?>dist/sweetalert/sweetalert2.all.min.js"></script>
 		
+		<!-- adding these links to include chart.js -->
+		<script src="<?php echo site_root;?>chartjs/chart.bundle.min.js"></script>
+		<link href="<?php echo site_root;?>chartjs/chart.min.css" rel="stylesheet" type="text/css">
+		<script src="<?php echo site_root;?>chartjs/chart.min.js"></script>
+
 		<style>
 			.swal2-container.swal2-backdrop-show{
 				background: #00000066;
@@ -152,16 +157,8 @@
 
 			// animateOutArray = ['bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'flipOutX', 'flipOutY', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'lightSpeedOut', 'rollOut'];
 			
-			$('.showImageModal').each(function(){
-				$(this).on('click',function(){
-					$('#imageModal').show();
-					$('#showImageHere').attr('src',$(this).attr('src'));
-				});
-			});
-			$('#close').on('click',function(){
-				// $('#imageModal').hide('slow');
-				$('#imageModal').slideUp(1000);
-			});
+			showImageModal();
+			
 			function googleTranslateElementInit() {
 				new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
 			}
@@ -177,4 +174,22 @@
 			// 	);
 		},1000);
 	});
-</script>
+			function showImageModal()
+			{
+				$('marquee').each(function(){
+					$(this).on('mouseover',function(){this.stop();});
+					$(this).on('mouseout',function(){this.start();});
+				});
+
+				$('.showImageModal').each(function(){
+					$(this).on('click',function(){
+						$('#imageModal').show();
+						$('#showImageHere').attr('src',$(this).attr('src'));
+					});
+				});
+				$('#close').on('click',function(){
+					// $('#imageModal').hide('slow');
+					$('#imageModal').slideUp(1000);
+				});
+			}
+		</script>

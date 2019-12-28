@@ -6,9 +6,9 @@ require_once doc_root.'includes/PHPExcel.php';
 $noSelect2    = 'dont';
 $functionsObj = new Model();
 
-$object        = $functionsObj->SelectData(array(), 'GAME_SITESETTINGS', array('id=1'), '', '', '', '', 0);
-$sitename      = $functionsObj->FetchObject($object);
-$file          = 'list.php';
+$object       = $functionsObj->SelectData(array(), 'GAME_SITESETTINGS', array('id=1'), '', '', '', '', 0);
+$sitename     = $functionsObj->FetchObject($object);
+$file         = 'list.php';
 // include PHPExcel
 //echo $_POST['chkround'];
 //exit();
@@ -629,8 +629,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 			// adding the below query to updat the newly added fields liek Area, Comp, SubComp name and formula exp to reduce joins
 			$updateArea = ($_POST['area_id'])?$_POST['area_id']:$_POST['dis_area_id'];	
 			$updateSql  = "UPDATE GAME_LINKAGE_SUB gls LEFT JOIN GAME_AREA ga ON ga.Area_ID = gls.SubLink_AreaID LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID LEFT JOIN GAME_FORMULAS gf ON gf.f_id = gls.SubLink_FormulaID SET gls.SubLink_AreaName = ga.Area_Name, gls.SubLink_CompName = gc.Comp_Name, gls.SubLink_SubcompName = gs.SubComp_Name, gls.SubLink_FormulaExpression = gf.expression	WHERE gls.SubLink_AreaID =".$updateArea;
-			$functionsObj->ExecuteQuery($updateSql);
-			if($result === true){
+			if($result === true)
+			{
+				$functionsObj->ExecuteQuery($updateSql);
+				// adding area to game_area_sequencing table if not exist $linkid and $_POST['area_id']
+				$areaSequencing = $functionsObj->AreaSequencing($linkid,$updateArea);
+				// echo $linkid.' , '.$_POST['area_id']."<pre>"; print_r($areaSequencing); exit;
 				if(isset($_POST['start1']) && isset($_POST['end1']) && isset($_POST['value1']))
 				{
 						//echo empty($_POST['replaceid1']);

@@ -1,5 +1,5 @@
 <?php 
-include_once 'includes/header.php'; 
+include_once 'includes/headerNav.php'; 
 ?>
 <section id="video_player">
 	<div class="container">
@@ -13,10 +13,19 @@ include_once 'includes/header.php';
 						<?php echo $gamedetails->Game_Message; ?>
 					</div>
 					<div class="col-sm-10 col-sm-offset-1 text-right">
-						View Game Report <img src="images/reportIcon.png" alt="Report">
+						<!-- View Game Report <img src="images/reportIcon.png" alt="Report"> -->
+						<a href="javascript:void(0);" data-toggle="tooltip" title="View Game Leaderboard" id="showLeaderboard">
+							<img src="images/leaderboard.png" alt="Report" width="75">
+						</a>
 						<?php 
 						// echo "<pre>"; print_r($result1); echo "</pre>";
 						// finding user company id if it is 21 then allow replay $result1->US_UserID
+						if(count($performanceData) > 1)
+						{
+							echo '<a href="javascript:void(0);" data-toggle="tooltip" title="View Game Performance" id="showPerformance">
+							<img src="images/performance.png" alt="Report" width="75"></a>';
+						}
+
 						$compSql        = "SELECT User_companyid FROM GAME_SITE_USERS WHERE User_companyid = '21' AND User_id=".$result1->US_UserID;
 						$compObj        = $functionsObj->ExecuteQuery($compSql);
 						$replaySql      = "SELECT UG_ReplayCount FROM GAME_USERGAMES WHERE UG_GameID = ".$gameid." AND UG_UserID=".$result1->US_UserID;
@@ -33,17 +42,54 @@ include_once 'includes/header.php';
 						}
 						if($result1->US_ReplayStatus == 1 || $allowReplay)
 						{
-							$urlstr .= "<a id='restart' href='#' data-gameid='".$gameid."' data-scenid='".$ScenID."' data-linkid='".$linkid."' class='restart'><img src='images/restartGameIcon.png' alt='ReStart/Resume Game'></a>";
+							$urlstr .= "<a id='restart' href='#' data-gameid='".$gameid."' data-scenid='".$ScenID."' data-linkid='".$linkid."' class='restart' title='ReStart/Resume Game' data-toggle='tooltip'><img src='images/replay.png' alt='ReStart/Resume Game' width='75'></a>";
 							echo $urlstr;
 						}
 						?>						
 					</div>
+					<!-- show user performance chart here only if user has played game more than one time -->
+					<?php if(count($performanceData) > 1) { ?>
+						<div class="row" id="showPerformanceChart" style="display: none;">
+							
+							<div class="col-md-8">
+								<canvas id="lineChart" width="400" height="400"></canvas>
+							</div>
+
+							<!-- <div class="clearfix"><br></div> -->
+							<div class="col-md-4" style="max-width: 30%;">
+								<div class="clearfix"><br></div>
+								<h2 class="alert-success">
+									<marquee behavior="alternate" direction="">Performance Chart</marquee>
+								</h2>
+								<strong>
+									<p>
+										Based on your results we have drawn a lini-chart to show your performance for repeat plays that you undertook.
+										<br><br>
+										Your performance has been compared with the top score as per the leaderboard at this point in time.
+										<br><br>
+										The chart shown here provides the following key inputs for your development:
+										<br><br>
+									</p>
+									<ul>
+										<li>
+											Whether you improved on your performance from the last time or not, and 
+										</li>
+										<li>
+											Whether your best performance was close to the benchmark or not
+										</li>
+									</ul>
+								</strong>
+
+							</div>
+
+						</div>
+					<?php } ?>
+					<!-- performance chart end here -->
 					<div class="clearfix"></div>
 					<div class="col-sm-12">
-						<hr></hr>
 					</div>	
 					<div class="col-sm-10 col-sm-offset-1 ">
-						<h4 class="innerh4">Other Unplayed Game</h4>
+						<!-- <h4 class="innerh4">Other Unplayed Game</h4> -->
 					</div>	
 					<div class="col-sm-10 col-sm-offset-1 no_padding" style="padding-bottom:20px;">	
 						<?php 
@@ -156,11 +202,107 @@ include_once 'includes/header.php';
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-12 text-center">
-				<span> </span>
+				<span>mksahu</span>
 			</div>
 		</div>
 	</div>
 </footer>
 <script src="js/jquery.min.js"></script>	
-<script src="js/bootstrap.min.js"></script>			
+<script src="js/bootstrap.min.js"></script>
+<script>
+	$(document).ready(function(){
+		setTimeout(function(){
+			$('#showLeaderboard').trigger('click');
+		},100)
+
+		// if user has played game more than one time then show the chart to user
+		<?php if(count($performanceData) > 1) { 
+			$data             = '';
+			$labels           = '';
+			$overAllBenchmark = '';
+			foreach ($performanceData as $performanceDataRow) {
+				$data             .= $performanceDataRow->Performance_Value.',';
+				$labels           .= "'".$performanceDataRow->Performance_CreatedOn."',";
+				$overAllBenchmark .= $performanceDataRow->max_value.',';
+			}
+			$data             = rtrim($data, ',');
+			$labels           = rtrim($labels, ',');
+			$overAllBenchmark = rtrim($overAllBenchmark, ',');
+			// print_r($data);
+			// print_r($labels);
+			?>
+			$('#showPerformance').on('click',function(){
+				$('#showPerformanceChart').toggle();
+			});
+
+			var ctx     = $('#lineChart');
+			var myChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: [<?php echo $labels; ?>],
+					datasets: [{
+						label: "<?php echo $performanceGraphTitle; ?>",
+						data: [<?php echo $data; ?>],
+						backgroundColor: [
+						// 'rgba(255, 99, 132, 0.2)',
+						'rgba(54, 162, 235, 0.2)',
+						// 'rgba(255, 206, 86, 0.2)',
+						// 'rgba(75, 192, 192, 0.2)',
+						// 'rgba(153, 102, 255, 0.2)',
+						// 'rgba(255, 159, 64, 0.2)'
+						],
+						borderColor: [
+						// 'rgba(255, 99, 132, 1)',
+						'rgba(54, 162, 235, 1)',
+						// 'rgba(255, 206, 86, 1)',
+						// 'rgba(75, 192, 192, 1)',
+						// 'rgba(153, 102, 255, 1)',
+						// 'rgba(255, 159, 64, 1)'
+						],
+						borderWidth: 2,
+						// fill: false,
+					},
+					{
+						label: "Top Score",
+						data: [<?php echo $overAllBenchmark; ?>],
+						backgroundColor: [
+						// 'rgba(255, 99, 132, 0.2)',
+						// 'rgba(54, 162, 235, 0.2)',
+						'rgba(255, 206, 86, 0.2)',
+						// 'rgba(75, 192, 192, 0.2)',
+						// 'rgba(153, 102, 255, 0.2)',
+						// 'rgba(255, 159, 64, 0.2)'
+						],
+						borderColor: [
+						// 'rgba(255, 99, 132, 1)',
+						// 'rgba(54, 162, 235, 1)',
+						// 'rgba(255, 206, 86, 1)',
+						// 'rgba(75, 192, 192, 1)',
+						// 'rgba(153, 102, 255, 1)',
+						'rgba(255, 159, 64, 1)'
+						],
+						borderWidth: 2,
+						fill: false,
+					}],
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true,
+							}
+						}],
+						xAxes: [{
+							ticks: {
+								autoSkip: false,
+								// maxRotation: 90,
+								minRotation: 60,
+							}
+						}]
+					},
+				}
+			});
+		<?php } ?>
+	});
+</script>
 <?php include_once 'includes/footer.php' ?>

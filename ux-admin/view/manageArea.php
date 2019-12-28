@@ -96,7 +96,11 @@
     </form>
     <div class="form-group"></div>
     <div class="panel panel-default">
-      <div class="panel-heading">Area List</div>
+      <div class="panel-heading">Area List
+        <a href="javascript:void(0);" class="pull-right" data-toggle="tooltip" title="Refresh Table Data" id="refreshServerSideDataTable">
+          <i class="fa fa-refresh"></i>
+        </a>
+      </div>
       <div class="panel-body">
         <div class="dataTable_wrapper">
           <table class="table table-striped table-bordered table-hover text-center" id="dataTables-serverSide" data-url="<?php echo site_root.'ux-admin/model/ajax/dataTables.php';?>" data-action="manageArea">

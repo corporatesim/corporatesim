@@ -127,7 +127,7 @@
         <button type="submit" class="btn btn-primary btn-lg btn-block" name="editBadges" value="editBadges" id="editBadges">Update</button>
       </div>
       <div class="col-md-3 text-center">
-        <a href="<?php echo site_root."ux-admin/outcomeBadges"; ?>" class="btn btn-primary btn-lg btn-block">CANCEL</a>
+        <a href="<?php echo site_root."ux-admin/outcomeBadges"; ?>" class="btn btn-danger btn-lg btn-block">CANCEL</a>
       </div>
     </div>
   </div>

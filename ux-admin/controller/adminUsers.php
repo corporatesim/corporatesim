@@ -529,10 +529,22 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 	$chartSubComp        = $enable_chartSubComp + $add_chartSubComp + $edit_chartSubComp + $delete_chartSubComp;
 	$val13               = array('chart' => $chartSubComp);
 
+	// ------------------------  Leaderboard/Collaboration  -----------------------------------------
+	$leaderboard_enable = $_POST['leaderboard_enable']!=''?$_POST['leaderboard_enable']:'no';
+	$enable_leaderboard = array('enable' => $leaderboard_enable);
+	$leaderboard_add    =  $_POST['leaderboard_add']!=''?$_POST['leaderboard_add']:'no';
+	$add_leaderboard    = array('add' => $leaderboard_add);
+	$leaderboard_edit   =  $_POST['leaderboard_edit']!=''?$_POST['leaderboard_edit']:'no';
+	$edit_leaderboard   = array('edit' => $leaderboard_edit);
+	$leaderboard_delete =  $_POST['leaderboard_delete']!=''?$_POST['leaderboard_delete']:'no';
+	$delete_leaderboard = array('delete' => $leaderboard_delete);
+	
+	$leaderboard        = $enable_leaderboard + $add_leaderboard + $edit_leaderboard + $delete_leaderboard;
+	$val14              = array('leaderboard' => $leaderboard);
 
 	// ------------------------  end -----------------------------------------
 
-	$userrights = $val1 + $val2 + $val3 + $val4 + $val5 + $val6 + $val7  + $val8  + $val9  + $val10  + $val11  + $val12  + $val13;
+	$userrights = $val1 + $val2 + $val3 + $val4 + $val5 + $val6 + $val7  + $val8  + $val9  + $val10  + $val11  + $val12  + $val13 + $val14;
  // echo "<pre>"; print_r(json_encode($userrights));exit;
 	
 		//Get values in array

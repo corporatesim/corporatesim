@@ -61,8 +61,17 @@
 </style>
 <div class="row">
   <div class="col-lg-12">
-    <h1 class="page-header"><?php echo $header; ?></h1>
-  </div>
+    <h1 class="page-header">
+
+     <?php if($functionsObj->checkModuleAuth('personalizeOutcome','add')){ ?>
+      <a href="<?php echo site_root."ux-admin/personalizeOutcome/add/add";?>" data-toggle="tooltip" title="Add personalize Outcome">
+        <i class="fa fa-plus-circle"></i>
+      </a>
+    <?php } ?>
+
+    <?php echo $header; ?>
+  </h1>
+</div>
 </div>
 <div class="row">
   <div class="col-sm-12">
@@ -92,10 +101,11 @@
 <form method="post" action="">
   <div class="row">
     <div class="col-md-6">
-
-     <a id="HideDownloadIcon"><i class="fa fa-download" aria-hidden="true" data-toggle="tooltip" title="Download personalize Outcome"></i></a>
-     <br>
-     <div id="downloadPersonalizeOutcome">
+     <a id="HideDownloadIcon">
+      <i class="fa fa-download" aria-hidden="true" data-toggle="tooltip" title="Download personalize Outcome"></i>
+    </a>
+    <br>
+    <div id="downloadPersonalizeOutcome">
       <div class="form-group col-xs-12 col-sm-8 col-sm-offset-2">
         <label>Select Game</label> 
         <select class="form-control"
@@ -143,14 +153,6 @@
 <div class="row">
   <div class="panel panel-default" id="loader">
     <div class="panel-heading">
-      <div class="pull-right">
-        <!-- <form action="" method="post">
-          <button class="btn btn-primary btn-lg btn-block" type="submit" value="addBranching" name="addBranching">Add Branching</button>
-        </form> -->
-        <?php if($functionsObj->checkModuleAuth('personalizeOutcome','add')){ ?>
-          <a href="<?php echo site_root."ux-admin/personalizeOutcome/add/add";?>" class="btn btn-primary btn-lg btn-block">Add Outcome</a>
-        <?php } ?>
-      </div>
       <div class="clearfix"></div>
       <div class="panel-body">
         <div class="dataTable_wrapper">

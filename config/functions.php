@@ -43,14 +43,21 @@ class Functions extends database
 		return $data;
 	}
 
-	function RunQueryFetchObject($sql)
+	function RunQueryFetchObject($sql,$arrayKey=NULL)
 	{
 		$returnData = array();
 		$object     = $this->conn->query($sql) or die($this->conn->error."<br>".$sql);
 		// $data       = $object->fetch_object() or die($this->conn->error);
 		while($data = $object->fetch_object())
 		{
-			$returnData[] = $data;
+			if(!empty($arrayKey))
+			{
+				$returnData[$data->$arrayKey] = $data;
+			}
+			else
+			{
+				$returnData[] = $data;
+			}
 		}
 		return $returnData;
 	}

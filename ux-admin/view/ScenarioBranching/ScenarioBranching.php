@@ -62,7 +62,14 @@
 <!-- scenario branching Data table CSS ends -->
 <div class="row">
   <div class="col-lg-12">
-    <h1 class="page-header"><?php echo $header; ?></h1>
+    <h1 class="page-header">
+      <?php if($functionsObj->checkModuleAuth('ScenarioBranching','add')){ ?>
+        <a href="<?php echo site_root."ux-admin/ScenarioBranching/add/add";?>" data-toggle="tooltip" title="Add Scenario Branching">
+          <i class="fa fa-plus-circle"></i>
+        </a>
+      <?php } ?>
+      <?php echo $header; ?>
+    </h1>
   </div>
 </div>
 <div class="row">
@@ -144,36 +151,36 @@
 <div class="row">
   <div class="panel panel-default" id="loader">
     <div class="panel-heading">
-      <div class="pull-right">
-        <!-- <form action="" method="post">
-          <button class="btn btn-primary btn-lg btn-block" type="submit" value="addBranching" name="addBranching">Add Branching</button>
-        </form> -->
-        <?php if($functionsObj->checkModuleAuth('ScenarioBranching','add')){ ?>
-          <a href="<?php echo site_root."ux-admin/ScenarioBranching/add/add";?>" class="btn btn-primary btn-lg btn-block">Add Branching</a>
-        <?php } ?>
-      </div>
       <div class="clearfix"></div>
-      <div class="panel-body">
-        <div class="dataTable_wrapper">
-          <table class="table table-striped table-bordered table-hover text-center" id="dataTables-serverSide" data-url="<?php echo site_root.'ux-admin/model/ajax/dataTables.php';?>" data-action="ScenarioBranching">
-            <thead>
-              <tr>
-                <th>Sr. No</th>
-                <!-- <th>Branch_Id</th> -->
-                <th>Game</th>
-                <th>Scenario</th>
-                <th id="password">Component</th>
-                <!--<th>Last Login</th>-->
-                <th>Minimum Value</th>
-                <th class="">Maximum Value</th>
-                <th class="">Order</th>
-                <th id="contact">Next Scenario</th>
-                <th class="no-sort" id="action">Action</th>
-              </tr>
-            </thead>
-          </table>
+      <div class="panel panel-default">
+        <div class="panel-heading">Scenario Branching List
+          <a href="javascript:void(0);" class="pull-right" data-toggle="tooltip" title="Refresh Table Data" id="refreshServerSideDataTable">
+            <i class="fa fa-refresh"></i>
+          </a>
+        </div>
+        <div class="panel-body">
+          <div class="dataTable_wrapper">
+            <table class="table table-striped table-bordered table-hover text-center" id="dataTables-serverSide" data-url="<?php echo site_root.'ux-admin/model/ajax/dataTables.php';?>" data-action="ScenarioBranching">
+              <thead>
+                <tr>
+                  <th>Sr. No</th>
+                  <!-- <th>Branch_Id</th> -->
+                  <th>Game</th>
+                  <th>Scenario</th>
+                  <th id="password">Component</th>
+                  <!--<th>Last Login</th>-->
+                  <th>Minimum Value</th>
+                  <th class="">Maximum Value</th>
+                  <th class="">Order</th>
+                  <th id="contact">Next Scenario</th>
+                  <th class="no-sort" id="action">Action</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
         </div>
       </div>
+
     </div>
   </div>
   <div class="clearfix"></div>

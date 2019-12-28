@@ -613,3 +613,97 @@ if($_POST['action'] == 'Dashboard')
 	echo json_encode($output);
 
 }
+
+// to get the all leaderboard/collaboration list via ajax
+if($_POST['action'] == 'leaderboard')
+{
+	$colIndex     = $_POST['order'][0]['column'];
+	$direction    = $_POST['order'][0]['dir'];
+	$start        = $_POST['start'];
+	$length       = $_POST['length'];
+	$search       = $_POST['search']['value'];
+	$data         = array();
+	$i            = $start;
+	$filterRecord = false;
+
+	switch ($colIndex) {
+		case 0:
+		$colName = 'Lead_Id';
+		break;
+
+		case 1:
+		$colName = 'Game_Name';
+		break;
+
+		case 2:
+		$colName = 'Scen_Name';
+		break;
+
+		case 3:
+		$colName = 'Comp_Name';
+		break;
+
+		case 4:
+		$colName = 'Lead_BelongTo';
+		break;
+
+		case 5:
+		$colName = 'Lead_Order';
+		break;
+		
+		default:
+		$colName   = 'Lead_CreatedBy';
+		$direction = 'DESC';
+		break;
+	}
+
+	$leaderboardSql = "SELECT gl.Lead_Id, IF( gl.Lead_Order, '<b>Descending</b>', 'Ascending' ) AS Lead_Order, gg.Game_Name, gs.Scen_Name, gc.Comp_Name, IF( gl.Lead_BelongTo, '<b>Collaboration</b>', 'Leaderboard' ) AS Type, gl.Lead_CreatedOn, CONCAT(gau.fname, ' ', gau.lname) AS creator, gl.Lead_CreatedOn FROM GAME_LEADERBOARD gl LEFT JOIN GAME_GAME gg ON gg.Game_ID = gl.Lead_GameId LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Lead_ScenId LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gl.Lead_CompId LEFT JOIN GAME_ADMINUSERS gau ON gau.id = gl.Lead_CreatedBy WHERE gl.Lead_Status = 0";
+
+	// to get the total user record
+	$countAllData = $funObj->ExecuteQuery($leaderboardSql);
+	$totalCount   = $countAllData->num_rows;
+
+	if(!empty($search))
+	{
+		$leaderboardSql .= " AND Game_Name LIKE '%".$search."%' OR Scen_Name LIKE '%".$search."%' OR Comp_Name LIKE '%".$search."%' OR User_fname LIKE '%".$search."%'  OR User_lname LIKE '%".$search."%' ";
+		$filterRecord    = true;
+	}
+	// to get the filter user record
+	$filterCountObj = $funObj->ExecuteQuery($leaderboardSql);
+	$filterCount    = $filterCountObj->num_rows;
+
+	$leaderboardSql .= " ORDER BY ".$colName." ".$direction." LIMIT ".$start.",".$length;
+	
+	$leaderboard = $funObj->ExecuteQuery($leaderboardSql);
+
+	while($leaderboardRow = mysqli_fetch_object($leaderboard))
+	{
+		// return the data to be displayed to user into and data array
+		$i++;
+		$edit = '';
+		if($funObj->checkModuleAuth('leaderboard','delete'))
+		{
+			$edit .= '<a href="javascript:void(0);" class="deleteLeaderCollab" id="'.$leaderboardRow->Lead_Id.'" data-toggle="tooltip" title="Delete"><span class="fa fa-trash"></span></a>';
+		}
+		else
+		{
+			$edit .= '<a href="javascript:void(0);" data-toggle="tooltip" title="Not allowed to delete"><span class="fa fa-eye"></span></a>';
+		}
+
+		$creator = date('d-m-Y H:i:s',strtotime($leaderboardRow->Lead_CreatedOn)).'<br>'.$leaderboardRow->creator;
+		$data[]  = array($i, $leaderboardRow->Game_Name, $leaderboardRow->Scen_Name, $leaderboardRow->Comp_Name, $leaderboardRow->Type, $leaderboardRow->Lead_Order, $creator, $edit);
+	}
+
+	// $filterCount = ($filterRecord)?$filterCount:$totalCount;
+	// $totalCount  = ($filterRecord)?$filterCount:$totalCount;
+
+	$output = array(
+		"draw"            => $_POST['draw'],
+		"recordsTotal"    => $totalCount,
+		"recordsFiltered" => $filterCount,
+		"data"            => $data,
+	);
+
+	echo json_encode($output);
+
+}

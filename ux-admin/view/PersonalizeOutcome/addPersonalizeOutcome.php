@@ -183,7 +183,7 @@ span.alert-danger {
           <button type="submit" class="btn btn-primary btn-lg btn-block" name="addOutcome" value="addOutcome" id="addOutcome">SAVE</button>
         </div>
         <div class="col-md-3 text-center">
-          <a href="<?php echo site_root."ux-admin/personalizeOutcome"; ?>" class="btn btn-primary btn-lg btn-block">CANCEL</a>
+          <a href="<?php echo site_root."ux-admin/personalizeOutcome"; ?>" class="btn btn-danger btn-lg btn-block">CANCEL</a>
         </div>
       </div>
     </div>

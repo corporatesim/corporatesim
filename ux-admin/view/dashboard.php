@@ -121,26 +121,36 @@
 
 	<div class="clearfix row"><br></div>
 	<br>
-
-	<div class="row col-md-12">
-		<table class="table table-striped table-bordered table-hover text-center" id="dataTables-serverSide" data-url="<?php echo site_root.'ux-admin/model/ajax/dataTables.php';?>" data-action="Dashboard" data-function="addClickHandlerToGetComments();">
-			<thead>
-				<tr>
-					<th class="no-sort">S.N.</th>
-					<th>ID</th>
-					<th>Game Name</th>
-					<th>Game/eLearning: Type</th>
-					<th>Creator</th>
-					<th>Created On</th>
-					<!-- <th>Game/eLearning</th> -->
-					<!-- <th>Type</th> -->
-					<th>Status</th>
-					<th>Completed On</th>
-					<th>Time Taken</th>
-					<th class="no-sort">Action</th>
-				</tr>
-			</thead>
-		</table>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<b>Game Creator/Completion List</b>
+			<a href="javascript:void(0);" class="pull-right" data-toggle="tooltip" title="Refresh Table Data" id="refreshServerSideDataTable">
+				<i class="fa fa-refresh"></i>
+			</a>
+		</div>
+		<div class="panel-body">
+			<div class="dataTable_wrapper">
+				<table class="table table-striped table-bordered table-hover text-center" id="dataTables-serverSide" data-url="<?php echo site_root.'ux-admin/model/ajax/dataTables.php';?>" data-action="Dashboard" data-function="addClickHandlerToGetComments();">
+					<thead>
+						<tr>
+							<th class="no-sort">S.N.</th>
+							<th>ID</th>
+							<th>Game Name</th>
+							<th>Game/eLearning: Type</th>
+							<th>Creator</th>
+							<th>Created On</th>
+							<!-- <th>Game/eLearning</th> -->
+							<!-- <th>Type</th> -->
+							<th>Status</th>
+							<th>Completed On</th>
+							<th>Time Taken</th>
+							<th class="no-sort">Action</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
 	</div>
 
 	<script>

@@ -10,11 +10,6 @@
 
 	<script type="text/javascript">
 		<!--
-// Tooltip function
-$(document).ready(function(){
-	$('[data-toggle="tooltip"]').tooltip();
-});
-
 //Tooltip function
 $(document).ready(function(){
 	$('[data-toggle="tooltip"]').tooltip();
@@ -73,6 +68,10 @@ $("#selectAll").change(function () {
 	<!--
 		$(document).ready(function() {
 			$('#dataTables-example').DataTable({
+				"language": {
+					"infoEmpty"  : "No record found",
+					"zeroRecords": "No record found",
+				},
 				responsive: true,
 				"scrollX": true,
 				"columnDefs": [ {
@@ -138,7 +137,16 @@ $("#selectAll").change(function () {
 							window.location.href = site_root + loc_url_del + id;
 						});
 					}
-				}
+				},
+				"language": {
+					"infoEmpty"  : "No record found",
+					"zeroRecords": "No record found",
+				},
+			});
+
+			// to reload the serverside data-table
+			$('#refreshServerSideDataTable').on('click',function(){
+				$('#dataTables-serverSide').DataTable().ajax.reload();
 			});
 		});
 // -->

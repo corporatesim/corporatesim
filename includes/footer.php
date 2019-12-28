@@ -1,4 +1,8 @@
-	
+<style>
+	.swal-size-sm{
+		width: auto;
+	}
+</style>
 <footer>
 	<div class="container">
 		<div class="row">
@@ -26,126 +30,186 @@
 			$(this).animate({width: "200px"});
 		});
 		// adding the restart/reset functionality
-		$(document).ready(function() {
-			$('.restart').each(function(){
-				$(this).on('click',function(e){
-					// var effectIn  = animateInArray[countInclick];
-					// var effectOut = animateOutArray[countOutclick];
-					e.stopPropagation();
-					// var senderElement = e.target;
-					// // if it has div.reduce_width then, if senderElement is img tag then stop event propagation for parent, i.e. not to redirect to result.php
-					// if($(this).parents('div.reduce_width'))
-					// if($(senderElement).is('img'))
-					// {
-					// 	// then disable click event propagation for parents div, i.e. result.php
-					// 	console.log('remove event from parent');
-					// }
-					// console.log(senderElement);
-					// return false;
-					var GameID = $(this).attr('data-gameid');
-					var ScenID = $(this).attr('data-scenid');
-					var LinkID = $(this).attr('data-linkid');
-					const swalWithBootstrapButtons = Swal.mixin({
-						customClass: {
-							confirmButton: 'btn btn-success',
-							cancelButton : 'btn btn-danger'
-						},
-						buttonsStyling: false,
-					})
-
-					swalWithBootstrapButtons.fire({
-					// title: 'Are you sure?',
-					text             : "Press YES to confirm your wish to play this simulation again else press NO",
-					icon             : 'warning',
-					showCancelButton : true,
-					confirmButtonText: 'Yes, Reset !',
-					cancelButtonText : 'No, cancel !',
-					reverseButtons   : false,
-					showClass: {
-						popup: 'animated rotateInDownLeft faster'
-						// popup: 'animated '+effectIn+' faster'
+		$('.restart').each(function(){
+			$(this).on('click',function(e){
+				// var effectIn  = animateInArray[countInclick];
+				// var effectOut = animateOutArray[countOutclick];
+				e.stopPropagation();
+				// var senderElement = e.target;
+				// // if it has div.reduce_width then, if senderElement is img tag then stop event propagation for parent, i.e. not to redirect to result.php
+				// if($(this).parents('div.reduce_width'))
+				// if($(senderElement).is('img'))
+				// {
+				// 	// then disable click event propagation for parents div, i.e. result.php
+				// 	console.log('remove event from parent');
+				// }
+				// console.log(senderElement);
+				// return false;
+				var GameID = $(this).attr('data-gameid');
+				var ScenID = $(this).attr('data-scenid');
+				var LinkID = $(this).attr('data-linkid');
+				const swalWithBootstrapButtons = Swal.mixin({
+					customClass: {
+						confirmButton: 'btn btn-success',
+						cancelButton : 'btn btn-danger'
 					},
-					hideClass: {
-						popup: 'animated rotateOutDownLeft faster'
-						// popup: 'animated '+effectOut+' faster'
-					}
-				}).then((result) => {
-					if (result.value) {
-						$.ajax({
-							url : "includes/ajax/ajax_replay.php",
-							type: "POST",
-							data: "action=replay&GameID="+GameID+'&ScenID='+ScenID+'&LinkID='+LinkID,
-							beforeSend: function(){
-								$('.overlay').show();
-							},
-							success:function(result)
+					buttonsStyling: false,
+				})
+
+				swalWithBootstrapButtons.fire({
+				// title: 'Are you sure?',
+				text             : "Press YES to confirm your wish to play this simulation again else press NO",
+				icon             : 'warning',
+				showCancelButton : true,
+				confirmButtonText: 'Yes, Reset !',
+				cancelButtonText : 'No, cancel !',
+				reverseButtons   : false,
+				showClass: {
+					popup: 'animated rotateInDownLeft faster'
+					// popup: 'animated '+effectIn+' faster'
+				},
+				hideClass: {
+					popup: 'animated rotateOutDownLeft faster'
+					// popup: 'animated '+effectOut+' faster'
+				}
+			}).then((result) => {
+				if (result.value) {
+					$.ajax({
+						url : "includes/ajax/ajax_replay.php",
+						type: "POST",
+						data: "action=replay&GameID="+GameID+'&ScenID='+ScenID+'&LinkID='+LinkID,
+						beforeSend: function(){
+							$('.overlay').show();
+						},
+						success:function(result)
+						{
+							if(result == 'redirect')
 							{
-								if(result == 'redirect')
-								{
-									// alert('Redirect User to input page');
-									window.location = "<?php echo site_root.'selectgame.php'?>";
-								} 
-								else
-								{
-									$('.overlay').hide();
-									// alert('Connection Problem');
-									Swal.fire('Connection Problem');
-									console.log(result);
-								}
+								// alert('Redirect User to input page');
+								window.location = "<?php echo site_root.'selectgame.php'?>";
+							} 
+							else
+							{
+								$('.overlay').hide();
+								// alert('Connection Problem');
+								Swal.fire('Connection Problem');
+								console.log(result);
+							}
+						}
+					});
+					// swalWithBootstrapButtons.fire(
+					//   'Deleted!',
+					//   'Your file has been deleted.',
+					//   'success'
+					//   )
+				}
+				//     else if (
+				// // Read more about handling dismissals
+				// result.dismiss === Swal.DismissReason.cancel
+				// ) {
+				//       swalWithBootstrapButtons.fire(
+				//         'Cancelled',
+				//         'Your imaginary file is safe :)',
+				//         'error'
+				//         )
+				//     }
+			})
+			// countInclick++;
+			// countOutclick++;
+			// countInclick  = (countInclick == animateInArray.length)?0:countInclick;
+			// countOutclick = (countOutclick == animateOutArray.length)?0:countOutclick;
+		}); 
+		});
+
+		// show game leaderboard to user
+		$('#showLeaderboard').click(function(){
+			$.ajax({
+				url : "includes/ajax/ajax_replay.php",
+				type: "POST",
+				data: {'action':'leaderboard', 'gameid':<?php echo $gameid; ?>},
+				complete: function(){
+					$('[data-toggle="tooltip"]').tooltip();
+					showImagePopUp();
+				},
+				success : function(result)
+				{
+					result = JSON.parse(result);
+					if(result.status == 200)
+					{
+						Swal.fire({
+							icon             : 'success',
+							title            : 'Leaderboard',
+							html             : result.message,
+							showConfirmButton: true,
+							customClass      : 'swal-size-sm',
+							showClass: {
+								popup: 'animated bounceInRight faster'
+							},
+							hideClass: {
+								popup: 'animated lightSpeedOut faster'
 							}
 						});
-						// swalWithBootstrapButtons.fire(
-						//   'Deleted!',
-						//   'Your file has been deleted.',
-						//   'success'
-						//   )
+					} 
+					else
+					{
+						Swal.fire({
+							icon             : 'error',
+							title            : '',
+							html             : result.message,
+							showConfirmButton: true,
+							showClass: {
+								popup: 'animated bounceInRight faster'
+							},
+							hideClass: {
+								popup: 'animated lightSpeedOut faster'
+							}
+						});
+						// console.log(result);
 					}
-					//     else if (
-					// // Read more about handling dismissals
-					// result.dismiss === Swal.DismissReason.cancel
-					// ) {
-					//       swalWithBootstrapButtons.fire(
-					//         'Cancelled',
-					//         'Your imaginary file is safe :)',
-					//         'error'
-					//         )
-					//     }
-				})
-				// countInclick++;
-				// countOutclick++;
-				// countInclick  = (countInclick == animateInArray.length)?0:countInclick;
-				// countOutclick = (countOutclick == animateOutArray.length)?0:countOutclick;
-			}); 
-			});
-			// show image pop up into alert form
-			$('.showImagePopUp').each(function(){
-				$(this).on('click', function(){
-					var imageUrl = $(this).attr('src');
-					// alert(this.width + 'x' + this.height);
+				},
+				error: function(jqXHR, exception)
+				{
 					Swal.fire({
-						// imageWidth       : 200,
-						// imageHeight      : 100,
-						imageUrl         : imageUrl,
-						imageAlt         : 'Profile image',
-						icon             : 'success',
-						title            : '',
-						showConfirmButton: true,
-						showClass: {
-							popup: 'animated flip faster'
-						},
-						hideClass: {
-							popup: 'animated lightSpeedOut faster'
-						}
-						// html             : 'You are allowed to play <b>"'+gameName+'"</b> from <b>"'+startDate+'"</b> to <b>"'+endDate+'"</b>',
-						// footer           : '<a href>Why do I have this issue?</a>'
-						// showCancelButton : false,
-						// cancelButtonColor: '#3085d6',
-						// footer           : ''
+						icon: 'error',
+						html: jqXHR.responseText,
 					});
+					console.log(result);
+					console.log(jqXHR);
+				}
+			});
+		});
+		showImagePopUp();
+	});
+
+	function showImagePopUp(){
+		// show image pop up into alert form
+		$('.showImagePopUp').each(function(){
+			$(this).on('click', function(){
+				var imageUrl = $(this).attr('src');
+				// alert(this.width + 'x' + this.height);
+				Swal.fire({
+					// imageWidth       : 200,
+					// imageHeight      : 100,
+					imageUrl         : imageUrl,
+					imageAlt         : 'Profile image',
+					icon             : 'success',
+					title            : '',
+					showConfirmButton: true,
+					showClass: {
+						popup: 'animated flip faster'
+					},
+					hideClass: {
+						popup: 'animated lightSpeedOut faster'
+					}
+					// html             : 'You are allowed to play <b>"'+gameName+'"</b> from <b>"'+startDate+'"</b> to <b>"'+endDate+'"</b>',
+					// footer           : '<a href>Why do I have this issue?</a>'
+					// showCancelButton : false,
+					// cancelButtonColor: '#3085d6',
+					// footer           : ''
 				});
 			});
 		});
-	});
+	}
 </script>
 
 <script>

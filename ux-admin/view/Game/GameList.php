@@ -13,7 +13,14 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Game</h1>
+		<h1 class="page-header">
+			<?php if($functionsObj->checkModuleAuth('game','add')){ ?>
+				<a href="<?php echo site_root."ux-admin/ManageGame/add/1"; ?>" data-toggle="tooltip" title="Add Game">
+          <i class="fa fa-plus-circle"></i>
+        </a>
+			<?php }?>
+			Game
+		</h1>
 	</div>
 </div>
 
@@ -72,12 +79,6 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<label style="padding-top:7px;">Games List</label>
-			<div class="pull-right">
-				<?php if($functionsObj->checkModuleAuth('game','add')){ ?>
-					<input class="btn btn-primary" type="button" name="addsiteuser" value="Add Game"
-					onclick="window.location.href='<?php echo site_root."ux-admin/ManageGame/add/1"; ?>';"/>
-				<?php }?>
-			</div>
 			<div class="clearfix"></div>
 		</div>
 		<div class="panel-body">

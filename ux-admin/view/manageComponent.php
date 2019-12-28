@@ -127,7 +127,11 @@
 
 	<div class="form-group"></div>
 	<div class="panel panel-default">
-		<div class="panel-heading">Component List</div>
+		<div class="panel-heading">Component List
+			<a href="javascript:void(0);" class="pull-right" data-toggle="tooltip" title="Refresh Table Data" id="refreshServerSideDataTable">
+				<i class="fa fa-refresh"></i>
+			</a>
+		</div>
 		<div class="panel-body">
 			<div class="dataTable_wrapper">
 				<table class="table table-striped table-bordered table-hover text-center" id="dataTables-serverSide" data-url="<?php echo site_root.'ux-admin/model/ajax/dataTables.php';?>" data-action="ManageComponent">
@@ -140,34 +144,9 @@
 							<th class="no-sort">Action</th>
 						</tr>
 					</thead>
-					<!-- <tbody>
-						<?php
-						if($object->num_rows > 0){
-							$i=1;
-							while($row = $object->fetch_object()){ ?>
-								<tr>
-									<th><?php echo $i;?></th>
-									<td><?php echo $row->Area_Name;?></td>
-									<td><?php echo $row->Comp_Name;?></td>
-									<td><?php echo $row->Comp_NameAlias;?></td>
-									<td class="text-center">
-										<?php if($functionsObj->checkModuleAuth('component','edit')){ ?>
-											<a href="<?php echo site_root."ux-admin/ManageComponent/edit/".base64_encode($row->Comp_ID);?>" title="Edit"><span class="fa fa-pencil"></span></a>
-										<?php } if($functionsObj->checkModuleAuth('component','delete')){ ?>
-											<a href="javascript:void(0);" class="dl_btn"
-											id="<?php echo $row->Comp_ID; ?>" title="Delete">
-											<span class="fa fa-trash"></span>
-										</a>
-									<?php }?>
-								</td>
-							</tr>
-							<?php $i++;
-						}
-					} ?>
-				</tbody> -->
-			</table>
+				</table>
+			</div>
 		</div>
 	</div>
-</div>
 </div>
 </div>

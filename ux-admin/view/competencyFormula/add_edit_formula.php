@@ -192,7 +192,7 @@
 
 							<div class="col-xs-12 col-sm-12 col-md-8 form-group text-center">
 								<button type="button" class="btn btn-primary" name="add_formula" id="add_formula">Submit</button>
-								<a href="<?php echo site_root.'ux-admin/competencyFormula';?>" class="btn btn-primary">Cancel</a>
+								<a href="<?php echo site_root.'ux-admin/competencyFormula';?>" class="btn btn-danger">Cancel</a>
 							</div>
 						</div>
 					</div>

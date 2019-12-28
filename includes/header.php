@@ -26,6 +26,12 @@
 	<script src="<?php echo site_root;?>dist/sweetalert/sweetalert2.all.min.js"></script>
 	
 	<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+	<!-- adding these links to include chart.js -->
+	<script src="<?php echo site_root;?>chartjs/chart.bundle.min.js"></script>
+	<link href="<?php echo site_root;?>chartjs/chart.min.css" rel="stylesheet" type="text/css">
+	<script src="<?php echo site_root;?>chartjs/chart.min.js"></script>
+	
 	<style>
 		.navbar-default .navbar-nav>li>a
 		{
@@ -138,12 +144,22 @@
 		</script>
 		<script>
 			$(document).ready(function(){
+				$('[data-toggle="tooltip"]').tooltip();
+				showImageModal();
 				// countInclick   = 0;
 				// countOutclick  = 0;
 				// animateInArray = ['bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'flipInX', 'flipInY', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight', 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'lightSpeedIn', 'bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello', 'heartBeat', 'flip', 'hinge', 'jackInTheBox', 'rollIn'];
 
 				// animateOutArray = ['bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'flipOutX', 'flipOutY', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'lightSpeedOut', 'rollOut'];
-				
+			});
+
+			function showImageModal()
+			{
+				$('marquee').each(function(){
+					$(this).on('mouseover',function(){this.stop();});
+					$(this).on('mouseout',function(){this.start();});
+				});
+
 				$('.showImageModal').each(function(){
 					$(this).on('click',function(){
 						$('#imageModal').show();
@@ -154,5 +170,6 @@
 					// $('#imageModal').hide('slow');
 					$('#imageModal').slideUp(1000);
 				});
-			});
+			}
+
 		</script>

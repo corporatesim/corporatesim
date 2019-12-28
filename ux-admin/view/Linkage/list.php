@@ -7,7 +7,14 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Linkage</h1>
+		<h1 class="page-header">
+			<?php if($functionsObj->checkModuleAuth('linkage','add')){ ?>
+				<a href="<?php echo site_root."ux-admin/linkage/add/1"; ?>" data-toggle="tooltip" title="Add Linkage">
+					<i class="fa fa-plus-circle"></i>
+				</a>
+			<?php } ?>
+			Linkage
+		</h1>
 	</div>
 </div>
 
@@ -45,12 +52,6 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<label style="padding-top:7px;">Linkage List</label>
-			<div class="pull-right">
-				<?php if($functionsObj->checkModuleAuth('linkage','add')){ ?>
-					<input class="btn btn-primary" type="button" name="addlink" value="Add Linkage"
-					onclick="window.location.href='<?php echo site_root."ux-admin/linkage/add/1"; ?>';"/>
-				<?php } ?>
-			</div>
 			<div class="clearfix"></div>
 		</div>
 		<div class="panel-body">
