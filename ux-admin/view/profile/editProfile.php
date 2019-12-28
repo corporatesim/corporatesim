@@ -47,7 +47,7 @@
 			
 			<div class="form-group col-sm-10 text-center">
 				<button class="btn btn-primary" type="submit" name="update" value="Update">Update</button>
-				<button class="btn btn-primary" type="button" onclick="window.location='<?php echo site_root."ux-admin/MyProfile"; ?>';">Back</button>
+				<button class="btn btn-danger" type="button" onclick="window.location='<?php echo site_root."ux-admin/MyProfile"; ?>';">Back</button>
 			</div>
 		</form>
 	</div>

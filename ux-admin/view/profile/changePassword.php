@@ -35,7 +35,7 @@
 			</div>
 			<div class="form-group text-center">
 				<button class="btn btn-primary" type="submit" name="changePassword" value="Change Password">Change Password</button>
-				<button class="btn btn-primary" type="button" onclick="window.location='<?php echo site_root."ux-admin/MyProfile"; ?>';">Back</button>
+				<button class="btn btn-danger" type="button" onclick="window.location='<?php echo site_root."ux-admin/MyProfile"; ?>';">Back</button>
 			</div>
 		</form>
 	</div>
