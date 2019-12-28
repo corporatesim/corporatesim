@@ -80,6 +80,17 @@ class Model extends database{
 		}
 	}
 
+	function AreaSequencingDelete($linkid=NULL,$areaid=NULL)
+	{
+		$delSequenceSql = "SELECT gls.SubLink_ID, gls.SubLink_LinkID, gls.SubLink_AreaID FROM GAME_LINKAGE_SUB gls WHERE gls.SubLink_Status=1 AND gls.SubLink_LinkID=$linkid";
+		$object         = $this->conn->query($delSequenceSql) or die($this->conn->error."<br>".$delSequenceSql);
+
+		if($object->num_rows < 1)
+		{
+			$deleteSequenc = DeleteData('GAME_AREA_SEQUENCE','Sequence_LinkId='.$linkid.' AND Sequence_AreaId',$areaid);
+		}
+	}
+
 	function FetchData($object){
 		$data = $object->fetch_assoc() or die($this->conn->error);
 		return $data;
