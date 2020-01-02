@@ -9,6 +9,8 @@ error_reporting(E_ALL & ~E_NOTICE | E_ERROR | E_WARNING | E_PARSE);
 $server = 'local';
 //$server = 'server';
 // $server = 'live';
+// defining this contatant for css and js file versioning(clearing cookies)
+define("version",1);
 
 if($server == 'local')
 {

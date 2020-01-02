@@ -16,9 +16,9 @@
 <!--<script src="js/jquery.min.js"></script>	-->
 <!-- <script src="js/bootstrap.min.js"></script>			 -->
 <!-- Metis Menu Plugin JavaScript -->
-<script src="<?php echo site_root.'/assets/components/metisMenu/dist/metisMenu.min.js'; ?>"></script>
+<script src="<?php echo site_root; ?>assets/components/metisMenu/dist/metisMenu.min.js?v=<?php echo version;?>"></script>
 <!-- Custom Theme JavaScript -->
-<script src="<?php echo site_root.'/assets/dist/js/sb-admin-2.js'; ?>"></script>
+<script src="<?php echo site_root; ?>assets/dist/js/sb-admin-2.js?v=<?php echo version;?>"></script>
 <script>
 	
 	$(document).ready(function() {

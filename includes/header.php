@@ -8,29 +8,29 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-	<link rel="stylesheet" href="<?php echo site_root;?>css/bootstrap.min.css">
-	<!-- <link rel="stylesheet" href="<?php echo site_root;?>css/selectgame.css">   -->
+	<link rel="stylesheet" href="<?php echo site_root;?>css/bootstrap.min.css?v=<?php echo version;?>">
+	<!-- <link rel="stylesheet" href="<?php echo site_root;?>css/selectgame.css?v=<?php echo version;?>">   -->
 
-	<link rel="stylesheet" href="<?php echo site_root;?>css/inner_pages.css">  
-	<link rel="stylesheet" href="<?php echo site_root;?>css/style.css">  
+	<link rel="stylesheet" href="<?php echo site_root;?>css/inner_pages.css?v=<?php echo version;?>">  
+	<link rel="stylesheet" href="<?php echo site_root;?>css/style.css?v=<?php echo version;?>">  
 	<link rel="shortcut icon" type="image/x-icon" href="images/faviconnew.ico">
 	
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,100,300,500,700' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,600,700" rel="stylesheet"> 
-	<script src="js/jquery.min.js"></script>	
-	<script src="js/bootstrap.min.js"></script>		
+	<script src="js/jquery.min.js?v=<?php echo version;?>"></script>	
+	<script src="js/bootstrap.min.js?v=<?php echo version;?>"></script>		
 	<!-- adding sweet alert -->
-	<link href="<?php echo site_root;?>dist/sweetalert/sweetalert2.min.css" rel="stylesheet" type="text/css">
-	<link href="<?php echo site_root;?>dist/sweetalert/animate.min.css" rel="stylesheet" type="text/css">
-	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"> -->
-	<script src="<?php echo site_root;?>dist/sweetalert/sweetalert2.all.min.js"></script>
+	<link href="<?php echo site_root;?>dist/sweetalert/sweetalert2.min.css?v=<?php echo version;?>" rel="stylesheet" type="text/css">
+	<link href="<?php echo site_root;?>dist/sweetalert/animate.min.css?v=<?php echo version;?>" rel="stylesheet" type="text/css">
+	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css?v=<?php echo version;?>"> -->
+	<script src="<?php echo site_root;?>dist/sweetalert/sweetalert2.all.min.js?v=<?php echo version;?>"></script>
 	
 	<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 	<!-- adding these links to include chart.js -->
-	<script src="<?php echo site_root;?>chartjs/chart.bundle.min.js"></script>
-	<link href="<?php echo site_root;?>chartjs/chart.min.css" rel="stylesheet" type="text/css">
-	<script src="<?php echo site_root;?>chartjs/chart.min.js"></script>
+	<script src="<?php echo site_root;?>chartjs/chart.bundle.min.js?v=<?php echo version;?>"></script>
+	<link href="<?php echo site_root;?>chartjs/chart.min.css?v=<?php echo version;?>" rel="stylesheet" type="text/css">
+	<script src="<?php echo site_root;?>chartjs/chart.min.js?v=<?php echo version;?>"></script>
 	
 	<style>
 		.navbar-default .navbar-nav>li>a

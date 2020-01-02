@@ -11,35 +11,35 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<!-- <link rel="stylesheet" href="<?php echo site_root;?>css/selectgame.css">   -->
+		<!-- <link rel="stylesheet" href="<?php echo site_root;?>css/selectgame.css?v=<?php echo version;?>">   -->
 
-		<link rel="stylesheet" href="<?php echo site_root;?>css/inner_pages.css">  
-		<link rel="stylesheet" href="<?php echo site_root;?>css/style.css"> 
-		<link rel="stylesheet" href="<?php echo site_root;?>css/simulation.css"> 
+		<link rel="stylesheet" href="<?php echo site_root;?>css/inner_pages.css?v=<?php echo version;?>">  
+		<link rel="stylesheet" href="<?php echo site_root;?>css/style.css?v=<?php echo version;?>"> 
+		<link rel="stylesheet" href="<?php echo site_root;?>css/simulation.css?v=<?php echo version;?>"> 
 		
 		<!-- Admin files starts here -->
 		<!-- favicon -->
 		<link rel="shortcut icon" type="image/x-icon" href="<?php echo site_root;?>images/favicon.ico">
 		<!-- Bootstrap Core CSS -->
-		<link href="<?php echo site_root;?>assets/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="<?php echo site_root;?>assets/components/bootstrap/dist/css/bootstrap.min.css?v=<?php echo version;?>" rel="stylesheet">
 		<!-- Custom CSS -->
-		<link href="<?php echo site_root;?>assets/dist/css/sb-admin-2.css" rel="stylesheet">
+		<link href="<?php echo site_root;?>assets/dist/css/sb-admin-2.css?v=<?php echo version;?>" rel="stylesheet">
 		<!-- Custom Fonts -->
-		<link href="<?php echo site_root;?>assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="<?php echo site_root;?>assets/components/font-awesome/css/font-awesome.min.css?v=<?php echo version;?>" rel="stylesheet" type="text/css">
 		<!-- Admin files end here -->
-		<script src="<?php echo site_root;?>js/jquery.min.js"></script>	
-		<script src="<?php echo site_root;?>js/bootstrap.min.js"></script>
+		<script src="<?php echo site_root;?>js/jquery.min.js?v=<?php echo version;?>"></script>	
+		<script src="<?php echo site_root;?>js/bootstrap.min.js?v=<?php echo version;?>"></script>
 		<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 		<!-- adding sweet alert -->
-		<link href="<?php echo site_root;?>dist/sweetalert/sweetalert2.min.css" rel="stylesheet" type="text/css">
-		<link href="<?php echo site_root;?>dist/sweetalert/animate.min.css" rel="stylesheet" type="text/css">
-		<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"> -->
-		<script src="<?php echo site_root;?>dist/sweetalert/sweetalert2.all.min.js"></script>
+		<link href="<?php echo site_root;?>dist/sweetalert/sweetalert2.min.css?v=<?php echo version;?>" rel="stylesheet" type="text/css">
+		<link href="<?php echo site_root;?>dist/sweetalert/animate.min.css?v=<?php echo version;?>" rel="stylesheet" type="text/css">
+		<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css?v=<?php echo version;?>"> -->
+		<script src="<?php echo site_root;?>dist/sweetalert/sweetalert2.all.min.js?v=<?php echo version;?>"></script>
 		
 		<!-- adding these links to include chart.js -->
-		<script src="<?php echo site_root;?>chartjs/chart.bundle.min.js"></script>
-		<link href="<?php echo site_root;?>chartjs/chart.min.css" rel="stylesheet" type="text/css">
-		<script src="<?php echo site_root;?>chartjs/chart.min.js"></script>
+		<script src="<?php echo site_root;?>chartjs/chart.bundle.min.js?v=<?php echo version;?>"></script>
+		<link href="<?php echo site_root;?>chartjs/chart.min.css?v=<?php echo version;?>" rel="stylesheet" type="text/css">
+		<script src="<?php echo site_root;?>chartjs/chart.min.js?v=<?php echo version;?>"></script>
 
 		<style>
 			.swal2-container.swal2-backdrop-show{

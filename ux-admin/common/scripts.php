@@ -1,12 +1,12 @@
 <!-- Bootstrap Core JavaScript -->
-<script src="<?php echo site_root; ?>assets/components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="<?php echo site_root; ?>assets/components/bootstrap/dist/js/bootstrap.min.js?v=<?php echo version;?>"></script>
 <!-- Metis Menu Plugin JavaScript -->
-<script src="<?php echo site_root; ?>assets/components/metisMenu/dist/metisMenu.min.js"></script>
+<script src="<?php echo site_root; ?>assets/components/metisMenu/dist/metisMenu.min.js?v=<?php echo version;?>"></script>
 
-<!--<script src="../components/morrisjs/morris.min.js"></script>
-	<script src="../js/morris-data.js"></script>-->
+<!--<script src="../components/morrisjs/morris.min.js?v=<?php echo version;?>"></script>
+	<script src="../js/morris-data.js?v=<?php echo version;?>"></script>-->
 	<!-- Custom Theme JavaScript -->
-	<script src="<?php echo site_root; ?>assets/dist/js/sb-admin-2.js"></script>
+	<script src="<?php echo site_root; ?>assets/dist/js/sb-admin-2.js?v=<?php echo version;?>"></script>
 
 	<script type="text/javascript">
 		<!--
@@ -32,8 +32,8 @@ $("#selectAll").change(function () {
 // -->
 </script>
 
-<script src="<?php echo site_root; ?>assets/js/datetimepicker/bootstrap-datepicker.js"></script>
-<script src="<?php echo site_root; ?>assets/js/datetimepicker/bootstrap-datepicker.min.js"></script>
+<script src="<?php echo site_root; ?>assets/js/datetimepicker/bootstrap-datepicker.js?v=<?php echo version;?>"></script>
+<script src="<?php echo site_root; ?>assets/js/datetimepicker/bootstrap-datepicker.min.js?v=<?php echo version;?>"></script>
 <script type="text/javascript">
 	<!--
 		// $enableEndDate = 'enableEndDate';
@@ -62,8 +62,8 @@ $("#selectAll").change(function () {
 // -->
 </script>
 
-<script src="<?php echo site_root; ?>assets/components/datatables/media/js/jquery.dataTables.min.js"></script>
-<script src="<?php echo site_root; ?>assets/components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+<script src="<?php echo site_root; ?>assets/components/datatables/media/js/jquery.dataTables.min.js?v=<?php echo version;?>"></script>
+<script src="<?php echo site_root; ?>assets/components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js?v=<?php echo version;?>"></script>
 <script>
 	<!--
 		$(document).ready(function() {
