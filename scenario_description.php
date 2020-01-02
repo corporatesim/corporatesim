@@ -18,9 +18,10 @@ if(isset($_GET['Link']))
 	$gameidObj    = $functionsObj->ExecuteQuery($gameidSql);
 	$checkGame    = $functionsObj->FetchObject($gameidObj);
 	$gameidChk    = $checkGame->Link_GameID;
-	$checkGameSql = "SELECT * FROM GAME_SITE_USERS WHERE LOCATE($gameidChk,User_games) AND User_id=$uid";
+	$checkGameSql = "SELECT * FROM GAME_USERGAMES WHERE UG_GameID=$gameidChk AND UG_UserID=$uid";
 	// die($checkGameSql);
 	$checkGameObj = $functionsObj->ExecuteQuery($checkGameSql);
+	// echo $checkGameSql."<pre>"; print_r($checkGameObj); exit();
 	if($checkGameObj->num_rows < 1)
 	{
 		$_SESSION['er_msg'] = "You do not have permission to access that scenario description.";

@@ -15,8 +15,8 @@ include_once 'includes/headerNav.php';
   <?php
     // echo "<pre>"; print_r($result->num_rows); exit;
   if($disable == 'disabled' || $result->num_rows < 1) { ?>
-    <marquee behavior="alternate" direction="" onMouseOver="this.stop()" onMouseOut="this.start()" class="row">
-      <div style="color:#a94442; background-color:#f2dede; border-color:#ebccd1; text-align:center; font-weight:bold;"><?php echo $game_status; ?></div>
+    <marquee behavior="alternate" direction="" class="row">
+      <div class="row col-md-12"><?php echo "<span class='alert-danger'><b>Assigned simulations/games have been disabled or not assigned yet. If required, please contact the administration.</b></span>"; ?></div>
     </marquee>
     <?php die(); }  ?>
     <!-- only if game assigned or enabled -->
