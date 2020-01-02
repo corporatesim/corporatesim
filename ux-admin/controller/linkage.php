@@ -1161,17 +1161,18 @@ if(isset($_GET['edit'])){
 	$file      = 'addedit.php';
 	$noSelect2 = '';
 }
-elseif(isset($_GET['del'])){
+elseif(isset($_GET['del']))
+{
 	// this will delete the complete linkage, so delete all the area sequencing for the this scenario
 	// Delete Siteuser
-	$id = base64_decode($_GET['del']);
-	// echo $id;	exit();
+	$linkid = base64_decode($_GET['del']);
+	// echo $linkid;	exit();
 
-	$result           = $functionsObj->DeleteData('GAME_LINKAGE','Link_ID',$id,0);
-	$resultLinkUsers  = $functionsObj->DeleteData('GAME_LINKAGE_USERS','UsScen_LinkId',$id,0);
-	$resultSubLinkage = $functionsObj->DeleteData('GAME_LINKAGE_SUB','SubLink_LinkID',$id,0);
+	$result           = $functionsObj->DeleteData('GAME_LINKAGE','Link_ID',$linkid,0);
+	$resultLinkUsers  = $functionsObj->DeleteData('GAME_LINKAGE_USERS','UsScen_LinkId',$linkid,0);
+	$resultSubLinkage = $functionsObj->DeleteData('GAME_LINKAGE_SUB','SubLink_LinkID',$linkid,0);
 	// deleting area to game_area_sequencing table for this scenario
-	// $scenAreaSequencing = $functionsObj->AreaSequencingDelete($linkid,$areaid);
+	$scenAreaSequencing = $functionsObj->AreaSequencingDelete($linkid);
 	// echo $linkid.' , '.$_POST['area_id']."<pre>"; print_r($areaSequencing); exit;
 	// print_r($resultLinkUsers); echo "<br>"; print_r($result); exit;
 
@@ -1181,8 +1182,10 @@ elseif(isset($_GET['del'])){
 	header("Location: ".site_root."ux-admin/linkage");
 	exit(0);
 
-}elseif(isset($_GET['stat'])){
-	// Enable disable siteuser account
+}
+elseif(isset($_GET['stat']))
+{
+	// Enable disable complete linkage
 	$id      = base64_decode($_GET['stat']);
 	$object  = $functionsObj->SelectData(array(), 'GAME_LINKAGE', array('Link_ID='.$id), '', '', '', '', 0);
 	$details = $functionsObj->FetchObject($object);
@@ -1205,7 +1208,9 @@ elseif(isset($_GET['del'])){
 		$type[0] = "inputSuccess";
 		$type[1] = "has-success";
 	}
-}elseif(isset($_GET['link'])){
+}
+elseif(isset($_GET['link']))
+{
 	$header = 'Add Links';
 	$file   ='addeditlink.php';	
 	$linkid = $_GET['link'];
@@ -1425,14 +1430,14 @@ elseif(isset($_GET['linkstat']))
 		$details = $functionsObj->FetchObject($object);
 		
 		if($details->SubLink_Status == 1){
-			$status             = 'Deactivated';
-			$result             = $functionsObj->UpdateData('GAME_LINKAGE_SUB', array('SubLink_Status'=> 0), 'SubLink_ID', $sublinkid, 0);
+			$status = 'Deactivated';
+			$result = $functionsObj->UpdateData('GAME_LINKAGE_SUB', array('SubLink_Status'=> 0), 'SubLink_ID', $sublinkid, 0);
 			// $scenAreaSequencing = $functionsObj->AreaSequencingDelete($linkid,$areaid);
 		}
 		else
 		{
-			$status             = 'Activated';
-			$result             = $functionsObj->UpdateData('GAME_LINKAGE_SUB', array('SubLink_Status'=> 1), 'SubLink_ID', $sublinkid, 0);
+			$status = 'Activated';
+			$result = $functionsObj->UpdateData('GAME_LINKAGE_SUB', array('SubLink_Status'=> 1), 'SubLink_ID', $sublinkid, 0);
 			// $scenAreaSequencing = $functionsObj->AreaSequencingDelete($linkid,$areaid);
 		}
 		if($result === true)

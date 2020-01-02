@@ -257,7 +257,7 @@
 					<?php } if($functionsObj->checkModuleAuth('leaderboard','enable')){ ?>
 						<li>
 							<a href="<?php echo site_root."ux-admin/leaderboard";?>">
-							Leaderboard/Collaboration</a>
+							Leaderboard / Collaboration</a>
 						</li>									
 					<?php } ?>
 				</ul>

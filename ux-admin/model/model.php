@@ -87,7 +87,14 @@ class Model extends database{
 
 		if($object->num_rows < 1)
 		{
-			$deleteSequenc = DeleteData('GAME_AREA_SEQUENCE','Sequence_LinkId='.$linkid.' AND Sequence_AreaId',$areaid);
+			if(!empty($areaid))
+			{
+				$deleteSequenc = DeleteData('GAME_AREA_SEQUENCE','Sequence_LinkId='.$linkid.' AND Sequence_AreaId',$areaid);
+			}
+			else
+			{
+				$deleteSequenc = DeleteData('GAME_AREA_SEQUENCE','Sequence_LinkId',$linkid);
+			}
 		}
 	}
 
