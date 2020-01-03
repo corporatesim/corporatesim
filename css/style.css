@@ -2,6 +2,10 @@ iframe{
 	max-height: 300px;
 }
 
+th, td{
+	text-align: center !important;
+}
+
 div.vertical-menu > a.active{
 	background-color: #337ab7;
 	color           : #ffffff;
