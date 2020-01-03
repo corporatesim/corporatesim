@@ -242,11 +242,15 @@ public function deleteRecords($tableName=NULL,$where=NULL)
 }
 
  //Update Records
-public function updateRecords($tableName=NULL,$data=NULL,$where=NULL)
+public function updateRecords($tableName=NULL,$data=NULL,$where=NULL,$printQuery=NULL)
 {
   $this->db->where($where);
   $affectedRows = $this->db->update($tableName,$data);
-  // print_r($this->db->last_query()); exit();
+  if($printQuery)
+  {
+    print_r($this->db->last_query());
+    echo '<br>'.$affectedRows;
+  }
   return $affectedRows;
 }
 

@@ -132,7 +132,7 @@
 
 						<div class="form-group row">
 							<label class="col-sm-12 col-md-4 col-form-label">Domain/Sub-Domain</label>
-							<?php if(isset($domainName->Domain_Name)) { ?>
+							<?php if(!empty($domainName->Domain_Name)) { ?>
 								<div class="col-sm-12 col-md-6" id="addDomainField">
 									<input type="text" name="" id="commonDomain" class="form-control" value="<?php echo $domainName->Domain_Name;?>" disabled >
 								</div>

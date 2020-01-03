@@ -159,17 +159,56 @@ class Enterprise extends CI_Controller {
 				'Enterprise_Status'  => 0,
 			);
 			$result1 = $this->Common_Model->updateRecords('GAME_ENTERPRISE',$Enterprisedata,$where);
-			//print_r($result1);exit();
-
-			if($result1 && !empty($EnterpriseLogo))
+			// print_r($result1); echo '<br>'.$EnterpriseLogo.'<br>'.$this->input->post('commonDomain');   exit();
+			if($result1 && (!empty($EnterpriseLogo) || !empty($this->input->post('commonDomain'))))
 			{
-				$updateDomain  = array(
-					// "Domain_Name" => $this->input->post('commonDomain'),
-					"Domain_Logo" => $EnterpriseLogo,
-				);
-				$where = array('Domain_EnterpriseId' => $EnterpriseId);
-				$this->Common_Model->updateRecords('GAME_DOMAIN',$updateDomain,$where);
+				if(!empty($this->input->post('commonDomain')) && !empty($EnterpriseLogo))
+				{
+					$Domain_Name  = trim("http://".$this->input->post('commonDomain').".corporatesim.com");
+					$updateDomain = array(
+						"Domain_Name" => $Domain_Name,
+						"Domain_Logo" => $EnterpriseLogo,
+					);
+					$where = array('Domain_EnterpriseId' => $EnterpriseId);
+					$state = $this->Common_Model->updateRecords('GAME_DOMAIN',$updateDomain,$where);
+					// echo "<pre>"; var_dump($state);
+				}
+
+				elseif(!empty($this->input->post('commonDomain')) && empty($EnterpriseLogo))
+				{
+					$Domain_Name  = trim("http://".$this->input->post('commonDomain').".corporatesim.com");
+					$updateDomain = array(
+						"Domain_Name" => $Domain_Name,
+						// "Domain_Logo" => $EnterpriseLogo,
+					);
+					$where = array('Domain_EnterpriseId' => $EnterpriseId);
+					$state = $this->Common_Model->updateRecords('GAME_DOMAIN',$updateDomain,$where);
+					// echo "<pre>"; var_dump($state);
+				}
+
+				elseif(empty($this->input->post('commonDomain')) && !empty($EnterpriseLogo))
+				{
+					$updateDomain  = array(
+						// "Domain_Name" => $this->input->post('commonDomain'),
+						"Domain_Logo" => $EnterpriseLogo,
+					);
+					$where = array('Domain_EnterpriseId' => $EnterpriseId);
+					$state = $this->Common_Model->updateRecords('GAME_DOMAIN',$updateDomain,$where);
+					// echo "<pre>"; var_dump($state);
+				}
+
+				else
+				{
+					// $updateDomain  = array(
+					// 	"Domain_Name" => $this->input->post('commonDomain'),
+					// 	"Domain_Logo" => $EnterpriseLogo,
+					// );
+					// $where = array('Domain_EnterpriseId' => $EnterpriseId);
+					// $this->Common_Model->updateRecords('GAME_DOMAIN',$updateDomain,$where);
+				}
+
 			}
+			// die(' here');
 			$this->session->set_flashdata("tr_msg","Details Update Successfully" );
 			redirect("Enterprise","refresh");
 
@@ -274,12 +313,12 @@ class Enterprise extends CI_Controller {
 							$Domain_Name         = $this->input->post('commonDomain');
 							$Domain_Logo         = $_FILES['logo']['name'];
 							$Domain_details      = array(
-								'Domain_Name'         => trim("http://".$Domain_Name.".corporatesim.com"),
+								'Domain_Name'         => (!empty($Domain_Name))?trim("http://".$Domain_Name.".corporatesim.com"):'',
 								'Domain_EnterpriseId' => $Domain_EnterpriseId,
 								'Domain_Logo'         => $Domain_Logo,
 								'Domain_Status'       => 0,
 							);
-							if($this->input->post('allow') == 'allow')
+							if($this->input->post('allow') == 'allow' || empty($Domain_Name))
 							{
 								// insert data to domain table only if domanin is neither existing nor empty
 								$this->Common_Model->insert('GAME_DOMAIN',$Domain_details);
