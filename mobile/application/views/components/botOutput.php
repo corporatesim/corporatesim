@@ -145,7 +145,7 @@
               if(result.status == 200)
               {
                 // redirect to rsult or next scenario accordigly
-                window.location.href = result.redirectUrl;
+                window.location.href = result.redirect;
                 // console.log(result);
               }
               else

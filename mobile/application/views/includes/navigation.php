@@ -12,16 +12,18 @@
   }
 
   .affix {
-    top: 0;
-    width: 100%;
-    z-index: 9999 !important;
+    top     : 0;
+    width   : 100%;
+    z-index : 9999 !important;
     position: fixed;
   }
 
 </style>
 <nav class="navbar navbar-expand-md navbar-light affix" style="background-color: #e3f2fd;">
   <!-- Brand -->
-  <a class="navbar-brand" href="#">Logo</a>
+  <a class="navbar-brand" href="">
+    <img src="<?php echo base_url('../enterprise/common/Logo/'.$this->Common_Model->fetchLogo('http://'.$_SERVER['SERVER_NAME'])); ?>" alt="Logo" style="height: 45px; max-width: 50%;">
+  </a>
   <a class="navbar-brand d-none" href="#" id="clockTimeHolder"><i class="fa fa-clock-o" id="rotateTimerClock"></i> <span id="showTimer"></span></a>
 
   <!-- Toggler/collapsibe Button -->

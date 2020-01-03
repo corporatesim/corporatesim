@@ -7,15 +7,22 @@
 ?>
 
 <div class="" id="outerDiv">
-  <h2>Welcome To Mobile Simulation</h2>
+
+  <div class="d-flex align-items-start"></div>
+
+  <h2 class="mt-1">
+    <img src="<?php echo base_url('../enterprise/common/Logo/'.$logo); ?>" alt="Logo" style="height: 75px; max-width: 50%;">
+    <span class="float-right">Welcome !</span>
+  </h2>
+  <div class="d-flex align-items-start clearfix"><br></div>
 
   <form class="needs-validation" action="" autocomplete="off" id="loginForm">
     <?php $this->load->view('components/trErAlert'); ?>
     <input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
     <div class="container">
       <img src="<?php echo base_url('../images/avatar.png'); ?>" alt="Avatar" style="width:100%;">
-      <p>Hello. How are you today?</p>
-      <p>Please enter your email or username</p>
+      <p>Are you ready to play?</p>
+      <!-- <p>Please enter your email or username</p> -->
       <!-- <span class="time-right"><?php echo date('d-m-Y h:i:s'); ?></span> -->
     </div>
 
@@ -36,7 +43,7 @@
     <div class="form-row bottom-row" id="emailDiv">
       <div class="input-group col-md-12 mb-12">
         <label for="User_email"></label>
-        <input type="text" class="form-control" name="User_email" id="User_email" placeholder="Enter Email/UserName" required="" autocomplete="new-password">
+        <input type="text" class="form-control" name="User_email" id="User_email" placeholder="UserName/Email" required="" autocomplete="new-password">
         <!-- <div class="valid-tooltip">
           Please Wait...
         </div> -->

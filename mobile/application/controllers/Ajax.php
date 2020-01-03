@@ -616,6 +616,7 @@ class Ajax extends MY_Controller {
 		$replaceSublinkId = array();
 		// likely selected all the components, some to form and calcuate formula, some for carryforward purpose, and also taken user type as well, to update the carryForward values if forwarded any from user actual values
 		$findFormulaCompSubcomp = "SELECT * FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=$UserID WHERE gls.SubLink_LinkID=$linkid AND (gls.SubLink_InputMode='formula' OR gls.SubLink_InputMode='carry' OR gls.SubLink_InputMode='user')";
+		// die($findFormulaCompSubcomp);
 		$getFormulaCompSubcomp  = $this->Ajax_Model->executeQuery($findFormulaCompSubcomp);
 		// find formula expression and calculate
 		foreach ($getFormulaCompSubcomp as $getFormulaCompSubcompRow)
@@ -801,7 +802,18 @@ class Ajax extends MY_Controller {
 			'US_Output' => 1,
 		);
 		$this->Ajax_Model->updateRecords('GAME_USERSTATUS',$dataInput,$whereInput);
-		die(json_encode(["status" => "200", "csrfHash" => $this->csrfHash, "redirect" => base_url('PlaySimulation/output/'.base64_encode($gameid))]));
+		// if o/p page is skipped then only call the submitOutput function $linkid $gameid
+		$linkWhere       = array('Link_ID' => $linkid,);
+		$checkSkipOutput = $this->Ajax_Model->fetchRecords('GAME_LINKAGE',$linkWhere,'Link_Enabled');
+		if($checkSkipOutput[0]->Link_Enabled == 1)
+		{
+			$skipOutput = $this->submitOutput($gameid,$linkid);
+			// var_dump($skipOutput); exit();
+		}
+		else
+		{
+			die(json_encode(["status" => "200", "csrfHash" => $this->csrfHash, "redirect" => base_url('PlaySimulation/output/'.base64_encode($gameid))]));
+		}
 
 	}
 
@@ -1064,7 +1076,7 @@ class Ajax extends MY_Controller {
 		}
 		else
 		{
-			die(json_encode(["status" => $status, "csrfHash" => $this->csrfHash, "redirectUrl" => $redirectUrl]));
+			die(json_encode(["status" => $status, "csrfHash" => $this->csrfHash, "redirect" => $redirectUrl]));
 		}
 
 	}

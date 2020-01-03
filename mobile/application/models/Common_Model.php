@@ -19,6 +19,36 @@ class Common_Model extends CI_Model {
     return $result->num_rows();
   }
 
+  public function fetchLogo($url=NULL)
+  {
+    // firstly check for its logo, if exist then show, other wise check for it's parent logo
+
+    $where_logo = array(
+      'Domain_Name' => $url,
+    );
+
+    $this->db->select('Domain_Logo');
+    $this->db->from('GAME_DOMAIN');
+    $this->db->where($where_logo);
+    $result = $this->db->get()->result();
+    
+    // print_r($this->db->last_query());
+
+    if(count($result) > 0)
+    {
+      return $result[0]->Domain_Logo;
+    }
+
+    else
+    {
+      return 'default_logo.png';
+      // check that this is enterprise or not, add this functionality later after discussion, curently return default logo
+    }
+
+    
+    // print_r($this->db->last_query());
+  }
+
   //fetch record of login Enterprise
   public function fetchRecords($tableName=NULL,$where=NULL,$columnName=NULL,$order=NULL,$limit=NULL,$printQuery=NULL)
   {
@@ -73,6 +103,10 @@ class Common_Model extends CI_Model {
     {
       $this->db->insert($tableName,$data);
       // print_r($this->db->last_query());exit();
+      if($printQuery)
+      {
+        print_r($this->db->last_query());
+      }
       $userId = $this->db->insert_id();
       return $userId;
     }
@@ -113,11 +147,22 @@ public function deleteRecords($tableName=NULL,$where=NULL)
 }
 
 //Update Records
-public function updateRecords($tableName=NULL,$data=NULL,$where=NULL)
+public function updateRecords($tableName=NULL,$data=NULL,$where=NULL,$msg=NULL)
 {
   $this->db->where($where);
   $affectedRows = $this->db->update($tableName,$data);
   // print_r($this->db->last_query()); exit();
+  if(empty($msg))
+  {
+    if($affectedRows>0)
+    {
+      $this->session->set_flashdata('tr_msg', 'Record Updated Successfully');
+    }
+    else
+    {
+      $this->session->set_flashdata('er_msg', 'Data Error Occured. Please try later');
+    }
+  }
   return $affectedRows;
 }
 

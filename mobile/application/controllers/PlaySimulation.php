@@ -322,7 +322,7 @@ class PlaySimulation extends My_Controller {
 					'input_user'      => $this->userID,
 				);
 
-				$updateInputKey = $this->Common_Model->updateRecords('GAME_INPUT',array('input_key' => $checkKeyUpdationRow->views_key),$whereInput);
+				$updateInputKey = $this->Common_Model->updateRecords('GAME_INPUT',array('input_key' => $checkKeyUpdationRow->views_key),$whereInput,1);
 			}
 			return ["status" => "200"];
 		}
