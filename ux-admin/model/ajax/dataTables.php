@@ -665,7 +665,7 @@ if($_POST['action'] == 'leaderboard')
 
 	if(!empty($search))
 	{
-		$leaderboardSql .= " AND Game_Name LIKE '%".$search."%' OR Scen_Name LIKE '%".$search."%' OR Comp_Name LIKE '%".$search."%' OR User_fname LIKE '%".$search."%'  OR User_lname LIKE '%".$search."%' ";
+		$leaderboardSql .= " AND Game_Name LIKE '%".$search."%' OR Scen_Name LIKE '%".$search."%' OR Comp_Name LIKE '%".$search."%'";
 		$filterRecord    = true;
 	}
 	// to get the filter user record
