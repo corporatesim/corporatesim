@@ -69,7 +69,7 @@ include_once 'includes/header.php';
   <div class="timer_clock" id="timer" style="margin-right: -30px; font-weight: bold;">0:00</div>
   <div id="rightSidenav" class="row">
     <!-- <a href="javascript:void(0);" id="timer" class="pull-right"></a> -->
-    <a class="rotateCompAnti" href="#" id="left_scenario" style="margin-top: 303px;">
+    <a class="rotateCompAnti hidden" href="#" id="left_scenario" style="margin-top: 303px;">
       <button class="btn btn-success" type="button"><?php  echo "Scenario: ".$result->Scenario; ?></button>
     </a>
     

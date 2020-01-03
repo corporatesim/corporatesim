@@ -92,7 +92,7 @@
 							<th>Comments</th>
 							<th>Header</th>
 							<th>Type</th>
-							<th>Bot</th>
+							<!-- <th>Mobile</th> -->
 							<th>Introduction</th>
 							<th>Introduction Link</th>
 							<th>Description</th>
@@ -110,11 +110,11 @@
 							<tr>
 								<th><?php echo $i;?></th>
 								<td><?php echo $row->Game_ID; ?></td>
-								<td><?php echo $row->Game_Name; ?></td>
+								<td><?php echo $row->Game_Name.'<br><code>'.$row->Game_Category.'</code>'; ?></td>
 								<td><?php echo $row->Game_Comments;?></td>
 								<td><?php echo $row->Game_Header;?></td>
 								<td><?php echo ($row->Game_Elearning==1)?'eLearning':'Game'?></td>
-								<td><?php echo ($row->Game_Type==1)?'<strong>Bot-Enabled</strong>':'Normal Game'?></td>
+								<!-- <td><?php echo ($row->Game_Type==1)?'<code>Yes</code>':'No'?></td> -->
 								<td><?php echo ($row->Game_Introduction>0)?'Skipped':'Default';?></td>
 								<td><?php echo ($row->Game_IntroductionLink>0)?'Skipped':'Default';?></td>
 								<td><?php echo ($row->Game_Description>0)?'Skipped':'Default';?></td>

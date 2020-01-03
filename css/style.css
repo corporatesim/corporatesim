@@ -924,7 +924,7 @@ flip card
 
 @media (min-width: 992px){
 	.manageContainer {
-		width: 85% !important;
+		width: 93% !important;
 	}
 }
 
@@ -980,7 +980,7 @@ flip card
 .timer_clock {
 	/*margin-top     : 120px;*/
 	position       : fixed;
-	right          : -90px;
+	right          : -115px;
 	transition     : 0.3s;
 	padding        : 5px;
 	width          : 200px;
@@ -988,12 +988,14 @@ flip card
 	font-size      : 14px;
 	color          : white;
 	border-radius  : 0 5px 5px 0;
+	z-index        : 100;
+	/*background     : black;*/
 }
 
 .timer_clock_icon {
 	margin-top     : -25px;
 	position       : fixed;
-	right          : -125px;
+	right          : -150px;
 	transition     : 0.3s;
 	padding        : 5px;
 	width          : 200px;
@@ -1001,6 +1003,8 @@ flip card
 	font-size      : 20px;
 	color          : white;
 	border-radius  : 0 5px 5px 0;
+	z-index        : 100;
+	/*background     : #000000;*/
 }
 
 .leftsideNav {

@@ -554,7 +554,7 @@ if($_POST['action'] == 'Dashboard')
 		break;
 	}
 
-	$dashboardDataSql = "SELECT gg.Game_ID, gg.Game_Name, gg.Game_CreatedBy, CONCAT(gau.fname, ' ', gau.lname) AS Creator, gg.Game_Datetime AS Created_On, IF( gg.Game_Elearning > 0, 'eLearning', 'Game' ) AS Game_eLearning, IF( gg.Game_Type > 0, 'Bot', 'Game' ) AS Game_Type, IF( gg.Game_Complete > 0, 'Complete', 'In-Progress' ) AS Game_Status, gg.Game_UpdatedBy, CONCAT(ga.fname,' ',ga.lname) AS Completed_By, gg.Game_UpdatedOn, IF( gg.Game_Complete > 0, DATEDIFF( gg.Game_UpdatedOn, gg.Game_Datetime ), DATEDIFF( NOW(), gg.Game_Datetime ) ) AS Time_Taken, gau.email, gg.Game_Associates AS Associates FROM GAME_GAME gg LEFT JOIN GAME_ADMINUSERS gau ON gau.id = gg.Game_CreatedBy LEFT JOIN GAME_ADMINUSERS ga ON ga.id = gg.Game_UpdatedBy WHERE gg.Game_Delete = 0 ";
+	$dashboardDataSql = "SELECT gg.Game_ID, gg.Game_Name, gg.Game_Category, gg.Game_CreatedBy, CONCAT(gau.fname, ' ', gau.lname) AS Creator, gg.Game_Datetime AS Created_On, IF( gg.Game_Elearning > 0, 'eLearning', 'Game' ) AS Game_eLearning, IF( gg.Game_Type > 0, 'Bot', 'Game' ) AS Game_Type, IF( gg.Game_Complete > 0, 'Complete', 'In-Progress' ) AS Game_Status, gg.Game_UpdatedBy, CONCAT(ga.fname,' ',ga.lname) AS Completed_By, gg.Game_UpdatedOn, IF( gg.Game_Complete > 0, DATEDIFF( gg.Game_UpdatedOn, gg.Game_Datetime ), DATEDIFF( NOW(), gg.Game_Datetime ) ) AS Time_Taken, gau.email, gg.Game_Associates AS Associates FROM GAME_GAME gg LEFT JOIN GAME_ADMINUSERS gau ON gau.id = gg.Game_CreatedBy LEFT JOIN GAME_ADMINUSERS ga ON ga.id = gg.Game_UpdatedBy WHERE gg.Game_Delete = 0 ";
 
 	// to get the total user record
 	$countAllData = $funObj->ExecuteQuery($dashboardDataSql);
@@ -597,7 +597,7 @@ if($_POST['action'] == 'Dashboard')
 			$status = "<span class='alert-danger'>".$dashboardDataRow->Game_Status."</span>";
 		}
 
-		$data[] = array($i, $dashboardDataRow->Game_ID, $dashboardDataRow->Game_Name, $dashboardDataRow->Game_eLearning.'<b>:-</b> '.$dashboardDataRow->Game_Type, $dashboardDataRow->Creator, $dashboardDataRow->Created_On, $status, $dashboardDataRow->Game_UpdatedOn, ($dashboardDataRow->Time_Taken < 8)?$dashboardDataRow->Time_Taken.' Days':'<span class="alert-danger">'.$dashboardDataRow->Time_Taken.' Days</span>', $edit);
+		$data[] = array($i, $dashboardDataRow->Game_ID, $dashboardDataRow->Game_Name.'<br><code>'.$dashboardDataRow->Game_Category.'</code>', $dashboardDataRow->Game_eLearning.'<b>:-</b> '.$dashboardDataRow->Game_Type, $dashboardDataRow->Creator, $dashboardDataRow->Created_On, $status, $dashboardDataRow->Game_UpdatedOn, ($dashboardDataRow->Time_Taken < 8)?$dashboardDataRow->Time_Taken.' Days':'<span class="alert-danger">'.$dashboardDataRow->Time_Taken.' Days</span>', $edit);
 	}
 
 	// $filterCount = ($filterRecord)?$filterCount:$totalCount;

@@ -5,6 +5,9 @@
     /*border       : none;*/
     text-align   : center !important; 
   }
+  .container{
+    width: 93% !important;
+  }
 </style>
 <?php 
 include_once 'includes/header.php'; 
