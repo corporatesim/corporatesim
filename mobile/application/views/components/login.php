@@ -6,6 +6,16 @@
 // echo "<pre>"; print_r($csrf); exit();
 ?>
 
+<style>
+  .container img {
+    float        : left;
+    max-width    : 60px;
+    width        : 100%;
+    margin-right : 20px;
+    border-radius: 50%;
+  }
+</style>
+
 <div class="" id="outerDiv">
 
   <div class="d-flex align-items-start"></div>
