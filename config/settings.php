@@ -10,7 +10,7 @@ $server = 'local';
 //$server = 'server';
 // $server = 'live';
 // defining this contatant for css and js file versioning(clearing cookies)
-define("version",1);
+define("version",1.1);
 
 if($server == 'local')
 {
