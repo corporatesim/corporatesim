@@ -486,7 +486,7 @@
           {
             // rdirect to the result url
             // alert(result.redirect);
-            Swal.fire('Submitted Successfully');
+            Swal.fire('Submitted Successfully. Please Wait...');
             window.location = result.redirect;
           }
           else

@@ -662,7 +662,11 @@ class Ajax extends MY_Controller {
 			$replaceSql = "SELECT Rep_SublinkID, Rep_Start, Rep_End, Rep_Value FROM GAME_LINK_REPLACE WHERE Rep_SublinkID IN (".implode(',', array_keys($formulaArray)).") AND (Rep_Start!=0 OR Rep_End!=0 ) ORDER BY Rep_SublinkID ASC, Rep_Order";
 			if(count($this->Ajax_Model->executeQuery($replaceSql)) > 0)
 			{
-				$formulaReplace[] = $this->Ajax_Model->executeQuery($replaceSql);
+				// $formulaReplace[] = $this->Ajax_Model->executeQuery($replaceSql);
+				foreach($this->Ajax_Model->executeQuery($replaceSql) as $cRow)
+				{
+					$formulaReplace[] = $cRow;
+				}
 			}
 		}
 
@@ -740,7 +744,11 @@ class Ajax extends MY_Controller {
 			$replaceSql = "SELECT Rep_SublinkID, Rep_Start, Rep_End, Rep_Value FROM GAME_LINK_REPLACE WHERE Rep_SublinkID IN (".implode(',', array_keys($carryArray)).") AND (Rep_Start!=0 OR Rep_End!=0 ) ORDER BY Rep_SublinkID ASC, Rep_Order";
 			if(count($this->Ajax_Model->executeQuery($replaceSql)) > 0)
 			{
-				$replaceSublinkId[] = $this->Ajax_Model->executeQuery($replaceSql);
+				// $replaceSublinkId[] = $this->Ajax_Model->executeQuery($replaceSql);
+				foreach($this->Ajax_Model->executeQuery($replaceSql) as $fRow)
+				{
+					$formulaReplace[] = $fRow;
+				}
 			}
 
 			if(count($replaceSublinkId)>0)
