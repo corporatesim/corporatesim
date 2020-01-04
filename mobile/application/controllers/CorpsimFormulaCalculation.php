@@ -441,6 +441,7 @@ class CorpsimFormulaCalculation extends CI_Controller {
 				{
 					$branchingFlag = true;
 					$valueSql      = "SELECT input_current FROM GAME_INPUT WHERE input_user=".$UserID." AND input_key LIKE '%comp_".$checkBranching[0]->Branch_CompId."'";
+					// die($valueSql);
 					$getValue      = $this->Ajax_Model->executeQuery($valueSql);
 					$inputValue    = ($getValue[0]->input_current)?$getValue[0]->input_current:0;
 					// branching exist for the current scenario

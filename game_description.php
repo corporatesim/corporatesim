@@ -16,7 +16,7 @@ $functionsObj = new Functions();
 $gameid = $_GET['Game'];
 $userid = $_SESSION['userid'];
 // if user is not assigned this game then move to select game page
-$checkGameSql = "SELECT * FROM GAME_SITE_USERS WHERE LOCATE($gameid,User_games) AND User_id=$userid";
+$checkGameSql = "SELECT * FROM GAME_USERGAMES WHERE UG_GameID=$gameid AND UG_UserID=$userid";
 $checkGameObj = $functionsObj->ExecuteQuery($checkGameSql);
 if($checkGameObj->num_rows < 1)
 {
