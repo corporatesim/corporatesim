@@ -376,8 +376,8 @@
 </section>
 <script>
   $(document).ready(function(){
-    csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
-    csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+    // csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+    // csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
 
     // console.log('show first component excluding subcomponent, getting the subcomponent via ajax, but when user play then putting component and subcomponent together via ajax');
     // trigger ajax to get the time of the scenario
@@ -441,23 +441,30 @@
     $('#submitPage, #submitPageViaCkEditor').on('click',function(e){
       if(e.originalEvent !== undefined)
       {
-        Swal.fire({
-          icon              : 'warning',
-          title             : 'Are you sure?',
-          showCancelButton  : true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor : '#d33',
-          confirmButtonText : 'OK',
-          text              : "Please press OK if you have provided all your inputs and are ready to submit else press Cancel. Please note that you can not come back to this page after clicking OK",
-        }).then((result) => {
-          if (result.value) {
-            submitPage();
-          }
-          else
-          {
-            return false;
-          }
-        })
+        if(<?php echo $skipAlert; ?>)
+        {
+          submitPage();
+        }
+        else
+        {
+          Swal.fire({
+            icon              : 'warning',
+            title             : 'Are you sure?',
+            showCancelButton  : true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor : '#d33',
+            confirmButtonText : 'OK',
+            text              : "Please press OK if you have provided all your inputs and are ready to submit else press Cancel. Please note that you can not come back to this page after clicking OK",
+          }).then((result) => {
+            if (result.value) {
+              submitPage();
+            }
+            else
+            {
+              return false;
+            }
+          })
+        }
       }
       else
       {
@@ -486,8 +493,10 @@
           {
             // rdirect to the result url
             // alert(result.redirect);
-            Swal.fire('Submitted Successfully. Please Wait...');
+            // $('#pre-loader').removeClass('d-none hidden');
             window.location = result.redirect;
+            Swal.fire('Submitted Successfully. Please Wait...');
+            // $('#pre-loader').show();
           }
           else
           {

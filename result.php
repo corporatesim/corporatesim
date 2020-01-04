@@ -104,7 +104,7 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 						);
 						$result = $functionsObj->UpdateData ( 'GAME_USERSTATUS', $array, 'US_ID', $userstatusid  );
 						// updating the game status to complete above, and now capturing the data of output for feedback/performance
-						$leaderboardSql  = "SELECT * FROM GAME_LEADERBOARD WHERE Lead_BelongTo=0 AND Lead_Status=0 AND Lead_GameId=".$gameid;
+						$leaderboardSql  = "SELECT * FROM GAME_LEADERBOARD WHERE Lead_BelongTo=0 AND Lead_Status=0 AND Lead_GameId=".$gameid." AND Lead_ScenId=".$result1->US_ScenID;
 						$leaderboardData = $functionsObj->RunQueryFetchObject($leaderboardSql);
 						if(count($leaderboardData) > 0 && $result1->US_ScenID == $leaderboardData[0]->Lead_ScenId && $result)
 						{

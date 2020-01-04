@@ -1076,6 +1076,27 @@ class Ajax extends MY_Controller {
 			}
 		}
 
+		// add user final data, if this is set for leaderboard, for performance track
+		$performanceSql  = "SELECT * FROM GAME_LEADERBOARD glb WHERE glb.Lead_BelongTo = 0 AND glb.Lead_Status = 0 AND glb.Lead_GameId =".$gameid." AND glb.Lead_ScenId =( SELECT gl.Link_ScenarioID FROM GAME_LINKAGE gl WHERE gl.Link_ID =".$linkid." )";
+		$leaderboardData = $this->Ajax_Model->executeQuery($performanceSql);
+		if(count($leaderboardData) > 0)
+		{
+			$userDataSql = "SELECT gi.input_current FROM GAME_INPUT gi WHERE gi.input_sublinkid=(SELECT gls.SubLink_ID FROM GAME_LINKAGE_SUB gls WHERE gls.SubLink_LinkID=".$linkid." AND gls.SubLink_CompID=".$leaderboardData[0]->Lead_CompId." AND gls.SubLink_SubCompID < 1) AND gi.input_user=".$UserID;
+			$userInputData = $this->Ajax_Model->executeQuery($userDataSql);
+
+			if(count($userInputData) > 0)
+			{
+				$insertArray         = array(
+					'Performance_UserId' => $UserID,
+					'Performance_GameId' => $gameid,
+					'Performance_ScenId' => $leaderboardData[0]->Lead_ScenId,
+					'Performance_CompId' => $leaderboardData[0]->Lead_CompId,
+					'Performance_Value'  => $userInputData[0]->input_current,
+				);
+				$addPerformanceData  = $this->Ajax_Model->insert( 'GAME_USER_PERFORMANCE', $insertArray);
+			}
+		}
+		// end of adding/save last performance data
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === FALSE)

@@ -57,8 +57,8 @@
   </div>
   <script>
     $(document).ready(function(){
-      csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
-      csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+      // var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+      // var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
 
       $('#showLeaderboard').on('click',function(){
         showLeaderboard();
@@ -98,7 +98,7 @@
             else
             {
               swal.fire({
-                // icon             : 'error',
+                icon             : 'error',
                 title            : 'Leaderboard',
                 html             : result.message,
                 showConfirmButton: true,

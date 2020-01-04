@@ -28,8 +28,8 @@
 </body>
 <script>
 	$(document).ready(function(){
-		var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
-		var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+		// var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+		// var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
 		$('[data-toggle="tooltip"]').tooltip();
 		// show pre-loader when ajax starts
 		$(document).ajaxStart(function(){

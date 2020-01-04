@@ -28,6 +28,9 @@
 <!-- <body style="background-image: url('<?php echo base_url("../images/bg3.jpg"); ?>');"> -->
 	<script>
 		$(document).ready(function(){
+			csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+			csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+			
 			$('marquee').each(function(){
 				$(this).on('mouseover',function(){this.stop();});
 				$(this).on('mouseout',function(){this.start();});

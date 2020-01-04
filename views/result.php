@@ -1,5 +1,6 @@
 <?php 
-include_once 'includes/headerNav.php'; 
+// include_once 'includes/headerNav.php'; 
+include_once 'includes/header.php'; 
 ?>
 <section id="video_player">
 	<div class="container">

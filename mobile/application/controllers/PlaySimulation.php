@@ -192,6 +192,7 @@ class PlaySimulation extends My_Controller {
 		// $findLinkageSub = $this->Common_Model->executeQuery($findLinkageSubSql);
 		// echo "$findLinkageSubSql<pre>"; print_r($findScenario); print_r($findLinkage); print_r($findLinkageSub); exit();
 
+		$content['skipAlert']      = $findLinkage->Link_SkipAlert;
 		$content['findScenario']   = $findScenario;
 		$content['findLinkage']    = $findLinkage;
 		$content['findLinkageSub'] = $findLinkageSub;
