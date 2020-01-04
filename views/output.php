@@ -6,7 +6,7 @@
     text-align   : center !important; 
   }
   .container{
-    width: 93% !important;
+    width: 92% !important;
   }
 </style>
 <?php 
