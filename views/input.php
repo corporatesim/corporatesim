@@ -92,7 +92,7 @@ include_once 'includes/header.php';
         <div class="clearfix"></div>
         <form method="POST" action="" id="game_frm" name="game_frm" novalidate="">
           <?php if($result->BackgroundImage){ ?>
-            <div class="col-sm-12 no_padding shadow" style="background: url(<?php echo site_root.'images/'.$result->BackgroundImage?>);">
+            <div class="col-sm-12 no_padding shadow" style="background: url(<?php echo site_root.'images/'.$result->BackgroundImage?>); background-repeat: round;">
             <?php } else { ?>
               <div class="col-sm-12 no_padding shadow">
               <?php } ?>
