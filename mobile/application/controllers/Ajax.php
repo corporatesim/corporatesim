@@ -1153,5 +1153,74 @@ class Ajax extends MY_Controller {
 		// check if, the component or subcomponent is further depending to any other comp/subComp or not
 	}
 
+	public function showLeaderboard($gameId=NULL)
+	{
+		$gameId = base64_decode($gameId);
+		$UserID = $this->botUserData->User_id;
+
+		// get data o/p data for particular game with refrence to gameid and create the leaderboard
+		$leadWhere = array(
+			'Lead_BelongTo' => 0,
+			'Lead_Status'   => 0,
+			'Lead_GameId'   => $gameId,
+		);
+		$leaderboardData = $this->Ajax_Model->fetchRecords('GAME_LEADERBOARD',$leadWhere,'','','','');
+		// print_r($leaderboardData);
+		if(count($leaderboardData) > 0)
+		{
+			// coz there must be only one entry for per game for leaderboard
+			$leadSql = "SELECT gi.input_user, gi.input_sublinkid, gi.input_current, CONCAT( gsu.User_fname, ' ', gsu.User_lname ) AS NAME, gsu.User_profile_pic AS pic, gc.Comp_Name, gc.Comp_NameAlias FROM GAME_INPUT gi LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_id = gi.input_user LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID =".$leaderboardData[0]->Lead_CompId." WHERE gi.input_sublinkid =( SELECT SubLink_ID FROM GAME_LINKAGE_SUB WHERE SubLink_Status = 1 AND SubLink_LinkID =( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID =".$leaderboardData[0]->Lead_GameId." AND Link_ScenarioID =".$leaderboardData[0]->Lead_ScenId.") AND SubLink_CompID =".$leaderboardData[0]->Lead_CompId." AND SubLink_SubCompID < 1 ) ORDER BY gi.input_current ".(($leaderboardData[0]->Lead_Order >0)?'DESC':'ASC');
+			$leadData = $this->Ajax_Model->executeQuery($leadSql);
+			// echo $leadSql.'<br><br>'; print_r($leadData);
+			// // die(json_encode(["status" => 200, "message" => $leadData]));
+			$totalRecords = count($leadData);
+			$userFlag     = false;
+			// show only top 10 records
+			// var_dump(array_search($UserID,$leadData));
+			$returnData = "<table class='table table-striped table-sm table-hover table-responsive table-bordered'><thead class='thead-dark'><th>Rank</th> <th>Name</th> <th>Image</th> <th>".((!empty($leadData[0]->Comp_NameAlias))?$leadData[0]->Comp_NameAlias:$leadData[0]->Comp_Name)."</th></thead><tbody>";
+
+			for ($i=0; $i<$totalRecords; $i++)
+			{
+				$imgSrc = (empty($leadData[$i]->pic))?'avatar.png':$leadData[$i]->pic;
+				// if user is in top 10
+				if($leadData[$i]->input_user == $UserID && $i < 10)
+				{
+					$returnData .= "<tr class='alert-success'><td>".eval('return 1+'.$i.';')."</td> <td>You</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='You'><img src='".base_url('../')."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
+					$userFlag = true;
+				}
+				elseif($leadData[$i]->input_user != $UserID && $i < 10)
+				{
+					$returnData .= "<tr><td>".eval('return 1+'.$i.';')."</td> <td>".$leadData[$i]->NAME."</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='".$leadData[$i]->NAME."'><img src='".base_url('../')."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
+				}
+				else
+				{
+					if($userFlag && $i==9)
+					{
+						// echo '<br><br>here in 121 <br><br>';
+						break;
+					}
+					else
+					{
+						if($leadData[$i]->input_user == $UserID)
+						{
+							// is user is not in the top 10 then add the user at the bottom with his/her rank
+							$returnData .= "<tr class='alert-danger'><td>".eval('return 1+'.$i.';')."</td> <td>You</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='You'><img src='".base_url('../')."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
+						}
+						continue;
+					}
+				}
+			}
+
+			$returnData .= "</tbody> <tfoot> <tr><th colspan=4> <marquee> ".$totalRecords." Users Played This Game </marquee></th></tr> </tfoot> </table>";
+			die(json_encode(["status" => 200, "csrfHash" => $this->csrfHash, "message" => $returnData]));
+		}
+		else
+		{
+			die(json_encode(["status" => 201, "csrfHash" => $this->csrfHash, "message" => "Leaderboard will be available asap."]));
+		}
+
+
+	}
+
 
 }

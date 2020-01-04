@@ -9,10 +9,7 @@ include_once 'includes/headerNav.php';
 			<div class="clearfix"></div>
 			<div class="no_padding ">
 				<div class="shadow col-sm-12">
-					<div class="col-sm-10 col-sm-offset-1 mssgeforUser">
-						<!--Message for User... -->
-						<?php echo $gamedetails->Game_Message; ?>
-					</div>
+				
 					<div class="col-sm-10 col-sm-offset-1 text-right">
 						<!-- View Game Report <img src="images/reportIcon.png" alt="Report"> -->
 						<a href="javascript:void(0);" data-toggle="tooltip" title="View Game Leaderboard" id="showLeaderboard">
@@ -87,6 +84,10 @@ include_once 'includes/headerNav.php';
 					<?php } ?>
 					<!-- performance chart end here -->
 					<div class="clearfix"></div>
+					<div class="col-sm-10 col-sm-offset-1 mssgeforUser">
+						<!--Message for User... -->
+						<?php echo $gamedetails->Game_Message; ?>
+					</div>
 					<div class="col-sm-12">
 					</div>	
 					<div class="col-sm-10 col-sm-offset-1 ">
@@ -203,7 +204,7 @@ include_once 'includes/headerNav.php';
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-12 text-center">
-				<span>mksahu</span>
+				<span></span>
 			</div>
 		</div>
 	</div>
@@ -212,9 +213,9 @@ include_once 'includes/headerNav.php';
 <script src="js/bootstrap.min.js"></script>
 <script>
 	$(document).ready(function(){
-		setTimeout(function(){
-			$('#showLeaderboard').trigger('click');
-		},100)
+		// setTimeout(function(){
+		// 	$('#showLeaderboard').trigger('click');
+		// },100)
 
 		// if user has played game more than one time then show the chart to user
 		<?php if(count($performanceData) > 1) { 

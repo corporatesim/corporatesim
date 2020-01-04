@@ -11,21 +11,25 @@
           <p class="card-text"><?php echo $gameResult->Game_Comments;?></p>
           <p class="card-text">
             <!-- if user is allowed to play games within UG_GameStartDate and UG_GameEndDate-->
-            <?php if( time() > strtotime($gameResult->UG_GameStartDate) && time() < strtotime($gameResult->UG_GameEndDate)) { ?>
-
+            <?php if(time()>strtotime($gameResult->UG_GameStartDate) && time()<strtotime($gameResult->UG_GameEndDate)) { ?>
               <!-- check if user has completed (US_LinkID == 1)) the simulation-->
               <?php if($gameResult->US_LinkID == 1){ ?>
 
                 <?php if($gameResult->UG_ReplayCount > 0 || $gameResult->UG_ReplayCount < 0 || $this->session->userdata('botUserData')->User_companyid == 21){ ?>
                   <!-- it means user belongs to humanlink or has some or unlimited replay access to play the simulation -->
+                  <a href="javascript:void(0);" data-toggle="tooltip" title="Simulation Result" id="showLeaderboard">
+                    <img src="<?php echo base_url('../images/leaderboard.png');?>" alt="Simulation Result" width="80" height="80">
+                  </a>
 
-                  <a href="<?php echo base_url('PlaySimulation/result/'.base64_encode($gameResult->Game_ID));?>" data-toggle="tooltip" title="Simulation Result"><img src="<?php echo base_url('../images/report.png');?>" alt="Simulation Result" width="80" height="80"></a>
-
-                  <a href="javascript:void(0);" class="replaySimulation" data-imageurl="<?php echo base_url('../images/'); echo ($gameResult->Game_Image)?$gameResult->Game_Image:'Game2.jpg';?>" data-gameid="<?php echo $gameResult->Game_ID; ?>" data-toggle="tooltip" title="Replay Simulation"><img src="<?php echo base_url('../images/replay1.png');?>" alt="Replay Simulation" width="80" height="80"></a>
+                  <a href="javascript:void(0);" class="replaySimulation" data-imageurl="<?php echo base_url('../images/'); echo ($gameResult->Game_Image)?$gameResult->Game_Image:'Game2.jpg';?>" data-gameid="<?php echo $gameResult->Game_ID; ?>" data-toggle="tooltip" title="Replay Simulation">
+                    <img src="<?php echo base_url('../images/replay.png');?>" alt="Replay Simulation" width="80" height="80">
+                  </a>
 
                 <?php } else { ?>
-                  <!-- user has complted the simulation and don't have the replay option -->
-                  <a href="<?php echo base_url('PlaySimulation/result/'.base64_encode($gameResult->Game_ID));?>" data-toggle="tooltip" title="Simulation Result"><img src="<?php echo base_url('../images/report.png');?>" alt="Simulation Result" width="80" height="80"></a>
+                  <!-- user has completed the simulation and don't have the replay option -->
+                  <a href="javascript:void(0);" data-toggle="tooltip" title="Simulation Result" id="showLeaderboard">
+                    <img src="<?php echo base_url('../images/leaderboard.png');?>" alt="Simulation Result" width="80" height="80">
+                  </a>
                 <?php } ?>
 
               <?php } else { ?>
@@ -51,3 +55,70 @@
       </div>
     </div>
   </div>
+  <script>
+    $(document).ready(function(){
+      csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+      csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+
+      $('#showLeaderboard').on('click',function(){
+        showLeaderboard();
+      });
+      // showLeaderboard();
+    });
+
+    function showLeaderboard()
+    {
+      $.ajax({
+        url   : "<?php echo base_url('Ajax/showLeaderboard/'.$this->uri->segment(3));?>",
+        type  : 'POST',
+        data  : {[csrfName]: csrfHash},
+        // global: false, // this is used to prevent the ajaxStart function
+        success: function(result){
+          try
+          {
+            var result = JSON.parse( result );
+            // updating csrf token value
+            csrfHash = result.csrfHash;
+            if(result.status == 200)
+            {
+              swal.fire({
+                // icon             : 'success',
+                title            : 'Leaderboard',
+                html             : result.message,
+                showConfirmButton: true,
+                customClass      : 'custom-style-alert',
+                showClass: {
+                  popup: 'animated bounceInRight faster'
+                },
+                hideClass: {
+                  popup: 'animated lightSpeedOut faster'
+                }
+              });
+            }
+            else
+            {
+              swal.fire({
+                // icon             : 'error',
+                title            : 'Leaderboard',
+                html             : result.message,
+                showConfirmButton: true,
+                customClass      : 'custom-style-alert',
+                showClass: {
+                  popup: 'animated bounceInRight faster'
+                },
+                hideClass: {
+                  popup: 'animated lightSpeedOut faster'
+                }
+              });
+              console.log(result);
+            }
+          }
+          catch ( e )
+          {
+            swal.fire('Something went wrong. Please try later.');
+            console.log(e + "\n" + result);
+          }
+        }
+      });
+    }
+  </script>

@@ -34,5 +34,21 @@
 			});
 		});
 	</script>
+	<style>
+		.swal2-container.swal2-backdrop-show
+		{
+			background: #00000066;
+		}
+		.swal-size-sm
+		{
+			width: auto;
+		}
+		.custom-style-alert
+		{
+			width     : auto;
+			height    : auto;
+			margin-top: 70px !important;
+		}
+	</style>
 	<body>
 		<section id="bodySection">

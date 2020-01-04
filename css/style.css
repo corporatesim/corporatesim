@@ -988,7 +988,7 @@ flip card
 	font-size      : 14px;
 	color          : white;
 	border-radius  : 0 5px 5px 0;
-	z-index        : 100;
+	z-index        : 0;
 	/*background     : black;*/
 }
 
@@ -1003,7 +1003,7 @@ flip card
 	font-size      : 20px;
 	color          : white;
 	border-radius  : 0 5px 5px 0;
-	z-index        : 100;
+	z-index        : 0;
 	/*background     : #000000;*/
 }
 
