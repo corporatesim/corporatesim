@@ -21,7 +21,7 @@
   <div class="d-flex align-items-start"></div>
 
   <h2 class="mt-1">
-    <img src="<?php echo base_url('../enterprise/common/Logo/'.$logo); ?>" alt="Logo" style="height: 75px; max-width: 50%;">
+    <img src="<?php echo base_url('../enterprise/common/Logo/'.$logo); ?>" alt="Logo" style="height: 45px; max-width: 300px;">
     <span class="float-right">Welcome !</span>
   </h2>
   <div class="d-flex align-items-start clearfix"><br></div>

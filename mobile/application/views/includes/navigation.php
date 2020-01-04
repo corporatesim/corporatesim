@@ -22,7 +22,7 @@
 <nav class="navbar navbar-expand-md navbar-light affix" style="background-color: #e3f2fd;">
   <!-- Brand -->
   <a class="navbar-brand" href="">
-    <img src="<?php echo base_url('../enterprise/common/Logo/'.$this->Common_Model->fetchLogo('http://'.$_SERVER['SERVER_NAME'])); ?>" alt="Logo" style="height: 45px; max-width: 50%;">
+    <img src="<?php echo base_url('../enterprise/common/Logo/'.$this->Common_Model->fetchLogo('http://'.$_SERVER['SERVER_NAME'])); ?>" alt="Logo" style="height: 45px; max-width: 300px;">
   </a>
   <a class="navbar-brand d-none" href="#" id="clockTimeHolder"><i class="fa fa-clock-o" id="rotateTimerClock"></i> <span id="showTimer"></span></a>
 
