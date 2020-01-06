@@ -268,6 +268,7 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	}
 	else
 	{
+		// $addedit = "firstTime";
 		// die('else: '.$addedit);
 		$sql = "SELECT views_sublinkid AS input_sublinkid, views_current AS input_current, views_key AS input_key FROM GAME_VIEWS WHERE views_Game_ID = $gameid";
 		// die($sql);
