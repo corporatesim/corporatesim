@@ -59,7 +59,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 		$sql = "SELECT u.*, ge.Enterprise_Logo ,gse.SubEnterprise_Logo,gd.Domain_Name
 		FROM GAME_SITE_USERS u INNER JOIN GAME_USER_AUTHENTICATION ua
 		ON u.User_id = ua.Auth_userid LEFT JOIN GAME_ENTERPRISE ge ON u.User_ParentId = ge.Enterprise_ID LEFT JOIN GAME_SUBENTERPRISE gse ON u.User_SubParentId=gse.SubEnterprise_ID LEFT JOIN GAME_DOMAIN gd ON ge.Enterprise_ID = gd.Domain_EnterpriseId AND gd.Domain_Status=0  AND( CASE WHEN u.User_Role = 1 THEN gd.Domain_EnterpriseId = u.User_ParentId WHEN u.User_Role = 2 THEN gd.Domain_SubEnterpriseId = u.User_SubParentId END ) WHERE (u.User_username='".$username."' OR u.User_email='".$username."')	AND ua.Auth_password='".$password."'";
-		// echo $sql; exit();
+		// echo $sql; exit(); User_ParentId User_SubParentId
 		$object = $funObj->ExecuteQuery($sql);
 
 		if($object->num_rows > 0){
@@ -81,6 +81,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 						$_SESSION['username']         = $res->User_username;
 						$_SESSION['companyid']        = $res->User_companyid;
 						$_SESSION['User_profile_pic'] = $res->User_profile_pic;
+						$_SESSION['User_ParentId']    = $res->User_ParentId;
+						$_SESSION['User_SubParentId'] = $res->User_SubParentId;
 						
 						if(empty($_SESSION['logo']))
 						{

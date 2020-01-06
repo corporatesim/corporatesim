@@ -65,9 +65,9 @@ $res_status = $functionsObj->FetchObject($res);
 // }
 
 // commenting the above old code, check the user disable/end date functionality later
-$sql = "SELECT gug.UG_GameStartDate AS startDate, gug.UG_GameEndDate AS endDate, gug.UG_ReplayCount, gus.US_LinkID AS gameStatus, gsu.User_companyid, gg.* FROM GAME_USERGAMES gug LEFT JOIN GAME_GAME gg ON gg.Game_ID = gug.UG_GameID LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID = gg.Game_ID AND gus.US_UserID = $uid LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_id=gug.UG_UserID WHERE gug.UG_UserID = $uid AND gg.Game_ID IS NOT NULL ORDER BY `gg`.`Game_Name` ASC";
+$sql = "SELECT gug.UG_GameStartDate AS startDate, gug.UG_GameEndDate AS endDate, gug.UG_ReplayCount, gus.US_LinkID AS gameStatus, gsu.User_companyid, gg.* FROM GAME_USERGAMES gug LEFT JOIN GAME_GAME gg ON gg.Game_ID = gug.UG_GameID LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID = gg.Game_ID AND gus.US_UserID = $uid LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_id=gug.UG_UserID WHERE gug.UG_UserID = $uid AND gg.Game_ID IS NOT NULL AND gug.UG_ParentId=".$_SESSION['User_ParentId']." AND gug.UG_SubParentId=".$_SESSION['User_SubParentId']." ORDER BY `gg`.`Game_Name` ASC";
 
-// echo $sql; exit();
+// echo "<pre>".$sql; print_r($_SESSION); exit(); $_SESSION['User_ParentId'] $_SESSION['User_SubParentId']
 $result = $functionsObj->ExecuteQuery($sql);
 
 include_once doc_root.'views/selectgame.php';
