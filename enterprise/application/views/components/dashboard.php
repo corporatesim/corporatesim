@@ -37,7 +37,7 @@
             <div class="card" style="width: 18rem;">
               <img class="card-img-top" src="<?php echo base_url('common/Logo'.'/'.$profilePic);?>" alt="Simulation Games">
               <div class="card-body">
-                <p class="card-text">No game allocated. Pleaes contact admin.</p>
+                <p class="card-text">No game allocated. Please contact admin.</p>
               </div>
             </div>
           <?php } ?>
