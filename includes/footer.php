@@ -137,7 +137,7 @@
 					if(result.status == 200)
 					{
 						Swal.fire({
-							icon             : 'success',
+							// icon             : 'success',
 							title            : 'Leaderboard',
 							html             : result.message,
 							showConfirmButton: true,

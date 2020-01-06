@@ -54,4 +54,4 @@
 		}
 	</style>
 	<body>
-		<section id="bodySection">
+		<section id="bodySection" style="background-image: url(<?php echo base_url('../images/mobileHomePage.png');?>);">

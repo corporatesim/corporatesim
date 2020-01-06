@@ -101,20 +101,38 @@ if($_POST['action'] == 'leaderboard')
 		$userFlag     = false;
 		// show only top 10 records
 		// var_dump(array_search($UserID,$leadData));
-		$returnData = "<table class='table table-bordered table-hover'><thead><th>Rank</th> <th>Name</th> <th>Image</th> <th>".((!empty($leadData[0]->Comp_NameAlias))?$leadData[0]->Comp_NameAlias:$leadData[0]->Comp_Name)."</th></thead><tbody>";
+		$returnData = "<table class='table table-bordered table-hover' style='font-size:14px;'><thead><th>Rank</th> <th>Name</th> <th>Image</th> <th>".((!empty($leadData[0]->Comp_NameAlias))?$leadData[0]->Comp_NameAlias:$leadData[0]->Comp_Name)."</th></thead><tbody>";
 
 		for ($i=0; $i<$totalRecords; $i++)
 		{
 			$imgSrc = (empty($leadData[$i]->pic))?'avatar.png':$leadData[$i]->pic;
+			switch(eval('return 1+'.$i.';'))
+			{
+				case 1:
+				$j = "<img src='".site_root."images/1stWinner.png' width='30' data-toggle='tooltip' title='1st'>";
+				break;
+
+				case 2:
+				$j = "<img src='".site_root."images/2ndWinner.png' width='30' data-toggle='tooltip' title='2nd'>";
+				break;
+
+				case 3:
+				$j = "<img src='".site_root."images/3rdWinner.png' width='30' data-toggle='tooltip' title='3rd'>";
+				break;
+
+				default:
+				$j = eval('return 1+'.$i.';');
+				break;
+			}
 			// if user is in top 10
 			if($leadData[$i]->input_user == $UserID && $i < 10)
 			{
-				$returnData .= "<tr class='alert-success'><td>".eval('return 1+'.$i.';')."</td> <td>You</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='You'><img src='".site_root."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
+				$returnData .= "<tr class='alert-success'><td>".$j."</td> <td>You</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='You'><img src='".site_root."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
 				$userFlag = true;
 			}
 			elseif($leadData[$i]->input_user != $UserID && $i < 10)
 			{
-				$returnData .= "<tr><td>".eval('return 1+'.$i.';')."</td> <td>".$leadData[$i]->NAME."</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='".$leadData[$i]->NAME."'><img src='".site_root."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
+				$returnData .= "<tr><td>".$j."</td> <td>".$leadData[$i]->NAME."</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='".$leadData[$i]->NAME."'><img src='".site_root."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
 			}
 			else
 			{
@@ -128,14 +146,14 @@ if($_POST['action'] == 'leaderboard')
 					if($leadData[$i]->input_user == $UserID)
 					{
 						// is user is not in the top 10 then add the user at the bottom with his/her rank
-						$returnData .= "<tr class='alert-danger'><td>".eval('return 1+'.$i.';')."</td> <td>You</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='You'><img src='".site_root."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
+						$returnData .= "<tr class='alert-danger'><td>".$j."</td> <td>You</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='You'><img src='".site_root."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
 					}
 					continue;
 				}
 			}
 		}
 
-		$returnData .= "</tbody> <tfoot> <tr><th colspan=4> <marquee> ".$totalRecords." Users Played This Game </marquee></th></tr> </tfoot> </table>";
+		$returnData .= "</tbody> <tfoot> <tr><th colspan=4> <marquee> ".eval('return 2000+'.$totalRecords.';')." Users Played This Game </marquee></th></tr> </tfoot> </table>";
 		die(json_encode(["status" => 200, "message" => $returnData]));
 	}
 	else

@@ -1198,20 +1198,40 @@ class Ajax extends MY_Controller {
 			$userFlag     = false;
 			// show only top 10 records
 			// var_dump(array_search($UserID,$leadData));
-			$returnData = "<table class='table table-striped table-sm table-hover table-responsive table-bordered'><thead class='thead-dark'><th>Rank</th> <th>Name</th> <th>Image</th> <th>".((!empty($leadData[0]->Comp_NameAlias))?$leadData[0]->Comp_NameAlias:$leadData[0]->Comp_Name)."</th></thead><tbody>";
+			$returnData = "<table class='table table-striped table-sm table-hover table-responsive table-bordered' style='font-size:14px;'><thead class='thead-dark'><th>Rank</th> <th>Name</th> <th>Image</th> <th>".((!empty($leadData[0]->Comp_NameAlias))?$leadData[0]->Comp_NameAlias:$leadData[0]->Comp_Name)."</th></thead><tbody>";
 
 			for ($i=0; $i<$totalRecords; $i++)
 			{
 				$imgSrc = (empty($leadData[$i]->pic))?'avatar.png':$leadData[$i]->pic;
+
+				// show 3 images/badges for the leaderboard
+				switch(eval('return 1+'.$i.';'))
+				{
+					case 1:
+					$j = "<img src='".base_url('../')."images/1stWinner.png' width='30' data-toggle='tooltip' title='1st'>";
+					break;
+
+					case 2:
+					$j = "<img src='".base_url('../')."images/2ndWinner.png' width='30' data-toggle='tooltip' title='2nd'>";
+					break;
+
+					case 3:
+					$j = "<img src='".base_url('../')."images/3rdWinner.png' width='30' data-toggle='tooltip' title='3rd'>";
+					break;
+
+					default:
+					$j = eval('return 1+'.$i.';');
+					break;
+				}
 				// if user is in top 10
 				if($leadData[$i]->input_user == $UserID && $i < 10)
 				{
-					$returnData .= "<tr class='alert-success'><td>".eval('return 1+'.$i.';')."</td> <td>You</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='You'><img src='".base_url('../')."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
+					$returnData .= "<tr class='alert-success'><td>".$j."</td> <td>You</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='You'><img src='".base_url('../')."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
 					$userFlag = true;
 				}
 				elseif($leadData[$i]->input_user != $UserID && $i < 10)
 				{
-					$returnData .= "<tr><td>".eval('return 1+'.$i.';')."</td> <td>".$leadData[$i]->NAME."</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='".$leadData[$i]->NAME."'><img src='".base_url('../')."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
+					$returnData .= "<tr><td>".$j."</td> <td>".$leadData[$i]->NAME."</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='".$leadData[$i]->NAME."'><img src='".base_url('../')."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
 				}
 				else
 				{
@@ -1225,14 +1245,14 @@ class Ajax extends MY_Controller {
 						if($leadData[$i]->input_user == $UserID)
 						{
 							// is user is not in the top 10 then add the user at the bottom with his/her rank
-							$returnData .= "<tr class='alert-danger'><td>".eval('return 1+'.$i.';')."</td> <td>You</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='You'><img src='".base_url('../')."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
+							$returnData .= "<tr class='alert-danger'><td>".$j."</td> <td>You</td> <td><a href='javascript:void(0);' data-toggle='tooltip' title='You'><img src='".base_url('../')."images/userProfile/".$imgSrc."' class='showImagePopUp' style='width:30px;'></a></td> <td>".$leadData[$i]->input_current."</td></tr>";
 						}
 						continue;
 					}
 				}
 			}
 
-			$returnData .= "</tbody> <tfoot> <tr><th colspan=4> <marquee> ".$totalRecords." Users Played This Game </marquee></th></tr> </tfoot> </table>";
+			$returnData .= "</tbody> <tfoot> <tr><th colspan=4> <marquee> ".eval('return 2000+'.$totalRecords.';')." Users Played This Game </marquee></th></tr> </tfoot> </table>";
 			die(json_encode(["status" => 200, "csrfHash" => $this->csrfHash, "message" => $returnData]));
 		}
 		else

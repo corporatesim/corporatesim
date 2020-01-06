@@ -28,7 +28,7 @@ include_once 'includes/header.php';
             <input type="hidden" name="ScenarioId" id="ScenarioId" value="<?php echo $result->Link_ScenarioID; ?>">
             <input type="hidden" name="LinkId" id="LinkId" value="<?php echo ($result->Link_ID)?$result->Link_ID:$linkid; ?>">
             <?php if($result->BackgroundImage){ ?>
-              <div class="col-sm-12 no_padding shadow" style="background: url(<?php echo site_root.'images/'.$result->BackgroundImage;?>);">
+              <div class="col-sm-12 no_padding shadow" style="background: url(<?php echo site_root.'images/'.$result->BackgroundImage;?>); background-repeat: round;">
               <?php } else { ?>
                 <div class="col-sm-12 no_padding shadow">
                 <?php } ?>
