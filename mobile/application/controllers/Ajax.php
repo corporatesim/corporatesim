@@ -454,7 +454,7 @@ class Ajax extends MY_Controller {
 							if($getOutcomeRow->input_current>=$getOutcomeRow->Outcome_MinVal && $getOutcomeRow->input_current<=$getOutcomeRow->Outcome_MaxVal)
 							{
 								$showOtucome = 'd-none';
-								$returnHtml .= "<img src='".base_url('../ux-admin/upload/Badges/'.$getOutcomeRow->Outcome_FileName)."' alt='Outcome image for ".$getOutcomeRow->SubLink_CompName." not found' id='outcome_".$getOutcomeRow->input_sublinkid."' class='' data-toggle='tooltip' title='".$getOutcomeRow->Outcome_Description."' onclick='return showImageOnFullScreen(this.id);'><div class='row'>$getOutcomeRow->Outcome_Description</div>";
+								$returnHtml .= "<img src='".base_url('../ux-admin/upload/Badges/'.$getOutcomeRow->Outcome_FileName)."' alt='Outcome image for ".$getOutcomeRow->SubLink_CompName." not found' id='outcome_".$getOutcomeRow->input_sublinkid."' class='' data-toggle='tooltip' title-title='".$getOutcomeRow->Outcome_Description."' onclick='return showImageOnFullScreen(this.id);'><div class='row'>$getOutcomeRow->Outcome_Description</div>";
 								break;
 							}
 						}

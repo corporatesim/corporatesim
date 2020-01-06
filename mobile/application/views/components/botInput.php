@@ -234,29 +234,29 @@
 
                   elseif($findLinkageSubRow->SubLink_InputMode == 'admin')
                   {
-                  // check for SubLink_InputFieldOrder, it means show only current or last values
+                    // check for SubLink_InputFieldOrder, it means show only current or last values
                     switch ($findLinkageSubRow->SubLink_InputFieldOrder)
                     {
                       case 1:
-                    // label current - label last
+                      // label current - label last
                       $current = "";
                       $last    = "";
                       break;
 
                       case 2:
-                    // label current - label last
+                      // label current - label last
                       $current = "float-right";
                       $last    = "float-left";
                       break;
 
                       case 3:
-                    // label current
+                      // label current
                       $current = "";
                       $last    = "d-none";
                       break;
 
                       case 4:
-                    // label last
+                      // label last
                       $current = "d-none";
                       $last    = "";
                       break;
@@ -278,7 +278,7 @@
                       </label>
                       <input type="range" data-sublinkid="<?php echo $findLinkageSubRow->SubLink_ID; ?>" id="formula_<?php echo $findLinkageSubRow->SubLink_ID; ?>" value="<?php echo $findLinkageSubRow->input_current; ?>" readonly>
                     <?php }
-                // if none of the above then user mode, it can have mChoice, range or normal text box
+                    // if none of the above then user mode, it can have mChoice, range or normal text box
                     else { ?>
                       <!-- show user inputs here "$findLinkageSubRow->SubLink_InputModeTypeValue"-->
                       <div class="userInputsDiv" <?php echo $fontStyle;?>>
@@ -286,26 +286,26 @@
                         <?php if($findLinkageSubRow->SubLink_InputModeType == 'mChoice') {
                           $SubLink_InputModeTypeValue = json_decode($findLinkageSubRow->SubLink_InputModeTypeValue,true);
 
-                      // echo $findLinkageSubRow->input_current."<pre>"; print_r($SubLink_InputModeTypeValue); echo "</pre>";
+                        // echo $findLinkageSubRow->input_current."<pre>"; print_r($SubLink_InputModeTypeValue); echo "</pre>";
 
                           $question       = $SubLink_InputModeTypeValue['question'];
                           $defaultChecked = $SubLink_InputModeTypeValue['makeDefaultChecked'];
                           $questionFlag   = false;
-                      // if default checked is selected from admin, then remove last element from array
+                          // if default checked is selected from admin, then remove last element from array
                           if($defaultChecked)
                           {
                             array_pop($SubLink_InputModeTypeValue);
                           }
-                      // print question in a row
+                          // print question in a row
                           echo "<div class=''>".$question."</div><br>";
                           foreach(($SubLink_InputModeTypeValue) as $optionText => $optionValue)
                           {
-                        // as first is question, so skip this,
+                            // as first is question, so skip this,
                             if($questionFlag)
                             {
-                          // hiding the default, selected from admin end
+                              // hiding the default, selected from admin end
                               $hideDefault = ($defaultChecked==$optionText)?'d-none':'';
-                          // check the value and make it checked
+                              // check the value and make it checked
                               $checkedDefault = ($findLinkageSubRow->input_current==$optionValue)?'checked':'';
                               echo '<div class="custom-control custom-radio mb-3 '.$hideDefault.'">
                               <input type="radio" data-sublinkid="'.$findLinkageSubRow->SubLink_ID.'" class="custom-control-input" id="'.$optionText.$optionText.'" name="radio-stacked" value="'.$optionValue.'" required '.$checkedDefault.'>
@@ -476,12 +476,14 @@
   function submitPage()
   {
     // triggering ajax to save data and submit the page to move
+    $('#pre-loader').show();
     $.ajax({
-      url     : '<?php echo base_url("Ajax/submitInput/".$findLinkage->Link_ID."/".$findLinkage->Link_GameID);?>',
-      type    : 'POST',
+      url        : '<?php echo base_url("Ajax/submitInput/".$findLinkage->Link_ID."/".$findLinkage->Link_GameID);?>',
+      type       : 'POST',
       // dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
       // data    : $("form").serialize(),
-      data    : {[csrfName]: csrfHash},
+      global     : false,
+      data       : {[csrfName]: csrfHash},
       success: function(result){
         try
         {
@@ -493,19 +495,20 @@
           {
             // rdirect to the result url
             // alert(result.redirect);
-            // $('#pre-loader').removeClass('d-none hidden');
-            window.location = result.redirect;
-            Swal.fire('Submitted Successfully. Please Wait...');
             // $('#pre-loader').show();
+            window.location = result.redirect;
+            // Swal.fire('Submitted Successfully. Please Wait...');
           }
           else
           {
+            $('#pre-loader').hide();
             swal.fire('Connection Error. Please try later.');
             console.log(result);
           }
         }
         catch ( e )
         {
+          $('#pre-loader').hide();
           // swal.fire('Something went wrong. Please try later.');
           Swal.fire({
             title: 'Something went wrong. Please try later.',
@@ -548,6 +551,7 @@
                 // if reset successfully then refresh the page
                 $('#removeCompDiv').remove();
                 $('#areaCompSubcomp').append(result.appendHtml);
+                $('html, body').animate({scrollTop: '0px'}, 0);
                 triggerAjaxToShowHideComp();
               }
               else
