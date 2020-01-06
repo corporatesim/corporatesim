@@ -55,7 +55,7 @@ include_once 'includes/header.php';
 							</div>
 
 							<!-- <div class="clearfix"><br></div> -->
-							<div class="col-md-4" style="max-width: 30%;">
+							<div class="col-md-4">
 								<div class="clearfix"><br></div>
 								<h2 class="alert-success">
 									<marquee behavior="alternate" direction="">Performance Chart</marquee>
