@@ -158,7 +158,7 @@
 							</div>
 
 							<div class="row">
-								<div class="col-md-6 form-group" data-toggle="tooltip" title="Selected user can only change the design. And Creator can not be the Associate">
+								<div class="col-md-6 form-group" data-toggle="tooltip" title="Game will be available for mobile and desktop platform according to this category">
 									<label for="name"><span class="alert-danger">*</span>Game Category</label>
 									<select name="Game_Category" id="Game_Category" class="form-control" required="">
 										<option value="-1">--Select Category--</option>

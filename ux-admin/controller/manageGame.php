@@ -152,12 +152,15 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 	// if game is bot enabled then check that this doesn't contains multiple areas in i/p side and doesn't have any subcomponent
 	if(isset($_POST['Game_Type']))
 	{
-		$checkSql = "SELECT * FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID =".$_POST['id']." ) ORDER BY SubLink_SubCompID DESC, SubLink_AreaID";
+		$checkSql = "SELECT * FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID =".$_POST['id']." ) AND SubLink_Status=1 ORDER BY SubLink_SubCompID DESC, SubLink_AreaID";
+
 		$checkSqlObj = $functionsObj->ExecuteQuery($checkSql);
 
 		if($checkSqlObj->num_rows > 0)
 		{
 			$areaID = '';
+			$linkID = '';
+
 			while($row = $checkSqlObj->fetch_object())
 			{
 				if($row->SubLink_SubCompID > 1)
@@ -172,11 +175,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 				{
 					if($row->SubLink_Type == 0)
 					{
-						if(empty($areaID))
-						{
-							$areaID = $row->SubLink_AreaID;
-						}
-						if($areaID != $row->SubLink_AreaID)
+						$tmpLinkId = $linkID;
+						$tmpAreaId = $areaID;
+						$linkID    = $row->SubLink_LinkID;
+						$areaID    = $row->SubLink_AreaID;
+
+						if($tmpAreaId != $areaID && $tmpLinkId == $linkID)
 						{
 							$_SESSION['msg']     = 'This game can not be converted to Bot. Because this is having multiple areas in input side';
 							$_SESSION['type[0]'] = "inputError";
