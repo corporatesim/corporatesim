@@ -552,6 +552,9 @@
                 $('#removeCompDiv').remove();
                 $('#areaCompSubcomp').append(result.appendHtml);
                 $('html, body').animate({scrollTop: '0px'}, 0);
+                // adding click handler to submit page via button added from admin side, when it comes dynamically to the page
+                addPageSubmitHandler();
+
                 triggerAjaxToShowHideComp();
               }
               else
@@ -577,6 +580,13 @@
           }
         });
       });
+    });
+  }
+
+  function addPageSubmitHandler()
+  {
+    $('#submitPageViaCkEditor').on('click',function(){
+      submitPage();
     });
   }
 </script>
