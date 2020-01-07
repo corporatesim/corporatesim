@@ -74,6 +74,12 @@ if(isset($_POST['Link_id']) && isset($_POST['Game_id']) && isset($_POST['Scen_id
 			if($result)
 			{	
 				$sublinkid  = $funObj->InsertID();
+				// insert data also into GAME_VIEWS table
+				$viewSql = "INSERT INTO GAME_VIEWS( views_Game_ID, views_sublinkid, views_key ) SELECT views_Game_ID, ".$sublinkid." AS views_sublinkid, views_key FROM GAME_VIEWS WHERE views_sublinkid=".$row->SubLink_ID;
+				// echo $viewSql;
+				$objreplace = $funObj->ExecuteQuery($viewSql);
+
+				// fetch and insert data for replace values if any
 				$sqlreplace = "SELECT * FROM `GAME_LINK_REPLACE` WHERE Rep_SublinkID = ".$row->SubLink_ID;
 				$objreplace = $funObj->ExecuteQuery($sqlreplace);
 				
