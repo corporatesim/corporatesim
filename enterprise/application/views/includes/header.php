@@ -30,8 +30,13 @@
   <!-- material icons for bootgrid -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
   <link href="<?php echo base_url('common/vendors/bootgrid/');?>jquery.bootgrid.min.css" rel="stylesheet" type="text/css">
+
   <link href="<?php echo base_url('common/vendors/sweetalert/');?>sweetalert2.min.css" rel="stylesheet" type="text/css">
+  <link href="<?php echo base_url('common/vendors/sweetalert/');?>animate.min.css" rel="stylesheet" type="text/css">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"> -->
+
   <script src="<?php echo base_url('common/vendors/sweetalert/');?>sweetalert2.all.min.js"></script>
+
   <!-- adding these links to include chart.js -->
   <script src="<?php echo base_url('common/vendors/chartjs/chart.bundle.min.js');?>"></script>
   <link href="<?php echo base_url('common/vendors/chartjs/chart.min.css');?>" rel="stylesheet" type="text/css">
@@ -181,7 +186,7 @@
      </div>
      <div class="modal-footer">
       <input type="submit" name="Upload" value="Upload" class="btn btn-primary">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
     </div>
   </form>
 </div>
@@ -200,7 +205,7 @@
         <p>Some text in the modal.</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

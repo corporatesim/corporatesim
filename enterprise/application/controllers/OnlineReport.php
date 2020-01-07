@@ -166,7 +166,7 @@ class OnlineReport extends CI_Controller {
 			$reportSql .= " AND gu.User_SubParentId=".$SubEnterprise;
 		}
 		// $reportSql .= " AND (date_time BETWEEN '".$dateTo."' AND '".$dateFrom."') ";
-		$reportSql .= " ORDER BY Comp_SubComp ASC ";
+		$reportSql .= " ORDER BY gls.SubLink_Order ASC ";
 
 		// die($reportSql);
 		$reportData = $this->Common_Model->executeQuery($reportSql);

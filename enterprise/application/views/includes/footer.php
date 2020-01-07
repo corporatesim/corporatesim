@@ -21,7 +21,9 @@
 		</div>
 	</div>
 	<div class="footer-wrap bg-white pd-20 mb-20 border-radius-5 box-shadow">
-		&copy; 2017.  All rights reserved By<a href="https://www.corporatesim.com/" target="_blank">  Corporatesim</a>
+		<a href="https://www.corporatesim.com/" target="_blank">
+			Copyright &copy; Humanlinks Learning Pvt. Ltd.- All rights reserved
+		</a>
 	</div>
 </div>
 </div>
@@ -150,7 +152,7 @@
 			var options    = "<option>--Select State--</option>";
 			if(!Country_Id)
 			{
-				alert('Please Select Country.');
+				Swal.fire('Please Select Country.');
 				return false;
 			}
 			$.ajax({
@@ -162,11 +164,11 @@
 				{
 					if(result == 'no')
 					{
-						alert('Please Select Country.');
+						Swal.fire('Please Select Country.');
 					}
 					else if(result == 'nos')
 					{
-						alert('Threre are no states regarding the selected country');
+						Swal.fire('Threre are no states regarding the selected country');
 					}
 					else
 					{
@@ -227,7 +229,7 @@
             else
             {
             	$this.parents('form').find('select.subenterprise').html(option);
-            	// alert('No SubEnterprise Associated With The Selected Enterprise');
+            	// Swal.fire('No SubEnterprise Associated With The Selected Enterprise');
             }
           },
         });          
@@ -235,7 +237,7 @@
       else
       {
       	$this.parents('form').find('select.subenterprise').html(option);
-      	alert('Please Select Enterprise...');
+      	Swal.fire('Please Select Enterprise...');
       	return false;
       }
     });

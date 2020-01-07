@@ -348,7 +348,7 @@
                 var feedbacktitle   = imgTag.data('feedbacktitle');
                 var feedbackmessage = imgTag.data('feedbackmessage');
                 var imgSrc          = imgTag.attr('src');
-                var data            = "<img src='"+imgSrc+"'> <div class='row text-blue'><b class='text-dark'>Title:-</b>&nbsp;"+feedbacktitle+"</div><div class='row text-blue'><b class='text-dark'>Message:-</b>&nbsp;"+feedbackmessage+"</div><div class='row text-blue'><b class='text-dark'>Name:-</b>&nbsp;"+username+"</div><div class='row text-blue'><b class='text-dark'>User Email:-</b>&nbsp;"+useremail+"</div><div class='row text-blue'><b class='text-dark'>User ID:-</b>&nbsp;"+userid+"</div>";
+                var data            = "<img src='"+imgSrc+"'> <div class='row text-blue'><b class='text-dark'>Title:-</b>&nbsp;"+feedbacktitle+"</div><div class='row text-blue'><b class='text-dark'>Message:-</b>&nbsp;"+feedbackmessage+"</div><div class='row text-blue'><b class='text-dark'>Name:-</b>&nbsp;"+username+"</div><div class='row text-blue'><b class='text-dark'>User Email:-</b>&nbsp; <a class='text-danger' href='mailto:"+useremail+"'>"+useremail+"</a></div><div class='row text-blue'><b class='text-dark'>User ID:-</b>&nbsp;"+userid+"</div>";
                 $('#randomModal').modal('show');
                 var modalTitle = $('#randomModal').find('.modal-title').text('Feedback');
                 var modalBody  = $('#randomModal').find('.modal-body');
