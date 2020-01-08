@@ -54,7 +54,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 	if(!empty($_POST['username']) && !empty($_POST['password']))
 	{
 		$username = $funObj->EscapeString(trim($_POST['username']));
-		$password = $_POST['password'];
+		$password = trim($_POST['password']);
 
 		$sql = "SELECT u.*, ge.Enterprise_Logo ,gse.SubEnterprise_Logo,gd.Domain_Name
 		FROM GAME_SITE_USERS u INNER JOIN GAME_USER_AUTHENTICATION ua
