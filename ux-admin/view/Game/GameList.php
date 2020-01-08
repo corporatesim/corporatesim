@@ -27,7 +27,7 @@
 <div class="row">
 	<div class="col-sm-12">
 		<ul class="breadcrumb">
-			<li class="completed"><a href="<?php echo site_root."ux-admin/Dashboard"; ?>">Home</a></li>
+			<li class=""><a href="<?php echo site_root."ux-admin/Dashboard"; ?>">Home</a></li>
 			<li class="active">Manage Game</li>			
 		</ul>
 	</div>

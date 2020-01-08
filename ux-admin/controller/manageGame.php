@@ -382,9 +382,11 @@ elseif(isset($_GET['del']))
 		{
 			$strresult = $strresult." '".$row->Scen."' ";
 		}
-		$msg     = 'Can not Delete Game. Is linked with '.$strresult;
-		$type[0] = 'inputError';
-		$type[1] = 'has-error';		
+		$_SESSION['msg']     = 'Can not Delete Game. Is linked with '.$strresult;
+		$_SESSION['type[0]'] = 'inputError';
+		$_SESSION['type[1]'] = 'has-error';		
+		header("Location: ".site_root."ux-admin/ManageGame");
+		exit(0);
 	}
 	else
 	{
