@@ -107,6 +107,7 @@
               {
                 // getting the html for components and append it to areaTab related Div
                 $('#'+divId).html(result.returnHtml);
+                submitOutputPage();
               }
               else
               {
@@ -131,6 +132,11 @@
           }
         });
       });
+      submitOutputPage();
+    });
+
+    function submitOutputPage()
+    {
       // submit the page
       $('#submitPage, #submitPageViaCkEditor').on('click',function(){
         var gameid   = $('#outputGameid').val();
@@ -179,6 +185,6 @@
           }
         });
       });
-    });
+    }
 
   </script>
