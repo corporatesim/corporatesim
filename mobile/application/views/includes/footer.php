@@ -70,7 +70,7 @@
 				var imageUrl = $(this).data('imageurl');
 
 				Swal.fire({
-					imageUrl          : imageUrl,
+					// imageUrl          : imageUrl,
 					imageWidth        : 200,
 					imageHeight       : 100,
 					imageAlt          : 'Custom image',

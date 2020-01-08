@@ -30,7 +30,7 @@ class SelectSimulation extends My_Controller {
 	public function index()
 	{
 		// check if user has bot-enabled game or not if yes then show, else redirect to registered domain 
-		$gameSql = "SELECT * FROM GAME_USERGAMES gug JOIN GAME_GAME gg ON gg.Game_ID = gug.UG_GameID LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID = gug.UG_GameID AND gus.US_UserID =".$this->botUserData->User_id." WHERE gg.Game_Type = 1 AND gug.UG_UserID =".$this->botUserData->User_id;
+		$gameSql = "SELECT * FROM GAME_USERGAMES gug JOIN GAME_GAME gg ON gg.Game_ID = gug.UG_GameID LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID = gug.UG_GameID AND gus.US_UserID =".$this->botUserData->User_id." WHERE gg.Game_Type = 1 AND gg.Game_Category IN ('Mobile Simulation', 'Mobile Assesment', 'Mobile eLearning') AND gug.UG_UserID =".$this->botUserData->User_id;
 		$gameResult = $this->Common_Model->executeQuery($gameSql);
 		// die($gameSql);
 		// echo "<pre>"; print_r($this->botUserData); print_r($gameResult); echo "<a href='".base_url('PlaySimulation')."'>PlaySimulation</a><br>"; echo "<a href='".base_url('SelectSimulation/logOut')."'>Logout</a> ";

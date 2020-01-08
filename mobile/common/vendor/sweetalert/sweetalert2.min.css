@@ -927,7 +927,8 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
 }
 
 .swal2-container:not(.swal2-top):not(.swal2-top-start):not(.swal2-top-end):not(.swal2-top-left):not(.swal2-top-right):not(.swal2-center-start):not(.swal2-center-end):not(.swal2-center-left):not(.swal2-center-right):not(.swal2-bottom):not(.swal2-bottom-start):not(.swal2-bottom-end):not(.swal2-bottom-left):not(.swal2-bottom-right):not(.swal2-grow-fullscreen)>.swal2-modal {
-  margin: auto
+  margin: auto;
+  margin-top: 65px;
 }
 
 @media all and (-ms-high-contrast:none),
@@ -946,19 +947,19 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
 }
 
 .swal2-popup {
-  display: none;
-  position: relative;
-  box-sizing: border-box;
-  flex-direction: column;
+  display        : none;
+  position       : relative;
+  box-sizing     : border-box;
+  flex-direction : column;
   justify-content: center;
-  width: 32em;
-  max-width: 100%;
-  padding: 1.25em;
-  border: none;
-  border-radius: .3125em;
-  background: #fff;
-  font-family: inherit;
-  font-size: 1rem
+  width          : 32em;
+  max-width      : 100%;
+  padding        : 1.25em;
+  border         : none;
+  border-radius  : .3125em;
+  background     : #fff;
+  font-family    : inherit;
+  font-size      : 10px;
 }
 
 .swal2-popup:focus {
