@@ -32,19 +32,22 @@ include_once 'includes/header.php';
 </script>
 
 <section id="video_player">
-	<div class="container">
+	<div class="container" style="width: 92%;">
 		<div class="row">
 			<div class="col-sm-9 col-md-10 no_padding">
 				<!-- <h4 class="InnerPageHeader"><?php if(!empty($game)){ echo $game->Game_Header; } ?> </h4> -->
-				<h4 class=""><?php if(!empty($game)){ echo $game->Game_Header; } ?> </h4>
+				<h2 class="gamename">
+					<?php if(!empty($game)){ echo $game->Game_Header; } ?>
+				</h2>
 			</div>
-			<div class="col-sm-3 col-md-2 text-center <?php echo ($game->Game_HideScenarioLink == 1)?'hidden':'';?>">
+			
+			<div class="col-sm-2 text-right pull-right <?php echo ($game->Game_HideScenarioLink == 1)?'hidden':'';?>">
 				<input type="hidden" name="Scenid" value="<?php if(!empty($result)){ echo $result->Link_ScenarioID; } ?>" >
 				<button id="scenario_button" class="btn innerBtns" onclick="window.location='<?php echo $url; ?>';">Scenario</button>
 			</div>
 
-			<div class="clearfix game_header"></div>
-			<div class="col-sm-12 no_padding ">
+			<div class="clearfix scenario_header"></div>
+			<div class="col-sm-12 no_padding shadow">
 				<!-- Nav tabs -->	
 				<div class="shadow TabMain col-sm-12">
 

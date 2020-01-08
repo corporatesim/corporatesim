@@ -36,78 +36,78 @@ include_once 'includes/header.php';
 			<!--<div class="col-sm-12"><div class="timer text-center col-sm-1 pull-right" id="timer">2:00</div></div>-->
 		</div>
 	</div>
-	<div class="container">
+	<div class="container" style="width: 92%;">
 		<div class="row">
 			<div class="col-sm-9 col-md-10 no_padding">
 				<h2 class="gamename">
 					<!-- <a href="<?php echo $gameurl; ?>" target="_blank" class="innerPageLink">
 						<?php // echo $game_description; ?></a> /  -->
-						<?php if(!empty($scen)){ echo $scen->Scen_Header; } ?> </h2>	
-					</div>
-					<div class="col-sm-2  text-right pull-right <?php echo ($scen->Scen_InputButton == 0)?'hidden':'';?>" style="margin-top:-6px;">
-						<button class="btn innerBtns" id="proceedBtn" type="button">Proceed</button>
-						<!--<button class="btn innerBtns">Save</button>
-							<button class="btn innerBtns">Submit</button>-->
-						</div>
+						<?php if(!empty($scen)){ echo $scen->Scen_Header; } ?>
+					</h2>	
+				</div>
+				
+				<div class="col-sm-2  text-right pull-right <?php echo ($scen->Scen_InputButton == 0)?'hidden':'';?>" style="margin-top:-6px;">
+					<button class="btn innerBtns" id="proceedBtn" type="button">Proceed</button>
+				</div>
 
-						<div class="col-sm-3 col-md-2 text-center">
-							<input type="hidden" name="Scenid" value="<?php if(!empty($result)){ echo $result->Link_ScenarioID; } ?>" >
+				<div class="col-sm-3 col-md-2 text-center">
+					<input type="hidden" name="Scenid" value="<?php if(!empty($result)){ echo $result->Link_ScenarioID; } ?>" >
 
-							<!--header("Location: ".site_root."scenario_description.php?Link=".$result->Link_ID);-->
+					<!--header("Location: ".site_root."scenario_description.php?Link=".$result->Link_ID);-->
 
-						</div>
+				</div>
 
-						<div class="clearfix scenario_header"></div>
-						<div class="col-sm-12 no_padding shadow">
-							<!-- Nav tabs -->	
-							<div class="shadow TabMain col-sm-12">
+				<div class="clearfix scenario_header"></div>
+				<div class="col-sm-12 no_padding shadow">
+					<!-- Nav tabs -->	
+					<div class="shadow TabMain col-sm-12">
 
-								<ul class="nav nav-tabs" role="tablist">
-									<li role="presentation" class="active regular"><a href="#generalTab" aria-controls="generalTab" role="tab" data-toggle="tab">Storyline</a></li>
-									<li role="presentation" class="regular"><a href="#videosTab" aria-controls="videosTab" role="tab" data-toggle="tab">Videos</a></li>
-									<li role="presentation" class="regular"><a href="#imagesTab" aria-controls="imagesTab" role="tab" data-toggle="tab">Images</a></li>
-									<li role="presentation" class="regular"><a href="#documentsTab" aria-controls="documentsTab" role="tab" data-toggle="tab">Documents</a></li>
-									<li role="presentation" class="regular pull-right <?php echo ($link->Link_BackToIntro)?'hidden':''?>" style="margin-right: 40%;"><a href='<?php echo site_root."game_description.php?Game=".$gameidChk; ?>'>Go Back To Introduction</a></li>
-								</ul>
+						<ul class="nav nav-tabs" role="tablist">
+							<li role="presentation" class="active regular"><a href="#generalTab" aria-controls="generalTab" role="tab" data-toggle="tab">Storyline</a></li>
+							<li role="presentation" class="regular"><a href="#videosTab" aria-controls="videosTab" role="tab" data-toggle="tab">Videos</a></li>
+							<li role="presentation" class="regular"><a href="#imagesTab" aria-controls="imagesTab" role="tab" data-toggle="tab">Images</a></li>
+							<li role="presentation" class="regular"><a href="#documentsTab" aria-controls="documentsTab" role="tab" data-toggle="tab">Documents</a></li>
+							<li role="presentation" class="regular pull-right <?php echo ($link->Link_BackToIntro)?'hidden':''?>" style="margin-right: 40%;"><a href='<?php echo site_root."game_description.php?Game=".$gameidChk; ?>'>Go Back To Introduction</a></li>
+						</ul>
 
-								<!-- Tab panes -->
-								<div class="tab-content">
-									<div role="tabpanel" class="tab-pane active" id="generalTab">
-										<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-											<!-- Indicators -->
-											<ol class="carousel-indicators"  style="display:none;">
-												<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-												<li data-target="#myCarousel" data-slide-to="1"></li>
-												<li data-target="#myCarousel" data-slide-to="2"></li>
-												<li data-target="#myCarousel" data-slide-to="3"></li>
-											</ol>
-											<!-- adding 'hide_this' class to hide next and prev button to hide on screen size less -->
-											<div class="carousel-inner col-lg-12 col-md-6" role="listbox" >
-												<div class="col-sm-1 col-lg-1 col-md-1 text-right pull-left hide_this" style="margin-top: 15%;">
-													<!-- <a href ="#myCarousel" role="button" data-slide="prev"><img src="images/prevIcon.png" alt="Previous" title="Previous" style="width: 75%; background: #DCDCDC;"></img></a> -->
-												</div>
-												<?php
-												$i=1;
-												while($row = mysqli_fetch_array($general)) {
-													if($i==1)
-													{
-														echo "<div class='item active col-sm-10 col-lg-10 col-md-10'>";
-													}
-													else
-													{												
-														echo "<div class='item col-sm-10 col-lg-10 col-md-10'>";
-													}
-													$i++;
-													echo "<div class='col-sm-12 no_padding'>";
-													echo $row['ScenGen_Content'];												
-													echo "</div></div>";
-												}
-												?>											
-												<div class="col-sm-1 col-lg-1 col-md-1 text-left pull-right hide_this" style="margin-top: 15%;">
-													<!-- <a href ="#myCarousel" role="button" data-slide="next"><img src="images/nextIcon.png" alt="Next" title="Next" style="width: 75%;background:#DCDCDC;"></img></a> -->
-												</div>
-											</div>
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane active" id="generalTab">
+								<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+									<!-- Indicators -->
+									<ol class="carousel-indicators"  style="display:none;">
+										<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+										<li data-target="#myCarousel" data-slide-to="1"></li>
+										<li data-target="#myCarousel" data-slide-to="2"></li>
+										<li data-target="#myCarousel" data-slide-to="3"></li>
+									</ol>
+									<!-- adding 'hide_this' class to hide next and prev button to hide on screen size less -->
+									<div class="carousel-inner col-lg-12 col-md-6" role="listbox" >
+										<div class="col-sm-1 col-lg-1 col-md-1 text-right pull-left hide_this" style="margin-top: 15%;">
+											<!-- <a href ="#myCarousel" role="button" data-slide="prev"><img src="images/prevIcon.png" alt="Previous" title="Previous" style="width: 75%; background: #DCDCDC;"></img></a> -->
 										</div>
+										<?php
+										$i=1;
+										while($row = mysqli_fetch_array($general)) {
+											if($i==1)
+											{
+												echo "<div class='item active col-sm-10 col-lg-10 col-md-10'>";
+											}
+											else
+											{												
+												echo "<div class='item col-sm-10 col-lg-10 col-md-10'>";
+											}
+											$i++;
+											echo "<div class='col-sm-12 no_padding'>";
+											echo $row['ScenGen_Content'];												
+											echo "</div></div>";
+										}
+										?>											
+										<div class="col-sm-1 col-lg-1 col-md-1 text-left pull-right hide_this" style="margin-top: 15%;">
+											<!-- <a href ="#myCarousel" role="button" data-slide="next"><img src="images/nextIcon.png" alt="Next" title="Next" style="width: 75%;background:#DCDCDC;"></img></a> -->
+										</div>
+									</div>
+								</div>
 										<!-- <?php if($i>1) { ?>
 											<div class="nextPrev nextPrevbottom no_padding regular col-sm-12 col-md-12 col-lg-12">
 

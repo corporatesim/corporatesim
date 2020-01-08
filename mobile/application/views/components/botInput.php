@@ -5,7 +5,7 @@
   }
 </style>
 <section style="margin-top: 48px!important;">
-  <div class="container">
+  <div class="container" style="min-height:100vh;">
     <?php $this->load->view('components/trErAlert'); ?>
     <!-- <div class="row clearfix">show timing here</div> -->
 

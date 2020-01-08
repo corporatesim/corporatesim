@@ -31,7 +31,7 @@
     die();
   }
   ?>
-  <div class="container" <?php echo ($findLinkageSub[0]->Scen_Image)?"style='width:auto; background-image:url(".base_url('../images/'.$findLinkageSub[0]->Scen_Image).")'":"style:width:auto;" ?>>
+  <div class="container" <?php echo ($findLinkageSub[0]->Scen_Image)?"style='width:auto;min-height:100vh; background-image:url(".base_url('../images/'.$findLinkageSub[0]->Scen_Image).")'":"style:width:auto; min-height:100vh;" ?>>
     <!-- <div class="row clearfix">show timing here</div> -->
     <ul class="nav nav-tabs affix-nav" id="myTab" role="tablist">
       <?php
