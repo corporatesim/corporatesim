@@ -316,13 +316,20 @@
 								else
 								{
 									$this.parents('form').find('select.subenterprise').html(option);
-									alert('Please Select Enterprise...');
+									// alert('Please Select Enterprise...');
 									return false;
 								}
 							});
 
 							$('#SubEnterprise').on('change',function(){
-								fetchAssignedGames('subEnterpriseUsers',$(this).val());
+								if($(this).val())
+								{
+									fetchAssignedGames('subEnterpriseUsers',$(this).val());
+								}
+								else
+								{
+									Swal.fire('Please select SubEnterprise');
+								}
 							});
 							
 
@@ -344,7 +351,7 @@
 										{
 											if(result == 'No game found')
 											{
-												alert('No game allocated to selected '+ent_SubEnt);
+												Swal.fire('No game allocated to selected '+ent_SubEnt);
 												$('#selectGame').html('<option value="">--Select Game--</option>');
 											}
 											else

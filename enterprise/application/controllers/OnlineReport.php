@@ -120,9 +120,9 @@ class OnlineReport extends CI_Controller {
 			$gameQuery = "SELECT * FROM GAME_GAME WHERE Game_Delete=0 ORDER BY Game_Name";
 		}
 
-		$EnterpriseName            = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where);
+		$EnterpriseName            = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where,'','Enterprise_Name');
 		$content['EnterpriseName'] = $EnterpriseName;
-		$SubEnterprise             = $this->Common_Model->fetchRecords('GAME_SUBENTERPRISE',$subWhere);
+		$SubEnterprise             = $this->Common_Model->fetchRecords('GAME_SUBENTERPRISE',$subWhere,'','SubEnterprise_Name');
 		$content['SubEnterprise']  = $SubEnterprise;
 		$gameData                  = $this->Common_Model->executeQuery($gameQuery);
 		$content['gameData']       = $gameData;
