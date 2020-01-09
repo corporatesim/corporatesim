@@ -8,354 +8,359 @@
 				<div class="row">
 					<div class="col-md-12 col-sm-12">
 						<div class="title">
-							<h3>Select <?php echo $select;?> To Allocate/De-Allocate Game: <b class="text-blue"><?php echo $gamedata[1]; ?></b></h3>
-						</div>
-					</div>	
+							<h3>Select <?php echo $select;?> To Allocate/De-Allocate Game: <strong>
+								<a href="<?php echo $gameUrl;?>" target="_blank" data-toggle="tooltip" title="Click to see the URL to play">
+									<?php echo $gamedata[1]; ?>
+								</a>
+							</strong>
+						</h3>
+					</div>
+				</div>	
+			</div>
+			<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
+				<div class="clearfix">
+					<?php $this->load->view('components/trErMsg');?>
+					<div class="custom-control custom-checkbox pull-right">
+						<input type="checkbox" class="custom-control-input" id="select_all">
+						<label class="custom-control-label" for="select_all">Select All</label>
+					</div>
 				</div>
-				<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
-					<div class="clearfix">
-						<?php $this->load->view('components/trErMsg');?>
-						<div class="custom-control custom-checkbox pull-right">
-							<input type="checkbox" class="custom-control-input" id="select_all">
-							<label class="custom-control-label" for="select_all">Select All</label>
-						</div>
+				<br>
+				<div class="row" id="labelNames">
+					<div class="col-md-4">
+						<label for="name"><span class="alert-danger">*</span>Select <?php echo $select;?></label>
 					</div>
-					<br>
-					<div class="row" id="labelNames">
-						<div class="col-md-4">
-							<label for="name"><span class="alert-danger">*</span>Select <?php echo $select;?></label>
-						</div>
-						<div class="col-md-3">
-							<label for="name"><span class="alert-danger">*</span>Start Date</label>
-						</div>
-						<div class="col-md-3">
-							<label for="name"><span class="alert-danger">*</span>End Date</label>
-						</div>
-						<div class="col-md-2">
-							<label for="name">Replay Count (Unlimited -1)</label>
-						</div>
+					<div class="col-md-3">
+						<label for="name"><span class="alert-danger">*</span>Start Date</label>
 					</div>
-					<form action="" method="post" id="gameDataForm">
-						<!-- check that to whom game need to be allocated or de-allocated -->
-						<input type="hidden"name="gameID" value="<?php echo $gamedata[0]; ?>">
-						<input type="hidden"name="allocateTo" value="<?php echo $allocateTo; ?>">
-						<?php if($allocateTo=='enterprise'){ ?>
-							<!-- <div class="row" id="to_enterprise"> -->
-								<!-- show enterprise checkboxes only --><!-- <?php // echo $enterpriseRow->Enterprise_ID;?> -->
-								<?php foreach($enterpriseCheckbox as $enterpriseRow){ 
+					<div class="col-md-3">
+						<label for="name"><span class="alert-danger">*</span>End Date</label>
+					</div>
+					<div class="col-md-2">
+						<label for="name">Replay Count (Unlimited -1)</label>
+					</div>
+				</div>
+				<form action="" method="post" id="gameDataForm">
+					<!-- check that to whom game need to be allocated or de-allocated -->
+					<input type="hidden"name="gameID" value="<?php echo $gamedata[0]; ?>">
+					<input type="hidden"name="allocateTo" value="<?php echo $allocateTo; ?>">
+					<?php if($allocateTo=='enterprise'){ ?>
+						<!-- <div class="row" id="to_enterprise"> -->
+							<!-- show enterprise checkboxes only --><!-- <?php // echo $enterpriseRow->Enterprise_ID;?> -->
+							<?php foreach($enterpriseCheckbox as $enterpriseRow){ 
 									// print_r($enterpriseRow);
 									// check for default checked and start and end date
-									$startDate = strtotime($enterpriseRow->Enterprise_StartDate);
-									$endDate   = strtotime($enterpriseRow->Enterprise_EndDate);
+								$startDate = strtotime($enterpriseRow->Enterprise_StartDate);
+								$endDate   = strtotime($enterpriseRow->Enterprise_EndDate);
 
-									if($enterpriseRow->EG_GameID==$gamedata[0])
-									{
-										$valueStartDate = strtotime($enterpriseRow->EG_Game_Start_Date);
-										$valueEndDate   = strtotime($enterpriseRow->EG_Game_End_Date);
-										$checked        = 'checked';
+								if($enterpriseRow->EG_GameID==$gamedata[0])
+								{
+									$valueStartDate = strtotime($enterpriseRow->EG_Game_Start_Date);
+									$valueEndDate   = strtotime($enterpriseRow->EG_Game_End_Date);
+									$checked        = 'checked';
 										// echo "$startDate, $endDate, $valueStartDate, $valueEndDate, $checked";
-									}
-									else
-									{
-										$valueStartDate = strtotime($enterpriseRow->Enterprise_StartDate);
-										$valueEndDate   = strtotime($enterpriseRow->Enterprise_EndDate);
-										$checked        = '';
-									}
-									?>
+								}
+								else
+								{
+									$valueStartDate = strtotime($enterpriseRow->Enterprise_StartDate);
+									$valueEndDate   = strtotime($enterpriseRow->Enterprise_EndDate);
+									$checked        = '';
+								}
+								?>
 
-									<div class="row">
-										<div class="col-md-4">
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" name="enterprise[]" id="<?php echo $enterpriseRow->Enterprise_ID;?>" <?php echo $checked;?> value="<?php echo $enterpriseRow->Enterprise_ID;?>">
-												<label class="custom-control-label" for="<?php echo $enterpriseRow->Enterprise_ID;?>"><?php echo $enterpriseRow->Enterprise_Name;?></label>
-											</div>
-										</div>
-										<div id="assignDate"class="col-md-6">
-											<div class="input-group" name="gamedate" id="datepicker">
-												<input type="text" class="form-control datepicker-here" id="" name="<?php echo $enterpriseRow->Enterprise_ID;?>_gamestartdate" value="<?php echo date('Y-m-d', $valueStartDate);?>" data-value="<?php echo $valueStartDate;?>" placeholder="Select Start Date" required="" readonly="" data-startdate="<?php echo $startDate; ?>" data-enddate="<?php echo $endDate; ?>" data-language='en' data-date-format="dd-mm-yyyy">
-
-												<span class="input-group-addon" >To</span>
-
-												<input type ="text" class="form-control datepicker-here" id="" name="<?php echo $enterpriseRow->Enterprise_ID;?>_gameenddate" value="<?php echo date('Y-m-d', $valueEndDate);?>" data-value="<?php echo $valueEndDate;?>" placeholder="Select End Date" required="" readonly="" data-startdate="<?php echo $startDate; ?>" data-enddate="<?php echo $endDate; ?>" data-language='en' data-date-format="dd-mm-yyyy">
-											</div>
+								<div class="row">
+									<div class="col-md-4">
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" class="custom-control-input" name="enterprise[]" id="<?php echo $enterpriseRow->Enterprise_ID;?>" <?php echo $checked;?> value="<?php echo $enterpriseRow->Enterprise_ID;?>">
+											<label class="custom-control-label" for="<?php echo $enterpriseRow->Enterprise_ID;?>"><?php echo $enterpriseRow->Enterprise_Name;?></label>
 										</div>
 									</div>
+									<div id="assignDate"class="col-md-6">
+										<div class="input-group" name="gamedate" id="datepicker">
+											<input type="text" class="form-control datepicker-here" id="" name="<?php echo $enterpriseRow->Enterprise_ID;?>_gamestartdate" value="<?php echo date('Y-m-d', $valueStartDate);?>" data-value="<?php echo $valueStartDate;?>" placeholder="Select Start Date" required="" readonly="" data-startdate="<?php echo $startDate; ?>" data-enddate="<?php echo $endDate; ?>" data-language='en' data-date-format="dd-mm-yyyy">
 
-								<?php } ?>
-								<!-- </div> -->
+											<span class="input-group-addon" >To</span>
+
+											<input type ="text" class="form-control datepicker-here" id="" name="<?php echo $enterpriseRow->Enterprise_ID;?>_gameenddate" value="<?php echo date('Y-m-d', $valueEndDate);?>" data-value="<?php echo $valueEndDate;?>" placeholder="Select End Date" required="" readonly="" data-startdate="<?php echo $startDate; ?>" data-enddate="<?php echo $endDate; ?>" data-language='en' data-date-format="dd-mm-yyyy">
+										</div>
+									</div>
+								</div>
+
 							<?php } ?>
+							<!-- </div> -->
+						<?php } ?>
 
-							<?php if($allocateTo=='subEnterprise'){ ?>
-								<!-- if superadmin is logged in -->
-								<?php if($loggedInAs == 'superadmin'){ ?>
-									<div class="row col-md-12" id="to_subEnterprise">
-										<!-- show Ent DropDown and subEnt checkboxes -->
+						<?php if($allocateTo=='subEnterprise'){ ?>
+							<!-- if superadmin is logged in -->
+							<?php if($loggedInAs == 'superadmin'){ ?>
+								<div class="row col-md-12" id="to_subEnterprise">
+									<!-- show Ent DropDown and subEnt checkboxes -->
 
-										<div class="form-group row col-sm-12 col-md-6" id="Enterprise_Section">
-											<select name="Enterprise" id="Enterprise" class="custom-select2 form-control" required="">
-												<option value="">--Select Enterprise--</option>
-												<?php foreach ($enterpriseDropdown as $EnterpriseData) { ?>
-													<option value="<?php echo $EnterpriseData->Enterprise_ID.'_'.strtotime($EnterpriseData->EG_Game_Start_Date).'_'.strtotime($EnterpriseData->EG_Game_End_Date); ?>"><?php echo $EnterpriseData->Enterprise_Name; ?></option>
-												<?php } ?>
-											</select>
-										</div>
-										<!-- search here -->
-										<div class="form-group row col-sm-12 col-md-6">
-											<input type="search" class="form-control" placeholder="search" name="searchData" disabled="">
-										</div>
-
-										<!-- show subEnterprise checkbox here -->
-										<div class="form-group row col-sm-12" id="subEnterpriseCheckbox">
-										</div>
-
+									<div class="form-group row col-sm-12 col-md-6" id="Enterprise_Section">
+										<select name="Enterprise" id="Enterprise" class="custom-select2 form-control" required="">
+											<option value="">--Select Enterprise--</option>
+											<?php foreach ($enterpriseDropdown as $EnterpriseData) { ?>
+												<option value="<?php echo $EnterpriseData->Enterprise_ID.'_'.strtotime($EnterpriseData->EG_Game_Start_Date).'_'.strtotime($EnterpriseData->EG_Game_End_Date); ?>"><?php echo $EnterpriseData->Enterprise_Name; ?></option>
+											<?php } ?>
+										</select>
 									</div>
-								<?php } ?>
-								<!-- if entperise is logged in -->
-								<?php if($loggedInAs == '1'){ ?>
-									<div class="" id="to_subEnterprise">
-										<!-- show SubEnt checkboxes -->
-										<?php if(count($subEnterpriseCheckbox) > 0)
-										{
-											foreach($subEnterpriseCheckbox as $subEnterpriseRow)
-											{ 
+									<!-- search here -->
+									<div class="form-group row col-sm-12 col-md-6">
+										<input type="search" class="form-control" placeholder="search" name="searchData" disabled="">
+									</div>
+
+									<!-- show subEnterprise checkbox here -->
+									<div class="form-group row col-sm-12" id="subEnterpriseCheckbox">
+									</div>
+
+								</div>
+							<?php } ?>
+							<!-- if entperise is logged in -->
+							<?php if($loggedInAs == '1'){ ?>
+								<div class="" id="to_subEnterprise">
+									<!-- show SubEnt checkboxes -->
+									<?php if(count($subEnterpriseCheckbox) > 0)
+									{
+										foreach($subEnterpriseCheckbox as $subEnterpriseRow)
+										{ 
 												// check for default checked and start and end date
 												// setting start date
-												if($subEnterpriseRow->SubEnterprise_StartDate > $subEnterpriseRow->EG_Game_Start_Date)
-												{
-													$startDate      = $subEnterpriseRow->SubEnterprise_StartDate;
-													$valueStartDate = $subEnterpriseRow->SubEnterprise_StartDate;
-												}
-												else
-												{
-													$startDate      = $subEnterpriseRow->EG_Game_Start_Date;
-													$valueStartDate = $subEnterpriseRow->EG_Game_Start_Date;
-												}
+											if($subEnterpriseRow->SubEnterprise_StartDate > $subEnterpriseRow->EG_Game_Start_Date)
+											{
+												$startDate      = $subEnterpriseRow->SubEnterprise_StartDate;
+												$valueStartDate = $subEnterpriseRow->SubEnterprise_StartDate;
+											}
+											else
+											{
+												$startDate      = $subEnterpriseRow->EG_Game_Start_Date;
+												$valueStartDate = $subEnterpriseRow->EG_Game_Start_Date;
+											}
 												// setting end date
-												if($subEnterpriseRow->SubEnterprise_EndDate < $subEnterpriseRow->EG_Game_End_Date)
-												{
-													$endDate      = $subEnterpriseRow->SubEnterprise_EndDate;
-													$valueEndDate = $subEnterpriseRow->SubEnterprise_EndDate;
-												}
-												else
-												{
-													$endDate      = $subEnterpriseRow->EG_Game_End_Date;
-													$valueEndDate = $subEnterpriseRow->EG_Game_End_Date;
-												}
-												if($subEnterpriseRow->SG_GameID==$gamedata[0])
-												{
-													$valueStartDate = $subEnterpriseRow->SG_Game_Start_Date;
-													$valueEndDate   = $subEnterpriseRow->SG_Game_End_Date;
-													$checked        = 'checked';
+											if($subEnterpriseRow->SubEnterprise_EndDate < $subEnterpriseRow->EG_Game_End_Date)
+											{
+												$endDate      = $subEnterpriseRow->SubEnterprise_EndDate;
+												$valueEndDate = $subEnterpriseRow->SubEnterprise_EndDate;
+											}
+											else
+											{
+												$endDate      = $subEnterpriseRow->EG_Game_End_Date;
+												$valueEndDate = $subEnterpriseRow->EG_Game_End_Date;
+											}
+											if($subEnterpriseRow->SG_GameID==$gamedata[0])
+											{
+												$valueStartDate = $subEnterpriseRow->SG_Game_Start_Date;
+												$valueEndDate   = $subEnterpriseRow->SG_Game_End_Date;
+												$checked        = 'checked';
 													// echo "$startDate, $endDate, $valueStartDate, $valueEndDate, $checked";
-												}
-												else
-												{
-													$checked = '';
-												}
-												?>
+											}
+											else
+											{
+												$checked = '';
+											}
+											?>
 
-												<div class="row">
-													<div class="col-md-4">
-														<div class="custom-control custom-checkbox">
-															<input type="checkbox" class="custom-control-input" name="enterprise[]" id="<?php echo $subEnterpriseRow->SubEnterprise_ID;?>" <?php echo $checked;?> value="<?php echo $subEnterpriseRow->SubEnterprise_ID;?>">
-															<label class="custom-control-label" for="<?php echo $subEnterpriseRow->SubEnterprise_ID;?>"><?php echo $subEnterpriseRow->SubEnterprise_Name;?></label>
-														</div>
-													</div>
-													<div id="assignDate"class="col-md-6">
-														<div class="input-group" name="gamedate" id="datepicker">
-															<input type="text" class="form-control datepicker-here" id="" name="<?php echo $subEnterpriseRow->SubEnterprise_ID;?>_gamestartdate" value="<?php echo date('Y-m-d', $valueStartDate);?>" data-value="<?php echo $valueStartDate;?>" placeholder="Select Start Date" required="" readonly="" data-startdate="<?php echo $startDate; ?>" data-enddate="<?php echo $endDate; ?>" data-language='en' data-date-format="dd-mm-yyyy">
-
-															<span class="input-group-addon" >To</span>
-
-															<input type ="text" class="form-control datepicker-here" id="" name="<?php echo $subEnterpriseRow->SubEnterprise_ID;?>_gameenddate" value="<?php echo date('Y-m-d', $valueEndDate);?>" data-value="<?php echo $valueEndDate;?>" placeholder="Select End Date" required="" readonly="" data-startdate="<?php echo $startDate; ?>" data-enddate="<?php echo $endDate; ?>" data-language='en' data-date-format="dd-mm-yyyy">
-														</div>
+											<div class="row">
+												<div class="col-md-4">
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input" name="enterprise[]" id="<?php echo $subEnterpriseRow->SubEnterprise_ID;?>" <?php echo $checked;?> value="<?php echo $subEnterpriseRow->SubEnterprise_ID;?>">
+														<label class="custom-control-label" for="<?php echo $subEnterpriseRow->SubEnterprise_ID;?>"><?php echo $subEnterpriseRow->SubEnterprise_Name;?></label>
 													</div>
 												</div>
+												<div id="assignDate"class="col-md-6">
+													<div class="input-group" name="gamedate" id="datepicker">
+														<input type="text" class="form-control datepicker-here" id="" name="<?php echo $subEnterpriseRow->SubEnterprise_ID;?>_gamestartdate" value="<?php echo date('Y-m-d', $valueStartDate);?>" data-value="<?php echo $valueStartDate;?>" placeholder="Select Start Date" required="" readonly="" data-startdate="<?php echo $startDate; ?>" data-enddate="<?php echo $endDate; ?>" data-language='en' data-date-format="dd-mm-yyyy">
 
-											<?php } ?>
-										<?php } else{ ?>
-											<marquee class="alert-danger">No SubEnterprises</marquee>
+														<span class="input-group-addon" >To</span>
+
+														<input type ="text" class="form-control datepicker-here" id="" name="<?php echo $subEnterpriseRow->SubEnterprise_ID;?>_gameenddate" value="<?php echo date('Y-m-d', $valueEndDate);?>" data-value="<?php echo $valueEndDate;?>" placeholder="Select End Date" required="" readonly="" data-startdate="<?php echo $startDate; ?>" data-enddate="<?php echo $endDate; ?>" data-language='en' data-date-format="dd-mm-yyyy">
+													</div>
+												</div>
+											</div>
+
 										<?php } ?>
-									</div>
-								<?php } ?>
+									<?php } else{ ?>
+										<marquee class="alert-danger">No SubEnterprises</marquee>
+									<?php } ?>
+								</div>
 							<?php } ?>
+						<?php } ?>
 
-							<?php if($allocateTo=='entErpriseUsers'){ ?>
-								<!-- if superadmin is logged in -->
-								<?php if($loggedInAs == 'superadmin'){ ?>
-									<div class="row" id="to_entErpriseUsers">
-										<!-- show Ent DropDown and then show users checkboxes -->
+						<?php if($allocateTo=='entErpriseUsers'){ ?>
+							<!-- if superadmin is logged in -->
+							<?php if($loggedInAs == 'superadmin'){ ?>
+								<div class="row" id="to_entErpriseUsers">
+									<!-- show Ent DropDown and then show users checkboxes -->
 
-										<div class="form-group row col-sm-12 col-md-6" id="Enterprise_Section">
-											<select name="Enterprise" id="Enterprise" class="custom-select2 form-control" required="">
-												<option value="">--Select Enterprise--</option>
-												<?php foreach ($enterpriseDropdown as $EnterpriseData) { ?>
-													<option value="<?php echo $EnterpriseData->Enterprise_ID.'_'.strtotime($EnterpriseData->EG_Game_Start_Date).'_'.strtotime($EnterpriseData->EG_Game_End_Date); ?>"><?php echo $EnterpriseData->Enterprise_Name; ?></option>
-												<?php } ?>
-											</select>
-										</div>
-										<!-- search here -->
-										<div class="form-group row col-sm-12 col-md-6">
-											<input type="search" class="form-control" placeholder="search" name="searchData" disabled="">
-										</div>
-
-										<!-- show entErpriseUsers checkbox here -->
-										<div class="form-group row col-sm-12" id="entErpriseUsersCheckbox">
-										</div>
-
+									<div class="form-group row col-sm-12 col-md-6" id="Enterprise_Section">
+										<select name="Enterprise" id="Enterprise" class="custom-select2 form-control" required="">
+											<option value="">--Select Enterprise--</option>
+											<?php foreach ($enterpriseDropdown as $EnterpriseData) { ?>
+												<option value="<?php echo $EnterpriseData->Enterprise_ID.'_'.strtotime($EnterpriseData->EG_Game_Start_Date).'_'.strtotime($EnterpriseData->EG_Game_End_Date); ?>"><?php echo $EnterpriseData->Enterprise_Name; ?></option>
+											<?php } ?>
+										</select>
 									</div>
-								<?php } ?>
-								<!-- if entperise is logged in -->
-								<?php if($loggedInAs == '1'){ ?>
-									<div class="row" id="to_entErpriseUsers">
-										<!-- put search box here to search -->
-										<div class="col-md-6"></div>
-										<div class="form-group row col-sm-12 col-md-6">
-											<input type="search" class="form-control" placeholder="search" name="searchData" disabled="">
-										</div>
-
-										<div class="form-group row col-sm-12" id="entErpriseUsersCheckbox">
-											<!-- making enterprise checkboxes here by calling the js function-->
-											<!-- end of making enterprise users checkboxes here -->
-										</div>
+									<!-- search here -->
+									<div class="form-group row col-sm-12 col-md-6">
+										<input type="search" class="form-control" placeholder="search" name="searchData" disabled="">
 									</div>
-								<?php } ?>
+
+									<!-- show entErpriseUsers checkbox here -->
+									<div class="form-group row col-sm-12" id="entErpriseUsersCheckbox">
+									</div>
+
+								</div>
 							<?php } ?>
+							<!-- if entperise is logged in -->
+							<?php if($loggedInAs == '1'){ ?>
+								<div class="row" id="to_entErpriseUsers">
+									<!-- put search box here to search -->
+									<div class="col-md-6"></div>
+									<div class="form-group row col-sm-12 col-md-6">
+										<input type="search" class="form-control" placeholder="search" name="searchData" disabled="">
+									</div>
 
-							<?php if($allocateTo=='subEnterpriseUsers'){ ?>
-								<!-- if superadmin is logged in -->
-								<?php if($loggedInAs == 'superadmin'){ ?>
-									<div class="row" id="to_subEnterpriseUsers">
-										<!-- show Ent and SubEnt DropDown then users checkboxes -->
+									<div class="form-group row col-sm-12" id="entErpriseUsersCheckbox">
+										<!-- making enterprise checkboxes here by calling the js function-->
+										<!-- end of making enterprise users checkboxes here -->
+									</div>
+								</div>
+							<?php } ?>
+						<?php } ?>
 
-										<div class="form-group row col-sm-12 col-md-6" id="Enterprise_Section">
-											<select name="Enterprise" id="Enterprise" class="custom-select2 form-control" required="">
-												<option value="">--Select Enterprise--</option>
-												<?php foreach ($enterpriseDropdown as $EnterpriseData) { ?>
-													<option value="<?php echo $EnterpriseData->Enterprise_ID.'_'.strtotime($EnterpriseData->EG_Game_Start_Date).'_'.strtotime($EnterpriseData->EG_Game_End_Date); ?>"><?php echo $EnterpriseData->Enterprise_Name; ?></option>
-												<?php } ?>
-											</select>
-										</div>
+						<?php if($allocateTo=='subEnterpriseUsers'){ ?>
+							<!-- if superadmin is logged in -->
+							<?php if($loggedInAs == 'superadmin'){ ?>
+								<div class="row" id="to_subEnterpriseUsers">
+									<!-- show Ent and SubEnt DropDown then users checkboxes -->
 
-										<div class="form-group row col-sm-12 col-md-6 d-none" id="subEnterpriseUsers_Section">
-											<select name="SubEnterpriseDropdown" id="SubEnterpriseDropdown" class="custom-select2 form-control" required="">
-												<option value="">--Select SubEnterprise--</option>
+									<div class="form-group row col-sm-12 col-md-6" id="Enterprise_Section">
+										<select name="Enterprise" id="Enterprise" class="custom-select2 form-control" required="">
+											<option value="">--Select Enterprise--</option>
+											<?php foreach ($enterpriseDropdown as $EnterpriseData) { ?>
+												<option value="<?php echo $EnterpriseData->Enterprise_ID.'_'.strtotime($EnterpriseData->EG_Game_Start_Date).'_'.strtotime($EnterpriseData->EG_Game_End_Date); ?>"><?php echo $EnterpriseData->Enterprise_Name; ?></option>
+											<?php } ?>
+										</select>
+									</div>
+
+									<div class="form-group row col-sm-12 col-md-6 d-none" id="subEnterpriseUsers_Section">
+										<select name="SubEnterpriseDropdown" id="SubEnterpriseDropdown" class="custom-select2 form-control" required="">
+											<option value="">--Select SubEnterprise--</option>
+										</select>
+									</div>
+
+									<!-- search here -->
+									<div class="form-group row col-sm-12 col-md-6 d-none">
+										<input type="search" class="form-control" placeholder="search" name="searchData" disabled="">
+									</div>
+
+									<!-- show subErpriseUsers checkbox here -->
+									<div class="form-group row col-sm-12" id="subEntErpriseUsersCheckbox">
+									</div>
+
+								</div>
+							<?php } ?>
+							<!-- if entperise is logged in -->
+							<?php if($loggedInAs == '1'){ ?>
+								<div class="row" id="to_subEnterpriseUsers">
+									<div class="form-group row col-sm-12 col-md-6 " id="subEnterpriseUsers_Section">
+										<?php if(isset($entData)) { ?>
+											<input type="hidden" name="Enterprise" value="<?php echo $entData['User_Id'].'_'.time().'_'.time();?>">
+										<?php } ?>
+										<!-- show SubEnt DropDown and then users checkboxes -->
+										<select name="SubEnterpriseDropdown" id="SubEnterpriseDropdown" class="custom-select2 form-control" required="">
+											<option value="">--Select SubEnterprise--</option>
+											<?php if(count($subEnterpriseDropdown) > 0){ 
+												foreach ($subEnterpriseDropdown as $subEnterpriseDropdownRow) { ?>
+													<option value="<?php echo $subEnterpriseDropdownRow->SubEnterprise_ID.'_'.$subEnterpriseDropdownRow->startDate.'_'.$subEnterpriseDropdownRow->endDate;?>"><?php echo $subEnterpriseDropdownRow->SubEnterprise_Name;?></option>
+												<?php } } ?>
 											</select>
 										</div>
 
 										<!-- search here -->
-										<div class="form-group row col-sm-12 col-md-6 d-none">
+										<div class="form-group row col-sm-12 col-md-6 ">
 											<input type="search" class="form-control" placeholder="search" name="searchData" disabled="">
 										</div>
 
 										<!-- show subErpriseUsers checkbox here -->
 										<div class="form-group row col-sm-12" id="subEntErpriseUsersCheckbox">
 										</div>
+									</div>
+								<?php } ?>
+								<!-- if subEntperise is logged in -->
+								<?php if($loggedInAs == '2'){ ?>
+									<div class="col-md-12" id="to_subEnterpriseUsers">
+										<!-- show users checkboxes only -->
+										<input type="hidden" name="Enterprise" value="<?php echo $ent_subEnt_Data->Enterprise_ID?>">
+										<input type="hidden" name="SubEnterpriseDropdown" value="<?php echo $ent_subEnt_Data->SubEnterprise_ID.'_'.$ent_subEnt_Data->SG_Game_Start_Date.'_'.$ent_subEnt_Data->SG_Game_End_Date?>">
+										<!-- $ent_subEnt_Data->SG_Game_Start_Date and $ent_subEnt_Data->SG_Game_End_Date -->
+										<?php if(isset($subEntErpriseUsersCheckbox) && count($subEntErpriseUsersCheckbox) > 0)
+										{
+											foreach($subEntErpriseUsersCheckbox as $subEntErpriseUsersRow)
+											{ 
+													// check for default checked and start and end date
+													// setting start date
+												if($subEntErpriseUsersRow->UserStartDate > $ent_subEnt_Data->SG_Game_Start_Date)
+												{
+													$startDate      = $subEntErpriseUsersRow->UserStartDate;
+													$valueStartDate = $subEntErpriseUsersRow->UserStartDate;
+												}
+												else
+												{
+													$startDate      = $ent_subEnt_Data->SG_Game_Start_Date;
+													$valueStartDate = $ent_subEnt_Data->SG_Game_Start_Date;
+												}
+													// setting end date
+												if($subEntErpriseUsersRow->UserEndDate < $ent_subEnt_Data->SG_Game_End_Date)
+												{
+													$endDate      = $subEntErpriseUsersRow->UserEndDate;
+													$valueEndDate = $subEntErpriseUsersRow->UserEndDate;
+												}
+												else
+												{
+													$endDate      = $ent_subEnt_Data->SG_Game_End_Date;
+													$valueEndDate = $ent_subEnt_Data->SG_Game_End_Date;
+												}
+													// if user already has the game 
+												if($subEntErpriseUsersRow->UG_GameID==$gamedata[0])
+												{
+													$valueStartDate = $subEntErpriseUsersRow->UG_GameStartDate;
+													$valueEndDate   = $subEntErpriseUsersRow->UG_GameEndDate;
+													$checked        = 'checked';
+														// echo "$startDate, $endDate, $valueStartDate, $valueEndDate, $checked";
+												}
+												else
+												{
+													$checked = '';
+												}
+												?>
+												<div class="row">
+													<div class="col-md-4" data-toggle="tooltip" title="<?php echo $subEntErpriseUsersRow->User_email;?>">
+														<div class="custom-control custom-checkbox">
+															<input type="checkbox" class="custom-control-input" name="subEnterpriseUser[]" id="<?php echo $subEntErpriseUsersRow->User_id;?>" <?php echo $checked;?> value="<?php echo $subEntErpriseUsersRow->User_id;?>">
+															<label class="custom-control-label" for="<?php echo $subEntErpriseUsersRow->User_id;?>"><?php echo $subEntErpriseUsersRow->userName;?></label>
+														</div>
+													</div>
+													<div id="assignDate" class="col-md-6">
+														<div class="input-group" name="gamedate" id="datepicker">
+															<input type="text" class="form-control datepicker-here" id="" name="<?php echo $subEntErpriseUsersRow->User_id;?>_gamestartdate" value="<?php echo date('Y-m-d', $valueStartDate);?>" data-value="<?php echo $valueStartDate;?>" placeholder="Select Start Date" required="" readonly="" data-startdate="<?php echo $startDate; ?>" data-enddate="<?php echo $endDate; ?>" data-language='en' data-date-format="dd-mm-yyyy">
+
+															<span class="input-group-addon" >To</span>
+
+															<input type ="text" class="form-control datepicker-here" id="" name="<?php echo $subEntErpriseUsersRow->User_id;?>_gameenddate" value="<?php echo date('Y-m-d', $valueEndDate);?>" data-value="<?php echo $valueEndDate;?>" placeholder="Select End Date" required="" readonly="" data-startdate="<?php echo $startDate; ?>" data-enddate="<?php echo $endDate; ?>" data-language='en' data-date-format="dd-mm-yyyy">
+														</div>
+													</div>
+													<div class="col-md-2">
+														<input type="text" class="form-control" name="<?php echo $subEntErpriseUsersRow->User_id;?>_replaycount" value="<?php echo ($subEntErpriseUsersRow->UG_ReplayCount)?$subEntErpriseUsersRow->UG_ReplayCount:0?>">
+													</div>
+												</div>
+											<?php } ?>
+										<?php } else{ ?>
+											<marquee class="alert-danger">No Users</marquee>
+										<?php } ?>
 
 									</div>
 								<?php } ?>
-								<!-- if entperise is logged in -->
-								<?php if($loggedInAs == '1'){ ?>
-									<div class="row" id="to_subEnterpriseUsers">
-										<div class="form-group row col-sm-12 col-md-6 " id="subEnterpriseUsers_Section">
-											<?php if(isset($entData)) { ?>
-												<input type="hidden" name="Enterprise" value="<?php echo $entData['User_Id'].'_'.time().'_'.time();?>">
-											<?php } ?>
-											<!-- show SubEnt DropDown and then users checkboxes -->
-											<select name="SubEnterpriseDropdown" id="SubEnterpriseDropdown" class="custom-select2 form-control" required="">
-												<option value="">--Select SubEnterprise--</option>
-												<?php if(count($subEnterpriseDropdown) > 0){ 
-													foreach ($subEnterpriseDropdown as $subEnterpriseDropdownRow) { ?>
-														<option value="<?php echo $subEnterpriseDropdownRow->SubEnterprise_ID.'_'.$subEnterpriseDropdownRow->startDate.'_'.$subEnterpriseDropdownRow->endDate;?>"><?php echo $subEnterpriseDropdownRow->SubEnterprise_Name;?></option>
-													<?php } } ?>
-												</select>
-											</div>
-
-											<!-- search here -->
-											<div class="form-group row col-sm-12 col-md-6 ">
-												<input type="search" class="form-control" placeholder="search" name="searchData" disabled="">
-											</div>
-
-											<!-- show subErpriseUsers checkbox here -->
-											<div class="form-group row col-sm-12" id="subEntErpriseUsersCheckbox">
-											</div>
-										</div>
-									<?php } ?>
-									<!-- if subEntperise is logged in -->
-									<?php if($loggedInAs == '2'){ ?>
-										<div class="col-md-12" id="to_subEnterpriseUsers">
-											<!-- show users checkboxes only -->
-											<input type="hidden" name="Enterprise" value="<?php echo $ent_subEnt_Data->Enterprise_ID?>">
-											<input type="hidden" name="SubEnterpriseDropdown" value="<?php echo $ent_subEnt_Data->SubEnterprise_ID.'_'.$ent_subEnt_Data->SG_Game_Start_Date.'_'.$ent_subEnt_Data->SG_Game_End_Date?>">
-											<!-- $ent_subEnt_Data->SG_Game_Start_Date and $ent_subEnt_Data->SG_Game_End_Date -->
-											<?php if(isset($subEntErpriseUsersCheckbox) && count($subEntErpriseUsersCheckbox) > 0)
-											{
-												foreach($subEntErpriseUsersCheckbox as $subEntErpriseUsersRow)
-												{ 
-													// check for default checked and start and end date
-													// setting start date
-													if($subEntErpriseUsersRow->UserStartDate > $ent_subEnt_Data->SG_Game_Start_Date)
-													{
-														$startDate      = $subEntErpriseUsersRow->UserStartDate;
-														$valueStartDate = $subEntErpriseUsersRow->UserStartDate;
-													}
-													else
-													{
-														$startDate      = $ent_subEnt_Data->SG_Game_Start_Date;
-														$valueStartDate = $ent_subEnt_Data->SG_Game_Start_Date;
-													}
-													// setting end date
-													if($subEntErpriseUsersRow->UserEndDate < $ent_subEnt_Data->SG_Game_End_Date)
-													{
-														$endDate      = $subEntErpriseUsersRow->UserEndDate;
-														$valueEndDate = $subEntErpriseUsersRow->UserEndDate;
-													}
-													else
-													{
-														$endDate      = $ent_subEnt_Data->SG_Game_End_Date;
-														$valueEndDate = $ent_subEnt_Data->SG_Game_End_Date;
-													}
-													// if user already has the game 
-													if($subEntErpriseUsersRow->UG_GameID==$gamedata[0])
-													{
-														$valueStartDate = $subEntErpriseUsersRow->UG_GameStartDate;
-														$valueEndDate   = $subEntErpriseUsersRow->UG_GameEndDate;
-														$checked        = 'checked';
-														// echo "$startDate, $endDate, $valueStartDate, $valueEndDate, $checked";
-													}
-													else
-													{
-														$checked = '';
-													}
-													?>
-													<div class="row">
-														<div class="col-md-4" data-toggle="tooltip" title="<?php echo $subEntErpriseUsersRow->User_email;?>">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" class="custom-control-input" name="subEnterpriseUser[]" id="<?php echo $subEntErpriseUsersRow->User_id;?>" <?php echo $checked;?> value="<?php echo $subEntErpriseUsersRow->User_id;?>">
-																<label class="custom-control-label" for="<?php echo $subEntErpriseUsersRow->User_id;?>"><?php echo $subEntErpriseUsersRow->userName;?></label>
-															</div>
-														</div>
-														<div id="assignDate" class="col-md-6">
-															<div class="input-group" name="gamedate" id="datepicker">
-																<input type="text" class="form-control datepicker-here" id="" name="<?php echo $subEntErpriseUsersRow->User_id;?>_gamestartdate" value="<?php echo date('Y-m-d', $valueStartDate);?>" data-value="<?php echo $valueStartDate;?>" placeholder="Select Start Date" required="" readonly="" data-startdate="<?php echo $startDate; ?>" data-enddate="<?php echo $endDate; ?>" data-language='en' data-date-format="dd-mm-yyyy">
-
-																<span class="input-group-addon" >To</span>
-
-																<input type ="text" class="form-control datepicker-here" id="" name="<?php echo $subEntErpriseUsersRow->User_id;?>_gameenddate" value="<?php echo date('Y-m-d', $valueEndDate);?>" data-value="<?php echo $valueEndDate;?>" placeholder="Select End Date" required="" readonly="" data-startdate="<?php echo $startDate; ?>" data-enddate="<?php echo $endDate; ?>" data-language='en' data-date-format="dd-mm-yyyy">
-															</div>
-														</div>
-														<div class="col-md-2">
-															<input type="text" class="form-control" name="<?php echo $subEntErpriseUsersRow->User_id;?>_replaycount" value="<?php echo ($subEntErpriseUsersRow->UG_ReplayCount)?$subEntErpriseUsersRow->UG_ReplayCount:0?>">
-														</div>
-													</div>
-												<?php } ?>
-											<?php } else{ ?>
-												<marquee class="alert-danger">No Users</marquee>
-											<?php } ?>
-
-										</div>
-									<?php } ?>
-								<?php } ?>
+							<?php } ?>
 
 							<!-- <div class="row">
 								<div class="col-md-4">

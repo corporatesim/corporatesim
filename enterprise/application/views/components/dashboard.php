@@ -17,17 +17,20 @@
                       <?php if($this->session->userdata('loginData')['User_Role'] == 1){ ?>
                         <span data-toggle="tooltip" title="From: <?php echo date('d-m-Y',strtotime($gameDataRow->EG_Game_Start_Date)); ?> To: <?php echo date('d-m-Y',strtotime($gameDataRow->EG_Game_End_Date)); ?>" data-startdate="<?php echo strtotime($gameDataRow->EG_Game_Start_Date);?>" data-enddate="<?php echo strtotime($gameDataRow->EG_Game_End_Date);?>">
                         <?php } else { ?>
-                        <span data-toggle="tooltip" title="From: <?php echo date('d-m-Y',strtotime($gameDataRow->SG_Game_Start_Date)); ?> To: <?php echo date('d-m-Y',strtotime($gameDataRow->SG_Game_End_Date)); ?>" data-startdate="<?php echo strtotime($gameDataRow->SG_Game_Start_Date);?>" data-enddate="<?php echo strtotime($gameDataRow->SG_Game_End_Date);?>">
-                        <?php } ?>
-                        <?php echo $gameDataRow->Game_Name; ?>
-                      </span>
-                      <a href="javascript:void(0);" data-toggle="tooltip" title="Allocate/De-Allocate" class="pull-right allocateDeallocate" data-gamedata="<?php echo base64_encode($gameDataRow->Game_ID.','.$gameDataRow->Game_Name);?>" data-gamedata="<?php echo base64_encode($gameDataRow->Game_ID.','.$gameDataRow->Game_Name);?>">
-                        <i class="fa fa-tasks"></i>
-                      </a>
-                    </h5>
-                    <?php if($gameDataRow->Game_Elearning > 0){ ?>
-                      <h5>(eLearning)</h5>
-                    <?php } ?>
+                          <span data-toggle="tooltip" title="From: <?php echo date('d-m-Y',strtotime($gameDataRow->SG_Game_Start_Date)); ?> To: <?php echo date('d-m-Y',strtotime($gameDataRow->SG_Game_End_Date)); ?>" data-startdate="<?php echo strtotime($gameDataRow->SG_Game_Start_Date);?>" data-enddate="<?php echo strtotime($gameDataRow->SG_Game_End_Date);?>">
+                          <?php } ?>
+                          <?php echo $gameDataRow->Game_Name; ?>
+                        </span>
+                        <a href="javascript:void(0);" data-toggle="tooltip" title="Allocate/De-Allocate" class="pull-right allocateDeallocate" data-gamedata="<?php echo base64_encode($gameDataRow->Game_ID.','.$gameDataRow->Game_Name);?>" data-gamedata="<?php echo base64_encode($gameDataRow->Game_ID.','.$gameDataRow->Game_Name);?>">
+                          <i class="fa fa-tasks"></i>
+                        </a>
+                      </h5>
+                      <?php if(!empty($gameDataRow->Game_Category)){
+                        echo "<code>$gameDataRow->Game_Category</code>";
+                      } ?>
+                  <!-- <?php if($gameDataRow->Game_Elearning > 0){ ?>
+                    <h5>(eLearning)</h5>
+                    <?php } ?> -->
                   </p>
                 </div>
               </div>

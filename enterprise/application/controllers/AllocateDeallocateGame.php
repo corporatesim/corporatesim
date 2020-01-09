@@ -45,6 +45,18 @@ class AllocateDeallocateGame extends CI_Controller {
 		$RequestMethod         = $this->input->server('REQUEST_METHOD');
 		$entSql                = "SELECT ge.Enterprise_ID, ge.Enterprise_Name, ge.Enterprise_Email, ge.Enterprise_StartDate, ge.Enterprise_EndDate, geg.EG_Game_Start_Date, geg.EG_Game_End_Date FROM GAME_ENTERPRISE ge LEFT JOIN GAME_ENTERPRISE_GAME geg ON geg.EG_EnterpriseID=ge.Enterprise_ID AND geg.EG_GameID=".$content['gamedata'][0]." WHERE ge.Enterprise_Status = 0";
 
+		// finding game category for it's url gameId = $content['gamedata'][0]
+		$gameCategory = $this->Common_Model->fetchRecords('GAME_GAME',array('Game_ID' => $content['gamedata'][0]),'Game_Category');
+		// echo "<pre>"; print_r($gameCategory[0]); exit();
+		if (strpos($gameCategory[0]->Game_Category, 'Desktop') !== false)
+		{
+			$content['gameUrl'] = base_url('../');
+		}
+		else
+		{
+			$content['gameUrl'] = base_url('../mobile');
+		}
+		
 		switch ($content['allocateTo'])
 		{
 			case 'enterprise':
