@@ -15,6 +15,14 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 	$Game_DescriptionLink  = ($_POST['Game_DescriptionLink'])?$_POST['Game_DescriptionLink']:0;
 	$Game_BackToIntro      = ($_POST['Game_BackToIntro'])?$_POST['Game_BackToIntro']:0;
 	$Game_HideScenarioLink = ($_POST['Game_HideScenarioLink'])?$_POST['Game_HideScenarioLink']:0;
+
+	if(strpos(trim($_POST['Game_Category']), trim('Mobile')) !== false)
+	{
+		// if mobile category consist of mobile then make this game bot-enabled
+		$_POST['Game_Type'] = 1;
+	}
+	// echo "<pre>"; print_r($_POST); exit();
+
 	$gamedetails           = (object) array(
 		'Game_Name'             => $_POST['name'],
 		'Game_Comments'         => $_POST['comments'],
@@ -149,8 +157,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 {
+	// echo "<pre>"; print_r($_POST); exit();
 	// if game is bot enabled then check that this doesn't contains multiple areas in i/p side and doesn't have any subcomponent
-	if(isset($_POST['Game_Type']))
+	if(isset($_POST['Game_Type']) || (strpos(trim($_POST['Game_Category']), trim('Mobile')) !== false))
 	{
 		$checkSql = "SELECT * FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID =".$_POST['id']." ) AND SubLink_Status=1 ORDER BY SubLink_SubCompID DESC, SubLink_AreaID";
 
@@ -165,7 +174,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 			{
 				if($row->SubLink_SubCompID > 1)
 				{
-					$_SESSION['msg']     = 'This game can not be converted to Bot. Because this is having subcomponents';
+					$_SESSION['msg']     = 'This game can not be converted to Mobile Category. Because this is having subcomponents';
 					$_SESSION['type[0]'] = "inputError";
 					$_SESSION['type[1]'] = "has-error";
 					header("Location: ".site_root."ux-admin/ManageGame/edit/".base64_encode($_POST['id']));
@@ -182,7 +191,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 
 						if($tmpAreaId != $areaID && $tmpLinkId == $linkID)
 						{
-							$_SESSION['msg']     = 'This game can not be converted to Bot. Because this is having multiple areas in input side';
+							$_SESSION['msg']     = 'This game can not be converted to Mobile Category. Because this is having multiple areas in input side';
 							$_SESSION['type[0]'] = "inputError";
 							$_SESSION['type[1]'] = "has-error";
 							header("Location: ".site_root."ux-admin/ManageGame/edit/".base64_encode($_POST['id']));
@@ -200,6 +209,14 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 	$Game_DescriptionLink  = ($_POST['Game_DescriptionLink'])?$_POST['Game_DescriptionLink']:0;
 	$Game_BackToIntro      = ($_POST['Game_BackToIntro'])?$_POST['Game_BackToIntro']:0;
 	$Game_HideScenarioLink = ($_POST['Game_HideScenarioLink'])?$_POST['Game_HideScenarioLink']:0;
+
+	if(strpos(trim($_POST['Game_Category']), trim('Mobile')) !== false)
+	{
+		// if mobile category consist of mobile then make this game bot-enabled
+		$_POST['Game_Type'] = 1;
+	}
+	// echo "<pre>"; print_r($_POST); exit();
+
 	$gamedetails           = (object) array(
 		'Game_Name'             => $_POST['name'],
 		'Game_Comments'         => $_POST['comments'],

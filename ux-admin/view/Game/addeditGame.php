@@ -182,6 +182,9 @@
 										</option>
 									</select>
 								</div>
+								<div class="col-md-6 form-group text-danger">
+									<marquee behavior="" direction="">Mobile category games will be <b>Bot-Enabled</b> by default</marquee>
+								</div>
 							</div>
 
 							<div class="row name" id="name">

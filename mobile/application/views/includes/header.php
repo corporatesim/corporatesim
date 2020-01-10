@@ -52,6 +52,15 @@
 			height    : auto;
 			margin-top: 70px !important;
 		}
+		/*to hide the radio button*/
+		/*.custom-control-label::before{
+			width: 1px;
+			height: 1px;
+		}
+		.custom-control-label::after{
+			width: 1px;
+			height: 1px;
+		}*/
 	</style>
 	<body>
 		<section id="bodySection" style="background-image: url(<?php echo base_url('../images/mobileHomePage.png');?>); min-height: 100vh;">
