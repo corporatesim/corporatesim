@@ -3,44 +3,44 @@
 <head>
   <!-- Basic Page Info -->
   <meta charset="utf-8">
-  <title><?php echo ucfirst($this->uri->segment(1)); ?></title>
+  <title><?php echo ucfirst($this->uri->segment(1));?></title>
   <!-- Site favicon -->
   <!-- <link rel="shortcut icon" href="images/favicon.ico"> -->
   <!-- Mobile Specific Metas -->
-  <link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url('common/vendors');?>/images/favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url('common/vendors/images/favicon.ico');?>">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
   <!-- bootstrap css -->
-  <!-- <link rel="stylesheet" href="<?php //echo base_url('common/'); ?>loginSignup/vendor/bootstrap/css/bootstrap.css"> -->
-  <link rel="stylesheet" href="<?php echo base_url('common/'); ?>bootstrap4/dist/css/bootstrap.css"> 
+  <!-- <link rel="stylesheet" href="<?php //echo base_url('common/');?>loginSignup/vendor/bootstrap/css/bootstrap.css"> -->
+  <link rel="stylesheet" href="<?php echo base_url('common/bootstrap4/dist/css/bootstrap.css?v=').file_version_cs;?>"> 
   <!-- CSS -->
-  <link rel="stylesheet" href="<?php echo base_url('common/'); ?>vendors/styles/style.css">
-  <link rel="stylesheet" type="text/css" href="<?php echo base_url('common/'); ?>src/plugins/datatables/media/css/jquery.dataTables.css">
-  <link rel="stylesheet" type="text/css" href="<?php echo base_url('common/'); ?>src/plugins/datatables/media/css/dataTables.bootstrap4.css">
-  <link rel="stylesheet" type="text/css" href="<?php echo base_url('common/'); ?>src/plugins/datatables/media/css/responsive.dataTables.css"> 
+  <link rel="stylesheet" href="<?php echo base_url('common/vendors/styles/style.css?v=').file_version_cs;?>">
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url('common/src/plugins/datatables/media/css/jquery.dataTables.css?v=').file_version_cs;?>">
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url('common/src/plugins/datatables/media/css/dataTables.bootstrap4.css?v=').file_version_cs;?>">
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url('common/src/plugins/datatables/media/css/responsive.dataTables.css?v=').file_version_cs;?>"> 
 
   <!-- datepicker css -->
-  <link href="<?php echo base_url('common/'); ?>datetimePicker/css/datepicker.min.css" rel="stylesheet" type="text/css">
+  <link href="<?php echo base_url('common/datetimePicker/css/datepicker.min.css?v=').file_version_cs;?>" rel="stylesheet" type="text/css">
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script src="<?php echo base_url('common/'); ?>src/jquery/dist/jquery.min.js"></script>
+  <script src="<?php echo base_url('common/src/jquery/dist/jquery.min.js?v=').file_version_cs;?>"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
   <!-- material icons for bootgrid -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
-  <link href="<?php echo base_url('common/vendors/bootgrid/');?>jquery.bootgrid.min.css" rel="stylesheet" type="text/css">
+  <link href="<?php echo base_url('common/vendors/bootgrid/jquery.bootgrid.min.css?v=').file_version_cs;?>" rel="stylesheet" type="text/css">
 
-  <link href="<?php echo base_url('common/vendors/sweetalert/');?>sweetalert2.min.css" rel="stylesheet" type="text/css">
-  <link href="<?php echo base_url('common/vendors/sweetalert/');?>animate.min.css" rel="stylesheet" type="text/css">
+  <link href="<?php echo base_url('common/vendors/sweetalert/sweetalert2.min.css?v=').file_version_cs;?>" rel="stylesheet" type="text/css">
+  <link href="<?php echo base_url('common/vendors/sweetalert/animate.min.css?v=').file_version_cs;?>" rel="stylesheet" type="text/css">
   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"> -->
 
-  <script src="<?php echo base_url('common/vendors/sweetalert/');?>sweetalert2.all.min.js"></script>
+  <script src="<?php echo base_url('common/vendors/sweetalert/sweetalert2.all.min.js?v=').file_version_cs;?>"></script>
 
   <!-- adding these links to include chart.js -->
-  <script src="<?php echo base_url('common/vendors/chartjs/chart.bundle.min.js');?>"></script>
-  <link href="<?php echo base_url('common/vendors/chartjs/chart.min.css');?>" rel="stylesheet" type="text/css">
-  <script src="<?php echo base_url('common/vendors/chartjs/chart.min.js');?>"></script>
+  <script src="<?php echo base_url('common/vendors/chartjs/chart.bundle.min.js?v=').file_version_cs;?>"></script>
+  <link href="<?php echo base_url('common/vendors/chartjs/chart.min.css?v=').file_version_cs;?>" rel="stylesheet" type="text/css">
+  <script src="<?php echo base_url('common/vendors/chartjs/chart.min.js?v=').file_version_cs;?>"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -56,9 +56,9 @@
       <div class="brand-logo">
         <a href="<?php echo base_url('Dashboard');?>">
           <?php if(isset($this->session->userdata('loginData')['User_profile_pic'])) { ?>
-            <img src="<?php echo base_url('common/Logo/'.$this->session->userdata('loginData')['User_profile_pic']); ?>" alt="CorporateSim">
+            <img src="<?php echo base_url('common/Logo/'.$this->session->userdata('loginData')['User_profile_pic']);?>" alt="CorporateSim">
           <?php } else { ?>
-            <img src="<?php echo base_url('common/'); ?>vendors/images/cs_logo.jpg" alt="CorporateSim">
+            <img src="<?php echo base_url('common/');?>vendors/images/cs_logo.jpg" alt="CorporateSim">
           <?php } ?>
         </a> 
       </div>
@@ -85,7 +85,7 @@
               echo "<span class='user-icon'><i class='fa fa-user-o'></i></span>";
             } 
             ?> -->
-            <span class="user-name"><?php echo ucfirst($this->session->userdata('loginData')['User_FullName']); ?>
+            <span class="user-name"><?php echo ucfirst($this->session->userdata('loginData')['User_FullName']);?>
             <?php if($this->session->userdata('loginData')['User_Role'] == 1){?>
               <br><span class="small"><center><code>Enterprise: <?php echo $this->session->userdata('loginData')['Enterprise_Name'];?> </code></center></span>
             <?php }else if($this->session->userdata('loginData')['User_Role'] == 2) { ?> 
@@ -116,49 +116,49 @@
             <ul>
               <li>
                 <a href="#">
-                  <img src="<?php echo base_url('common/'); ?>vendors/images/img.jpg" alt="">
+                  <img src="<?php echo base_url('common/');?>vendors/images/img.jpg" alt="">
                   <h3 class="clearfix">John Doe <span>3 mins ago</span></h3>
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src="<?php echo base_url('common/'); ?>vendors/images/img.jpg" alt="">
+                  <img src="<?php echo base_url('common/');?>vendors/images/img.jpg" alt="">
                   <h3 class="clearfix">John Doe <span>3 mins ago</span></h3>
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src="<?php echo base_url('common/'); ?>vendors/images/img.jpg" alt="">
+                  <img src="<?php echo base_url('common/');?>vendors/images/img.jpg" alt="">
                   <h3 class="clearfix">John Doe <span>3 mins ago</span></h3>
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src="<?php echo base_url('common/'); ?>vendors/images/img.jpg" alt="">
+                  <img src="<?php echo base_url('common/');?>vendors/images/img.jpg" alt="">
                   <h3 class="clearfix">John Doe <span>3 mins ago</span></h3>
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src="<?php echo base_url('common/'); ?>vendors/images/img.jpg" alt="">
+                  <img src="<?php echo base_url('common/');?>vendors/images/img.jpg" alt="">
                   <h3 class="clearfix">John Doe <span>3 mins ago</span></h3>
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src="<?php echo base_url('common/'); ?>vendors/images/img.jpg" alt="">
+                  <img src="<?php echo base_url('common/');?>vendors/images/img.jpg" alt="">
                   <h3 class="clearfix">John Doe <span>3 mins ago</span></h3>
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src="<?php echo base_url('common/'); ?>vendors/images/img.jpg" alt="">
+                  <img src="<?php echo base_url('common/');?>vendors/images/img.jpg" alt="">
                   <h3 class="clearfix">John Doe <span>3 mins ago</span></h3>
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
                 </a>

@@ -23267,10 +23267,10 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
   }
 
   .brand-logo a img {
-    /*max-width: 200px;*/
-    max-height : 70px;
-    display    : block;
-    margin     : 0 auto; 
+    max-width : 300px;
+    max-height: 45px;
+    display   : block;
+    margin    : 0 auto; 
   }
 
   .left-side-bar {

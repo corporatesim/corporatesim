@@ -27,27 +27,27 @@
 	</div>
 </div>
 </div>
-<script src="<?php echo base_url('common/'); ?>vendors/scripts/script.js"></script>
-<script src="<?php echo base_url('common/'); ?>src/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
-<script src="<?php echo base_url('common/'); ?>src/plugins/datatables/media/js/dataTables.bootstrap4.js"></script>
-<script src="<?php echo base_url('common/'); ?>src/plugins/datatables/media/js/dataTables.responsive.js"></script>
-<script src="<?php echo base_url('common/'); ?>src/plugins/datatables/media/js/responsive.bootstrap4.js"></script>
+<script src="<?php echo base_url('common/vendors/scripts/script.js?v=').file_version_cs;?>"></script>
+<script src="<?php echo base_url('common/src/plugins/datatables/media/js/jquery.dataTables.min.js?v=').file_version_cs;?>"></script>
+<script src="<?php echo base_url('common/src/plugins/datatables/media/js/dataTables.bootstrap4.js?v=').file_version_cs;?>"></script>
+<script src="<?php echo base_url('common/src/plugins/datatables/media/js/dataTables.responsive.js?v=').file_version_cs;?>"></script>
+<script src="<?php echo base_url('common/src/plugins/datatables/media/js/responsive.bootstrap4.js?v=').file_version_cs;?>"></script>
 <!-- buttons for Export datatable -->
-<script src="<?php echo base_url('common/'); ?>src/plugins/datatables/media/js/button/dataTables.buttons.js"></script>
-<script src="<?php echo base_url('common/'); ?>src/plugins/datatables/media/js/button/buttons.bootstrap4.js"></script>
-<script src="<?php echo base_url('common/'); ?>src/plugins/datatables/media/js/button/buttons.print.js"></script>
-<script src="<?php echo base_url('common/'); ?>src/plugins/datatables/media/js/button/buttons.html5.js"></script>
-<script src="<?php echo base_url('common/'); ?>src/plugins/datatables/media/js/button/buttons.flash.js"></script>
-<script src="<?php echo base_url('common/'); ?>src/plugins/datatables/media/js/button/pdfmake.min.js"></script>
-<script src="<?php echo base_url('common/'); ?>src/plugins/datatables/media/js/button/vfs_fonts.js">
+<script src="<?php echo base_url('common/src/plugins/datatables/media/js/button/dataTables.buttons.js?v=').file_version_cs;?>"></script>
+<script src="<?php echo base_url('common/src/plugins/datatables/media/js/button/buttons.bootstrap4.js?v=').file_version_cs;?>"></script>
+<script src="<?php echo base_url('common/src/plugins/datatables/media/js/button/buttons.print.js?v=').file_version_cs;?>"></script>
+<script src="<?php echo base_url('common/src/plugins/datatables/media/js/button/buttons.html5.js?v=').file_version_cs;?>"></script>
+<script src="<?php echo base_url('common/src/plugins/datatables/media/js/button/buttons.flash.js?v=').file_version_cs;?>"></script>
+<script src="<?php echo base_url('common/src/plugins/datatables/media/js/button/pdfmake.min.js?v=').file_version_cs;?>"></script>
+<script src="<?php echo base_url('common/src/plugins/datatables/media/js/button/vfs_fonts.js?v=').file_version_cs;?>">
 </script>
 <script src="<?php echo base_url('common/vendors/bootgrid/');?>jquery.bootgrid.min.js"></script>
-<script src="<?php echo base_url('common/'); ?>src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
-<script src="<?php echo base_url('common/'); ?>src/plugins/highcharts-6.0.7/code/highcharts-more.js"></script>
+<script src="<?php echo base_url('common/');?>src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
+<script src="<?php echo base_url('common/');?>src/plugins/highcharts-6.0.7/code/highcharts-more.js"></script>
 <!-- datepicker js -->
-<script src="<?php echo base_url('common/'); ?>datetimePicker/js/datepicker.min.js"></script>
+<script src="<?php echo base_url('common/');?>datetimePicker/js/datepicker.min.js"></script>
 <!-- Include English language -->
-<script src="<?php echo base_url('common/'); ?>datetimePicker/js/i18n/datepicker.en.js"></script>
+<script src="<?php echo base_url('common/');?>datetimePicker/js/i18n/datepicker.en.js"></script>
 <!-- Show datatable -->
 <script type="text/javascript">
 	$(document).ready(function()
