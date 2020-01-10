@@ -114,9 +114,10 @@
 
          <div class="row col-md-12 alert-danger" id="showAlertMessage">Make sure that o/p component is not hidden</div>
        </div>
+       <div class="clearfix"></div>
        <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeAddLeaderboardModel">Close</button>
         <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeAddLeaderboardModel">Close</button>
       </div>
     </form>
   </div>
