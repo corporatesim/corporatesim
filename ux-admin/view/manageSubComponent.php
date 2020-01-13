@@ -186,8 +186,11 @@
 							<thead>
 								<tr>
 									<th>S.N.</th>
+									<th>Area ID</th>
 									<th>Area Name</th>
-									<th>Component Name</th>
+									<th>Component ID</th>
+									<th>Component Name / Alias</th>
+									<th>Sub Component ID</th>
 									<th>Sub Component Name</th>
 									<th>Sub Component Alias</th>
 									<th class="no-sort">Action</th>

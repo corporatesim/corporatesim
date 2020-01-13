@@ -89,11 +89,11 @@ class Model extends database{
 		{
 			if(!empty($areaid))
 			{
-				$deleteSequenc = DeleteData('GAME_AREA_SEQUENCE','Sequence_LinkId='.$linkid.' AND Sequence_AreaId',$areaid);
+				$deleteSequenc = $this->DeleteData('GAME_AREA_SEQUENCE','Sequence_LinkId='.$linkid.' AND Sequence_AreaId',$areaid);
 			}
 			else
 			{
-				$deleteSequenc = DeleteData('GAME_AREA_SEQUENCE','Sequence_LinkId',$linkid);
+				$deleteSequenc = $this->DeleteData('GAME_AREA_SEQUENCE','Sequence_LinkId',$linkid);
 			}
 		}
 	}

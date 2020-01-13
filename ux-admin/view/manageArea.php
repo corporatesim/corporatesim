@@ -107,6 +107,7 @@
             <thead>
               <tr>
                 <th class="no-sort">S.N.</th>
+                <th>Area ID</th>
                 <th>Area Name</th>
                 <th>Background Color</th>
                 <th>Text Color</th>

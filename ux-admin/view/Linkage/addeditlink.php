@@ -310,7 +310,7 @@
               <button type="submit" name="submit" id="User_request" class="btn btn-primary"
               value="RequestDownload"> Request User Report</button>
             </div>
-          <?php }?>
+          <?php } ?>
         </div>
       </form>
     <?php } ?>
@@ -348,7 +348,7 @@
                   <?php } else {?>
                     <input type="hidden" name="dis_area_id" value="<?php echo $linkdetails->SubLink_AreaID;?>">
                     <select class="form-control" name="area_id" id="area_id" disabled="" >
-                    <?php }?>
+                    <?php } ?>
                     <option value="">-- SELECT --</option>
                     <!-- <?php while($row = $areaLink->fetch_object()){ ?>
                       <option value="<?php echo $row->Area_ID; ?>"
@@ -398,7 +398,7 @@
                       <input type="hidden" name="dis_comp_id" value="<?php echo $linkdetails->SubLink_CompID; ?>">
                       <select class="form-control" name="comp_id" id="comp_id" disabled="">
                         <!-- as due to permissions component dropdown will be disabled so no value will be passed, that's why adding a hidden field to send comp id in the controller -->
-                      <?php }?>
+                      <?php } ?>
                       <option value="">-- SELECT COMPONENT--</option>
                       <?php while($row = $component->fetch_object()){ ?>
                         <option value="<?php echo $row->Comp_ID; ?>"
@@ -408,14 +408,14 @@
                       <?php } ?>
                     </select>
                   </div>
-                  <div class="col-md-4" id="subcomponent" name="subcomponent" <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID>0){ } else { echo "style='display:none;'";}?> >
+                  <div class="col-md-4" id="subcomponent" name="subcomponent" <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID>0){ } else { echo "style='display:none;'";} ?> >
                     <!--<label><span class="alert-danger">*</span>Select SubComponent</label> -->
                     <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_subcompo')){?>
                       <select class="form-control" name="subcomp_id" id="subcomp_id">
                       <?php } else {?>
                         <input type="hidden" name="dis_subcomp_id" value="<?php echo $linkdetails->SubLink_SubCompID;?>">
                         <select class="form-control" name="subcomp_id" id="subcomp_id" disabled="">
-                        <?php }?>
+                        <?php } ?>
                         <option value="">-- SELECT SUBCOMPONENT--</option>
                         <?php while($row = $subcomponent->fetch_object()){ ?>
                           <option value="<?php echo $row->SubComp_ID; ?>"
@@ -439,7 +439,7 @@
                         <?php } else {?>
                           <input type="hidden" name="dis_SubLink_ViewingOrder" value="<?php echo $SubLink_ViewingOrder;?>">
                           <select class="form-control" name="SubLink_ViewingOrder" id="SubLink_ViewingOrder" disabled="">
-                          <?php }?>
+                          <?php } ?>
                           <option value="">-- SELECT --</option>
                           <option value="1" <?php echo ($SubLink_ViewingOrder == 1?'selected':''); ?>>Name - Details/Chart(CkEditor) - Input Fields</option>
                           <option value="2" <?php echo ($SubLink_ViewingOrder == 2?'selected':''); ?>>Name - Input Fields - Details/Chart(CkEditor)</option>
@@ -494,7 +494,7 @@
                           <label><span class="alert-danger">*</span>Label Last</label>
                           <input type="text" name="SubLink_LabelLast" id="SubLink_LabelLast" class="form-control"  value="<?php echo $SubLink_LabelLast;?>" placeholder="Enter Label Text" disabled="">
                         </div>
-                      <?php }?>
+                      <?php } ?>
                     </div>
                     <br>
                     <!-- adding font-size box for label name -->
@@ -539,7 +539,7 @@
                           <select class="form-control" name="SubLink_InputFieldOrder" id="SubLink_InputFieldOrder">
                           <?php } else {?>
                            <select class="form-control" name="SubLink_InputFieldOrder" id="SubLink_InputFieldOrder" disabled="">
-                           <?php }?>
+                           <?php } ?>
                            <option value="">-- SELECT --</option>
                            <option value="1" <?php echo ($SubLink_InputFieldOrder == 1?'selected':'');?>>Label(C) <?php echo $SubLink_LabelCurrent;?> - Label(L) <?php echo $SubLink_LabelLast;?></option>
                            <option value="2" <?php echo ($SubLink_InputFieldOrder == 2?'selected':'');?>>Label(L) <?php echo $SubLink_LabelLast;?> - Label(C) <?php echo $SubLink_LabelCurrent;?></option>
@@ -556,7 +556,7 @@
                           <input type="color" id="changeMe" name="SubLink_BackgroundColor" id="SubLink_BackgroundColor" value="<?php echo ($SubLink_BackgroundColor == NULL)?'#ffffff':$SubLink_BackgroundColor;?>" onchange="hexToRgb(this.value)">
                         <?php } else {?>
                          <input type="color" id="changeMe" name="SubLink_BackgroundColor" id="SubLink_BackgroundColor" value="<?php echo ($SubLink_BackgroundColor == NULL)?'#ffffff':$SubLink_BackgroundColor;?>" onchange="hexToRgb(this.value)" disabled="">
-                       <?php }?>
+                       <?php } ?>
                        <!-- <button id="change" style='color:white;background-color: blue; width: 40px; height:20px' onclick="hexToRgb('#fbafff')"></button> -->
                        <label for="makeTransparent" class='containerCheckbox'>
                         <input type='checkbox' name='makeTransparent' id='makeTransparent' value="makeTransparent" <?php echo ($linkdetails->SubLink_BackgroundColor == '#0000ff00')?'checked':''; ?>> Transparent
@@ -569,7 +569,7 @@
                         <input type="color" name="SubLink_TextColor" id="SubLink_TextColor" value="<?php echo ($SubLink_TextColor == NULL)?'#000000':$SubLink_TextColor;?>">
                       <?php } else {?>
                        <input type="color" name="SubLink_TextColor" id="SubLink_TextColor" value="<?php echo ($SubLink_TextColor == NULL)?'#000000':$SubLink_TextColor;?>" disabled="">
-                     <?php }?>
+                     <?php } ?>
                    </div>
                  </div>
                  <br>
@@ -610,7 +610,7 @@
                           <span class="checkmarkRadio"></span>
                         </label>
                       </div>
-                    <?php }?>
+                    <?php } ?>
                     <!--  </div>-->
                   </div>
                   <br>
@@ -628,7 +628,7 @@
                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'formula'){ echo "checked"; } ?> disabled=""> Formula
                          <span class="checkmarkRadio"></span>
                        </label>
-                     <?php }?>
+                     <?php } ?>
                    </div>
                    <div class="col-md-4">
                     <div id="formula" name="formula" <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'formula') {} else { echo "style='display:none;'";} ?> >
@@ -661,28 +661,28 @@
                         <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'admin'){ echo "checked"; } ?> disabled=""> By Admin
                         <span class="checkmarkRadio"></span>
                       </label>
-                    <?php }?>
+                    <?php } ?>
                   </div>
-                  <div id="admin" name="admin" <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'admin') {} else { echo "style='display:none;'";}?> >
+                  <div id="admin" name="admin" <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'admin') {} else { echo "style='display:none;'";} ?> >
                     <div class="col-md-4">
                       <!--<label>Current Input</label>-->
-                      <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
-                        <input type="text" name="current" id="current" data-toggle="tooltip" title="Only 2 digits after decimal are allowed" pattern="^[-+0-9]\d*(\.\d{0,2})?$" value="<?php if(!empty($linkdetails->SubLink_AdminCurrent)) echo $linkdetails->SubLink_AdminCurrent;  ?>" 
-                        class="form-control">
-                      <?php } else {?>
-                        <input type="text" name="current" id="current" data-toggle="tooltip" title="Only 2 digits after decimal are allowed" pattern="^[-+0-9]\d*(\.\d{0,2})?$" value="<?php if(!empty($linkdetails->SubLink_AdminCurrent)) echo $linkdetails->SubLink_AdminCurrent;  ?>" 
+                      <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){ ?>
+                        <input type="text" name="current" id="current" data-toggle="tooltip" title="Only 2 digits after decimal are allowed" pattern="^[-+0-9]\d*(\.\d{0,2})?$" value="<?php echo(!empty($linkdetails->SubLink_AdminCurrent))?$linkdetails->SubLink_AdminCurrent:0.00;  ?>" 
+                        class="form-control" required>
+                      <?php } else { ?>
+                        <input type="text" name="current" id="current" data-toggle="tooltip" title="Only 2 digits after decimal are allowed" pattern="^[-+0-9]\d*(\.\d{0,2})?$" value="<?php echo(!empty($linkdetails->SubLink_AdminCurrent))?$linkdetails->SubLink_AdminCurrent:0.00;  ?>" 
                         class="form-control" disabled="">
-                      <?php }?>
+                      <?php } ?>
                     </div>
                     <div class="col-md-4">
                       <!--<label>Last Stored Input</label>-->
-                      <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
-                        <input type="text" name="last" id="last" data-toggle="tooltip" title="Only 2 digits after decimal are allowed" pattern="^[-+0-9]\d*(\.\d{0,2})?$" placeholder="Last Stored Input" value="<?php if(!empty($linkdetails->SubLink_AdminLast)) echo $linkdetails->SubLink_AdminLast; ?>"
+                      <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){ ?>
+                        <input type="text" name="last" id="last" data-toggle="tooltip" title="Only 2 digits after decimal are allowed" pattern="^[-+0-9]\d*(\.\d{0,2})?$" placeholder="Last Stored Input" value="<?php echo(!empty($linkdetails->SubLink_AdminLast))?$linkdetails->SubLink_AdminLast:0.00; ?>"
                         class="form-control">
-                      <?php } else {?>
-                        <input type="text" name="last" id="last" data-toggle="tooltip" title="Only 2 digits after decimal are allowed" pattern="^[-+0-9]\d*(\.\d{0,2})?$" placeholder="Last Stored Input" value="<?php if(!empty($linkdetails->SubLink_AdminLast)) echo $linkdetails->SubLink_AdminLast; ?>"
+                      <?php } else { ?>
+                        <input type="text" name="last" id="last" data-toggle="tooltip" title="Only 2 digits after decimal are allowed" pattern="^[-+0-9]\d*(\.\d{0,2})?$" placeholder="Last Stored Input" value="<?php echo(!empty($linkdetails->SubLink_AdminLast))?$linkdetails->SubLink_AdminLast:0.00; ?>"
                         class="form-control" disabled="">
-                      <?php }?>
+                      <?php } ?>
                     </div>
                   </div>
                 </div>
@@ -701,9 +701,9 @@
                         <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'carry'){ echo "checked"; } ?> disabled=""> Carry Forward
                         <span class="checkmarkRadio"></span>
                       </label>
-                    <?php }?>
+                    <?php } ?>
                   </div>
-                  <div id="carry" name="carry" <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'carry') {} else { echo "style='display:none;'";}?> >
+                  <div id="carry" name="carry" <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'carry') {} else { echo "style='display:none;'";} ?> >
                     <!-- need link to scenario-->
                     <div class="col-md-2" id="carry_scen" name="carry_scen">
                       <!--<label><span class="alert-danger">*</span>Select Component</label> -->
@@ -761,7 +761,7 @@
                         <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'user'){ echo "checked"; } ?> disabled=""/> By User
                         <span class="checkmarkRadio"></span>
                       </label>
-                    <?php }?>
+                    <?php } ?>
                   </div>
                   <!-- adding multiple choice and range type here -->
                   <div class="row col-md-8 <?php echo ($linkdetails->SubLink_InputMode == 'user')?'':'hidden'; ?>" id="user" name="user">
@@ -853,7 +853,7 @@
                             <?php if(empty($linkdetails) || $linkdetails->SubLink_InputMode == 'none'){ echo "checked"; } ?>disabled=""> None
                             <span class="checkmarkRadio"></span>
                           </label>
-                        <?php }?>
+                        <?php } ?>
                       </div>
                     </div>
                     <br>
@@ -867,7 +867,7 @@
                           <input type="text" name="order" id="order" value="<?php if(!empty($linkdetails->SubLink_Order)) echo $linkdetails->SubLink_Order; ?>" class="form-control" placeholder="Enter Order No" required>
                         <?php } else {?>
                          <input type="text" name="order" id="order" value="<?php if(!empty($linkdetails->SubLink_Order)) echo $linkdetails->SubLink_Order; ?>" class="form-control" placeholder="Enter Order No" disabled="">
-                       <?php }?>
+                       <?php } ?>
                      </div>
                    </div>
                    <br>
@@ -897,7 +897,7 @@
                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_ShowHide == 1){ echo "checked"; } ?> disabled=""> Hide
                          <span class="checkmarkRadio"></span>
                        </label>
-                     <?php }?>
+                     <?php } ?>
                    </div>
 
                    <div class="col-md-8">
@@ -945,7 +945,7 @@
                       <input type="text" name="start1" id="start1" 
                       value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Start; } ?>" 
                       placeholder = "Start" class="form-control" <?php if($linkreplace1 != ''){?> disabled=""<?php } ?>>
-                    <?php }?>
+                    <?php } ?>
                   </div>
                   <div class="col-md-4">
                    <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
@@ -956,18 +956,18 @@
                    <input type="text" name="end1" id="end1" 
                    value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_End; } ?>" 
                    placeholder = "End" class="form-control" <?php if($linkreplace1 != ''){?> disabled=""<?php } ?>>
-                 <?php }?>
+                 <?php } ?>
                </div>
                <div class="col-md-4">
                  <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
                   <input type="text" name="value1" id="value1" 
-                  value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Value; }?>" 
+                  value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Value; } ?>" 
                   placeholder = "Value" class="form-control">
                 <?php } else {?>
                   <input type="text" name="value1" id="value1" 
-                  value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Value; }?>" 
+                  value="<?php if(isset($linkreplace1)){ echo $linkreplace1->Rep_Value; } ?>" 
                   placeholder = "Value" class="form-control" <?php if($linkreplace1 != ''){?> disabled=""<?php } ?>>
-                <?php }?>
+                <?php } ?>
               </div>
             </div>
             <div class="row">
@@ -982,7 +982,7 @@
                <input type="text" name="start2" id="start2" 
                value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Start; } ?>" 
                placeholder = "Start" class="form-control" <?php if($linkreplace2 != ''){?> disabled=""<?php } ?>>
-             <?php }?>
+             <?php } ?>
            </div>
            <div class="col-md-4">
              <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
@@ -993,18 +993,18 @@
              <input type="text" name="end2" id="end2" 
              value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_End; } ?>"
              placeholder = "End" class="form-control" <?php if($linkreplace2 != ''){?> disabled=""<?php } ?>>
-           <?php }?>
+           <?php } ?>
          </div>
          <div class="col-md-4">
            <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
             <input type="text" name="value2" id="value2" 
-            value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Value; }?>"
+            value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Value; } ?>"
             placeholder = "Value" class="form-control">
           <?php } else {?>
            <input type="text" name="value2" id="value2" 
-           value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Value; }?>"
+           value="<?php if(isset($linkreplace2)){ echo $linkreplace2->Rep_Value; } ?>"
            placeholder = "Value" class="form-control" <?php if($linkreplace2 != ''){?> disabled=""<?php } ?>>
-         <?php }?>
+         <?php } ?>
        </div>
      </div>
      <div class="row">
@@ -1019,7 +1019,7 @@
         <input type="text" name="start3" id="start3" 
         value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Start; } ?>"
         placeholder = "Start" class="form-control" <?php if($linkreplace3 != ''){?> disabled=""<?php } ?>>
-      <?php }?>
+      <?php } ?>
     </div>
     <div class="col-md-4">
       <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
@@ -1030,18 +1030,18 @@
        <input type="text" name="end3" id="end3" 
        value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_End; } ?>"
        placeholder = "End" class="form-control" <?php if($linkreplace3 != ''){?> disabled=""<?php } ?>>
-     <?php }?>
+     <?php } ?>
    </div>
    <div class="col-md-4">
     <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_replace')){?>
       <input type="text" name="value3" id="value3" 
-      value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Value; }?>"
+      value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Value; } ?>"
       placeholder = "Value" class="form-control">
     <?php } else {?>
       <input type="text" name="value3" id="value3" 
-      value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Value; }?>"
+      value="<?php if(isset($linkreplace3)){ echo $linkreplace3->Rep_Value; } ?>"
       placeholder = "Value" class="form-control"  <?php if($linkreplace3 != ''){?> disabled=""<?php } ?>>
-    <?php }?>
+    <?php } ?>
   </div>
 </div>
 <div class="row">
@@ -1053,8 +1053,8 @@
     <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_chart')){?>
       <select class="form-control" name="chart_id" id="chart_id">
       <?php } else {?> 
-        <select class="form-control" name="chart_id" id="chart_id" <?php if($linkdetails != ''){?> disabled=""<?php }else {?> "" <?php }?>>
-        <?php }?>
+        <select class="form-control" name="chart_id" id="chart_id" <?php if($linkdetails != ''){?> disabled=""<?php }else {?> "" <?php } ?>>
+        <?php } ?>
         <option value="">-- SELECT --</option>
         <!-- for components chart -->
         <?php
@@ -1093,7 +1093,7 @@
              <textarea id="details" name="details" class="form-control" disabled="">
 
               <?php if(!empty($linkdetails->SubLink_Details)){ echo $linkdetails->SubLink_Details; } ?></textarea>
-            <?php }?>
+            <?php } ?>
             <!--</div>-->
             <div class="contact_error"></div>
           </div>
@@ -1114,7 +1114,7 @@
               <button type="button" id="siteuser_btn" class="btn btn-primary hidden" value="Submit"> Submit </button>
               <button type="submit" name="submit" id="siteuser_sbmit" class="btn btn-primary hidden" value="Submit"> Submit </button>
               <button type="button" class="btn btn-danger" onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
-            <?php }?>
+            <?php } ?>
           </div>
         </div>
       </div>
@@ -1174,8 +1174,8 @@
                 <td><?php echo $row->AreaName; ?></td>
                 <td><?php echo $row->Component; ?></td>
                 <td><?php if($row->SubLink_SubCompID > 0) { echo $row->SubComponent; } else  echo "--"; ?></td>
-                <td><?php if($row->SubLink_Type ==0 ) { echo "Input"; } else {echo "Output";}?></td>
-                <td><?php if($row->SubLink_ShowHide ==0 ) { echo "Show"; } else {echo "Hide";}?></td>
+                <td><?php if($row->SubLink_Type ==0 ) { echo "Input"; } else {echo "Output";} ?></td>
+                <td><?php if($row->SubLink_ShowHide ==0 ) { echo "Show"; } else {echo "Hide";} ?></td>
                 <td><?php echo $row->SubLink_InputMode;?></td>
                 <td><?php echo $row->SubLink_Order;?></td>
                 <td><input type="color" value="<?php echo $row->SubLink_BackgroundColor;?>" disabled "><code> 

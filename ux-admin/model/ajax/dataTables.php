@@ -154,14 +154,18 @@ if($_POST['action'] == 'manageArea')
 
 	switch ($colIndex) {
 		case 1:
-		$colName = 'Area_Name';
+		$colName = 'Area_ID';
 		break;
 
 		case 2:
-		$colName = 'Area_BackgroundColor';
+		$colName = 'Area_Name';
 		break;
 
 		case 3:
+		$colName = 'Area_BackgroundColor';
+		break;
+
+		case 4:
 		$colName = 'Area_TextColor';
 		break;
 		
@@ -205,7 +209,7 @@ if($_POST['action'] == 'manageArea')
 		}
 		$Area_BackgroundColor = '<input type="color" value="'.$areaDataObjRow->Area_BackgroundColor.'" disabled>';
 		$Area_TextColor       = '<input type="color" value="'.$areaDataObjRow->Area_TextColor.'" disabled>';
-		$data[] = array($i, $areaDataObjRow->Area_Name, $Area_BackgroundColor, $Area_TextColor, $edit);
+		$data[] = array($i,$areaDataObjRow->Area_ID, $areaDataObjRow->Area_Name, $Area_BackgroundColor, $Area_TextColor, $edit);
 	}
 
 	// $filterCount = ($filterRecord)?$filterCount:$totalCount;
@@ -235,19 +239,23 @@ if($_POST['action'] == 'ManageComponent')
 	$filterRecord = false;
 
 	switch ($colIndex) {
-		case 0:
-		$colName = 'Comp_ID';
-		break;
-
 		case 1:
-		$colName = 'Area_Name';
+		$colName = 'Area_ID';
 		break;
 
 		case 2:
-		$colName = 'Comp_Name';
+		$colName = 'Area_Name';
 		break;
 
 		case 3:
+		$colName = 'Comp_ID';
+		break;
+
+		case 4:
+		$colName = 'Comp_Name';
+		break;
+
+		case 5:
 		$colName = 'Comp_NameAlias';
 		break;
 		
@@ -257,7 +265,7 @@ if($_POST['action'] == 'ManageComponent')
 		break;
 	}
 
-	$compSql = "SELECT gc.Comp_ID, ga.Area_Name, gc.Comp_Name, gc.Comp_NameAlias, gc.Comp_date FROM GAME_COMPONENT gc LEFT JOIN GAME_AREA ga ON ga.Area_ID = gc.Comp_AreaID WHERE gc.Comp_Delete=0 ";
+	$compSql = "SELECT ga.Area_ID, ga.Area_Name, gc.Comp_ID, gc.Comp_Name, gc.Comp_NameAlias, gc.Comp_date FROM GAME_COMPONENT gc LEFT JOIN GAME_AREA ga ON ga.Area_ID = gc.Comp_AreaID WHERE gc.Comp_Delete=0 ";
 
 	// to get the total user record
 	$countAllData = $funObj->ExecuteQuery($compSql);
@@ -290,7 +298,7 @@ if($_POST['action'] == 'ManageComponent')
 			$edit .= '<a href="javascript:void(0);" class="dl_btn" id="'.$compSqlObjRow->Comp_ID.'" data-toggle="tooltip" title="Delete"><span class="fa fa-trash"></span></a>';
 		}		
 
-		$data[] = array($i, $compSqlObjRow->Area_Name, $compSqlObjRow->Comp_Name, $compSqlObjRow->Comp_NameAlias, $edit);
+		$data[] = array($i, $compSqlObjRow->Area_ID, $compSqlObjRow->Area_Name, $compSqlObjRow->Comp_ID, $compSqlObjRow->Comp_Name, $compSqlObjRow->Comp_NameAlias, $edit);
 	}
 
 	// $filterCount = ($filterRecord)?$filterCount:$totalCount;
@@ -321,23 +329,31 @@ if($_POST['action'] == 'ManageSubComponent')
 	$filterRecord = false;
 
 	switch ($colIndex) {
-		case 0:
-		$colName = 'SubComp_ID';
-		break;
-
 		case 1:
-		$colName = 'Area_Name';
+		$colName = 'Area_ID';
 		break;
 
 		case 2:
-		$colName = 'Comp_Name';
+		$colName = 'Area_Name';
 		break;
 
 		case 3:
-		$colName = 'SubComp_Name';
+		$colName = 'Comp_ID';
 		break;
 
 		case 4:
+		$colName = 'Comp_Name';
+		break;
+
+		case 5:
+		$colName = 'SubComp_ID';
+		break;
+
+		case 6:
+		$colName = 'SubComp_Name';
+		break;
+
+		case 7:
 		$colName = 'SubComp_NameAlias';
 		break;
 		
@@ -347,7 +363,7 @@ if($_POST['action'] == 'ManageSubComponent')
 		break;
 	}
 
-	$subCompSql = "SELECT gs.SubComp_ID, ga.Area_Name, gc.Comp_Name, gs.SubComp_Name, gs.SubComp_NameAlias FROM GAME_SUBCOMPONENT gs LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gs.SubComp_CompID LEFT JOIN GAME_AREA ga ON ga.Area_ID = gc.Comp_AreaID WHERE gs.SubComp_Delete = 0";
+	$subCompSql = "SELECT ga.Area_ID, ga.Area_Name, gc.Comp_ID, gc.Comp_Name, gc.Comp_NameAlias, gs.SubComp_ID, gs.SubComp_Name, gs.SubComp_NameAlias FROM GAME_SUBCOMPONENT gs LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gs.SubComp_CompID LEFT JOIN GAME_AREA ga ON ga.Area_ID = gc.Comp_AreaID WHERE gs.SubComp_Delete = 0";
 
 	// to get the total user record
 	$countAllData = $funObj->ExecuteQuery($subCompSql);
@@ -355,7 +371,7 @@ if($_POST['action'] == 'ManageSubComponent')
 
 	if(!empty($search))
 	{
-		$subCompSql .= " AND (Area_Name LIKE '%".$search."%' OR Comp_Name LIKE '%".$search."%' OR SubComp_Name LIKE '%".$search."%' OR SubComp_NameAlias LIKE '%".$search."%') ";
+		$subCompSql .= " AND (Area_Name LIKE '%".$search."%' OR Comp_Name LIKE '%".$search."%' OR Comp_NameAlias LIKE '%".$search."%' OR SubComp_Name LIKE '%".$search."%' OR SubComp_NameAlias LIKE '%".$search."%') ";
 		$filterRecord = true;
 	}
 	// to get the filter user record
@@ -380,7 +396,7 @@ if($_POST['action'] == 'ManageSubComponent')
 			$edit .= '<a href="javascript:void(0);" class="dl_btn" id="'.$subCompRow->SubComp_ID.'" data-toggle="tooltip" title="Delete"><span class="fa fa-trash"></span></a>';
 		}		
 
-		$data[] = array($i, $subCompRow->Area_Name, $subCompRow->Comp_Name, $subCompRow->SubComp_Name, $subCompRow->SubComp_NameAlias, $edit);
+		$data[] = array($i, $subCompRow->Area_ID, $subCompRow->Area_Name, $subCompRow->Comp_ID, $subCompRow->Comp_Name.' / '.$subCompRow->Comp_NameAlias, $subCompRow->SubComp_ID, $subCompRow->SubComp_Name, $subCompRow->SubComp_NameAlias, $edit);
 	}
 
 	// $filterCount = ($filterRecord)?$filterCount:$totalCount;

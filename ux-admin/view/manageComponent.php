@@ -138,7 +138,9 @@
 					<thead>
 						<tr>
 							<th>S.N.</th>
-							<th>Area</th>
+							<th>Area ID</th>
+							<th>Area Name</th>
+							<th>Component ID</th>
 							<th>Component Name</th>
 							<th>Component Alias</th>
 							<th class="no-sort">Action</th>
