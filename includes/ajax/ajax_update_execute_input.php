@@ -246,10 +246,13 @@ if($_POST['action']=='updateFormula')
 			}
 		}
 
-		$query  .= implode(',',$query_field_value);
-		$query  .= "ON DUPLICATE KEY UPDATE input_current=VALUES(input_current)";
-		// making query to update input_id in the json of inserted record
-		$object  = $funObj->ExecuteQuery($query);
+		if(isset($query_field_value) && count($query_field_value)>0 )
+		{
+			$query  .= implode(',',$query_field_value);
+			$query  .= "ON DUPLICATE KEY UPDATE input_current=VALUES(input_current)";
+			// making query to update input_id in the json of inserted record
+			$object  = $funObj->ExecuteQuery($query);
+		}
 	}
 	
 
