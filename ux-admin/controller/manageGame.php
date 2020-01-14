@@ -397,9 +397,9 @@ elseif(isset($_GET['del']))
 	{
 		while($row = $sublink->fetch_object())
 		{
-			$strresult = $strresult." '".$row->Scen."' ";
+			$strresult = $strresult." '".$row->Scen."', ";
 		}
-		$_SESSION['msg']     = 'Can not Delete Game. Is linked with '.$strresult;
+		$_SESSION['msg']     = 'Can not Delete Game. Is linked with '.trim($strresult, ', ');
 		$_SESSION['type[0]'] = 'inputError';
 		$_SESSION['type[1]'] = 'has-error';		
 		header("Location: ".site_root."ux-admin/ManageGame");
