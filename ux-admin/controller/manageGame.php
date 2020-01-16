@@ -23,10 +23,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 	}
 	// echo "<pre>"; print_r($_POST); exit();
 
-	$gamedetails           = (object) array(
+	$gamedetails = (object) array(
 		'Game_Name'             => $_POST['name'],
 		'Game_Comments'         => $_POST['comments'],
 		'Game_Message'          => $_POST['message'],
+		'Game_ReportFirstPage'  => $_POST['Game_ReportFirstPage'],
+		'Game_ReportSecondPage' => $_POST['Game_ReportSecondPage'],
 		'Game_Header'           => $_POST['Game_Header'],
 		'Game_shortDescription' => $_POST['Game_shortDescription'],
 		'Game_longDescription'  => $_POST['Game_longDescription'],
@@ -217,11 +219,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 	}
 	// echo "<pre>"; print_r($_POST); exit();
 
-	$gamedetails           = (object) array(
+	$gamedetails = (object) array(
 		'Game_Name'             => $_POST['name'],
 		'Game_Comments'         => $_POST['comments'],
 		'Game_Header'           => $_POST['Game_Header'],
 		'Game_Message'          => $_POST['message'],
+		'Game_ReportFirstPage'  => $_POST['Game_ReportFirstPage'],
+		'Game_ReportSecondPage' => $_POST['Game_ReportSecondPage'],
 		'Game_shortDescription' => $_POST['Game_shortDescription'],
 		'Game_longDescription'  => $_POST['Game_longDescription'],
 		'Game_prise'            => $_POST['Game_prize'],

@@ -260,6 +260,24 @@
 								</div>
 							</div>
 
+							<div class="row name" data-toggle="tooltip" title="This text will be shown in the first half page of report">
+								<div >
+									<div class="form-group">
+										<label for="Game_ReportFirstPage"><span class="alert-danger">Game Report First Page</span></label>
+										<textarea id="Game_ReportFirstPage" name="Game_ReportFirstPage" class="form-control" placeholder="Game Report First Page"><?php if(!empty($gamedetails->Game_ReportFirstPage)) echo $gamedetails->Game_ReportFirstPage; ?></textarea>
+									</div>
+								</div>
+							</div>
+
+							<div class="row name" data-toggle="tooltip" title="This text will be shown in the second full page of report">
+								<div >
+									<div class="form-group">
+										<label for="Game_ReportSecondPage"><span class="alert-danger">Game Report Second Page</span></label>
+										<textarea id="Game_ReportSecondPage" name="Game_ReportSecondPage" class="form-control" placeholder="Game Report Second Page"><?php if(!empty($gamedetails->Game_ReportSecondPage)) echo $gamedetails->Game_ReportSecondPage; ?></textarea>
+									</div>
+								</div>
+							</div>
+
 							<div class="row name">
 								<div class="col-md-6 col-xs-12">
 									<div class="form-group">
@@ -302,6 +320,8 @@
 					<script type="text/javascript">
 						<!--
 							CKEDITOR.replace('message');
+							CKEDITOR.replace('Game_ReportFirstPage');
+							CKEDITOR.replace('Game_ReportSecondPage');
 //-->
 </script>
 <script>
