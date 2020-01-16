@@ -559,7 +559,7 @@
                        <?php } ?>
                        <!-- <button id="change" style='color:white;background-color: blue; width: 40px; height:20px' onclick="hexToRgb('#fbafff')"></button> -->
                        <label for="makeTransparent" class='containerCheckbox'>
-                        <input type='checkbox' name='makeTransparent' id='makeTransparent' value="makeTransparent" <?php echo ($linkdetails->SubLink_BackgroundColor == '#0000ff00')?'checked':''; ?>> Transparent
+                        <input type='checkbox' name='makeTransparent' id='makeTransparent' value="makeTransparent" <?php echo ($linkdetails->SubLink_BackgroundColor == '#0000ff00' || empty($linkdetails->SubLink_BackgroundColor))?'checked':''; ?>> Transparent
                         <span class="checkmark"></span>
                       </label>
                     </div>
