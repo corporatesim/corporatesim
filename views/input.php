@@ -2772,41 +2772,38 @@ function staticSaveData(formula_json_expcomp,formula_json_expsubc,input_field_va
     },
     success: function(result) 
     {
-      if(result != 'no')
-      {
-        $.each(result, function (index, val){
-          input_field_values[index].values   = result[index].values;
-          input_field_values[index].input_id = result[index].input_id;
-          if(!$('#'+index).parents('div').hasClass('align_radio'))
-          {
-            $('#'+index).val(result[index].values);
-          }
-        });
-        end_time   = new Date();
-        // final_time = (start_time.getTime() - end_time.getTime())/1000;
-        $("#input_loader").html('');
-        $('.overlay').hide();
-        $('.graph_chart').each(function(index, el)
+     $("#input_loader").html('');
+     $('.overlay').hide();
+     if(result != 'no')
+     {
+      $.each(result, function (index, val){
+        input_field_values[index].values   = result[index].values;
+        input_field_values[index].input_id = result[index].input_id;
+        if(!$('#'+index).parents('div').hasClass('align_radio'))
         {
-          var new_src = $(this).attr('src');
-          $(this).attr('src',new_src);
-        });
-      }
-    },
-    error: function(jqXHR, exception)
-    {
+          $('#'+index).val(result[index].values);
+        }
+      });
+      end_time = new Date();
+      // final_time = (start_time.getTime() - end_time.getTime())/1000;
+      $('.graph_chart').each(function(index, el)
       {
-        $('.overlay').hide();
-        // alert(jqXHR.responseText);
-        Swal.fire({
-          icon: 'error',
-          html: jqXHR.responseText,
-        });
-        $("#input_loader").html('');
-        $('.overlay').hide();
-      }
+        var new_src = $(this).attr('src');
+        $(this).attr('src',new_src);
+      });
     }
-  });
+  },
+  error: function(jqXHR, exception)
+  {
+    $('.overlay').hide();
+    $("#input_loader").html('');
+    // alert(jqXHR.responseText);
+    Swal.fire({
+      icon: 'error',
+      html: jqXHR.responseText,
+    });
+  }
+});
 }
 
 // adding the below code for auto initialize
