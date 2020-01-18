@@ -48,6 +48,12 @@
     
     gtag('config', 'UA-119386393-1');
   </script>
+  <style>
+    .swal2-container.swal2-backdrop-show
+    {
+      background: #00000066;
+    }
+  </style>
 </head>
 <body>
   <div class="pre-loader"></div>
