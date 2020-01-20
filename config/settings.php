@@ -19,7 +19,7 @@ if($server == 'local')
 }
 else
 {
-	define('site_root','http://'.$_SERVER['HTTP_HOST']."/");
+	define('site_root','https://'.$_SERVER['HTTP_HOST']."/");
 	define('doc_root',$_SERVER['DOCUMENT_ROOT']."/");
 }
 require_once doc_root.'config/configuration.php';

@@ -472,7 +472,7 @@ include_once 'includes/header.php';
                           $Outcome_Description = $objectResult->Outcome_Description;
                           echo "<div class ='InlineBox'>";
 		                        // echo "<label class ='scenariaLabel'>OutcomeResult</label>";
-                          echo "<img id='".$objectResult->Outcome_FileName."' src='".site_root."ux-admin/upload/Badges/".$objectResult->Outcome_FileName."' alt='Outcome_image' width=100 height=100 />";
+                          echo "<img class='showImageModal' id='".$objectResult->Outcome_FileName."' src='".site_root."ux-admin/upload/Badges/".$objectResult->Outcome_FileName."' alt='Outcome_image' width=100 height=100 />";
                           echo "</div>";
                           echo "<div class='InlineBox hidden ".$labelC."'>";
                           echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
@@ -1123,5 +1123,4 @@ if($skipOutput->Link_Enabled > 0)
   },100);</script>";
 }
 ?>
-</body>
-</html>
+<?php include_once 'includes/footer.php' ?>
