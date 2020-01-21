@@ -93,7 +93,7 @@
 					<li class="hoverAnchor hidden"><a href="<?php echo site_root."registration.php";?>" class="">Register</a></li>
 				<?php } }?>
 				<?php
-				$allowedDonmain = ['http://localhost/corp_simulation/','http://develop.corporatesim.com/'];
+				$allowedDonmain = ['https://localhost/corp_simulation/','https://develop.corporatesim.com/'];
 				if(in_array(site_root,$allowedDonmain)) { ?>
 					<li class="" id="google_translate_element"></li>
 				<?php } else {
