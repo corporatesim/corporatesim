@@ -1,6 +1,6 @@
 <?php 
 // die('http://'.$_SERVER['SERVER_NAME']);
-$enterpriseDomain = 'http://'.$_SERVER['SERVER_NAME'];
+$enterpriseDomain = 'https://'.$_SERVER['SERVER_NAME'];
 //include_once 'includes/header.php'; 
 include_once 'config/settings.php';
 include_once doc_root.'config/functions.php';
