@@ -117,7 +117,7 @@
 						</li>
 						<!-- end of user profile pic -->
 						<li>
-							<a style="color:#d1dae2;" href="selectgame.php" class="<?php echo ($_SESSION['userpage'] == 'selectgame')?'active':'';?>"><i style="padding-right:20px;" class="glyphicon glyphicon-bishop"></i> Assigned Modules</a>
+							<a style="color:#d1dae2;" href="selectgame.php" class="<?php echo ($_SESSION['userpage'] == 'selectgame')?'active':'';?>"><i style="padding-right:20px;" class="glyphicon glyphicon-bishop"></i> Simulations</a>
 						</li>
 						<li class="hidden">
 							<a style="color:#d1dae2;" href="gameCatalogue.php" class="<?php echo ($_SESSION['userpage'] == 'gameCatalogue')?'active':'';?>"><i style="padding-right:20px;" class="glyphicon glyphicon-knight"></i> Catalogue</a>
