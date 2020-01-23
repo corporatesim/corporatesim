@@ -104,7 +104,7 @@
 								<li class="hoverAnchor hidden">
 								<?php } else if(site_root == "https://develop.corporatesim.com/"){?>
 									<li class="hoverAnchor">
-									<?php } else if(site_root == "https://localhost/corp_simulation/"){?>
+									<?php } else if(site_root == "http://localhost/corp_simulation/"){?>
 										<li class="hoverAnchor">
 										<?php } else {?>
 											<li class="hoverAnchor hidden">
@@ -117,7 +117,7 @@
 							</li> -->
 						<?php } }?>
 						<?php
-						$allowedDonmain = ['https://localhost/corp_simulation/','https://develop.corporatesim.com/'];
+						$allowedDonmain = ['http://localhost/corp_simulation/','https://develop.corporatesim.com/'];
 						if(in_array(site_root,$allowedDonmain)) {?>
 							<li class="" id="google_translate_element"></li>
 						<?php } else {

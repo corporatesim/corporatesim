@@ -10,8 +10,17 @@ include_once 'includes/header.php';
 			<div class="clearfix"></div>
 			<div class="no_padding ">
 				<div class="shadow col-sm-12">
-				
+
 					<div class="col-sm-10 col-sm-offset-1 text-right">
+						<!-- show error message if any -->
+						<?php if(isset($msg) && !empty($msg)){ ?>
+							<div class="alert <?php echo ($type[0]=='inputError')?'alert-danger':'alert-success'; ?> alert-dismissible" >
+								<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+								<?php echo $msg; ?>
+							</div>
+						<?php } ?>
+						<!-- error message ends here -->
+
 						<!-- View Game Report <img src="images/reportIcon.png" alt="Report"> -->
 						<a href="javascript:void(0);" data-toggle="tooltip" title="View Game Leaderboard" id="showLeaderboard">
 							<img src="images/leaderboard.png" alt="Report" width="75">
@@ -44,13 +53,30 @@ include_once 'includes/header.php';
 							$urlstr .= "<a id='restart' href='#' data-gameid='".$gameid."' data-scenid='".$ScenID."' data-linkid='".$linkid."' class='restart' title='ReStart/Resume Game' data-toggle='tooltip'><img src='images/replay.png' alt='ReStart/Resume Game' width='75'></a>";
 							echo $urlstr;
 						}
-						?>						
+						?>	
+						<!-- show/download output result -->
+						<a href="javascript:void(0);" data-toggle="tooltip" title="View Game Output" data-gameid='<?php echo $gameid; ?>' data-scenid='<?php echo $ScenID; ?>' data-linkid='<?php echo $linkid; ?>' id="showDownloadOutput">
+							<img src="images/downloadReport.png" alt="Output" width="75">
+						</a>
+
+						<form action="" class="" id="downloadReportForm" method="post">
+							<input type="hidden" name="gameid" id="gameid" value="<?php echo $gameid;?>">
+							<input type="hidden" name="ScenID" id="ScenID" value="<?php echo $ScenID;?>">
+							<input type="hidden" name="linkid" id="linkid" value="<?php echo $linkid;?>">
+							<input type="hidden" name="download" id="download" value="download">
+						</form>
 					</div>
 					<!-- show user performance chart here only if user has played game more than one time -->
 					<?php if(count($performanceData) > 1) { ?>
+
+						<div class="clearfix"><br></div>
+
 						<div class="row" id="showPerformanceChart" style="display: none;">
-							
 							<div class="col-md-8">
+								<a id="downloadPerformanceChart" download="performanceGraph.png" data-toggle="tooltip" title="Download Performance Chart" class="pull-right">
+									<i class="glyphicon glyphicon-download"></i>
+								</a>
+
 								<canvas id="lineChart" width="400" height="400"></canvas>
 							</div>
 
@@ -236,6 +262,7 @@ include_once 'includes/header.php';
 			?>
 			$('#showPerformance').on('click',function(){
 				$('#showPerformanceChart').toggle();
+				downloadChartImage();
 			});
 
 			var ctx     = $('#lineChart');
@@ -306,6 +333,21 @@ include_once 'includes/header.php';
 				}
 			});
 		<?php } ?>
+
+		// show/download result output data when user request
+		$('#showDownloadOutput').on('click',function(){
+			$('#downloadReportForm').submit();
+		});
 	});
+
+	function downloadChartImage()
+	{
+		$('#downloadPerformanceChart').on('click',function(){
+			var url_base64 = document.getElementById('lineChart').toDataURL('image/png');
+			$('#downloadPerformanceChart').attr('href',url_base64);
+			// console.log($(this).attr('href'));
+		});
+	}
+
 </script>
 <?php include_once 'includes/footer.php' ?>

@@ -1,6 +1,7 @@
 <?php 
 include_once 'config/settings.php'; 
 include_once 'config/functions.php'; 
+include_once 'tcpdf/tcpdf.php'; 
 
 if($_SESSION['username'] == NULL)
 {
@@ -16,7 +17,332 @@ $gameid    = $_GET['ID'];
 $companyid = $_SESSION['companyid'];
 // echo $userid."</br>";
 // echo $gameid."</br>";
-//exit();
+// setting the error message if any
+$msg                  = $_SESSION['msg'];		
+$type[0]              = $_SESSION['type[0]'];
+$type[1]              = $_SESSION['type[1]'];
+$_SESSION['msg']      = '';
+$_SESSION['type[0]']  = '';
+$_SESSION['type[1]']  = '';
+
+// for downloading result output report for user
+if(isset($_POST['download']) && $_POST['download'] == 'download')
+{
+	// echo "<pre>"; print_r($_POST); exit();
+	$oputput_gameid = $_POST['gameid'];
+	$oputput_scenid = $_POST['ScenID'];
+	$oputput_linkid = $_POST['linkid'];
+	$gameData       = $functionsObj->RunQueryFetchObject("SELECT gsu.User_id, CONCAT( gsu.User_fname, ' ', gsu.User_lname ) AS FullName, gsu.User_email AS Email, gsu.User_mobile AS Mobile, gsu.User_profile_pic AS ProfileImage, gg.Game_Name, gg.Game_ReportFirstPage, gg.Game_ReportSecondPage, gsu.User_ParentId, gsu.User_SubParentId, ge.Enterprise_Name, ge.Enterprise_Logo, gse.SubEnterprise_Name, gse.SubEnterprise_Logo FROM GAME_SITE_USERS gsu LEFT JOIN GAME_USERGAMES gug ON gsu.User_id = gug.UG_UserID AND gug.UG_GameID =".$oputput_gameid." LEFT JOIN GAME_GAME gg ON gg.Game_ID = gug.UG_GameID LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID=gsu.User_ParentId AND ge.Enterprise_Status=0 LEFT JOIN GAME_SUBENTERPRISE gse ON gse.SubEnterprise_ID=gsu.User_SubParentId AND gse.SubEnterprise_Status=0 WHERE gsu.User_id=".$userid)[0];
+	// echo "<pre>"; print_r($gameData); exit(); // Game_ReportFirstPage Game_ReportSecondPage
+	$sqlarea = "SELECT distinct a.Area_ID as AreaID, a.Area_Name as Area_Name, a.Area_BackgroundColor as BackgroundColor, a.Area_TextColor as TextColor, gas.Sequence_Order AS Area_Sequencing
+	FROM GAME_LINKAGE l 
+	INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
+	INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
+	INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
+	INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+	INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
+	LEFT JOIN GAME_AREA_SEQUENCE gas on a.Area_ID=gas.Sequence_AreaId
+	LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+	WHERE ls.SubLink_Type=1 AND gas.Sequence_LinkId=".$oputput_linkid." AND l.Link_ID=".$oputput_linkid." ORDER BY gas.Sequence_Order DESC";
+	// echo $sqlarea; exit();
+	$area = $functionsObj->RunQueryFetchObject($sqlarea);
+	if(count($area) > 0)
+	{
+		$printPdfFlag = TRUE;
+		// echo count($area)."<pre><br>".$sqlarea.'<br>'; print_r($area); exit();
+
+		foreach ($area as $areaRow)
+		{
+			// to check that this area comp are visible or hide by admin, if visible then only show area to user else not
+			$checkVisibleCompSql = "SELECT gls.*,gi.input_current FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=".$userid." WHERE gls.SubLink_LinkID =".$oputput_linkid." AND gls.SubLink_AreaID =".$areaRow->AreaID." AND gls.SubLink_ShowHide = 0 AND gls.SubLink_SubCompID<1";
+			$visibleComponents   = $functionsObj->RunQueryFetchObject($checkVisibleCompSql);
+			// echo $checkVisibleCompSql.'<br>';
+
+			if(count($visibleComponents) > 0)
+			{
+				// this means this area has some comp or subcomp that is visible, take this area data and break the loop
+				$printPdfFlag = FALSE;
+				break;
+			}
+		}
+
+		// if nothing to visible then redirect to result page, showing the alert message
+		if($printPdfFlag)
+		{
+			$_SESSION['msg']     = "This game output not available/visible. Please contact admin.";
+			$_SESSION['type[0]'] = "inputError";
+			$_SESSION['type[1]'] = "has-error";
+			header("Location:".site_root."result.php?ID=".$gameid);
+			exit();
+		}
+
+		// echo count($visibleComponents)."<pre><br>".$checkVisibleCompSql.'<br>'; print_r($visibleComponents); exit();
+		$pageHeader = '<table align="left" cellspacing="0" cellpadding="1" style"font-weight:bold;"><tr style="background-color:#c4daec;"><td><b>Name</b>: </td><td>'.$gameData->FullName.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Email</b>: </td><td>'.$gameData->Email.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Mobile</b>: </td><td>'.$gameData->Mobile.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Simulation/Game</b>: </td><td>'.$gameData->Game_Name.'</td></tr></table><br>'.$gameData->Game_ReportFirstPage;
+
+		foreach ($visibleComponents as $visibleComponentsRow)
+		{
+			// $printData .= $visibleComponentsRow->SubLink_CompName.$visibleComponentsRow->input_current;
+			$printData .= '<div style="width:100%; display:inline-block;" class="componentDiv">';
+
+			// adding ckEditor/chart div
+			$printData .= '<div class="componentDivCkeditor" style="width:50%; display:inline-block;">';
+			if(empty($visibleComponentsRow->SubLink_ChartID))
+			{
+				$printData .= $visibleComponentsRow->SubLink_Details;
+			}
+			else
+			{
+				// $printData .= $visibleComponentsRow->SubLink_ChartID;
+				$printData .= '<img src="'.site_root.'chart/'.$visibleComponentsRow->SubLink_ChartType.'.php?gameid='.$oputput_gameid.'&userid='.$userid.'&ChartID='.$visibleComponentsRow->SubLink_ChartID.'">';
+			}
+
+			$printData .= '</div>';
+			// end of ckEditor/chart div
+
+			// adding the inputField/PersonalizeOutcome div GAME_PERSONALIZE_OUTCOME
+			$printData .= '<div style="width:50%; display:inline-block;" class="componentDivInputField">';
+
+			$personalizeOutcomeSql = "SELECT * FROM GAME_PERSONALIZE_OUTCOME gpo WHERE gpo.Outcome_LinkId=".$visibleComponentsRow->SubLink_LinkID." AND gpo.Outcome_CompId=".$visibleComponentsRow->SubLink_CompID." AND gpo.Outcome_IsActive=0 ORDER BY gpo.Outcome_Order ASC";
+			$personalizeOutcomeResult = $functionsObj->RunQueryFetchObject($personalizeOutcomeSql);
+			if(count($personalizeOutcomeResult) > 0)
+			{
+				$foundInRangeFlag = TRUE;
+				foreach ($personalizeOutcomeResult as $personalizeOutcomeResultRow)
+				{
+					if($objectResult->Outcome_FileType !=3 && ($value>=$objectResult->Outcome_MinVal AND $value<=$objectResult->Outcome_MaxVal))
+					{
+						$printData .= '<img src="'.doc_root.'ux-admin/upload/Badges/'.str_replace(' ', '%20', $personalizeOutcomeResultRow->Outcome_FileName).'"><br><br><br><div>'.$personalizeOutcomeResultRow->Outcome_Description.'</div>';
+						$foundInRangeFlag = FALSE;
+						break;
+					}	
+				}
+				if($foundInRangeFlag)
+				{
+					// if there is no condition matched, i.e. gap in range so so the value as it is
+					$printData .= "Gap in range for personalizeOutcomeResult and the actual value is:- ".$visibleComponentsRow->input_current;
+				}
+			}
+			else
+			{
+				$printData .= $visibleComponentsRow->input_current;
+			}
+
+			$printData .= '</div>';
+			// end of adding inputField/PersonalizeOutcome div
+
+			// after coming out from the loop check that component has subcomponent or not
+			$checkVisibleSubCompSql = "SELECT gls.*,gi.input_current FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=".$userid." WHERE gls.SubLink_LinkID =".$oputput_linkid." AND gls.SubLink_AreaID =".$visibleComponentsRow->SubLink_AreaID." AND gls.SubLink_ShowHide = 0 AND gls.SubLink_CompID=".$visibleComponentsRow->SubLink_CompID." AND gls.SubLink_SubCompID>1";
+			$visibleSubComponents   = $functionsObj->RunQueryFetchObject($checkVisibleSubCompSql);
+
+			if(count($visibleSubComponents) > 0)
+			{
+				foreach ($visibleSubComponents as $visibleSubComponentsRow)
+				{
+					$printData .= '<div class="subComponentDiv" style="width:100%; display:inline-block;">';
+
+					// adding ckEditor/chart div
+					$printData .= '<div class="subComponentDivCkeditor" style="width:50%; display:inline-block;">';
+					if(empty($visibleSubComponentsRow->SubLink_ChartID))
+					{
+						$printData .= $visibleSubComponentsRow->SubLink_Details;
+					}
+					else
+					{
+						// $printData .= $visibleSubComponentsRow->SubLink_ChartID;
+						$printData .= '<img src="'.site_root.'chart/'.$visibleSubComponentsRow->SubLink_ChartType.'.php?gameid='.$oputput_gameid.'&userid='.$userid.'&ChartID='.$visibleSubComponentsRow->SubLink_ChartID.'">';
+					}
+
+					$printData .= '</div>';
+					// end of ckEditor/chart div
+
+					// adding the inputField div
+					$printData .= '<div class="subComponentDivInputField" style="width:50%; display:inline-block;">'.$visibleSubComponentsRow->input_current.'</div>';
+					// end of adding inputField div
+
+					$printData .= '</div>';
+					// end of subComponentDiv
+				}
+			}
+
+			$printData .= "</div>";
+			// end of componentDiv
+		}
+
+		// echo $printData; exit();
+
+		define(Enterprise_Name, ($gameData->Enterprise_Name)?$gameData->Enterprise_Name:'noVal');
+		define(Enterprise_Logo, ($gameData->Enterprise_Logo)?str_replace(' ', '%20', $gameData->Enterprise_Logo):'noVal');
+		define(SubEnterprise_Name, ($gameData->SubEnterprise_Name)?$gameData->SubEnterprise_Name:'noVal');
+		define(SubEnterprise_Logo, ($gameData->SubEnterprise_Logo)?str_replace(' ', '%20', $gameData->SubEnterprise_Logo):'noVal');
+		// echo "<pre>"; print_r($_SERVER); exit();
+		// $pathFile = site_root.'chart/donutchart.php?gameid=70&userid=1989&ChartID=127';
+		// if(file_exists($pathFile))
+		// {
+		// 	die('file found <br>'.$pathFile);
+		// }
+		// else
+		// {
+		// 	die('not found <br>'.$pathFile);
+		// }
+		// for downloading pdf file, creating new objects, only if there is one area
+		// echo Enterprise_Name.', '.Enterprise_Logo.', '.SubEnterprise_Logo.', '.SubEnterprise_Name; die(' here');
+		class MYPDF extends TCPDF
+		{
+			//Page header
+			public function Header()
+			{
+				// get the current page break margin
+				$bMargin = $this->getBreakMargin();
+				// get current auto-page-break mode
+				$auto_page_break = $this->AutoPageBreak;
+				// disable auto-page-break
+				$this->SetAutoPageBreak(false, 0);
+				// set bacground image
+				$img_file = K_PATH_IMAGES.'../../../images/watermark.png';
+				$this->Image($img_file, 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
+				// restore auto-page-break status
+				$this->SetAutoPageBreak($auto_page_break, $bMargin);
+				// set the starting point for the page content
+				$this->setPageMark();
+
+        // Enterprise Logo
+				if(Enterprise_Logo != 'noVal')
+				{
+					// if there is enterprise logo then only show ent logo
+					$image_file = K_PATH_IMAGES.'../../../enterprise/common/Logo/'.Enterprise_Logo;
+					$ext        = explode('.',$gameData->Enterprise_Logo);
+					$extension  = end($ext);
+					$this->Image($image_file, 10, 10, 20, '',$extension, '', 'T', false, 300, '', false, false, 0, false, false, false);
+				}
+				// if(Enterprise_Name != 'noVal')
+				// {
+				// 	// if there is enterprise name then only show the name of enterprise
+				// 	$this->Cell(0, 15, Enterprise_Name, 0, false, 'A', 0, '', 0, false, 'T', 'B');
+				// }
+
+        // Humanlinks Logo
+				$image_file = K_PATH_IMAGES.'../../../images/logo.png';
+				$this->Image($image_file, 90, 10, 20, '', 'png', 'https://humanlinks.in/', 'T', false, 300, '', false, false, 0, false, false, false);
+				// $this->Cell(0, 15, ' Humanlinks ', 0, false, 'B', 0, 'https://humanlinks.in/', 0, false, 'T', 'B');
+
+        // Sub-Enterprise Logo
+				if(SubEnterprise_Logo != 'noVal')
+				{
+					$image_file = K_PATH_IMAGES.'../../../enterprise/common/Logo/'.SubEnterprise_Logo;
+					$ext        = explode('.',$gameData->SubEnterprise_Logo);
+					$extension  = end($ext);
+					$this->Image($image_file, 150, 10, 20, '', $extension, '', 'T', false, 300, '', false, false, 0, false, false, false);
+				}
+				// if(SubEnterprise_Name != 'noVal')
+				// {
+				// 	// if there is subEnterprise name then only show the name of enterprise
+				// 	$this->Cell(0, 15, SubEnterprise_Name, 0, false, 'C', 0, '', 0, false, 'T', 'B');
+				// }
+
+        // Set font
+				$this->SetFont('helvetica', 'B', 20);
+			}
+
+		    // Page footer
+			public function Footer()
+			{
+        // Position at 15 mm from bottom
+				$this->SetY(-15);
+        // Set font
+				$this->SetFont('helvetica', 'I', 8);
+        // Page number
+				$this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+			}
+
+	    //Page header
+			// public function Header()
+			// {
+        // get the current page break margin
+				// $bMargin = $this->getBreakMargin();
+        // get current auto-page-break mode
+				// $auto_page_break = $this->AutoPageBreak;
+        // disable auto-page-break
+				// $this->SetAutoPageBreak(false, 0);
+        // set bacground image
+				// $img_file = site_root.'images/mobileHomePage.png';
+				// $this->Image($img_file, 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
+        // restore auto-page-break status
+				// $this->SetAutoPageBreak($auto_page_break, $bMargin);
+        // set the starting point for the page content
+				// $this->setPageMark('show this string mksahu');
+			// }
+		}
+
+		// create new PDF document
+		$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+		// set document information
+		$pdf->SetCreator(PDF_CREATOR);
+		$pdf->SetAuthor('Humanlinks');
+		$pdf->SetTitle($gameData->Game_Name.' Report');
+		$pdf->SetSubject('Simulation Output Report');
+		$pdf->SetKeywords('Simulation, Report, Output, Result, Simulation Report');
+		// set default header data
+		$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+
+		// set header and footer fonts
+		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+
+		// set default monospaced font
+		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+		// set margins
+		$pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
+		$pdf->SetHeaderMargin(0);
+		$pdf->SetFooterMargin(0);
+
+		// remove default footer
+		$pdf->setPrintFooter(true);
+
+		// set auto page breaks
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+		// set image scale factor
+		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+		// set some language-dependent strings (optional)
+		if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+			require_once(dirname(__FILE__).'/lang/eng.php');
+			$pdf->setLanguageArray($l);
+		}
+
+		// adding first page to show header and user data
+		$pdf->AddPage();
+		// ---------------------------------------------------------
+		$pdf->writeHTML($pageHeader, true, false, false, false, '');
+
+		// adding a second page for game report
+		$pdf->AddPage();
+		$secondPage = $gameData->Game_ReportSecondPage;
+		$pdf->writeHTML($secondPage, true, false, false, false, '');
+
+		// finally adding page to print game result
+		$pdf->AddPage();
+		$pdf->writeHTML($printData, true, false, false, false, '');
+
+		$outputFileName = $gameData->FullName.'-'.$gameData->Game_Name.'_'.date('d-m-Y').'.pdf';
+		// to show this pdf in browser
+		// $pdf->Output($outputFileName,'I');
+		// to download this pdf with the given name
+		$pdf->Output($outputFileName,'D');
+		// echo count($area)."<pre><br>".$sqlarea.'<br>'; print_r($area); exit();
+	}
+	else
+	{
+		$_SESSION['msg']     = "This game output not available/visible. Please contact admin.";
+		$_SESSION['type[0]'] = "inputError";
+		$_SESSION['type[1]'] = "has-error";
+		header("Location:".site_root."result.php?ID=".$gameid);
+		exit();
+	}
+}
+// end of donwloading pdf resutl of o/p for user
+
 
 if (isset($_GET['ID']) && !empty($_GET['ID']))
 {
