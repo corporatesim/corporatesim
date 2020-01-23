@@ -76,8 +76,11 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 			exit();
 		}
 
+		// finding the game completion date
+		$gameCompletDate = $functionsObj->RunQueryFetchObject("SELECT US_CompletedOn FROM GAME_USERSTATUS WHERE US_GameID=$oputput_gameid AND US_UserID=$userid")[0];
+
 		// echo count($visibleComponents)."<pre><br>".$checkVisibleCompSql.'<br>'; print_r($visibleComponents); exit();
-		$pageHeader = '<table align="left" cellspacing="0" cellpadding="1" style"font-weight:bold;"><tr style="background-color:#c4daec;"><td><b>Name</b>: </td><td>'.$gameData->FullName.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Email</b>: </td><td>'.$gameData->Email.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Mobile</b>: </td><td>'.$gameData->Mobile.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Simulation/Game</b>: </td><td>'.$gameData->Game_Name.'</td></tr></table><br>'.$gameData->Game_ReportFirstPage;
+		$pageHeader = '<table align="left" cellspacing="0" cellpadding="1" style"font-weight:bold;"><tr style="background-color:#c4daec;"><td><b>Name</b>: </td><td>'.$gameData->FullName.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Email</b>: </td><td>'.$gameData->Email.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Mobile</b>: </td><td>'.$gameData->Mobile.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Simulation/Game</b>: </td><td>'.$gameData->Game_Name.' ('.date('d-m-Y',strtotime($gameCompletDate->US_CompletedOn)).')</td></tr></table><br>'.$gameData->Game_ReportFirstPage;
 
 		foreach ($visibleComponents as $visibleComponentsRow)
 		{
@@ -327,9 +330,9 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 
 		$outputFileName = $gameData->FullName.'-'.$gameData->Game_Name.'_'.date('d-m-Y').'.pdf';
 		// to show this pdf in browser
-		// $pdf->Output($outputFileName,'I');
+		$pdf->Output($outputFileName,'I');
 		// to download this pdf with the given name
-		$pdf->Output($outputFileName,'D');
+		// $pdf->Output($outputFileName,'D');
 		// echo count($area)."<pre><br>".$sqlarea.'<br>'; print_r($area); exit();
 	}
 	else
@@ -426,7 +429,8 @@ if (isset($_GET['ID']) && !empty($_GET['ID']))
 
 						//exists
 						$array = array (			
-							'US_LinkID' => 1
+							'US_LinkID'      => 1,
+							'US_CompletedOn' => date('Y-m-d H:i:s')
 						);
 						$result = $functionsObj->UpdateData ( 'GAME_USERSTATUS', $array, 'US_ID', $userstatusid  );
 						// updating the game status to complete above, and now capturing the data of output for feedback/performance
