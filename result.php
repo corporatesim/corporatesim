@@ -330,9 +330,9 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 
 		$outputFileName = $gameData->FullName.'-'.$gameData->Game_Name.'_'.date('d-m-Y').'.pdf';
 		// to show this pdf in browser
-		$pdf->Output($outputFileName,'I');
+		// $pdf->Output($outputFileName,'I');
 		// to download this pdf with the given name
-		// $pdf->Output($outputFileName,'D');
+		$pdf->Output($outputFileName,'D');
 		// echo count($area)."<pre><br>".$sqlarea.'<br>'; print_r($area); exit();
 	}
 	else

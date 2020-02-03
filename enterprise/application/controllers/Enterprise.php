@@ -313,7 +313,7 @@ class Enterprise extends CI_Controller {
 							$Domain_Name         = $this->input->post('commonDomain');
 							$Domain_Logo         = $_FILES['logo']['name'];
 							$Domain_details      = array(
-								'Domain_Name'         => (!empty($Domain_Name))?trim("http://".$Domain_Name.".corporatesim.com"):'',
+								'Domain_Name'         => (!empty($Domain_Name))?trim("https://".$Domain_Name.".corporatesim.com"):'',
 								'Domain_EnterpriseId' => $Domain_EnterpriseId,
 								'Domain_Logo'         => $Domain_Logo,
 								'Domain_Status'       => 0,
