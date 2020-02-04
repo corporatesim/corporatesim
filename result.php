@@ -10,6 +10,18 @@ if($_SESSION['username'] == NULL)
 
 $functionsObj = new Functions();
 
+// getting lastDigits of phone numbers
+function lastDigits($phoneNumber){
+	$phoneNumberLength = strlen($phoneNumber);
+	if($phoneNumberLength > 9)
+	{
+		return 'XXXXXX'.$phoneNumber[$phoneNumberLength-4].$phoneNumber[$phoneNumberLength-3].$phoneNumber[$phoneNumberLength-2].$phoneNumber[$phoneNumberLength-1];
+	}
+	else
+	{
+		return 'XXXXXXXXXX';
+	}
+}
 //$linkid=$_GET['Link'];
 //$scenid=$_GET['Scenario'];
 $userid    = $_SESSION['userid'];
@@ -54,7 +66,7 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 		foreach ($area as $areaRow)
 		{
 			// to check that this area comp are visible or hide by admin, if visible then only show area to user else not
-			$checkVisibleCompSql = "SELECT gls.*,gi.input_current FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=".$userid." WHERE gls.SubLink_LinkID =".$oputput_linkid." AND gls.SubLink_AreaID =".$areaRow->AreaID." AND gls.SubLink_ShowHide = 0 AND gls.SubLink_SubCompID<1";
+			$checkVisibleCompSql = "SELECT gls.*,gi.input_current FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=".$userid." WHERE gls.SubLink_LinkID =".$oputput_linkid." AND gls.SubLink_AreaID =".$areaRow->AreaID." AND gls.SubLink_ShowHide = 0 AND gls.SubLink_SubCompID<1 ORDER BY gls.SubLink_Order";
 			$visibleComponents   = $functionsObj->RunQueryFetchObject($checkVisibleCompSql);
 			// echo $checkVisibleCompSql.'<br>';
 
@@ -80,7 +92,7 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 		$gameCompletDate = $functionsObj->RunQueryFetchObject("SELECT US_CompletedOn FROM GAME_USERSTATUS WHERE US_GameID=$oputput_gameid AND US_UserID=$userid")[0];
 
 		// echo count($visibleComponents)."<pre><br>".$checkVisibleCompSql.'<br>'; print_r($visibleComponents); exit();
-		$pageHeader = '<table align="left" cellspacing="0" cellpadding="1" style"font-weight:bold;"><tr style="background-color:#c4daec;"><td><b>Name</b>: </td><td>'.$gameData->FullName.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Email</b>: </td><td>'.$gameData->Email.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Mobile</b>: </td><td>'.$gameData->Mobile.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Simulation/Game</b>: </td><td>'.$gameData->Game_Name.' ('.date('d-m-Y',strtotime($gameCompletDate->US_CompletedOn)).')</td></tr></table><br>'.$gameData->Game_ReportFirstPage;
+		$pageHeader = '<table align="left" cellspacing="0" cellpadding="1" style"font-weight:bold;"><tr><td colspan="2" align="center" style="background-color:#f0f0f0;"><b>Participant Details</b></td></tr><tr style="background-color:#c4daec;"><td><b>Name</b>: </td><td>'.$gameData->FullName.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Email</b>: </td><td>'.$gameData->Email.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Mobile</b>: </td><td>'.lastDigits($gameData->Mobile).'</td></tr> <tr style="background-color:#c4daec;"><td><b>Simulation/Game</b>: </td><td>'.$gameData->Game_Name.' ('.date('d-m-Y',strtotime($gameCompletDate->US_CompletedOn)).')</td></tr></table><br>'.$gameData->Game_ReportFirstPage;
 
 		foreach ($visibleComponents as $visibleComponentsRow)
 		{
@@ -134,7 +146,7 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 			// end of adding inputField/PersonalizeOutcome div
 
 			// after coming out from the loop check that component has subcomponent or not
-			$checkVisibleSubCompSql = "SELECT gls.*,gi.input_current FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=".$userid." WHERE gls.SubLink_LinkID =".$oputput_linkid." AND gls.SubLink_AreaID =".$visibleComponentsRow->SubLink_AreaID." AND gls.SubLink_ShowHide = 0 AND gls.SubLink_CompID=".$visibleComponentsRow->SubLink_CompID." AND gls.SubLink_SubCompID>1";
+			$checkVisibleSubCompSql = "SELECT gls.*,gi.input_current FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=".$userid." WHERE gls.SubLink_LinkID =".$oputput_linkid." AND gls.SubLink_AreaID =".$visibleComponentsRow->SubLink_AreaID." AND gls.SubLink_ShowHide = 0 AND gls.SubLink_CompID=".$visibleComponentsRow->SubLink_CompID." AND gls.SubLink_SubCompID>1 ORDER BY gls.SubLink_Order";
 			$visibleSubComponents   = $functionsObj->RunQueryFetchObject($checkVisibleSubCompSql);
 
 			if(count($visibleSubComponents) > 0)
@@ -330,9 +342,9 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 
 		$outputFileName = $gameData->FullName.'-'.$gameData->Game_Name.'_'.date('d-m-Y').'.pdf';
 		// to show this pdf in browser
-		// $pdf->Output($outputFileName,'I');
+		$pdf->Output($outputFileName,'I');
 		// to download this pdf with the given name
-		$pdf->Output($outputFileName,'D');
+		// $pdf->Output($outputFileName,'D');
 		// echo count($area)."<pre><br>".$sqlarea.'<br>'; print_r($area); exit();
 	}
 	else

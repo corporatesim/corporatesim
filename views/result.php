@@ -20,12 +20,12 @@ include_once 'includes/header.php';
 							</div>
 						<?php } ?>
 						<!-- error message ends here -->
-
-						<!-- View Game Report <img src="images/reportIcon.png" alt="Report"> -->
-						<a href="javascript:void(0);" data-toggle="tooltip" title="View Game Leaderboard" id="showLeaderboard">
-							<img src="images/leaderboard.png" alt="Report" width="75">
-						</a>
-						<?php 
+						<?php if($gamedetails->Game_LeaderboardButton < 1) { ?>
+							<!-- View Game Report <img src="images/reportIcon.png" alt="Report"> -->
+							<a href="javascript:void(0);" data-toggle="tooltip" title="View Game Leaderboard" id="showLeaderboard">
+								<img src="images/leaderboard.png" alt="Report" width="75">
+							</a>
+						<?php }						
 						// echo "<pre>"; print_r($result1); echo "</pre>";
 						// finding user company id if it is 21 then allow replay $result1->US_UserID
 						if(count($performanceData) > 1)
@@ -53,11 +53,13 @@ include_once 'includes/header.php';
 							$urlstr .= "<a id='restart' href='#' data-gameid='".$gameid."' data-scenid='".$ScenID."' data-linkid='".$linkid."' class='restart' title='ReStart/Resume Game' data-toggle='tooltip'><img src='images/replay.png' alt='ReStart/Resume Game' width='75'></a>";
 							echo $urlstr;
 						}
-						?>	
-						<!-- show/download output result -->
-						<a href="javascript:void(0);" data-toggle="tooltip" title="View Game Output" data-gameid='<?php echo $gameid; ?>' data-scenid='<?php echo $ScenID; ?>' data-linkid='<?php echo $linkid; ?>' id="showDownloadOutput">
-							<img src="images/downloadReport.png" alt="Output" width="75">
-						</a>
+
+						if($gamedetails->Game_ReportButton < 1){ ?>
+							<!-- show/download output result -->
+							<a href="javascript:void(0);" data-toggle="tooltip" title="View Game Output" data-gameid='<?php echo $gameid; ?>' data-scenid='<?php echo $ScenID; ?>' data-linkid='<?php echo $linkid; ?>' id="showDownloadOutput">
+								<img src="images/downloadReport.png" alt="Output" width="75">
+							</a>
+						<?php } ?>	
 
 						<form action="" class="" id="downloadReportForm" method="post">
 							<input type="hidden" name="gameid" id="gameid" value="<?php echo $gameid;?>">
@@ -292,28 +294,32 @@ include_once 'includes/header.php';
 						borderWidth: 2,
 						// fill: false,
 					},
-					{
-						label: "Top Score",
-						data: [<?php echo $overAllBenchmark; ?>],
-						backgroundColor: [
-						// 'rgba(255, 99, 132, 0.2)',
-						// 'rgba(54, 162, 235, 0.2)',
-						'rgba(255, 206, 86, 0.2)',
-						// 'rgba(75, 192, 192, 0.2)',
-						// 'rgba(153, 102, 255, 0.2)',
-						// 'rgba(255, 159, 64, 0.2)'
-						],
-						borderColor: [
-						// 'rgba(255, 99, 132, 1)',
-						// 'rgba(54, 162, 235, 1)',
-						// 'rgba(255, 206, 86, 1)',
-						// 'rgba(75, 192, 192, 1)',
-						// 'rgba(153, 102, 255, 1)',
-						'rgba(255, 159, 64, 1)'
-						],
-						borderWidth: 2,
-						fill: false,
-					}],
+					// if leaderboard button is hidden then don't show the top score
+					<?php if($gamedetails->Game_LeaderboardButton < 1) { ?>
+						{
+							label: "Top Score",
+							data: [<?php echo $overAllBenchmark; ?>],
+							backgroundColor: [
+							// 'rgba(255, 99, 132, 0.2)',
+							// 'rgba(54, 162, 235, 0.2)',
+							'rgba(255, 206, 86, 0.2)',
+							// 'rgba(75, 192, 192, 0.2)',
+							// 'rgba(153, 102, 255, 0.2)',
+							// 'rgba(255, 159, 64, 0.2)'
+							],
+							borderColor: [
+							// 'rgba(255, 99, 132, 1)',
+							// 'rgba(54, 162, 235, 1)',
+							// 'rgba(255, 206, 86, 1)',
+							// 'rgba(75, 192, 192, 1)',
+							// 'rgba(153, 102, 255, 1)',
+							'rgba(255, 159, 64, 1)'
+							],
+							borderWidth: 2,
+							fill: false,
+						}
+					<?php } ?>
+					],
 				},
 				options: {
 					scales: {

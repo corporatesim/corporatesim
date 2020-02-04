@@ -109,6 +109,7 @@ include_once 'includes/header.php';
                 gc.Comp_ID AS CompID,
                 ga.Area_Name AS Area_Name,
                 gc.Comp_Name AS Comp_Name,
+                gc.Comp_NameAlias AS Comp_NameAlias,
                 gls.SubLink_Details AS Description,
                 gls.SubLink_ViewingOrder AS ViewingOrder,
                 gls.SubLink_LabelCurrent AS LabelCurrent,
@@ -440,7 +441,7 @@ include_once 'includes/header.php';
 
                       echo "<div class='col-sm-2 ".$width." regular text-center ".$ComponentName." ".$ShowHide."' style='font-size: ".$row1['fontSize']."px; font-family: ".$row1['fontStyle'].";'>";
 
-                      echo $row1['Comp_Name'];
+                      echo (empty($row1['Comp_NameAlias']))?$row1['Comp_Name']:$row1['Comp_NameAlias'];
                       echo "</div>";
                       // for ck-editor or chart
                       echo "<div class='col-sm-4 ".$cklength." no_padding ".$DetailsChart."'>";
@@ -497,11 +498,11 @@ include_once 'includes/header.php';
                    echo "</div>";
                    if($row1['ViewingOrder'] == 4)
                    {
-                     echo "<div class='col-sm-2 ".$width." text-center regular'>".$row1['Comp_Name']." </div>";
+                     echo "<div class='col-sm-2 ".$width." text-center regular'>".((empty($row1['Comp_NameAlias']))?$row1['Comp_Name']:$row1['Comp_NameAlias'])." </div>";
                    }
                    if($row1['ViewingOrder'] == 6)
                    {
-                     echo "<div class='col-sm-2 ".$width." text-center regular'>".$row1['Comp_Name']." </div>";
+                     echo "<div class='col-sm-2 ".$width." text-center regular'>".((empty($row1['Comp_NameAlias']))?$row1['Comp_Name']:$row1['Comp_NameAlias'])." </div>";
                    }
 
                    echo "<div class='clearfix'></div>";
@@ -509,7 +510,7 @@ include_once 'includes/header.php';
                   //Get SubComponent for this Component, linkid
                    $sqlsubcomp = "SELECT distinct a.Area_ID AS AreaID, ls.SubLink_CompID AS CompID, ls.SubLink_SubCompID AS SubCompID,  
                    gi.input_current AS outputValue,
-                   a.Area_Name AS Area_Name, c.Comp_Name AS Comp_Name, s.SubComp_Name AS SubComp_Name,ls.SubLink_ViewingOrder AS ViewingOrder,
+                   a.Area_Name AS Area_Name, c.Comp_Name AS Comp_Name, s.SubComp_Name AS SubComp_Name, s.SubComp_NameAlias AS SubComp_NameAlias, ls.SubLink_ViewingOrder AS ViewingOrder,
                    ls.SubLink_LabelCurrent AS LabelCurrent, ls.SubLink_LabelLast AS LabelLast,ls.SubLink_InputFieldOrder AS InputFieldOrder,
                    ls.subLink_ShowHide AS ShowHide,
                    ls.SubLink_Details AS Description ,ls.SubLink_BackgroundColor AS BackgroundColor, ls.SubLink_TextColor AS TextColor, ls.SubLink_FontSize AS fontSize, ls.SubLink_FontStyle AS fontStyle, ls.SubLink_InputMode AS Mode, ls.SubLink_LinkIDcarry AS CarryLinkID, ls.SubLink_CompIDcarry AS CarryCompID, ls.SubLink_SubCompIDcarry AS CarrySubCompID, ls.SubLink_ChartID AS ChartID, ls.SubLink_ChartType AS Chart_Type
@@ -852,7 +853,7 @@ include_once 'includes/header.php';
 
                   echo "<div class='".$length." subCompnent ".$hidden."' style='background:".$row2['BackgroundColor']."; color:".$row2['TextColor'].";'>";
                   echo "<div class='col-sm-2 ".$width." regular text-center ".$SubcomponentName."' style='font-size: ".$row2['fontSize']."px; font-family: ".$row2['fontStyle'].";'>";
-                  echo $row2['SubComp_Name'];
+                  echo (empty($row2['SubComp_NameAlias']))?$row2['SubComp_Name']:$row2['SubComp_NameAlias'];
                   echo "</div>";
                   echo "<div class='col-sm-4 ".$cklength." no_padding ".$DetailsChart."'>";
                   if(empty($row2['ChartID']))
@@ -886,11 +887,11 @@ include_once 'includes/header.php';
                   echo "</div>";
                   if($row2['ViewingOrder'] == 4)
                   {
-                  	echo "<div class='col-sm-2 ".$width." text-center regular'>".$row2['SubComp_Name']." </div>";
+                  	echo "<div class='col-sm-2 ".$width." text-center regular'>".((empty($row2['SubComp_NameAlias']))?$row2['SubComp_Name']:$row2['SubComp_NameAlias'])." </div>";
                   }
                   if($row2['ViewingOrder'] == 6)
                   {
-                  	echo "<div class='col-sm-2 ".$width." text-center regular'>".$row2['SubComp_Name']." </div>";
+                  	echo "<div class='col-sm-2 ".$width." text-center regular'>".((empty($row2['SubComp_NameAlias']))?$row2['SubComp_Name']:$row2['SubComp_NameAlias'])." </div>";
                   }
                   echo "<div class='clearfix'></div>";
                   echo "</div>";

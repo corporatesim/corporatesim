@@ -1155,13 +1155,14 @@
             <tr>
               <th>#</th>
               <th>Area</th>
-              <th>Component</th>
-              <th>Subcomponent</th>
+              <th>Component / Alias</th>
+              <th>Subcomponent / Alias</th>
               <th>Type</th>
               <th>Show/Hide</th>
               <th>Mode</th>
               <th>Order</th>
               <th>Background</th>
+              <th>Viewing Order</th>
               <th>Text Color</th>
               <th class="no-sort">Action</th>
             </tr>
@@ -1172,8 +1173,8 @@
               <tr>
                 <th><?php echo $i;?></th>
                 <td><?php echo $row->AreaName; ?></td>
-                <td><?php echo $row->Component; ?></td>
-                <td><?php if($row->SubLink_SubCompID > 0) { echo $row->SubComponent; } else  echo "--"; ?></td>
+                <td><?php echo $row->Component.' / '.$row->Comp_NameAlias; ?></td>
+                <td><?php if($row->SubLink_SubCompID > 0) { echo $row->SubComponent.' / '.$row->SubComp_NameAlias; } else  echo "--"; ?></td>
                 <td><?php if($row->SubLink_Type ==0 ) { echo "Input"; } else {echo "Output";} ?></td>
                 <td><?php if($row->SubLink_ShowHide ==0 ) { echo "Show"; } else {echo "Hide";} ?></td>
                 <td><?php echo $row->SubLink_InputMode;?></td>
@@ -1192,6 +1193,12 @@
                   ?> 
                 </code>
               </td>
+              <!-- showing viewing order for the particular comp/subcomp linkage -->
+              <td><?php
+              $viewingOrder = array ('mksahu','Name - Details/Chart(CkEditor) - Input Fields', 'Name - Input Fields - Details/Chart(CkEditor)', 'Details/Chart(CkEditor) - Input Fields - Name', 'Details/Chart(CkEditor) - Name - Input Fields', 'Input Fields - Details/Chart(CkEditor) - Name', 'Input Fields - Name - Details/Chart(CkEditor)', 'Input Fields - Name - Full Length', 'Input Fields - Details/Chart(CkEditor)', 'Name - Details/Chart(CkEditor)', 'Name - Input Fields - Full Length', 'Details/Chart(CkEditor) - Name', 'Details/Chart(CkEditor) - Input Fields', 'Name - Input Fields - Half Length', 'Input Fields - Name - Half Length', 'Details/Chart(CkEditor) - Full Length', 'Details/Chart(CkEditor) - Half Length', 'Details/Chart(CkEditor) - Input Fields - Half ', 'Input Fields - Details/Chart(CkEditor) - Half ', 'Name - Details/Chart(CkEditor) - Half Length', 'Details/Chart(CkEditor) 1/4 length', 'InputField 1/4 length', 'Details/Chart(CkEditor) 75%  ', 'Input Fields - Details/Chart(CkEditor) 75%', 'Details/Chart(CkEditor) - Input Fields 75%', 'Details/Chart(CkEditor) 33%', 'Input Fields - Details/Chart(CkEditor) 33%', 'Details/Chart(CkEditor) - Input Fields 33%', 'Input Fields 33%');
+              echo '<code>'.$viewingOrder[$row->SubLink_ViewingOrder].'</code>';
+              ?></td>
+
               <td><input type="color" value="<?php echo $row->SubLink_TextColor;?>" disabled>
                 <code>
                   <?php

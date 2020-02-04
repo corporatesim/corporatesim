@@ -1242,7 +1242,9 @@ elseif(isset($_GET['link']))
 	(SELECT `Game_Name` FROM GAME_GAME  WHERE `Game_ID` = L.Link_GameID) AS Game,
 	(SELECT `Scen_Name` FROM GAME_SCENARIO WHERE `Scen_ID` = L.`Link_ScenarioID`) AS Scenario,
 	(SELECT `Comp_Name` FROM GAME_COMPONENT WHERE `Comp_ID` = LS.SubLink_CompID) AS Component,
+	(SELECT `Comp_NameAlias` FROM GAME_COMPONENT WHERE `Comp_ID` = LS.SubLink_CompID) AS Comp_NameAlias,
 	(SELECT `SubComp_Name` FROM GAME_SUBCOMPONENT WHERE `SubComp_ID` = LS.SubLink_SubCompID) AS SubComponent,
+	(SELECT `SubComp_NameAlias` FROM GAME_SUBCOMPONENT WHERE `SubComp_ID` = LS.SubLink_SubCompID) AS SubComp_NameAlias,
 	(SELECT `Area_Name` FROM GAME_AREA  WHERE `Area_ID` = LS.SubLink_AreaID) AS AreaName
 	FROM
 	`GAME_LINKAGE` L INNER JOIN GAME_LINKAGE_SUB LS 

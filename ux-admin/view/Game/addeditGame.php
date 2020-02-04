@@ -143,6 +143,28 @@
 									</div>
 								</div>
 
+								<div class="row name col-md-3 col-lg-3 col-sm-12 col-xs-12" id="hideLeaderboardButton" data-toggle="tooltip" title="Hide Leaderboard Button From O/P Page">
+									<div class="form-group">
+										<div class="form-check" data-toggle="tooltip">
+											<label class="form-check-label containerCheckbox" for="Game_LeaderboardButton">
+												<input type="checkbox" class="form-check-input" id="Game_LeaderboardButton" name="Game_LeaderboardButton" value="1" <?php echo ($gamedetails->Game_LeaderboardButton == 1)?'checked':'';?>> Hide Leaderboard
+												<span class="checkmark"></span>
+											</label>
+										</div>
+									</div>
+								</div>
+
+								<div class="row name col-md-3 col-lg-3 col-sm-12 col-xs-12" id="hideReportButton" data-toggle="tooltip" title="Hide Report Button From O/P Page">
+									<div class="form-group">
+										<div class="form-check" data-toggle="tooltip">
+											<label class="form-check-label containerCheckbox" for="Game_ReportButton">
+												<input type="checkbox" class="form-check-input" id="Game_ReportButton" name="Game_ReportButton" value="1" <?php echo ($gamedetails->Game_ReportButton == 1)?'checked':'';?>> Hide Report
+												<span class="checkmark"></span>
+											</label>
+										</div>
+									</div>
+								</div>
+
 							</div>
 
 							<div class="row">
