@@ -2,6 +2,7 @@
 	<!doctype html>
 	<html class="fixed">
 	<head>
+		<title>Enterprise Login</title>
 
 		<!-- Basic -->
 		<meta charset="UTF-8">

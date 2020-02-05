@@ -5,7 +5,7 @@
 // );
 // echo "<pre>"; print_r($csrf); exit();
 ?>
-
+<title>Mobile Simulation</title>
 <style>
   .container img {
     float        : left;
