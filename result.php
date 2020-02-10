@@ -10,18 +10,6 @@ if($_SESSION['username'] == NULL)
 
 $functionsObj = new Functions();
 
-// getting lastDigits of phone numbers
-function lastDigits($phoneNumber){
-	$phoneNumberLength = strlen($phoneNumber);
-	if($phoneNumberLength > 9)
-	{
-		return 'XXXXXX'.$phoneNumber[$phoneNumberLength-4].$phoneNumber[$phoneNumberLength-3].$phoneNumber[$phoneNumberLength-2].$phoneNumber[$phoneNumberLength-1];
-	}
-	else
-	{
-		return 'XXXXXXXXXX';
-	}
-}
 //$linkid=$_GET['Link'];
 //$scenid=$_GET['Scenario'];
 $userid    = $_SESSION['userid'];
@@ -92,7 +80,7 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 		$gameCompletDate = $functionsObj->RunQueryFetchObject("SELECT US_CompletedOn FROM GAME_USERSTATUS WHERE US_GameID=$oputput_gameid AND US_UserID=$userid")[0];
 
 		// echo count($visibleComponents)."<pre><br>".$checkVisibleCompSql.'<br>'; print_r($visibleComponents); exit();
-		$pageHeader = '<table align="left" cellspacing="0" cellpadding="1" style"font-weight:bold;"><tr><td colspan="2" align="center" style="background-color:#f0f0f0;"><b>Participant Details</b></td></tr><tr style="background-color:#c4daec;"><td><b>Name</b>: </td><td>'.$gameData->FullName.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Email</b>: </td><td>'.$gameData->Email.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Mobile</b>: </td><td>'.lastDigits($gameData->Mobile).'</td></tr> <tr style="background-color:#c4daec;"><td><b>Simulation/Game</b>: </td><td>'.$gameData->Game_Name.' ('.date('d-m-Y',strtotime($gameCompletDate->US_CompletedOn)).')</td></tr></table><br>'.$gameData->Game_ReportFirstPage;
+		$pageHeader = '<table align="left" cellspacing="0" cellpadding="1" style"font-weight:bold;"><tr><td colspan="2" align="center" style="background-color:#f0f0f0;"><b>Participant Details</b></td></tr><tr style="background-color:#c4daec;"><td><b>Name</b>: </td><td>'.$gameData->FullName.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Email</b>: </td><td>'.$gameData->Email.'</td></tr> <tr style="background-color:#c4daec;"><td><b>Mobile</b>: </td><td>'.'XXXXXX'.substr($gameData->Mobile, -4).'</td></tr> <tr style="background-color:#c4daec;"><td><b>Simulation/Game</b>: </td><td>'.$gameData->Game_Name.' ('.date('d-m-Y',strtotime($gameCompletDate->US_CompletedOn)).')</td></tr></table><br>'.$gameData->Game_ReportFirstPage;
 
 		foreach ($visibleComponents as $visibleComponentsRow)
 		{
