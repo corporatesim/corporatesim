@@ -27,15 +27,16 @@
                  <!--  <div class="clearfix mb-20">
                     <h5 class="text-blue">See the users report acoordingly</h5>
                   </div> -->
-
                   <!-- add users details here -->
                   <div class="row col-md-12 col-lg-12 col-sm-12 form-group mb-20" id="showUserReport">
                     <table id="data_table_id" class="table table-condensed table-striped table-hover table-bordered table-responsive">
                       <thead id="table_body">
                         <tr>
-                          <th data-column-id="ID" data-identifier="true" data-header-align="center">ID</th>
+                          <th data-column-id="ID" data-identifier="true" data-header-align="center">S N</th>
+                          <th data-column-id="user_game_id" data-identifier="false" data-visible="false">ID</th>
+                          <th data-column-id="reportIcons" data-identifier="false" data-formatter="reportIcons" data-sortable="false">Report</th>
                           <?php foreach ($tableHeader as $tableHeaderRow) { ?>
-                            <th data-column-id="<?php echo $tableHeaderRow; ?>" data-identifier="true" data-header-align="center"><?php echo $tableHeaderRow; ?></th>
+                            <th data-column-id="<?php echo $tableHeaderRow; ?>" data-header-align="center"><?php echo $tableHeaderRow; ?></th>
                           <?php } ?>
                         </tr>
                       </thead>
@@ -43,6 +44,8 @@
                         <?php $j=1; foreach ($userData as $userDataRow) { ?>
                           <tr>
                             <td><?php echo $j; ?></td>
+                            <td><?php echo $userDataRow['user_game_id']; ?></td>
+                            <td></td>
                             <!-- <?php // print_r($userDataRow); echo "<br><br>"; ?> -->
                             <?php for($i=0; $i<count($tableHeader); $i++) { ?>
                               <td>
@@ -75,6 +78,16 @@
                       iconUp     : 'fa fa-angle-up',
                       // search     :'fa fa-search'
                     },
+                    formatters: {
+                      "reportIcons": function(column, row) {
+                        // console.log(column); console.log(row);
+                        var user_game_id = row.user_game_id.split('_');
+                        var user_id      = user_game_id[0];
+                        var game_id      = user_game_id[1];
+
+                        return "<a href='javascript:void(0);' data-user_id='"+user_id+"' data-game_id='"+game_id+"' data-toggle='tooltip' title='Download Report' onclick='downloadGameReport(this)'><span class='fa fa-download'></span></a> &nbsp; <a href='javascript:void(0);' data-user_id='"+user_id+"' data-game_id='"+game_id+"' data-toggle='tooltip' title='View Performance Chart' onclick='showPerformanceChart(this)'><span class='fa fa-line-chart'></span></a>";
+                      }
+                    },
                   }).on("loaded.rs.jquery.bootgrid", function () {
 
                     if ($('[data-toggle="tooltip"]')[0]) {
@@ -86,168 +99,323 @@
                     // });
                   });
                 });
-              </script>           
-              <style>
-               .pagination {
-                display: inline-block;
-                padding-left: 0;
-                margin: 18px 0;
-                border-radius: 2px;
-              }
 
-              .pagination > li {
-                display: inline;
-              }
+                function showPerformanceChart(element)
+                {
+                  var user_id = $(element).data('user_id');
+                  var game_id = $(element).data('game_id');
+                  // console.log(user_id+' and '+game_id);
+                  // trigger ajax to get the data accordingly
+                  $.ajax({
+                    url : "<?php echo base_url('Ajax/showPerformanceChart/');?>"+user_id+'/'+game_id,
+                    type: "POST",
+                    data: '',
+                    beforeSend: function(){
+                    },
+                    success:function(result)
+                    {
+                      // console.log(result);
+                      var result = JSON.parse(result);
+                      if(result.status == 200)
+                      {
+                       Swal.fire({
+                        // icon : result.icon,
+                        // title: result.title,
+                        html : 'showing chart for now',
+                        showClass: {
+                          popup: 'animated zoomInUp faster'
+                        },
+                        hideClass: {
+                          popup: 'animated zoomOutUp faster'
+                        }
+                      });
+                        // create element and show this on alert
+                        $('#swal2-content').html('<a id="downloadPerformanceChart" href="javascript:void(0);" download="performanceGraph.png" data-toggle="tooltip" title="Download Performance Chart" class="pull-right"><i class="fa fa-download"></i></a> <canvas id="lineChart" width="400" height="400"></canvas>');
+                        var ctx     = $('#lineChart');
+                        var myChart = new Chart(ctx, {
+                          type: 'line',
+                          data: {
+                            labels: result.chartLabels,
+                            datasets: [{
+                              label: result.graphTitle,
+                              data: result.chartData,
+                              backgroundColor: [
+                              'rgba(54, 162, 235, 0.2)',
+                              ],
+                              borderColor: [
+                              'rgba(54, 162, 235, 1)',
+                              ],
+                              borderWidth: 2,
+                              // fill: false,
+                            },
+                            {
+                              label: "Top Score (Bench Mark)",
+                              data: result.overAllBenchmark,
+                              backgroundColor: [
+                              'rgba(255, 206, 86, 0.2)',
+                              ],
+                              borderColor: [
+                              'rgba(255, 159, 64, 1)'
+                              ],
+                              borderWidth: 2,
+                              fill: false,
+                            }
+                            ],
+                          },
+                          options: {
+                            scales: {
+                              yAxes: [{
+                                ticks: {
+                                  beginAtZero: true,
+                                }
+                              }],
+                              xAxes: [{
+                                ticks: {
+                                  autoSkip: false,
+                                  // maxRotation: 90,
+                                  minRotation: 60,
+                                }
+                              }]
+                            },
+                          }
+                        });
+                        // adding chart downloading functionality
+                        $('#downloadPerformanceChart').on('click',function(){
+                          var url_base64 = document.getElementById('lineChart').toDataURL('image/png');
+                          $('#downloadPerformanceChart').attr('href',url_base64);
+                        });
+                      }
+                      else
+                      {
+                        Swal.fire({
+                          icon : result.icon,
+                          title: result.title,
+                          html : result.message,
+                          showClass: {
+                            popup: 'animated fadeInDown faster'
+                          },
+                          hideClass: {
+                            popup: 'animated fadeOutUp faster'
+                          }
+                        });
+                      }
+                    }
 
-              .pagination > li > a,
-              .pagination > li > span {
-                position: relative;
-                float: left;
-                padding: 6px 12px;
-                line-height: 1.42857143;
-                text-decoration: none;
-                color: #7e7e7e;
-                background-color: #e2e2e2;
-                border: 1px solid #ffffff;
-                margin-left: -1px;
-              }
+                  });
+}
+function downloadGameReport(element)
+{
+  var user_id   = $(element).data('user_id');
+  var game_id   = $(element).data('game_id');
+  var returnUrl = "<?php echo $this->uri->segment(3); ?>";
+  // console.log(returnUrl);
+  // console.log(user_id+' and '+game_id);
+  window.location = "<?php echo base_url('Ajax/downloadGameReport/');?>"+user_id+'/'+game_id+'/'+returnUrl;
+  // trigger ajax to get the data accordingly
+  // $.ajax({
+  //   url : "<?php echo base_url('Ajax/downloadGameReport/');?>"+user_id+'/'+game_id,
+  //   type: "POST",
+  //   data: '',
+  //   beforeSend: function(){
+  //   },
+  //   success:function(result)
+  //   {
+  //     // console.log(result);
+  //     var result = JSON.parse(result);
+  //     if(result.status == 200)
+  //     {
+  //       Swal.fire({
+  //         icon : result.icon,
+  //         title: result.title,
+  //         html : result.message,
+  //         showClass: {
+  //           popup: 'animated fadeInDown faster'
+  //         },
+  //         hideClass: {
+  //           popup: 'animated fadeOutUp faster'
+  //         }
+  //       });
+  //     }
+  //     else
+  //     {
+  //       Swal.fire({
+  //         icon : result.icon,
+  //         title: result.title,
+  //         html : result.message,
+  //         showClass: {
+  //           popup: 'animated fadeInDown faster'
+  //         },
+  //         hideClass: {
+  //           popup: 'animated fadeOutUp faster'
+  //         }
+  //       });
+  //     }
+  //   }
 
-              .pagination > li:first-child > a,
-              .pagination > li:first-child > span {
-                margin-left: 0;
-                border-bottom-left-radius: 2px;
-                border-top-left-radius: 2px;
-              }
+  // });
+}
+</script>           
+<style>
+ .pagination {
+  display: inline-block;
+  padding-left: 0;
+  margin: 18px 0;
+  border-radius: 2px;
+}
 
-              .pagination > li:last-child > a,
-              .pagination > li:last-child > span {
-                border-bottom-right-radius: 2px;
-                border-top-right-radius: 2px;
-              }
+.pagination > li {
+  display: inline;
+}
 
-              .pagination > li > a:hover,
-              .pagination > li > span:hover,
-              .pagination > li > a:focus,
-              .pagination > li > span:focus {
-                z-index: 2;
-                color: #333333;
-                background-color: #d7d7d7;
-                border-color: #ffffff;
-              }
+.pagination > li > a,
+.pagination > li > span {
+  position: relative;
+  float: left;
+  padding: 6px 12px;
+  line-height: 1.42857143;
+  text-decoration: none;
+  color: #7e7e7e;
+  background-color: #e2e2e2;
+  border: 1px solid #ffffff;
+  margin-left: -1px;
+}
 
-              .pagination > .active > a,
-              .pagination > .active > span,
-              .pagination > .active > a:hover,
-              .pagination > .active > span:hover,
-              .pagination > .active > a:focus,
-              .pagination > .active > span:focus {
-                z-index: 3;
-                color: #ffffff;
-                background-color: #00bcd4;
-                border-color: #ffffff;
-                cursor: default;
-              }
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  margin-left: 0;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
 
-              .pagination > .disabled > span,
-              .pagination > .disabled > span:hover,
-              .pagination > .disabled > span:focus,
-              .pagination > .disabled > a,
-              .pagination > .disabled > a:hover,
-              .pagination > .disabled > a:focus {
-                color: #777777;
-                background-color: #e2e2e2;
-                border-color: #ffffff;
-                cursor: not-allowed;
-              }
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  border-bottom-right-radius: 2px;
+  border-top-right-radius: 2px;
+}
 
-              .pagination-lg > li > a,
-              .pagination-lg > li > span {
-                padding: 10px 16px;
-                font-size: 17px;
-                line-height: 1.3333333;
-              }
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+  z-index: 2;
+  color: #333333;
+  background-color: #d7d7d7;
+  border-color: #ffffff;
+}
 
-              .pagination-lg > li:first-child > a,
-              .pagination-lg > li:first-child > span {
-                border-bottom-left-radius: 2px;
-                border-top-left-radius: 2px;
-              }
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  z-index: 3;
+  color: #ffffff;
+  background-color: #00bcd4;
+  border-color: #ffffff;
+  cursor: default;
+}
 
-              .pagination-lg > li:last-child > a,
-              .pagination-lg > li:last-child > span {
-                border-bottom-right-radius: 2px;
-                border-top-right-radius: 2px;
-              }
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+  color: #777777;
+  background-color: #e2e2e2;
+  border-color: #ffffff;
+  cursor: not-allowed;
+}
 
-              .pagination-sm > li > a,
-              .pagination-sm > li > span {
-                padding: 5px 10px;
-                font-size: 12px;
-                line-height: 1.5;
-              }
+.pagination-lg > li > a,
+.pagination-lg > li > span {
+  padding: 10px 16px;
+  font-size: 17px;
+  line-height: 1.3333333;
+}
 
-              .pagination-sm > li:first-child > a,
-              .pagination-sm > li:first-child > span {
-                border-bottom-left-radius: 2px;
-                border-top-left-radius: 2px;
-              }
+.pagination-lg > li:first-child > a,
+.pagination-lg > li:first-child > span {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
 
-              .pagination-sm > li:last-child > a,
-              .pagination-sm > li:last-child > span {
-                border-bottom-right-radius: 2px;
-                border-top-right-radius: 2px;
-              }
+.pagination-lg > li:last-child > a,
+.pagination-lg > li:last-child > span {
+  border-bottom-right-radius: 2px;
+  border-top-right-radius: 2px;
+}
 
-              .pagination {
-                border-radius: 0;
-              }
+.pagination-sm > li > a,
+.pagination-sm > li > span {
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
 
-              .pagination > li {
-                margin: 0 2px;
-                display: inline-block;
-                vertical-align: top;
-              }
+.pagination-sm > li:first-child > a,
+.pagination-sm > li:first-child > span {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
 
-              .pagination > li > a,
-              .pagination > li > span {
-                border-radius: 50% !important;
-                padding: 0;
-                width: 40px;
-                height: 40px;
-                line-height: 38px;
-                text-align: center;
-                font-size: 14px;
-                z-index: 1;
-                position: relative;
-                cursor: pointer;
-              }
+.pagination-sm > li:last-child > a,
+.pagination-sm > li:last-child > span {
+  border-bottom-right-radius: 2px;
+  border-top-right-radius: 2px;
+}
 
-              .pagination > li > a > .zmdi,
-              .pagination > li > span > .zmdi {
-                font-size: 22px;
-                line-height: 39px;
-              }
+.pagination {
+  border-radius: 0;
+}
 
-              .pagination > li.disabled {
-                opacity: 0.5;
-                filter: alpha(opacity=50);
-              }
+.pagination > li {
+  margin: 0 2px;
+  display: inline-block;
+  vertical-align: top;
+}
 
-              .lv-pagination {
-                width: 100%;
-                text-align: center;
-                padding: 40px 0;
-                border-top: 1px solid #F0F0F0;
-                margin-top: 0;
-                margin-bottom: 0;
-              }
-              tr.active{
-                background-color: #00bcd4 !important;
-              }
-              .bootgrid-table td.select-cell, .bootgrid-table th.select-cell{
-                display: none;
-              }
-              .bootgrid-footer .search, .bootgrid-header .search{
-                margin: 0 20px -25px 0;
-              }
-            </style>
+.pagination > li > a,
+.pagination > li > span {
+  border-radius: 50% !important;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  line-height: 38px;
+  text-align: center;
+  font-size: 14px;
+  z-index: 1;
+  position: relative;
+  cursor: pointer;
+}
+
+.pagination > li > a > .zmdi,
+.pagination > li > span > .zmdi {
+  font-size: 22px;
+  line-height: 39px;
+}
+
+.pagination > li.disabled {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+.lv-pagination {
+  width: 100%;
+  text-align: center;
+  padding: 40px 0;
+  border-top: 1px solid #F0F0F0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+tr.active{
+  background-color: #00bcd4 !important;
+}
+.bootgrid-table td.select-cell, .bootgrid-table th.select-cell{
+  display: none;
+}
+.bootgrid-footer .search, .bootgrid-header .search{
+  margin: 0 20px -25px 0;
+}
+</style>

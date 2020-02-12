@@ -276,7 +276,7 @@
           <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-30">
             <div class="bg-white pd-20 box-shadow border-radius-5 height-100-p">
               <h4 class="mb-30">Data Creation</h4>
-              <div class="mx-h-450 customscroll">
+              <div class="customscroll">
                 <canvas id="barChart" width="400" height="400"></canvas>
               </div>
             </div>
