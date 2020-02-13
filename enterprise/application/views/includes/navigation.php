@@ -70,32 +70,43 @@
         </a>
       </li>
     <?php } ?>
-    <!-- to see the mis and analytics -->
-    <li class="dropdown">
-      <a href="javascript:;" class="dropdown-toggle">
-        <span class="fa fa-book fa-fw"></span><span class="mtext">MIS & Analytics</span>
-      </a>
 
-      <ul class="submenu">
-        <li>
-         <a href="<?php echo base_url('OfflineReports/');?>">
-          <span class="fa fa-file"></span> Offline Reports
-        </a>
-      </li>
+    <li class="dropdown">
+     <a href="<?php echo base_url('Collaboration/');?>" class="dropdown-toggle no-arrow">
+      <i class="fa fa-handshake-o" aria-hidden="true"></i>
+      <span class="mtext">P2P</span>
+    </a>
+  </li>
+
+  <!-- to see the mis and analytics -->
+  <li class="dropdown">
+    <a href="javascript:;" class="dropdown-toggle">
+      <span class="fa fa-book fa-fw"></span><span class="mtext">MIS & Analytics</span>
+    </a>
+
+    <ul class="submenu">
       <li>
-        <a href="<?php echo base_url('OnlineReport');?>">
-          <span class='fa fa-file-code-o'></span> Online Reports
-        </a>
-      </li>
-      <li class="d-none">
-        <a href="<?php echo base_url('Analytics/');?>">
+       <a href="<?php echo base_url('OfflineReports/');?>">
+        <span class="fa fa-file"></span> Offline Reports
+      </a>
+    </li>
+    <li>
+      <a href="<?php echo base_url('OnlineReport');?>">
+        <span class='fa fa-file-code-o'></span> Online Reports
+      </a>
+    </li>
+    <!-- <li class="d-none">
+      <a href="<?php echo base_url('Analytics/');?>">
         <span class="fa fa-bar-chart"></span> Analytics
+      </a>
+    </li> -->
+    <li>
+      <a href="<?php echo base_url('Collaboration/viewGroupReport');?>">
+        <span class="fa fa-bar-chart"></span> P2P Reports
       </a>
     </li>
   </ul>
-
 </li>
-
 </ul>
 
 </div>

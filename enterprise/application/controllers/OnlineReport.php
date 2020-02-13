@@ -155,7 +155,7 @@ class OnlineReport extends CI_Controller {
 			redirect(base_url('OnlineReport'));
 		}
 
-		$reportSql = 'SELECT gi.input_current, CONCAT( IF(gc.Comp_NameAlias != "" AND gc.Comp_NameAlias IS NOT NULL,gc.Comp_NameAlias,gc.Comp_Name), "/", IF( gs.SubComp_NameAlias != "" AND gs.SubComp_NameAlias IS NOT NULL, gs.SubComp_NameAlias, IF(gs.SubComp_Name IS NOT NULL,gs.SubComp_Name,"") ) ) AS Comp_SubComp, CONCAT( gu.User_fname, " ", gu.User_lname) AS FullName, gu.User_username AS userName, gu.User_email AS UserEmail FROM GAME_INPUT gi INNER JOIN GAME_SITE_USERS gu ON gu.User_id = gi.input_user  INNER JOIN GAME_SITE_USER_REPORT_NEW gur ON gur.uid=gu.User_id AND (gur. date_time BETWEEN "'.$dateTo.'" AND "'.$dateFrom.'") INNER JOIN GAME_LINKAGE_SUB gls ON gi.input_sublinkid = gls.SubLink_ID AND gls.SubLink_ShowHide=0 AND gls.SubLink_InputMode !="none" LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID WHERE ( gls.SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = '.$gameId.' ) AND gls.SubLink_Type = 1 ) ';
+		$reportSql = 'SELECT gu.User_id AS user_game_id, gi.input_current, CONCAT( IF(gc.Comp_NameAlias != "" AND gc.Comp_NameAlias IS NOT NULL,gc.Comp_NameAlias,gc.Comp_Name), "/", IF( gs.SubComp_NameAlias != "" AND gs.SubComp_NameAlias IS NOT NULL, gs.SubComp_NameAlias, IF(gs.SubComp_Name IS NOT NULL,gs.SubComp_Name,"") ) ) AS Comp_SubComp, CONCAT( gu.User_fname, " ", gu.User_lname) AS FullName, gu.User_username AS userName, gu.User_email AS UserEmail, gus.US_LinkID AS gameStatus FROM GAME_INPUT gi INNER JOIN GAME_SITE_USERS gu ON gu.User_id = gi.input_user  INNER JOIN GAME_SITE_USER_REPORT_NEW gur ON gur.uid=gu.User_id AND (gur. date_time BETWEEN "'.$dateTo.'" AND "'.$dateFrom.'") INNER JOIN GAME_LINKAGE_SUB gls ON gi.input_sublinkid = gls.SubLink_ID AND gls.SubLink_ShowHide=0 AND gls.SubLink_InputMode !="none" LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID='.$gameId.' AND gus.US_UserID=gu.User_id LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID WHERE ( gls.SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = '.$gameId.' ) AND gls.SubLink_Type = 1 ) ';
 
 		if(!empty($Enterprise))
 		{
@@ -191,8 +191,9 @@ class OnlineReport extends CI_Controller {
 			}
 			else
 			{
-				$userData[$reportDataRow->UserEmail]['FullName']  = $reportDataRow->FullName;
-				$userData[$reportDataRow->UserEmail]['UserEmail'] = $reportDataRow->UserEmail;
+				$userData[$reportDataRow->UserEmail]['FullName']                   = trim($reportDataRow->FullName);
+				$userData[$reportDataRow->UserEmail]['UserEmail']                  = trim($reportDataRow->UserEmail);
+				$userData[$reportDataRow->UserEmail]['user_game_id']               = $reportDataRow->user_game_id.'_'.$gameId.'_'.$reportDataRow->gameStatus;
 				$userData[$reportDataRow->UserEmail][$reportDataRow->Comp_SubComp] = $reportDataRow->input_current;
 			}
 		}

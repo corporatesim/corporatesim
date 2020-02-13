@@ -90,6 +90,8 @@
 												<td><?php echo $userDetails->User_mobile; ?></td>
 												<td>
 													<a href="<?php echo base_url('Games/assignGames/').base64_encode($userDetails->User_id).'/'.base64_encode($this->uri->segment(2)); ?>" title="Allocate/Deallocate Games"><?php echo "<b style='color:#0029ff;'>".$userDetails->gameCount."</b>"; ?></a>
+													&nbsp;
+													<a href="javascript:void(0);" onclick="downloadCompletedGamesReport('<?php echo base64_encode($userDetails->User_id); ?>');" data-toggle="tooltip" title="Download CSV For All Complted Games"><i class="fa fa-download"></i></a>
 												</td>
 												<td><?php echo date('d-m-Y',strtotime($userDetails->User_GameStartDate))." <b>To</b> ".date('d-m-Y',strtotime($userDetails->User_GameEndDate)); ?></td>
 												<td>

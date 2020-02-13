@@ -275,6 +275,112 @@
 	});
 	// document.ready function ends here
 
+	// adding function to download completed games report
+	function downloadCompletedGamesReport(userid)
+	{
+		if(!userid)
+		{
+			Swal.fire({
+				icon: error,
+				title: 'Error',
+				text: 'Please select atleast one user to get report'
+			});
+			return false;
+		}
+		// trigger ajax to get the completed game data and create dialog for checkboxes
+		$.ajax({
+			url     : "<?php echo base_url('Ajax/getCompletedGames/')?>"+userid,
+			type    : 'POST',
+			success: function(result)
+			{
+				// console.log(result);
+				var result = JSON.parse(result);
+				if(result.status == 200)
+				{
+					Swal.fire({
+						// icon : result.icon,
+						title            : result.title,
+						html             : result.message,
+						showConfirmButton: false,
+					});
+				}
+				else
+				{
+					Swal.fire({
+						icon : result.icon,
+						title: result.title,
+						html : result.message,
+						showClass: {
+							popup: 'animated zoomInUp faster'
+						},
+						hideClass: {
+							popup: 'animated zoomOutUp faster'
+						}
+					});
+				}
+			}
+		})
+	}
+
+	function getCompleteReport(element,event)
+	{
+		Swal.close(); event.preventDefault(); console.log('form submitted');
+
+		var formData = $('#completedGamesForm').serialize();
+		$.ajax({
+			url : "<?php echo base_url('Ajax/downloadCompletedGamesReport/')?>",
+			type: 'POST',
+			data: formData,
+			success: function(result)
+			{
+				// console.log(result);
+				var result = JSON.parse(result);
+				if(result.status == 200)
+				{
+					// Swal.fire({
+					// 	icon             : result.icon,
+					// 	title            : result.title,
+					// 	html             : result.message,
+					// 	showConfirmButton: false,
+					// });
+					// download csv report here, and remove above alert
+					var csvData = '';
+					$.each(result.data,function(i,e){
+						// console.log(result.data[i]['comp_subcomp']);
+						csvData += '"'+result.data[i]['comp_subcomp']+'";'+result.data[i]['inputValue']+';'+result.data[i]['gameName']+';\n';
+					});
+
+
+					var createDownloadLink = document.createElement("a");
+					var fileData           = ['\ufeff'+csvData];
+					var blobObject         = new Blob(fileData,{
+						type: "text/csv;charset=utf-8;"
+					});
+
+					var url                     = URL.createObjectURL(blobObject);
+					createDownloadLink.href     = url;
+					createDownloadLink.download = "consolidatedReport_<?php echo date('d-m-Y');?>.csv";
+					document.body.appendChild(createDownloadLink);
+					createDownloadLink.click();
+					document.body.removeChild(createDownloadLink);
+				}
+				else
+				{
+					Swal.fire({
+						icon : result.icon,
+						title: result.title,
+						html : result.message,
+						showClass: {
+							popup: 'animated zoomInUp faster'
+						},
+						hideClass: {
+							popup: 'animated zoomOutUp faster'
+						}
+					});
+				}
+			}
+		})
+	}
 	function showPopup(gamedata,startdate,enddate)
 	{
 		// if logged-in as superAdmin then show 4 options to allocate/de-allocate games

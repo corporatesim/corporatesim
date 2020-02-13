@@ -1,31 +1,31 @@
 <!-- <?php // echo "<pre>"; print_r($enterpriseusersDetails); exit;?> -->
-<script type="text/javascript">
-	var loc_url_del = "<?php echo base_url('Users/delete/');?>";
-	var func        = "<?php echo $this->uri->segment(2);?>";
-</script>
-<div class="main-container">
-	<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
-		<?php $this->load->view('components/trErMsg');?>
-		<div class="min-height-200px">
-			<div class="page-header">
-				<div class="row">
-					<div class="col-md-6 col-sm-12">
-						<div class="title">
-							<h1><a href="<?php echo base_url('Users/addUsers/entuser');?>" data-toggle="tooltip" title="Add User"><i class="fa fa-plus-circle text-blue"> 
-							</i></a> Enterprize Users</h1>
+	<script type="text/javascript">
+		var loc_url_del = "<?php echo base_url('Users/delete/');?>";
+		var func        = "<?php echo $this->uri->segment(2);?>";
+	</script>
+	<div class="main-container">
+		<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+			<?php $this->load->view('components/trErMsg');?>
+			<div class="min-height-200px">
+				<div class="page-header">
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="title">
+								<h1><a href="<?php echo base_url('Users/addUsers/entuser');?>" data-toggle="tooltip" title="Add User"><i class="fa fa-plus-circle text-blue"> 
+								</i></a> Enterprize Users</h1>
+							</div>
+							<nav aria-label="breadcrumb" role="navigation">
+								<ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
+									<li class="breadcrumb-item active" aria-current="page">Manage Enterprize Users</li>
+								</ol>
+							</nav>
 						</div>
-						<nav aria-label="breadcrumb" role="navigation">
-							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Manage Enterprize Users</li>
-							</ol>
-						</nav>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12 col-sm-12">
-						<div class="title">
-							<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							<div class="title">
+								<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
 								<!-- <div class="pull-right">
 									<form method="post"  action="<?php echo base_url('excel_export/downloadEnterpriseUser'); ?>" enctype="multipart/form-data">
 										<button type="submit" name="submit" id="user_download" class="btn btn-primary"
@@ -72,8 +72,10 @@
 													<td><?php echo $enterpriseusersDetails->User_mobile; ?></td>
 													<td>
 														<a href="<?php echo base_url('Games/assignGames/');?>
-														<?php echo base64_encode($enterpriseusersDetails->User_id).'/'.base64_encode($this->uri->segment(2));?>" title="Allocate/Deallocate Games"><?php echo "<b style='color:#0029ff;'>".$enterpriseusersDetails->gameCount."</b>";?>
+														<?php echo base64_encode($enterpriseusersDetails->User_id).'/'.base64_encode($this->uri->segment(2));?>" data-toggle="tooltip" title="Allocate/Deallocate Games"><?php echo "<b style='color:#0029ff;'>".$enterpriseusersDetails->gameCount."</b>";?>
 													</a>
+													&nbsp;
+													<a href="javascript:void(0);" onclick="downloadCompletedGamesReport('<?php echo base64_encode($enterpriseusersDetails->User_id); ?>');" data-toggle="tooltip" title="Download CSV For All Complted Games"><i class="fa fa-download"></i></a>
 												</td>
 												<td><?php echo date('d-m-Y',strtotime($enterpriseusersDetails->User_GameStartDate))." <b>To</b> ".date('d-m-Y',strtotime($enterpriseusersDetails->User_GameEndDate)); ?></td>
 												<td>
@@ -136,7 +138,6 @@
 
 						<script type="text/javascript">
 							<!--
-
 								$('#upload-file').change( function(){
 									var form = $('#uploadUser').get(0);                     
 									$.ajax({

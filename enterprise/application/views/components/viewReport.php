@@ -84,8 +84,21 @@
                         var user_game_id = row.user_game_id.split('_');
                         var user_id      = user_game_id[0];
                         var game_id      = user_game_id[1];
+                        var gameStatus   = user_game_id[2];
+                        var report_icon  = '';
 
-                        return "<a href='javascript:void(0);' data-user_id='"+user_id+"' data-game_id='"+game_id+"' data-toggle='tooltip' title='Download Report' onclick='downloadGameReport(this)'><span class='fa fa-download'></span></a> &nbsp; <a href='javascript:void(0);' data-user_id='"+user_id+"' data-game_id='"+game_id+"' data-toggle='tooltip' title='View Performance Chart' onclick='showPerformanceChart(this)'><span class='fa fa-line-chart'></span></a>";
+                        if(gameStatus > 0)
+                        {
+                          // this means user has completed game. So, show report icon
+                          report_icon = "<a href='javascript:void(0);' data-user_id='"+user_id+"' data-game_id='"+game_id+"' data-toggle='tooltip' title='Download Report' onclick='downloadGameReport(this)'><span class='fa fa-download'></span></a>";
+                        }
+                        else
+                        {
+                          // show alert that user has not completed the game so far
+                          report_icon = "<a href='javascript:void(0);' data-toggle='tooltip' title='Game Not Completed So Far' onclick='showAlertForIncompleteGame()'><span class='fa fa-download'></span></a>";
+                        }
+
+                        return report_icon+" &nbsp; <a href='javascript:void(0);' data-user_id='"+user_id+"' data-game_id='"+game_id+"' data-toggle='tooltip' title='View Performance Chart' onclick='showPerformanceChart(this)'><span class='fa fa-line-chart'></span></a>";
                       }
                     },
                   }).on("loaded.rs.jquery.bootgrid", function () {
@@ -149,7 +162,7 @@
                               // fill: false,
                             },
                             {
-                              label: "Top Score (Bench Mark)",
+                              label: "Top Score",
                               data: result.overAllBenchmark,
                               backgroundColor: [
                               'rgba(255, 206, 86, 0.2)',
@@ -203,6 +216,22 @@
 
                   });
 }
+
+function showAlertForIncompleteGame()
+{
+  Swal.fire({
+    icon : 'error',
+    title: 'InComplete',
+    html : 'User has not completed this game so far.',
+    showClass: {
+      popup: 'animated fadeInDown faster'
+    },
+    hideClass: {
+      popup: 'animated fadeOutUp faster'
+    }
+  });
+}
+
 function downloadGameReport(element)
 {
   var user_id   = $(element).data('user_id');
