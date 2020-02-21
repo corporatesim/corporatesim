@@ -177,12 +177,16 @@ switch($_GET['q']){
 	$showfile = 'notification.php';
 	break;
 
-		// Logout
+	case 'resetGameViews':
+	$showfile = 'resetGameViews.php';
+	break;
+
+	// Logout
 	case 'Logout':
 	$showfile = 'logout.php';
 	break;
 
-		// Default Page to show
+	// Default Page to show
 	default:
 	$showfile = 'error.php';
 }
