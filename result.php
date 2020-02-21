@@ -102,9 +102,6 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 			$printData .= '</div>';
 			// end of ckEditor/chart div
 
-			// adding the inputField/PersonalizeOutcome div GAME_PERSONALIZE_OUTCOME
-			$printData .= '<div style="width:50%; display:inline-block;" class="componentDivInputField">';
-
 			$personalizeOutcomeSql = "SELECT * FROM GAME_PERSONALIZE_OUTCOME gpo WHERE gpo.Outcome_LinkId=".$visibleComponentsRow->SubLink_LinkID." AND gpo.Outcome_CompId=".$visibleComponentsRow->SubLink_CompID." AND gpo.Outcome_IsActive=0 ORDER BY gpo.Outcome_Order ASC";
 			$personalizeOutcomeResult = $functionsObj->RunQueryFetchObject($personalizeOutcomeSql);
 			if(count($personalizeOutcomeResult) > 0)
@@ -114,8 +111,11 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 				{
 					if($objectResult->Outcome_FileType !=3 && ($value>=$objectResult->Outcome_MinVal AND $value<=$objectResult->Outcome_MaxVal))
 					{
+						// adding the inputField/PersonalizeOutcome div GAME_PERSONALIZE_OUTCOME
+						$printData .= '<div style="width:50%; display:inline-block;" class="componentDivInputFieldPo">';
 						$printData .= '<img src="'.doc_root.'ux-admin/upload/Badges/'.str_replace(' ', '%20', $personalizeOutcomeResultRow->Outcome_FileName).'"><br><br><br><div>'.$personalizeOutcomeResultRow->Outcome_Description.'</div>';
 						$foundInRangeFlag = FALSE;
+						$printData .= '</div>';
 						break;
 					}	
 				}
@@ -127,10 +127,15 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 			}
 			else
 			{
-				$printData .= $visibleComponentsRow->input_current;
+				if($visibleComponentsRow->SubLink_ViewingOrder != 15 && $visibleComponentsRow->SubLink_ViewingOrder != 16)
+				{
+					// adding the inputField/PersonalizeOutcome div GAME_PERSONALIZE_OUTCOME
+					$printData .= '<div style="width:50%; display:inline-block;" class="componentDivInputField">';
+					$printData .= $visibleComponentsRow->input_current;
+					$printData .= '</div>';
+				}
 			}
 
-			$printData .= '</div>';
 			// end of adding inputField/PersonalizeOutcome div
 
 			// after coming out from the loop check that component has subcomponent or not

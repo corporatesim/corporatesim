@@ -213,6 +213,7 @@
 							<!-- if entperise is logged in -->
 							<?php if($loggedInAs == '1'){ ?>
 								<div class="row" id="to_entErpriseUsers">
+									<input type="hidden" id="Enterprise" name="Enterprise" value="<?php echo $enterpriseData->Enterprise_ID.'_'.strtotime($enterpriseData->EG_Start_Date_Game).'_'.strtotime($enterpriseData->EG_End_Date_Game); ?>">
 									<!-- put search box here to search -->
 									<div class="col-md-6"></div>
 									<div class="form-group row col-sm-12 col-md-6">

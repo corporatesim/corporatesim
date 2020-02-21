@@ -94,7 +94,7 @@ class AllocateDeallocateGame extends CI_Controller {
 				// $entUserCheckBoxSql = "SELECT gsu.User_id, CONCAT( gsu.User_fname, ' ', gsu.User_lname ) AS userName, gsu.User_GameStartDate, UNIX_TIMESTAMP(gsu.User_GameStartDate) AS UserStartDate, UNIX_TIMESTAMP(gsu.User_GameEndDate) AS UserEndDate, gug.UG_GameID, UNIX_TIMESTAMP(gug.UG_GameStartDate) AS UG_GameStartDate, UNIX_TIMESTAMP(gug.UG_GameEndDate) AS UG_GameEndDate, gug.UG_ReplayCount, gsu.User_email FROM GAME_SITE_USERS gsu LEFT JOIN GAME_USERGAMES gug ON gug.UG_UserID = gsu.User_id AND gug.UG_GameID = 60 AND gug.UG_ParentId =".$this->loginData['User_Id']." WHERE gsu.User_ParentId =".$this->loginData['User_Id']." AND gsu.User_Role = 1 AND gsu.User_GameEndDate >= DATE(NOW()) AND gsu.User_Delete = 0";
 				// // die($entUserCheckBoxSql);
 				// $content['EnterpriseUserCheckbox'] = $this->Common_Model->executeQuery($entUserCheckBoxSql);
-				$logEntSql = "SELECT ge.Enterprise_ID, ge.Enterprise_Name, ge.Enterprise_Email, ge.Enterprise_StartDate, ge.Enterprise_EndDate, UNIX_TIMESTAMP(geg.EG_Game_Start_Date) AS EG_Game_Start_Date, UNIX_TIMESTAMP(geg.EG_Game_End_Date) AS EG_Game_End_Date FROM GAME_ENTERPRISE ge LEFT JOIN GAME_ENTERPRISE_GAME geg ON geg.EG_EnterpriseID=ge.Enterprise_ID AND geg.EG_GameID=".$content['gamedata'][0]." WHERE ge.Enterprise_Status = 0 AND ge.Enterprise_ID=".$this->loginData['User_Id'];
+				$logEntSql = "SELECT ge.Enterprise_ID, ge.Enterprise_Name, ge.Enterprise_Email, ge.Enterprise_StartDate, ge.Enterprise_EndDate, UNIX_TIMESTAMP(geg.EG_Game_Start_Date) AS EG_Game_Start_Date, UNIX_TIMESTAMP(geg.EG_Game_End_Date) AS EG_Game_End_Date, geg.EG_Game_Start_Date AS EG_Start_Date_Game, geg.EG_Game_End_Date AS EG_End_Date_Game FROM GAME_ENTERPRISE ge LEFT JOIN GAME_ENTERPRISE_GAME geg ON geg.EG_EnterpriseID=ge.Enterprise_ID AND geg.EG_GameID=".$content['gamedata'][0]." WHERE ge.Enterprise_Status = 0 AND ge.Enterprise_ID=".$this->loginData['User_Id'];
 				$resultData                     = $this->Common_Model->executeQuery($logEntSql);
 				$content['enterpriseData']      = $resultData[0];
 				$content['showEnterpriseUsers'] = 'showEnterpriseUsers';
@@ -263,24 +263,29 @@ class AllocateDeallocateGame extends CI_Controller {
 
 			if($allocateTo == 'entErpriseUsers')
 			{
-				if($this->input->post('EnterpriseUser')==NULL || empty($this->input->post('EnterpriseUser')))
-				{
-					$this->session->set_flashdata('er_msg', 'Please Select User');
-					redirect(current_url());
-				}
+				// echo "<pre>"; print_r($content['enterpriseData']); print_r($this->input->post()); die();
 				// single game to multiple enterprise users, as Enterprise id is like entId_startDate_endDate
 				$tableName           = "GAME_USERGAMES";
 				$Enterprise          = explode('_',$this->input->post('Enterprise'));
 				$UG_ParentId         = $Enterprise[0];
-				$EnterpriseUserArray = $this->input->post('EnterpriseUser');
-				$where_in[0]         = 'UG_UserID';
-				$where_in[1]         = implode(',', $EnterpriseUserArray);
 				$deleteWhere         = array(
 					'UG_ParentId'    => $UG_ParentId,
 					'UG_SubParentId' => -2,
 					'UG_GameID'      => $gameID,
 				);
 
+				if($this->input->post('EnterpriseUser')==NULL || empty($this->input->post('EnterpriseUser')))
+				{
+					// this means de-allocate the game from all users
+					$this->db->where($deleteWhere);
+					$this->db->delete($tableName);
+					$this->session->set_flashdata('tr_msg', 'Game De-Allocated Successfully.');
+					redirect('Dashboard');
+				}
+
+				$EnterpriseUserArray = $this->input->post('EnterpriseUser');
+				$where_in[0]         = 'UG_UserID';
+				$where_in[1]         = implode(',', $EnterpriseUserArray);
 				// creating insert array
 				for($i=0; $i<count($EnterpriseUserArray); $i++)
 				{
@@ -299,26 +304,30 @@ class AllocateDeallocateGame extends CI_Controller {
 
 			if($allocateTo == 'subEnterpriseUsers')
 			{
-				if($this->input->post('subEnterpriseUser')==NULL || empty($this->input->post('subEnterpriseUser')))
-				{
-					$this->session->set_flashdata('er_msg', 'Please Select User');
-					redirect(current_url());
-				}
 				// single game to multiple sub-enterprise users, as Enterprise and subEnterprise id's are like entId_startDate_endDate
 				$tableName              = "GAME_USERGAMES";
 				$Enterprise             = explode('_',$this->input->post('Enterprise'));
 				$UG_ParentId            = $Enterprise[0];
 				$subEnterprise          = explode('_',$this->input->post('SubEnterpriseDropdown'));
 				$UG_SubParentId         = $subEnterprise[0];
-				$subEnterpriseUserArray = $this->input->post('subEnterpriseUser');
-				$where_in[0]            = 'UG_UserID';
-				$where_in[1]            = implode(',', $subEnterpriseUserArray);
 				$deleteWhere            = array(
 					'UG_ParentId'    => $UG_ParentId,
 					'UG_SubParentId' => $UG_SubParentId,
 					'UG_GameID'      => $gameID,
 				);
 
+				if($this->input->post('subEnterpriseUser')==NULL || empty($this->input->post('subEnterpriseUser')))
+				{
+					// this means de-allocate the game from all users
+					$this->db->where($deleteWhere);
+					$this->db->delete($tableName);
+					$this->session->set_flashdata('tr_msg', 'Game De-Allocated Successfully.');
+					redirect('Dashboard');
+				}
+
+				$subEnterpriseUserArray = $this->input->post('subEnterpriseUser');
+				$where_in[0]            = 'UG_UserID';
+				$where_in[1]            = implode(',', $subEnterpriseUserArray);
 				// creating insert array
 				for($i=0; $i<count($subEnterpriseUserArray); $i++)
 				{
@@ -358,9 +367,11 @@ class AllocateDeallocateGame extends CI_Controller {
 		// put the queries in transactions
 		// adding FALSE to remove quotes i.e. from ('6,1,17') to (6,1,17)
 		$this->db->trans_start();
-		$this->db->where_in($where_in[0], trim($where_in[1]), FALSE);
+		// deleting all records and then updating the selected users only
+		// $this->db->where_in($where_in[0], trim($where_in[1]), FALSE);
 		$this->db->where($deleteWhere);
 		$this->db->delete($tableName);
+		// print_r($this->db->last_query()); exit();
 		$this->db->insert_batch($tableName, $insertArr);
 		if($updateArr)
 		{

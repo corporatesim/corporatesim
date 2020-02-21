@@ -1107,16 +1107,18 @@ public function EnterpriseUsersCSV($Enterpriseid=NULL)
           if( !empty($filesop) )
           {
             //convert the date format 
-            $startDate     = $filesop[6];
-            $endDate       = $filesop[7];
-            $userStartDate = date("Y-m-d", strtotime($startDate));
-            $userEndDate   = date("Y-m-d", strtotime($endDate));
-            $email         = $filesop[4];
-            $mobile        = $filesop[3];
-            $where         = array(
+            $dateDoesNotAccept = array('.','-');
+            $startDate         = str_replace($dateDoesNotAccept, '/', $filesop[6]);
+            $endDate           = str_replace($dateDoesNotAccept, '/', $filesop[7]);
+            $userStartDate     = date("Y-m-d", strtotime($startDate));
+            $userEndDate       = date("Y-m-d", strtotime($endDate));
+            $email             = $filesop[4];
+            $mobile            = $filesop[3];
+            $where             = array(
               "User_mobile" => $mobile,
               "User_email"  => $email
             );
+            // echo $filesop[7].' csvSD '.$startDate.' sD '.$userStartDate. ' csvED '.$endDate.' eD '.$userEndDate; exit();
 
             $object = $this->Common_Model->findCount('GAME_SITE_USERS',$where);
             if($object > 0)
