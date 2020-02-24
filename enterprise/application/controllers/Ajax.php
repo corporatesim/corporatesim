@@ -310,14 +310,13 @@ public function downloadGameReport($userid=NULL, $game_id=NULL, $returnUrl=NULL)
       else
       {
         // $printData .= $visibleComponentsRow->SubLink_ChartID;
-        $printData .= '<img src="'.site_root.'chart/'.$visibleComponentsRow->SubLink_ChartType.'.php?gameid='.$game_id.'&userid='.$userid.'&ChartID='.$visibleComponentsRow->SubLink_ChartID.'">';
+        $printData .= '<img src="'.base_url('../').'chart/'.$visibleComponentsRow->SubLink_ChartType.'.php?gameid='.$game_id.'&userid='.$userid.'&ChartID='.$visibleComponentsRow->SubLink_ChartID.'">';
       }
 
       $printData .= '</div>';
       // end of ckEditor/chart div
 
       // adding the inputField/PersonalizeOutcome div GAME_PERSONALIZE_OUTCOME
-      $printData .= '<div style="width:50%; display:inline-block;" class="componentDivInputField">';
 
       $personalizeOutcomeSql = "SELECT * FROM GAME_PERSONALIZE_OUTCOME gpo WHERE gpo.Outcome_LinkId=".$visibleComponentsRow->SubLink_LinkID." AND gpo.Outcome_CompId=".$visibleComponentsRow->SubLink_CompID." AND gpo.Outcome_IsActive=0 ORDER BY gpo.Outcome_Order ASC";
       $personalizeOutcomeResult = $this->Common_Model->executeQuery($personalizeOutcomeSql);
@@ -326,10 +325,12 @@ public function downloadGameReport($userid=NULL, $game_id=NULL, $returnUrl=NULL)
         $foundInRangeFlag = TRUE;
         foreach ($personalizeOutcomeResult as $personalizeOutcomeResultRow)
         {
-          if($objectResult->Outcome_FileType !=3 && ($value>=$objectResult->Outcome_MinVal AND $value<=$objectResult->Outcome_MaxVal))
+          if($personalizeOutcomeResultRow->Outcome_FileType !=3 && ($visibleComponentsRow->input_current>=$personalizeOutcomeResultRow->Outcome_MinVal AND $visibleComponentsRow->input_current<=$personalizeOutcomeResultRow->Outcome_MaxVal))
           {
-            $printData .= '<img src="'.doc_root.'ux-admin/upload/Badges/'.str_replace(' ', '%20', $personalizeOutcomeResultRow->Outcome_FileName).'"><br><br><br><div>'.$personalizeOutcomeResultRow->Outcome_Description.'</div>';
+            $printData .= '<div style="width:50%; display:inline-block;" class="componentDivInputFieldPo">';
+            $printData .= '<img src="'.base_url('../').'ux-admin/upload/Badges/'.str_replace(' ', '%20', $personalizeOutcomeResultRow->Outcome_FileName).'"><br><br><br><div>'.$personalizeOutcomeResultRow->Outcome_Description.'</div>';
             $foundInRangeFlag = FALSE;
+            $printData .= '</div>';
             break;
           } 
         }
@@ -341,10 +342,15 @@ public function downloadGameReport($userid=NULL, $game_id=NULL, $returnUrl=NULL)
       }
       else
       {
-        $printData .= $visibleComponentsRow->input_current;
+        if($visibleComponentsRow->SubLink_ViewingOrder != 15 && $visibleComponentsRow->SubLink_ViewingOrder != 16)
+        {
+          // adding the inputField/PersonalizeOutcome div GAME_PERSONALIZE_OUTCOME
+          $printData .= '<div style="width:50%; display:inline-block;" class="componentDivInputField">';
+          $printData .= $visibleComponentsRow->input_current;
+          $printData .= '</div>';
+        }
       }
 
-      $printData .= '</div>';
       // end of adding inputField/PersonalizeOutcome div
 
       // after coming out from the loop check that component has subcomponent or not
@@ -366,7 +372,7 @@ public function downloadGameReport($userid=NULL, $game_id=NULL, $returnUrl=NULL)
           else
           {
             // $printData .= $visibleSubComponentsRow->SubLink_ChartID;
-            $printData .= '<img src="'.site_root.'chart/'.$visibleSubComponentsRow->SubLink_ChartType.'.php?gameid='.$game_id.'&userid='.$userid.'&ChartID='.$visibleSubComponentsRow->SubLink_ChartID.'">';
+            $printData .= '<img src="'.base_url('../').'chart/'.$visibleSubComponentsRow->SubLink_ChartType.'.php?gameid='.$game_id.'&userid='.$userid.'&ChartID='.$visibleSubComponentsRow->SubLink_ChartID.'">';
           }
 
           $printData .= '</div>';

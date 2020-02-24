@@ -109,7 +109,7 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 				$foundInRangeFlag = TRUE;
 				foreach ($personalizeOutcomeResult as $personalizeOutcomeResultRow)
 				{
-					if($objectResult->Outcome_FileType !=3 && ($value>=$objectResult->Outcome_MinVal AND $value<=$objectResult->Outcome_MaxVal))
+					if($personalizeOutcomeResultRow->Outcome_FileType !=3 && ($visibleComponentsRow->input_current>=$personalizeOutcomeResultRow->Outcome_MinVal AND $visibleComponentsRow->input_current<=$personalizeOutcomeResultRow->Outcome_MaxVal))
 					{
 						// adding the inputField/PersonalizeOutcome div GAME_PERSONALIZE_OUTCOME
 						$printData .= '<div style="width:50%; display:inline-block;" class="componentDivInputFieldPo">';
