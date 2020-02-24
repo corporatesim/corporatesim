@@ -612,6 +612,23 @@
                       </div>
                     <?php } ?>
                     <!--  </div>-->
+                    <!-- adding competency and simulated performance radio button -->
+                    <div class="col-md-2">
+                      <label class="containerRadio">
+                        <input type="radio"  name="SubLink_Competency_Performance" value="0" id=""
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competency_Performance == 0){ echo "checked"; } ?> checked/> Simulated Performace
+                        <span class="checkmarkRadio"></span>
+                      </label>
+                    </div>
+
+                    <div class="col-md-2">
+                      <label class="containerRadio">
+                        <input type="radio"  name="SubLink_Competency_Performance" value="1" id=""
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competency_Performance == 1){ echo "checked"; } ?>> Competency
+                        <span class="checkmarkRadio"></span>
+                      </label>
+                    </div>
+                    <!-- end of competency and simulated performance radio button -->
                   </div>
                   <br>
                   <div class="row" >
