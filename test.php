@@ -1,6 +1,6 @@
 <?php
 
-phpinfo();
+phpinfo(); echo "<pre>"; print_r(openssl_get_cert_locations()); exit();
 include_once 'config/settings.php'; 
 include_once 'config/functions.php'; 
 // using domPdf library

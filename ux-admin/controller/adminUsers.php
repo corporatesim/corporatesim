@@ -132,6 +132,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 // ------------------------  edit type inside inner linkage ---------------------------
 	$type                = $_POST['type_edit']!=''?$_POST['type_edit']:'no';
 	$edit_type           = array('edit_type' => $type);
+// ------------------------  edit Simulated Performance/Competency inside inner linkage ------
+	$competencyPerformance 			= $_POST['competencyPerformance_edit']!=''?$_POST['competencyPerformance_edit']:'no';
+	$edit_competencyPerformance = array('edit_competencyPerformance' => $competencyPerformance);
 // ------------------------  edit order inside inner linkage -----------------------
 	$order               = $_POST['order_edit']!=''?$_POST['order_edit']:'no';
 	$edit_order          = array('edit_order' => $order);
@@ -145,7 +148,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 	$chart               = $_POST['chart_edit']!=''?$_POST['chart_edit']:'no';
 	$edit_chart          = array('edit_chart' => $chart);
 
-	$value               = $edit_area + $edit_compo + $edit_subcompo + $edit_viewingorder + $edit_labelC + $edit_labelOrder + $edit_bgColor + $edit_textbgColor + $edit_type + $edit_order + $edit_showhide + $edit_replace + $edit_chart;
+	$value               = $edit_area + $edit_compo + $edit_subcompo + $edit_viewingorder + $edit_labelC + $edit_labelOrder + $edit_bgColor + $edit_textbgColor + $edit_type + $edit_competencyPerformance + $edit_order + $edit_showhide + $edit_replace + $edit_chart;
 	$innerlinkagedata    = $value;
 	$edit_innerlinkage   = array('edit' => $innerlinkage_edit,'innerPermission' =>$innerlinkagedata);
 	//print_r($edit_innerlinkage);exit;
@@ -435,6 +438,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 	// ------------------------  edit type inside inner linkage ---------------------------
 	$type                = $_POST['type_edit']!=''?$_POST['type_edit']:'no';
 	$edit_type           = array('edit_type' => $type);
+	// ------------------------  edit type inside inner linkage ---------------------------
+	$competencyPerformance     = $_POST['competencyPerformance_edit']!=''?$_POST['competencyPerformance_edit']:'no';
+	$edit_competencyPerformance = array('edit_competencyPerformance' => $competencyPerformance);
 	// ------------------------  edit order inside inner linkage -----------------------
 	$order               = $_POST['order_edit']!=''?$_POST['order_edit']:'no';
 	$edit_order          = array('edit_order' => $order);
@@ -449,7 +455,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 	$edit_chart          = array('edit_chart' => $chart);
 
 
-	$value = $edit_area + $edit_compo + $edit_subcompo + $edit_labelC + $edit_viewingorder + $edit_labelOrder + $edit_bgColor + $edit_textbgColor + $edit_type + $edit_order + $edit_showhide + $edit_replace + $edit_chart;
+	$value = $edit_area + $edit_compo + $edit_subcompo + $edit_labelC + $edit_viewingorder + $edit_labelOrder + $edit_bgColor + $edit_textbgColor + $edit_type + $edit_competencyPerformance + $edit_order + $edit_showhide + $edit_replace + $edit_chart;
 
 	$innerlinkagedata = $value;
 	 //print_r($value);exit;

@@ -575,7 +575,7 @@
                  <br>
                  <div class="row col-md-12">
                   <!--  <div class="form-group">-->
-                    <label class="pull-left"><span class="alert-danger">*</span>Type - </label>
+                    <label class="col-md-2 pull-left"><span class="alert-danger">*</span>Type - </label>
                     <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
                       <div class="col-md-2">
                         <label class="containerRadio">
@@ -613,10 +613,30 @@
                     <?php } ?>
                     <!--  </div>-->
                     <!-- adding competency and simulated performance radio button -->
+                    <label class="col-md-2 pull-left"><span class="alert-danger">*</span>Result Type - </label>
+                    <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_competencyPerformance')){?>
+                      <div class="col-md-2">
+                        <label class="containerRadio">
+                          <input type="radio" name="SubLink_Competency_Performance" value="0" id=""
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competency_Performance == 0){ echo "checked"; } ?> checked/> Simulated Performance
+                          <span class="checkmarkRadio"></span>
+                        </label>
+                      </div>
+
+                      <div class="col-md-2">
+                        <label class="containerRadio">
+                          <input type="radio" name="SubLink_Competency_Performance" value="1" id=""
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competency_Performance == 1){ echo "checked"; } ?> > Competence
+                          <span class="checkmarkRadio"></span>
+                        </label>
+                      </div>
+
+                    <?php } else {?>
+
                     <div class="col-md-2">
                       <label class="containerRadio">
                         <input type="radio"  name="SubLink_Competency_Performance" value="0" id=""
-                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competency_Performance == 0){ echo "checked"; } ?> checked/> Simulated Performace
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competency_Performance == 0){ echo "checked"; } ?> checked disabled=""> Simulated Performace
                         <span class="checkmarkRadio"></span>
                       </label>
                     </div>
@@ -624,10 +644,11 @@
                     <div class="col-md-2">
                       <label class="containerRadio">
                         <input type="radio"  name="SubLink_Competency_Performance" value="1" id=""
-                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competency_Performance == 1){ echo "checked"; } ?>> Competency
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competency_Performance == 1){ echo "checked"; } ?> disabled=""> Competency
                         <span class="checkmarkRadio"></span>
                       </label>
                     </div>
+                    <?php } ?>
                     <!-- end of competency and simulated performance radio button -->
                   </div>
                   <br>
@@ -1175,6 +1196,7 @@
               <th>Component / Alias</th>
               <th>Subcomponent / Alias</th>
               <th>Type</th>
+              <th>Result Type</th>
               <th>Show/Hide</th>
               <th>Mode</th>
               <th>Order</th>
@@ -1193,10 +1215,11 @@
                 <td><?php echo $row->Component.' / '.$row->Comp_NameAlias; ?></td>
                 <td><?php if($row->SubLink_SubCompID > 0) { echo $row->SubComponent.' / '.$row->SubComp_NameAlias; } else  echo "--"; ?></td>
                 <td><?php if($row->SubLink_Type ==0 ) { echo "Input"; } else {echo "Output";} ?></td>
+                <td><?php if($row->SubLink_Competency_Performance ==0 ) { echo "Simulated Performance"; } else {echo "Competence";} ?></td>
                 <td><?php if($row->SubLink_ShowHide ==0 ) { echo "Show"; } else {echo "Hide";} ?></td>
                 <td><?php echo $row->SubLink_InputMode;?></td>
                 <td><?php echo $row->SubLink_Order;?></td>
-                <td><input type="color" value="<?php echo $row->SubLink_BackgroundColor;?>" disabled "><code> 
+                <td><input type="color" value="<?php echo $row->SubLink_BackgroundColor;?>" disabled><code> 
                   <?php
                   if($row->SubLink_BackgroundColor)
                   {

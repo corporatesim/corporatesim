@@ -310,7 +310,7 @@ public function downloadGameReport($userid=NULL, $game_id=NULL, $returnUrl=NULL)
       else
       {
         // $printData .= $visibleComponentsRow->SubLink_ChartID;
-        $printData .= '<img src="'.base_url('../').'chart/'.$visibleComponentsRow->SubLink_ChartType.'.php?gameid='.$game_id.'&userid='.$userid.'&ChartID='.$visibleComponentsRow->SubLink_ChartID.'">';
+        $printData .= '<img src="'.base_url().'../chart/'.$visibleComponentsRow->SubLink_ChartType.'.php?gameid='.$game_id.'&userid='.$userid.'&ChartID='.$visibleComponentsRow->SubLink_ChartID.'">';
       }
 
       $printData .= '</div>';
@@ -328,7 +328,7 @@ public function downloadGameReport($userid=NULL, $game_id=NULL, $returnUrl=NULL)
           if($personalizeOutcomeResultRow->Outcome_FileType !=3 && ($visibleComponentsRow->input_current>=$personalizeOutcomeResultRow->Outcome_MinVal AND $visibleComponentsRow->input_current<=$personalizeOutcomeResultRow->Outcome_MaxVal))
           {
             $printData .= '<div style="width:50%; display:inline-block;" class="componentDivInputFieldPo">';
-            $printData .= '<img src="'.base_url('../').'ux-admin/upload/Badges/'.str_replace(' ', '%20', $personalizeOutcomeResultRow->Outcome_FileName).'"><br><br><br><div>'.$personalizeOutcomeResultRow->Outcome_Description.'</div>';
+            $printData .= '<img src="../ux-admin/upload/Badges/'.str_replace(' ', '%20', $personalizeOutcomeResultRow->Outcome_FileName).'"><br><br><br><div>'.$personalizeOutcomeResultRow->Outcome_Description.'</div>';
             $foundInRangeFlag = FALSE;
             $printData .= '</div>';
             break;
@@ -372,7 +372,7 @@ public function downloadGameReport($userid=NULL, $game_id=NULL, $returnUrl=NULL)
           else
           {
             // $printData .= $visibleSubComponentsRow->SubLink_ChartID;
-            $printData .= '<img src="'.base_url('../').'chart/'.$visibleSubComponentsRow->SubLink_ChartType.'.php?gameid='.$game_id.'&userid='.$userid.'&ChartID='.$visibleSubComponentsRow->SubLink_ChartID.'">';
+            $printData .= '<img src="'.base_url().'../chart/'.$visibleSubComponentsRow->SubLink_ChartType.'.php?gameid='.$game_id.'&userid='.$userid.'&ChartID='.$visibleSubComponentsRow->SubLink_ChartID.'">';
           }
 
           $printData .= '</div>';

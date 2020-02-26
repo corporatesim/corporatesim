@@ -113,7 +113,7 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 					{
 						// adding the inputField/PersonalizeOutcome div GAME_PERSONALIZE_OUTCOME
 						$printData .= '<div style="width:50%; display:inline-block;" class="componentDivInputFieldPo">';
-						$printData .= '<img src="'.doc_root.'ux-admin/upload/Badges/'.str_replace(' ', '%20', $personalizeOutcomeResultRow->Outcome_FileName).'"><br><br><br><div>'.$personalizeOutcomeResultRow->Outcome_Description.'</div>';
+						$printData .= '<img src="'.doc_root.'/ux-admin/upload/Badges/'.str_replace(' ', '%20', $personalizeOutcomeResultRow->Outcome_FileName).'"><br><br><br><div>'.$personalizeOutcomeResultRow->Outcome_Description.'</div>';
 						$foundInRangeFlag = FALSE;
 						$printData .= '</div>';
 						break;
@@ -214,14 +214,14 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 				$this->setPageMark();
 
         // Enterprise Logo
-				if(Enterprise_Logo != 'noVal')
-				{
-					// if there is enterprise logo then only show ent logo
-					$image_file = K_PATH_IMAGES.'../../../enterprise/common/Logo/'.Enterprise_Logo;
-					$ext        = explode('.',$gameData->Enterprise_Logo);
-					$extension  = end($ext);
-					$this->Image($image_file, 10, 10, 20, '',$extension, '', 'T', false, 300, '', false, false, 0, false, false, false);
-				}
+				// if(Enterprise_Logo != 'noVal')
+				// {
+				// 	// if there is enterprise logo then only show ent logo
+				// 	$image_file = K_PATH_IMAGES.'../../../enterprise/common/Logo/'.Enterprise_Logo;
+				// 	$ext        = explode('.',$gameData->Enterprise_Logo);
+				// 	$extension  = end($ext);
+				// 	$this->Image($image_file, 10, 10, 20, '',$extension, '', 'T', false, 300, '', false, false, 0, false, false, false);
+				// }
 				// if(Enterprise_Name != 'noVal')
 				// {
 				// 	// if there is enterprise name then only show the name of enterprise
@@ -234,13 +234,13 @@ if(isset($_POST['download']) && $_POST['download'] == 'download')
 				// $this->Cell(0, 15, ' Humanlinks ', 0, false, 'B', 0, 'https://humanlinks.in/', 0, false, 'T', 'B');
 
         // Sub-Enterprise Logo
-				if(SubEnterprise_Logo != 'noVal')
-				{
-					$image_file = K_PATH_IMAGES.'../../../enterprise/common/Logo/'.SubEnterprise_Logo;
-					$ext        = explode('.',$gameData->SubEnterprise_Logo);
-					$extension  = end($ext);
-					$this->Image($image_file, 150, 10, 20, '', $extension, '', 'T', false, 300, '', false, false, 0, false, false, false);
-				}
+				// if(SubEnterprise_Logo != 'noVal')
+				// {
+				// 	$image_file = K_PATH_IMAGES.'../../../enterprise/common/Logo/'.SubEnterprise_Logo;
+				// 	$ext        = explode('.',$gameData->SubEnterprise_Logo);
+				// 	$extension  = end($ext);
+				// 	$this->Image($image_file, 150, 10, 20, '', $extension, '', 'T', false, 300, '', false, false, 0, false, false, false);
+				// }
 				// if(SubEnterprise_Name != 'noVal')
 				// {
 				// 	// if there is subEnterprise name then only show the name of enterprise
