@@ -7,7 +7,7 @@ include_once 'includes/header.php';
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Chango">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Chango">
 <!-- adding css for component branching componentBranching branchingOverlay -->
 <style>
   .addOverlay{

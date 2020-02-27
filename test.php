@@ -1,5 +1,6 @@
 <?php
 
+echo ini_get('allow_url_fopen');
 phpinfo(); echo "<pre>"; print_r(openssl_get_cert_locations()); exit();
 include_once 'config/settings.php'; 
 include_once 'config/functions.php'; 
