@@ -27,6 +27,12 @@ class SelectSimulation extends My_Controller {
 		$this->botUserData = $this->session->userdata('botUserData');
 	}
 
+	public function phpinfo()
+	{
+		phpinfo();
+		echo "<pre>"; print_r(ini_get_all());
+	}
+
 	public function index()
 	{
 		// check if user has bot-enabled game or not if yes then show, else redirect to registered domain 
