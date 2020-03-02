@@ -388,7 +388,7 @@ else
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 {	
-	// echo "<pre>"; print_r($_POST); exit();
+	 //echo "<pre>"; print_r($_POST); exit();
 	// header('X-XSS-Protection:0');	echo "<pre>"; print_r($_POST); die('Update Linkage'); 
 
 	// if multiple choice then input value should be the default value instead of 0

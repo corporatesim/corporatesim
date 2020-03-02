@@ -132,7 +132,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 // ------------------------  edit type inside inner linkage ---------------------------
 	$type                = $_POST['type_edit']!=''?$_POST['type_edit']:'no';
 	$edit_type           = array('edit_type' => $type);
-// ------------------------  edit Simulated Performance/Competency inside inner linkage ------
+// ------------------------  edit Result Type inside inner linkage ------
 	$competencyPerformance 			= $_POST['competencyPerformance_edit']!=''?$_POST['competencyPerformance_edit']:'no';
 	$edit_competencyPerformance = array('edit_competencyPerformance' => $competencyPerformance);
 // ------------------------  edit order inside inner linkage -----------------------
@@ -438,7 +438,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update'){
 	// ------------------------  edit type inside inner linkage ---------------------------
 	$type                = $_POST['type_edit']!=''?$_POST['type_edit']:'no';
 	$edit_type           = array('edit_type' => $type);
-	// ------------------------  edit type inside inner linkage ---------------------------
+	// ------------------------  edit Result Type inside inner linkage ---------------------------
 	$competencyPerformance     = $_POST['competencyPerformance_edit']!=''?$_POST['competencyPerformance_edit']:'no';
 	$edit_competencyPerformance = array('edit_competencyPerformance' => $competencyPerformance);
 	// ------------------------  edit order inside inner linkage -----------------------

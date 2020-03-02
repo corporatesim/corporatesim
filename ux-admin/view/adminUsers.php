@@ -782,7 +782,7 @@
 
 													<!-- Adding Checkbox for Simulated Performance and Competency-->
 													<tr id="showhideCompetencyPerformance" class="collapse">
-														<td>Select Simulated Performance / Competence</td>
+														<td>Select Result Type</td>
 
 														<td colspan="4" class="enableDisableSub">
 															<div class="col-md-2" style="margin-left:50%;">
