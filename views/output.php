@@ -778,6 +778,33 @@ include_once 'includes/header.php';
                       $length           = "col-md-4";
                       $cklength         = '';
                       break;
+
+                      // InputFields 20%
+                      case 29:
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "hidden";
+                      $InputFields      = "";
+                      $length           = "col-md-2";
+                      $cklength         = '';
+                      break;
+
+                      // Details/Chart(CkEditor) 20%
+                      case 30:
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "";
+                      $InputFields      = "hidden";
+                      $length           = "col-md-2";
+                      $cklength         = '';
+                      break;
+
+                      // Details/Chart(CkEditor) 10%
+                      case 31:
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "";
+                      $InputFields      = "hidden";
+                      $length           = "col-md-1";
+                      $cklength         = '';
+                      break;
                     }
 
                     if($length  ==  'col-sm-6')

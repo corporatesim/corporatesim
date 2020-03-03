@@ -462,15 +462,31 @@
                           <option value="19" <?php  echo ($SubLink_ViewingOrder == 19?'selected':''); ?>> Name - Details/Chart(CkEditor) - Half Length</option> 
 
                           <!-- for subcomponent only -->
-                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="20" <?php  echo ($SubLink_ViewingOrder == 20?'selected':''); ?>> Details/Chart(CkEditor) 1/4 length (for SubComponent only)</option> 
+                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="20" <?php  echo ($SubLink_ViewingOrder == 20?'selected':''); ?>> Details/Chart(CkEditor) 1/4 length (for SubComponent only)</option>
+
                           <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="21" <?php  echo ($SubLink_ViewingOrder == 21?'selected':''); ?>> InputField 1/4 length (for SubComponent only)</option>
+
                           <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="22" <?php  echo ($SubLink_ViewingOrder == 22?'selected':''); ?>> Details/Chart(CkEditor) 75% (for SubComponent only)</option>
+
                           <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="23" <?php  echo ($SubLink_ViewingOrder == 23?'selected':''); ?>>  Input Fields - Details/Chart(CkEditor) 75% (for SubComponent only)</option>
+
                           <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="24" <?php  echo ($SubLink_ViewingOrder == 24?'selected':''); ?>>  Details/Chart(CkEditor) - Input Fields 75% (for SubComponent only)</option>
+
                           <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="25" <?php  echo ($SubLink_ViewingOrder == 25?'selected':''); ?>> Details/Chart(CkEditor) 33% (for SubComponent only)</option>
+
                           <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="26" <?php  echo ($SubLink_ViewingOrder == 26?'selected':''); ?>> Input Fields - Details/Chart(CkEditor) 33% (for SubComponent only)</option>
+
                           <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="27" <?php  echo ($SubLink_ViewingOrder == 27?'selected':''); ?>> Details/Chart(CkEditor) - Input Fields 33% (for SubComponent only)</option>
+
                           <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="28" <?php  echo ($SubLink_ViewingOrder == 28?'selected':''); ?>> Input Fields 33% (for SubComponent only)</option>
+
+                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="29" <?php  echo ($SubLink_ViewingOrder == 29?'selected':''); ?>> Input Fields 20% (for SubComponent only)</option>
+
+                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="30" <?php  echo ($SubLink_ViewingOrder == 30?'selected':''); ?>> Details/Chart(CkEditor) 20% (for SubComponent only)</option>
+
+                          <!-- not for now, discuss and add later or remove, as 20% will be 10% technically -->
+                          <option <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID==0){ echo "disabled"; } ?> class="onlyForSubcomponent" value="31" <?php  echo ($SubLink_ViewingOrder == 31?'selected':''); ?>> Details/Chart(CkEditor) 10% (for SubComponent only)</option>
+
                         </select>
                       </div>
                       <br><br>
@@ -1279,38 +1295,34 @@
                 <td><?php if($row->SubLink_SubCompID > 0) { echo $row->SubComponent.' / '.$row->SubComp_NameAlias; } else  echo "--"; ?></td>
                 <!-- <td><?php// if($row->SubLink_Type ==0 ) { echo "Input"; } else {echo "Output";} ?></td> -->
 
-                <td><?php 
-                switch ($row->SubLink_Type) {
+                <td><?php switch ($row->SubLink_Type) {
                   case 0:
-                    echo "Input";
-                    break;
+                  echo "Input";
+                  break;
                   case 1:
-                    echo "Output";
-                    break;
+                  echo "Output";
+                  break;
                   default:
-                    echo "--";
-                }
-                ?></td>
+                  echo "--";
+                } ?></td>
 
-                <td><?php 
-                switch ($row->SubLink_Competency_Performance) {
+                <td><?php switch ($row->SubLink_Competency_Performance) {
                   case 0:
-                    echo "None";
-                    break;
+                  echo "None";
+                  break;
                   case 1:
                   case 4:
-                    echo "Competence";
-                    break;
+                  echo "Competence";
+                  break;
                   case 2:
-                    echo "Application";
-                    break;
+                  echo "Application";
+                  break;
                   case 3:
-                    echo "Simulated Performance";
-                    break;
+                  echo "Simulated Performance";
+                  break;
                   default:
-                    echo "--";
-                }
-                ?></td>
+                  echo "--";
+                } ?></td>
 
                 <td><?php if($row->SubLink_ShowHide ==0 ) { echo "Show"; } else {echo "Hide";} ?></td>
                 <td><?php echo $row->SubLink_InputMode;?></td>
@@ -1331,7 +1343,7 @@
               </td>
               <!-- showing viewing order for the particular comp/subcomp linkage -->
               <td><?php
-              $viewingOrder = array ('mksahu','Name - Details/Chart(CkEditor) - Input Fields', 'Name - Input Fields - Details/Chart(CkEditor)', 'Details/Chart(CkEditor) - Input Fields - Name', 'Details/Chart(CkEditor) - Name - Input Fields', 'Input Fields - Details/Chart(CkEditor) - Name', 'Input Fields - Name - Details/Chart(CkEditor)', 'Input Fields - Name - Full Length', 'Input Fields - Details/Chart(CkEditor)', 'Name - Details/Chart(CkEditor)', 'Name - Input Fields - Full Length', 'Details/Chart(CkEditor) - Name', 'Details/Chart(CkEditor) - Input Fields', 'Name - Input Fields - Half Length', 'Input Fields - Name - Half Length', 'Details/Chart(CkEditor) - Full Length', 'Details/Chart(CkEditor) - Half Length', 'Details/Chart(CkEditor) - Input Fields - Half ', 'Input Fields - Details/Chart(CkEditor) - Half ', 'Name - Details/Chart(CkEditor) - Half Length', 'Details/Chart(CkEditor) 1/4 length', 'InputField 1/4 length', 'Details/Chart(CkEditor) 75%  ', 'Input Fields - Details/Chart(CkEditor) 75%', 'Details/Chart(CkEditor) - Input Fields 75%', 'Details/Chart(CkEditor) 33%', 'Input Fields - Details/Chart(CkEditor) 33%', 'Details/Chart(CkEditor) - Input Fields 33%', 'Input Fields 33%');
+              $viewingOrder = array ('mksahu','Name - Details/Chart(CkEditor) - Input Fields', 'Name - Input Fields - Details/Chart(CkEditor)', 'Details/Chart(CkEditor) - Input Fields - Name', 'Details/Chart(CkEditor) - Name - Input Fields', 'Input Fields - Details/Chart(CkEditor) - Name', 'Input Fields - Name - Details/Chart(CkEditor)', 'Input Fields - Name - Full Length', 'Input Fields - Details/Chart(CkEditor)', 'Name - Details/Chart(CkEditor)', 'Name - Input Fields - Full Length', 'Details/Chart(CkEditor) - Name', 'Details/Chart(CkEditor) - Input Fields', 'Name - Input Fields - Half Length', 'Input Fields - Name - Half Length', 'Details/Chart(CkEditor) - Full Length', 'Details/Chart(CkEditor) - Half Length', 'Details/Chart(CkEditor) - Input Fields - Half ', 'Input Fields - Details/Chart(CkEditor) - Half ', 'Name - Details/Chart(CkEditor) - Half Length', 'Details/Chart(CkEditor) 1/4 length', 'InputField 1/4 length', 'Details/Chart(CkEditor) 75%  ', 'Input Fields - Details/Chart(CkEditor) 75%', 'Details/Chart(CkEditor) - Input Fields 75%', 'Details/Chart(CkEditor) 33%', 'Input Fields - Details/Chart(CkEditor) 33%', 'Details/Chart(CkEditor) - Input Fields 33%', 'Input Fields 33%', 'Input Fields 20%', 'Details/Chart(CkEditor) 20%');
               echo '<code>'.$viewingOrder[$row->SubLink_ViewingOrder].'</code>';
               ?></td>
 
@@ -1393,20 +1405,20 @@
             </div>
           </div>
 
-<script>
+          <script>
   //for Result Type Radio Button
   var subLinkTypeRadio = "<?php if(!empty($linkdetails)){ echo $linkdetails->SubLink_Type; } ?>";
   subLinkTypeRadio = Number(subLinkTypeRadio);
 
   switch (subLinkTypeRadio) {
     case 1:
-      $(".inputShowHide").addClass("hidden");
-      $(".outputShowHide").removeClass("hidden");
-      break;
+    $(".inputShowHide").addClass("hidden");
+    $(".outputShowHide").removeClass("hidden");
+    break;
     //case 0:
     default:
-      $(".outputShowHide").addClass("hidden");
-      $(".inputShowHide").removeClass("hidden");
+    $(".outputShowHide").addClass("hidden");
+    $(".inputShowHide").removeClass("hidden");
   }
 
   $('#typeInput').click(function(){
@@ -1422,30 +1434,30 @@
   });
   //end of Result Type Radio Button
 
- $('#siteuser_btn').click( function()
- {
-  if($('input[name=Mode]:checked').val() == 'comp')
+  $('#siteuser_btn').click( function()
   {
-    var key = 'comp_'+$('#comp_id').val();
-  }
-  else
-  {
-    var key = 'subc_'+$('#subcomp_id').val();
-  }
-  $('#input_key').val(($('#area_id option:selected').text()).trim()+'_'+key);
-  $("#siteuser_sbmit").trigger( "click" );
-});
+    if($('input[name=Mode]:checked').val() == 'comp')
+    {
+      var key = 'comp_'+$('#comp_id').val();
+    }
+    else
+    {
+      var key = 'subc_'+$('#subcomp_id').val();
+    }
+    $('#input_key').val(($('#area_id option:selected').text()).trim()+'_'+key);
+    $("#siteuser_sbmit").trigger( "click" );
+  });
 
- $('#siteuser_btn_update').click( function()
- {
-  if($('input[name=Mode]:checked').val() == 'comp')
+  $('#siteuser_btn_update').click( function()
   {
-    var key = 'comp_'+$('#comp_id').val();
-  }
-  else
-  {
-    var key = 'subc_'+$('#subcomp_id').val();
-  }
+    if($('input[name=Mode]:checked').val() == 'comp')
+    {
+      var key = 'comp_'+$('#comp_id').val();
+    }
+    else
+    {
+      var key = 'subc_'+$('#subcomp_id').val();
+    }
     // alert($('#area_id option:selected').text().trim()+'_'+key);
     $('#input_key').val(($('#area_id option:selected').text()).trim()+'_'+key);
     $( "#siteuser_update" ).trigger( "click" );

@@ -1124,6 +1124,39 @@ include_once 'includes/header.php';
                       $sImageMaxWidth   = "90%";
                       $addCenterPadding = "addCenterPadding";
                       break;
+
+                      // InputFields 20%
+                      case 29:
+                      $SubCkEditor      = 'col-md-12';
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "hidden";
+                      $InputFields      = "";
+                      $length           = "col-md-2";
+                      $sImageMaxWidth   = "90%";
+                      $addCenterPadding = "addCenterPadding";
+                      break;
+
+                      // Details/Chart(CkEditor) 20%
+                      case 30:
+                      $SubCkEditor      = 'col-md-12';
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "";
+                      $InputFields      = "hidden";
+                      $length           = "col-md-2";
+                      $sImageMaxWidth   = "90%";
+                      $addCenterPadding = "addCenterPadding";
+                      break;
+
+                      // Details/Chart(CkEditor) 10%
+                      case 31:
+                      $SubCkEditor      = 'col-md-12';
+                      $SubcomponentName = "hidden";
+                      $DetailsChart     = "";
+                      $InputFields      = "hidden";
+                      $length           = "col-md-1";
+                      $sImageMaxWidth   = "90%";
+                      $addCenterPadding = "addCenterPadding";
+                      break;
                     }
 
                     // if component div is half length then make subcomponent div col-md-12
@@ -2264,6 +2297,7 @@ $('.range').each(function(i,e){
     $(this).attr('src',new_src);
   });
 });
+
 function create_json_carry_field_data()
 {
   // create carry forward json to update it without refresh
@@ -2275,6 +2309,7 @@ function create_json_carry_field_data()
 });
   // console.log(carry_field_data);
 }
+
 function create_json_input_field_keys(key)
 {
   // comp,expcomp,fcomp and subc,expsubc,fsubc
@@ -2293,6 +2328,7 @@ function create_json_input_field_keys(key)
   });
   // console.log(input_field_keys);
 }
+
 function create_json_expcomp_onload()
 {
   $('.json_expcomp').each(function(index, el) 
