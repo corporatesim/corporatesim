@@ -22,6 +22,8 @@ class Login extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		error_reporting(0);
+		ini_set('display_errors', 0);
 		if($this->session->userdata('botUserData') != NULL)
 		{
 			redirect('SelectSimulation');
