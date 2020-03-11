@@ -19,13 +19,25 @@ class Common_Model extends CI_Model {
     return $result->num_rows();
   }
 
-//fetch record of login Enterprise
-  public function fetchRecords($tableName=NULL,$where=NULL,$columnName=NULL,$order=NULL,$limit=NULL,$printQuery=NULL)
+  public function batchInsert($tableName=NULL, $insertArray=NULL)
+  {
+    // to insert multiple data at once
+    // print_r($this->db->last_query()); prd($insertArray);
+    $result = $this->db->insert_batch($tableName, $insertArray);
+    return $result;
+  }
+
+  //fetch record of login Enterprise
+  public function fetchRecords($tableName=NULL,$where=NULL,$columnName=NULL,$order=NULL,$limit=NULL, $groupBy=NULL, $printQuery=NULL)
   {
     // die('in modal');
     if($columnName)
     {
       $this->db->select($columnName);
+    }
+    if($groupBy)
+    {
+      $this->db->group_by($groupBy);
     }
     if($order)
     {
@@ -153,10 +165,30 @@ class Common_Model extends CI_Model {
   //insert users of Enterprise/SubEnterprise
   public  function insert($tableName=NULL,$data=NULL,$check=NULL)
   {
-    $this->db->insert($tableName,$data);
-    // print_r($this->db->last_query());exit();
-    $userId = $this->db->insert_id();
-    return $userId;
+    if(!empty($check))
+    {
+      $this->db->where($check);
+      $userData = $this->db->get($tableName)->result();
+      if(count($userData) > 0)
+      {
+        // duplicate record
+        return 'duplicate';
+      }
+      else
+      {
+        $this->db->insert($tableName,$data);
+        // print_r($this->db->last_query());exit();
+        $userId = $this->db->insert_id();
+        return $userId;
+      }
+    }
+    else
+    {
+      $this->db->insert($tableName,$data);
+      // print_r($this->db->last_query());exit();
+      $userId = $this->db->insert_id();
+      return $userId;
+    }
   }
 
 //edit password

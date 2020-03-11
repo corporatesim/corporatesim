@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Ajax extends CI_Controller {
+class Ajax extends MY_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -26,12 +26,60 @@ class Ajax extends CI_Controller {
     if($this->session->userdata('loginData') == NULL)
     {
      $this->session->set_flashdata('er_msg', 'Session Expired. Please Login');
-     redirect('Login/login');
+     // redirect('Login/login');
    }
  }
 
- public function fetchAssignedGames($gameFor=NULL,$id=NULL)
+ public function checkLoginStatus()
  {
+  die($this->loginDataLocal['User_Id']);
+  if($this->loginDataLocal == NULL)
+  {
+    die('redirect');
+  }
+  else
+  {
+    die($this->loginDataLocal['User_Id']);
+  }
+}
+
+public function deleteRecords($tableName=NULL, $dataCol=NULL)
+{
+  $tableName = 'GAME_'.strtoupper($tableName);
+  // delete records from table
+  $data = array(
+    $dataCol => 1,
+  );
+  $where = $this->input->post();
+  // print_r($data); print_r($where);
+  $retData = $this->Common_Model->softDelete($tableName, $data, $where);
+  if($retData)
+  {
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Competency Deleted Successfully.']));
+  }
+  else
+  {
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Connection Error. Please Try Later.']));
+  }
+}
+
+public function fetchRecords($tableName=NULL,$orderBy=NULL)
+{
+  // fetching records from table with where condition // print_r($this->input->post());
+  $where     = $this->input->post();
+  $fetchData = $this->Common_Model->fetchRecords($tableName, $where, '', $orderBy, '', '');
+  if(count($fetchData)<1)
+  {
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No Record Found.']));
+  }
+  else
+  {
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Competency Data Loaded Successfully.', "data" => $fetchData]));
+  }
+}
+
+public function fetchAssignedGames($gameFor=NULL,$id=NULL)
+{
   if($gameFor == 'enterpriseUsers')
   {
     $gameQuery = "SELECT gg.Game_ID, gg.Game_Name FROM GAME_ENTERPRISE_GAME ge LEFT JOIN GAME_GAME gg ON gg.Game_ID=ge.EG_GameID WHERE gg.Game_Delete=0 AND ge.EG_EnterpriseID=".$id." ORDER BY gg.Game_Name";
@@ -103,21 +151,21 @@ public function getGroupData()
     case 'superadminUsers':
     if(empty($Group_Id))
     {
-      die(json_encode(["status" => "201", 'title' => $title, 'icon' => 'error', 'message' => 'No group/collaboration selected']));
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => $title, 'icon' => 'error', 'message' => 'No group/collaboration selected']));
     }
     break;
 
     case 'enterpriseUsers':
     if(empty($Group_Id) || empty($Group_ParentId))
     {
-      die(json_encode(["status" => "201", 'title' => $title, 'icon' => 'error', 'message' => 'No group/collaboration or enterprise selected']));
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => $title, 'icon' => 'error', 'message' => 'No group/collaboration or enterprise selected']));
     }
     break;
 
     case 'subEnterpriseUsers':
     if(empty($Group_Id) || empty($Group_ParentId) || empty($Group_SubParentId))
     {
-      die(json_encode(["status" => "201", 'title' => $title, 'icon' => 'error', 'message' => 'No group/collaboration, enterprise or subEnterprise selected']));
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => $title, 'icon' => 'error', 'message' => 'No group/collaboration, enterprise or subEnterprise selected']));
     }
     break;
   }
@@ -162,7 +210,7 @@ public function getGroupData()
           );
         }
       }
-      die(json_encode(["status" => "200", 'title' => $title, 'icon' => $icon, 'message' => $message, 'data' => $returnData]));
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => $title, 'icon' => $icon, 'message' => $message, 'data' => $returnData]));
     }
     else
     {
@@ -172,13 +220,13 @@ public function getGroupData()
       // }
       // print_r($users);
       // print_r($returnData);
-      die(json_encode(["status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'Collaboration output not set for selected game.']));
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'Collaboration output not set for selected game.']));
     }
 
   }
   else
   {
-    die(json_encode(["status" => "201", 'title' => $title, 'icon' => 'error', 'message' => 'Something went wrong. Please try later.']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => $title, 'icon' => 'error', 'message' => 'Something went wrong. Please try later.']));
   }
 
 }
@@ -187,7 +235,7 @@ public function getCollaborationGames($Map_GroupId=NULL)
 {
   if(empty($Map_GroupId))
   {
-    die(json_encode(["status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'Please select collaboration.']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'Please select collaboration.']));
   }
   else
   {
@@ -197,11 +245,11 @@ public function getCollaborationGames($Map_GroupId=NULL)
 
     if(count($collaborationGames)>0)
     {
-      die(json_encode(["status" => "200", 'title' => 'success', 'icon' => 'success', 'message' => 'Fetched Associated Games.', 'gameData' => $collaborationGames]));
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => 'success', 'icon' => 'success', 'message' => 'Fetched Associated Games.', 'gameData' => $collaborationGames]));
     }
     else
     {
-      die(json_encode(["status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'This collaboration is not associated with any game.']));
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'This collaboration is not associated with any game.']));
     }
   }
 }
@@ -238,7 +286,7 @@ public function showPerformanceChart($userid=NULL, $gameid=NULL)
   }
   else
   {
-    die(json_encode(["status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'User has either not completed the game or not played more than once.']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'User has either not completed the game or not played more than once.']));
   }
 }
 
@@ -284,7 +332,7 @@ public function downloadGameReport($userid=NULL, $game_id=NULL, $returnUrl=NULL)
     // if nothing to visible then redirect to result page, showing the alert message
     if($printPdfFlag)
     {
-      // die(json_encode(["status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'This game output not available/visible. Please contact admin.']));
+      // die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'This game output not available/visible. Please contact admin.']));
       $this->session->set_flashdata('er_msg', 'This game output not available/visible. Please contact admin.');
       redirect(base_url('OnlineReport/viewReport//'.$returnUrl));
     }
@@ -460,7 +508,7 @@ public function downloadGameReport($userid=NULL, $game_id=NULL, $returnUrl=NULL)
   }
   else
   {
-    // die(json_encode(["status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'This game output not available/visible. Please contact admin.']));
+    // die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'This game output not available/visible. Please contact admin.']));
     $this->session->set_flashdata('er_msg', 'This game output not available/visible. Please contact admin.');
     redirect(base_url('OnlineReport/viewReport//'.$returnUrl));
   }
@@ -477,7 +525,7 @@ public function getCompletedGames($userid=NULL)
   if(count($completedGames) < 1)
   {
     // no game allocated or complted
-    die(json_encode(["status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'Selected user has not completed any game till now.']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'Selected user has not completed any game till now.']));
   }
   else
   {
@@ -487,7 +535,7 @@ public function getCompletedGames($userid=NULL)
       $data .= '<div class="custom-control custom-checkbox col-md-12"><input required type="checkbox" class="custom-control-input" name="completedGameLinkId[]" id="'.$completedGamesRow->Link_ID.'" value="'.$completedGamesRow->Link_ID.'"><label class="custom-control-label" for="'.$completedGamesRow->Link_ID.'">'.$completedGamesRow->Game_Name.'</label></div>';
     }
     $data .= "</div><br><button class='btn btn-success' onclick='getCompleteReport(this,event);'>Download Report</button></form>";
-    die(json_encode(["status" => "200", 'title' => 'Please select games(completed) to download consolidated report', 'icon' => 'success', 'message' => $data]));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => 'Please select games(completed) to download consolidated report', 'icon' => 'success', 'message' => $data]));
   }
 }
 
@@ -498,7 +546,7 @@ public function downloadCompletedGamesReport($userid=NULL,$linkid=NULL)
   $completedGameLinkId = $this->input->post('completedGameLinkId');
   if(count($completedGameLinkId) < 1)
   {
-    die(json_encode(["status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'Please select at least one game to get report']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'Please select at least one game to get report']));
   }
   else
   {
@@ -514,7 +562,7 @@ public function downloadCompletedGamesReport($userid=NULL,$linkid=NULL)
     array_unshift($reportData, $rowArr);
 
     // print_r($reportData);
-    die(json_encode(["status" => "200", 'title' => 'Success', 'icon' => 'success', 'message' => 'Please wait while downloading report.', 'data' => $reportData]));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => 'Success', 'icon' => 'success', 'message' => 'Please wait while downloading report.', 'data' => $reportData]));
   }
 }
 
@@ -594,7 +642,7 @@ public function getAgentsForCollaboration()
   // if filterValue is blank or not defined then show error
   if(empty($filterValue))
   {
-    die(json_encode(["status" => "201", "message" => 'Please select user type to create collabration.', 'title' => 'show this title', 'icon' => 'error']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", "message" => 'Please select user type to create collabration.', 'title' => 'show this title', 'icon' => 'error']));
   }
   else
   {
@@ -631,7 +679,7 @@ public function getAgentsForCollaboration()
   $collabrationAgentsData = $this->Common_Model->executeQuery($collabrationAgentsSql);
   $collabrationTeamData   = $this->Common_Model->executeQuery($allAgentsSql);
 
-  die(json_encode(["status" => "200", "userdata" => $collabrationAgentsData, 'title' => 'show this title', 'icon' => 'success', 'mappedUser' => json_decode($collabrationAgentsData[0]->Map_UserId), 'message' => count($collabrationAgentsData).' Users Found.', 'teamUsersData' => $collabrationTeamData]));
+  die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", "userdata" => $collabrationAgentsData, 'title' => 'show this title', 'icon' => 'success', 'mappedUser' => json_decode($collabrationAgentsData[0]->Map_UserId), 'message' => count($collabrationAgentsData).' Users Found.', 'teamUsersData' => $collabrationTeamData]));
 }
 
 // to get the all data of users with team mapping
@@ -646,11 +694,11 @@ public function getAllUsersWithTeamMapping()
   // if filterValue is blank or not defined then show error
   if(empty($filterValue))
   {
-    die(json_encode(["status" => "201", "message" => 'Please select filter accordingly.', 'title' => 'show this title', 'icon' => 'error']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", "message" => 'Please select filter accordingly.', 'title' => 'show this title', 'icon' => 'error']));
   }
   elseif(empty($Team_UserId))
   {
-    die(json_encode(["status" => "201", "message" => 'Please select at least one team.', 'title' => 'show this title', 'icon' => 'error']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", "message" => 'Please select at least one team.', 'title' => 'show this title', 'icon' => 'error']));
   }
   else
   {
@@ -705,14 +753,14 @@ public function getAllUsersWithTeamMapping()
     $collabrationTeamData = $allUsersdata;
   }
 
-  die(json_encode(["status" => "200", 'title' => 'show this title', 'icon' => 'success', 'message' => 'show this message', 'teamUsersData' => $collabrationTeamData]));
+  die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => 'show this title', 'icon' => 'success', 'message' => 'show this message', 'teamUsersData' => $collabrationTeamData]));
 }
 
 public function getTeamMembers($Team_UserId=NULL)
 {
   if(empty($Team_UserId))
   {
-    die(json_encode(["status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'No Team Selected']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'No Team Selected']));
   }
   else
   {
@@ -720,14 +768,14 @@ public function getTeamMembers($Team_UserId=NULL)
     if(count($teamData) < 1)
     {
       // is there is no mapping
-      die(json_encode(["status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'No User Mapped.']));
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'No User Mapped.']));
     }
     else
     {
       $mappedUserIds = implode(',', json_decode($teamData[0]->Team_Users));
       // print_r($mappedUserIds); echo implode(',', $mappedUserIds);
       $userDetails = $this->Common_Model->fetchRecords('GAME_SITE_USERS',"User_id IN ($mappedUserIds)",'User_id, CONCAT(User_fname," ",User_lname) AS fullName, User_mobile, User_email, User_username');
-      die(json_encode(["status" => "200", 'title' => 'Associated Team Members', 'icon' => 'success', 'message' => 'Associated Team Members', 'teamUsersData' => $userDetails]));
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => 'Associated Team Members', 'icon' => 'success', 'message' => 'Associated Team Members', 'teamUsersData' => $userDetails]));
     }
   }
 }
@@ -793,7 +841,7 @@ public function addEditDeleteFetchCollaboration($modification=NULL,$Group_Id=NUL
 
 if(empty($modification))
 {
-  die(json_encode(["status" => "201", "message" => 'Send proper information.']));
+  die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", "message" => 'Send proper information.']));
 }
 else
 {
@@ -804,7 +852,7 @@ else
   // check if group name is empty or not
   if(empty($Group_Name) && ($modification != 'fetch' && $modification != 'delete'))
   {
-    die(json_encode(["status" => "201", 'title' => 'show this title', 'icon' => 'error', 'message' => 'Name/Info field can not be empty.']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'show this title', 'icon' => 'error', 'message' => 'Name/Info field can not be empty.']));
   }
 
   switch ($modification)
@@ -844,10 +892,10 @@ else
     $retData = $this->Common_Model->fetchRecords('GAME_COLLABORATION',$fetch_where,'','Group_Name','',0);
     // print_r($this->input->post());
     $message = 'Record Fetched Successfully.';
-    die(json_encode(["status" => "200", 'title' => 'show this title', 'icon' => 'success', 'groupData' => $retData]));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => 'show this title', 'icon' => 'success', 'groupData' => $retData]));
     break;
   }
-  die(json_encode(["status" => "200", 'title' => 'show this title', 'icon' => 'success', 'message' => $message]));
+  die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => 'show this title', 'icon' => 'success', 'message' => $message]));
 }
 
 }
@@ -861,12 +909,12 @@ public function teamUserMapping()
   $teamUsers = $this->input->post('teamUsers');
   if(empty($teamId))
   {
-    die(json_encode(["status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'Select Team.']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'Select Team.']));
   }
 
   elseif(empty($teamUsers))
   {
-    die(json_encode(["status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'Select at least one user.']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'Select at least one user.']));
   }
 
   else
@@ -882,7 +930,7 @@ public function teamUserMapping()
     );
     $teamMapping        = $this->Common_Model->insert('GAME_TEAM_MAPPING',$insertMapArray);
 
-    die(json_encode(["status" => "200", 'title' => 'show this title', 'icon' => 'success', 'message' => 'Users Mapped Successfully']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => 'show this title', 'icon' => 'success', 'message' => 'Users Mapped Successfully']));
   }
 
 }
@@ -1509,6 +1557,210 @@ public function getDomainName($Domain_Name=NULL)
   {
     echo 'success';
   }
+}
+
+public function addCompetency()
+{
+  // add competency // print_r($this->input->post());
+  $Compt_Name        = $this->input->post('Compt_Name');
+  $Compt_Description = $this->input->post('Compt_Description');
+  if(empty($Compt_Name))
+  {
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Competency name can not be left blank.']));
+  }
+  else
+  {
+    $insertArray = array(
+      'Compt_Name'        => $Compt_Name,
+      'Compt_Description' => $Compt_Description,
+      'Compt_CreatedBy'   => $this->loginDataLocal['User_Id'],
+    );
+    $checkExistingData = array(
+      'Compt_Name'   => $Compt_Name,
+      'Compt_Delete' => 0,
+    );
+    $retData = $this->Common_Model->insert('GAME_COMPETENCY',$insertArray,$checkExistingData);
+    if($retData == 'duplicate')
+    {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Competency Name Already Exist.']));
+    }
+    else
+    {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Competency Added Successfully.']));
+    }
+  }
+}
+
+public function editCompetency()
+{
+  // edit competency
+  // print_r($this->input->post());
+  $Compt_Id          = $this->input->post('Compt_Id');
+  $Compt_Name        = trim($this->input->post('Compt_Name'));
+  $Compt_Description = trim($this->input->post('Compt_Description'));
+  if(empty($Compt_Name))
+  {
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Competency name can not be left blank.']));
+  }
+  else
+  {
+    $updateArray = array(
+      'Compt_Name'        => $Compt_Name,
+      'Compt_Description' => $Compt_Description,
+      'Compt_UpdatedBy'   => $this->loginDataLocal['User_Id'],
+      'Compt_UpdatedOn'   => date('Y-m-d H:i:s'),
+    );
+
+    $check = array(
+      'Compt_Name' => $Compt_Name,
+    );
+    $retData = $this->Common_Model->update('GAME_COMPETENCY', $Compt_Id, $updateArray, $check, 'Compt_Id');
+    if($retData == 'duplicate')
+    {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Competency Name Already Exist.']));
+    }
+    else
+    {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Competency Data Updated Successfully.']));
+    }
+  }
+}
+
+public function compSubcompCheckboxes($selectedCompSubcomps=NULL)
+{
+  if(empty($selectedCompSubcomps))
+  {
+    $selectedCompSubcomps[] = '';
+  }
+  else
+  {
+    $selectedCompSubcomps = explode('_', $selectedCompSubcomps);
+  }
+  // prd($this->input->post());
+  $competencyId = $this->input->post('Cmap_ComptId');
+  $gamesId      = $this->input->post('Cmap_GameId'); // this is of array type
+  if(empty($gamesId))
+  {
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Select Game To View Data.']));
+  }
+  else
+  {
+    $returnTableHtml = '<div class="row col-md-12"><div class="col-md-6"><span class="dot-success"></span> Components &nbsp; <span class="dot-danger"></span> SubComponents</div> <div class="custom-control custom-checkbox pull-right col-md-6"> <input type="checkbox" class="custom-control-input" id="select_all"> <label class="custom-control-label" for="select_all">Select All</label> </div> </div> <table class="table table-bordered table-hover"><thead><tr> <th>Game (Scen Name)</th> <th>Competency</th> <th>Application</th> <th>Simulated Performance</th> </tr></thead><tbody>';
+    $gamesId = implode(',', $gamesId);
+    // prd($this->input->post());
+    // finding the last scenario of selected games
+    $scenSql = "SELECT gl.Link_GameID,gl.Link_ID,gl.Link_ScenarioID,MAX(gl.Link_Order), gg.Game_Name, gs.Scen_Name FROM GAME_LINKAGE gl LEFT JOIN GAME_GAME gg ON gg.Game_ID=gl.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID=gl.Link_ScenarioID WHERE gl.Link_GameID IN ($gamesId) GROUP BY gl.Link_GameID ORDER BY gl.Link_GameID ASC";
+    $lastScenario = $this->Common_Model->executeQuery($scenSql);
+    if(count($lastScenario)<1)
+    {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No Scenario Found For Selected Games.']));
+    }
+    else
+    {
+      $tableRow = '';
+      foreach ($lastScenario as $lastScenarioRow)
+      {
+        $tableRow .= '<tr>'; // this is the game comp/subComp row
+        // getting the component and subcomponent of scenario one by one
+        $whereLink = array(
+          'SubLink_LinkID'   => $lastScenarioRow->Link_ID,
+          'SubLink_ShowHide' => 0,
+          'SubLink_Type'     => 1,
+        );
+        $compSubcomp = $this->Common_Model->fetchRecords('GAME_LINKAGE_SUB', $whereLink, '"'.$lastScenarioRow->Game_Name.'" AS GameName, "'.$lastScenarioRow->Scen_Name.'" AS ScenName, SubLink_ID AS SubLinkID, SubLink_CompID AS CompID, SubLink_CompName AS CompName, SubLink_SubCompID AS SubCompID, SubLink_SubcompName AS SubcompName, SubLink_Competency_Performance AS Competency_Performance, IF(SubLink_SubCompID>0, "subComponent", "component") AS "compSubcompType", SubLink_AreaName', 'SubLink_CompName, SubLink_SubcompName, SubLink_Competency_Performance');
+        // as we are taking only o/p comp/subcomp. // print_r($compSubcomp);
+        // echo "<br>starting for ".$lastScenarioRow->Link_GameID."<br><br>";
+        if(count($compSubcomp)<1)
+        {
+          // this scenario don't have any comp subcomp or all are hidden
+          $tableRow .= '<td class="gameScenRow">'.$lastScenarioRow->Game_Name.' ('.$lastScenarioRow->Scen_Name.')</td> <td>N/A</td> <td>N/A</td> <td>N/A</td>';
+        }
+        else
+        {
+          $tdArray    = array();
+          $tdGameScen = '<td class="gameScenRow">'.$lastScenarioRow->Game_Name.' ('.$lastScenarioRow->Scen_Name.')</td>';
+
+          $tdSimulatedPerformance = '<td class="tdSimulatedPerformance">';
+          $tdCompetency           = '<td class="tdCompetency">';
+          $tdApplication          = '<td class="tdApplication">';
+          // this scenario has some comp/subcome visible
+          foreach ($compSubcomp as $compSubcompRow)
+          {
+            // check that this is already selected or not, when editing applicable only then
+            if(in_array($compSubcompRow->SubLinkID, $selectedCompSubcomps))
+            {
+              $alreadySelected = 'checked';
+            }
+            else
+            {
+              $alreadySelected = '';
+            }
+            // generating html for those. There will be only (3=simulatedPerformance, 4=Competency, 5=Application) for Competency_Performance
+            switch ($compSubcompRow->Competency_Performance) {
+              case 4:
+              // write code
+              $appendData = 'tdCompetency';
+              break;
+
+              case 5:
+              // write code
+              $appendData = 'tdApplication';
+              break;
+              
+              default:
+              // write code
+              $appendData = 'tdSimulatedPerformance';
+              break;
+            }
+
+            if(in_array($compSubcompRow->Competency_Performance, $tdArray))
+            {
+              // if Competency_Performance td already created so put this check box into that td 
+              $$appendData .= $this->compSubcompCheckboxesHtml($compSubcompRow, $lastScenarioRow->Link_GameID, $alreadySelected);
+            }
+            else
+            {
+              // create td and put the check box here
+              $tdArray[]    = $compSubcompRow->Competency_Performance;
+              $$appendData .= $this->compSubcompCheckboxesHtml($compSubcompRow, $lastScenarioRow->Link_GameID, $alreadySelected);
+            }
+
+          }
+          $tdSimulatedPerformance .= '</td>';
+          $tdCompetency           .= '</td>';
+          $tdApplication          .= '</td>';
+          $tableRow .= $tdGameScen.$tdCompetency.$tdApplication.$tdSimulatedPerformance;
+        }
+        $tableRow .= '</tr>';
+      }
+    }
+    $returnTableHtml .= $tableRow.'</tbody></table>';
+    // die($returnTableHtml);
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "Success", 'icon' => 'success', 'message' => 'Table Created Successfully.', 'data' => $returnTableHtml]));
+  }
+}
+
+private function compSubcompCheckboxesHtml($compSubcompRow=NULL, $gameId=NULL, $alreadySelected=NULL)
+{
+  // create comp/subcomp checkboxes and return html // prd($compSubcompRow);
+  // check compSubcompType i.e. component or subComponent // for Component(#1cc88a), for subComponent(#e74a3b)
+  if($compSubcompRow->compSubcompType == 'component')
+  {
+    // if compoentnt, then title as
+    $name      = $compSubcompRow->CompName;
+    $TextColor = "#1cc88a";
+    $title     = 'data-toggle="tooltip" title="Area: '.$compSubcompRow->SubLink_AreaName.'"';
+    $type      = 0;
+  }
+  else
+  {
+    // if not compoentnt, that means subComponent, then title as CompName
+    $name      = $compSubcompRow->SubcompName;
+    $TextColor = "#e74a3b";
+    $title     = 'data-toggle="tooltip" title="Component: '.$compSubcompRow->CompName.'"';
+    $type      = 1;
+  }
+  return '<div class="custom-control custom-checkbox" '.$title.'> <input type="checkbox" class="custom-control-input" name="'.$gameId.'[]" id="'.$compSubcompRow->SubLinkID.'" value="'.$compSubcompRow->SubLinkID.'_'.$compSubcompRow->Competency_Performance.'_'.$type.'" '.$alreadySelected.'> <label style="color:'.$TextColor.'" class="custom-control-label" for="'.$compSubcompRow->SubLinkID.'">'.$name.'</label> </div>';
 }
 
 public function userReportData()

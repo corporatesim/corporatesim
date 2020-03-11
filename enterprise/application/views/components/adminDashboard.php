@@ -99,7 +99,7 @@
       <!-- loading games here -->
       <marquee behavior="" direction="" onmouseover="this.stop();" onmouseout="this.start();">
         <h2 class="text-green">
-          Available <img src="<?php echo base_url('common/images/giphy_remote.gif');?>" alt="Game Allocation/De-allocation" style="height: 50px;"> Games
+          Available <img src="<?php echo base_url('common/images/giphy_remote.gif');?>" alt="Game Allocation/De-allocation" style="height: 70px; width: 20%;"> Games
         </h2>
       </marquee>
       <div class="clearfix"><br></div>

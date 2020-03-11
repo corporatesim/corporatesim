@@ -53,6 +53,22 @@
     {
       background: #00000066;
     }
+    .dot-success {
+      height          : 15px;
+      width           : 15px;
+      background-color: #bbb;
+      border-radius   : 50%;
+      display         : inline-block;
+      background      : #1cc88a;
+    }
+    .dot-danger {
+      height          : 15px;
+      width           : 15px;
+      background-color: #bbb;
+      border-radius   : 50%;
+      display         : inline-block;
+      background      : #e74a3b;
+    }
   </style>
 </head>
 <body>

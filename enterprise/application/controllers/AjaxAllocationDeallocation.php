@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class AjaxAllocationDeallocation extends CI_Controller 
+class AjaxAllocationDeallocation extends MY_Controller 
 {
 
 	/**

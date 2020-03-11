@@ -52,6 +52,31 @@
 <script type="text/javascript">
 	$(document).ready(function()
 	{
+		makeTableDataTable();
+
+		$(document).ajaxStart(function(){
+			$('[data-toggle="tooltip"]').tooltip('hide');
+		});
+
+		$(document).ajaxComplete(function(){
+			$('[data-toggle="tooltip"]').tooltip();
+			selectAll();
+		});
+
+		// only if user is logged in then only check
+		<?php if($this->session->userdata('loginData') != NULL){ ?>
+			// if user clicks on everyWhere in dom, page then check that user is logged in or not
+			$(document).on('click',function(e){
+				var loginStatus = triggerAjax("<?php echo base_url('Ajax/checkLoginStatus'); ?>",'');
+				// console.log(loginStatus);
+				if(loginStatus.length<1)
+				{
+					window.location.reload();
+				}
+				// toggleIcons();
+				// deleteRow();
+			});
+		<?php } ?>
 		// increasing the width of scroll-bar
 		setTimeout(function(){
 			$('div.mCSB_dragger_bar').css({'width':'90%'});
@@ -252,6 +277,15 @@
 				showPopup(gamedata,startdate,enddate);
 			});
 		});
+
+		selectAll();
+		toggleIcons();
+		deleteRow();
+	});
+	// document.ready function ends here
+
+	function selectAll()
+	{
 		$('#select_all').click(function(i,e){
 			if($(this).is(':checked'))
 			{
@@ -272,8 +306,236 @@
 				});
 			}
 		});
-	});
-	// document.ready function ends here
+	}
+	// to show hide edit/save icon accordingly
+	function toggleIcons()
+	{
+		//editIcon saveIcon
+		$('.data-table-export').on('click', '.editIcon', function(){
+			var pid              = $(this).data('pid');
+			var callFunction     = $(this).data('function');
+			$(this).toggleClass('d-none');
+			// $('.saveIcon').addClass('d-none');
+			$('#'+pid+'__save').removeClass('d-none');
+			// if function exist then call this function
+			makeEditable(pid,'edit',callFunction);
+		});
+		// $('.saveIcon').on('click', function(){
+			$('.data-table-export').on('click', '.saveIcon', function(){
+				var pid              = $(this).data('pid');
+				var callFunction     = $(this).data('function');
+				$(this).toggleClass('d-none');
+			// $('.editIcon').addClass('d-none');
+			$('#'+pid+'__edit').removeClass('d-none');
+			// if function exist then call this function
+			makeEditable(pid,'save',callFunction);
+		});
+		}
+
+	// make html element editable
+	function makeEditable(id,action,callNextFunction)
+	{
+		// action can be of edit or save, this will set the inline-edit border and editable option true or false
+		if(action == 'save')
+		{
+			// console.log($('#parent__'+id).find('.editable').length);
+			$('#parent__'+id).find('.editable').each(function(){
+				$(this).attr('contenteditable',false);
+				$(this).css({'border':'none'});
+			});
+			eval(callNextFunction+"("+id+", '<?php echo base_url('Ajax/');?>"+callNextFunction+"')");
+		}
+
+		if(action == 'edit') 
+		{
+			// console.log($('#parent__'+id).find('.editable').length+' and '+id);
+			$('#parent__'+id).find('.editable').each(function(){
+				$(this).attr('contenteditable',true);
+				$(this).css({"border-color": "#dc3545", "border-width":"1px", "border-style":"solid", "max-width":"100px", "white-space":"pre-wrap"});
+			});
+		}
+	}
+
+	function appendCompetencyGameComponentSubcomponent(selectedCompSubcomps)
+	{
+		// console.log(selectedCompSubcomps);
+		$('#Cmap_GameId').on('change', function(){
+			var game_selected  = $(this).val();
+			var waitStringText = "Please Wait While Loading Selected Game Components/Subcomponents";
+			if(game_selected.length < 1)
+			{
+				// select game
+				$('#addCompSubcompOfGame').html('<span class="text-danger text-center">Please Select Game To Select Components/Subcomponents</span>');
+			}
+			else
+			{
+				// show some wait text to users
+				$('#addCompSubcompOfGame').html('<span class="text-success text-center">'+waitStringText+'</span>');
+				// tirgger ajax and get the o/p comp and subcomponent which are visible
+				var formData = $('#competencyMappingForm').serialize();
+				// selectedCompSubcomps argument will be passed only when editing, comes from backend
+				var compSubcompOfGame = triggerAjax("<?php echo base_url('Ajax/compSubcompCheckboxes/');?>"+selectedCompSubcomps,formData);
+				// console.log(compSubcompOfGame);
+				if(compSubcompOfGame.status == 201)
+				{
+					Swal.fire({
+						position         : compSubcompOfGame.position,
+						icon             : compSubcompOfGame.icon,
+						title            : compSubcompOfGame.title,
+						html             : compSubcompOfGame.message,
+						showConfirmButton: compSubcompOfGame.showConfirmButton,
+						timer            : compSubcompOfGame.timer,
+					});
+				}
+				else
+				{
+					$('#addCompSubcompOfGame').html(compSubcompOfGame.data);
+					$('[data-toggle="tooltip"]').tooltip();
+				}
+			}
+		});
+	}
+
+	// this function will edit/update the competency data
+	function editCompetency(parentid, url)
+	{
+		var ajaxData = {};
+		// dataid is nothing but the parent_id which children are editable, so take data(text) of it
+		// console.log(parentid+' and '+url); // 1_Compt_Name 1_Compt_Description
+		ajaxData['Compt_Id'] = parentid;
+		$('#parent__'+parentid).find('.editable').each(function(){
+			var td_id = $(this).attr('id').split('__');
+			ajaxData[td_id[1]] = $(this).text();
+		});
+		// console.log(decodeURIComponent($.param(ajaxData)));
+		var result = triggerAjax(url,ajaxData);
+		Swal.fire({
+			position         : result.position,
+			icon             : result.icon,
+			title            : result.title,
+			html             : result.message,
+			showConfirmButton: result.showConfirmButton,
+			timer            : result.timer,
+		});
+		listCompetency();
+	}
+
+	function listCompetency()
+	{
+		var table          = '<table class="stripe hover multiple-select-row data-table-export nowrap">';
+		var tableHead      = '<thead><tr><th>ID</th><th>Name</th><th>Description</th><th class="datatable-nosort noExport">Action</th></tr></thead>';
+		var tableBody      = '<tbody>';
+		var ajaxWhere      = {'Compt_Delete':'0'};
+		var competencyList = triggerAjax("<?php echo base_url('Ajax/fetchRecords/GAME_COMPETENCY/Compt_Name'); ?>",ajaxWhere);
+		// Swal.fire({
+		// 	position         : competencyList.position,
+		// 	icon             : competencyList.icon,
+		// 	title            : competencyList.title,
+		// 	html             : competencyList.message,
+		// 	showConfirmButton: competencyList.showConfirmButton,
+		// 	timer            : competencyList.timer,
+		// });
+		// console.log(competencyList);
+		if(competencyList.status == 200)
+		{			
+			$.each(competencyList.data, function(i,e){
+				if(competencyList.data[i].Compt_Description.length < 1)
+				{
+					competencyList.data[i].Compt_Description = '<span class="text-danger">No Description</span>';
+				}
+
+				tableBody += '<tr id="parent__'+competencyList.data[i].Compt_Id+'"> <td>'+eval(i+1)+'</td> <td id="'+competencyList.data[i].Compt_Id+'__Compt_Name" class="editable">'+competencyList.data[i].Compt_Name+'</td> <td id="'+competencyList.data[i].Compt_Id+'__Compt_Description" class="editable">'+competencyList.data[i].Compt_Description+'</td> <td><a href="javascript:void(0);" data-function="editCompetency" data-toggle="tooltip" title="Edit" data-pid="'+competencyList.data[i].Compt_Id+'" class="editIcon" id="'+competencyList.data[i].Compt_Id+'__edit"> <i class="fa fa-pencil"></i> </a> <a href="javascript:void(0);" data-function="editCompetency" data-toggle="tooltip" title="Save" data-pid="'+competencyList.data[i].Compt_Id+'" class="saveIcon d-none" id="'+competencyList.data[i].Compt_Id+'__save"> <i class="fa fa-save"></i> </a>&nbsp;<a href="javascript:void(0);" data-col_table="Compt_Delete__competency__Compt_Id__listCompetency" data-toggle="tooltip" title="Delete" data-pid="'+competencyList.data[i].Compt_Id+'" class="deleteIcon"> <i class="fa fa-trash"></i> </a></td></tr>'
+			});
+			table += tableHead+tableBody+'</tbody>'+'</table>';
+			$('#addTable').html(table);
+			// console.log(table);
+		}
+		else
+		{
+			table += tableHead+'<tbody><tr><td class="text-danger text-center" colspan="4"> No Record Found </td></tr></tbody>'+'</table>';
+			$('#addTable').html(table);
+		}
+		makeTableDataTable();
+		toggleIcons();
+		deleteRow();
+	}
+
+	// triggering ajax to fetch/modify data
+	function triggerAjax(url,data)
+	{
+		var returnResult = '';
+		$.ajax({
+			type    : "POST",
+			dataType: "json",
+			data    : data,
+			url     : url,
+			async   : false,
+			beforeSend: function() {
+				// $('.pre-loader').show();
+			},
+			success: function(result) 
+			{
+				// console.log(result);
+				returnResult = result;
+			},
+			error: function(jqXHR, exception)
+			{
+				{
+					// $('.pre-loader').hide();
+					// Swal.fire({
+					// 	icon: 'error',
+					// 	html: jqXHR.responseText,
+					// });
+					console.log(jqXHR.responseText);
+					$("#input_loader").html('');
+				}
+			}
+
+		});
+		return returnResult;
+	}
+
+	// to delete the record
+	function deleteRow()
+	{
+		// $('.deleteIcon').on('click', function(){
+			$('.data-table-export').on('click', '.deleteIcon', function(){
+			// show alert message, before proceeding
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!'
+			}).then((result) => {
+				if (result.value){
+					// this is valid for all the purpose,
+					var ajaxWhere         = {};
+					var pid               = $(this).data('pid');
+					// dataColTable = Compt_Delete__competency__Compt_Id__listCompetency , // this is nothing but updateColName__tableName__whereColName__nextExecutableFunctionName
+					var dataColTable      = $(this).data('col_table').split('__');
+					var dataCol           = dataColTable[0];
+					var tableName         = dataColTable[1];
+					var primaryCol        = dataColTable[2];
+					var executeFunction   = dataColTable[3];
+					ajaxWhere[primaryCol] = pid;
+					var deleteRecord      = triggerAjax("<?php echo base_url('Ajax/deleteRecords/'); ?>"+tableName+"/"+dataCol,ajaxWhere);
+					// console.log(deleteRecord);
+					Swal.fire({
+						position         : deleteRecord.position,
+						icon             : deleteRecord.icon,
+						title            : deleteRecord.title,
+						html             : deleteRecord.message,
+						showConfirmButton: deleteRecord.showConfirmButton,
+						timer            : deleteRecord.timer,
+					});
+					eval(executeFunction+'()');
+				}
+			})
+		});
+		}
 
 	// adding function to download completed games report
 	function downloadCompletedGamesReport(userid)
@@ -460,48 +722,61 @@
 		});
 	}
 	// datepicker ends here
-	$('.data-table-export').DataTable({
-		scrollCollapse: true,
-		autoWidth     : false,
-		responsive    : true,
-		columnDefs    : [{
-			targets       : "datatable-nosort",
-			orderable     : false,
-		}],
-		"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-		"language": {
-			"info": "_START_-_END_ of _TOTAL_ entries",
-			searchPlaceholder: "Search"
-		},
-		dom    : 'Bfrtip',
-		buttons: [
-		
-		{
-			extend: 'copy',
-			footer: false
+
+	// this function will provide delay
+	function sleep(milliseconds, returnString) {
+		const date = Date.now();
+		let currentDate = null;
+		do {
+			currentDate = Date.now();
+		} while (currentDate - date < milliseconds){ console.log('printing delay value '+returnString);}
+	}
+
+	function makeTableDataTable()
+	{
+		$('.data-table-export').DataTable({
+			scrollCollapse: true,
+			autoWidth     : false,
+			responsive    : true,
+			columnDefs    : [{
+				targets       : "datatable-nosort",
+				orderable     : false,
+			}],
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+			"language": {
+				"info": "_START_-_END_ of _TOTAL_ entries",
+				searchPlaceholder: "Search"
+			},
+			dom    : 'Bfrtip',
+			buttons: [
 			
-		},
-		{
-			extend: 'csv',
-			footer: true,
-			exportOptions: {
-				columns: "thead th:not(.noExport)"
-			}
-		},
-		// {
-		// 	extend: 'pdf',
-		// 	footer: true,
-		// },
-		{
-			extend: 'print',
-			footer: false
-		},
-		// {
-		// 	extend: 'excel',
-		// 	footer: false
-		// }
-		] 
-	});
+			{
+				extend: 'copy',
+				footer: false
+				
+			},
+			{
+				extend: 'csv',
+				footer: true,
+				exportOptions: {
+					columns: "thead th:not(.noExport)"
+				}
+			},
+			// {
+			// 	extend: 'pdf',
+			// 	footer: true,
+			// },
+			{
+				extend: 'print',
+				footer: false
+			},
+			// {
+			// 	extend: 'excel',
+			// 	footer: false
+			// }
+			] 
+		});
+	}
 </script>
 <!-- For delete record-->
 <script type="text/javascript">
