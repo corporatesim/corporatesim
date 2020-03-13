@@ -155,7 +155,7 @@ class OnlineReport extends MY_Controller {
 			redirect(base_url('OnlineReport'));
 		}
 
-		$reportSql = 'SELECT gu.User_id AS user_game_id, gi.input_current, CONCAT( IF(gc.Comp_NameAlias != "" AND gc.Comp_NameAlias IS NOT NULL,gc.Comp_NameAlias,gc.Comp_Name), "/", IF( gs.SubComp_NameAlias != "" AND gs.SubComp_NameAlias IS NOT NULL, gs.SubComp_NameAlias, IF(gs.SubComp_Name IS NOT NULL,gs.SubComp_Name,"") ) ) AS Comp_SubComp, CONCAT( gu.User_fname, " ", gu.User_lname) AS FullName, gu.User_username AS userName, gu.User_email AS UserEmail, gus.US_LinkID AS gameStatus FROM GAME_INPUT gi INNER JOIN GAME_SITE_USERS gu ON gu.User_id = gi.input_user  INNER JOIN GAME_SITE_USER_REPORT_NEW gur ON gur.uid=gu.User_id AND (gur. date_time BETWEEN "'.$dateTo.'" AND "'.$dateFrom.'") INNER JOIN GAME_LINKAGE_SUB gls ON gi.input_sublinkid = gls.SubLink_ID AND gls.SubLink_ShowHide=0 AND gls.SubLink_InputMode !="none" LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID='.$gameId.' AND gus.US_UserID=gu.User_id LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID WHERE ( gls.SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = '.$gameId.' ) AND gls.SubLink_Type = 1 ) ';
+		$reportSql = 'SELECT gu.User_id AS user_game_id, gi.input_current, CONCAT( IF(gc.Comp_NameAlias != "" AND gc.Comp_NameAlias IS NOT NULL,gc.Comp_NameAlias,gc.Comp_Name), "/", IF( gs.SubComp_NameAlias != "" AND gs.SubComp_NameAlias IS NOT NULL, gs.SubComp_NameAlias, IF(gs.SubComp_Name IS NOT NULL,gs.SubComp_Name,"") ) ) AS Comp_SubComp, CONCAT( gu.User_fname, " ", gu.User_lname) AS FullName, gu.User_username AS userName, gu.User_email AS UserEmail, gus.US_LinkID AS gameStatus, gus.US_ScenID AS lastScenario FROM GAME_INPUT gi INNER JOIN GAME_SITE_USERS gu ON gu.User_id = gi.input_user  INNER JOIN GAME_SITE_USER_REPORT_NEW gur ON gur.uid=gu.User_id AND (gur. date_time BETWEEN "'.$dateTo.'" AND "'.$dateFrom.'") INNER JOIN GAME_LINKAGE_SUB gls ON gi.input_sublinkid = gls.SubLink_ID AND gls.SubLink_ShowHide=0 AND gls.SubLink_InputMode !="none" LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID='.$gameId.' AND gus.US_UserID=gu.User_id LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID WHERE ( gls.SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = '.$gameId.' ) AND gls.SubLink_Type = 1 ) ';
 
 		if(!empty($Enterprise))
 		{
@@ -193,7 +193,7 @@ class OnlineReport extends MY_Controller {
 			{
 				$userData[$reportDataRow->UserEmail]['FullName']                   = trim($reportDataRow->FullName);
 				$userData[$reportDataRow->UserEmail]['UserEmail']                  = trim($reportDataRow->UserEmail);
-				$userData[$reportDataRow->UserEmail]['user_game_id']               = $reportDataRow->user_game_id.'_'.$gameId.'_'.$reportDataRow->gameStatus;
+				$userData[$reportDataRow->UserEmail]['user_game_id']               = $reportDataRow->user_game_id.'_'.$gameId.'_'.$reportDataRow->gameStatus.'_'.$reportDataRow->lastScenario;
 				$userData[$reportDataRow->UserEmail][$reportDataRow->Comp_SubComp] = $reportDataRow->input_current;
 			}
 		}
@@ -209,4 +209,32 @@ class OnlineReport extends MY_Controller {
 		$content['subview']     = 'viewReport';
 		$this->load->view('main_layout',$content);
 	}
+
+	public function viewUserReport($gameid=NULL, $lastScenLinkId=NULL, $userid=NULL)
+	{
+		if(empty($userid) || empty($lastScenLinkId))
+		{
+			$this->session->set_flashdata('er_msg', 'No User Selected');
+			redirect(base_url('OnlineReport'));
+		}
+		// finding the link id from the game last scenario
+		$linkWhere = array(
+			'Link_GameID'     => $gameid,
+			'Link_ScenarioID' => $lastScenLinkId,
+		);
+		$linkID = $this->Common_Model->fetchRecords('GAME_LINKAGE', $linkWhere,'Link_ID'); 
+		if(count($linkID) > 0)
+		{
+			$linkid             = $linkID[0]->Link_ID;
+			$content['loadUrl'] = base_url('../userReport.php?gid='.$gameid.'&linkid='.$linkid.'&userid='.$userid);
+			$content['subview'] = 'viewUserReport';
+			$this->load->view('main_layout', $content);
+		}
+		else
+		{
+			$this->session->set_flashdata('er_msg', 'No report exist for the selected user. Please contact admin');
+			redirect(base_url('OnlineReport'));
+		}
+	}
+
 }

@@ -56,7 +56,7 @@ include_once 'includes/header.php';
 
 						if($gamedetails->Game_ReportButton < 1){ ?>
 							<!-- show/download output result -->
-							<a href="javascript:void(0);" data-toggle="tooltip" title="View Game Output" data-gameid='<?php echo $gameid; ?>' data-scenid='<?php echo $ScenID; ?>' data-linkid='<?php echo $linkid; ?>' id="showDownloadOutput">
+							<a href="<?php echo site_root.'report.php?ID='.$gameid.'&linkid='.$linkid;?>" data-toggle="tooltip" title="View Game Output" data-gameid='<?php echo $gameid; ?>' data-scenid='<?php echo $ScenID; ?>' data-linkid='<?php echo $linkid; ?>' id="showDownloadOutput">
 								<img src="images/downloadReport.png" alt="Output" width="75">
 							</a>
 						<?php } ?>	
@@ -342,7 +342,9 @@ include_once 'includes/header.php';
 
 		// show/download result output data when user request
 		$('#showDownloadOutput').on('click',function(){
-			$('#downloadReportForm').submit();
+			// commenting the below line of code, to prevent the report download, and adding url to redirect the webpage to newly added report.php
+
+			// $('#downloadReportForm').submit();
 		});
 	});
 

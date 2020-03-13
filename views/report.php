@@ -1,4 +1,10 @@
 <!-- <?php // echo "<pre>"; print_r($result); exit(); ?> -->
+  <title>
+    <?php echo ucfirst($_SESSION['username']).'_Game_Report-'.date('d-m-Y');?>
+  </title>
+  <?php 
+  include_once 'includes/header.php'; 
+  ?>
   <style>
    input[type=text] {
     border-radius: 12px;
@@ -8,21 +14,18 @@
   .container{
     width: 92% !important;
   }
+  @media print {
+  @page { margin-bottom: 1px; }
+  /*body { margin: 1.6cm; }*/
+}
 </style>
-<?php 
-include_once 'includes/header.php'; 
-?>
 <section id="video_player">
 	<div class="container">
 		<div class="row">
         <!--<div class="col-sm-9 col-md-10 no_padding"><h2 class="InnerPageHeader"><?php if(!empty($result)){ echo $result->Game." | ".$result->Scenario ; }?> Your Output</h2></div>
         	<div class="col-sm-3 col-md-2 text-center timer">hh:mm:ss</div>-->
           <div class="col-md-12 InnerPageHeader">
-            <?php if(!empty($result)){ echo $result->Scenario ; }?>
-            <button type="button" name="submit" id="submitShow" class="btn btn-danger pull-right" value="Submit" style="display: none;">Submit</button>
-            <?php if(!$skipOutput->Link_Enabled > 0){ ?>
-              <button type="button" name="submit" id="submitShowRight" class="btn btn-danger rotateCompAnti submitShowRight" value="Submit">Submit</button>
-            <?php } ?>
+            <button type="button" name="submit" id="submitShow" class="btn btn-danger pull-right hidden" value="Submit" onclick="return window.print();">Print</button>
           </div>
           <form method="POST" action="" id="game_frm" name="game_frm">
             <input type="hidden" name="ScenarioId" id="ScenarioId" value="<?php echo $result->Link_ScenarioID; ?>">
@@ -128,8 +131,7 @@ include_once 'includes/header.php';
                 gls.SubLink_FontSize AS fontSize,
                 gls.SubLink_FontStyle AS fontStyle,
                 gls.SubLink_ChartID AS ChartID,
-                gls.SubLink_ChartType AS Chart_Type,
-                gls.SubLink_InputBackgroundColor as InputBackgroundColor
+                gls.SubLink_ChartType AS Chart_Type
                 FROM GAME_LINKAGE_SUB gls 
                 LEFT JOIN GAME_LINKAGE gl ON gl.Link_ID=gls.SubLink_LinkID
                 LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID=gls.SubLink_CompID
@@ -452,7 +454,7 @@ include_once 'includes/header.php';
                       }
                       else
                       {
-                        // echo '<a class="refreshChart" data-redirect="'.site_root.'output.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row1['SubLinkID'].'" data-reload="ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row1['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
+                        // echo '<a class="refreshChart" data-redirect="'.site_root.'report.php?ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row1['SubLinkID'].'" data-reload="ID='.$gameid.'&tab='.$row['Area_Name'].'#ref_'.$row1['SubLinkID'].'" data-toggle="tooltip" title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a>';
                         ?>  
                         <img class="graph_chart showImageModal comp_chart col-md-12" src="<?php echo site_root;?>chart/<?=$row1['Chart_Type']?>.php?gameid=<?=$gameid?>&userid=<?=$userid?>&ChartID=<?=$row1['ChartID']?>" style="max-width:100%;">
                         <?php
@@ -478,7 +480,7 @@ include_once 'includes/header.php';
                           echo "</div>";
                           echo "<div class='InlineBox hidden ".$labelC."'>";
                           echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
-                          echo "<input style='background:".$row1['InputBackgroundColor']."' type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value='".$value."' readonly></input>";
+                          echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value='".$value."' readonly></input>";
                           echo "</div>";
                           break;
                         }
@@ -488,11 +490,11 @@ include_once 'includes/header.php';
                     {
                      echo "<div class='InlineBox ".$labelC."'>";
                      echo "<label class='scenariaLabel'>".$row1['LabelCurrent']."</label>";
-                     echo "<input style='background:".$row1['InputBackgroundColor']."' type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value='".$value."' readonly></input>";
+                     echo "<input type='text' id='comp_".$row1['CompID']."' name='".$row1['Area_Name']."_comp_".$row1['CompID']."' class='scenariaInput' value='".$value."' readonly></input>";
                      echo "</div>";
                      echo "<div class='InlineBox ".$labelL."'>";
                      echo "<label class='scenariaLabel'>".$row1['LabelLast']."</label>";
-                     echo "<input style='background:".$row1['InputBackgroundColor']."' type='text' class='scenariaInput' value='".$row1['Last']."' readonly></input>";
+                     echo "<input type='text' class='scenariaInput' value='".$row1['Last']."' readonly></input>";
                      echo "</div>";
                    }
 
@@ -514,11 +516,11 @@ include_once 'includes/header.php';
                    a.Area_Name AS Area_Name, c.Comp_Name AS Comp_Name, s.SubComp_Name AS SubComp_Name, s.SubComp_NameAlias AS SubComp_NameAlias, ls.SubLink_ViewingOrder AS ViewingOrder,
                    ls.SubLink_LabelCurrent AS LabelCurrent, ls.SubLink_LabelLast AS LabelLast,ls.SubLink_InputFieldOrder AS InputFieldOrder,
                    ls.subLink_ShowHide AS ShowHide,
-                   ls.SubLink_Details AS Description ,ls.SubLink_BackgroundColor AS BackgroundColor, ls.SubLink_TextColor AS TextColor, ls.SubLink_FontSize AS fontSize, ls.SubLink_FontStyle AS fontStyle, ls.SubLink_InputMode AS Mode, ls.SubLink_LinkIDcarry AS CarryLinkID, ls.SubLink_CompIDcarry AS CarryCompID, ls.SubLink_SubCompIDcarry AS CarrySubCompID, ls.SubLink_ChartID AS ChartID, ls.SubLink_ChartType AS Chart_Type, ls.SubLink_InputBackgroundColor as InputBackgroundColor
+                   ls.SubLink_Details AS Description ,ls.SubLink_BackgroundColor AS BackgroundColor, ls.SubLink_TextColor AS TextColor, ls.SubLink_FontSize AS fontSize, ls.SubLink_FontStyle AS fontStyle, ls.SubLink_InputMode AS Mode, ls.SubLink_LinkIDcarry AS CarryLinkID, ls.SubLink_CompIDcarry AS CarryCompID, ls.SubLink_SubCompIDcarry AS CarrySubCompID, ls.SubLink_ChartID AS ChartID, ls.SubLink_ChartType AS Chart_Type
                    FROM GAME_LINKAGE l 
                    INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
                    INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
-                   INNER JOIN GAME_GAME g on l.Link_GameID=g.Game_ID
+                   INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
                    INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
                    LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=ls.SubLink_ID AND gi.input_user=$userid
                    LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
@@ -898,7 +900,7 @@ include_once 'includes/header.php';
                   echo "<div class=' col-sm-6 ".$width1." text-center ".$InputFields."'>";
                   echo "<div class='InlineBox ".$labelC."'>";
                   echo "<label class='scenariaLabel'>".$row2['LabelCurrent']."</label>";
-                  echo "<input style='background:".$row2['InputBackgroundColor']."' type='text' id='subcomp_".$row2['SubCompID']."' name='".$row2['Area_Name']."_subc_".$row2['SubCompID']."' class='scenariaInput' readonly ".$row2['Mode']." value='".$opValue."'></input>";
+                  echo "<input type='text' id='subcomp_".$row2['SubCompID']."' name='".$row2['Area_Name']."_subc_".$row2['SubCompID']."' class='scenariaInput' readonly ".$row2['Mode']." value='".$opValue."'></input>";
                   echo "</div>";
                   echo "<div class='InlineBox ".$labelL."'>";
                   echo "<label class='scenariaLabel'>".$row2['LabelLast']."</label>";

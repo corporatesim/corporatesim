@@ -11,14 +11,14 @@
 					<div class="col-md-6 col-sm-12">
 						<div class="title">
 							<h1>
-								<a href="<?php echo base_url('Competency/addCompetencyMapping');?>" data-toggle="tooltip" title="Add Competency Mapping" id="addCompetency">
-									<i class="fa fa-plus-circle text-blue"></i></a> Add Competency Mapping
+								<a href="<?php echo base_url('Competency/addCompetencyMapping');?>" data-toggle="tooltip" title="Add Items Mapping" id="addCompetency">
+									<i class="fa fa-plus-circle text-blue"></i></a> Add Items Mapping
 								</h1>
 							</div>
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Competency Mapping</li>
+									<li class="breadcrumb-item active" aria-current="page">Items Mapping</li>
 								</ol>
 							</nav>
 						</div>
@@ -28,14 +28,15 @@
 							<div class="title">
 								<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
 									<div class="clearfix mb-20">
-										<h5 class="text-blue">Competency Mapping List</h5>
+										<h5 class="text-blue">Items Mapping List</h5>
 									</div>
 									<div class="row" id="addTable">
 										<table class="stripe hover multiple-select-row data-table-export nowrap">
 											<thead>
 												<tr>
 													<th>ID</th>
-													<th>Competency Name</th>
+                          <th>Enterprise</th>
+													<th>Item Name</th>
 													<th>Mapped Game</th>
 													<th class="datatable-nosort noExport">Action</th>
 												</tr>
@@ -46,10 +47,15 @@
 														<td class="text-danger text-center" colspan="4"> No Record Found </td>
 													</tr>
 													<!-- only if record exists -->
-												<?php } else{ $i=1; foreach ($competencyMapping as $competencyMappingRow => $value) { ?>
+												<?php } else{ $i=1; 
+
+                          // print_r($competencyMapping);
+                          foreach ($competencyMapping as $competencyMappingRow => $value) { ?>
 													<tr>
 														<!-- ID -->
 														<td><?php echo $i;?></td>
+                            <!-- Competency Enterprise Name -->
+                            <td><?php echo $value[2];?></td>
 														<!-- Competency Name -->
 														<td><?php echo $competencyMappingRow;?></td>
 														<!-- Competency Description -->

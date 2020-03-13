@@ -228,7 +228,7 @@ include_once 'includes/header.php';
                   ls.SubLink_FormulaExpression as exp , ls.SubLink_ID as SubLinkID,ls.Sublink_AdminCurrent as AdminCurrent, 
                   ls.Sublink_AdminLast as AdminLast, ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff,
                   ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
-                  ls.SubLink_SubCompIDcarry as CarrySubCompID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle
+                  ls.SubLink_SubCompIDcarry as CarrySubCompID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle, ls.SubLink_InputBackgroundColor as InputBackgroundColor
                   FROM GAME_LINKAGE l 
                   INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
                   LEFT JOIN GAME_INPUT gi on gi.input_sublinkid=ls.SubLink_ID and input_user=".$userid." 
@@ -637,7 +637,7 @@ include_once 'includes/header.php';
 
                       $sankey_val1 = '"'.$areaname."_fcomp_".$row1['CompID'].'"';
 
-                      echo "<input data-roundoff='".$row1['RoundOff']."' value='".$formulaValue."' type ='text' class='scenariaInput current' id='".$areaname."_fcomp_".$row1['CompID']."' name='".$areaname."_fcomp_".$row1['CompID']."' readonly></input>";
+                      echo "<input data-roundoff='".$row1['RoundOff']."' value='".$formulaValue."' type ='text' class='scenariaInput current' id='".$areaname."_fcomp_".$row1['CompID']."' name='".$areaname."_fcomp_".$row1['CompID']."' readonly style='background:".$row1['InputBackgroundColor']."'></input>";
                         // echo "onclick='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' readonly ></input>";
                     }
                     else
@@ -738,6 +738,13 @@ include_once 'includes/header.php';
 
                         else
                         {
+                          // adding admin background color for input box
+
+                          if(!empty($row1['InputBackgroundColor']) && $row1['InputBackgroundColor'] !== '#ffffff')
+                          {
+                            $style_text = "style='background:".$row1['InputBackgroundColor']."; color:#000000; font-weight:bolder;'";
+                          }
+
                           // $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
                           echo "<input type='text' value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' ";
                           echo "onchange='return lookupCurrent(".$row1['SubLinkID'].",".$sankey_val1.",this.value);' required $style_text></input>";
@@ -748,7 +755,7 @@ include_once 'includes/header.php';
                       {
                         $sankey_val1 = '"'.$areaname."_comp_".$row1['CompID'].'"';
                         echo $linkCarry;
-                        echo "<input type='text' value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' readonly></input>";
+                        echo "<input style='background:".$row1['InputBackgroundColor']."' type='text' value='".$value."' class='scenariaInput current' id='".$areaname."_comp_".$row1['CompID']."' name='".$areaname."_comp_".$row1['CompID']."' readonly></input>";
                       }
                     }
 
@@ -767,7 +774,7 @@ include_once 'includes/header.php';
                     AND Link_Order < ".$row1['Order']." 
                     ORDER BY Link_Order DESC LIMIT 1))";
                     //echo $sqllast;
-                    echo "<input type='text' class='scenariaInput' ";
+                    echo "<input style='background:".$row1['InputBackgroundColor']."' type='text' class='scenariaInput' ";
                     if($row1['Mode']=="admin"){
                       echo " value ='".$row1['AdminLast']."' ";                         
                     }
@@ -801,7 +808,7 @@ include_once 'includes/header.php';
                   ls.SubLink_ID as SubLinkID ,ls.Sublink_AdminCurrent as AdminCurrent, ls.Sublink_AdminLast as AdminLast, 
                   ls.Sublink_ShowHide as ShowHide , ls.Sublink_Roundoff as RoundOff , 
                   ls.SubLink_LinkIDcarry as CarryLinkID, ls.SubLink_CompIDcarry as CarryCompID, 
-                  ls.SubLink_SubCompIDcarry as CarrySubCompID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle
+                  ls.SubLink_SubCompIDcarry as CarrySubCompID, l.Link_ScenarioID as ScenID, ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder, ls.SubLink_InputModeType as InputModeType, ls.SubLink_InputModeTypeValue as InputModeTypeValue, ls.SubLink_FontSize as fontSize, ls.SubLink_FontStyle as fontStyle, ls.SubLink_InputBackgroundColor as InputBackgroundColor
                   FROM GAME_LINKAGE l 
                   INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
                   WHERE ls.SubLink_Type=0 AND ls.SubLink_SubCompID>0 and l.Link_ID=".$linkid
@@ -1345,7 +1352,7 @@ include_once 'includes/header.php';
                        {
                         $value = $formaulValue->input_current;
                       }
-                      echo "<input data-roundoff='".$row2['RoundOff']."' type='text' value='".$value."' id='".$areaname."_fsubc_".$row2['SubCompID']."' name='".$areaname."_fsubc_".$row2['SubCompID']."' ";
+                      echo "<input style='background:".$row2['InputBackgroundColor']."' data-roundoff='".$row2['RoundOff']."' type='text' value='".$value."' id='".$areaname."_fsubc_".$row2['SubCompID']."' name='".$areaname."_fsubc_".$row2['SubCompID']."' ";
                       $sankey_val = '"'.$areaname."_fsubc_".$row2['SubCompID'].'"';
                       echo " readonly></input>";
                       // echo "onclick='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' "." onfocus='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);' readonly></input>";
@@ -1443,13 +1450,19 @@ include_once 'includes/header.php';
                         <?php }
                         else
                         {
+                          // adding admin background color for input boxes
+                          if(!empty($row2['InputBackgroundColor']) && $row2['InputBackgroundColor'] !== '#ffffff')
+                          {
+                            $style_text = "style='background:".$row2['InputBackgroundColor']."; color:#000000; font-weight:bolder;'";
+                          }
+
                           echo "<input type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
                           echo "onchange='return lookupCurrent(".$row2['SubLinkID'].",".$sankey_val.",this.value);'"." required ".$style_text."></input>";
                         }
                       }
                       else
                       {
-                        echo "<input type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
+                        echo "<input style='background:".$row2['InputBackgroundColor']."' type='text' value='".$value."' id='".$areaname."_subc_".$row2['SubCompID']."' name='".$areaname."_subc_".$row2['SubCompID']."' ";
                         $sankey_val = '"'.$areaname."_subc_".$row2['SubCompID'].'"';
                         echo " readonly></input>";
                       }
@@ -1472,7 +1485,7 @@ include_once 'includes/header.php';
                   AND Link_Order < ".$row2['Order']." 
                   ORDER BY Link_Order DESC LIMIT 1))";
                   //echo $sqllast;
-                  echo "<input type='text' class='scenariaInput' ";
+                  echo "<input style='background:".$row2['InputBackgroundColor']."' type='text' class='scenariaInput' ";
                   if($row2['Mode']=="admin"){
                     echo " value ='".$row2['AdminLast']."' ";                         
                   }

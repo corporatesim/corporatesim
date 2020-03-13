@@ -11,14 +11,14 @@
 					<div class="col-md-6 col-sm-12">
 						<div class="title">
 							<h1>
-								<a href="javascript:void(0);" data-toggle="tooltip" title="Add Competency" id="addCompetency">
-									<i class="fa fa-plus-circle text-blue"></i></a> Competency
+								<a href="javascript:void(0);" data-toggle="tooltip" title="Add Items" id="addCompetency">
+									<i class="fa fa-plus-circle text-blue"></i></a> Items
 								</h1>
 							</div>
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Competency</li>
+									<li class="breadcrumb-item active" aria-current="page">Items</li>
 								</ol>
 							</nav>
 						</div>
@@ -28,13 +28,14 @@
 							<div class="title">
 								<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
 									<div class="clearfix mb-20">
-										<h5 class="text-blue">Competency List</h5>
+										<h5 class="text-blue">Items List</h5>
 									</div>
 									<div class="row" id="addTable">
 										<table class="stripe hover multiple-select-row data-table-export nowrap">
 											<thead>
 												<tr>
 													<th>ID</th>
+                          <th>Enterprise</th>
 													<th>Name/Level</th>
 													<th>Description</th>
 													<th class="datatable-nosort noExport">Action</th>
@@ -50,6 +51,8 @@
 													<tr id="parent__<?php echo $competencyRow->Compt_Id;?>">
 														<!-- ID -->
 														<td><?php echo $i;?></td>
+                            <!-- Competency Enterprise Name -->
+                            <td><?php echo $competencyRow->Enterprise_Name;?></td>
 														<!-- Competency Name -->
 														<td id="<?php echo $competencyRow->Compt_Id;?>__Compt_Name" class="editable"><?php echo $competencyRow->Compt_Name;?></td>
 														<!-- Competency Description -->
@@ -68,7 +71,7 @@
 															
 															&nbsp;
 															<!-- delete icon -->
-															<a href="javascript:void(0);" data-col_table="Compt_Delete__competency__Compt_Id__listCompetency" data-toggle="tooltip" title="Delete" data-pid="<?php echo $competencyRow->Compt_Id;?>" class="deleteIcon">
+															<a href="javascript:void(0);" data-col_table="Compt_Delete__items__Compt_Id__listCompetency" data-toggle="tooltip" title="Delete" data-pid="<?php echo $competencyRow->Compt_Id;?>" class="deleteIcon">
 																<i class="fa fa-trash"></i>
 															</a>
 
@@ -87,10 +90,17 @@
 								$(document).ready(function()
 								{
 									$('#addCompetency').on('click', function(){
-										var addCompetencyForm = '<form id="competencyForm"> <input required type="text" name="Compt_Name" placeholder="competency Name" class="swal2-input"> <textarea name="Compt_Description" class="swal2-input" placeholder="Competency Description"></textarea><br> <button class="btn btn-primary">Add</button> <button type="button" class="btn btn-danger cancelPopup" onClick="return Swal.close();">Cancel</button></form>';
+                    var addCompetencyForm = "";
+                    var entOptions = '<option value="">---Select Enterprise--- </option>';
+
+                    <?php foreach ($enterpriseDetails as $row) { ?>
+                    entOptions +='<option value="<?php echo $row->Enterprise_ID; ?>"><?php echo $row->Enterprise_Name; ?></option>';
+                    <?php } ?>
+
+                    addCompetencyForm +='<form id="competencyForm">  <select class="custom-select2 form-control" name="Compt_Enterprise_ID" id="Compt_Enterprise_ID">'+entOptions+'</select> <input required type="text" name="Compt_Name" placeholder="Item Name" class="swal2-input"> <textarea name="Compt_Description" class="swal2-input" placeholder="Item Description"></textarea><br> <button class="btn btn-primary">Add</button> <button type="button" class="btn btn-danger cancelPopup" onClick="return Swal.close();">Cancel</button></form>';
 										Swal.fire({
 										// icon: 'question',
-										title            : 'Add Competency',
+										title            : 'Add Items',
 										html             : addCompetencyForm,
 										showConfirmButton: false,
 									});

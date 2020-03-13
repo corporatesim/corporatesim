@@ -423,10 +423,10 @@
 	function listCompetency()
 	{
 		var table          = '<table class="stripe hover multiple-select-row data-table-export nowrap">';
-		var tableHead      = '<thead><tr><th>ID</th><th>Name</th><th>Description</th><th class="datatable-nosort noExport">Action</th></tr></thead>';
+		var tableHead      = '<thead><tr><th>ID</th><th>Enterprise</th><th>Name</th><th>Description</th><th class="datatable-nosort noExport">Action</th></tr></thead>';
 		var tableBody      = '<tbody>';
 		var ajaxWhere      = {'Compt_Delete':'0'};
-		var competencyList = triggerAjax("<?php echo base_url('Ajax/fetchRecords/GAME_COMPETENCY/Compt_Name'); ?>",ajaxWhere);
+		var competencyList = triggerAjax("<?php echo base_url('Ajax/listItems'); ?>",ajaxWhere);
 		// Swal.fire({
 		// 	position         : competencyList.position,
 		// 	icon             : competencyList.icon,
@@ -444,7 +444,7 @@
 					competencyList.data[i].Compt_Description = '<span class="text-danger">No Description</span>';
 				}
 
-				tableBody += '<tr id="parent__'+competencyList.data[i].Compt_Id+'"> <td>'+eval(i+1)+'</td> <td id="'+competencyList.data[i].Compt_Id+'__Compt_Name" class="editable">'+competencyList.data[i].Compt_Name+'</td> <td id="'+competencyList.data[i].Compt_Id+'__Compt_Description" class="editable">'+competencyList.data[i].Compt_Description+'</td> <td><a href="javascript:void(0);" data-function="editCompetency" data-toggle="tooltip" title="Edit" data-pid="'+competencyList.data[i].Compt_Id+'" class="editIcon" id="'+competencyList.data[i].Compt_Id+'__edit"> <i class="fa fa-pencil"></i> </a> <a href="javascript:void(0);" data-function="editCompetency" data-toggle="tooltip" title="Save" data-pid="'+competencyList.data[i].Compt_Id+'" class="saveIcon d-none" id="'+competencyList.data[i].Compt_Id+'__save"> <i class="fa fa-save"></i> </a>&nbsp;<a href="javascript:void(0);" data-col_table="Compt_Delete__competency__Compt_Id__listCompetency" data-toggle="tooltip" title="Delete" data-pid="'+competencyList.data[i].Compt_Id+'" class="deleteIcon"> <i class="fa fa-trash"></i> </a></td></tr>'
+				tableBody += '<tr id="parent__'+competencyList.data[i].Compt_Id+'"> <td>'+eval(i+1)+'</td> <td>'+competencyList.data[i].Enterprise_Name+'</td> <td id="'+competencyList.data[i].Compt_Id+'__Compt_Name" class="editable">'+competencyList.data[i].Compt_Name+'</td> <td id="'+competencyList.data[i].Compt_Id+'__Compt_Description" class="editable">'+competencyList.data[i].Compt_Description+'</td> <td><a href="javascript:void(0);" data-function="editCompetency" data-toggle="tooltip" title="Edit" data-pid="'+competencyList.data[i].Compt_Id+'" class="editIcon" id="'+competencyList.data[i].Compt_Id+'__edit"> <i class="fa fa-pencil"></i> </a> <a href="javascript:void(0);" data-function="editCompetency" data-toggle="tooltip" title="Save" data-pid="'+competencyList.data[i].Compt_Id+'" class="saveIcon d-none" id="'+competencyList.data[i].Compt_Id+'__save"> <i class="fa fa-save"></i> </a>&nbsp;<a href="javascript:void(0);" data-col_table="Compt_Delete__items__Compt_Id__listCompetency" data-toggle="tooltip" title="Delete" data-pid="'+competencyList.data[i].Compt_Id+'" class="deleteIcon"> <i class="fa fa-trash"></i> </a></td></tr>'
 			});
 			table += tableHead+tableBody+'</tbody>'+'</table>';
 			$('#addTable').html(table);

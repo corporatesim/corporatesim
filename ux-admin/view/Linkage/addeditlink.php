@@ -566,7 +566,8 @@
                        <br><br><br>
                      </div>
                      <div class="row">
-                      <div class="col-md-6">
+
+                      <div class="col-md-4">
                         <label>Background Color</label>
                         <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_bgcolor')){?>
                           <input type="color" id="changeMe" name="SubLink_BackgroundColor" id="SubLink_BackgroundColor" value="<?php echo ($SubLink_BackgroundColor == NULL)?'#ffffff':$SubLink_BackgroundColor;?>" onchange="hexToRgb(this.value)">
@@ -579,7 +580,8 @@
                         <span class="checkmark"></span>
                       </label>
                     </div>
-                    <div class="col-md-6">
+
+                    <div class="col-md-4">
                       <label>Text Color</label>
                       <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_textbgcolor')){?>
                         <input type="color" name="SubLink_TextColor" id="SubLink_TextColor" value="<?php echo ($SubLink_TextColor == NULL)?'#000000':$SubLink_TextColor;?>">
@@ -587,9 +589,15 @@
                        <input type="color" name="SubLink_TextColor" id="SubLink_TextColor" value="<?php echo ($SubLink_TextColor == NULL)?'#000000':$SubLink_TextColor;?>" disabled="">
                      <?php } ?>
                    </div>
-                 </div>
-                 <br>
-                 <div class="row col-md-12">
+
+                   <div class="col-md-4" data-toggle="tooltip" title="Only applicable for Admin, Formula, Carry and User(default) input boxex)">
+                    <label>Input Box Background</label>
+                    <input type="color" name="SubLink_InputBackgroundColor" id="SubLink_InputBackgroundColor" value="<?php echo ($linkdetails->SubLink_InputBackgroundColor == NULL)?'#ffffff':$linkdetails->SubLink_InputBackgroundColor;?>">
+                  </div>
+
+                </div>
+                <br>
+                <div class="row col-md-12">
                   <!--  <div class="form-group">-->
                     <label class="col-md-2 pull-left"><span class="alert-danger">*</span>Type - </label>
                     <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){ ?>
@@ -685,6 +693,14 @@
                         </label>
                       </div>
 
+                      <div class="col-md-2 outputShowHide">
+                        <label class="containerRadio">
+                          <input type="radio" name="SubLink_Competency_Performance" value="5" id="" <?php 
+                          if(!empty($linkdetails) && $linkdetails->SubLink_Competency_Performance == 5){ echo "checked"; } ?> /> Application
+                          <span class="checkmarkRadio"></span>
+                        </label>
+                      </div>
+
                     <?php } else{ ?>
 
                       <div class="col-md-2 inputShowHide">
@@ -723,6 +739,14 @@
                         <label class="containerRadio">
                           <input type="radio" name="SubLink_Competency_Performance" value="4" id="" onclick="javascript: return false;"
                           <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competency_Performance == 4){ echo "checked"; } ?> /> Competence
+                          <span class="checkmarkRadio"></span>
+                        </label>
+                      </div>
+
+                      <div class="col-md-2 outputShowHide">
+                        <label class="containerRadio">
+                          <input type="radio" name="SubLink_Competency_Performance" value="5" id="" onclick="javascript: return false;"
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competency_Performance == 5){ echo "checked"; } ?> /> Application
                           <span class="checkmarkRadio"></span>
                         </label>
                       </div>
@@ -1307,17 +1331,18 @@
                 } ?></td>
 
                 <td><?php switch ($row->SubLink_Competency_Performance) {
-                  case 0:
+                  case 0://Input
                   echo "None";
                   break;
-                  case 1:
-                  case 4:
+                  case 1://Input
+                  case 4://Output
                   echo "Competence";
                   break;
-                  case 2:
+                  case 2://Input
+                  case 5://Output
                   echo "Application";
                   break;
-                  case 3:
+                  case 3://Output
                   echo "Simulated Performance";
                   break;
                   default:

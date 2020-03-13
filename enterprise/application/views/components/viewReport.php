@@ -81,16 +81,21 @@
                     formatters: {
                       "reportIcons": function(column, row) {
                         // console.log(column); console.log(row);
-                        var user_game_id = row.user_game_id.split('_');
-                        var user_id      = user_game_id[0];
-                        var game_id      = user_game_id[1];
-                        var gameStatus   = user_game_id[2];
-                        var report_icon  = '';
+                        var user_game_id   = row.user_game_id.split('_');
+                        var user_id        = user_game_id[0];
+                        var game_id        = user_game_id[1];
+                        var gameStatus     = user_game_id[2];
+                        var lastScenLinkId = user_game_id[3];
+                        var report_icon    = '';
 
                         if(gameStatus > 0)
                         {
                           // this means user has completed game. So, show report icon
-                          report_icon = "<a href='javascript:void(0);' data-user_id='"+user_id+"' data-game_id='"+game_id+"' data-toggle='tooltip' title='Download Report' onclick='downloadGameReport(this)'><span class='fa fa-download'></span></a>";
+
+                          // report_icon = "<a href='javascript:void(0);' data-user_id='"+user_id+"' data-game_id='"+game_id+"' data-toggle='tooltip' title='Download Report' onclick='downloadGameReport(this)'><span class='fa fa-download'></span></a>";
+
+                          // commenting the above lines, to prevent the report download from pdf, and redirecting the viewUserReport(). So, this will get the view from report.php, via ajax and show to processOwner
+                          report_icon = "<a target='_blank' href='<?php echo base_url('OnlineReport/viewUserReport/');?>"+game_id+"/"+lastScenLinkId+"/"+user_id+"' data-user_id='"+user_id+"' data-game_id='"+game_id+"' data-toggle='tooltip' title='Download Report'><span class='fa fa-download'></span></a>";
                         }
                         else
                         {

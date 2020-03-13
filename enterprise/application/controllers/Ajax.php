@@ -55,13 +55,58 @@ public function deleteRecords($tableName=NULL, $dataCol=NULL)
   $retData = $this->Common_Model->softDelete($tableName, $data, $where);
   if($retData)
   {
-    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Competency Deleted Successfully.']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Item Deleted Successfully.']));
   }
   else
   {
     die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Connection Error. Please Try Later.']));
   }
 }
+
+public function listItems()
+{
+  // fetching records for competancy item list
+  $competencyQuery = "SELECT gi.Compt_Id, gi.Compt_Name, gi.Compt_Description, ge.Enterprise_Name FROM GAME_ITEMS gi INNER JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gi.Compt_Enterprise_ID  WHERE gi.Compt_Delete = 0 ORDER BY gi.Compt_Name";
+
+  $fetchData = $this->Common_Model->executeQuery($competencyQuery);
+
+  if(count($fetchData)<1)
+  {
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No Record Found.']));
+  }
+  else
+  {
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Item Data Loaded Successfully.', "data" => $fetchData]));
+  }
+}
+
+  public function getCompetencyGameItems($enterprise_ID=NULL)
+  {
+    //fetching all Items created under this enterprise
+    $enterpriseItemsWhere = array(
+      'Compt_Enterprise_ID' => $enterprise_ID,
+      'Compt_Delete'        => 0,
+    );
+    $enterpriseItemsList =$this->Common_Model->fetchRecords('GAME_ITEMS', $enterpriseItemsWhere, 'Compt_Id, Compt_Name, Compt_Description', 'Compt_Name');
+
+    //fetching all Games assigned to this enterprise
+    $enterpriseGameQuery = "SELECT gg.Game_ID, gg.Game_Name, gg.Game_Comments FROM GAME_GAME gg LEFT JOIN GAME_ENTERPRISE_GAME geg ON geg.EG_GameID = gg.Game_ID WHERE gg.Game_Delete = 0 AND geg.EG_EnterpriseID = $enterprise_ID ORDER BY gg.Game_Name";
+    $enterpriseGameList = $this->Common_Model->executeQuery($enterpriseGameQuery);
+    //print_r($this->db->last_query()); exit();
+
+    // $result = array('itemOptions'=> $enterpriseItemsList, 'gameOptions' => $enterpriseGameList);
+    // echo json_encode($result);
+
+    if(count($enterpriseItemsList) < 1 || count($enterpriseGameList) < 1)
+    {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No Record Found.']));
+    }
+    else
+    {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Item Data Loaded Successfully.', "enterpriseItemsData" => $enterpriseItemsList, "enterpriseGameData" => $enterpriseGameList]));
+    }
+  }
+
 
 public function fetchRecords($tableName=NULL,$orderBy=NULL)
 {
@@ -74,7 +119,7 @@ public function fetchRecords($tableName=NULL,$orderBy=NULL)
   }
   else
   {
-    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Competency Data Loaded Successfully.', "data" => $fetchData]));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Item Data Loaded Successfully.', "data" => $fetchData]));
   }
 }
 
@@ -1562,31 +1607,33 @@ public function getDomainName($Domain_Name=NULL)
 public function addCompetency()
 {
   // add competency // print_r($this->input->post());
-  $Compt_Name        = $this->input->post('Compt_Name');
-  $Compt_Description = $this->input->post('Compt_Description');
+  $Compt_Name          = $this->input->post('Compt_Name');
+  $Compt_Description   = $this->input->post('Compt_Description');
+  $Compt_Enterprise_ID = $this->input->post('Compt_Enterprise_ID');
   if(empty($Compt_Name))
   {
-    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Competency name can not be left blank.']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Item name can not be left blank.']));
   }
   else
   {
     $insertArray = array(
-      'Compt_Name'        => $Compt_Name,
-      'Compt_Description' => $Compt_Description,
-      'Compt_CreatedBy'   => $this->loginDataLocal['User_Id'],
+      'Compt_Name'          => $Compt_Name,
+      'Compt_Description'   => $Compt_Description,
+      'Compt_Enterprise_ID' => $Compt_Enterprise_ID,
+      'Compt_CreatedBy'     => $this->loginDataLocal['User_Id'],
     );
     $checkExistingData = array(
       'Compt_Name'   => $Compt_Name,
       'Compt_Delete' => 0,
     );
-    $retData = $this->Common_Model->insert('GAME_COMPETENCY',$insertArray,$checkExistingData);
+    $retData = $this->Common_Model->insert('GAME_ITEMS',$insertArray,$checkExistingData);
     if($retData == 'duplicate')
     {
-      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Competency Name Already Exist.']));
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Item Name Already Exist.']));
     }
     else
     {
-      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Competency Added Successfully.']));
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Item Added Successfully.']));
     }
   }
 }
@@ -1600,7 +1647,7 @@ public function editCompetency()
   $Compt_Description = trim($this->input->post('Compt_Description'));
   if(empty($Compt_Name))
   {
-    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Competency name can not be left blank.']));
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Item name can not be left blank.']));
   }
   else
   {
@@ -1614,14 +1661,14 @@ public function editCompetency()
     $check = array(
       'Compt_Name' => $Compt_Name,
     );
-    $retData = $this->Common_Model->update('GAME_COMPETENCY', $Compt_Id, $updateArray, $check, 'Compt_Id');
+    $retData = $this->Common_Model->update('GAME_ITEMS', $Compt_Id, $updateArray, $check, 'Compt_Id');
     if($retData == 'duplicate')
     {
-      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Competency Name Already Exist.']));
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Item Name Already Exist.']));
     }
     else
     {
-      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Competency Data Updated Successfully.']));
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Item Data Updated Successfully.']));
     }
   }
 }

@@ -12,7 +12,7 @@
 						<nav aria-label="breadcrumb" role="navigation">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Competency Mapping</li>
+								<li class="breadcrumb-item active" aria-current="page">Item Mapping</li>
 							</ol>
 						</nav>
 					</div>
@@ -22,56 +22,64 @@
 						<div class="title">
 							<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
 								<div class="clearfix mb-20">
-									<h5 class="text-blue">Edit Competency Mapping</h5>
+									<h5 class="text-blue">Edit Item Mapping</h5>
 								</div>
 
 								<?php echo form_open('', 'id="competencyMappingForm"', '');?>
-								<div class="row col-md-12 col-lg-12 col-sm-12 row form-group">
-									<label for="Cmap_ComptId" class="col-sm-12 col-md-3 col-form-label">Select Competency </label>
-									<div class="col-sm-12 col-md-9">
-										<input name="Cmap_ComptId"  type="hidden" value="<?php echo $Cmap_ComptId; ?>">
-										<select id="Cmap_ComptId" class="custom-select2 form-control" required="" disabled="">
-											<option value="">--Select Competency--</option>
-											<?php foreach ($competency as $competencyRow) { ?>
-												<option value="<?php echo $competencyRow->Compt_Id;?>" title="<?php echo $competencyRow->Compt_Description; ?>" <?php echo ($competencyRow->Compt_Id == $Cmap_ComptId)?'selected':''; ?>> <?php echo $competencyRow->Compt_Name; ?> </option>
-											<?php } ?>
-										</select> <span class="text-danger">*</span>
-									</div>
-								</div>
 
-								<div class="row col-md-12 col-lg-12 col-sm-12 row form-group">
-									<label for="Cmap_GameId" class="col-sm-12 col-md-3 col-form-label">Select Game </label>
-									<div class="col-sm-12 col-md-9">
-										<select name="Cmap_GameId[]" id="Cmap_GameId" class="custom-select2 form-control" multiple="" required="">
-											<?php foreach ($games as $gamesRow) { ?>
-												<option value="<?php echo $gamesRow->Game_ID;?>" title="<?php echo $gamesRow->Game_Comments; ?>" <?php echo (empty($gamesRow->Cmap_Id))?'':'selected';?>> <?php echo $gamesRow->Game_Name; ?> </option>
-											<?php } ?>
-										</select> <span class="text-danger">* (Click on the box to see games dropdown)</span>
-									</div>
-								</div>
+                <div class="row col-md-12 col-lg-12 col-sm-12 row form-group">
+                  <label for="Cmap_Enterprise_ID" class="col-sm-12 col-md-3 col-form-label">Select Enterprise </label>
+                  <div class="col-sm-12 col-md-9">
+                    <input name="Cmap_Enterprise_ID"  type="hidden" value="<?php echo $enterprise_ID;?>">
+                    <select id="Cmap_Enterprise_ID" class="custom-select2 form-control" required="" disabled="">
+                      <option value="<?php echo $enterprise_ID;?>"> <?php echo $enterprise_Name; ?> </option>
+                    </select> <span class="text-danger">*</span>
+                  </div>
+                </div>
 
-								<div class="row col-md-12 col-lg-12 col-sm-12 row form-group" id="addCompSubcompOfGame">
-									<!-- // on change of game list all the component and subcomponent here -->
-									addCompSubcompOfGame
-								</div>
+                <div class="row col-md-12 col-lg-12 col-sm-12 row form-group">
+                  <label for="Cmap_ComptId" class="col-sm-12 col-md-3 col-form-label">Select Item </label>
+                  <div class="col-sm-12 col-md-9">
+                    <input name="Cmap_ComptId"  type="hidden" value="<?php echo $Cmap_ComptId; ?>">
+                    <select id="Cmap_ComptId" class="custom-select2 form-control" required="" disabled="">
+                      <option value="<?php echo $Cmap_ComptId;?>" title="<?php echo $compt_Description; ?>"> <?php echo $compt_Name; ?> </option>
+                    </select> <span class="text-danger">*</span>
+                  </div>
+                </div>
 
-								<div class="clearfix"></div>
-								<div class="text-center">
-									<button class="btn btn-primary" name="" type="submit">Create Mapping</button>
-									<a href="<?php echo base_url('Competency/viewCompetencyMapping');?>" class="btn btn-outline-danger">Cancel</a>
-								</div>
+                <div class="row col-md-12 col-lg-12 col-sm-12 row form-group">
+                 <label for="Cmap_GameId" class="col-sm-12 col-md-3 col-form-label">Select Game </label>
+                 <div class="col-sm-12 col-md-9">
+                  <select name="Cmap_GameId[]" id="Cmap_GameId" class="custom-select2 form-control" multiple="" required="">
+                   <?php foreach ($games as $gamesRow) { ?>
+                    <option value="<?php echo $gamesRow->Game_ID;?>" title="<?php echo $gamesRow->Game_Comments; ?>" <?php echo (empty($gamesRow->Cmap_Id))?'':'selected';?>> <?php echo $gamesRow->Game_Name; ?> </option>
+                  <?php } ?>
+                </select> <span class="text-danger">* (Click on the box to see games dropdown)</span>
+              </div>
+            </div>
 
-								<?php echo form_close();?>
-							</div>
-							<!-- end of adding users -->
-						</div>
-					</div>
+            <div class="row col-md-12 col-lg-12 col-sm-12 row form-group" id="addCompSubcompOfGame">
+             <!-- // on change of game list all the component and subcomponent here -->
+             addCompSubcompOfGame
+           </div>
 
-					<script>
-						$(document).ready(function(){
-							<?php if(count($mappedCompSubcomp) > 0){ ?>
-								appendCompetencyGameComponentSubcomponent('<?php echo implode('_', $mappedCompSubcomp); ?>');
-								$('#Cmap_GameId').trigger('change');
-							<?php } ?>
-						});
-					</script>
+           <div class="clearfix"></div>
+           <div class="text-center">
+             <button class="btn btn-primary" name="" type="submit">Create Mapping</button>
+             <a href="<?php echo base_url('Competency/viewCompetencyMapping');?>" class="btn btn-outline-danger">Cancel</a>
+           </div>
+
+           <?php echo form_close();?>
+         </div>
+         <!-- end of adding users -->
+       </div>
+     </div>
+
+     <script>
+      $(document).ready(function(){
+       <?php if(count($mappedCompSubcomp) > 0){ ?>
+        appendCompetencyGameComponentSubcomponent('<?php echo implode('_', $mappedCompSubcomp); ?>');
+        $('#Cmap_GameId').trigger('change');
+      <?php } ?>
+    });
+  </script>

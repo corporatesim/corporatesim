@@ -14,12 +14,21 @@ class Competency extends MY_Controller {
 	public function index()
 	{
   	// adding competency master
-		$where = array(
-			'Compt_Delete' => 0,
-		);
-		$competency = $this->Common_Model->fetchRecords('GAME_COMPETENCY', $where, 'Compt_Id, Compt_Name, Compt_Description', 'Compt_Name');
-		
+    $competencyQuery = "SELECT gi.Compt_Id, gi.Compt_Name, gi.Compt_Description, ge.Enterprise_Name FROM GAME_ITEMS gi LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gi.Compt_Enterprise_ID WHERE gi.Compt_Delete = 0 ORDER BY gi.Compt_Name";
+
+    $competency = $this->Common_Model->executeQuery($competencyQuery);
+
+		// print_r($this->db->last_query()); exit();
 		$content['competency'] = $competency;
+
+    // fetching all Game Enterprise
+    $enterprisewhere = array(
+      'Enterprise_Status' => 0,
+    );
+    $enterpriseDetails = $this->Common_Model->fetchRecords('GAME_ENTERPRISE', $enterprisewhere, 'Enterprise_ID, Enterprise_Name', 'Enterprise_Name');
+    
+    $content['enterpriseDetails'] = $enterpriseDetails;
+
 		$content['subview']    = 'competency';
 		$this->load->view('main_layout',$content);
 	}
@@ -27,9 +36,10 @@ class Competency extends MY_Controller {
 	public function viewCompetencyMapping()
 	{
   	// viewing competency mapping with all the games, for superadmin
-		$sql = "SELECT gcm.Cmap_Id, gcm.Cmap_ComptId, gc.Compt_Name, gcm.Cmap_GameId, gg.Game_Name FROM GAME_COMPETENCY_MAPPING gcm LEFT JOIN GAME_COMPETENCY gc ON gc.Compt_Id = gcm.Cmap_ComptId LEFT JOIN GAME_GAME gg ON gg.Game_ID = gcm.Cmap_GameId ORDER BY gc.Compt_Name";
+		$sql = "SELECT gcm.Cmap_Id, gcm.Cmap_ComptId, gi.Compt_Name, gcm.Cmap_GameId, gg.Game_Name, ge.Enterprise_Name FROM GAME_ITEMS_MAPPING gcm LEFT JOIN GAME_ITEMS gi ON gi.Compt_Id = gcm.Cmap_ComptId LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gcm.Cmap_Enterprise_ID LEFT JOIN GAME_GAME gg ON gg.Game_ID = gcm.Cmap_GameId WHERE gi.Compt_Delete = 0 ORDER BY gi.Compt_Name";
 
 		$competencyMapping = $this->Common_Model->executeQuery($sql);
+    //print_r($this->db->last_query()); exit();
 
 		if(count($competencyMapping)<1)
 		{
@@ -52,9 +62,7 @@ class Competency extends MY_Controller {
 				}
 				else
 				{
-					// $competencyMappingArray[$competencyMappingRow->Compt_Name] = $competencyMappingRow->Game_Name;
-					// $competencyMappingArray[$competencyMappingRow->Compt_Name.'_id'] = $competencyMappingRow->Cmap_ComptId;
-					$competencyMappingArray[$competencyMappingRow->Compt_Name] = array($competencyMappingRow->Game_Name, $competencyMappingRow->Cmap_ComptId);
+          $competencyMappingArray[$competencyMappingRow->Compt_Name] = array($competencyMappingRow->Game_Name, $competencyMappingRow->Cmap_ComptId, $competencyMappingRow->Enterprise_Name);
 				}
 			}
 			
@@ -81,18 +89,13 @@ class Competency extends MY_Controller {
 			$this->addEditCompetencyMappingOnSubmit();
 		}
 
-		$where = array(
-			'Compt_Delete' => 0,
-		);
-		$competency = $this->Common_Model->fetchRecords('GAME_COMPETENCY', $where, 'Compt_Id, Compt_Name, Compt_Description', 'Compt_Name');
-
-		$whereGame = array(
-			'Game_Delete' => 0,
-		);
-		$games = $this->Common_Model->fetchRecords('GAME_GAME', $whereGame, 'Game_ID, Game_Name, Game_Comments', 'Game_Name');
+    // fetching all Game Enterprise
+    $enterprisewhere = array(
+      'Enterprise_Status' => 0,
+    );
+    $enterpriseDetails = $this->Common_Model->fetchRecords('GAME_ENTERPRISE', $enterprisewhere, 'Enterprise_ID, Enterprise_Name', 'Enterprise_Name');
 		
-		$content['competency'] = $competency;
-		$content['games']      = $games;
+		$content['enterpriseDetails'] = $enterpriseDetails;
 		$content['subview']    = 'addCompetencyMapping';
 		$this->load->view('main_layout',$content);
 	}
@@ -102,7 +105,7 @@ class Competency extends MY_Controller {
 		$Cmap_ComptId = base64_decode($id);
 		if(empty($Cmap_ComptId))
 		{
-			$this->session->set_flashdata('er_msg', 'No Competency Selected To Edit');
+			$this->session->set_flashdata('er_msg', 'No Item Selected To Edit');
 			redirect('Competency/viewCompetencyMapping');
 		}
 
@@ -114,20 +117,30 @@ class Competency extends MY_Controller {
 			$this->addEditCompetencyMappingOnSubmit();
 		}
 
-		// fetching the list of all competency
-		$where = array(
-			'Compt_Delete' => 0,
-		);
-		$competency = $this->Common_Model->fetchRecords('GAME_COMPETENCY', $where, 'Compt_Id, Compt_Name, Compt_Description', 'Compt_Name');
+		//fetching Item Name and Description
+    $competencyQuery = "SELECT gi.Compt_Id, gi.Compt_Name, gi.Compt_Description FROM GAME_ITEMS gi WHERE gi.Compt_Delete = 0 AND gi.Compt_Id = $Cmap_ComptId";
+    $competency = $this->Common_Model->executeQuery($competencyQuery);
+    //print_r($this->db->last_query()); exit();
+    $compt_Name        = $competency[0]->Compt_Name;
+    $compt_Description = $competency[0]->Compt_Description;
 
-		// fetching the list of all the games, with mapping Id, if cmap_id is not null, then mapped
-		$gameSql = "SELECT gg.Game_ID, gg.Game_Name, gg.Game_Comments, gcm.Cmap_Id FROM GAME_GAME gg LEFT JOIN GAME_COMPETENCY_MAPPING gcm ON gcm.Cmap_GameId=gg.Game_ID AND gcm.Cmap_ComptId=".$Cmap_ComptId." WHERE Game_Delete=0 GROUP BY gg.Game_ID ORDER BY gg.Game_Name";
-		$games = $this->Common_Model->executeQuery($gameSql);
+    // fetching Item Game Enterprise
+    $enterpriseQuery = "SELECT ge.Enterprise_ID, ge.Enterprise_Name FROM GAME_ENTERPRISE ge LEFT JOIN GAME_ITEMS gi ON gi.Compt_Enterprise_ID = ge.Enterprise_ID WHERE gi.Compt_Delete = 0 AND gi.Compt_Id = $Cmap_ComptId";
+    $enterpriseDetails = $this->Common_Model->executeQuery($enterpriseQuery);
+    //print_r($this->db->last_query()); exit();
+    $enterprise_ID   = $enterpriseDetails[0]->Enterprise_ID;
+    $enterprise_Name = $enterpriseDetails[0]->Enterprise_Name;
+
+    //fetching all games that assign to this($enterprise_ID) enterprise 
+    $gameSql = "SELECT gg.Game_ID, gg.Game_Name, gg.Game_Comments, gim.Cmap_Id FROM GAME_GAME gg LEFT JOIN GAME_ENTERPRISE_GAME geg ON geg.EG_GameID = gg.Game_ID  LEFT JOIN GAME_ITEMS_MAPPING gim ON gim.Cmap_GameId = gg.Game_ID AND gim.Cmap_ComptId = $Cmap_ComptId WHERE gg.Game_Delete = 0 AND geg.EG_EnterpriseID = $enterprise_ID GROUP BY gg.Game_ID ORDER BY gg.Game_Name";
+    $games = $this->Common_Model->executeQuery($gameSql);
+    //print_r($this->db->last_query()); exit();
+
 		// fetching the list of all the components and subcomponents associated with the competency game mapping
 		$whereMap = array(
 			'Cmap_ComptId' => $Cmap_ComptId,
 		);
-		$mappedCompSubcomp = $this->Common_Model->fetchRecords('GAME_COMPETENCY_MAPPING', $whereMap, 'Cmap_SublinkId', '', '', '');
+		$mappedCompSubcomp = $this->Common_Model->fetchRecords('GAME_ITEMS_MAPPING', $whereMap, 'Cmap_SublinkId', '', '', '');
 		$mappedCompSubcompArray = array();
 		foreach ($mappedCompSubcomp as $mappedCompSubcompRow)
 		{
@@ -136,19 +149,23 @@ class Competency extends MY_Controller {
 
 		// pr($this->db->last_query()); prd($mappedCompSubcompArray);
 
-		$content['mappedCompSubcomp'] = $mappedCompSubcompArray;
-		$content['games']             = $games;
-		$content['competency']        = $competency;
-		$content['Cmap_ComptId']      = $Cmap_ComptId;
-		$content['subview']           = 'editCompetencyMapping';
+    $content['mappedCompSubcomp'] = $mappedCompSubcompArray;
+    $content['games']             = $games;
+    $content['enterprise_ID']     = $enterprise_ID;
+    $content['enterprise_Name']   = $enterprise_Name;
+    $content['compt_Name']        = $compt_Name;
+    $content['compt_Description'] = $compt_Description;
+    $content['Cmap_ComptId']      = $Cmap_ComptId;
+    $content['subview']           = 'editCompetencyMapping';
 		$this->load->view('main_layout',$content);
 	}
 
 	private function addEditCompetencyMappingOnSubmit()
 	{
 		// array value may be of type = 11521_3_1 or 1757_3_0, i.e. sublinkId_compePerforType_compSubComp, 0-comp, 1-Subcomp
-		$gamesId      = $this->input->post('Cmap_GameId');
-		$competencyId = $this->input->post('Cmap_ComptId');
+    $enterpriseID = $this->input->post('Cmap_Enterprise_ID');
+    $gamesId      = $this->input->post('Cmap_GameId');
+    $competencyId = $this->input->post('Cmap_ComptId');
 		if(count($gamesId)<1)
 		{
 			$this->session->set_flashdata('er_msg', 'No Game Selected');
@@ -170,6 +187,7 @@ class Competency extends MY_Controller {
 						$flag          = FALSE;
 						$tableColData  = explode('_', $gameDataArray[$j]);
 						$insertArray[] = array(
+              'Cmap_Enterprise_ID'   => $enterpriseID,
 							'Cmap_ComptId'         => $competencyId,
 							'Cmap_GameId'          => $gamesId[$i],
 							'Cmap_SublinkId'       => $tableColData[0],
@@ -189,8 +207,8 @@ class Competency extends MY_Controller {
 			$whereCompt = array(
 				'Cmap_ComptId' => $competencyId,
 			);
-			$this->Common_Model->deleteRecords('GAME_COMPETENCY_MAPPING', $whereCompt);
-			$this->Common_Model->batchInsert('GAME_COMPETENCY_MAPPING', $insertArray);
+			$this->Common_Model->deleteRecords('GAME_ITEMS_MAPPING', $whereCompt);
+			$this->Common_Model->batchInsert('GAME_ITEMS_MAPPING', $insertArray);
 			$this->db->trans_complete();
 			if($this->db->trans_status() === FALSE)
 			{
@@ -200,7 +218,7 @@ class Competency extends MY_Controller {
 			}
 			else
 			{
-				$this->session->set_flashdata('tr_msg', 'Competency Mapping Done Successfully');
+				$this->session->set_flashdata('tr_msg', 'Item Mapping Done Successfully');
 				redirect('Competency/viewCompetencyMapping');
 			}
 		}
@@ -217,7 +235,7 @@ class Competency extends MY_Controller {
 		$Cmap_ComptId = base64_decode($id);
 		if(empty($Cmap_ComptId))
 		{
-			$this->session->set_flashdata('er_msg', 'No Competency Selected To Delete');
+			$this->session->set_flashdata('er_msg', 'No Item Selected To Delete');
 			redirect('Competency/viewCompetencyMapping');
 		}
 		else
@@ -225,8 +243,8 @@ class Competency extends MY_Controller {
 			$whereCompt = array(
 				'Cmap_ComptId' => $Cmap_ComptId,
 			);
-			$del = $this->Common_Model->deleteRecords('GAME_COMPETENCY_MAPPING', $whereCompt);
-			$this->session->set_flashdata('tr_msg', 'Competency Mapping Deleted Successfully');
+			$del = $this->Common_Model->deleteRecords('GAME_ITEMS_MAPPING', $whereCompt);
+			$this->session->set_flashdata('tr_msg', 'Item Mapping Deleted Successfully');
 			redirect('Competency/viewCompetencyMapping');
 		}
 	}

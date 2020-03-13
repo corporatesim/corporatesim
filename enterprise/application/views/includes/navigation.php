@@ -111,18 +111,18 @@
 <?php if($this->session->userdata('loginData')['User_Role'] == 'superadmin') { ?>
   <li class="dropdown">
     <a href="javascript:;" class="dropdown-toggle">
-      <span class="fa fa-superpowers"></span><span class="mtext">Competency</span>
+      <span class="fa fa-superpowers"></span><span class="mtext">Items</span>
     </a>
 
     <ul class="submenu">
       <li>
-       <a href="<?php echo base_url('Competency');?>" data-toggle="tooltip" title="Add Competency Master">
-        <span class="fa fa-plus-circle"></span> Competency Master
+       <a href="<?php echo base_url('Competency');?>" data-toggle="tooltip" title="Add Items Master">
+        <span class="fa fa-plus-circle"></span> Items Master
       </a>
     </li>
     <li>
-      <a href="<?php echo base_url('Competency/viewCompetencyMapping');?>" data-toggle="tooltip" title="View/Edit Competency Mapping">
-        <span class='fa fa-eye'></span> Competency Mapping
+      <a href="<?php echo base_url('Competency/viewCompetencyMapping');?>" data-toggle="tooltip" title="View/Edit Items Mapping">
+        <span class='fa fa-eye'></span> Items Mapping
       </a>
     </li>
   </ul>
