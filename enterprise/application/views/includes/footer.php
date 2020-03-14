@@ -356,7 +356,7 @@
 		}
 	}
 
-	function appendCompetencyGameComponentSubcomponent(selectedCompSubcomps)
+	function appendCompetenceGameComponentSubcomponent(selectedCompSubcomps)
 	{
 		// console.log(selectedCompSubcomps);
 		$('#Cmap_GameId').on('change', function(){
@@ -372,7 +372,7 @@
 				// show some wait text to users
 				$('#addCompSubcompOfGame').html('<span class="text-success text-center">'+waitStringText+'</span>');
 				// tirgger ajax and get the o/p comp and subcomponent which are visible
-				var formData = $('#competencyMappingForm').serialize();
+				var formData = $('#competenceMappingForm').serialize();
 				// selectedCompSubcomps argument will be passed only when editing, comes from backend
 				var compSubcompOfGame = triggerAjax("<?php echo base_url('Ajax/compSubcompCheckboxes/');?>"+selectedCompSubcomps,formData);
 				// console.log(compSubcompOfGame);
@@ -396,8 +396,8 @@
 		});
 	}
 
-	// this function will edit/update the competency data
-	function editCompetency(parentid, url)
+	// this function will edit/update the competence data
+	function editCompetence(parentid, url)
 	{
 		var ajaxData = {};
 		// dataid is nothing but the parent_id which children are editable, so take data(text) of it
@@ -417,34 +417,34 @@
 			showConfirmButton: result.showConfirmButton,
 			timer            : result.timer,
 		});
-		listCompetency();
+		listCompetence();
 	}
 
-	function listCompetency()
+	function listCompetence()
 	{
-		var table          = '<table class="stripe hover multiple-select-row data-table-export nowrap">';
+		var table          = '<table class="stripe hover multiple-select-row data-table-export">';
 		var tableHead      = '<thead><tr><th>ID</th><th>Enterprise</th><th>Name</th><th>Description</th><th class="datatable-nosort noExport">Action</th></tr></thead>';
 		var tableBody      = '<tbody>';
 		var ajaxWhere      = {'Compt_Delete':'0'};
-		var competencyList = triggerAjax("<?php echo base_url('Ajax/listItems'); ?>",ajaxWhere);
+		var competenceList = triggerAjax("<?php echo base_url('Ajax/listItems'); ?>",ajaxWhere);
 		// Swal.fire({
-		// 	position         : competencyList.position,
-		// 	icon             : competencyList.icon,
-		// 	title            : competencyList.title,
-		// 	html             : competencyList.message,
-		// 	showConfirmButton: competencyList.showConfirmButton,
-		// 	timer            : competencyList.timer,
+		// 	position         : competenceList.position,
+		// 	icon             : competenceList.icon,
+		// 	title            : competenceList.title,
+		// 	html             : competenceList.message,
+		// 	showConfirmButton: competenceList.showConfirmButton,
+		// 	timer            : competenceList.timer,
 		// });
-		// console.log(competencyList);
-		if(competencyList.status == 200)
+		// console.log(competenceList);
+		if(competenceList.status == 200)
 		{			
-			$.each(competencyList.data, function(i,e){
-				if(competencyList.data[i].Compt_Description.length < 1)
+			$.each(competenceList.data, function(i,e){
+				if(competenceList.data[i].Compt_Description.length < 1)
 				{
-					competencyList.data[i].Compt_Description = '<span class="text-danger">No Description</span>';
+					competenceList.data[i].Compt_Description = '<span class="text-danger">No Description</span>';
 				}
 
-				tableBody += '<tr id="parent__'+competencyList.data[i].Compt_Id+'"> <td>'+eval(i+1)+'</td> <td>'+competencyList.data[i].Enterprise_Name+'</td> <td id="'+competencyList.data[i].Compt_Id+'__Compt_Name" class="editable">'+competencyList.data[i].Compt_Name+'</td> <td id="'+competencyList.data[i].Compt_Id+'__Compt_Description" class="editable">'+competencyList.data[i].Compt_Description+'</td> <td><a href="javascript:void(0);" data-function="editCompetency" data-toggle="tooltip" title="Edit" data-pid="'+competencyList.data[i].Compt_Id+'" class="editIcon" id="'+competencyList.data[i].Compt_Id+'__edit"> <i class="fa fa-pencil"></i> </a> <a href="javascript:void(0);" data-function="editCompetency" data-toggle="tooltip" title="Save" data-pid="'+competencyList.data[i].Compt_Id+'" class="saveIcon d-none" id="'+competencyList.data[i].Compt_Id+'__save"> <i class="fa fa-save"></i> </a>&nbsp;<a href="javascript:void(0);" data-col_table="Compt_Delete__items__Compt_Id__listCompetency" data-toggle="tooltip" title="Delete" data-pid="'+competencyList.data[i].Compt_Id+'" class="deleteIcon"> <i class="fa fa-trash"></i> </a></td></tr>'
+				tableBody += '<tr id="parent__'+competenceList.data[i].Compt_Id+'"> <td>'+eval(i+1)+'</td> <td>'+competenceList.data[i].Enterprise_Name+'</td> <td id="'+competenceList.data[i].Compt_Id+'__Compt_Name" class="editable">'+competenceList.data[i].Compt_Name+'</td> <td id="'+competenceList.data[i].Compt_Id+'__Compt_Description" class="editable">'+competenceList.data[i].Compt_Description+'</td> <td style="width:70px;"><a href="javascript:void(0);" data-function="editCompetence" data-toggle="tooltip" title="Edit" data-pid="'+competenceList.data[i].Compt_Id+'" class="editIcon" id="'+competenceList.data[i].Compt_Id+'__edit"> <i class="fa fa-pencil"></i> Edit </a> <a href="javascript:void(0);" data-function="editCompetence" data-toggle="tooltip" title="Save" data-pid="'+competenceList.data[i].Compt_Id+'" class="saveIcon d-none" id="'+competenceList.data[i].Compt_Id+'__save"> <i class="fa fa-save"></i> Save </a> <br /><a href="javascript:void(0);" data-col_table="Compt_Delete__items__Compt_Id__listCompetence" data-toggle="tooltip" title="Delete" data-pid="'+competenceList.data[i].Compt_Id+'" class="deleteIcon"> <i class="fa fa-trash"></i> Delete </a></td></tr>'
 			});
 			table += tableHead+tableBody+'</tbody>'+'</table>';
 			$('#addTable').html(table);
@@ -514,7 +514,7 @@
 					// this is valid for all the purpose,
 					var ajaxWhere         = {};
 					var pid               = $(this).data('pid');
-					// dataColTable = Compt_Delete__competency__Compt_Id__listCompetency , // this is nothing but updateColName__tableName__whereColName__nextExecutableFunctionName
+					// dataColTable = Compt_Delete__competence__Compt_Id__listCompetence , // this is nothing but updateColName__tableName__whereColName__nextExecutableFunctionName
 					var dataColTable      = $(this).data('col_table').split('__');
 					var dataCol           = dataColTable[0];
 					var tableName         = dataColTable[1];

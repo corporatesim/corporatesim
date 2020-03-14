@@ -84,7 +84,7 @@ include_once 'includes/header.php';
       <?php } ?> -->
       <!-- adding submit button to right and hiding the execute formula button -->
       <a class="rotateCompAnti" href="javascript:void(0);" style="padding-left: 120px;">
-        <button class="btn btn-danger" id="submitBtn" type="button">Submit</button>
+        <button class="btn btn-danger" id="submitBtn" type="button">Continue</button>
       </a>
 
     </div>
@@ -1542,7 +1542,7 @@ include_once 'includes/header.php';
         <br>
         <div class="" id="backForwardDiv">
           <button type="button" class="btn btn-primary pull-right" id="goForward">Go Forward</button>
-          <button type="button" class="btn btn-primary pull-right hidden" id="submitBtn2">Submit</button>
+          <button type="button" class="btn btn-danger pull-right hidden" id="submitBtn2">Continue</button>
           <button type="button" class="btn btn-primary" id="goBackward">Go Back</button>
         </div>
         <!-- end of adding next and previous buttons -->

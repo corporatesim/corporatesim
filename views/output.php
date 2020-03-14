@@ -19,9 +19,9 @@ include_once 'includes/header.php';
         	<div class="col-sm-3 col-md-2 text-center timer">hh:mm:ss</div>-->
           <div class="col-md-12 InnerPageHeader">
             <?php if(!empty($result)){ echo $result->Scenario ; }?>
-            <button type="button" name="submit" id="submitShow" class="btn btn-danger pull-right" value="Submit" style="display: none;">Submit</button>
+            <button type="button" name="submit" id="submitShow" class="btn btn-danger pull-right" value="Submit" style="display: none;">Continue</button>
             <?php if(!$skipOutput->Link_Enabled > 0){ ?>
-              <button type="button" name="submit" id="submitShowRight" class="btn btn-danger rotateCompAnti submitShowRight" value="Submit">Submit</button>
+              <button type="button" name="submit" id="submitShowRight" class="btn btn-danger rotateCompAnti submitShowRight" value="Submit">Continue</button>
             <?php } ?>
           </div>
           <form method="POST" action="" id="game_frm" name="game_frm">
@@ -951,7 +951,7 @@ include_once 'includes/header.php';
             <br>
             <div class="">
               <button type="button" class="btn btn-primary pull-right" id="goForward">Go Forward</button>
-              <button type="button" class="btn btn-primary pull-right hidden" id="submitBtn2">Submit</button>
+              <button type="button" class="btn btn-danger pull-right hidden" id="submitBtn2">Continue</button>
               <button type="button" class="btn btn-primary" id="goBackward">Go Back</button>
             </div>
             <!-- end of adding next and previous buttons -->

@@ -26,7 +26,7 @@
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script src="<?php echo base_url('common/src/jquery/dist/jquery.min.js?v=').file_version_cs;?>"></script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script> -->
   <!-- material icons for bootgrid -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
   <link href="<?php echo base_url('common/vendors/bootgrid/jquery.bootgrid.min.css?v=').file_version_cs;?>" rel="stylesheet" type="text/css">

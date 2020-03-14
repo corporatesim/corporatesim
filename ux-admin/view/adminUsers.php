@@ -780,20 +780,20 @@
 														</td>
 													</tr>
 
-													<!-- Adding Checkbox for Simulated Performance and Competency-->
-													<tr id="showhideCompetencyPerformance" class="collapse">
+													<!-- Adding Checkbox for Simulated Performance and Competence-->
+													<tr id="showhideCompetencePerformance" class="collapse">
 														<td>Select Result Type</td>
 
 														<td colspan="4" class="enableDisableSub">
 															<div class="col-md-2" style="margin-left:50%;">
-																<label for="competencyPerformance_edit" class="containerCheckbox">
-																	<input type="checkbox" id="competencyPerformance_edit" name="competencyPerformance_edit" value="yes"<?=$data['edit_competencyPerformance']=='yes'?'checked="yes"':''?> class="enableall" disabled="">
+																<label for="competencePerformance_edit" class="containerCheckbox">
+																	<input type="checkbox" id="competencePerformance_edit" name="competencePerformance_edit" value="yes"<?=$data['edit_competencePerformance']=='yes'?'checked="yes"':''?> class="enableall" disabled="">
 																	<span class="checkmark"></span>
 																</label>
 															</div>
 														</td>
 													</tr>
-													<!-- end of Adding Checkbox for Simulated Performance and Competency-->
+													<!-- end of Adding Checkbox for Simulated Performance and Competence-->
 
 													<tr id="showhideOrder" class="collapse">
 														<td>Select Order</td>

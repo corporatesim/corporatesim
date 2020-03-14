@@ -18,9 +18,11 @@ if($_SESSION['username'] == NULL)
 $userid  = $_SESSION['userid'];
 //echo $userid; 
 // echo "<pre>"; print_r($_REQUEST); exit();
-$gameid  = $_GET['ID'];
-$linkid  = $_GET['linkid'];
-$sqlarea = "SELECT distinct a.Area_ID as AreaID, a.Area_Name as Area_Name, a.Area_BackgroundColor as BackgroundColor, a.Area_TextColor as TextColor, gas.Sequence_Order AS Area_Sequencing
+$gameid   = $_GET['ID'];
+$gameData = $functionsObj->RunQueryFetchObject("SELECT * FROM GAME_GAME g WHERE g.Game_ID=$gameid");
+$title    = $gameData[0]->Game_Name;
+$linkid   = $_GET['linkid'];
+$sqlarea  = "SELECT distinct a.Area_ID as AreaID, a.Area_Name as Area_Name, a.Area_BackgroundColor as BackgroundColor, a.Area_TextColor as TextColor, gas.Sequence_Order AS Area_Sequencing, g.Game_Name
 FROM GAME_LINKAGE l 
 INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
 INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 

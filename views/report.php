@@ -1,6 +1,7 @@
 <!-- <?php // echo "<pre>"; print_r($result); exit(); ?> -->
+  <!-- <?php // echo ucfirst($_SESSION['username']).'_Game_Report-'.date('d-m-Y');?> -->
   <title>
-    <?php echo ucfirst($_SESSION['username']).'_Game_Report-'.date('d-m-Y');?>
+    <?php echo $title ;?>
   </title>
   <?php 
   include_once 'includes/header.php'; 
@@ -15,18 +16,18 @@
     width: 92% !important;
   }
   @media print {
-  @page { margin-bottom: 1px; }
-  /*body { margin: 1.6cm; }*/
-}
+    @page { margin-bottom: 1px; }
+    /*body { margin: 1.6cm; }*/
+  }
 </style>
 <section id="video_player">
 	<div class="container">
 		<div class="row">
         <!--<div class="col-sm-9 col-md-10 no_padding"><h2 class="InnerPageHeader"><?php if(!empty($result)){ echo $result->Game." | ".$result->Scenario ; }?> Your Output</h2></div>
         	<div class="col-sm-3 col-md-2 text-center timer">hh:mm:ss</div>-->
-          <div class="col-md-12 InnerPageHeader">
+          <!-- <div class="col-md-12 InnerPageHeader">
             <button type="button" name="submit" id="submitShow" class="btn btn-danger pull-right hidden" value="Submit" onclick="return window.print();">Print</button>
-          </div>
+          </div> -->
           <form method="POST" action="" id="game_frm" name="game_frm">
             <input type="hidden" name="ScenarioId" id="ScenarioId" value="<?php echo $result->Link_ScenarioID; ?>">
             <input type="hidden" name="LinkId" id="LinkId" value="<?php echo ($result->Link_ID)?$result->Link_ID:$linkid; ?>">
@@ -1154,4 +1155,11 @@ if($skipOutput->Link_Enabled > 0)
   },100);</script>";
 }
 ?>
+<script>
+  $(document).ready(function(){
+    $('#video_player').on('click',function(e){
+      window.print();
+    });
+  });
+</script>
 <?php include_once 'includes/footer.php' ?>

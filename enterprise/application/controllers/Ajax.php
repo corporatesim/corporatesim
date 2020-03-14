@@ -66,9 +66,9 @@ public function deleteRecords($tableName=NULL, $dataCol=NULL)
 public function listItems()
 {
   // fetching records for competancy item list
-  $competencyQuery = "SELECT gi.Compt_Id, gi.Compt_Name, gi.Compt_Description, ge.Enterprise_Name FROM GAME_ITEMS gi INNER JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gi.Compt_Enterprise_ID  WHERE gi.Compt_Delete = 0 ORDER BY gi.Compt_Name";
+  $competenceQuery = "SELECT gi.Compt_Id, gi.Compt_Name, gi.Compt_Description, ge.Enterprise_Name FROM GAME_ITEMS gi INNER JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gi.Compt_Enterprise_ID  WHERE gi.Compt_Delete = 0 ORDER BY gi.Compt_Name";
 
-  $fetchData = $this->Common_Model->executeQuery($competencyQuery);
+  $fetchData = $this->Common_Model->executeQuery($competenceQuery);
 
   if(count($fetchData)<1)
   {
@@ -80,7 +80,7 @@ public function listItems()
   }
 }
 
-  public function getCompetencyGameItems($enterprise_ID=NULL)
+  public function getCompetenceGameItems($enterprise_ID=NULL)
   {
     //fetching all Items created under this enterprise
     $enterpriseItemsWhere = array(
@@ -1604,9 +1604,9 @@ public function getDomainName($Domain_Name=NULL)
   }
 }
 
-public function addCompetency()
+public function addCompetence()
 {
-  // add competency // print_r($this->input->post());
+  // add competence // print_r($this->input->post());
   $Compt_Name          = $this->input->post('Compt_Name');
   $Compt_Description   = $this->input->post('Compt_Description');
   $Compt_Enterprise_ID = $this->input->post('Compt_Enterprise_ID');
@@ -1638,9 +1638,9 @@ public function addCompetency()
   }
 }
 
-public function editCompetency()
+public function editCompetence()
 {
-  // edit competency
+  // edit competence
   // print_r($this->input->post());
   $Compt_Id          = $this->input->post('Compt_Id');
   $Compt_Name        = trim($this->input->post('Compt_Name'));
@@ -1684,7 +1684,7 @@ public function compSubcompCheckboxes($selectedCompSubcomps=NULL)
     $selectedCompSubcomps = explode('_', $selectedCompSubcomps);
   }
   // prd($this->input->post());
-  $competencyId = $this->input->post('Cmap_ComptId');
+  $competenceId = $this->input->post('Cmap_ComptId');
   $gamesId      = $this->input->post('Cmap_GameId'); // this is of array type
   if(empty($gamesId))
   {
@@ -1692,12 +1692,14 @@ public function compSubcompCheckboxes($selectedCompSubcomps=NULL)
   }
   else
   {
-    $returnTableHtml = '<div class="row col-md-12"><div class="col-md-6"><span class="dot-success"></span> Components &nbsp; <span class="dot-danger"></span> SubComponents</div> <div class="custom-control custom-checkbox pull-right col-md-6"> <input type="checkbox" class="custom-control-input" id="select_all"> <label class="custom-control-label" for="select_all">Select All</label> </div> </div> <table class="table table-bordered table-hover"><thead><tr> <th>Game (Scen Name)</th> <th>Competency</th> <th>Application</th> <th>Simulated Performance</th> </tr></thead><tbody>';
+    $returnTableHtml = '<div class="row col-md-12"><div class="col-md-6"><span class="dot-success"></span> Components &nbsp; <span class="dot-danger"></span> SubComponents</div> <div class="custom-control custom-checkbox pull-right col-md-6"> <input type="checkbox" class="custom-control-input" id="select_all"> <label class="custom-control-label" for="select_all">Select All</label> </div> </div> <table class="table table-bordered table-hover"><thead><tr> <th>Game (Scen Name)</th> <th>Competence</th> <th>Application</th> <th>Simulated Performance</th> </tr></thead><tbody>';
     $gamesId = implode(',', $gamesId);
     // prd($this->input->post());
     // finding the last scenario of selected games
-    $scenSql = "SELECT gl.Link_GameID,gl.Link_ID,gl.Link_ScenarioID,MAX(gl.Link_Order), gg.Game_Name, gs.Scen_Name FROM GAME_LINKAGE gl LEFT JOIN GAME_GAME gg ON gg.Game_ID=gl.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID=gl.Link_ScenarioID WHERE gl.Link_GameID IN ($gamesId) GROUP BY gl.Link_GameID ORDER BY gl.Link_GameID ASC";
+    $scenSql = "SELECT gl.Link_GameID, gl.Link_ID, gl.Link_ScenarioID, gl.Link_Order, gg.Game_Name, gs.Scen_Name FROM GAME_LINKAGE gl LEFT JOIN GAME_GAME gg ON gg.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Link_ScenarioID WHERE (gl.Link_GameID, gl.Link_Order) IN( SELECT gll.Link_GameID, MAX(gll.Link_Order) FROM GAME_LINKAGE gll WHERE gll.Link_GameID IN($gamesId) GROUP BY gll.Link_GameID)";
+    // $scenSql = "SELECT gl.Link_GameID, gl.Link_ID, gl.Link_ScenarioID, gl.Link_Order, gg.Game_Name, gs.Scen_Name FROM GAME_LINKAGE gl JOIN GAME_LINKAGE gll ON gl.Link_Order > gll.Link_Order LEFT JOIN GAME_GAME gg ON gg.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Link_ScenarioID WHERE gl.Link_GameID IN($gamesId) GROUP BY gl.Link_GameID";
     $lastScenario = $this->Common_Model->executeQuery($scenSql);
+    // echo $scenSql; prd($lastScenario);
     if(count($lastScenario)<1)
     {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No Scenario Found For Selected Games.']));
@@ -1714,7 +1716,7 @@ public function compSubcompCheckboxes($selectedCompSubcomps=NULL)
           'SubLink_ShowHide' => 0,
           'SubLink_Type'     => 1,
         );
-        $compSubcomp = $this->Common_Model->fetchRecords('GAME_LINKAGE_SUB', $whereLink, '"'.$lastScenarioRow->Game_Name.'" AS GameName, "'.$lastScenarioRow->Scen_Name.'" AS ScenName, SubLink_ID AS SubLinkID, SubLink_CompID AS CompID, SubLink_CompName AS CompName, SubLink_SubCompID AS SubCompID, SubLink_SubcompName AS SubcompName, SubLink_Competency_Performance AS Competency_Performance, IF(SubLink_SubCompID>0, "subComponent", "component") AS "compSubcompType", SubLink_AreaName', 'SubLink_CompName, SubLink_SubcompName, SubLink_Competency_Performance');
+        $compSubcomp = $this->Common_Model->fetchRecords('GAME_LINKAGE_SUB', $whereLink, '"'.$lastScenarioRow->Game_Name.'" AS GameName, "'.$lastScenarioRow->Scen_Name.'" AS ScenName, SubLink_ID AS SubLinkID, SubLink_CompID AS CompID, SubLink_CompName AS CompName, SubLink_SubCompID AS SubCompID, SubLink_SubcompName AS SubcompName, SubLink_Competence_Performance AS Competence_Performance, IF(SubLink_SubCompID>0, "subComponent", "component") AS "compSubcompType", SubLink_AreaName', 'SubLink_CompName, SubLink_SubcompName, SubLink_Competence_Performance');
         // as we are taking only o/p comp/subcomp. // print_r($compSubcomp);
         // echo "<br>starting for ".$lastScenarioRow->Link_GameID."<br><br>";
         if(count($compSubcomp)<1)
@@ -1728,7 +1730,7 @@ public function compSubcompCheckboxes($selectedCompSubcomps=NULL)
           $tdGameScen = '<td class="gameScenRow">'.$lastScenarioRow->Game_Name.' ('.$lastScenarioRow->Scen_Name.')</td>';
 
           $tdSimulatedPerformance = '<td class="tdSimulatedPerformance">';
-          $tdCompetency           = '<td class="tdCompetency">';
+          $tdCompetence           = '<td class="tdCompetence">';
           $tdApplication          = '<td class="tdApplication">';
           // this scenario has some comp/subcome visible
           foreach ($compSubcomp as $compSubcompRow)
@@ -1742,11 +1744,11 @@ public function compSubcompCheckboxes($selectedCompSubcomps=NULL)
             {
               $alreadySelected = '';
             }
-            // generating html for those. There will be only (3=simulatedPerformance, 4=Competency, 5=Application) for Competency_Performance
-            switch ($compSubcompRow->Competency_Performance) {
+            // generating html for those. There will be only (3=simulatedPerformance, 4=Competence, 5=Application) for Competence_Performance
+            switch ($compSubcompRow->Competence_Performance) {
               case 4:
               // write code
-              $appendData = 'tdCompetency';
+              $appendData = 'tdCompetence';
               break;
 
               case 5:
@@ -1760,23 +1762,23 @@ public function compSubcompCheckboxes($selectedCompSubcomps=NULL)
               break;
             }
 
-            if(in_array($compSubcompRow->Competency_Performance, $tdArray))
+            if(in_array($compSubcompRow->Competence_Performance, $tdArray))
             {
-              // if Competency_Performance td already created so put this check box into that td 
+              // if Competence_Performance td already created so put this check box into that td 
               $$appendData .= $this->compSubcompCheckboxesHtml($compSubcompRow, $lastScenarioRow->Link_GameID, $alreadySelected);
             }
             else
             {
               // create td and put the check box here
-              $tdArray[]    = $compSubcompRow->Competency_Performance;
+              $tdArray[]    = $compSubcompRow->Competence_Performance;
               $$appendData .= $this->compSubcompCheckboxesHtml($compSubcompRow, $lastScenarioRow->Link_GameID, $alreadySelected);
             }
 
           }
           $tdSimulatedPerformance .= '</td>';
-          $tdCompetency           .= '</td>';
+          $tdCompetence           .= '</td>';
           $tdApplication          .= '</td>';
-          $tableRow .= $tdGameScen.$tdCompetency.$tdApplication.$tdSimulatedPerformance;
+          $tableRow .= $tdGameScen.$tdCompetence.$tdApplication.$tdSimulatedPerformance;
         }
         $tableRow .= '</tr>';
       }
@@ -1807,7 +1809,7 @@ private function compSubcompCheckboxesHtml($compSubcompRow=NULL, $gameId=NULL, $
     $title     = 'data-toggle="tooltip" title="Component: '.$compSubcompRow->CompName.'"';
     $type      = 1;
   }
-  return '<div class="custom-control custom-checkbox" '.$title.'> <input type="checkbox" class="custom-control-input" name="'.$gameId.'[]" id="'.$compSubcompRow->SubLinkID.'" value="'.$compSubcompRow->SubLinkID.'_'.$compSubcompRow->Competency_Performance.'_'.$type.'" '.$alreadySelected.'> <label style="color:'.$TextColor.'" class="custom-control-label" for="'.$compSubcompRow->SubLinkID.'">'.$name.'</label> </div>';
+  return '<div class="custom-control custom-checkbox" '.$title.'> <input type="checkbox" class="custom-control-input" name="'.$gameId.'[]" id="'.$compSubcompRow->SubLinkID.'" value="'.$compSubcompRow->SubLinkID.'_'.$compSubcompRow->Competence_Performance.'_'.$type.'" '.$alreadySelected.'> <label style="color:'.$TextColor.'" class="custom-control-label" for="'.$compSubcompRow->SubLinkID.'">'.$name.'</label> </div>';
 }
 
 public function userReportData()

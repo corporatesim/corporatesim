@@ -105,6 +105,11 @@
         <span class="fa fa-bar-chart"></span> P2P Reports
       </a>
     </li>
+    <!-- <li>
+      <a href="<?php echo base_url('CompetenceReport');?>">
+        <span class="fa fa-superpowers"></span> Item Reports
+      </a>
+    </li> -->
   </ul>
 </li>
 
@@ -116,12 +121,12 @@
 
     <ul class="submenu">
       <li>
-       <a href="<?php echo base_url('Competency');?>" data-toggle="tooltip" title="Add Items Master">
+       <a href="<?php echo base_url('Competence');?>" data-toggle="tooltip" title="Add Items Master">
         <span class="fa fa-plus-circle"></span> Items Master
       </a>
     </li>
     <li>
-      <a href="<?php echo base_url('Competency/viewCompetencyMapping');?>" data-toggle="tooltip" title="View/Edit Items Mapping">
+      <a href="<?php echo base_url('Competence/viewCompetenceMapping');?>" data-toggle="tooltip" title="View/Edit Items Mapping">
         <span class='fa fa-eye'></span> Items Mapping
       </a>
     </li>

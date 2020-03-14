@@ -165,12 +165,12 @@ switch($_GET['q']){
 	$showfile = 'createMis.php';
 	break;
 
-	case 'manageCompetency':
-	$showfile = 'manageCompetency.php';
+	case 'manageCompetence':
+	$showfile = 'manageCompetence.php';
 	break;
 
-	case 'competencyFormula':
-	$showfile = 'competencyFormula.php';
+	case 'competenceFormula':
+	$showfile = 'competenceFormula.php';
 	break;
 
 	case 'notification':

@@ -1,7 +1,9 @@
 <?php
-
+include_once 'config/settings.php'; 
 echo ini_get('allow_url_fopen');
-phpinfo(); echo "<pre>"; print_r(openssl_get_cert_locations()); exit();
+phpinfo(); echo "<pre>"; print_r(openssl_get_cert_locations()); 
+print_r($_SESSION); print_r($_SERVER); var_dump($localIP); exit();
+
 include_once 'config/settings.php'; 
 include_once 'config/functions.php'; 
 // using domPdf library

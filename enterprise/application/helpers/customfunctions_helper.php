@@ -3,7 +3,7 @@
 function prd($data=NULL){
 	echo "<pre>";
 	print_r($data);
-	echo "<pre>";
+	echo "</pre>";
 	die(' into_helper ');
 }
 
@@ -11,7 +11,7 @@ function prd($data=NULL){
 function pr($data=NULL){
 	echo "<pre>";
 	print_r($data);
-	echo "<pre>";
+	echo "</pre>";
 }
 
 function SendMail($toEmail=NULL,$html=NULL,$subject=NULL)
@@ -74,16 +74,5 @@ function do_upload($imageDataArray=NULL)
 		return array('status' => 200, 'data' => $data['upload_data']['file_name']);
 	} 
 
-}
-
-function notificationCount()
-{
-	$CI =& get_instance();
-	if($CI->session->userdata('userLoginData')->user_role == 1)
-	{
-		$CI->db->where(array('order_to' => $CI->session->userdata('userLoginData')->user_id, 'order_deleteTo' => 0, 'order_status' => 0));
-		$result = $CI->db->get('orders');
-		echo $result->num_rows();
-	}
 }
 
