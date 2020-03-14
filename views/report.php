@@ -1,8 +1,8 @@
 <!-- <?php // echo "<pre>"; print_r($result); exit(); ?> -->
   <!-- <?php // echo ucfirst($_SESSION['username']).'_Game_Report-'.date('d-m-Y');?> -->
-  <title>
+ <!--  <title>
     <?php echo $title ;?>
-  </title>
+  </title> -->
   <?php 
   include_once 'includes/header.php'; 
   ?>
@@ -16,7 +16,7 @@
     width: 92% !important;
   }
   @media print {
-    @page { margin-bottom: 1px; }
+    @page { margin: 0; }
     /*body { margin: 1.6cm; }*/
   }
 </style>

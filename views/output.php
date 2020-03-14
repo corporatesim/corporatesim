@@ -8,6 +8,13 @@
   .container{
     width: 92% !important;
   }
+  @media print {
+    @page { margin: 0; }
+    /*body { margin: 1.6cm; }*/
+    .InnerPageHeader{
+      display: none;
+    }
+  }
 </style>
 <?php 
 include_once 'includes/header.php'; 
