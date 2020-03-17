@@ -56,7 +56,7 @@ include_once 'includes/header.php';
 
 						if($gamedetails->Game_ReportButton < 1){ ?>
 							<!-- show/download output result -->
-							<a href="<?php echo site_root.'report.php?ID='.$gameid.'&linkid='.$linkid;?>" data-toggle="tooltip" title="View Game Output" data-gameid='<?php echo $gameid; ?>' data-scenid='<?php echo $ScenID; ?>' data-linkid='<?php echo $linkid; ?>' id="showDownloadOutput">
+							<a href="<?php echo site_root.'report.php?ID='.$gameid.'&linkid='.$linkid;?>" target="_blank" data-toggle="tooltip" title="View Game Output" data-gameid='<?php echo $gameid; ?>' data-scenid='<?php echo $ScenID; ?>' data-linkid='<?php echo $linkid; ?>' id="showDownloadOutput">
 								<img src="images/downloadReport.png" alt="Output" width="75">
 							</a>
 						<?php } ?>	
