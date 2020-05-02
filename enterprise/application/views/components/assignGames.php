@@ -1,8 +1,10 @@
  <!--   <?php// echo $type."<pre>";print_r($assignGames); exit(); ?>   -->
  	<div class="main-container">
  		<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+      <?php $this->load->view('components/trErMsg');?>
  			<div class="min-height-200px">
  				<div class="page-header">
+
  					<div class="row">
  						<div class="col-md-6 col-sm-12">
  							<div class="title">
@@ -33,9 +35,9 @@
  							</nav>
  						</div>	
  					</div>
+          
  					<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
  						<div class="clearfix">
- 							<?php $this->load->view('components/trErMsg');?>
  							<div class="col-md-6 pull-left text-left">
  								Mobile category simulations will be played on:-
  								<a href="<?php echo base_url('../mobile');?>" target="_blank">

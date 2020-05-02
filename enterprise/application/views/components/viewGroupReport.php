@@ -21,12 +21,12 @@
 					<div class="col-md-6 col-sm-12">
 						<div class="title">
 							<h1><a href="javascript:void(0);" data-toggle="tooltip" title="Reports"><i class="fa fa-file text-blue"> 
-							</i></a> Group/P2P Reports</h1>
+							</i></a> Group/P2P Report</h1>
 						</div>
 						<nav aria-label="breadcrumb" role="navigation">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Group/P2P Reports</li>
+								<li class="breadcrumb-item active" aria-current="page">Group/P2P Report</li>
 							</ol>
 						</nav>
 					</div>
@@ -84,7 +84,7 @@
 											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprise</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="SubEnterprise" id="SubEnterprise" class="custom-select2 form-control subenterprise">
-													<option value="">-Select SubEnterprise-</option>
+													<option value="">-Select Subenterprize-</option>
 												</select>
 											</div>
 										</div>
@@ -112,10 +112,10 @@
 										</div>
 
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="enterpriseDiv">
-											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
+											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="Enterprise" id="Enterprise" class="custom-select2 form-control Enterprise" required="">
-													<option value="">--Select Enterprise--</option>
+													<option value="">--Select Enterprize--</option>
 													<?php foreach ($enterpriseData as $enterpriseDataRow) { ?>
 														<option value="<?php echo $enterpriseDataRow->Enterprise_ID; ?>" date-enterprisename="<?php echo $enterpriseDataRow->Enterprise_Name;?>" selected><?php echo $enterpriseDataRow->Enterprise_Name; ?></option>
 													<?php } ?>
@@ -127,7 +127,7 @@
 											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprise</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="SubEnterprise" id="SubEnterprise" class="custom-select2 form-control subenterprise">
-													<option value="">-Select SubEnterprise-</option>
+													<option value="">-Select Subenterprize-</option>
 													<?php foreach ($SubEnterprise as $SubEnterpriseData) { ?>
 														<option value="<?php echo $SubEnterpriseData->SubEnterprise_ID; ?>" date-subEnterprisename="<?php echo $SubEnterpriseData->SubEnterprise_Name;?>"><?php echo $SubEnterpriseData->SubEnterprise_Name; ?></option>
 													<?php } ?>
@@ -154,7 +154,7 @@
 											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="Enterprise" id="Enterprise" class="custom-select2 form-control Enterprise">
-													<option value="">--Select Enterprise--</option>
+													<option value="">--Select Enterprize--</option>
 													<?php foreach ($enterpriseData as $enterpriseDataRow) { ?>
 														<option value="<?php echo $enterpriseDataRow->Enterprise_ID; ?>" date-enterprisename="<?php echo $enterpriseDataRow->Enterprise_Name;?>" selected><?php echo $enterpriseDataRow->Enterprise_Name; ?></option>
 													<?php } ?>
@@ -163,10 +163,10 @@
 										</div>
 
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="subEnterpriseDiv">
-											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprise</label>
+											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select Subenterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="SubEnterprise" id="SubEnterprise" class="custom-select2 form-control subenterprise">
-													<option value="">-Select SubEnterprise-</option>
+													<option value="">-Select Subenterprize-</option>
 													<?php foreach ($SubEnterprise as $SubEnterpriseData) { ?>
 														<option value="<?php echo $SubEnterpriseData->SubEnterprise_ID; ?>" date-subEnterprisename="<?php echo $SubEnterpriseData->SubEnterprise_Name;?>" selected><?php echo $SubEnterpriseData->SubEnterprise_Name; ?></option>
 													<?php } ?>
@@ -193,10 +193,10 @@
 										</div>
 
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group" id="gameDiv">
-											<label for="selectGame" class="col-sm-12 col-md-3 col-form-label">Select Game</label>
+											<label for="selectGame" class="col-sm-12 col-md-3 col-form-label">Select Card</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="selectGame" id="selectGame" class="custom-select2 form-control" required="">
-													<option value="">--Select Game--</option>
+													<option value="">--Select Card--</option>
 												</select>
 											</div>
 										</div>
@@ -268,13 +268,13 @@
 										fetchAssignedGroups('superadminUsers',null,null);
 
 										<?php if($this->session->userdata('loginData')['User_Role']=='superadmin') { ?>
-											var entOption = '<option value="">--Select Enterprise--</option>';
+											var entOption = '<option value="">--Select Enterprize--</option>';
 											<?php foreach ($enterpriseData as $enterpriseDataRow) { ?>
 												entOption += '<option value="<?php echo $enterpriseDataRow->Enterprise_ID; ?>"><?php echo $enterpriseDataRow->Enterprise_Name; ?></option>';
 											<?php } ?>
 											$('#Enterprise').html(entOption);
 										<?php } ?>
-										$('#SubEnterprise').html('<option value="">--Select SubEnterprise--</option>');
+										$('#SubEnterprise').html('<option value="">--Select Subenterprize--</option>');
 
 									}
 
@@ -324,7 +324,7 @@
 										$('#subEnterpriseDiv').removeClass('d-none');
 
 										<?php if($this->session->userdata('loginData')['User_Role']==1) { ?>
-											var subEntOption = '<option value="">--Select Enterprise--</option>';
+											var subEntOption = '<option value="">--Select Enterprize--</option>';
 											<?php foreach ($subEnterpriseData as $subEnterpriseDataRow) { ?>
 												subEntOption += '<option value="<?php echo $subEnterpriseDataRow->SubEnterprise_ID; ?>"><?php echo $subEnterpriseDataRow->SubEnterprise_Name; ?></option>';
 											<?php } ?>
@@ -346,7 +346,7 @@
 
 $('#Enterprise').on('change',function(){
 	$this             = $(this);
-	var option        = '<option value="">--Select SubEnterprise--</option>';
+	var option        = '<option value="">--Select Subenterprize--</option>';
 	var Enterprise_ID = $(this).val();
 
 	if($(this).val())
@@ -365,7 +365,7 @@ $('#Enterprise').on('change',function(){
 						option += ("<option value='"+result[i].SubEnterprise_ID+"'>"+result[i].SubEnterprise_Name+"</option>");
 					});
 					$this.parents('form').find('select.subenterprise').html(option);
-					option = '<option value="">--Select SubEnterprise--</option>';
+					option = '<option value="">--Select Subenterprize--</option>';
 					// $('.SubEnterprise').html(option);
 				}
 				else
@@ -443,7 +443,7 @@ submitFormGetData();
 // when group is changed then find all the games associated with this, if not then show alert
 $('#selectGroup').on('change',function(){
 	var Map_GroupId        = $(this).val();
-	var collaborationGames = '<option value="">--select game--</option>';
+	var collaborationGames = '<option value="">--select Card--</option>';
 
 	if(!Map_GroupId)
 	{
@@ -529,7 +529,7 @@ function submitFormGetData()
 							clearInterval(timerInterval)
 							$('#resultGroupName').html('<b>Group Name: </b>'+result.data.Group_Name);
 							$('#resultGroupInfo').html('<b>Group Info: </b>'+result.data.Group_Info);
-							$('#resultGameName').html('<b>Game Name: </b>'+result.data.Game_Name);
+							$('#resultGameName').html('<b>Card Name: </b>'+result.data.Game_Name);
 							// console.log(result.data.userData);
 							// var donutChart = $('#donutChart');
 							var chart_labels          = [];

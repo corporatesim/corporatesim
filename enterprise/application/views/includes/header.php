@@ -90,9 +90,10 @@
         <span></span>
         <span></span>
       </div>
+
       <div class="user-info-dropdown">
         <div class="dropdown">
-          <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+          <a class="dropdown-toggle" href="javascript:void(0);" role="button" data-toggle="dropdown">
             <!-- <?php
             if($this->session->userdata('loginData')['User_Role'] > 0 )
             {
@@ -124,6 +125,16 @@
           <!-- <a class="dropdown-item" href="#"><i class="fa fa-question" aria-hidden="true"></i> Help</a> -->
           <a class="dropdown-item" href="<?php echo base_url('Dashboard/logout');?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
         </div>
+      </div>
+    </div>
+    
+    <!-- Notification -->
+    <div class="user-notification d-none">
+      <div class="dropdown">
+        <a class="dropdown-toggle no-arrow" href="javascript:void(0);" role="button">
+          <i class="fa fa-bell" aria-hidden="true"></i>
+          <span class="notification">4</span>
+        </a>
       </div>
     </div>
     <!-- hiding user notification -->

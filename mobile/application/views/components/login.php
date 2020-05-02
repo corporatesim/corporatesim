@@ -22,7 +22,7 @@
 
   <h2 class="mt-1">
     <img src="<?php echo base_url('../enterprise/common/Logo/'.$logo); ?>" alt="Logo" style="height: 45px; max-width: 300px;">
-    <span class="float-right">Welcome !</span>
+    <!-- <span class="float-right">Welcome !</span> -->
   </h2>
   <div class="d-flex align-items-start clearfix"><br></div>
 
@@ -31,7 +31,7 @@
     <input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
     <div class="container">
       <img src="<?php echo base_url('../images/avatar.png'); ?>" alt="Avatar" style="width:100%;">
-      <p>Are you ready to play?</p>
+      <p>Welcome! Are you ready?</p>
       <!-- <p>Please enter your email or username</p> -->
       <!-- <span class="time-right"><?php echo date('d-m-Y h:i:s'); ?></span> -->
     </div>

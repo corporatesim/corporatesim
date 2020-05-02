@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class PlaySimulation extends My_Controller {
+class PlaySimulation extends My_Controller
+{
 
 	/**
 	 * Index Page for this controller.
@@ -34,7 +35,7 @@ class PlaySimulation extends My_Controller {
 		redirect('SelectSimulation');
 	}
 
-	public function input($gameId=NULL)
+	public function input($gameId = NULL)
 	{
 		$checkUserGame  = $this->checkUserGame($gameId);
 		$checkKeyUpdate = true;
@@ -46,12 +47,10 @@ class PlaySimulation extends My_Controller {
 
 		$gameID = $userLinkageResult[0]->Link_GameID;
 
-		foreach ($userLinkageResult as $userLinkageResultRow)
-		{
+		foreach ($userLinkageResult as $userLinkageResultRow) {
 			// if it has only one row/linkage then this will be the end scenario, and scen_status will be played by default
-			$endScenario = (count($userLinkageResult)>1)?0:1;
-			if(empty($userLinkageResultRow->UsScen_Id))
-			{
+			$endScenario = (count($userLinkageResult) > 1) ? 0 : 1;
+			if (empty($userLinkageResultRow->UsScen_Id)) {
 				// add this linkage, it may be possible that user is playing first time, or admin added new linkage
 				$insertUserLinkage = array(
 					'UsScen_UserId'        => $this->userID,
@@ -61,7 +60,7 @@ class PlaySimulation extends My_Controller {
 					'UsScen_Status'        => 0,
 					'UsScen_IsEndScenario' => $endScenario,
 				);
-				$getUserLinkageId = $this->Common_Model->insert('GAME_LINKAGE_USERS',$insertUserLinkage);
+				$getUserLinkageId = $this->Common_Model->insert('GAME_LINKAGE_USERS', $insertUserLinkage);
 			}
 		}
 
@@ -69,64 +68,57 @@ class PlaySimulation extends My_Controller {
 			'US_GameID' => $gameID,
 			'US_UserID' => $this->userID,
 		);
-		$checkForFirstTime = $this->Common_Model->fetchRecords('GAME_USERSTATUS',$whereStatus);
+		$checkForFirstTime = $this->Common_Model->fetchRecords('GAME_USERSTATUS', $whereStatus);
 
 		// if row exist then check that user has completed the game or in which scenario user is, there must be only one row for the selected game for the current user
-		if(count($checkForFirstTime) > 0)
-		{
+		if (count($checkForFirstTime) > 0) {
 			$checkForFirstTime = $checkForFirstTime[0];
-			if($checkForFirstTime->US_LinkID == 1)
-			{
+			if ($checkForFirstTime->US_LinkID == 1) {
 				// it means user has completed the game, so redirect to result page
 				$this->session->set_flashdata('tr_msg', 'You have successfully completed the simulation');
-				redirect('PlaySimulation/result/'.$gameId);
+				redirect('PlaySimulation/result/' . $gameId);
 			}
 
-			if($checkForFirstTime->US_Output == 1)
-			{
+			if ($checkForFirstTime->US_Output == 1) {
 				// it means user is in the output page, but not submitted, so redirect to output page
 				$this->session->set_flashdata('tr_msg', 'You have already provided inputs');
-				redirect('PlaySimulation/output/'.$gameId);
+				redirect('PlaySimulation/output/' . $gameId);
 			}
 		}
 
 		// from $checkForFirstTime, if game_userstatus has no row for user to the selected game, then it means user is playing this game first time, or reset everything, so insert game status row
-		else
-		{
+		else {
 			$insertUserGameStatus = array(
 				'US_GameID'     => $gameID,
 				'US_UserID'     => $this->userID,
 				'US_ScenID'     => $userLinkageResult[0]->Link_ScenarioID,
 				'US_Input'      => 1,
-				'US_CreateDate' => date( 'Y-m-d h:i:s' ),
+				'US_CreateDate' => date('Y-m-d h:i:s'),
 			);
-			$getUserStatusId = $this->Common_Model->insert('GAME_USERSTATUS',$insertUserGameStatus);
+			$getUserStatusId = $this->Common_Model->insert('GAME_USERSTATUS', $insertUserGameStatus);
 
 			// also insert data from game_views to game_input, as user is fresh starting the game 
 			$whereKeyUpdate = array(
 				'views_Game_ID' => $gameID,
 			);
-			$getGameViews = $this->Common_Model->fetchRecords('GAME_VIEWS',$whereKeyUpdate);
+			$getGameViews = $this->Common_Model->fetchRecords('GAME_VIEWS', $whereKeyUpdate);
 			// if any changes or updation found, then update it for user
-			if(count($getGameViews) > 0)
-			{
-				foreach($getGameViews as $getGameViewsRow)
-				{
+			if (count($getGameViews) > 0) {
+				foreach ($getGameViews as $getGameViewsRow) {
 					$insertInputs = array(
 						'input_user'      => $this->userID,
 						'input_sublinkid' => $getGameViewsRow->views_sublinkid,
 						'input_current'   => $getGameViewsRow->views_current,
 						'input_key'       => $getGameViewsRow->views_key,
 					);
-					$getUserInputId = $this->Common_Model->insert('GAME_INPUT',$insertInputs);
+					$getUserInputId = $this->Common_Model->insert('GAME_INPUT', $insertInputs);
 				}
 				$checkKeyUpdate = false;
 			}
 		}
 
 		// check if admin update any comp or subcomp for the area that changes the key then update after login
-		if($checkKeyUpdate)
-		{
+		if ($checkKeyUpdate) {
 			$updateInputKey = $this->updateInputKey($gameID);
 		}
 
@@ -137,21 +129,21 @@ class PlaySimulation extends My_Controller {
 			'US_UserID' => $this->userID,
 			'US_GameID' => $gameID,
 		);
-		$findScen = $this->Common_Model->fetchRecords('GAME_USERSTATUS',$whereScen);
+		$findScen = $this->Common_Model->fetchRecords('GAME_USERSTATUS', $whereScen);
 		$findScen = $findScen[0];
 
 		$whereLinkage = array(
 			'Link_GameID'     => $gameID,
 			'Link_ScenarioID' => $findScen->US_ScenID,
 		);
-		$findLinkage = $this->Common_Model->fetchRecords('GAME_LINKAGE',$whereLinkage);
+		$findLinkage = $this->Common_Model->fetchRecords('GAME_LINKAGE', $whereLinkage);
 		$findLinkage = $findLinkage[0];
 
 		$whereScenario = array(
 			'Scen_Delete' => 0,
 			'Scen_ID'     => $findScen->US_ScenID,
 		);
-		$findScenario = $this->Common_Model->fetchRecords('GAME_SCENARIO',$whereScenario);
+		$findScenario = $this->Common_Model->fetchRecords('GAME_SCENARIO', $whereScenario);
 		$findScenario = $findScenario[0];
 		// echo "<pre>"; print_r($findLinkage[0]); exit();
 
@@ -164,15 +156,17 @@ class PlaySimulation extends My_Controller {
 		$insertTimer = array(
 			'linkid' => $findLinkage->Link_ID,
 			'userid' => $this->userID,
-			'timer'  => (($findLinkage->Link_Hour*60)+$findLinkage->Link_Min),
+			'timer'  => (($findLinkage->Link_Hour * 60) + $findLinkage->Link_Min),
 		);
-		$insertTimerId = $this->Common_Model->insert('GAME_LINKAGE_TIMER',$insertTimer,$checkTimer);
+		$insertTimerId = $this->Common_Model->insert('GAME_LINKAGE_TIMER', $insertTimer, $checkTimer);
 		// check and insert of timer end here
 
+		// updating the carry forwarded values here, for this scenario component/subcomponent
+		$this->updateAdminAndCarryFowardValues($findLinkage->Link_ID);
+
 		// after setting everything above, then finding game component/subcomponent 
-		$findLinkageSubSql = "SELECT * FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_AREA ga ON ga.Area_ID=gls.SubLink_AreaID LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID WHERE SubLink_LinkID=".$findLinkage->Link_ID;
-		if($checkUserGame->Game_Type == 1)
-		{
+		$findLinkageSubSql = "SELECT * FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_AREA ga ON ga.Area_ID=gls.SubLink_AreaID LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=" . $this->userID . " WHERE SubLink_LinkID=" . $findLinkage->Link_ID;
+		if ($checkUserGame->Game_Type == 1) {
 			// show only the first or unplayed component/subcomponent, which need to be shown to user
 
 			// $findLinkageSubSql = "SELECT * FROM GAME_LINKAGE_SUB glss JOIN GAME_AREA gaa ON gaa.Area_ID = glss.SubLink_AreaID JOIN GAME_INPUT gii ON gii.input_sublinkid = glss.SubLink_ID WHERE gii.input_user =$this->userID AND glss.SubLink_CompID =( SELECT gls.SubLink_CompID FROM GAME_LINKAGE_SUB gls JOIN GAME_INPUT gi ON gi.input_sublinkid = gls.SubLink_ID WHERE SubLink_LinkID =".$findLinkage->Link_ID." AND gls.SubLink_SubCompID < 1 AND gi.input_showComp != 1 AND input_user =$this->userID ORDER BY gi.input_showComp DESC , gls.SubLink_Order ASC LIMIT 1 ) ORDER BY glss.SubLink_SubCompID";
@@ -181,9 +175,7 @@ class PlaySimulation extends My_Controller {
 			// $content['navigation'] = 'hide';
 			$content['subview']    = 'botInput';
 			$findLinkageSub        = $this->Common_Model->executeQuery($findLinkageSubSql);
-		}
-		else
-		{
+		} else {
 			$content['subview'] = 'input';
 			$findLinkageSubSql .= " ORDER BY gls.SubLink_Order ";
 			$findLinkageSub     = $this->Common_Model->executeQuery($findLinkageSubSql);
@@ -196,10 +188,10 @@ class PlaySimulation extends My_Controller {
 		$content['findScenario']   = $findScenario;
 		$content['findLinkage']    = $findLinkage;
 		$content['findLinkageSub'] = $findLinkageSub;
-		$this->load->view('main_layout',$content);
+		$this->load->view('main_layout', $content);
 	}
 
-	public function output($gameId=NULL)
+	public function output($gameId = NULL)
 	{
 		$checkUserGame         = $this->checkUserGame($gameId);
 		// $content['navigation'] = 'hide';
@@ -207,94 +199,107 @@ class PlaySimulation extends My_Controller {
 		// $gameId             = $checkUserGame->US_GameID;
 		$scenId                = $checkUserGame->US_ScenID;
 
-		if($checkUserGame->US_LinkID == 1)
-		{
+		if ($checkUserGame->US_LinkID == 1) {
 			// it means user has completed the game, so redirect to result page
 			$this->session->set_flashdata('tr_msg', 'You have successfully completed the simulation');
-			redirect('PlaySimulation/result/'.$gameId);
+			redirect('PlaySimulation/result/' . $gameId);
 		}
-		if(empty($checkUserGame->US_LinkID) && empty($checkUserGame->US_Output))
-		{
+		if (empty($checkUserGame->US_LinkID) && empty($checkUserGame->US_Output)) {
 			$this->session->set_flashdata('er_msg', 'Please submit inputs to see the output');
-			redirect('PlaySimulation/input/'.$gameId);
+			redirect('PlaySimulation/input/' . $gameId);
 		}
 
 		// find linkage first and then fetch data from game_linkage_sub, also check for outcome images
-		$outputSql = "SELECT gls.SubLink_ID, gls.SubLink_LinkID, gls.SubLink_AreaID, gls.SubLink_AreaName, ga.Area_BackgroundColor, ga.Area_TextColor, gs.Scen_Name, gs.Scen_Image  FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_AREA ga ON ga.Area_ID= gls.SubLink_AreaID LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=".$userID." LEFT JOIN GAME_LINKAGE gl ON gl.Link_ID=gls.SubLink_LinkID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID=gl.Link_ScenarioID  WHERE gls.SubLink_LinkID IN(SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=".$checkUserGame->US_GameID." AND Link_ScenarioID=".$checkUserGame->US_ScenID.") AND gls.SubLink_Type=1 GROUP BY SubLink_AreaID";
+		$outputSql = "SELECT gls.SubLink_ID, gls.SubLink_LinkID, gls.SubLink_AreaID, gls.SubLink_AreaName, ga.Area_BackgroundColor, ga.Area_TextColor, gs.Scen_Name, gs.Scen_Image  FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_AREA ga ON ga.Area_ID= gls.SubLink_AreaID LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=" . $userID . " LEFT JOIN GAME_LINKAGE gl ON gl.Link_ID=gls.SubLink_LinkID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID=gl.Link_ScenarioID  WHERE gls.SubLink_LinkID IN(SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID=" . $checkUserGame->US_GameID . " AND Link_ScenarioID=" . $checkUserGame->US_ScenID . ") AND gls.SubLink_Type=1 GROUP BY SubLink_AreaID";
 
 		$findLinkageSub = $this->Common_Model->executeQuery($outputSql);
 		// echo $outputSql."<pre>"; print_r($findLinkageSub);
-		if(count($findLinkageSub)<1)
-		{
+		if (count($findLinkageSub) < 1) {
 			$this->session->set_flashdata('er_msg', 'No output exist for the current scenario');
 		}
 		$content['findLinkageSub'] = $findLinkageSub;
 		$content['gameId']         = base64_decode($gameId);
 		$content['subview']        = 'botOutput';
-		$this->load->view('main_layout',$content);
+		$this->load->view('main_layout', $content);
 	}
 
-	public function result($gameId=NULL)
+	private function updateAdminAndCarryFowardValues($linkid = NULL)
+	{
+		$carriedCompSql = "SELECT gls.SubLink_ID, gls.SubLink_LinkIDcarry, gls.SubLink_CompIDcarry, gls.SubLink_SubCompIDcarry, gls.SubLink_InputMode, gls.SubLink_AdminCurrent, gls.SubLink_AdminLast FROM GAME_LINKAGE_SUB gls WHERE ( (gls.SubLink_LinkIDcarry>1 AND gls.SubLink_CompIDcarry>1 AND gls.SubLink_SubCompIDcarry<1 AND gls.SubLink_InputMode='carry') OR gls.SubLink_InputMode='admin') AND gls.SubLink_LinkID=" . $linkid;
+
+		$carryForwardedComp = $this->Common_Model->executeQuery($carriedCompSql);
+		if (count($carryForwardedComp) > 0) {
+			// if there is any carry forwarded or admin value is there in components then update it's values
+			foreach ($carryForwardedComp as $carryForwardedCompRow) {
+				$inputWhere = array(
+					'input_sublinkid' => $carryForwardedCompRow->SubLink_ID,
+					'input_user' => $this->userID,
+				);
+				if ($carryForwardedCompRow->SubLink_InputMode == 'admin') {
+					// if mode is admin then update the admin current value to input_current field of game_input table
+					$updateInputValue = $this->Common_Model->updateRecords('GAME_INPUT', array('input_current' => $carryForwardedCompRow->SubLink_AdminCurrent), $inputWhere, 1);
+					// echo "updating value of ".$carryForwardedCompRow->SubLink_ID." to ".$carryForwardedCompRow->SubLink_ID." This is of type admin <br>";
+				} else {
+					// if carry forwarded then find that comp/subcomp and then update the input_current field of game_input table
+					$carrySql = "SELECT gi.input_current, gi.input_sublinkid FROM GAME_INPUT gi WHERE gi.input_sublinkid=(SELECT gls.SubLink_ID FROM GAME_LINKAGE_SUB gls WHERE gls.SubLink_LinkID=$carryForwardedCompRow->SubLink_LinkIDcarry AND gls.SubLink_CompID=$carryForwardedCompRow->SubLink_CompIDcarry) AND gi.input_user=" . $this->userID;
+					// need to add subcomponent condition in the above query, but as we are not using subcomponent in mobile simulation, so not adding currently
+					$carryVal = $this->Common_Model->executeQuery($carrySql);
+					$updateInputValue = $this->Common_Model->updateRecords('GAME_INPUT', array('input_current' => $carryVal[0]->input_current), $inputWhere, 1);
+					// echo "updating value of ".$carryForwardedCompRow->SubLink_ID." to ".$carryVal[0]->input_sublinkid." carry<br>";
+				}
+			}
+		}
+	}
+
+	public function result($gameId = NULL)
 	{
 		$checkUserGame = $this->checkUserGame($gameId);
-		if($checkUserGame->US_LinkID == 0 && $checkUserGame->US_Output == 1)
-		{
+		if ($checkUserGame->US_LinkID == 0 && $checkUserGame->US_Output == 1) {
 			// it means user is in the output page, but not submitted, so redirect to output page
 			$this->session->set_flashdata('er_msg', 'Please submit to see the reports');
-			redirect('PlaySimulation/output/'.$gameId);
+			redirect('PlaySimulation/output/' . $gameId);
 		}
-		if($checkUserGame->US_LinkID == 0 && $checkUserGame->US_Output == 0)
-		{
+		if ($checkUserGame->US_LinkID == 0 && $checkUserGame->US_Output == 0) {
 			// it means user is in the output page, but not submitted, so redirect to output page
 			$this->session->set_flashdata('er_msg', 'Please submit/complete the game to see the reports');
-			redirect('PlaySimulation/output/'.$gameId);
+			redirect('PlaySimulation/output/' . $gameId);
 		}
 		// echo "in result() <pre>"; print_r($checkUserGame); exit();
 		$content['gameResult'] = $checkUserGame;
 		$content['subview']    = 'result';
-		$this->load->view('main_layout',$content);
+		$this->load->view('main_layout', $content);
 	}
 
-	private function checkUserGame($gameId=NULL)
-	{		
-		if(empty($gameId))
-		{
+	private function checkUserGame($gameId = NULL)
+	{
+		if (empty($gameId)) {
 			// no game selected, show error message
 			$this->session->set_flashdata('er_msg', 'No game selected');
 			redirect('SelectSimulation');
-		}
-		else
-		{
+		} else {
 			// to check that given string is valid string for base64_decode() or not
-			if (!base64_decode($gameId, true))
-			{
+			if (!base64_decode($gameId, true)) {
 				$this->session->set_flashdata('er_msg', 'Invalid Game ID');
 				redirect('SelectSimulation');
 			}
 
 			$gameId = base64_decode($gameId);
 			// check that user has this game or not
-			$checkGame = "SELECT gug.*, gus.*,gg.Game_Name, gg.Game_Type, gg.Game_Image, gg.Game_Comments, gg.Game_ID, UNIX_TIMESTAMP(gug.UG_GameStartDate) AS gameStartDate, UNIX_TIMESTAMP(gug.UG_GameEndDate) AS gameEndDate FROM GAME_USERGAMES gug LEFT JOIN GAME_USERSTATUS gus ON gug.UG_GameID = gus.US_GameID AND gus.US_UserID=".$this->userID." LEFT JOIN GAME_GAME gg ON gg.Game_ID=gug.UG_GameID WHERE gug.UG_UserID =".$this->userID." AND gg.Game_Type=1 AND gug.UG_GameID =".$gameId;
+			$checkGame = "SELECT gug.*, gus.*,gg.Game_Name, gg.Game_Type, gg.Game_Image, gg.Game_Comments, gg.Game_ID, UNIX_TIMESTAMP(gug.UG_GameStartDate) AS gameStartDate, UNIX_TIMESTAMP(gug.UG_GameEndDate) AS gameEndDate FROM GAME_USERGAMES gug LEFT JOIN GAME_USERSTATUS gus ON gug.UG_GameID = gus.US_GameID AND gus.US_UserID=" . $this->userID . " LEFT JOIN GAME_GAME gg ON gg.Game_ID=gug.UG_GameID WHERE gug.UG_UserID =" . $this->userID . " AND gg.Game_Type=1 AND gug.UG_GameID =" . $gameId;
 			$checkGameResult = $this->Common_Model->executeQuery($checkGame);
 			// echo $checkGame."<pre>"; print_r($checkGameResult); exit();
-			if(count($checkGameResult) < 1)
-			{
+			if (count($checkGameResult) < 1) {
 				// this game is not assigned to user
 				$this->session->set_flashdata('er_msg', 'This bot simulation either does not exist or not assigned to you');
 				redirect('SelectSimulation');
-			}
-			else
-			{
+			} else {
 				$checkGameResult = $checkGameResult[0];
 				// game is allocated to user, check the game start-date and end-date range, UG_GameStartDate, UG_GameEndDate
-				if(! (time()>$checkGameResult->gameStartDate && time()<$checkGameResult->gameEndDate))
-				{
+				if (!(time() > $checkGameResult->gameStartDate && time() < $checkGameResult->gameEndDate)) {
 					// user is not authorised to play simulation from today or till today
-					$this->session->set_flashdata('er_msg', "You are allowed to play simulation from ".date('d-m-Y',strtotime($checkGameResult->UG_GameStartDate))." to ".date('d-m-Y',strtotime($checkGameResult->UG_GameEndDate)));
+					$this->session->set_flashdata('er_msg', "You are allowed to play simulation from " . date('d-m-Y', strtotime($checkGameResult->UG_GameStartDate)) . " to " . date('d-m-Y', strtotime($checkGameResult->UG_GameEndDate)));
 					redirect('SelectSimulation');
-				}
-				else
-				{
+				} else {
 					// echo "<pre>"; print_r($checkGameResult);
 					// now check the different status of the game in the above declared functions i.e. input(), output(), result() and perform task accordingly
 					// if user is playing simulation first time
@@ -306,32 +311,26 @@ class PlaySimulation extends My_Controller {
 		}
 	}
 
-	private function updateInputKey($gameID=NULL,$checkKeyUpdate=NULL)
+	private function updateInputKey($gameID = NULL, $checkKeyUpdate = NULL)
 	{
 		$whereKeyUpdate = array(
 			'views_Game_ID' => $gameID,
 			'is_updated'    => 1,
 		);
-		$checkKeyUpdation = $this->Common_Model->fetchRecords('GAME_VIEWS',$whereKeyUpdate);
+		$checkKeyUpdation = $this->Common_Model->fetchRecords('GAME_VIEWS', $whereKeyUpdate);
 		// if any changes or updation found, then update it for user
-		if(count($checkKeyUpdation) > 0)
-		{
-			foreach($checkKeyUpdation as $checkKeyUpdationRow)
-			{
+		if (count($checkKeyUpdation) > 0) {
+			foreach ($checkKeyUpdation as $checkKeyUpdationRow) {
 				$whereInput = array(
 					'input_sublinkid' => $checkKeyUpdationRow->views_sublinkid,
 					'input_user'      => $this->userID,
 				);
 
-				$updateInputKey = $this->Common_Model->updateRecords('GAME_INPUT',array('input_key' => $checkKeyUpdationRow->views_key),$whereInput,1);
+				$updateInputKey = $this->Common_Model->updateRecords('GAME_INPUT', array('input_key' => $checkKeyUpdationRow->views_key), $whereInput, 1);
 			}
 			return ["status" => "200"];
-		}
-		else
-		{
+		} else {
 			return ["status" => "201"];
 		}
 	}
-
-
 }

@@ -647,6 +647,7 @@
                   </div>
 
                   <!-- adding competence and simulated performance radio button -->
+                  <!-- 0-(Input)None, 1-(Input)Competence Readiness, 2-(Input)Competence Application, 3-(Output)Simulated Performance, 4-(Output)Competence Readiness, 5-(Output)Competence Application, 6-(Output)None -->
                   <div class="row col-md-12 py-5">
                     <label class="col-md-2 pull-left"><span class="alert-danger">*</span>Result Type - </label>
 
@@ -663,7 +664,7 @@
                       <div class="col-md-2 inputShowHide">
                         <label class="containerRadio">
                           <input type="radio" name="SubLink_Competence_Performance" value="1" id="" <?php 
-                          if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 1){ echo "checked"; } ?> /> Competence
+                          if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 1){ echo "checked"; } ?> /> Competence Readiness
                           <span class="checkmarkRadio"></span>
                         </label>
                       </div>
@@ -671,7 +672,16 @@
                       <div class="col-md-2 inputShowHide">
                         <label class="containerRadio">
                           <input type="radio" name="SubLink_Competence_Performance" value="2" id="" <?php 
-                          if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 2){ echo "checked"; } ?> /> Application
+                          if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 2){ echo "checked"; } ?> /> Competence Application
+                          <span class="checkmarkRadio"></span>
+                        </label>
+                      </div>
+
+                      <div class="col-md-2 outputShowHide">
+                        <label class="containerRadio">
+                          <input type="radio" name="SubLink_Competence_Performance" value="6" id="" <?php 
+                          if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 6){ echo "checked"; } 
+                          else if(!empty($linkdetails) && $linkdetails->SubLink_Type == 1){ echo "checked"; } ?> /> None
                           <span class="checkmarkRadio"></span>
                         </label>
                       </div>
@@ -679,8 +689,7 @@
                       <div class="col-md-2 outputShowHide">
                         <label class="containerRadio">
                           <input type="radio" name="SubLink_Competence_Performance" value="3" id="" <?php 
-                          if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 3){ echo "checked"; } 
-                          else if(!empty($linkdetails) && $linkdetails->SubLink_Type == 1){ echo "checked"; } ?> /> Simulated Performance
+                          if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 3){ echo "checked"; } ?> /> Simulated Performance
                           <span class="checkmarkRadio"></span>
                         </label>
                       </div>
@@ -688,7 +697,7 @@
                       <div class="col-md-2 outputShowHide">
                         <label class="containerRadio">
                           <input type="radio" name="SubLink_Competence_Performance" value="4" id="" <?php 
-                          if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 4){ echo "checked"; } ?> /> Competence
+                          if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 4){ echo "checked"; } ?> /> Competence Readiness
                           <span class="checkmarkRadio"></span>
                         </label>
                       </div>
@@ -696,7 +705,7 @@
                       <div class="col-md-2 outputShowHide">
                         <label class="containerRadio">
                           <input type="radio" name="SubLink_Competence_Performance" value="5" id="" <?php 
-                          if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 5){ echo "checked"; } ?> /> Application
+                          if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 5){ echo "checked"; } ?> /> Competence Application
                           <span class="checkmarkRadio"></span>
                         </label>
                       </div>
@@ -714,7 +723,7 @@
                       <div class="col-md-2 inputShowHide">
                         <label class="containerRadio">
                           <input type="radio" name="SubLink_Competence_Performance" value="1" id="" onclick="javascript: return false;"
-                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 1){ echo "checked"; } ?> /> Competence
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 1){ echo "checked"; } ?> /> Competence Readiness
                           <span class="checkmarkRadio"></span>
                         </label>
                       </div>
@@ -722,7 +731,15 @@
                       <div class="col-md-2 inputShowHide">
                         <label class="containerRadio">
                           <input type="radio" name="SubLink_Competence_Performance" value="2" id="" onclick="javascript: return false;"
-                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 2){ echo "checked"; } ?> /> Application
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 2){ echo "checked"; } ?> /> Competence Application
+                          <span class="checkmarkRadio"></span>
+                        </label>
+                      </div>
+
+                      <div class="col-md-2 outputShowHide">
+                        <label class="containerRadio">
+                          <input type="radio" name="SubLink_Competence_Performance" value="6" id="" onclick="javascript: return false;"
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 6){ echo "checked"; } ?> /> Simulated Performance
                           <span class="checkmarkRadio"></span>
                         </label>
                       </div>
@@ -738,7 +755,7 @@
                       <div class="col-md-2 outputShowHide">
                         <label class="containerRadio">
                           <input type="radio" name="SubLink_Competence_Performance" value="4" id="" onclick="javascript: return false;"
-                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 4){ echo "checked"; } ?> /> Competence
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 4){ echo "checked"; } ?> /> Competence Readiness
                           <span class="checkmarkRadio"></span>
                         </label>
                       </div>
@@ -746,7 +763,7 @@
                       <div class="col-md-2 outputShowHide">
                         <label class="containerRadio">
                           <input type="radio" name="SubLink_Competence_Performance" value="5" id="" onclick="javascript: return false;"
-                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 5){ echo "checked"; } ?> /> Application
+                          <?php if(!empty($linkdetails) && $linkdetails->SubLink_Competence_Performance == 5){ echo "checked"; } ?> /> Competence Application
                           <span class="checkmarkRadio"></span>
                         </label>
                       </div>
@@ -1321,32 +1338,34 @@
 
                 <td><?php switch ($row->SubLink_Type) {
                   case 0:
-                  echo "Input";
-                  break;
+                    echo "Input";
+                    break;
                   case 1:
-                  echo "Output";
-                  break;
+                    echo "Output";
+                    break;
                   default:
-                  echo "--";
+                    echo "--";
                 } ?></td>
 
+                <!-- 0->Input None, 1->Input Competence Readiness,2->Input Competence Application,3->Output,4->Output Competence Readiness,5->Output Competence Application,6->Output None -->
                 <td><?php switch ($row->SubLink_Competence_Performance) {
                   case 0://Input
-                  echo "None";
-                  break;
+                  case 6://Output
+                    echo "None";
+                    break;
                   case 1://Input
                   case 4://Output
-                  echo "Competence";
-                  break;
+                    echo "Competence Readiness";
+                    break;
                   case 2://Input
                   case 5://Output
-                  echo "Application";
-                  break;
+                    echo "Competence Application";
+                    break;
                   case 3://Output
-                  echo "Simulated Performance";
-                  break;
+                    echo "Simulated Performance";
+                    break;
                   default:
-                  echo "--";
+                    echo "--";
                 } ?></td>
 
                 <td><?php if($row->SubLink_ShowHide ==0 ) { echo "Show"; } else {echo "Hide";} ?></td>
@@ -1431,6 +1450,7 @@
           </div>
 
           <script>
+  // 0-(Input)None, 1-(Input)Competence Readiness, 2-(Input)Competence Application, 3-(Output)Simulated Performance, 4-(Output)Competence Readiness, 5-(Output)Competence Application, 6-(Output)None
   //for Result Type Radio Button
   var subLinkTypeRadio = "<?php if(!empty($linkdetails)){ echo $linkdetails->SubLink_Type; } ?>";
   subLinkTypeRadio = Number(subLinkTypeRadio);
@@ -1455,7 +1475,7 @@
   $('#typeOutput').click(function(){
     $(".inputShowHide").addClass("hidden");
     $(".outputShowHide").removeClass("hidden");
-    $('input[name="SubLink_Competence_Performance"][value="3"]').prop('checked',true);
+    $('input[name="SubLink_Competence_Performance"][value="6"]').prop('checked',true);
   });
   //end of Result Type Radio Button
 

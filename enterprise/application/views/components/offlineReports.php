@@ -11,12 +11,12 @@
 					<div class="col-md-6 col-sm-12">
 						<div class="title">
 							<h1><a href="javascript:void(0);" data-toggle="tooltip" title="Reports"><i class="fa fa-file text-blue"> 
-							</i></a> Reports</h1>
+							</i></a> Report</h1>
 						</div>
 						<nav aria-label="breadcrumb" role="navigation">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Download Simulation Reports</li>
+								<li class="breadcrumb-item active" aria-current="page">Download Simulation Report</li>
 							</ol>
 						</nav>
 					</div>
@@ -26,7 +26,7 @@
 						<div class="title">
 							<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
 								<div class="clearfix mb-20">
-									<h5 class="text-blue">Choose To Download</h5>
+									<h5 class="text-blue">View participation and download</h5>
 								</div>
 
 								<form action="" method="post" class="" id="">
@@ -177,26 +177,13 @@
 
 									<!-- after all the above filter show users here -->
 									<div class="row col-md-12 col-lg-12 col-sm-12 row form-group" id="gameDiv">
-										<label for="selectGame" class="col-sm-12 col-md-3 col-form-label">Select Game</label>
+										<label for="selectGame" class="col-sm-12 col-md-3 col-form-label">Select Card</label>
 										<div class="col-sm-12 col-md-9">
 											<select name="selectGame" id="selectGame" class="custom-select2 form-control" required="">
-												<option value="">-Select Game-</option>
+												<option value="">-Select Card-</option>
 											</select>
 										</div>
 									</div>
-
-									<div class="row col-md-12 col-lg-12 col-sm-12 form-group">
-										<label for="searchUser" class="col-sm-12 col-md-3 col-form-label">Search</label>
-										<div class="col-sm-12 col-md-6">
-											<input type="search" name="searchUser" id="searchUser" class="form-control" placeholder="Search by Email/UserName">
-											<span id="showUserCount"></span>
-										</div>
-									</div>
-
-									<!-- add users details here -->
-									<div class="row col-md-12 col-lg-12 col-sm-12 form-group mb-20" id="addUsersHere">
-									</div>
-									<!-- end of adding users -->
 
 									<div id="assignDate" class="row col-md-12 col-lg-12 col-sm-12 row form-group">
 										<label for="date" class="col-sm-12 col-md-3 col-form-label">Select Date</label>
@@ -210,6 +197,19 @@
 											</div>
 										</div>
 									</div>
+
+                  <div class="row col-md-12 col-lg-12 col-sm-12 form-group">
+                    <label for="searchUser" class="col-sm-12 col-md-3 col-form-label">Search</label>
+                    <div class="col-sm-12 col-md-6">
+                      <input type="search" name="searchUser" id="searchUser" class="form-control" placeholder="Search by Email/UserName">
+                      <span id="showUserCount"></span>
+                    </div>
+                  </div>
+
+                  <!-- add users details here -->
+                  <div class="row col-md-12 col-lg-12 col-sm-12 form-group mb-20" id="addUsersHere">
+                  </div>
+                  <!-- end of adding users -->
 
 									<div class="row col-md-12 form-group" style="margin-left: 33%;">
 										<button class="btn btn-primary">Download</button>
@@ -226,7 +226,7 @@
 						<script>
 							$(document).ready(function(){
 								// show all game by default and then show games as per the filter
-								var allGameOption = "<option value=''>-Select Game-</option>";
+								var allGameOption = "<option value=''>-Select Card-</option>";
 								<?php foreach ($gameData as $games) { ?>
 									allGameOption += "<option value=<?php echo $games->Game_ID; ?>><?php echo $games->Game_Name; ?></option>";
 								<?php } ?>
@@ -293,7 +293,7 @@
 
 									$('#Enterprise').on('change',function(){
 										$this             = $(this);
-										var option        = '<option value="">--Select SubEnterprise--</option>';
+										var option        = '<option value="">--Select SubEnterprize--</option>';
 										var Enterprise_ID = $(this).val();
 
 										if($(this).val())
@@ -312,7 +312,7 @@
 														option += ("<option value='"+result[i].SubEnterprise_ID+"'>"+result[i].SubEnterprise_Name+"</option>");
 													});
 													$this.parents('form').find('select.subenterprise').html(option);
-													option = '<option value="">--Select SubEnterprise--</option>';
+													option = '<option value="">--Select Subenterprise--</option>';
 													// $('.SubEnterprise').html(option);
 												}
 												else
@@ -341,7 +341,7 @@
 										}
 										else
 										{
-											Swal.fire('Please select SubEnterprise');
+											Swal.fire('Please select Subenterprise');
 										}
 									});
 
@@ -386,15 +386,15 @@
 											type: "POST",
 											success: function( result )
 											{
-												if(result == 'No game found')
+												if(result == 'No Card found')
 												{
-													Swal.fire('No game allocated to selected '+ent_SubEnt);
-													$('#selectGame').html('<option value="">--Select Game--</option>');
+													Swal.fire('No Card allocated to selected '+ent_SubEnt);
+													$('#selectGame').html('<option value="">--Select Card--</option>');
 												}
 												else
 												{
 													result = JSON.parse(result);
-													var entGameOption = '<option value="">--Select Game--</option>';
+													var entGameOption = '<option value="">--Select Card--</option>';
 													$(result).each(function(i,e)
 													{
 														entGameOption += ("<option value='"+result[i].Game_ID+"'>"+result[i].Game_Name+"</option>");
@@ -417,7 +417,7 @@
 									// $('#addUsersHere').html('<h3>Add users checkbox here by fetching from ajax for Game_ID:-'+gameId+'</h3>');
 									if(gameId.length<1)
 									{
-										console.log('Please select game');
+										console.log('Please select Card');
 										$('#addUsersHere').html('<span class="row alert-danger">No record found</span>');
 										$('#showUserCount').html('');
 										return false;
@@ -451,7 +451,7 @@
 												});
 												console.log(userCount);
 												$('#addUsersHere').html(siteUsers);
-												$('#showUserCount').html('<span class="alert-success">Total Users Played: <b>'+userCount+'</b>, Completed: <b>'+parseInt(userCount-notSbumittedCount)+'</b>, Incompleted(in red): <b>'+notSbumittedCount+'</b></span>');
+												$('#showUserCount').html('<span class="alert-success">Total Users Login: <b>'+userCount+'</b>, Completed: <b>'+parseInt(userCount-notSbumittedCount)+'</b>, Incompleted(in red): <b>'+notSbumittedCount+'</b></span>');
 												// if any of the checkbox is not checked then uncheck the selectAll checkbox
 												$('input[type="checkbox"]').on('click', function(){
 													if(!$(this).is(':checked'))

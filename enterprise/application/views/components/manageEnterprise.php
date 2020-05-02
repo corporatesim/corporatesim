@@ -51,6 +51,10 @@
                         <th>Password</th>
                         <th>Address</th>
                         <th>Games</th>
+                        <!-- only superadmin can view cards -->
+                        <?php if($this->session->userdata('loginData')['User_Role'] == 'superadmin'){ ?>
+                        <th>Assign Card</th>
+                        <?php } ?>
                         <th>Domain</th>
                         <th>Duration(DD-MM-YYYY)</th>
                         <!-- <th>Created By</th> -->
@@ -88,8 +92,13 @@
                             <?php echo $address; ?>
                           </td>
                           <td>
-                            <a class="dropdown-item" href="<?php echo base_url('Games/assignGames/').base64_encode($enterprisedetails->Enterprise_ID).'/'.base64_encode($this->uri->segment(1));?>" title="Allocate/Deallocate Games"><?php if($enterprisedetails->gamecount>0){echo "<b style='color:#0029ff;'>".$enterprisedetails->gamecount."</b>"; }else{echo "<b style='color:#0029ff;'>0</b>";}?></a>
+                            <a class="dropdown-item" href="<?php echo base_url('Games/assignGames/').base64_encode($enterprisedetails->Enterprise_ID).'/'.base64_encode($this->uri->segment(1)); ?>" title="Allocate/Deallocate Games"><?php if($enterprisedetails->gamecount>0){echo "<b style='color:#0029ff;'>".$enterprisedetails->gamecount."</b>"; }else{echo "<b style='color:#0029ff;'>0</b>"; }?></a>
+                          </td>
+                          <?php if($this->session->userdata('loginData')['User_Role'] == 'superadmin'){ ?>
+                          <td>
+                            <a class="dropdown-item" href="<?php echo base_url('Card/assignCards/').base64_encode($enterprisedetails->Enterprise_ID).'/'.base64_encode($this->uri->segment(1)); ?>" title="Allocate/Deallocate Cards"><?php if($enterprisedetails->cardcount > 0){echo "<b style='color:#0029ff;'>".$enterprisedetails->cardcount."</b>"; }else{echo "<b style='color:#0029ff;'>0</b>";} ?></a>
                           </td> 
+                          <?php } ?>
 
                           <td>
                             <?php if ($enterprisedetails->Domain_Name != '')

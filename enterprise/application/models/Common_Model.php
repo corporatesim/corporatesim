@@ -19,6 +19,67 @@ class Common_Model extends CI_Model {
     return $result->num_rows();
   }
 
+  function SelectData($fields, $tables, $where, $order=array(), $group=array(),$limit='',$offset='',$print_flag=0){
+    if(is_array($fields)){
+      $fields = implode(",",$fields);
+    }
+
+    if(is_array($tables)){
+      $tables = implode(",",$tables);
+    }
+
+    if(!empty($where)){
+      if(is_array($where)){
+        $where = implode(" AND ", $where);
+      }
+    }
+
+    if(!empty($order)){
+      if(is_array($order)){
+        $order = implode(",",$order);
+      }
+    }
+
+    if(!empty($fields)){
+      $sql = "SELECT $fields FROM $tables ";
+    }
+    else{
+      $sql = "SELECT * FROM $tables ";
+    }
+
+    if(!empty($where)){
+      $sql .= ' WHERE '.$where;
+    }
+
+    if(!empty($group)){
+      if(is_array($group)){
+        $group = implode(",",$group);
+      }
+      $sql .= ' GROUP BY '.$group;
+    }
+
+    if(!empty($order)){
+      $sql .= ' ORDER BY '.$order;
+    }
+
+    if(!empty($limit)){
+      if(!empty($offset)){
+        $sql .= ' LIMIT '.$offset.",".$limit;
+      } 
+      else{
+        $sql .= ' LIMIT '.$limit;
+      }
+    }
+
+    if($print_flag==1){
+      echo($sql);
+    }
+
+    $result = $this->ExecuteQuery($sql); //Execute sql statement
+    //$result = $this->executeSqlStatementQuery($sql);
+    return $result;
+  }
+
   public function batchInsert($tableName=NULL, $insertArray=NULL)
   {
     // to insert multiple data at once

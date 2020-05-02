@@ -155,10 +155,10 @@
 										</div>
 										<!-- end of radio, choose dropdown -->
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="enterpriseDiv">
-											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
+											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="Enterprise" id="Enterprise" class="custom-select2 form-control Enterprise">
-													<option value="">--Select Enterprise--</option>
+													<option value="">--Select Enterprize--</option>
 													<?php foreach ($EnterpriseName as $EnterpriseData) { ?>
 														<option value="<?php echo $EnterpriseData->Enterprise_ID; ?>" date-enterprisename="<?php echo $EnterpriseData->Enterprise_Name;?>"><?php echo $EnterpriseData->Enterprise_Name; ?></option>
 													<?php } ?>
@@ -167,10 +167,10 @@
 										</div>
 										<!-- for subenterprise selection -->
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="subEnterpriseDiv">
-											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprise</label>
+											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select Subenterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="SubEnterprise" id="SubEnterprise" class="custom-select2 form-control subenterprise">
-													<option value="">-Select SubEnterprise-</option>
+													<option value="">-Select Subenterprize-</option>
 												</select>
 											</div>
 										</div>
@@ -187,7 +187,7 @@
 											<div class=" col-sm-12 col-md-3 col-lg-3">
 												<div class="custom-control custom-radio mb-5">
 													<input type="radio" id="subEnterpriseUsers" name="filtertype" class="custom-control-input" value="subEnterpriseUsers" data-filtertype="enterprise">
-													<label class="custom-control-label" for="subEnterpriseUsers">SubEnterprize Teams</label>
+													<label class="custom-control-label" for="subEnterpriseUsers">Subenterprize Teams</label>
 												</div>
 											</div>
 											<div class="custom-control custom-checkbox col-sm-12 col-md-3 col-lg-3">
@@ -196,10 +196,10 @@
 											</div>
 										</div>
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="enterpriseDiv">
-											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
+											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="Enterprise" id="Enterprise" class="custom-select2 form-control Enterprise" required="">
-													<option value="">--Select Enterprise--</option>
+													<option value="">--Select Enterprize--</option>
 													<?php foreach ($EnterpriseName as $EnterpriseData) { ?>
 														<option value="<?php echo $EnterpriseData->Enterprise_ID; ?>" date-enterprisename="<?php echo $EnterpriseData->Enterprise_Name;?>" selected><?php echo $EnterpriseData->Enterprise_Name; ?></option>
 													<?php } ?>
@@ -208,10 +208,10 @@
 										</div>
 										<!-- for subenterprise selection -->
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="subEnterpriseDiv">
-											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprise</label>
+											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select Subenterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="SubEnterprise" id="SubEnterprise" class="custom-select2 form-control subenterprise">
-													<option value="">-Select SubEnterprise-</option>
+													<option value="">-Select Subenterprize-</option>
 													<?php foreach ($SubEnterprise as $SubEnterpriseData) { ?>
 														<option value="<?php echo $SubEnterpriseData->SubEnterprise_ID; ?>" date-subEnterprisename="<?php echo $SubEnterpriseData->SubEnterprise_Name;?>"><?php echo $SubEnterpriseData->SubEnterprise_Name; ?></option>
 													<?php } ?>
@@ -234,10 +234,10 @@
 											</div>
 										</div>
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="enterpriseDiv">
-											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
+											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="Enterprise" id="Enterprise" class="custom-select2 form-control Enterprise" required="">
-													<option value="">--Select Enterprise--</option>
+													<option value="">--Select Enterprize--</option>
 													<?php foreach ($EnterpriseName as $EnterpriseData) { ?>
 														<option value="<?php echo $EnterpriseData->Enterprise_ID; ?>" date-enterprisename="<?php echo $EnterpriseData->Enterprise_Name;?>" selected><?php echo $EnterpriseData->Enterprise_Name; ?></option>
 													<?php } ?>
@@ -245,10 +245,10 @@
 											</div>
 										</div>
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="subEnterpriseDiv">
-											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprise</label>
+											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select Subenterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="SubEnterprise" id="SubEnterprise" class="custom-select2 form-control subenterprise" required="">
-													<option value="">-Select SubEnterprise-</option>
+													<option value="">-Select Subenterprize-</option>
 													<?php foreach ($SubEnterprise as $SubEnterpriseData) { ?>
 														<option value="<?php echo $SubEnterpriseData->SubEnterprise_ID; ?>" date-subEnterprisename="<?php echo $SubEnterpriseData->SubEnterprise_Name;?>" selected><?php echo $SubEnterpriseData->SubEnterprise_Name; ?></option>
 													<?php } ?>
@@ -269,10 +269,10 @@
 										</div>
 									</div>
 									<div class="row col-md-12 col-lg-12 col-sm-12 row form-group" id="gameDiv">
-										<label for="selectGame" class="col-sm-12 col-md-3 col-form-label">Select Game</label>
+										<label for="selectGame" class="col-sm-12 col-md-3 col-form-label">Select Card</label>
 										<div class="col-sm-12 col-md-9">
 											<select name="selectGame" id="selectGame" class="custom-select2 form-control" required="">
-												<option value="">-Select Game-</option>
+												<option value="">-Select Card-</option>
 											</select>
 										<div class="text-danger">Please select only team id's for collaboration</div>
 										</div>
@@ -398,7 +398,7 @@
 									});
 								});
 								// show all game by default and then show games as per the filter
-								var allGameOption = "<option value=''>-Select Game-</option>";
+								var allGameOption = "<option value=''>-Select Card-</option>";
 								<?php foreach ($gameData as $games) { ?>
 									allGameOption += "<option value=<?php echo $games->Game_ID; ?>><?php echo $games->Game_Name; ?></option>";
 								<?php } ?>
@@ -471,7 +471,7 @@
 
 								$('#Enterprise').on('change',function(){
 									$this             = $(this);
-									var option        = '<option value="">--Select SubEnterprise--</option>';
+									var option        = '<option value="">--Select Subenterprize--</option>';
 									var Enterprise_ID = $(this).val();
 
 									if($(this).val())
@@ -492,7 +492,7 @@
 														option += ("<option value='"+result[i].SubEnterprise_ID+"'>"+result[i].SubEnterprise_Name+"</option>");
 													});
 													$this.parents('form').find('select.subenterprise').html(option);
-													option = '<option value="">--Select SubEnterprise--</option>';
+													option = '<option value="">--Select Subenterprize--</option>';
 													// $('.SubEnterprise').html(option);
 												}
 												else
@@ -508,7 +508,7 @@
 									else
 									{
 										$this.parents('form').find('select.subenterprise').html(option);
-										Swal.fire('Please Select Enterprise...');
+										Swal.fire('Please Select Enterprize...');
 										return false;
 									}
 									// getAgents();
@@ -562,15 +562,15 @@
 										type: "POST",
 										success: function( result )
 										{
-											if(result == 'No game found')
+											if(result == 'No Card found')
 											{
-												Swal.fire('No game allocated to selected '+ent_SubEnt);
-												$('#selectGame').html('<option value="">--Select Game--</option>');
+												Swal.fire('No Card allocated to selected '+ent_SubEnt);
+												$('#selectGame').html('<option value="">--Select Card--</option>');
 											}
 											else
 											{
 												result = JSON.parse(result);
-												var entGameOption = '<option value="">--Select Game--</option>';
+												var entGameOption = '<option value="">--Select Card--</option>';
 												$(result).each(function(i,e)
 												{
 													entGameOption += ("<option value='"+result[i].Game_ID+"'>"+result[i].Game_Name+"</option>");
@@ -596,8 +596,8 @@
 
 								if(gameId<1 || gameCollaboration<1)
 								{
-									Swal.fire("Error","Please Select Game And Collaboration","error");
-									console.log('Please select game');
+									Swal.fire("Error","Please Select Card And Collaboration","error");
+									console.log('Please select Card');
 									$('#addUsersHere').html('<span class="row alert-danger">No record found</span>');
 									$('#showUserCount').html('');
 									return false;
@@ -860,7 +860,7 @@ function editDeleteCollaboration()
 		$(this).on('click',function(){
 			var groupid = $(this).data('groupid');
 			var url     = "<?php echo base_url('Ajax/addEditDeleteFetchCollaboration/delete/');?>"+groupid;
-			var textMsg = "All the users/games associated with this group will also be deleted.";
+			var textMsg = "All the users/Cards associated with this group will also be deleted.";
 			Swal.fire({
 				title             : 'Are you sure?',
 				html              : textMsg,

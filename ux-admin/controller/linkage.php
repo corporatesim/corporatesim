@@ -1388,36 +1388,57 @@ elseif(isset($_GET['linkdel']))
 	// this will delete the linkage for one comp/subcomp
 	// Delete Siteuser
 	$sublinkid = base64_decode($_GET['linkdel']);
-	$sql       = "SELECT LS.*	FROM GAME_LINKAGE_SUB as LS WHERE SubLink_ID=".$sublinkid;
-	$object2   = $functionsObj->ExecuteQuery($sql);
-	//echo $linksql;
-	if($object2->num_rows>0)
-	{
-		$linkdetails = $functionsObj->FetchObject($object2);
-		$linkid      = $linkdetails->SubLink_LinkID;
-		$areaid      = $linkdetails->SubLink_AreaID;
-		$result      = $functionsObj->DeleteData('GAME_LINKAGE_SUB','SubLink_ID',$sublinkid,0);
-		// if linkage is deleted then only delete the area sequencing if required
-		if($result)
-		{
-			$scenAreaSequencing = $functionsObj->AreaSequencingDelete($linkid,$areaid);
-		}
 
-		$_SESSION['msg']     = "Link deleted successfully";
-		$_SESSION['type[0]'] = "inputSuccess";
-		$_SESSION['type[1]'] = "has-success";
-		header("Location: ".site_root."ux-admin/linkage/link/".$linkid);
-		exit(0);
-	}
-	else
-	{
-		$_SESSION['msg']     = "No Linkage Found";
-		$_SESSION['type[0]'] = "inputError";
-		$_SESSION['type[1]'] = "has-error";
-		header("Location: ".site_root."ux-admin/linkage");
-		exit(0);
-	}
-	//exit();
+  //selecting sublink
+  $sql       = "SELECT LS.* FROM GAME_LINKAGE_SUB as LS WHERE SubLink_ID=".$sublinkid;
+  $object2   = $functionsObj->ExecuteQuery($sql);
+
+  //echo $linksql;
+  if($object2->num_rows>0)
+  {
+    $linkdetails = $functionsObj->FetchObject($object2);
+    $linkid      = $linkdetails->SubLink_LinkID;
+    $areaid      = $linkdetails->SubLink_AreaID;
+
+    //searchin item mapping for this sublink id
+    $item_Mapping_Sql    = "SELECT GIM.* FROM GAME_ITEMS_MAPPING as GIM WHERE Cmap_SublinkId=".$sublinkid;
+    $item_Mapping_Object = $functionsObj->RunQueryFetchCount($item_Mapping_Sql);
+
+    if($item_Mapping_Object > 0)
+    {
+      //this sublink linked with item so, give an alert
+      $_SESSION['msg']     = "Cannot be deleted as it is linked to Process Owner reports";
+      $_SESSION['type[0]'] = "inputError";
+      $_SESSION['type[1]'] = "has-error";
+      header("Location: ".site_root."ux-admin/linkage/link/".$linkid);
+      exit(0);
+    }
+    else
+    {
+      //else this sublink not linked with item then delete the sublink
+      $result = $functionsObj->DeleteData('GAME_LINKAGE_SUB','SubLink_ID',$sublinkid,0);
+      // if linkage is deleted then only delete the area sequencing if required
+      if($result)
+      {
+        $scenAreaSequencing = $functionsObj->AreaSequencingDelete($linkid,$areaid);
+      }
+
+      $_SESSION['msg']     = "Link deleted successfully";
+      $_SESSION['type[0]'] = "inputSuccess";
+      $_SESSION['type[1]'] = "has-success";
+      header("Location: ".site_root."ux-admin/linkage/link/".$linkid);
+      exit(0);
+    }
+  }
+  else
+  {
+    $_SESSION['msg']     = "No Linkage Found";
+    $_SESSION['type[0]'] = "inputError";
+    $_SESSION['type[1]'] = "has-error";
+    header("Location: ".site_root."ux-admin/linkage");
+    exit(0);
+  }
+  //exit();
 }
 elseif(isset($_GET['linkstat']))
 {

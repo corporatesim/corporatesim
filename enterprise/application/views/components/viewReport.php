@@ -15,7 +15,7 @@
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
                   <li class="breadcrumb-item"><a href="<?php echo base_url('OnlineReport');?>">Online Report</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Game:- <?php echo $gameName->Game_Name?></li>
+                  <li class="breadcrumb-item active" aria-current="page">Card:- <?php echo $gameName->Game_Name?></li>
                 </ol>
               </nav>
             </div>
@@ -100,7 +100,7 @@
                         else
                         {
                           // show alert that user has not completed the game so far
-                          report_icon = "<a href='javascript:void(0);' data-toggle='tooltip' title='Game Not Completed So Far' onclick='showAlertForIncompleteGame()'><span class='fa fa-download'></span></a>";
+                          report_icon = "<a href='javascript:void(0);' data-toggle='tooltip' title='Card Not Completed So Far' onclick='showAlertForIncompleteGame()'><span class='fa fa-download'></span></a>";
                         }
 
                         return report_icon+" &nbsp; <a href='javascript:void(0);' data-user_id='"+user_id+"' data-game_id='"+game_id+"' data-toggle='tooltip' title='View Performance Chart' onclick='showPerformanceChart(this)'><span class='fa fa-line-chart'></span></a>";
@@ -226,8 +226,8 @@ function showAlertForIncompleteGame()
 {
   Swal.fire({
     icon : 'error',
-    title: 'InComplete',
-    html : 'User has not completed this game so far.',
+    title: 'Incomplete',
+    html : 'User has not completed this Card so far.',
     showClass: {
       popup: 'animated fadeInDown faster'
     },

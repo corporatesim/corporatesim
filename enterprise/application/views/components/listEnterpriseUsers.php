@@ -11,8 +11,11 @@
 					<div class="row">
 						<div class="col-md-6 col-sm-12">
 							<div class="title">
-								<h1><a href="<?php echo base_url('Users/addUsers/entuser');?>" data-toggle="tooltip" title="Add User"><i class="fa fa-plus-circle text-blue"> 
-								</i></a> Enterprize Users</h1>
+								<h1>
+                  <?php if($this->session->userdata('loginData')['User_Role'] == 'superadmin'){ ?>
+                  <a href="<?php echo base_url('Users/addUsers/entuser');?>" data-toggle="tooltip" title="Add User"><i class="fa fa-plus-circle text-blue"></i></a> 
+                  <?php } ?>
+                  Enterprize Users</h1>
 							</div>
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">

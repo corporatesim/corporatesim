@@ -11,12 +11,12 @@
 					<div class="col-md-6 col-sm-12">
 						<div class="title">
 							<h1><a href="javascript:void(0);" data-toggle="tooltip" title="Reports"><i class="fa fa-file text-blue"> 
-							</i></a> Online Reports</h1>
+							</i></a> Online Report</h1>
 						</div>
 						<nav aria-label="breadcrumb" role="navigation">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Online Reports</li>
+								<li class="breadcrumb-item active" aria-current="page">Online Report</li>
 							</ol>
 						</nav>
 					</div>
@@ -62,7 +62,7 @@
 											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="Enterprise" id="Enterprise" class="custom-select2 form-control Enterprise">
-													<option value="">--Select Enterprise--</option>
+													<option value="">--Select Enterprize--</option>
 													<?php foreach ($EnterpriseName as $EnterpriseData) { ?>
 														<option value="<?php echo $EnterpriseData->Enterprise_ID; ?>" date-enterprisename="<?php echo $EnterpriseData->Enterprise_Name;?>"><?php echo $EnterpriseData->Enterprise_Name; ?></option>
 													<?php } ?>
@@ -114,10 +114,10 @@
 										</div>
 										<!-- for subenterprise selection -->
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="subEnterpriseDiv">
-											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprise</label>
+											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select Subenterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="SubEnterprise" id="SubEnterprise" class="custom-select2 form-control subenterprise">
-													<option value="">-Select SubEnterprise-</option>
+													<option value="">-Select Subenterprize-</option>
 													<?php foreach ($SubEnterprise as $SubEnterpriseData) { ?>
 														<option value="<?php echo $SubEnterpriseData->SubEnterprise_ID; ?>" date-subEnterprisename="<?php echo $SubEnterpriseData->SubEnterprise_Name;?>"><?php echo $SubEnterpriseData->SubEnterprise_Name; ?></option>
 													<?php } ?>
@@ -157,7 +157,7 @@
 											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprise</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="SubEnterprise" id="SubEnterprise" class="custom-select2 form-control subenterprise" required="">
-													<option value="">-Select SubEnterprise-</option>
+													<option value="">-Select Subenterprize-</option>
 													<?php foreach ($SubEnterprise as $SubEnterpriseData) { ?>
 														<option value="<?php echo $SubEnterpriseData->SubEnterprise_ID; ?>" date-subEnterprisename="<?php echo $SubEnterpriseData->SubEnterprise_Name;?>" selected><?php echo $SubEnterpriseData->SubEnterprise_Name; ?></option>
 													<?php } ?>
@@ -169,10 +169,10 @@
 
 									<!-- after all the above filter show users here -->
 									<div class="row col-md-12 col-lg-12 col-sm-12 row form-group" id="gameDiv">
-										<label for="selectGame" class="col-sm-12 col-md-3 col-form-label">Select Game</label>
+										<label for="selectGame" class="col-sm-12 col-md-3 col-form-label">Select Card</label>
 										<div class="col-sm-12 col-md-9">
 											<select name="selectGame" id="selectGame" class="custom-select2 form-control" required="">
-												<option value="">-Select Game-</option>
+												<option value="">-Select Card-</option>
 											</select>
 										</div>
 									</div>
@@ -213,7 +213,7 @@
 						$(document).ready(function()
 						{
 							// show all game by default and then show games as per the filter
-							var allGameOption = "<option value=''>-Select Game-</option>";
+							var allGameOption = "<option value=''>-Select Card-</option>";
 							<?php foreach ($gameData as $games) { ?>
 								allGameOption += "<option value=<?php echo $games->Game_ID; ?>><?php echo $games->Game_Name; ?></option>";
 							<?php } ?>
@@ -224,7 +224,7 @@
 								var filterValue = $(this).val();
 								var loggedInAs  = $(this).data('filtertype');
 								$('#addUsersHere').html('');
-								$('#selectGame').html("<option value=''>-Select Game-</option>");
+								$('#selectGame').html("<option value=''>-Select Card-</option>");
 								// enterpriseDiv subEnterpriseDiv // superadminUsers enterpriseUsers subEnterpriseUsers
 								// console.log(loggedInAs+' of type '+filterValue);
 								if(loggedInAs == 'superadmin')
@@ -281,7 +281,7 @@
 
 							$('#Enterprise').on('change',function(){
 								$this             = $(this);
-								var option        = '<option value="">--Select SubEnterprise--</option>';
+								var option        = '<option value="">--Select Subenterprize--</option>';
 								var Enterprise_ID = $(this).val();
 
 								if($(this).val())
@@ -300,7 +300,7 @@
 													option += ("<option value='"+result[i].SubEnterprise_ID+"'>"+result[i].SubEnterprise_Name+"</option>");
 												});
 												$this.parents('form').find('select.subenterprise').html(option);
-												option = '<option value="">--Select SubEnterprise--</option>';
+												option = '<option value="">--Select Subenterprize--</option>';
 												// $('.SubEnterprise').html(option);
 											}
 											else
@@ -328,7 +328,7 @@
 								}
 								else
 								{
-									Swal.fire('Please select SubEnterprise');
+									Swal.fire('Please select Subenterprize');
 								}
 							});
 							
@@ -349,15 +349,15 @@
 										type: "POST",
 										success: function( result )
 										{
-											if(result == 'No game found')
+											if(result == 'No Card found')
 											{
-												Swal.fire('No game allocated to selected '+ent_SubEnt);
-												$('#selectGame').html('<option value="">--Select Game--</option>');
+												Swal.fire('No Card allocated to selected '+ent_SubEnt);
+												$('#selectGame').html('<option value="">--Select Card--</option>');
 											}
 											else
 											{
 												result = JSON.parse(result);
-												var entGameOption = '<option value="">--Select Game--</option>';
+												var entGameOption = '<option value="">--Select Card--</option>';
 												$(result).each(function(i,e)
 												{
 													entGameOption += ("<option value='"+result[i].Game_ID+"'>"+result[i].Game_Name+"</option>");

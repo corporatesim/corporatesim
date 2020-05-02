@@ -77,6 +77,63 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 				{
 					if($res->User_status == 1)
 					{
+            //updating user game end date
+            $uid = (int) $res->User_id;
+
+            //$sql = "SELECT gug.UG_GameEndDate, gug.UG_GameID, gug.UG_ParentId, gug.UG_SubParentId, gsu.User_companyid FROM GAME_USERGAMES gug LEFT JOIN GAME_GAME gg ON gg.Game_ID = gug.UG_GameID LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_id=gug.UG_UserID WHERE gug.UG_UserID = $uid AND gg.Game_ID IS NOT NULL AND gug.UG_ParentId=".$res->User_ParentId." AND gug.UG_SubParentId=".$res->User_SubParentId." ORDER BY `gg`.`Game_Name` ASC";
+
+            $sql = "SELECT * FROM GAME_USERGAMES gug LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_id = gug.UG_UserID LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gsu.User_ParentId LEFT JOIN GAME_SUBENTERPRISE gs ON gs.SubEnterprise_ID = gsu.User_SubParentId LEFT JOIN GAME_ENTERPRISE_GAME geg ON geg.EG_EnterpriseID = ge.Enterprise_ID AND geg.EG_GameID = gug.UG_GameID LEFT JOIN GAME_SUBENTERPRISE_GAME gsg ON gsg.SG_SubEnterpriseID = gsu.User_SubParentId AND gsg.SG_GameID = gug.UG_GameID WHERE gsu.User_id = $uid AND gug.UG_ParentId = ".$res->User_ParentId." AND gug.UG_SubParentId = ".$res->User_SubParentId;
+
+            $result = $funObj->ExecuteQuery($sql);
+            //print_r($sql); exit();
+
+            //looping for each game user having
+            while ($row = mysqli_fetch_assoc($result)) {
+
+              //randam query so that if not true any condition execute query will get query to execute
+              $query = "SELECT * FROM GAME_USERGAMES WHERE UG_ID = ".$row['UG_ID'];
+
+              if ($row['UG_GameID'] == $row['EG_GameID']) {
+                //if user and enterprise both having same game
+
+                if ($row['UG_GameEndDate'] > $row['User_GameEndDate'] && !empty($row['User_GameEndDate'])) {
+                  //if user game game end date is greater than user end date
+                  $query = "UPDATE GAME_USERGAMES SET UG_GameEndDate = '".$row['User_GameEndDate']."' WHERE UG_ID = ".$row['UG_ID'];
+                }
+
+                if ($row['UG_GameEndDate'] > $row['Enterprise_EndDate'] && !empty($row['Enterprise_EndDate'])) {
+                  //if user game game end date is greater than enterprise end date
+                  $query = "UPDATE GAME_USERGAMES SET UG_GameEndDate = '".$row['Enterprise_EndDate']."' WHERE UG_ID = ".$row['UG_ID'];
+                }
+
+                if ($row['UG_GameEndDate'] > $row['SubEnterprise_EndDate'] && !empty($row['SubEnterprise_EndDate'])) {
+                  //if user game game end date is greater than subenterprise end date
+                  $query = "UPDATE GAME_USERGAMES SET UG_GameEndDate = '".$row['SubEnterprise_EndDate']."' WHERE UG_ID = ".$row['UG_ID'];
+                }
+
+                if ($row['UG_GameEndDate'] > $row['EG_Game_End_Date'] && !empty($row['EG_Game_End_Date'])) {
+                  //if user game game end date is greater than enterprise game end date
+                  $query = "UPDATE GAME_USERGAMES SET UG_GameEndDate = '".$row['EG_Game_End_Date']."' WHERE UG_ID = ".$row['UG_ID'];
+                }
+
+                if ($row['UG_GameEndDate'] >= $row['SG_Game_End_Date'] && !empty($row['SG_Game_End_Date'])) {
+                  //if user game game end date is greater than subenterprise game end date
+                  $query = "UPDATE GAME_USERGAMES SET UG_GameEndDate = '".$row['SG_Game_End_Date']."' WHERE UG_ID = ".$row['UG_ID'];
+                }
+
+              }
+              else {
+                //if not present game for enterprise and present for user then delete game form user
+                $query = "DELETE FROM GAME_USERGAMES WHERE UG_ID = ".$row['UG_ID'];
+              }
+							//executing Query
+							// commenting this line to test properly
+              // $queryResult = $funObj->ExecuteQuery($query);
+              //print_r($query); echo "<br />";
+            }
+            //exit();
+
+            //setting session
 						$_SESSION['userid']           = (int) $res->User_id;
 						$_SESSION['FullName']         = $res->FullName;
 						$_SESSION['username']         = $res->User_username;
