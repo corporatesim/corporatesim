@@ -2,4 +2,9 @@ enterprise/common/Logo/*
 .project
 .buildpath
 images/
+images/*
+image/
+corporatesim.com.bak/
+corporatesim/
 ux-admin/upload/
+
