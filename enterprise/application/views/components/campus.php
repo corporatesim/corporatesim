@@ -8,7 +8,8 @@
   }
 </style>
 <div class="main-container">
-  <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+  <!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+  <div class="pd-ltr-20 height-100-p xs-pd-20-10">
     <?php $this->load->view('components/trErMsg');?>
     <div class="min-height-200px">
       <div class="page-header">
@@ -109,6 +110,7 @@
                         <tr>
                           <th>ID</th>
                           <th>Campus Name</th>
+                          <th>Type</th>
                           <th>Address</th>
                           <th>Email</th>
                           <th>Contact</th>
@@ -118,7 +120,7 @@
                       <tbody>
                         <?php if(count($campus) < 1){ ?>
                           <tr>
-                            <td class="text-danger text-center" colspan="6"> No Record Found </td>
+                            <td class="text-danger text-center" colspan="7"> No Record Found </td>
                           </tr>
                           <!-- only if record exists -->
                         <?php } else{ $i=1; foreach ($campus as $campusRow) { ?>
@@ -127,6 +129,21 @@
                             <td><?php echo $i;?></td>
                             <!-- campus Name -->
                             <td id="<?php echo $campusRow->UC_Name; ?>__Campus_Name" class="editable"><?php echo $campusRow->UC_Name; ?></td>
+                            <!-- Type -->
+                            <td>
+                              <?php
+                                switch ($campusRow->UC_Type) {
+                                  case 1:
+                                    echo 'Management';
+                                    break;
+                                  case 2:
+                                    echo 'Engineering';
+                                    break;
+                                  default:
+                                    echo 'Other';
+                                }
+                              ?>
+                            </td>
                             <!-- Address -->
                             <td><?php echo $campusRow->UC_Address; ?></td>
                             <!-- E-mail -->
@@ -168,7 +185,7 @@
   $(document).ready(function(){
     $('#addCampus').on('click', function(){
 
-      var addCampusForm ='<form id="campusForm"> <div class="form-group"><input type="text" required class="form-control" placeholder="Campus Name" name="Campus_Name"></div> <div class="form-group"><input type="text" required class="form-control" placeholder="Campus Address" name="Campus_Address"></div> <div class="form-group"><input type="email" required class="form-control" placeholder="Campus E-mail" name="Campus_Email"></div> <div class="form-group"><input type="text" required class="form-control" placeholder="Campus Contact" name="Campus_Contact"></div> <br> <button class="btn btn-primary">Add</button> <button type="button" class="btn btn-outline-danger cancelPopup" onClick="return Swal.close();">Cancel</button></form>';
+      var addCampusForm ='<form id="campusForm"> <div class="form-group"><input type="text" required class="form-control" placeholder="Campus Name" name="Campus_Name"></div> <div class="form-group"><div class="input-group"><select name="Campus_Type" id="Campus_Type" class="form-control" required><option value="1">Management</option><option value="2">Engineering</option><option value="3" selected>Other</option></select></div></div> <div class="form-group"><input type="text" required class="form-control" placeholder="Campus Address" name="Campus_Address"></div> <div class="form-group"><input type="email" required class="form-control" placeholder="Campus E-mail" name="Campus_Email"></div> <div class="form-group"><input type="text" required class="form-control" placeholder="Campus Contact" name="Campus_Contact"></div> <br> <button class="btn btn-primary">Add</button> <button type="button" class="btn btn-outline-danger cancelPopup" onClick="return Swal.close();">Cancel</button></form>';
       Swal.fire({
         // icon: 'question',
         title            : 'Add Campus',

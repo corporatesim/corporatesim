@@ -1,0 +1,11 @@
+01) Image Dimensions: 960 x 460 (Width: 960, Height: 460)
+02) Result is submited when time ends or when Submit button click
+03) Grid is divided into 12 x 8 which is in Image Dimensions 80 x 57.5 (Width: 80, Height: 57.5)
+04) Grid can be divided or multiply by the Image Dimensions of 960 x 460 
+05) for dragbox image or text both can placed (1 at a time)
+06) can be set when check button is available to click (enable or disable check button) 
+07) On click check show red and green background in text(dropbox) / only result(Correct or wrong) in pop up / result with data in pop up
+08) Retry will always set time from initial point and reset all dragbox and empty all dropbox
+09) In dragbox both is alowed image and text
+10) dropbox will defined based on Grid pattern
+11)

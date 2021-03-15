@@ -131,15 +131,13 @@ class Collaboration extends MY_Controller {
 		$this->load->view('main_layout',$content);
 	}
 
-	public function viewGroupReport($reportData=NULL)
-	{
+	public function viewGroupReport($reportData=NULL) {
 		// echo "<pre>"; print_r($this->session->userdata('loginData')); exit();
 		// $this->Common_Model->fetchRecords('GAME_SUBENTERPRISE',$subWhere);
 		// $this->Common_Model->fetchRecords('GAME_SUBENTERPRISE',$subWhere);
 
 		// if enterprise is logged in
-		if($this->session->userdata('loginData')['User_Role']==1)
-		{
+		if ($this->session->userdata('loginData')['User_Role'] == 1) {
 			$groupWhere = array(
 				'Group_Delete'      => 0,
 				'Group_ParentId'    => $this->session->userdata('loginData')['User_Id'],
@@ -155,8 +153,7 @@ class Collaboration extends MY_Controller {
 			$content['subEnterpriseData'] = $subEnterprise;
 		}
 		// if subenterprise is logged in
-		else if($this->session->userdata('loginData')['User_Role']==2)
-		{
+		else if ($this->session->userdata('loginData')['User_Role'] == 2) {
 			$groupWhere = array(
 				'Group_Delete'      => 0,
 				'Group_ParentId'    => $this->session->userdata('loginData')['User_ParentId'],
@@ -164,9 +161,23 @@ class Collaboration extends MY_Controller {
 				'Group_CreatedBy'   => $this->session->userdata('loginData')['User_Id'],
 			);
 		}
+    else if ($this->session->userdata('loginData')['User_Role'] == 3) {
+      $groupWhere = array(
+        'Group_Delete'      => 0,
+        'Group_ParentId'    => $this->session->userdata('loginData')['User_ParentId'],
+        'Group_SubParentId' => -2,
+        'Group_CreatedBy'   => $this->session->userdata('loginData')['User_ParentId'],
+      );
+      // fetch all the subenterprise data associated with enterprise
+      $subEntWhere = array(
+        'SubEnterprise_EnterpriseID' => $this->session->userdata('loginData')['User_ParentId'],
+        'SubEnterprise_Status'       => 0,
+      );
+      $subEnterprise                = $this->Common_Model->fetchRecords('GAME_SUBENTERPRISE',$subEntWhere);
+      $content['subEnterpriseData'] = $subEnterprise;
+    }
 		// if superAdmin is logged in
-		else
-		{
+		else {
 			$groupWhere = array(
 				'Group_Delete'      => 0,
 				'Group_ParentId'    => -1,
@@ -180,6 +191,7 @@ class Collaboration extends MY_Controller {
 			$enterprise                = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$entWhere,'','Enterprise_Name');
 			$content['enterpriseData'] = $enterprise;
 		}
+
 		$groupData = $this->Common_Model->fetchRecords('GAME_COLLABORATION', $groupWhere, 'Group_Id, Group_Name, Group_Info', 'Group_Name');
 		// echo "<pre>"; print_r($groupData); exit();
 		$content['groupData'] = $groupData;

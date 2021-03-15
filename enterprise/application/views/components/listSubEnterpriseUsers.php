@@ -3,7 +3,8 @@
 	var func        = "<?php echo $this->uri->segment(2);?>";
 </script>
 <div class="main-container">
-	<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+	<!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+  <div class="pd-ltr-20 height-100-p xs-pd-20-10">
 		<?php $this->load->view('components/trErMsg');?>
 		<div class="min-height-200px">
 			<div class="page-header">
@@ -74,7 +75,7 @@
 												<th>Email</th>
 												<th>Password</th>
 												<th class="datatable-nosort">Contact</th>
-												<th class="datatable-nosort">Games</th>
+												<th class="datatable-nosort">Cards</th>
 												<th>Duration</th>
 												<th class="datatable-nosort noExport">Action</th>
 											</tr>
@@ -86,18 +87,17 @@
 													<td><?php echo $i; ?></td>
 													<td><?php echo $userDetails->Enterprise_Name; ?></td>
 													<td class="table-plus"><?php echo $userDetails->SubEnterprise_Name ; ?></td>
-													<td><?php echo $userDetails->User_username;?>
-												</td>
-												<td><?php echo $userDetails->User_email; ?></td>
-												<td><?php echo $userDetails->password; ?></td>
-												<td><?php echo $userDetails->User_mobile; ?></td>
-												<td>
-													<a href="<?php echo base_url('Games/assignGames/').base64_encode($userDetails->User_id).'/'.base64_encode($this->uri->segment(2)); ?>" title="Allocate/Deallocate Games"><?php echo "<b style='color:#0029ff;'>".$userDetails->gameCount."</b>"; ?></a>
-													&nbsp;
-													<a href="javascript:void(0);" onclick="downloadCompletedGamesReport('<?php echo base64_encode($userDetails->User_id); ?>');" data-toggle="tooltip" title="Download CSV For All Complted Games"><i class="fa fa-download"></i></a>
-												</td>
-												<td><?php echo date('d-m-Y',strtotime($userDetails->User_GameStartDate))." <b>To</b> ".date('d-m-Y',strtotime($userDetails->User_GameEndDate)); ?></td>
-												<td>
+													<td><?php echo $userDetails->User_username;?></td>
+  												<td><?php echo $userDetails->User_email; ?></td>
+  												<td><?php echo $userDetails->password; ?></td>
+  												<td><?php echo $userDetails->User_mobile; ?></td>
+  												<td>
+  													<a href="<?php echo base_url('Games/assignGames/').base64_encode($userDetails->User_id).'/'.base64_encode($this->uri->segment(2)); ?>" title="Allocate/Deallocate Cards"><?php echo "<b style='color:#0029ff;'>".$userDetails->gameCount."</b>"; ?></a>
+  													&nbsp;
+  													<a href="javascript:void(0);" onclick="downloadCompletedGamesReport('<?php echo base64_encode($userDetails->User_id); ?>');" data-toggle="tooltip" title="Download CSV For All Complted Cards"><i class="fa fa-download"></i></a>
+  												</td>
+  												<td><?php echo date('d-m-Y',strtotime($userDetails->User_GameStartDate))." <b>To</b> ".date('d-m-Y',strtotime($userDetails->User_GameEndDate)); ?>
+  												</td>
 													<td>
 														<div class="dropdown">
 															<a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -106,7 +106,7 @@
 															<div class="dropdown-menu dropdown-menu-left">
 																<!-- <a class="dropdown-item" href="#"><i class="fa fa-eye"></i> View</a> -->
 																<a class="dropdown-item" href="<?php echo base_url('Users/user/').base64_encode($userDetails->User_id).'/'.$this->uri->segment(2);?>"><i class="fa fa-pencil"></i> Edit</a>
-																<!-- <a class="dropdown-item" href="<?php //echo base_url('Users/assignGames/');?><?php //echo base64_encode($userDetails->User_id); ?>" title="Allocate/Deallocate Games"><i class="fa fa-gamepad"></i> Allocate/Deallocate Games</a> -->
+																<!-- <a class="dropdown-item" href="<?php //echo base_url('Users/assignGames/');?><?php //echo base64_encode($userDetails->User_id); ?>" title="Allocate/Deallocate Cards"><i class="fa fa-gamepad"></i> Allocate/Deallocate Cards</a> -->
 																<a class="dropdown-item dl_btn" href="javascript:void(0);" class="btn btn-primary dl_btn" id="<?php echo 
 																$userDetails->User_id; ?>" title="Delete"><i class="fa fa-trash"></i> Delete</a>
 															</div>

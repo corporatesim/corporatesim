@@ -177,6 +177,10 @@ switch($_GET['q']){
 	$showfile = 'notification.php';
 	break;
 
+	case 'linkgame':
+	$showfile = 'linkgame.php';
+	break;
+
 	case 'resetGameViews':
 	$showfile = 'resetGameViews.php';
 	break;

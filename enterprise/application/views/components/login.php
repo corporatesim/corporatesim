@@ -2,7 +2,7 @@
 	<!doctype html>
 	<html class="fixed">
 	<head>
-		<title>Enterprise Login</title>
+		<title>Enterprize Login</title>
 
 		<!-- Basic -->
 		<meta charset="UTF-8">
@@ -11,12 +11,12 @@
 		<meta name="description" content="CorporateSim Enterprise Login">
 		<meta name="author" content="okler.net">
 
-		<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url('common/vendors?v=').file_version_cs;?>/images/favicon.ico">
+		<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url('common/vendors/images/favicon.ico');?>">
 		<!-- Mobile Metas -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 		<!-- Web Fonts  -->
-		<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
 
 		<!-- Vendor CSS -->
 		<link rel="stylesheet" href="<?php echo base_url('common/loginSignup/vendor/bootstrap/css/bootstrap.css?v=').file_version_cs;?>" />
@@ -37,12 +37,26 @@
 		<script src="<?php echo base_url('common/loginSignup/vendor/modernizr/modernizr.js?v=').file_version_cs;?>"></script>
 
 	</head>
-	<body>
+	<?php
+		// prd($_SERVER);
+	if(strpos($_SERVER['HTTP_HOST'], 'localhost') !== FALSE)
+	{
+		echo "<body style='background-color:#d9534f;'>";
+	}
+	elseif(strpos($_SERVER['HTTP_HOST'], 'develop.corpsim.in') !== FALSE)
+	{
+		echo "<body style='background-color:#337ab7;'>";
+	}
+	else
+	{
+		echo "<body>";
+	}
+	?>
 		<!-- start: page -->
 		<section class="body-sign">
 			<div class="center-sign">
 				<a href="<?php echo base_url();?>" class="logo pull-left">
-					<img src="<?php echo $logo;?>" alt="CorporateSim Logo" style="margin-top: 6%; max-width: 300px; height: 45px;"/>
+					<img src="<?php echo $logo;?>" alt="CorporateSim Logo" style="margin-top: 11%; max-width: 300px; height: 45px;"/>
 				</a>
 
 				<div class="panel panel-sign">

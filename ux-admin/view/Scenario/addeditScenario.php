@@ -1,14 +1,33 @@
+<?php 
+  // echo "<pre>"; print_r(json_decode($scendetails->Scen_Json, true)); exit();
+  $Scen_Json                = json_decode($scendetails->Scen_Json, true);
+  $aliasStoryline           = $Scen_Json['aliasStoryline'];
+  $aliasStorylineVisibility = $Scen_Json['aliasStorylineVisibility'];
+  $aliasVideo               = $Scen_Json['aliasVideo'];
+  $aliasVideoVisibility     = $Scen_Json['aliasVideoVisibility'];
+  $aliasImage               = $Scen_Json['aliasImage'];
+  $aliasImageVisibility     = $Scen_Json['aliasImageVisibility'];
+  $aliasDocument            = $Scen_Json['aliasDocument'];
+  $aliasDocumentVisibility  = $Scen_Json['aliasDocumentVisibility'];
+
+  $aliasStorylineColorCode  = $Scen_Json['aliasStorylineColorCode'];
+  $aliasVideoColorCode      = $Scen_Json['aliasVideoColorCode'];
+  $aliasImageColorCode      = $Scen_Json['aliasImageColorCode'];
+  $aliasDocumentColorCode   = $Scen_Json['aliasDocumentColorCode'];
+?>
 <style type="text/css">
   span.alert-danger {
     background-color: #ffffff;
     font-size: 18px;
   }
 </style>
+
 <div class="row">
   <div class="col-lg-12">
     <h1 class="page-header"><?php echo $header; ?></h1>
   </div>
 </div>
+
 <div class="row">
   <div class="col-sm-12">
     <ul class="breadcrumb">
@@ -19,6 +38,7 @@
     </ul>
   </div>
 </div>
+
 <?php if(isset($_GET['edit'])){ ?>
   <div class="row">
     <div class="col-lg-12">
@@ -62,7 +82,7 @@
               </div>
               <div class="row name col-sm-12" id="Scen_InputButton">
                 <!-- <input type="hidden" name="id" value="<?php // if(isset($_GET['edit'])){ echo $scendetails->Scen_ID; } ?>"> -->
-                <label for="Scen_InputButton"><span class="alert-danger">*</span>Input Button Status</label><br>
+                <label for="Scen_InputButton"><span class="alert-danger">*</span>Input (Proceed) Button Status</label><br>
 
                 <div class="col-md-2">
                   <label for="radioHide" class="containerRadio">
@@ -89,6 +109,141 @@
                       </label>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <div class="row name">
+                <div class="col-sm-12">
+                  <h3><strong>To view color codes <a href="https://material.io/resources/color/" target="_blank">click here!</a></strong></h3>
+                </div>
+              </div>
+              <br />
+
+              <!-- storyline alias -->
+              <div class="row" id="renameStoryline">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="aliasStoryline">Alias Storyline</label>
+                    <input type="text" name="aliasStoryline" value="<?php echo ($aliasStoryline) ? $aliasStoryline : 'Storyline'; ?>" class="form-control" placeholder="Put Alias Storyline">
+                  </div>
+                </div>
+
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="aliasStorylineColorCode">Storyline Color Code</label>
+                    <input type="text" name="aliasStorylineColorCode" value="<?php echo ($aliasStorylineColorCode) ? $aliasStorylineColorCode : 'lightcyan'; ?>" class="form-control" placeholder="Storyline Color Code">
+                  </div>
+                </div>
+                <br>
+                
+                <div class="col-md-1">
+                  <label for="aliasStorylineVisibility" class="containerRadio">
+                    <input type="radio" id="aliasStorylineVisibility" name="aliasStorylineVisibility" value="0" <?php echo ($aliasStorylineVisibility == 0) ? 'checked' : ''; ?>> Show
+                    <span class="checkmarkRadio"></span>
+                  </label>
+                </div>
+
+                <div class="col-md-1">
+                  <label for="aliasStorylineHide" class="containerRadio">
+                    <input type="radio" id="aliasStorylineHide" name="aliasStorylineVisibility" value="1" <?php echo ($aliasStorylineVisibility == 1) ? 'checked' : ''; ?>> Hide
+                    <span class="checkmarkRadio"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Video alias -->
+              <div class="row" id="renameVideo">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="aliasVideo">Alias Video</label>
+                    <input type="text" name="aliasVideo" value="<?php echo ($aliasVideo) ? $aliasVideo : 'Video'; ?>" class="form-control" placeholder="Put Alias Video">
+                  </div>
+                </div>
+
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="aliasVideoColorCode">Video Color Code</label>
+                    <input type="text" name="aliasVideoColorCode" value="<?php echo ($aliasVideoColorCode) ? $aliasVideoColorCode : 'lavender'; ?>" class="form-control" placeholder="Video Color Code">
+                  </div>
+                </div>
+                <br>
+                
+                <div class="col-md-1">
+                  <label foaliasVideoVisibility="aliasRadioShow" class="containerRadio">
+                    <input type="radio" id="aliasVideoVisibility" name="aliasVideoVisibility" value="0" <?php echo ($aliasVideoVisibility == 0) ? 'checked' : ''; ?>> Show
+                    <span class="checkmarkRadio"></span>
+                  </label>
+                </div>
+
+                <div class="col-md-1">
+                  <label for="aliasVideoHide" class="containerRadio">
+                    <input type="radio" id="aliasVideoHide" name="aliasVideoVisibility" value="1" <?php echo ($aliasVideoVisibility == 1) ? 'checked' : ''; ?>> Hide
+                    <span class="checkmarkRadio"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Image alias -->
+              <div class="row" id="renameImage">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="aliasImage">Alias Image</label>
+                    <input type="text" name="aliasImage" value="<?php echo ($aliasImage) ? $aliasImage : 'Image'; ?>" class="form-control" placeholder="Put Alias Image">
+                  </div>
+                </div>
+
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="aliasImageColorCode">Image Color Code</label>
+                    <input type="text" name="aliasImageColorCode" value="<?php echo ($aliasImageColorCode) ? $aliasImageColorCode : 'lavenderblush'; ?>" class="form-control" placeholder="Image Color Code">
+                  </div>
+                </div>
+                <br>
+                
+                <div class="col-md-1">
+                  <label foaliasImageVisibility="aliasRadioShow" class="containerRadio">
+                    <input type="radio" id="aliasImageVisibility" name="aliasImageVisibility" value="0" <?php echo ($aliasImageVisibility == 0) ? 'checked' : ''; ?>> Show
+                    <span class="checkmarkRadio"></span>
+                  </label>
+                </div>
+
+                <div class="col-md-1">
+                  <label for="aliasImageHide" class="containerRadio">
+                    <input type="radio" id="aliasImageHide" name="aliasImageVisibility" value="1" <?php echo ($aliasImageVisibility == 1) ? 'checked' : ''; ?>> Hide
+                    <span class="checkmarkRadio"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Document alias -->
+              <div class="row" id="renameDocument">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="aliasDocument">Alias Document</label>
+                    <input type="text" name="aliasDocument" value="<?php echo ($aliasDocument) ? $aliasDocument : 'Documents'; ?>" class="form-control" placeholder="Put Alias Document">
+                  </div>
+                </div>
+
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="aliasDocumentColorCode">Document Color Code</label>
+                    <input type="text" name="aliasDocumentColorCode" value="<?php echo ($aliasDocumentColorCode) ? $aliasDocumentColorCode : 'lemonchiffon'; ?>" class="form-control" placeholder="Document Color Code">
+                  </div>
+                </div>
+                <br>
+                
+                <div class="col-md-1">
+                  <label foaliasDocumentVisibility="aliasRadioShow" class="containerRadio">
+                    <input type="radio" id="aliasDocumentVisibility" name="aliasDocumentVisibility" value="0" <?php echo ($aliasDocumentVisibility == 0) ? 'checked' : ''; ?>> Show
+                    <span class="checkmarkRadio"></span>
+                  </label>
+                </div>
+
+                <div class="col-md-1">
+                  <label for="aliasDocumentHide" class="containerRadio">
+                    <input type="radio" id="aliasDocumentHide" name="aliasDocumentVisibility" value="1" <?php echo ($aliasDocumentVisibility == 1) ? 'checked' : ''; ?>> Hide
+                    <span class="checkmarkRadio"></span>
+                  </label>
                 </div>
               </div>
 

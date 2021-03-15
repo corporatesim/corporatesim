@@ -30,7 +30,7 @@ div.vertical-menu > a.active{
 
 .scenario_header{
 	width      :100%;
-	height     :35px; 
+	height     :20px; 
 	background :#73706d; 
 	margin-left:0px;
 }
@@ -808,8 +808,8 @@ flip card
 }
 
 .InnerPageHeader{
-	color      :#fff;
-	margin-top :8px;
+	color      :#000;
+	margin-top :6px;
 	font-weight: bold;
 	background-color: #73706d;
 }
@@ -956,10 +956,10 @@ flip card
 .submitShowRight {
 	margin-top     : 180px;
 	position       : fixed;
-	right          : -25px;
+	right          : -33px;
 	transition     : 0.3s;
 	padding        : 5px;
-	width          : 100px;
+	width          : 110px;
 	text-decoration: none;
 	/*font-size      : 20px;*/
 	color          : white;

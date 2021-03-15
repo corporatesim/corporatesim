@@ -1,7 +1,8 @@
 <!--   <link href="http://ttc.microwarecomp.com/common/backend/css/app.min.1.css" rel="stylesheet">
   <link href="http://ttc.microwarecomp.com/common/backend/css/app.min.2.css" rel="stylesheet"> -->
   <div class="main-container">
-    <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+    <!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+    <div class="pd-ltr-20 height-100-p xs-pd-20-10">
       <?php $this->load->view('components/trErMsg');?>
       <div class="min-height-200px">
         <div class="page-header">
@@ -14,7 +15,7 @@
               <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-                  <li class="breadcrumb-item"><a href="<?php echo base_url('OnlineReport');?>">Online Report</a></li>
+                  <li class="breadcrumb-item"><a href="<?php echo base_url('OnlineReport');?>">Single Card Reports</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Card:- <?php echo $gameName->Game_Name?></li>
                 </ol>
               </nav>
@@ -27,6 +28,11 @@
                  <!--  <div class="clearfix mb-20">
                     <h5 class="text-blue">See the users report acoordingly</h5>
                   </div> -->
+
+                  <div class="col-12 col-md-2 pull-left">
+                   <a href="<?php echo base_url('OfflineReports'); ?>"><button type="button" name="submit"class="btn btn-primary"><span class="btn-label"><i class="fa fa-download"></i></span>&nbsp;Download Report</button></a>
+                  </div>
+
                   <!-- add users details here -->
                   <div class="row col-md-12 col-lg-12 col-sm-12 form-group mb-20" id="showUserReport">
                     <table id="data_table_id" class="table table-condensed table-striped table-hover table-bordered table-responsive">
@@ -60,6 +66,7 @@
                   </div>
                   <!-- end of adding users -->
                 </div>
+              </div>
               </div>
 
               <script>

@@ -2,7 +2,8 @@
 // echo $type."<pre>";print_r($enterpriseDropdown); exit(); 
 ?>   -->
 <div class="main-container">
-	<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+	<!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+  <div class="pd-ltr-20 height-100-p xs-pd-20-10">
 		<div class="min-height-200px">
 			<div class="page-header">
 				<div class="row">
@@ -46,7 +47,7 @@
 					<input type="hidden"name="allocateTo" value="<?php echo $allocateTo; ?>">
 					<?php if($allocateTo=='enterprise'){ ?>
 						<!-- <div class="row" id="to_enterprise"> -->
-							<!-- show enterprise checkboxes only --><!-- <?php // echo $enterpriseRow->Enterprise_ID;?> -->
+							<!-- show enterprize checkboxes only --><!-- <?php // echo $enterpriseRow->Enterprise_ID;?> -->
 							<?php foreach($enterpriseCheckbox as $enterpriseRow){ 
 									// print_r($enterpriseRow);
 									// check for default checked and start and end date
@@ -98,7 +99,7 @@
 
 									<div class="form-group row col-sm-12 col-md-6" id="Enterprise_Section">
 										<select name="Enterprise" id="Enterprise" class="custom-select2 form-control" required="">
-											<option value="">--Select Enterprise--</option>
+											<option value="">--Select Enterprize--</option>
 											<?php foreach ($enterpriseDropdown as $EnterpriseData) { ?>
 												<option value="<?php echo $EnterpriseData->Enterprise_ID.'_'.strtotime($EnterpriseData->EG_Game_Start_Date).'_'.strtotime($EnterpriseData->EG_Game_End_Date); ?>"><?php echo $EnterpriseData->Enterprise_Name; ?></option>
 											<?php } ?>
@@ -109,7 +110,7 @@
 										<input type="search" class="form-control" placeholder="search" name="searchData" disabled="">
 									</div>
 
-									<!-- show subEnterprise checkbox here -->
+									<!-- show subenterprize checkbox here -->
 									<div class="form-group row col-sm-12" id="subEnterpriseCheckbox">
 									</div>
 
@@ -179,7 +180,7 @@
 
 										<?php } ?>
 									<?php } else{ ?>
-										<marquee class="alert-danger">No SubEnterprises</marquee>
+										<marquee class="alert-danger">No SubEnterprizes</marquee>
 									<?php } ?>
 								</div>
 							<?php } ?>
@@ -193,7 +194,7 @@
 
 									<div class="form-group row col-sm-12 col-md-6" id="Enterprise_Section">
 										<select name="Enterprise" id="Enterprise" class="custom-select2 form-control" required="">
-											<option value="">--Select Enterprise--</option>
+											<option value="">--Select Enterprize--</option>
 											<?php foreach ($enterpriseDropdown as $EnterpriseData) { ?>
 												<option value="<?php echo $EnterpriseData->Enterprise_ID.'_'.strtotime($EnterpriseData->EG_Game_Start_Date).'_'.strtotime($EnterpriseData->EG_Game_End_Date); ?>"><?php echo $EnterpriseData->Enterprise_Name; ?></option>
 											<?php } ?>
@@ -221,8 +222,8 @@
 									</div>
 
 									<div class="form-group row col-sm-12" id="entErpriseUsersCheckbox">
-										<!-- making enterprise checkboxes here by calling the js function-->
-										<!-- end of making enterprise users checkboxes here -->
+										<!-- making enterprize checkboxes here by calling the js function-->
+										<!-- end of making enterprize users checkboxes here -->
 									</div>
 								</div>
 							<?php } ?>
@@ -236,7 +237,7 @@
 
 									<div class="form-group row col-sm-12 col-md-6" id="Enterprise_Section">
 										<select name="Enterprise" id="Enterprise" class="custom-select2 form-control" required="">
-											<option value="">--Select Enterprise--</option>
+											<option value="">--Select Enterprize--</option>
 											<?php foreach ($enterpriseDropdown as $EnterpriseData) { ?>
 												<option value="<?php echo $EnterpriseData->Enterprise_ID.'_'.strtotime($EnterpriseData->EG_Game_Start_Date).'_'.strtotime($EnterpriseData->EG_Game_End_Date); ?>"><?php echo $EnterpriseData->Enterprise_Name; ?></option>
 											<?php } ?>
@@ -245,7 +246,7 @@
 
 									<div class="form-group row col-sm-12 col-md-6 d-none" id="subEnterpriseUsers_Section">
 										<select name="SubEnterpriseDropdown" id="SubEnterpriseDropdown" class="custom-select2 form-control" required="">
-											<option value="">--Select SubEnterprise--</option>
+											<option value="">--Select SubEnterprize--</option>
 										</select>
 									</div>
 
@@ -269,7 +270,7 @@
 										<?php } ?>
 										<!-- show SubEnt DropDown and then users checkboxes -->
 										<select name="SubEnterpriseDropdown" id="SubEnterpriseDropdown" class="custom-select2 form-control" required="">
-											<option value="">--Select SubEnterprise--</option>
+											<option value="">--Select SubEnterprize--</option>
 											<?php if(count($subEnterpriseDropdown) > 0){ 
 												foreach ($subEnterpriseDropdown as $subEnterpriseDropdownRow) { ?>
 													<option value="<?php echo $subEnterpriseDropdownRow->SubEnterprise_ID.'_'.$subEnterpriseDropdownRow->startDate.'_'.$subEnterpriseDropdownRow->endDate;?>"><?php echo $subEnterpriseDropdownRow->SubEnterprise_Name;?></option>
@@ -396,9 +397,7 @@
 					</div>
 					<div class="clearfix"></div>
 				</div>
-			</div>
-		</div>
-	</div>
+	
 
 	<script>
 		$(document).ready(function(){
@@ -435,7 +434,7 @@
 							{
 								if( result == 'no game' )
 								{
-									swal.fire("Selected enterprise doesn't have <span class='text-blue'>"+gameName+"</span>");
+									swal.fire("Selected enterprize doesn't have <span class='text-blue'>"+gameName+"</span>");
 								}
 								else
 								{
@@ -446,7 +445,7 @@
 									<?php if($allocateTo == 'entErpriseUsers'){ ?>
 										if(result.length<1)
 										{
-											swal.fire("Selected enterprise doesn't have any enterprise user associated");
+											swal.fire("Selected enterprize doesn't have any enterprize user associated");
 											$('.pre-loader').hide();
 											return false;
 										}
@@ -507,13 +506,13 @@
 									<?php if($allocateTo == 'subEnterprise'){ ?>
 										if(result.length<1)
 										{
-											swal.fire("Selected enterprise doesn't have any Subenterprise associated");
+											swal.fire("Selected enterprize doesn't have any Subenterprize associated");
 											$('.pre-loader').hide();
 											return false;
 										}
 
 										var subEnterpriseCheckbox = '';
-										// append the checkboxes of subenterprise to #subEnterpriseCheckbox
+										// append the checkboxes of subenterprize to #subEnterpriseCheckbox
 										$.each(result,function(i,e)
 										{
 											// to check that ent game start date is > sub ent date
@@ -556,11 +555,11 @@
 										datepickerBindHere();
 									<?php } ?>
 
-									// creating the subenterprise dropdown
-									var SubEnterpriseDropdown = '<option value="">--Select SubEnterprise--</option>';
-									// append the checkboxes of subenterprise to #SubEnterpriseDropdown
+									// creating the subenterprize dropdown
+									var SubEnterpriseDropdown = '<option value="">--Select SubEnterprize--</option>';
+									// append the checkboxes of subenterprize to #SubEnterpriseDropdown
 									$('.pre-loader').hide();
-									// creating subenterprise dropdown
+									// creating subenterprize dropdown
 									$.each(result,function(i,e)
 									{
 										if(gameid == result[i].SG_GameID)
@@ -596,7 +595,7 @@ else
 }
 });
 
-// when subenterprise dropdown is changed subEntErpriseUsersCheckbox
+// when subenterprize dropdown is changed subEntErpriseUsersCheckbox
 $('#SubEnterpriseDropdown').on('change',function(){
 	var dateAndId = $(this).val().split('_');
 	// console.log(dateAndId); // id_startDate_endDate
@@ -611,7 +610,7 @@ $('#SubEnterpriseDropdown').on('change',function(){
 	// append the checkboxes of entErpriseUsers to #subEntErpriseUsersCheckbox
 	if(!dateAndId[0])
 	{
-		swal.fire('Please Select SubEnterprise');
+		swal.fire('Please Select SubEnterprize');
 		return false;
 	}
 	$.ajax({
@@ -632,7 +631,7 @@ $('#SubEnterpriseDropdown').on('change',function(){
 			{
 				if( result == 'no game' )
 				{
-					swal.fire("Selected SubEnterprise doesn't have <span class='text-blue'>"+gameName+"</span>");
+					swal.fire("Selected Subenterprize doesn't have <span class='text-blue'>"+gameName+"</span>");
 					$('.pre-loader').hide();
 					return false;
 				}
@@ -641,7 +640,7 @@ $('#SubEnterpriseDropdown').on('change',function(){
 					result = JSON.parse( result );
 					if(result.length<1)
 					{
-						swal.fire("Selected SubEnterprise doesn't have any User associated");
+						swal.fire("Selected Subenterprize doesn't have any User associated");
 						$('.pre-loader').hide();
 						return false;
 					}
@@ -733,7 +732,7 @@ $('#SubEnterpriseDropdown').on('change',function(){
 	});
 <?php } ?>
 
-// adding function to get the enterprise users
+// adding function to get the enterprize users
 function showEnterpriseUsers(enterpriseData)
 {
 	$('#entErpriseUsersCheckbox').html('');

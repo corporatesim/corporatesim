@@ -482,8 +482,8 @@ class Ajax extends MY_Controller
 
 						// echo $findLinkageSubRow->input_current."<pre>"; print_r($SubLink_InputModeTypeValue); echo "</pre>";
 
-						$question       = $SubLink_InputModeTypeValue['question'];
-						$defaultChecked = $SubLink_InputModeTypeValue['makeDefaultChecked'];
+						$question       = $this->encode_decode_value($SubLink_InputModeTypeValue['question']);
+						$defaultChecked = $this->encode_decode_value($SubLink_InputModeTypeValue['makeDefaultChecked']);
 						$questionFlag   = false;
 						// if default checked is selected from admin, then remove last element from array
 						if ($defaultChecked) {
@@ -495,10 +495,10 @@ class Ajax extends MY_Controller
 							// as first is question, so skip this,
 							if ($questionFlag) {
 								// hiding the default, selected from admin end
-								$hideDefault = ($defaultChecked == $optionText) ? 'd-none' : '';
+								$hideDefault = ($defaultChecked == $this->encode_decode_value($optionText)) ? 'd-none' : '';
 								// check the value and make it checked
 								$checkedDefault = ($findLinkageSubRow->input_current == $optionValue) ? 'checked' : '';
-								$returnHtml    .= '<div class="custom-control custom-radio mb-3 ' . $hideDefault . '"><input type="radio" data-sublinkid="' . $findLinkageSubRow->SubLink_ID . '" class="custom-control-input" id="' . $optionText . $optionText . '" name="radio-stacked" value="' . $optionValue . '" required ' . $checkedDefault . '><label class="custom-control-label" for="' . $optionText . $optionText . '">' . $optionText . '</label><div class="invalid-feedback">More example invalid feedback text</div></div>';
+								$returnHtml    .= '<div class="custom-control custom-radio mb-3 ' . $hideDefault . '"><input type="radio" data-sublinkid="' . $findLinkageSubRow->SubLink_ID . '" class="custom-control-input" id="' .$this-> encode_decode_value($optionText) . $this->encode_decode_value($optionText) . '" name="radio-stacked" value="' . $optionValue . '" required ' . $checkedDefault . '><label class="custom-control-label" for="' . $this->encode_decode_value($optionText) . $this->encode_decode_value($optionText) . '">' . $this->encode_decode_value($optionText) . '</label><div class="invalid-feedback">More example invalid feedback text</div></div>';
 							}
 							$questionFlag = true;
 						}
@@ -542,6 +542,19 @@ class Ajax extends MY_Controller
 		$UserID = $this->botUserData->User_id;
 		die('subComponentFunction:- ' . $linkId . ' ' . $componentId);
 		echo "<div class='subcomponentDiv'>// put all the subComponents here</div>";
+	}
+
+	public function encode_decode_value($arg_value)
+	{
+		if (base64_encode(base64_decode($arg_value, true)) === $arg_value) {
+			if (ctype_alpha($arg_value) || is_numeric($arg_value)) {
+				return $arg_value;
+			} else {
+				return base64_decode($arg_value);
+			}
+		} else {
+			return $arg_value;
+		}
 	}
 
 	public function getScenarioTime($linkid = NULL)

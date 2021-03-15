@@ -43,7 +43,7 @@ class Enterprise extends MY_Controller {
 		);
 		$Enterprise            = $this->Common_Model->fetchRecords('GAME_ENTERPRISE',$where,'','Enterprise_Name');
 		$content['Enterprise'] = $Enterprise;
-		$query                 = "SELECT ge.*,concat(ga.fname,' ',ga.lname) AS User_Name, gd.Domain_Name, gc.Country_Name, gs.State_Name ,(SELECT count(*) FROM GAME_ENTERPRISE_GAME WHERE EG_EnterpriseID = ge.Enterprise_ID) as gamecount,(SELECT count(*) FROM GAME_ENTERPRISE_CARD WHERE EC_EnterpriseID = ge.Enterprise_ID) as cardcount FROM GAME_ENTERPRISE ge LEFT JOIN GAME_ADMINUSERS ga ON ge.Enterprise_CreatedBy=ga.id LEFT JOIN GAME_COUNTRY gc ON gc.Country_Id= ge.Enterprise_Country LEFT JOIN GAME_STATE gs ON gs.State_Id=ge.Enterprise_State LEFT JOIN GAME_DOMAIN gd ON ge.Enterprise_ID = gd.Domain_EnterpriseId  WHERE Enterprise_Status = 0 GROUP BY ge.Enterprise_ID ORDER BY Enterprise_CreatedOn DESC";
+		$query                 = "SELECT ge.*,concat(ga.fname,' ',ga.lname) AS User_Name, gd.Domain_Name, gc.Country_Name, gs.State_Name ,(SELECT count(*) FROM GAME_ENTERPRISE_GAME WHERE EG_EnterpriseID = ge.Enterprise_ID) as gamecount,(SELECT count(*) FROM GAME_ENTERPRISE_CARD WHERE EC_EnterpriseID = ge.Enterprise_ID) as cardCount, (SELECT count(*) FROM GAME_ENTERPRISE_CARD WHERE EC_EnterpriseID = ge.Enterprise_ID AND EC_Enterprise_Selected = 1) as selectedCardCount FROM GAME_ENTERPRISE ge LEFT JOIN GAME_ADMINUSERS ga ON ge.Enterprise_CreatedBy=ga.id LEFT JOIN GAME_COUNTRY gc ON gc.Country_Id= ge.Enterprise_Country LEFT JOIN GAME_STATE gs ON gs.State_Id=ge.Enterprise_State LEFT JOIN GAME_DOMAIN gd ON ge.Enterprise_ID = gd.Domain_EnterpriseId  WHERE Enterprise_Status = 0 GROUP BY ge.Enterprise_ID ORDER BY Enterprise_CreatedOn DESC";
 		$result                       = $this->Common_Model->executeQuery($query);
 		// echo "$query<br><pre>";print_r($result);exit;
 		$content['EnterpriseDetails'] = $result;
@@ -164,7 +164,7 @@ class Enterprise extends MY_Controller {
 			{
 				if(!empty($this->input->post('commonDomain')) && !empty($EnterpriseLogo))
 				{
-					$Domain_Name  = trim("http://".$this->input->post('commonDomain').".corporatesim.com");
+					$Domain_Name  = trim("https://".$this->input->post('commonDomain').".corpsim.in");
 					$updateDomain = array(
 						"Domain_Name" => $Domain_Name,
 						"Domain_Logo" => $EnterpriseLogo,
@@ -176,7 +176,7 @@ class Enterprise extends MY_Controller {
 
 				elseif(!empty($this->input->post('commonDomain')) && empty($EnterpriseLogo))
 				{
-					$Domain_Name  = trim("http://".$this->input->post('commonDomain').".corporatesim.com");
+					$Domain_Name  = trim("https://".$this->input->post('commonDomain').".corpsim.in");
 					$updateDomain = array(
 						"Domain_Name" => $Domain_Name,
 						// "Domain_Logo" => $EnterpriseLogo,
@@ -313,7 +313,7 @@ class Enterprise extends MY_Controller {
 							$Domain_Name         = $this->input->post('commonDomain');
 							$Domain_Logo         = $_FILES['logo']['name'];
 							$Domain_details      = array(
-								'Domain_Name'         => (!empty($Domain_Name))?trim("https://".$Domain_Name.".corporatesim.com"):'',
+								'Domain_Name'         => (!empty($Domain_Name))?trim("https://".$Domain_Name.".corpsim.in"):'',
 								'Domain_EnterpriseId' => $Domain_EnterpriseId,
 								'Domain_Logo'         => $Domain_Logo,
 								'Domain_Status'       => 0,
@@ -329,11 +329,11 @@ class Enterprise extends MY_Controller {
 								$password = $this->input->post('Enterprise_Password');
 								if($this->input->post('commonDomain') == '')
 								{
-									$domain = "https://live.corporatesim.com";
+									$domain = "http://scorpsim.in";
 								}
 								else
 								{
-									$domain   = 'https://'.$this->input->post('commonDomain').'corporatesim.com';
+									$domain   = 'http://'.$this->input->post('commonDomain').'corpsim.in';
 								}
 								$message  = "Thanks for your enrolling!\r\n\r\n";
 								$message .= 	"Your login and password for accessing our Simulation Games/eLearning programs/Assessments are provided below.\r\n";
@@ -349,7 +349,8 @@ class Enterprise extends MY_Controller {
 
 								$this->email->initialize($config);
 								$this->email->to($emailid);
-								$this->email->from('support@corporatesim.com','corporatesim','support@corporatesim.com');
+								// $this->email->from('support@corpsim.in','Humanlinks','support@corpsim.in');
+                $this->email->from('mailhumanlinks@gmail.com','Humanlinks','mailhumanlinks@gmail.com');
 								$this->email->subject("Here is your email and password");
 								$this->email->message($message);
 

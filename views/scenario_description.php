@@ -1,11 +1,45 @@
 <?php 
-// echo "<pre>"; print_r($scen); exit;
-include_once 'includes/header.php'; 
+  // echo "<pre>"; print_r($scen); print_r($_GET['close']); exit;
+  $closeWindow = $_GET['close'];
+  include_once 'includes/header.php'; 
+
+  // echo "<pre>"; 
+  // print_r('Storyline-'.$Scen_Json['aliasStoryline'].'<br />'); 
+  // print_r('Video-'.$Scen_Json['aliasVideo'].'<br />'); 
+  // print_r('Image-'.$Scen_Json['aliasImage'].'<br />'); 
+  // print_r('Document-'.$Scen_Json['aliasDocument'].'<br />'); 
+  // echo "</pre>"; 
+  // exit();
+
+  $aliasStoryline           = $Scen_Json['aliasStoryline'] ? $Scen_Json['aliasStoryline'] : 'Storyline';
+  $aliasStorylineColorCode  = $Scen_Json['aliasStorylineColorCode'] ? $Scen_Json['aliasStorylineColorCode'] : 'lightcyan';
+  $aliasStorylineVisibility = $Scen_Json['aliasStorylineVisibility'] == 1 ? 'hidden' : '';
+
+  $aliasVideo               = $Scen_Json['aliasVideo'] ? $Scen_Json['aliasVideo'] : 'Video';
+  $aliasVideoColorCode      = $Scen_Json['aliasVideoColorCode'] ? $Scen_Json['aliasVideoColorCode'] : 'lavender';
+  $aliasVideoVisibility     = $Scen_Json['aliasVideoVisibility'] == 1 ? 'hidden' : '';
+
+  $aliasImage               = $Scen_Json['aliasImage'] ? $Scen_Json['aliasImage'] : 'Image';
+  $aliasImageColorCode      = $Scen_Json['aliasImageColorCode'] ? $Scen_Json['aliasImageColorCode'] : 'lavenderblush';
+  $aliasImageVisibility     = $Scen_Json['aliasImageVisibility'] == 1 ? 'hidden' : '';
+
+  $aliasDocument            = $Scen_Json['aliasDocument'] ? $Scen_Json['aliasDocument'] : 'Documents';
+  $aliasDocumentColorCode   = $Scen_Json['aliasDocumentColorCode'] ? $Scen_Json['aliasDocumentColorCode'] : 'lemonchiffon';
+  $aliasDocumentVisibility  = $Scen_Json['aliasDocumentVisibility'] == 1 ? 'hidden' : '';
 ?>
 <!--[if IE]>
   <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+<style>
+.active a {
+  background-color: lightgray !important;
+  color: black !important;
+}
+.regular a {
+  color: black !important;
+}
+</style>
 <script src="js/jquery.js"></script>
 <script src="js/jquery.prettyPhoto.js" type="text/javascript" charset="utf-8"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -46,7 +80,7 @@ include_once 'includes/header.php';
 					</h2>	
 				</div>
 				
-				<div class="col-sm-2  text-right pull-right <?php echo ($scen->Scen_InputButton == 0)?'hidden':'';?>" style="margin-top:-6px;">
+				<div class="col-sm-2  text-right pull-right <?php echo ($scen->Scen_InputButton == 0)?'hidden':'';?> <?php echo ($closeWindow == 'true')?'hidden':'';?>" style="margin-top:-6px;">
 					<button class="btn innerBtns" id="proceedBtn" type="button">Proceed</button>
 				</div>
 
@@ -57,22 +91,63 @@ include_once 'includes/header.php';
 
 				</div>
 
-				<div class="clearfix scenario_header"></div>
+				<!-- <div class="clearfix scenario_header"></div> -->
 				<div class="col-sm-12 no_padding shadow">
 					<!-- Nav tabs -->	
 					<div class="shadow TabMain col-sm-12">
 
-						<ul class="nav nav-tabs" role="tablist">
-							<li role="presentation" class="active regular"><a href="#generalTab" aria-controls="generalTab" role="tab" data-toggle="tab">Storyline</a></li>
-							<li role="presentation" class="regular"><a href="#videosTab" aria-controls="videosTab" role="tab" data-toggle="tab">Videos</a></li>
-							<li role="presentation" class="regular"><a href="#imagesTab" aria-controls="imagesTab" role="tab" data-toggle="tab">Images</a></li>
-							<li role="presentation" class="regular"><a href="#documentsTab" aria-controls="documentsTab" role="tab" data-toggle="tab">Documents</a></li>
-							<li role="presentation" class="regular pull-right <?php echo ($link->Link_BackToIntro)?'hidden':''?>" style="margin-right: 40%;"><a href='<?php echo site_root."game_description.php?Game=".$gameidChk; ?>'>Go Back To Introduction</a></li>
-						</ul>
+            <ul class="nav nav-pills" role="tablist">
+              <li role="presentation" class="nav-item regular <?php echo $aliasStorylineVisibility; ?>" style="background-color: <?php echo $aliasStorylineColorCode; ?>; margin:3px;">
+                <a role="presentation" class="nav-link" href="#generalTab" aria-controls="generalTab" role="tab" data-toggle="tab"><?php echo $aliasStoryline; ?></a>
+              </li>
+
+              <li role="presentation" class="nav-item regular <?php echo $aliasVideoVisibility; ?>" style="background-color: <?php echo $aliasVideoColorCode; ?>; margin:3px;">
+                <a class="nav-link" href="#videosTab" aria-controls="videosTab" role="tab" data-toggle="tab"><?php echo $aliasVideo; ?></a>
+              </li>
+
+              <li role="presentation" class="nav-item regular <?php echo $aliasImageVisibility; ?>" style="background-color: <?php echo $aliasImageColorCode; ?>; margin:3px;">
+                <a class="nav-link" href="#imagesTab" aria-controls="imagesTab" role="tab" data-toggle="tab"><?php echo $aliasImage; ?></a>
+              </li>
+
+              <li role="presentation" class="nav-item regular <?php echo $aliasDocumentVisibility; ?>" style="background-color: <?php echo $aliasDocumentColorCode; ?>; margin:3px;">
+                <a class="nav-link" href="#documentsTab" aria-controls="documentsTab" role="tab" data-toggle="tab"><?php echo $aliasDocument; ?></a>
+              </li>
+
+              <li role="presentation" class="nav-item regular pull-right <?php echo ($link->Link_BackToIntro) ? 'hidden' : ''; ?>" style="background-color: lightgray;">
+                <a class="nav-link" href='<?php echo site_root."game_description.php?Game=".$gameidChk; ?>'>Go Back To Introduction</a>
+							</li>
+							<!-- to close the current tab -->
+							<?php if($closeWindow == 'true') { ?>
+								<!-- <li><a href="javascript:void(0);" onclick="window.close();">Close Window</a></li> -->
+								<!-- <li style="background-color: #337ab7;"><a onclick="window.close();" style="color:black;"><b>Close Window</b></a></li> -->
+								<li role="presentation" class="nav-item regular" style="background-color: #337ab7; margin:3px;">
+                  <a class="nav-link" href="#" aria-controls="" role="tab" data-toggle="tab" onclick="window.close();">Close Window</a>
+                </li>
+							<?php } ?>
+            </ul>
+
+            <!-- Older tabs -->
+						<!-- <ul class="nav nav-tabs" role="tablist">
+							<li role="presentation" class="active regular">
+                <a href="#generalTab" aria-controls="generalTab" role="tab" data-toggle="tab">Storyline</a>
+              </li>
+							<li role="presentation" class="regular">
+                <a href="#videosTab" aria-controls="videosTab" role="tab" data-toggle="tab">Videos</a>
+              </li>
+							<li role="presentation" class="regular">
+                <a href="#imagesTab" aria-controls="imagesTab" role="tab" data-toggle="tab">Images</a>
+              </li>
+							<li role="presentation" class="regular">
+                <a href="#documentsTab" aria-controls="documentsTab" role="tab" data-toggle="tab">Documents</a>
+              </li>
+							<li role="presentation" class="regular pull-right <?php //echo ($link->Link_BackToIntro)?'hidden':''?>" style="margin-right: 40%;">
+                <a href='<?php //echo site_root."game_description.php?Game=".$gameidChk; ?>'>Go Back To Introduction</a>
+              </li>
+						</ul> -->
 
 						<!-- Tab panes -->
 						<div class="tab-content">
-							<div role="tabpanel" class="tab-pane active" id="generalTab">
+							<div role="tabpanel" class="tab-pane <?php echo ($Scen_Json['aliasStorylineVisibility'] == 1)?'hidden':''; ?>" id="generalTab">
 								<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
 									<!-- Indicators -->
 									<ol class="carousel-indicators"  style="display:none;">
@@ -155,8 +230,8 @@ include_once 'includes/header.php';
 												echo "<div class='col-sm-6 ImageDiv gallery'>";
 												echo "<div class='img-container '>";
 												echo "<img src='";
-												echo "ux-admin/upload/".$row['ScenImg_Name'];
-												echo "' alt='Image' class='img-cntr showImageModal'></img>";
+												echo "ux-admin/upload/".$row['ScenImg_Name']."'";
+												echo " alt='Image' class='img-cntr' onclick='return showNextPreviousImage(this, \"ImageDiv\");'></img>";
 												echo "</div><div class='col-sm-12 no_padding ImageName'><h4 class=''>";
 												echo $row['ScenImg_Title'];
 												echo "</h4><span class='videoDiscription'>";
@@ -199,6 +274,13 @@ include_once 'includes/header.php';
 				<script>
 					$(document).ready(function()
 					{
+						// adding the below code to show the visible tab by admin
+						$('.nav-item').each(function(){
+							if(!$(this).hasClass('hidden')){
+								$('#'+$(this).children('a').attr('aria-controls')).addClass('active');
+								return false
+							}
+						});
 					// adding a confirmation box while click on proceed
 					$('#proceedBtn').on('click',function(){
 						// removing alert
@@ -251,7 +333,11 @@ include_once 'includes/header.php';
 			});
 				});
 			</script>
-			<script src="js/jquery.min.js"></script>	
-			<script src="js/bootstrap.min.js"></script>			
+			<!-- <script src="js/jquery.min.js"></script>	
+			<script src="js/bootstrap.min.js"></script>			 -->
+			<?php 
+				// echo "<pre>"; print_r($scen); exit;
+				include_once 'includes/footer.php'; 
+			?>
 		</body>
 		</html>

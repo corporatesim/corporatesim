@@ -1,19 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Competence extends MY_Controller
-{
-	public function __construct()
-	{
+class Competence extends MY_Controller {
+	public function __construct() {
 		parent::__construct();
-		// if($this->session->userdata('loginData')['User_Role'] != 'superadmin'){
-		// 	$this->session->set_flashdata('er_msg', 'You are not allowed to visit <b>"'.$this->router->fetch_class().'"</b> page');
-		// 	redirect('Dashboard');
-		// }
 	}
 
-	public function index()
-	{
+	public function index() {
 		if ($this->session->userdata('loginData')['User_Role'] != 'superadmin') {
 			$this->session->set_flashdata('er_msg', 'You are not allowed to visit <b>"' . $this->router->fetch_class() . '"</b> page');
 			redirect('Dashboard');
@@ -37,6 +30,16 @@ class Competence extends MY_Controller
 		$content['subview']    = 'competence';
 		$this->load->view('main_layout', $content);
 	}
+
+  public function itemReportCreation() {
+    if ($this->session->userdata('loginData')['User_Role'] != 'superadmin') {
+      $this->session->set_flashdata('er_msg', 'You are not allowed to visit <b>"' . $this->router->fetch_class() . '"</b> page');
+      redirect('Dashboard');
+    }
+
+    $content['subview']    = 'itemReportCreation';
+    $this->load->view('main_layout', $content);
+  }
 
 	public function viewCompetenceMapping()
 	{
@@ -288,15 +291,12 @@ class Competence extends MY_Controller
     $this->load->view('main_layout', $content);
   }
 
-  public function itemFormula()
-  {
-    $content['subview'] = 'itemFormula';
-
+  public function itemFormula() {
     // viewing item formula with all the items
-    $sql = "SELECT gif.Items_Formula_Id, gif.Items_Formula_Title, gif.Items_Formula_String, ge.Enterprise_Name FROM GAME_ITEMS_FORMULA gif LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gif.Items_Formula_Enterprise_Id";
+    $sql = "SELECT gif.Items_Formula_Id, gif.Items_Formula_Title, gif.Items_Formula_String, ge.Enterprise_Name, ge.Enterprise_ID FROM GAME_ITEMS_FORMULA gif LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gif.Items_Formula_Enterprise_Id";
     
     // if process owner is logged in then only show this page
-    if($this->session->userdata('loginData')['User_Role'] != 'superadmin'){
+    if ($this->session->userdata('loginData')['User_Role'] != 'superadmin') {
       $sql .= " WHERE gif.Items_Formula_Enterprise_Id=".$this->session->userdata('loginData')['User_Id'];
     }
     
@@ -304,24 +304,24 @@ class Competence extends MY_Controller
     $itemFormulaList = $this->Common_Model->executeQuery($sql);
     // echo $sql; prd($itemFormulaList); exit();
 
-    if(count($itemFormulaList) > 0){
+    if (count($itemFormulaList) > 0) {
       $itemFormulaListArray = array();
 
-      foreach ($itemFormulaList as $itemFormulaListRow){
-        $itemFormulaListArray[$itemFormulaListRow->Items_Formula_Id] = array($itemFormulaListRow->Items_Formula_Id, $itemFormulaListRow->Items_Formula_Title, $itemFormulaListRow->Items_Formula_String, $itemFormulaListRow->Enterprise_Name);
+      foreach ($itemFormulaList as $itemFormulaListRow) {
+        $itemFormulaListArray[$itemFormulaListRow->Items_Formula_Id] = array($itemFormulaListRow->Items_Formula_Id, $itemFormulaListRow->Items_Formula_Title, $itemFormulaListRow->Items_Formula_String, $itemFormulaListRow->Enterprise_Name, $itemFormulaListRow->Enterprise_ID);
 
         $content['itemFormulaList'] = $itemFormulaListArray;
       }
     }
-    else{
-      $content['itemFormulaList'] = '';
+    else {
+      $content['itemFormulaList'] = [];
     }
-    
+
+    $content['subview'] = 'itemFormula';
     $this->load->view('main_layout', $content);
   }
 
-  public function addItemFormula()
-  {
+  public function addItemFormula() {
     // fetching all Game Enterprise
     $enterpriseWhere = array(
       'Enterprise_Status' => 0,
@@ -339,12 +339,11 @@ class Competence extends MY_Controller
     $this->load->view('main_layout', $content);
   }
 
-  public function editItemFormula($id = NULL)
-  {
+  public function editItemFormula($id = NULL) {
     $items_formula_Id = base64_decode($id);
 
     // fetching item formula
-    $sql = "SELECT gif.Items_Formula_Id, gif.Items_Formula_Title, gif.Items_Formula_String, gif.Items_Formula_Expression, ge.Enterprise_ID, ge.Enterprise_Name FROM GAME_ITEMS_FORMULA gif LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gif.Items_Formula_Enterprise_Id WHERE gif.Items_Formula_Id = $items_formula_Id";
+    $sql = "SELECT gif.Items_Formula_Id, gif.Items_Formula_Title, gif.Items_Formula_String, gif.Items_Formula_Expression, gif.Items_Formula_Report_Name_Definition, ge.Enterprise_ID, ge.Enterprise_Name FROM GAME_ITEMS_FORMULA gif LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gif.Items_Formula_Enterprise_Id WHERE gif.Items_Formula_Id = $items_formula_Id";
     $itemFormulaList = $this->Common_Model->executeQuery($sql);
     // echo $sql; prd($itemFormulaList); exit();
     $content['itemFormulaList'] = $itemFormulaList;
@@ -460,5 +459,679 @@ class Competence extends MY_Controller
   //     redirect('Competence');
   //   }
   // }
+
+  public function itemConditionText($ID=NULL) {
+    if ($this->session->userdata('loginData')['User_Role'] != 'superadmin') {
+      $this->session->set_flashdata('er_msg', 'You are not allowed to visit <b>"' . $this->router->fetch_class() . '"</b> page');
+      redirect('Dashboard');
+    }
+
+    // $ID will be ItemID
+    //$ID = base64_decode($ID);
+
+    // Query to fetch enterprize name, factor type, subfactor type
+    // 4=Competence Readiness, 5=Competence Application, 3=Simulated Performance 
+    $queryDetails = "SELECT gi.Compt_Name, gi.Compt_Description, gi.Compt_PerformanceType, ge.Enterprise_Name FROM GAME_ITEMS gi LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gi.Compt_Enterprise_ID WHERE gi.Compt_Id = $ID";
+    $itemDetails = $this->Common_Model->executeQuery($queryDetails);
+    // print_r($queryDetails); print_r($itemDetails); exit();
+    $content['itemDetails'] = $itemDetails;
+
+    // Query to fetch all item conditions text
+    $query = "SELECT ic.IC_Min_Value, ic.IC_Max_Value, ic.IC_Text, ic.IC_Score_Status FROM GAME_ITEM_CONDITIONS ic WHERE ic.IC_Item_ID = $ID ORDER BY ic.IC_ID ASC";
+    $itemConditions = $this->Common_Model->executeQuery($query);
+    // print_r($query); print_r($itemConditions); exit();
+    $content['itemConditions'] = $itemConditions;
+
+    $RequestMethod = $this->input->server('REQUEST_METHOD');
+    if ($RequestMethod == 'POST') {
+      // print_r($this->input->post()); exit();
+
+      $where = array('IC_Item_ID' => $ID); //Array ( [IC_Item_ID] => 21 )
+      $itemMinValue = $this->input->post('minValue'); //array type
+      $itemMaxValue = $this->input->post('maxValue'); //array type
+      $itemDetails  = $this->input->post('details');  //array type
+
+      //making array to hold all inserting Data
+      $insertArray = array();
+
+      for ($i=0; $i<count($itemMinValue); $i++) {
+        $array = array(
+          'IC_Item_ID'      => $ID,
+          'IC_Min_Value'    => $itemMinValue[$i],
+          'IC_Max_Value'    => $itemMaxValue[$i],
+          'IC_Text'         => $itemDetails[$i],
+          'IC_Score_Status' => $this->input->post('scoreStatus'), // 0=Show, 1=Hide
+          'IC_Created_By'   => $this->session->userdata('loginData')['User_Id']
+        );
+        array_push($insertArray, $array);
+      }
+      //print_r($insertArray); exit();
+      //Array ( [0] => Array ( [IC_Item_ID] => 21 [IC_Min_Value] => 1 [IC_Max_Value] => 10 [IC_Text] =>AAA [IC_Created_By] => 1 ) [1] => Array ( [IC_Item_ID] => 21 [IC_Min_Value] => 11 [IC_Max_Value] => 20 [IC_Text] => BBB [IC_Created_By] => 1 ) )
+
+      $result = $this->Common_Model->deleteInsert('GAME_ITEM_CONDITIONS', $where, $insertArray);
+      //print_r($result); exit();
+      redirect('Competence');
+    }
+
+    $content['subview'] = 'itemConditionText';
+    $this->load->view('main_layout',$content);
+  }
+
+  public function itemReportExecutiveSummary($ID=NULL, $EntID=NULL) {
+    // IR_Type_Choice (1-> EXECUTIVE SUMMARY, 2-> CONCLUSION SECTION)
+    // IR_Condition_Type (1-> Average, 2-> Individual)
+
+    // only superadmin allow to access this page
+    if ($this->session->userdata('loginData')['User_Role'] != 'superadmin') {
+      $this->session->set_flashdata('er_msg', 'You are not allowed to visit <b>"' . $this->router->fetch_class() . '"</b> page');
+      redirect('Dashboard');
+    }
+    
+    // setting titl for the page
+    // $content['reportType'] = 'Executive Summary for Average';
+    $content['reportType'] = 'Executive Summary 1';
+
+    // $ID will be formula ID
+    $ID = base64_decode($ID);
+    // $EntID will be Enterprize ID
+    $EntID = base64_decode($EntID);
+
+    $formulaWhere   = array('Items_Formula_Id' => $ID);
+    $formulaDetails = $this->Common_Model->fetchRecords('GAME_ITEMS_FORMULA', $formulaWhere, 'Items_Formula_Id, Items_Formula_Title, Items_Formula_String', '');
+    // print_r($formulaDetails); print_r($formulaDetails[0]->Items_Formula_Title); exit();
+    $content['formulaDetails'] = $formulaDetails;
+
+    $enterprizeWhere   = array('Enterprise_ID' => $EntID);
+    $enterprizeDetails = $this->Common_Model->fetchRecords('GAME_ENTERPRISE', $enterprizeWhere, 'Enterprise_ID, Enterprise_Name', '');
+    // print_r($enterprizeDetails); print_r($enterprizeDetails[0]->Enterprise_Name); exit();
+    $content['enterprizeDetails'] = $enterprizeDetails;
+
+    // IR_Type_Choice (1-> EXECUTIVE SUMMARY, 2-> CONCLUSION SECTION)
+    // IR_Condition_Type (1-> Average, 2-> Individual)
+    $content['conditionType'] = 1;
+    // selecting WHERE IR_Type_Choice is 1-> EXECUTIVE SUMMARY and IR_Condition_Type is 1-> Average
+    // Query to fetch all item report text
+    $query = "SELECT ir.IR_Min_Value, ir.IR_Max_Value, ir.IR_CR_Min_Average_Value, ir.IR_CR_Max_Average_Value, ir.IR_CA_Min_Average_Value, ir.IR_CA_Max_Average_Value, ir.IR_SP_Min_Average_Value, ir.IR_SP_Max_Average_Value, ir.IR_Text FROM GAME_ITEM_REPORT ir WHERE ir.IR_Items_Formula_Id = $ID AND ir.IR_Type_Choice = 1 AND ir.IR_Condition_Type = 1 AND ir.IR_Formula_Enterprize_ID = $EntID ORDER BY ir.IR_ID ASC";
+    $reportDetails = $this->Common_Model->executeQuery($query);
+    // print_r($query); print_r($reportDetails); exit();
+    $content['reportDetails'] = $reportDetails;
+
+    $RequestMethod = $this->input->server('REQUEST_METHOD');
+    if ($RequestMethod == 'POST') {
+      // print_r($this->input->post()); exit();
+
+      $where = array(
+        'IR_Formula_Enterprize_ID' => $EntID,
+        'IR_Items_Formula_Id'      => $ID,
+        'IR_Type_Choice'           => 1, // 1-> EXECUTIVE SUMMARY
+        'IR_Condition_Type'        => 1, // 1-> Average
+      );
+
+      $itemReportMinValue = $this->input->post('minValue'); //array type
+      $itemReportMaxValue = $this->input->post('maxValue'); //array type
+      $itemReportMinValueCRAverage = $this->input->post('minValueCRAverage'); //array type
+      $itemReportMaxValueCRAverage = $this->input->post('maxValueCRAverage'); //array type
+      $itemReportMinValueCAAverage = $this->input->post('minValueCAAverage'); //array type
+      $itemReportMaxValueCAAverage = $this->input->post('maxValueCAAverage'); //array type
+      $itemReportMinValueSPAverage = $this->input->post('minValueSPAverage'); //array type
+      $itemReportMaxValueSPAverage = $this->input->post('maxValueSPAverage'); //array type
+      $itemReportDetails  = $this->input->post('details');  //array type
+
+      //making array to hold all inserting Data
+      $insertArray = array();
+
+      for ($i=0; $i<count($itemReportMinValue); $i++) {
+        $array = array(
+          'IR_Formula_Enterprize_ID' => $EntID,
+          'IR_Items_Formula_Id'      => $ID,
+          'IR_Type_Choice'           => 1, // 1-> EXECUTIVE SUMMARY
+          'IR_Condition_Type'        => 1, // 1-> Average
+          'IR_Min_Value'             => $itemReportMinValue[$i] ? $itemReportMinValue[$i] : 0,
+          'IR_Max_Value'             => $itemReportMaxValue[$i] ? $itemReportMaxValue[$i] : 0,
+          'IR_CR_Min_Average_Value'  => $itemReportMinValueCRAverage[$i] ? $itemReportMinValueCRAverage[$i] : 0,
+          'IR_CR_Max_Average_Value'  => $itemReportMaxValueCRAverage[$i] ? $itemReportMaxValueCRAverage[$i] : 0,
+          'IR_CA_Min_Average_Value'  => $itemReportMinValueCAAverage[$i] ? $itemReportMinValueCAAverage[$i] : 0,
+          'IR_CA_Max_Average_Value'  => $itemReportMaxValueCAAverage[$i] ? $itemReportMaxValueCAAverage[$i] : 0,
+          'IR_SP_Min_Average_Value'  => $itemReportMinValueSPAverage[$i] ? $itemReportMinValueSPAverage[$i] : 0,
+          'IR_SP_Max_Average_Value'  => $itemReportMaxValueSPAverage[$i] ? $itemReportMaxValueSPAverage[$i] : 0,
+          'IR_Text'                  => $itemReportDetails[$i],
+          'IR_Created_By'            => $this->session->userdata('loginData')['User_Id'],
+          'IR_Created_On'            => date('Y-m-d H:i:s'),
+        );
+        array_push($insertArray, $array);
+      }
+      //print_r($insertArray); exit();
+
+      $result = $this->Common_Model->deleteInsert('GAME_ITEM_REPORT', $where, $insertArray);
+      //print_r($result); exit();
+      redirect('Competence/itemFormula');
+    }
+
+    $content['subview'] = 'itemReport';
+    $this->load->view('main_layout', $content);
+  }
+
+  public function itemReportConclusionSection($ID=NULL, $EntID=NULL) {
+    // IR_Type_Choice (1-> EXECUTIVE SUMMARY, 2-> CONCLUSION SECTION)
+    // IR_Condition_Type (1-> Average, 2-> Individual)
+
+    // only superadmin allow to access this page
+    if ($this->session->userdata('loginData')['User_Role'] != 'superadmin') {
+      $this->session->set_flashdata('er_msg', 'You are not allowed to visit <b>"' . $this->router->fetch_class() . '"</b> page');
+      redirect('Dashboard');
+    }
+    
+    // setting titl for the page
+    // $content['reportType'] = 'Conclusion Section for Average';
+    $content['reportType'] = 'Conclusion 2';
+
+    // $ID will be formula ID
+    $ID = base64_decode($ID);
+    // $EntID will be Enterprize ID
+    $EntID = base64_decode($EntID);
+
+    $formulaWhere   = array('Items_Formula_Id' => $ID);
+    $formulaDetails = $this->Common_Model->fetchRecords('GAME_ITEMS_FORMULA', $formulaWhere, 'Items_Formula_Id, Items_Formula_Title, Items_Formula_String', '');
+    // print_r($formulaDetails); print_r($formulaDetails[0]->Items_Formula_Title); exit();
+    $content['formulaDetails'] = $formulaDetails;
+
+    $enterprizeWhere   = array('Enterprise_ID' => $EntID);
+    $enterprizeDetails = $this->Common_Model->fetchRecords('GAME_ENTERPRISE', $enterprizeWhere, 'Enterprise_ID, Enterprise_Name', '');
+    // print_r($enterprizeDetails); print_r($enterprizeDetails[0]->Enterprise_Name); exit();
+    $content['enterprizeDetails'] = $enterprizeDetails;
+
+    // IR_Type_Choice (1-> EXECUTIVE SUMMARY, 2-> CONCLUSION SECTION)
+    // IR_Condition_Type (1-> Average, 2-> Individual)
+    $content['conditionType'] = 1;
+    // selecting WHERE IR_Type_Choice is 2-> CONCLUSION SECTION and IR_Condition_Type is 1-> Average
+    // Query to fetch all item report text
+    $query = "SELECT ir.IR_Min_Value, ir.IR_Max_Value, ir.IR_CR_Min_Average_Value, ir.IR_CR_Max_Average_Value, ir.IR_CA_Min_Average_Value, ir.IR_CA_Max_Average_Value, ir.IR_SP_Min_Average_Value, ir.IR_SP_Max_Average_Value, ir.IR_Text FROM GAME_ITEM_REPORT ir WHERE ir.IR_Items_Formula_Id = $ID AND ir.IR_Type_Choice = 2 AND ir.IR_Condition_Type = 1 AND ir.IR_Formula_Enterprize_ID = $EntID ORDER BY ir.IR_ID ASC";
+    $reportDetails = $this->Common_Model->executeQuery($query);
+    // print_r($query); print_r($reportDetails); exit();
+    $content['reportDetails'] = $reportDetails;
+
+    // if form submit
+    $RequestMethod = $this->input->server('REQUEST_METHOD');
+    if ($RequestMethod == 'POST') {
+      // print_r($this->input->post()); exit();
+
+      $where = array(
+        'IR_Formula_Enterprize_ID' => $EntID,
+        'IR_Items_Formula_Id'      => $ID,
+        'IR_Type_Choice'           => 2, // 2-> CONCLUSION SECTION
+        'IR_Condition_Type'        => 1, // 1-> Average
+      );
+
+      $itemReportMinValue = $this->input->post('minValue'); //array type
+      $itemReportMaxValue = $this->input->post('maxValue'); //array type
+      $itemReportMinValueCRAverage = $this->input->post('minValueCRAverage'); //array type
+      $itemReportMaxValueCRAverage = $this->input->post('maxValueCRAverage'); //array type
+      $itemReportMinValueCAAverage = $this->input->post('minValueCAAverage'); //array type
+      $itemReportMaxValueCAAverage = $this->input->post('maxValueCAAverage'); //array type
+      $itemReportMinValueSPAverage = $this->input->post('minValueSPAverage'); //array type
+      $itemReportMaxValueSPAverage = $this->input->post('maxValueSPAverage'); //array type
+      $itemReportDetails  = $this->input->post('details');  //array type
+
+      //making array to hold all inserting Data
+      $insertArray = array();
+
+      for ($i=0; $i<count($itemReportMinValue); $i++) {
+        $array = array(
+          'IR_Formula_Enterprize_ID' => $EntID,
+          'IR_Items_Formula_Id'      => $ID,
+          'IR_Type_Choice'           => 2, // 2-> CONCLUSION SECTION
+          'IR_Condition_Type'        => 1, // 1-> Average
+          'IR_Min_Value'             => $itemReportMinValue[$i] ? $itemReportMinValue[$i] : 0,
+          'IR_Max_Value'             => $itemReportMaxValue[$i] ? $itemReportMaxValue[$i] : 0,
+          'IR_CR_Min_Average_Value'  => $itemReportMinValueCRAverage[$i] ? $itemReportMinValueCRAverage[$i] : 0,
+          'IR_CR_Max_Average_Value'  => $itemReportMaxValueCRAverage[$i] ? $itemReportMaxValueCRAverage[$i] : 0,
+          'IR_CA_Min_Average_Value'  => $itemReportMinValueCAAverage[$i] ? $itemReportMinValueCAAverage[$i] : 0,
+          'IR_CA_Max_Average_Value'  => $itemReportMaxValueCAAverage[$i] ? $itemReportMaxValueCAAverage[$i] : 0,
+          'IR_SP_Min_Average_Value'  => $itemReportMinValueSPAverage[$i] ? $itemReportMinValueSPAverage[$i] : 0,
+          'IR_SP_Max_Average_Value'  => $itemReportMaxValueSPAverage[$i] ? $itemReportMaxValueSPAverage[$i] : 0,
+          'IR_Text'                  => $itemReportDetails[$i],
+          'IR_Created_By'            => $this->session->userdata('loginData')['User_Id'],
+          'IR_Created_On'            => date('Y-m-d H:i:s'),
+        );
+        array_push($insertArray, $array);
+      }
+      //print_r($insertArray); exit();
+      $result = $this->Common_Model->deleteInsert('GAME_ITEM_REPORT', $where, $insertArray);
+
+      //print_r($result); exit();
+      redirect('Competence/itemFormula');
+    } // end of form submit
+
+    $content['subview']    = 'itemReport';
+    $this->load->view('main_layout', $content);
+  }
+
+  public function itemReportESI($ID=NULL, $EntID=NULL) {
+    // IRI_Type_Choice (1-> EXECUTIVE SUMMARY, 2-> CONCLUSION SECTION)
+    // IRI_Condition_Type (1-> Average, 2-> Individual)
+
+    // only superadmin allow to access this page
+    if ($this->session->userdata('loginData')['User_Role'] != 'superadmin') {
+      $this->session->set_flashdata('er_msg', 'You are not allowed to visit <b>"' . $this->router->fetch_class() . '"</b> page');
+      redirect('Dashboard');
+    }
+    
+    // setting titl for the page
+    // $content['reportType'] = 'Executive Summary for Individual';
+    $content['reportType'] = 'Executive Summary 2';
+
+    // $ID will be formula ID
+    $ID = base64_decode($ID);
+    // $EntID will be Enterprize ID
+    $EntID = base64_decode($EntID);
+
+    $formulaWhere   = array('Items_Formula_Id' => $ID);
+    $formulaDetails = $this->Common_Model->fetchRecords('GAME_ITEMS_FORMULA', $formulaWhere, 'Items_Formula_Id, Items_Formula_Title, Items_Formula_String, Items_Formula_Expression, Items_Formula_Json', '');
+    // print_r($formulaDetails); print_r($formulaDetails[0]->Items_Formula_Title); exit();
+    $content['formulaDetails'] = $formulaDetails;
+
+    // decoding JSON
+    $formulaJSON = json_decode($formulaDetails[0]->Items_Formula_Json, true);
+    //print_r($formulaJSON); exit();
+    $usedItemArray = []; //storing used Item ID in array
+
+    $keys   = array_keys($formulaJSON);
+    //$values = array_values($formulaJSON); 
+    for ($x=0; $x<count($formulaJSON); $x++) {
+      $usedItemArray[$x] = $keys[$x];
+    }
+    //print_r($usedItemArray); exit();
+
+    // converting array to string for query
+    $usedItem = implode(',', $usedItemArray);
+
+    // Query to fetch all items used in selected formula
+    $itemQuery = "SELECT gi.Compt_Id, gi.Compt_Name, gi.Compt_Description, gi.Compt_PerformanceType FROM GAME_ITEMS gi WHERE gi.Compt_Id IN ($usedItem)  AND gi.Compt_Enterprise_ID = $EntID ORDER BY gi.Compt_Id ASC";
+    $itemUsedDetails = $this->Common_Model->executeQuery($itemQuery);
+    //print_r($itemUsedDetails); exit();
+    // setting data for view
+    $content['itemUsedDetails'] = $itemUsedDetails;
+
+    $enterprizeWhere   = array('Enterprise_ID' => $EntID);
+    $enterprizeDetails = $this->Common_Model->fetchRecords('GAME_ENTERPRISE', $enterprizeWhere, 'Enterprise_ID, Enterprise_Name', '');
+    // print_r($enterprizeDetails); print_r($enterprizeDetails[0]->Enterprise_Name); exit();
+    $content['enterprizeDetails'] = $enterprizeDetails;
+
+    // IRI_Type_Choice (1-> EXECUTIVE SUMMARY, 2-> CONCLUSION SECTION)
+    // IRI_Condition_Type (1-> Average, 2-> Individual)
+    $content['conditionType'] = 2;
+    // selecting WHERE IRI_Type_Choice is 1-> EXECUTIVE SUMMARY and IRI_Condition_Type is 2-> Individual
+    // Query to fetch all item report text
+    $query = "SELECT iri.IRI_ID, iri.IRI_Text, iri.IRI_xAxis_Item_Id, iri.IRI_xAxis_Min_Value, iri.IRI_xAxis_Max_Value, iri.IRI_yAxis_Item_Id, iri.IRI_yAxis_Min_Value, iri.IRI_yAxis_Max_Value FROM GAME_ITEM_REPORT_INDIVIDUAL iri WHERE iri.IRI_Items_Formula_Id = $ID AND iri.IRI_Type_Choice = 1 AND iri.IRI_Condition_Type = 2 AND iri.IRI_Formula_Enterprize_ID = $EntID ORDER BY iri.IRI_ID ASC";
+    $reportDetails = $this->Common_Model->executeQuery($query);
+    // print_r($query); print_r($reportDetails); exit();
+    $content['reportDetails'] = $reportDetails;
+
+    // if form submit
+    $RequestMethod = $this->input->server('REQUEST_METHOD');
+    if ($RequestMethod == 'POST') {
+      // print_r($this->input->post()); exit();
+
+      $where = array(
+        'IRI_Formula_Enterprize_ID' => $EntID,
+        'IRI_Items_Formula_Id'      => $ID,
+        'IRI_Type_Choice'           => 1, // 1-> EXECUTIVE SUMMARY
+        'IRI_Condition_Type'        => 2, // 2-> Individual
+      );
+
+      // =========================================
+      // for X-Axis
+      $usedItemsxAxis = $this->input->post('usedItemsxAxis'); //array type but unseralised key
+      $minValuexAxis  = $this->input->post('minValuexAxis'); //array type
+      $maxValuexAxis  = $this->input->post('maxValuexAxis'); //array type
+      // for Y-Axis
+      $usedItemsyAxis = $this->input->post('usedItemsyAxis'); //array type but unseralised key
+      $minValueyAxis  = $this->input->post('minValueyAxis'); //array type
+      $maxValueyAxis  = $this->input->post('maxValueyAxis'); //array type
+
+      $details        = $this->input->post('details');  //array type
+
+      // making new array to hold used items in it with serialised key for x-axis
+      $usedItemsxAxisArray = array();
+      $foreachCountxAxis = 0;
+      foreach ($usedItemsxAxis as $key => $value) {
+        // $usedItemsxAxisArray[$foreachCountxAxis] =  $usedItemsxAxis[$key];
+        $usedItemsxAxisArray[$foreachCountxAxis] =  $value;
+        $foreachCountxAxis++;
+      }
+      // print_r($usedItemsxAxisArray); exit();
+
+      // making new array to hold used items in it with serialised key for y-axis
+      $usedItemsyAxisArray = array();
+      $foreachCountyAxis = 0;
+      foreach ($usedItemsyAxis as $key => $value) {
+        // $usedItemsyAxisArray[$foreachCountyAxis] =  $usedItemsyAxis[$key];
+        $usedItemsyAxisArray[$foreachCountyAxis] =  $value;
+        $foreachCountyAxis++;
+      }
+      // print_r($usedItemsyAxisArray); exit();
+
+      // making array to hold all inserting Data
+      $insertArray = array();
+
+      for ($i=0; $i<count($usedItemsxAxisArray); $i++) {
+        $array = array(
+          'IRI_Formula_Enterprize_ID' => $EntID,
+          'IRI_Items_Formula_Id'      => $ID,
+          'IRI_Type_Choice'           => 1, // 1-> EXECUTIVE SUMMARY
+          'IRI_Condition_Type'        => 2, // 2-> Individual
+          'IRI_xAxis_Item_Id'         => $usedItemsxAxisArray[$i],
+          'IRI_xAxis_Min_Value'       => $minValuexAxis[$i] ? $minValuexAxis[$i] : 0,
+          'IRI_xAxis_Max_Value'       => $maxValuexAxis[$i] ? $maxValuexAxis[$i] : 0,
+          'IRI_yAxis_Item_Id'         => $usedItemsyAxisArray[$i],
+          'IRI_yAxis_Min_Value'       => $minValueyAxis[$i] ? $minValueyAxis[$i] : 0,
+          'IRI_yAxis_Max_Value'       => $maxValueyAxis[$i] ? $maxValueyAxis[$i] : 0,
+          'IRI_Text'                  => $details[$i],
+          'IRI_Created_By'            => $this->session->userdata('loginData')['User_Id'],
+          'IRI_Created_On'            => date('Y-m-d H:i:s'),
+        );
+        array_push($insertArray, $array);
+      }
+      //print_r($insertArray); exit();
+      $result = $this->Common_Model->deleteInsert('GAME_ITEM_REPORT_INDIVIDUAL', $where, $insertArray);
+      // =========================================
+
+      //print_r($result); exit();
+      redirect('Competence/itemFormula');
+    } // end of form submit
+
+    $content['subview'] = 'itemReportIndividual';
+    $this->load->view('main_layout', $content);
+  }
+
+  public function itemReportCSI($ID=NULL, $EntID=NULL) {
+    // IRI_Type_Choice (1-> EXECUTIVE SUMMARY, 2-> CONCLUSION SECTION)
+    // IRI_Condition_Type (1-> Average, 2-> Individual)
+
+    // only superadmin allow to access this page
+    if ($this->session->userdata('loginData')['User_Role'] != 'superadmin') {
+      $this->session->set_flashdata('er_msg', 'You are not allowed to visit <b>"' . $this->router->fetch_class() . '"</b> page');
+      redirect('Dashboard');
+    }
+    
+    // setting titl for the page
+    // $content['reportType'] = 'Conclusion Section for Individual';
+    $content['reportType'] = 'Conclusion 1';
+
+    // $ID will be formula ID
+    $ID = base64_decode($ID);
+    // $EntID will be Enterprize ID
+    $EntID = base64_decode($EntID);
+
+    $formulaWhere   = array('Items_Formula_Id' => $ID);
+    $formulaDetails = $this->Common_Model->fetchRecords('GAME_ITEMS_FORMULA', $formulaWhere, 'Items_Formula_Id, Items_Formula_Title, Items_Formula_String, Items_Formula_Expression, Items_Formula_Json', '');
+    // print_r($formulaDetails); print_r($formulaDetails[0]->Items_Formula_Title); exit();
+    $content['formulaDetails'] = $formulaDetails;
+
+    // decoding JSON
+    $formulaJSON = json_decode($formulaDetails[0]->Items_Formula_Json, true);
+    //print_r($formulaJSON); exit();
+    $usedItemArray = []; //storing used Item ID in array
+
+    $keys   = array_keys($formulaJSON);
+    //$values = array_values($formulaJSON); 
+    for ($x=0; $x<count($formulaJSON); $x++) {
+      $usedItemArray[$x] = $keys[$x];
+    }
+    //print_r($usedItemArray); exit();
+
+    // converting array to string for query
+    $usedItem = implode(',', $usedItemArray);
+
+    // Query to fetch all items used in selected formula
+    $itemQuery = "SELECT gi.Compt_Id, gi.Compt_Name, gi.Compt_Description, gi.Compt_PerformanceType FROM GAME_ITEMS gi WHERE gi.Compt_Id IN ($usedItem)  AND gi.Compt_Enterprise_ID = $EntID ORDER BY gi.Compt_Id ASC";
+    $itemUsedDetails = $this->Common_Model->executeQuery($itemQuery);
+    //print_r($itemUsedDetails); exit();
+    // setting data for view
+    $content['itemUsedDetails'] = $itemUsedDetails;
+
+    $enterprizeWhere   = array('Enterprise_ID' => $EntID);
+    $enterprizeDetails = $this->Common_Model->fetchRecords('GAME_ENTERPRISE', $enterprizeWhere, 'Enterprise_ID, Enterprise_Name', '');
+    // print_r($enterprizeDetails); print_r($enterprizeDetails[0]->Enterprise_Name); exit();
+    $content['enterprizeDetails'] = $enterprizeDetails;
+
+    // IRI_Type_Choice (1-> EXECUTIVE SUMMARY, 2-> CONCLUSION SECTION)
+    // IRI_Condition_Type (1-> Average, 2-> Individual)
+    $content['conditionType'] = 2;
+    // selecting WHERE IRI_Type_Choice is 2-> CONCLUSION SECTION and IRI_Condition_Type is 2-> Individual
+    // Query to fetch all item report text
+    $query = "SELECT iri.IRI_ID, iri.IRI_Text, iri.IRI_xAxis_Item_Id, iri.IRI_xAxis_Min_Value, iri.IRI_xAxis_Max_Value, iri.IRI_yAxis_Item_Id, iri.IRI_yAxis_Min_Value, iri.IRI_yAxis_Max_Value FROM GAME_ITEM_REPORT_INDIVIDUAL iri WHERE iri.IRI_Items_Formula_Id = $ID AND iri.IRI_Type_Choice = 2 AND iri.IRI_Condition_Type = 2 AND iri.IRI_Formula_Enterprize_ID = $EntID ORDER BY iri.IRI_ID ASC";
+    $reportDetails = $this->Common_Model->executeQuery($query);
+    // print_r($query); print_r($reportDetails); exit();
+    $content['reportDetails'] = $reportDetails;
+
+    // if form submit
+    $RequestMethod = $this->input->server('REQUEST_METHOD');
+    if ($RequestMethod == 'POST') {
+      // print_r($this->input->post()); exit();
+
+      $where = array(
+        'IRI_Formula_Enterprize_ID' => $EntID,
+        'IRI_Items_Formula_Id'      => $ID,
+        'IRI_Type_Choice'           => 2, // 2-> CONCLUSION SECTION
+        'IRI_Condition_Type'        => 2, // 2-> Individual
+      );
+
+      // =========================================
+      // for X-Axis
+      $usedItemsxAxis = $this->input->post('usedItemsxAxis'); //array type but unseralised key
+      $minValuexAxis  = $this->input->post('minValuexAxis'); //array type
+      $maxValuexAxis  = $this->input->post('maxValuexAxis'); //array type
+      // for Y-Axis
+      $usedItemsyAxis = $this->input->post('usedItemsyAxis'); //array type but unseralised key
+      $minValueyAxis  = $this->input->post('minValueyAxis'); //array type
+      $maxValueyAxis  = $this->input->post('maxValueyAxis'); //array type
+
+      $details        = $this->input->post('details');  //array type
+
+      // making new array to hold used items in it with serialised key for x-axis
+      $usedItemsxAxisArray = array();
+      $foreachCountxAxis = 0;
+      foreach ($usedItemsxAxis as $key => $value) {
+        // $usedItemsxAxisArray[$foreachCountxAxis] =  $usedItemsxAxis[$key];
+        $usedItemsxAxisArray[$foreachCountxAxis] =  $value;
+        $foreachCountxAxis++;
+      }
+      // print_r($usedItemsxAxisArray); exit();
+
+      // making new array to hold used items in it with serialised key for y-axis
+      $usedItemsyAxisArray = array();
+      $foreachCountyAxis = 0;
+      foreach ($usedItemsyAxis as $key => $value) {
+        // $usedItemsyAxisArray[$foreachCountyAxis] =  $usedItemsyAxis[$key];
+        $usedItemsyAxisArray[$foreachCountyAxis] =  $value;
+        $foreachCountyAxis++;
+      }
+      // print_r($usedItemsyAxisArray); exit();
+
+      // making array to hold all inserting Data
+      $insertArray = array();
+
+      for ($i=0; $i<count($usedItemsxAxisArray); $i++) {
+        $array = array(
+          'IRI_Formula_Enterprize_ID' => $EntID,
+          'IRI_Items_Formula_Id'      => $ID,
+          'IRI_Type_Choice'           => 2, // 2-> CONCLUSION SECTION
+          'IRI_Condition_Type'        => 2, // 2-> Individual
+          'IRI_xAxis_Item_Id'         => $usedItemsxAxisArray[$i],
+          'IRI_xAxis_Min_Value'       => $minValuexAxis[$i] ? $minValuexAxis[$i] : 0,
+          'IRI_xAxis_Max_Value'       => $maxValuexAxis[$i] ? $maxValuexAxis[$i] : 0,
+          'IRI_yAxis_Item_Id'         => $usedItemsyAxisArray[$i],
+          'IRI_yAxis_Min_Value'       => $minValueyAxis[$i] ? $minValueyAxis[$i] : 0,
+          'IRI_yAxis_Max_Value'       => $maxValueyAxis[$i] ? $maxValueyAxis[$i] : 0,
+          'IRI_Text'                  => $details[$i],
+          'IRI_Created_By'            => $this->session->userdata('loginData')['User_Id'],
+          'IRI_Created_On'            => date('Y-m-d H:i:s'),
+        );
+        array_push($insertArray, $array);
+      }
+      //print_r($insertArray); exit();
+      $result = $this->Common_Model->deleteInsert('GAME_ITEM_REPORT_INDIVIDUAL', $where, $insertArray);
+      // =========================================
+
+      //print_r($result); exit();
+      redirect('Competence/itemFormula');
+    } // end of form submit
+
+    $content['subview'] = 'itemReportIndividual';
+    $this->load->view('main_layout', $content);
+  }
+
+  public function itemReportHeaderSection() {
+    // only superadmin allow to access this page
+    if ($this->session->userdata('loginData')['User_Role'] != 'superadmin') {
+      $this->session->set_flashdata('er_msg', 'You are not allowed to visit <b>"' . $this->router->fetch_class() . '"</b> page');
+      redirect('Dashboard');
+    }
+
+    // setting titl for the page
+    $content['reportType'] = 'Header Section of Report';
+
+    $headerWhere   = array('IR_ID' => 1); // IR_ID 1 is used for header section for report
+    $headerDetails = $this->Common_Model->fetchRecords('GAME_ITEM_REPORT', $headerWhere, 'IR_Text', '');
+    // print_r($headerDetails); print_r($headerDetails[0]->IR_Text); exit();
+    $content['headerDetails'] = $headerDetails;
+
+    $RequestMethod = $this->input->server('REQUEST_METHOD');
+    if ($RequestMethod == 'POST') {
+      // print_r($this->input->post()); exit();
+
+      $where = array('IR_ID' => 1);
+      $updateArray = array(
+        'IR_Text'       => $this->input->post('details'), // array type
+        'IR_Created_On' => date('Y-m-d H:i:s'),
+        'IR_Created_By' => $this->session->userdata('loginData')['User_Id'],
+      );
+      $result = $this->Common_Model->updateRecords('GAME_ITEM_REPORT', $updateArray, $where);
+      //print_r($result); exit();
+
+      redirect('Competence/itemReportCreation');
+    }
+
+    $content['subview'] = 'itemReportHeaderDisclaimer';
+    $this->load->view('main_layout', $content);
+  }
+
+  public function itemReportDisclaimerSection() {
+    // only superadmin allow to access this page
+    if ($this->session->userdata('loginData')['User_Role'] != 'superadmin') {
+      $this->session->set_flashdata('er_msg', 'You are not allowed to visit <b>"' . $this->router->fetch_class() . '"</b> page');
+      redirect('Dashboard');
+    }
+
+    // setting titl for the page
+    $content['reportType'] = 'Disclaimer Section of Report';
+
+    $headerWhere   = array('IR_ID' => 2); // IR_ID 2 is used for Desclamer section for report
+    $headerDetails = $this->Common_Model->fetchRecords('GAME_ITEM_REPORT', $headerWhere, 'IR_Text', '');
+    // print_r($headerDetails); print_r($headerDetails[0]->IR_Text); exit();
+    $content['headerDetails'] = $headerDetails;
+
+    $RequestMethod = $this->input->server('REQUEST_METHOD');
+    if ($RequestMethod == 'POST') {
+      // print_r($this->input->post()); exit();
+
+      $where = array('IR_ID' => 2);
+      $updateArray = array(
+        'IR_Text'       => $this->input->post('details'), // array type
+        'IR_Created_On' => date('Y-m-d H:i:s'),
+        'IR_Created_By' => $this->session->userdata('loginData')['User_Id'],
+      );
+      $result = $this->Common_Model->updateRecords('GAME_ITEM_REPORT', $updateArray, $where);
+      //print_r($result); exit();
+
+      redirect('Competence/itemReportCreation');
+    }
+
+    $content['subview'] = 'itemReportHeaderDisclaimer';
+    $this->load->view('main_layout', $content);
+  }
+
+  public function itemReportTitleDefinition($ID=NULL, $EntID=NULL) {
+    // only superadmin allow to access this page
+    if ($this->session->userdata('loginData')['User_Role'] != 'superadmin') {
+      $this->session->set_flashdata('er_msg', 'You are not allowed to visit <b>"' . $this->router->fetch_class() . '"</b> page');
+      redirect('Dashboard');
+    }
+
+    // setting titl for the page
+    $content['reportType'] = 'Report Title and Definition';
+
+    // $ID will be formula ID
+    $ID = base64_decode($ID);
+    // $EntID will be Enterprize ID
+    $EntID = base64_decode($EntID);
+
+    // Query to fetch all item report details
+    $query = "SELECT gif.Items_Formula_Title, gif.Items_Formula_Report_Name_Definition, ge.Enterprise_Name FROM GAME_ITEMS_FORMULA gif LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gif.Items_Formula_Enterprise_Id WHERE gif.Items_Formula_Id = $ID AND gif.Items_Formula_Enterprise_Id = $EntID";
+    $reportDetails = $this->Common_Model->executeQuery($query);
+    $content['reportDetails'] = $reportDetails;
+
+    $RequestMethod = $this->input->server('REQUEST_METHOD');
+    if ($RequestMethod == 'POST') {
+      // print_r($this->input->post()); exit();
+
+      $where = array(
+        'Items_Formula_Id'            => $ID,
+        'Items_Formula_Enterprise_Id' => $EntID
+      );
+      $updateArray = array(
+        'Items_Formula_Report_Name_Definition' => $this->input->post('details')
+      );
+      $result = $this->Common_Model->updateRecords('GAME_ITEMS_FORMULA', $updateArray, $where);
+      //print_r($result); exit();
+
+      redirect('Competence/itemFormula');
+    }
+
+    $content['subview'] = 'itemReportTitleDetailed';
+    $this->load->view('main_layout', $content);
+  }
+
+  public function itemReportDetailedReport($ID=NULL, $EntID=NULL) {
+    // only superadmin allow to access this page
+    if ($this->session->userdata('loginData')['User_Role'] != 'superadmin') {
+      $this->session->set_flashdata('er_msg', 'You are not allowed to visit <b>"' . $this->router->fetch_class() . '"</b> page');
+      redirect('Dashboard');
+    }
+
+    // setting titl for the page
+    $content['reportType'] = 'Detailed Report';
+
+    // $ID will be formula ID
+    $ID = base64_decode($ID);
+    // $EntID will be Enterprize ID
+    $EntID = base64_decode($EntID);
+
+    // Query to fetch all item report details
+    $query = "SELECT gif.Items_Formula_Title, gif.Items_Formula_Detailed_Report, ge.Enterprise_Name FROM GAME_ITEMS_FORMULA gif LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gif.Items_Formula_Enterprise_Id WHERE gif.Items_Formula_Id = $ID AND gif.Items_Formula_Enterprise_Id = $EntID";
+    $reportDetails = $this->Common_Model->executeQuery($query);
+    $content['reportDetails'] = $reportDetails;
+
+    $RequestMethod = $this->input->server('REQUEST_METHOD');
+    if ($RequestMethod == 'POST') {
+      // print_r($this->input->post()); exit();
+
+      $where = array(
+        'Items_Formula_Id'            => $ID,
+        'Items_Formula_Enterprise_Id' => $EntID
+      );
+      $updateArray = array(
+        'Items_Formula_Detailed_Report' => $this->input->post('details')
+      );
+      $result = $this->Common_Model->updateRecords('GAME_ITEMS_FORMULA', $updateArray, $where);
+      //print_r($result); exit();
+
+      redirect('Competence/itemFormula');
+    }
+    
+    $content['subview'] = 'itemReportTitleDetailed';
+    $this->load->view('main_layout', $content);
+  }
 
 }

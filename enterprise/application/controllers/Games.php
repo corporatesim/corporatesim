@@ -129,7 +129,7 @@ public function assignGames($ID=NULL,$userType=NULL)
 	$RequestMethod   = $this->input->server('REQUEST_METHOD');
 	if($RequestMethod == 'POST')
 	{
-		 //echo "<pre>"; print_r($this->input->post());//exit();
+		// echo "<pre>"; print_r($this->input->post()); exit();
 		$assigngames    = $this->input->post('assigngames');
 		$GameStartDate  = $this->input->post('gamestartdate');
 		$GameEndDate    = $this->input->post('gameenddate');
@@ -289,8 +289,8 @@ public function assignGames($ID=NULL,$userType=NULL)
 							'UG_GameID'        => $gameID[$j],
 							'UG_ParentId'      => $UG_ParentId,
 							'UG_SubParentId'   => $UG_SubParentId,
-							'UG_GameStartDate' => date('Y-m-d',strtotime($GameStartDate[$j])),
-							'UG_GameEndDate'   => date('Y-m-d',strtotime($GameEndDate[$j])),
+							'UG_GameStartDate' => date('Y-m-d H:i:s',strtotime($GameStartDate[$j])),
+							'UG_GameEndDate'   => date('Y-m-d H:i:s',strtotime($GameEndDate[$j])),
 							'UG_ReplayCount'   => $UG_ReplayCount[$j]
 						);
 					 //echo "<pre>"; print_r($insertUserGames);

@@ -1,6 +1,47 @@
-<!-- <?php // echo "<pre>"; print_r($object1->fetch_object()); exit; ?> -->
+<style>
+  .swal-size-sm {
+    width: auto;
+  }
+</style>
+<?php  
+  // echo "<pre>"; print_r($linkdetails); exit;
+  // extracting the json data from the data-field
+  $Sublink_Json = json_decode($linkdetails->Sublink_Json,true);
+  $countCompMapping = $Sublink_Json['countCompMapping'];
+  $countPositive    = $Sublink_Json['countPositive'];
+  $countNegative    = $Sublink_Json['countNegative'];
+
+  // get the encoded/value
+  function encode_decode_value($arg_value)
+  {
+    if(base64_encode(base64_decode($arg_value, true)) === $arg_value)
+    {
+      if(ctype_alpha($arg_value) || is_numeric($arg_value))
+      {
+        echo $arg_value;
+      }
+      else
+      {
+        echo base64_decode($arg_value);
+      }
+    }
+   else
+   {
+     echo $arg_value;
+    }
+      
+  }
+?>
   <script type="text/javascript">
     <!--
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger',
+          popup: 'swal-size-sm',
+        },
+        buttonsStyling: false,
+      }); 
      var loc_url_del  = "ux-admin/linkage/linkdel/";
      var loc_url_stat = "ux-admin/linkage/linkstat/";
   //-->
@@ -90,29 +131,54 @@
     if($(this).attr("value")=="formula"){ 
       $("#formula").show();
       $("#admin").hide();
-      $("#carry").hide();     
+      $("#carry").hide();
+			$('#count').hide();     
+      $("#jsmappingDiv").hide();
     }
 
     if($(this).attr("value")=="admin"){ 
       $("#admin").show();
       $("#formula").hide();
       $("#carry").hide();
+			$('#count').hide();
+      $("#jsmappingDiv").hide();
+    }
+
+		if($(this).attr("value")=="count"){ 
+      $("#admin").hide();
+      $("#formula").hide();
+      $("#carry").hide();
+      $("#count").show();
+      $("#jsmappingDiv").hide();
     }
 
     if($(this).attr("value")=="carry"){ 
       $("#carry").show();
       $("#formula").hide();
       $("#admin").hide();
+			$('#count').hide();
+      $("#jsmappingDiv").hide();
+    }
+
+    if($(this).attr("value")=="jsmapping"){ 
+      $("#jsmappingDiv").show();
+      $("#carry").hide();
+      $("#formula").hide();
+      $("#admin").hide();
+			$('#count').hide();
     }
 
     if($(this).attr("value")=="user"){  
       $("#carry").hide();
       $("#formula").hide();
       $("#admin").hide();
+			$('#count').hide();
+      $("#jsmappingDiv").hide();
     }
   });
     // adding this to remvoe required from input field to novalidate if hidden or not selected /inputTypeUser
     setTimeout(function(){
+      $('.checkedDefault').trigger('click');
       if($('input[name=inputType]:checked').val() != 'user')
       {
         $('.inputTypeUser').each(function(){
@@ -208,17 +274,25 @@
         <div class="col-sm-12">
           <input type="hidden" name="linkid" id="linkid" 
           value="<?php if(isset($result)){ echo $result->Link_ID; } ?>">                
-          <div class="col-sm-6">
+          <div class="col-sm-4">
             <input type="hidden" name="gameid" id="gameid" value="<?php echo $result->Link_GameID ; ?>">
             <div class="form-group">
-              <label>Game : </label><?php echo $result->Game; ?>
+              <label>Game : </label><?php echo "<a href='".site_root."ux-admin/ManageGame/edit/".base64_encode($result->Link_GameID)."' target='_blank'>".$result->Game."</a>"; ?>
             </div>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-4">
             <div class="form-group">
-              <label>Scenario : </label><?php echo $result->Scenario; ?>
+              <label>Scenario : </label><?php echo "<a href='".site_root."ux-admin/ManageScenario/edit/".base64_encode($result->Link_ScenarioID)."' target='_blank'>".$result->Scenario."</a>"; ?>
             </div>
           </div>
+          <?php if($result->Link_JsGameScen ==1 ){ ?>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <!-- <label>View JS Mapping Linkage : </label><?php echo $result->Scenario; ?> -->
+                <a href="javascript:void(0);" id="viewJsMappingLinkage" data-linkid="<?php echo $result->Link_ID;?>" onclick="return showJsMapping(this)">View JS Mapping Linkage</a>
+              </div>
+            </div>
+            <?php } ?>
         </div>
         <?php //if(isset($_GET['link'])) { 
           if($linkscenario->num_rows>0) {
@@ -248,8 +322,7 @@
               <div class="col-sm-12">
                 <input type="hidden" name="Link_ID" id="Link_ID" 
                 value="<?php if(isset($result)){ echo $result->Link_ID; } ?>">  
-                <button type="submit" name="submit" id="Link_download" class="btn btn-primary"
-                value="Download"> Download </button>
+                <button type="submit" name="submit" id="Link_download" class="btn btn-primary" value="Download"> Download </button>
               </div>
               <br>
               <hr/>
@@ -272,8 +345,8 @@
               <!-- end of user download report -->
 
               <hr>
-              <label>Request/Download User Report -</label> <br>
-              <div class="col-sm-12" id="sandbox-container">
+              <label class="hidden">Request/Download User Report -</label> <br>
+              <div class="col-sm-12 hidden" id="sandbox-container">
                 <?php  
                 $resultReq = $userRequest->fetch_object();
                 $reqstatus = $resultReq->status;
@@ -337,6 +410,7 @@
           <form method="POST" action="" id="siteuser_frm" name="siteuser_frm">
             <input type="hidden" name="defaultCheckedValue" id="defaultCheckedValue" value="0">
             <input type="hidden" name="Game_Type" id="Game_Type" value="<?php echo $result->Game_Type; ?>">
+            <input type="hidden" name="Link_JsGameScen" id="Link_JsGameScen" value="<?php echo $result->Link_JsGameScen; ?>">
             
             <div class="row">
               <div class="col-md-4">
@@ -381,9 +455,9 @@
                         <span class="checkmarkRadio"></span>
                       </label>
 
-                      <label for="Modesubcomp" class="containerRadio" <?php echo ($result->Game_Type == 1)?"title='SubComponent not allowed for bot-enabled games'":''; ?>>
+                      <label for="Modesubcomp" class="containerRadio" <?php echo ($result->Game_Type == 1)?"title='SubComponent not allowed for bot-enabled games'":''; ?> <?php echo ($result->Link_JsGameScen == 1)?"title='SubComponent not allowed for JS Enabled Scenarios'":''; ?>>
                         <input type="radio" name="Mode" value="subcomp" id="Modesubcomp"
-                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID>0){ echo "checked"; } ?> <?php echo ($result->Game_Type == 1)?'disabled':''; ?> > Sub Component
+                        <?php if(!empty($linkdetails) && $linkdetails->SubLink_SubCompID>0){ echo "checked"; } ?> <?php echo ($result->Game_Type == 1)?'disabled':''; ?> <?php echo ($result->Link_JsGameScen == 1)?'disabled':''; ?> > Sub Component
                         <span class="checkmarkRadio"></span>
                       </label>
                     </div>
@@ -843,7 +917,121 @@
                       <?php } ?>
                     </div>
                   </div>
-                </div>
+								</div>
+								
+								<!-- adding count comp dropdwon -->
+								<div class="clearfix"></div>
+								<div class="row">
+									<div class="col-md-4">
+										<?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
+											<label class="containerRadio" for="inputTypeCount">
+												<input type="radio" name="inputType" value="count" id="inputTypeCount"
+												<?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'count'){ echo "checked"; } ?> > Zero-Count (Only For Current Scenario)
+												<span class="checkmarkRadio"></span>
+											</label>
+										<?php } else {?>
+											<label class="containerRadio" for="inputTypeCount">
+												<input type="radio" name="inputType" value="count" id="inputTypeCount"
+												<?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'count'){ echo "checked"; } ?> disabled=""> Zero-Count (Only For Current Scenario)
+												<span class="checkmarkRadio"></span>
+											</label>
+										<?php } ?>
+									</div>
+									<div id="count" name="count" <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'count') {} else { echo "style='display:none;'";} ?> >
+											<!--<label>Current Input</label>-->
+											<?php 
+                      // creating query for dropdown comp/subcomp
+                      if(empty($id))
+                      {
+                        $linksql_mappingData = "SELECT LS.* FROM GAME_LINKAGE_SUB LS WHERE LS.`SubLink_LinkID` =".$_GET['link'];
+                      }
+                      else
+                      {
+                        $linksql_mappingData = "SELECT LS.* FROM GAME_LINKAGE_SUB LS WHERE LS.`SubLink_LinkID` = $id";
+                      }
+
+
+                      if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){ ?>
+                      <div class="col-md-4">
+												<select name="countCompMapping[]" id="countCompMapping" class="form-control" multiple="">
+													<option value="" disabled>--select mapping components / sub-components--</option>
+													<?php
+                          $options_count = $functionsObj->RunQueryFetchObject($linksql_mappingData." AND LS.SubLink_Type=0 ORDER BY LS.SubLink_CompName, LS.SubLink_SubcompName");
+														foreach($options_count as $option_row) { ?>
+														<option value="<?php echo $option_row->SubLink_ID;?>" title="<?php echo ($option_row->SubLink_SubCompID>0)?'Sub-Component':'Component';?>" <?php if(!empty($countCompMapping)){echo (in_array($option_row->SubLink_ID, $countCompMapping))?'selected':'';}?> > <?php echo ($option_row->SubLink_SubcompName)?$option_row->SubLink_SubcompName:$option_row->SubLink_CompName;?> </option>
+														<?php } ?>
+                        </select>
+                      </div>
+                        <!-- adding here the dropdown for +ve and -ve values -->
+                        <?php 
+                          if(!empty($id)) { $linksql_mappingData .= " AND LS.SubLink_ID != $id"; }
+                          $linksql_mappingData .= " AND LS.SubLink_Type=1 ORDER BY LS.SubLink_CompName, LS.SubLink_SubcompName";
+                          $options_count = $functionsObj->RunQueryFetchObject($linksql_mappingData); 
+                          ?>
+                          <div class="col-md-4">
+                          <select name="countPositive" title="For positive value of count" id="countPositive" class="form-control">
+													<option value="">--select positive value components / sub-components--</option>
+
+                          <?php foreach($options_count as $option_row_positive) { ?>
+                          <option value="<?php echo $option_row_positive->SubLink_ID;?>" title="<?php echo ($option_row_positive->SubLink_SubCompID>0)?'Sub-Component':'Component';?>" <?php if(!empty($countPositive)){echo ($option_row_positive->SubLink_ID == $countPositive)?'selected':'';}?> > <?php echo ($option_row_positive->SubLink_SubcompName)?$option_row_positive->SubLink_SubcompName:$option_row_positive->SubLink_CompName;?> </option>
+                            <?php } ?>
+                        </select>
+                          </div>
+
+                          <div class="col-md-4">
+                            <select name="countNegative" title="For negative value of count" id="countNegative" class="form-control">
+                              <option value="">--select negative value components / sub-components--</option>
+
+                              <?php foreach($options_count as $option_row_negative) { ?>
+                              <option value="<?php echo $option_row_negative->SubLink_ID;?>" title="<?php echo ($option_row_negative->SubLink_SubCompID>0)?'Sub-Component':'Component';?>" <?php if(!empty($countNegative)){echo ($option_row_negative->SubLink_ID == $countNegative)?'selected':'';}?> > <?php echo ($option_row_negative->SubLink_SubcompName)?$option_row_negative->SubLink_SubcompName:$option_row_negative->SubLink_CompName;?> </option>
+                                <?php } ?>
+                            </select>
+                          </div>
+                        <!-- end of the dropdown for +ve and -ve values -->
+
+                        <!-- if don't have permission to edit/add -->
+                      <?php } else { ?>
+                        <div class="col-md-4">
+												<select name="countCompMapping[]" id="countCompMapping" class="form-control" multiple="" readonly>
+													<option value="" disabled>--select mapping components / sub-components--</option>
+													<?php
+                          $options_count = $functionsObj->RunQueryFetchObject($linksql_mappingData." AND LS.SubLink_Type=0 ORDER BY LS.SubLink_CompName, LS.SubLink_SubcompName");
+														foreach($options_count as $option) { ?>
+														<option value="<?php echo $option_row->SubLink_ID;?>" title="<?php echo ($option_row->SubLink_SubCompID>0)?'Sub-Component':'Component';?>" <?php if(!empty($countCompMapping)){echo (in_array($option_row->SubLink_ID, $countCompMapping))?'selected':'';}?> > <?php echo ($option_row->SubLink_SubcompName)?$option_row->SubLink_SubcompName:$option_row->SubLink_CompName;?> </option>
+														<?php } ?>
+                        </select>
+                        </div>
+                         <!-- adding here the dropdown for +ve and -ve values -->
+                         <?php 
+                          if(!empty($id)) { $linksql_mappingData .= " AND LS.SubLink_ID != $id"; }
+                          $linksql_mappingData .= " AND LS.SubLink_Type=1 ORDER BY LS.SubLink_CompName, LS.SubLink_SubcompName";
+                          $options_count = $functionsObj->RunQueryFetchObject($linksql_mappingData); 
+                          ?>
+                          <div class="col-md-4">
+                          <select name="countPositive" title="For positive value of count" id="countPositive" class="form-control" readonly>
+													<option value="">--select positive value components / sub-components--</option>
+
+                          <?php foreach($options_count as $option_row_positive) { ?>
+                          <option value="<?php echo $option_row_positive->SubLink_ID;?>" title="<?php echo ($option_row_positive->SubLink_SubCompID>0)?'Sub-Component':'Component';?>" <?php if(!empty($countPositive)){echo ($option_row_positive->SubLink_ID == $countPositive)?'selected':'';}?> > <?php echo ($option_row_positive->SubLink_SubcompName)?$option_row_positive->SubLink_SubcompName:$option_row_positive->SubLink_CompName;?> </option>
+                            <?php } ?>
+                        </select>
+                          </div>
+
+                          <div class="col-md-4">
+                        <select name="countNegative" title="For negative value of count" id="countNegative" class="form-control" readonly>
+													<option value="">--select negative value components / sub-components--</option>
+
+                          <?php foreach($options_count as $option_row_negative) { ?>
+                          <option value="<?php echo $option_row_negative->SubLink_ID;?>" title="<?php echo ($option_row_negative->SubLink_SubCompID>0)?'Sub-Component':'Component';?>" <?php if(!empty($countNegative)){echo ($option_row_negative->SubLink_ID == $countNegative)?'selected':'';}?> > <?php echo ($option_row_negative->SubLink_SubcompName)?$option_row_negative->SubLink_SubcompName:$option_row_negative->SubLink_CompName;?> </option>
+                            <?php } ?>
+                        </select>
+                          </div>
+                        <!-- end of the dropdown for +ve and -ve values -->
+											<?php } ?>
+									</div>
+								</div>
+								<!-- end of adding count comp dropdwon -->
+								
                 <div class="clearfix"></div>
                 <div class="row">
                   <div class="col-md-4">
@@ -942,7 +1130,7 @@
                           <br>
                           <div class="form-group col-md-6">
                             <label for="No of questions">Enter Question:</label>
-                            <input name="question" id="question" type="text" value="<?php echo $question;?>" class="form-control inputTypeUser" placeholder="Enter Question" required="">
+                            <input name="question" id="question" type="text" value='<?php encode_decode_value($question) ;?>' class="form-control inputTypeUser" placeholder="Enter Question" required="">
                           </div>
                           <div class="form-group col-md-3 alert-danger">
                             Note: Default selected option will not be visible to user
@@ -953,7 +1141,7 @@
                           <br>
                           <div class="form-group col-md-6" style="margin-left: 1px;">
                             <label for="No of questions">Text:</label>
-                            <input name="option[]" id="option[]" type="text" value="<?php echo (!empty($options))?$options:'Option-';?>" class="form-control optionTextBox inputTypeUser" placeholder="Enter Option Text" required="">
+                            <input name="option[]" id="option[]" type="text" value='<?php encode_decode_value($options);?>' class="form-control optionTextBox inputTypeUser" placeholder="Enter Option Text" required="">
                           </div>
                           <div class="form-group col-md-3">
                             <label for="No of questions">Value:</label>
@@ -963,7 +1151,7 @@
                             // array_pop(array);
                             for($i=1; $i < count($option); $i++) { ?>
                               <div class="parentDefault">
-                                <div class="form-group col-md-6"><input name="option[]" type="text" value="<?php echo $option[$i];?>" placeholder="Text" class="form-control optionTextBox"></div>
+                                <div class="form-group col-md-6"><input name="option[]" type="text" value='<?php encode_decode_value($option[$i]);?>' placeholder="Text" class="form-control optionTextBox"></div>
                                 <div class="form-group col-md-3"><input name="option_value[]" type="text" value="<?php echo $option_value[$i];?>" placeholder="Value" class="form-control" required=""></div>
                                 <div class="form-group col-md-2"><button class="btn-danger removeDiv" type="button" data-toggle="tooltip" title="Remove Option">-</button>
                                   <input class="checkedDefault" type="radio" name="makeDefaultChecked[]" data-toggle="tooltip" title="Make This Default Checked" value="<?php echo $option[$i];?>" <?php echo ($makeDefaultChecked == $option[$i])?'checked':'';?> required/>
@@ -996,6 +1184,41 @@
                         </div>
                         <!-- end of multiple choice and range type -->
                       </div>
+
+                      <!-- if js mapped scenario then only show the below radio button -->
+                      <?php if($result->Link_JsGameScen == 1){ ?>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <?php if($functionsObj->checkModuleAuth('innerlinkage','innerPermission','edit_type')){?>
+                              <label class="containerRadio" for="inputTypeJs">
+                                <input type="radio" name="inputType" value="jsmapping" id="inputTypeJs"
+                                <?php if(empty($linkdetails) || $linkdetails->SubLink_InputMode == 'jsmapping'){ echo "checked"; } ?> > JS Element Mapping
+                                <span class="checkmarkRadio"></span>
+                              </label>
+                            <?php } else {?>
+                              <label class="containerRadio" for="inputTypeJs">
+                                <input type="radio" name="inputType" value="jsmapping" id="inputTypeJs"
+                                <?php if(empty($linkdetails) || $linkdetails->SubLink_InputMode == 'jsmapping'){ echo "checked"; } ?>disabled=""> JS Element Mapping
+                                <span class="checkmarkRadio"></span>
+                              </label>
+                            <?php } ?>
+                          </div>
+                          <!-- show this only when the js mapping radio button is selected -->
+                          <div class="col-md-4" id="jsmappingDiv" <?php if(!empty($linkdetails) && $linkdetails->SubLink_InputMode == 'jsmapping') {} else { echo "style='display:none;'";} ?>>
+                            <select name="jselement" id="jselement" class="form-control">
+                              <option value="">--Select Element--</option>
+                              <!-- looping all the js game elements -->
+                              <?php
+                                $jsOptions = $functionsObj->RunQueryFetchObject("SELECT * FROM GAME_JSGAME WHERE Js_LinkId=$result->Link_ID");
+                                foreach($jsOptions as $jsOptionsRow){ ?>
+                                <option value="<?php echo $jsOptionsRow->Js_id;?>" title="<?php echo $jsOptionsRow->Js_Alias;?>" <?php echo ($jsOptionsRow->Js_id == $linkdetails->SubLink_InputModeTypeValue)?'selected':'';?>><?php echo $jsOptionsRow->Js_Element;?></option>
+                                <?php } ?>
+                            </select>
+                          </div>
+                        </div>
+                      <?php } ?>
+                      <!-- end of adding js mapping radio button -->  
+
                       <div class="clearfix"></div>
                       <div class="row">
                         <div class="col-md-4">
@@ -1013,7 +1236,7 @@
                           </label>
                         <?php } ?>
                       </div>
-                    </div>
+                      </div>
                     <br>
                     <div class="clearfix"></div>
                     <div class="row">
@@ -1296,6 +1519,7 @@
         <li> <span class="glyphicon glyphicon-pencil">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Edit the Record"> Edit   </a></li>
         <li> <span class="glyphicon glyphicon-trash"> </span><a href="javascript:void(0);" data-toggle="tooltip" title="User Can Delete the Record"> Delete </a></li>
         <li> <span class="fa fa-bolt">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="Start component for area"> Start Component  </a></li>
+        <li> <span class="fa fa-pencil-square-o">  </span><a href="javascript:void(0);" data-toggle="tooltip" title="Inline Edit/Update For Some Options"> Inline Update  </a></li>
       </ul>
     </div>
   </div>
@@ -1331,9 +1555,11 @@
             $i=1; while($row = $object1->fetch_object()){ ?>
               <tr>
                 <th><?php echo $i;?></th>
-                <td><?php echo $row->AreaName; ?></td>
-                <td><?php echo $row->Component.' / '.$row->Comp_NameAlias; ?></td>
-                <td><?php if($row->SubLink_SubCompID > 0) { echo $row->SubComponent.' / '.$row->SubComp_NameAlias; } else  echo "--"; ?></td>
+                <td title="<?php echo $row->SubLink_AreaID;?>"><?php echo "<a href='".site_root."ux-admin/ManageArea/Edit/".base64_encode($row->SubLink_AreaID)."' target='_blank'>".$row->AreaName."</a>"; ?></td>
+
+                <td title="<?php echo $row->SubLink_CompID;?>"><?php echo "<a href='".site_root."ux-admin/ManageComponent/edit/".base64_encode($row->SubLink_CompID)."' target='_blank'>".$row->Component.' / '.$row->Comp_NameAlias."</a>"; ?></td>
+                
+                <td title="<?php echo $row->SubLink_SubCompID;?>"><?php if($row->SubLink_SubCompID > 0) { echo "<a href='".site_root."ux-admin/ManageSubComponent/Edit/".base64_encode($row->SubLink_SubCompID)."' target='_blank'>".$row->SubComponent.' / '.$row->SubComp_NameAlias."</a>"; } else  echo "--"; ?></td>
                 <!-- <td><?php// if($row->SubLink_Type ==0 ) { echo "Input"; } else {echo "Output";} ?></td> -->
 
                 <td><?php switch ($row->SubLink_Type) {
@@ -1369,7 +1595,35 @@
                 } ?></td>
 
                 <td><?php if($row->SubLink_ShowHide ==0 ) { echo "Show"; } else {echo "Hide";} ?></td>
-                <td><?php echo $row->SubLink_InputMode;?></td>
+
+                <!-- <td><?php // echo (($row->SubLink_InputMode=='user')?$row->SubLink_InputMode.' ('.$row->SubLink_InputModeType.')':$row->SubLink_InputMode);?></td> -->
+                <td>
+                  <?php
+                    $modeInCapital = ucfirst($row->SubLink_InputMode);
+
+                    switch($row->SubLink_InputMode)
+                    {
+                      case 'user':
+                        echo '<span title="'.$row->SubLink_InputModeTypeValue.'">'.$modeInCapital.' (<code>'.$row->SubLink_InputModeType.'</code>)</span>';
+                      break;
+
+                      case 'admin':
+                        echo '<span title="current value / last value">'.$modeInCapital.' (<code>'.$row->SubLink_AdminCurrent.' / '.$row->SubLink_AdminLast.'</code>)</span>';
+                      break;
+
+                      case 'formula':
+                        $formulaSql = "SELECT formula_title, expression_string FROM GAME_FORMULAS WHERE f_id=".$row->SubLink_FormulaID;
+                        $formulaRes = $functionsObj->RunQueryFetchObject($formulaSql);
+                        echo "<a href='".site_root."ux-admin/Formulas/edit/".base64_encode($row->SubLink_FormulaID)."' title='".$formulaRes[0]->formula_title." => ".$row->SubLink_FormulaExpression."' target='_blank'>".$formulaRes[0]->expression_string."</a>";
+                      break;
+
+                      default:
+                        echo $modeInCapital;
+                      break;
+                    }
+                  ?>
+                </td>
+
                 <td><?php echo $row->SubLink_Order;?></td>
                 <td><input type="color" value="<?php echo $row->SubLink_BackgroundColor;?>" disabled><code> 
                   <?php
@@ -1420,6 +1674,7 @@
                           <a href="javascript:void(0);" class="dl_btn" id="<?php echo $row->SubLink_ID; ?>" title="Delete">
                             <span class="fa fa-trash"></span></a>
                           <?php } ?>
+                          <a href="javascript:void(0);" class="updateInline" id="change_<?php echo $row->SubLink_ID; ?>" title="Update Inline" onclick="return fetchLinkageData(<?php echo $row->SubLink_ID; ?>);"><span class="fa fa-pencil-square-o"></span></a>
                         </td>
                       </tr>
                       <?php $i++; } ?>
@@ -1792,6 +2047,134 @@
   if(selectedFormula)
   {
     $('#formula_id').trigger('change');
+  }
+
+  function showJsMapping(element)
+  {
+    console.log(element);
+    var formData = "action=fetchScenarioJsMapping&Js_LinkId="+$(element).data('linkid');
+    var showMapping = triggerAjax("<?php echo site_root . 'ux-admin/model/ajax/gameAddMapping.php'; ?>", formData, 'show');
+  }
+
+  function triggerAjax(url, data, showAlert) {
+    // console.log(showAlert); console.log(url); console.log(data); return false; // triggering ajax for various operations
+    var returnResult = [];
+    fetch(url, {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        "Content-type": "application/x-www-form-urlencoded;"
+        // "Content-type": "application/json;"
+      },
+      body: data,
+    }).then(function(response) {
+      return response.json();
+    }).then(function(result) {
+      // show returned response here
+      if (showAlert == 'show') {
+        if (result.status == 200) {
+      swalWithBootstrapButtons.fire({
+            icon: result.icon,
+            html: result.msg,
+            position: result.position,
+            timer: result.timer,
+            showConfirmButton: false,
+            showClass: {
+              popup: result.showclass
+            },
+            hideClass: {
+              popup: result.hideclass
+            },
+            showCancelButton: true,
+          });
+        } else {
+          alert(result.msg);
+        }
+      } else if (showAlert == 'return') {
+        returnResult.push(result);
+      } else {
+        console.log(result);
+      }
+      $('#dataTables-serverSide').DataTable().ajax.reload();
+    }).catch(function(err) {
+      console.log('Fetch Error :-S', err);
+    });
+    return returnResult;
+  }
+
+  function fetchLinkageData(Sublink_ID)
+  {
+    if(Sublink_ID)
+    {
+      // trigger ajax to fetch data for the selected sub-linkage (table row)
+      ajaxTrigger("<?php echo site_root.'ux-admin/model/ajax/gameAddMapping.php';?>", 'action=fetchLinkage&Sublink_ID='+Sublink_ID, 'show');
+    }
+    else
+    {
+      swalWithBootstrapButtons.fire({
+        icon: 'error',
+        title: 'Error',
+        html: 'No data found for selected row.',
+        showConfirmButton: false,
+        showCancelButton: false,
+        showCloseButton: true,
+      });
+    }
+  }
+
+  function updateLinkageData(e)
+  {
+    e.preventDefault();
+    // console.log($("#linkageFormData").serialize());
+    var formData = $("#linkageFormData").serialize();
+    ajaxTrigger("<?php echo site_root.'ux-admin/model/ajax/gameAddMapping.php';?>", formData, 'show');
+  }
+
+  function ajaxTrigger(url, data, showAlert) {
+    // console.log(showAlert); console.log(url); console.log(data); return false; // triggering ajax for various operations
+    var returnResult = [];
+    fetch(url, {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        "Content-type": "application/x-www-form-urlencoded;"
+        // "Content-type": "application/json;"
+      },
+      body: data,
+    }).then(function(response) {
+      return response.json();
+    }).then(function(result) {
+      // show returned response here
+      if (showAlert == 'show') {
+        if (result.status == 200) {
+          swalWithBootstrapButtons.fire({
+            icon: result.icon,
+            title: result.title,
+            html: result.msg,
+            position: result.position,
+            timer: result.timer,
+            showConfirmButton: false,
+            allowOutsideClick: result.clickClose,
+            showClass: {
+              popup: result.showclass
+            },
+            hideClass: {
+              popup: result.hideclass
+            }
+          });
+        } else {
+          alert(result.msg);
+        }
+      } else if (showAlert == 'return') {
+        returnResult.push(result);
+      } else {
+        console.log(result);
+      }
+      $('#dataTables-serverSide').DataTable().ajax.reload();
+    }).catch(function(err) {
+      console.log('Fetch Error :-S', err);
+    });
+    return returnResult;
   }
 
 </script>

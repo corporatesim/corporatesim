@@ -17,7 +17,7 @@ class Campus extends MY_Controller {
       redirect('Dashboard');
     }
 
-    $query = "SELECT guc.UC_ID, guc.UC_Name, guc.UC_Address, guc.UC_Email, guc.UC_Contact FROM GAME_USER_CAMPUS guc ORDER BY guc.UC_Name ASC";
+    $query = "SELECT guc.UC_ID, guc.UC_Name, guc.UC_Type, guc.UC_Address, guc.UC_Email, guc.UC_Contact FROM GAME_USER_CAMPUS guc ORDER BY guc.UC_Name ASC";
     $campus = $this->Common_Model->executeQuery($query);
 
     $content['campus'] = $campus;
@@ -27,7 +27,7 @@ class Campus extends MY_Controller {
   } //end of index function
 
   public function SelectCampus() {
-    $query = "SELECT guc.UC_ID, guc.UC_Name, guc.UC_Address, guc.UC_Email, guc.UC_Contact, gec.ECampus_CampusID, gec.ECampus_UpdatedOn, gec.ECampus_Selected FROM GAME_USER_CAMPUS guc LEFT JOIN GAME_ENTERPRISE_CAMPUS gec ON gec.ECampus_CampusID = guc.UC_ID ORDER BY gec.ECampus_CampusID DESC, guc.UC_Name ASC";
+    $query = "SELECT guc.UC_ID, guc.UC_Name, guc.UC_Type, guc.UC_Address, guc.UC_Email, guc.UC_Contact, gec.ECampus_CampusID, gec.ECampus_UpdatedOn, gec.ECampus_Selected FROM GAME_USER_CAMPUS guc LEFT JOIN GAME_ENTERPRISE_CAMPUS gec ON gec.ECampus_CampusID = guc.UC_ID ORDER BY gec.ECampus_CampusID DESC, guc.UC_Name ASC";
     $campus = $this->Common_Model->executeQuery($query);
     //echo "<pre>"; print_r($query); print_r($campus); exit();
 
@@ -37,28 +37,22 @@ class Campus extends MY_Controller {
     $this->load->view('main_layout',$content);
   } //end of SelectCampus function
 
-  public function cardSelectedByEnterprise() {
+  public function campusSelectedByEnterprise() {
     $RequestMethod = $this->input->server('REQUEST_METHOD');
 
     if ($RequestMethod == 'POST') {
       //echo "<pre>"; print_r($this->input->post()); exit();
       $enterpriseID     = $this->session->userdata('loginData')['User_ParentId'];
-      //$campusSelectedOn = $this->input->post('campusSelectedOn');
       $selectedCampus   = $this->input->post('selectCampus');
       $campusCount      = count($selectedCampus);
       //echo "<pre>"; print_r($selectedCampus); print_r($campusCount); exit();
-        
-      //delete Old existing Campus for enterprise
-      //$where['ECampus_EnterpriseID'] = $enterpriseID;
-      //$this->Common_Model->deleteRecords('GAME_ENTERPRISE_CAMPUS', $where);
-
-      //selecting all existing campuses
-      // $query = "SELECT gec.ECampus_CampusID, gec.ECampus_UpdatedOn, gec.ECampus_Selected FROM GAME_ENTERPRISE_CAMPUS gec ORDER BY gec.ECampus_CampusID";
-      // $campus = $this->Common_Model->executeQuery($query);
 
       //setting all existing campus select value to 0-> not selected
       $updateWhere = array('ECampus_EnterpriseID' => $enterpriseID);
-      $updateArray = array('ECampus_Selected' => 0);
+      $updateArray = array(
+        'ECampus_Selected' => 0,
+        'ECampus_UpdatedOn' => date('Y-m-d H:i:s')
+      );
       $result      = $this->Common_Model->updateRecords('GAME_ENTERPRISE_CAMPUS', $updateArray, $updateWhere);
 
       if ($campusCount > 0) {
@@ -97,10 +91,10 @@ class Campus extends MY_Controller {
       }
       redirect('Campus/myCampus');
     }
-  } //end of function cardSelectedByEnterprise
+  } //end of function campusSelectedByEnterprise
 
   public function myCampus() {
-    $query = "SELECT guc.UC_ID, guc.UC_Name, guc.UC_Address, guc.UC_Email, guc.UC_Contact, gec.ECampus_CampusID, gec.ECampus_UpdatedOn FROM GAME_ENTERPRISE_CAMPUS gec LEFT JOIN GAME_USER_CAMPUS guc ON gec.ECampus_CampusID = guc.UC_ID WHERE gec.ECampus_Selected = 1 ORDER BY guc.UC_Name ASC";
+    $query = "SELECT guc.UC_ID, guc.UC_Name, guc.UC_Type, guc.UC_Address, guc.UC_Email, guc.UC_Contact, gec.ECampus_CampusID, gec.ECampus_UpdatedOn FROM GAME_ENTERPRISE_CAMPUS gec LEFT JOIN GAME_USER_CAMPUS guc ON gec.ECampus_CampusID = guc.UC_ID WHERE gec.ECampus_Selected = 1 ORDER BY guc.UC_Name ASC";
     //$query = "SELECT guc.UC_ID, guc.UC_Name, guc.UC_Address, guc.UC_Email, guc.UC_Contact, gec.ECampus_CampusID FROM GAME_USER_CAMPUS guc LEFT JOIN GAME_ENTERPRISE_CAMPUS gec ON gec.ECampus_CampusID = guc.UC_ID ORDER BY guc.UC_Name ASC";
     $campus = $this->Common_Model->executeQuery($query);
     //echo "<pre>"; print_r($query); print_r($campus); exit();

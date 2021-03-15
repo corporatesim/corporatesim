@@ -206,12 +206,23 @@ class Functions extends database
 			$sqlFirst = "REPLACE INTO " . $tblName . "(";
 		}
 		$sqlSecond = " VALUES(";
-		while(list($key, $value) = each($array))
+		// while(list($key, $value) = each($array))
+		// {
+		// 	$sqlFirst  = $sqlFirst . $key . ",";
+		// 	$value     = $this->Protect($value);
+		// 	$sqlSecond = $sqlSecond . $value . ",";
+		// }
+
+		foreach($array as $arrayKey=>$arrayValue)
 		{
-			$sqlFirst  = $sqlFirst . $key . ",";
-			$value     = $this->Protect($value);
+			$sqlFirst  = $sqlFirst . $arrayKey . ",";
+			$value     = $this->Protect($arrayValue);
 			$sqlSecond = $sqlSecond . $value . ",";
+			// echo $arrayValue."<br>";
 		}
+
+		
+		
 		$sqlFirst  = substr($sqlFirst, 0, strlen($sqlFirst) - 1) . ") ";
 		$sqlSecond = substr($sqlSecond, 0, strlen($sqlSecond) - 1) . ")";
 		$sql       = $sqlFirst . $sqlSecond;
@@ -252,10 +263,16 @@ class Functions extends database
 	function UpdateData($tblName, $array, $FieldName, $Fieldvalue, $print_flag = 0)
 	{
 		$sql = "UPDATE " . $tblName . " SET ";
-		while(list($key, $value) = each($array))
+		// while(list($key, $value) = each($array))
+		// {
+		// 	$sql = $sql . $key . "=" . "'" . $value . "'" . ", ";
+		// }
+
+		foreach($array as $arrayKey=>$arrayValue)
 		{
-			$sql = $sql . $key . "=" . "'" . $value . "'" . ", ";
+			$sql = $sql . $arrayKey . "=" . "'" . $arrayValue . "'" . ", ";
 		}
+
 		$sql = substr($sql, 0, strlen($sql) - 2) . " WHERE " . $FieldName . "=" . "'" . $Fieldvalue . "'";
 		if($print_flag == 1)
 		{
@@ -306,9 +323,14 @@ class Functions extends database
 	{
 		$sql = " UPDATE " . $tblName . " SET ";
 
-		while(list($key, $value) = each($array))
+		// while(list($key, $value) = each($array))
+		// {
+		// 	$sql = $sql . $key . "=" . "'" . $value . "'" . ", ";
+		// }
+
+		foreach($array as $arrayKey=>$arrayValue)
 		{
-			$sql = $sql . $key . "=" . "'" . $value . "'" . ", ";
+			$sql = $sql . $arrayKey . "=" . "'" . $arrayValue . "'" . ", ";
 		}
 
 		if(is_array($conditions))

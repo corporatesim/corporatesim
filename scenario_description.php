@@ -138,6 +138,7 @@ $object = $functionsObj->ExecuteQuery($sql);
 if($object->num_rows > 0)
 {
 	$scen = $functionsObj->FetchObject($object);
+	$Scen_Json = json_decode($scen->Scen_Json, true);
 }
 //echo $scenid;
 //echo $scen->Scen_Name;

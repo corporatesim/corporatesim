@@ -59,10 +59,11 @@ class CorpsimFormulaCalculation extends CI_Controller {
     $error            = array();
     $formulaReplace   = array();
     $replaceSublinkId = array();
+    $countIfZero      = array();
     // likely selected all the components, some to form and calcuate formula, some for carryforward purpose, and also taken user type as well, to update the carryForward values if forwarded any from user actual values
     $this->db->trans_start();
 
-    $findFormulaCompSubcomp = "SELECT SubLink_ID, SubLink_FormulaID, SubLink_InputMode, SubLink_FormulaExpression, SubLink_CompName, SubLink_SubcompName, SubLink_LinkIDcarry, SubLink_CompIDcarry, SubLink_SubCompIDcarry, SubLink_Roundoff, input_current FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=$UserID WHERE gls.SubLink_LinkID=$linkid AND (gls.SubLink_InputMode='formula' OR gls.SubLink_InputMode='carry' OR gls.SubLink_InputMode='user' OR gls.SubLink_InputMode='admin')";
+    $findFormulaCompSubcomp = "SELECT SubLink_ID, SubLink_FormulaID, SubLink_InputMode, SubLink_FormulaExpression, SubLink_CompName, SubLink_SubcompName, SubLink_LinkIDcarry, SubLink_CompIDcarry, SubLink_SubCompIDcarry, SubLink_Roundoff, input_current, Sublink_Json FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=$UserID WHERE gls.SubLink_LinkID=$linkid AND (gls.SubLink_InputMode='formula' OR gls.SubLink_InputMode='carry' OR gls.SubLink_InputMode='user' OR gls.SubLink_InputMode='admin' OR gls.SubLink_InputMode='count')";
     // die($findFormulaCompSubcomp);
     $getFormulaCompSubcomp  = $this->Ajax_Model->executeQuery($findFormulaCompSubcomp);
     // find formula expression and calculate
@@ -128,7 +129,10 @@ class CorpsimFormulaCalculation extends CI_Controller {
           continue;
         }
       }
-
+      if(!empty($getFormulaCompSubcompRow->Sublink_Json))
+      {
+        $countIfZero[$getFormulaCompSubcompRow->SubLink_ID] = $getFormulaCompSubcompRow->Sublink_Json;
+      }
     }
 
     // echo count($formulaArray)."<pre>"; print_r($formulaArray);
@@ -280,6 +284,74 @@ class CorpsimFormulaCalculation extends CI_Controller {
     //  'US_Output' => 1,
     // );
     // $this->Ajax_Model->updateRecords('GAME_USERSTATUS',$dataInput,$whereInput);
+
+    // now after all the above calculation, finding the zero, +ve and -ve count and updating accordingly
+    // echo "<pre>"; print_r($countIfZero);
+    $updateCountArray = array();
+
+    if(count($countIfZero)>0)
+    {
+      foreach($countIfZero as $countIfZeroKey => $countIfZeroValue)
+      {
+        // echo "Key: ".$countIfZeroKey." and Value: "; print_r(json_decode($countIfZeroValue,true)); echo "<br>";
+        $Sublink_Json  = json_decode($countIfZeroValue,true); 
+        $countPositive = $Sublink_Json['countPositive'];
+        $countNegative = $Sublink_Json['countNegative'];
+
+        // if mapping is not found then skip the loop
+        if(count($Sublink_Json['countCompMapping'])<1)
+        {
+          continue;
+        }
+        
+        $countSql      = "SELECT input_current FROM GAME_INPUT WHERE input_user= $UserID AND input_sublinkid IN (".implode(',', $Sublink_Json['countCompMapping']).")";
+        // echo $countSql."<br>";
+        $inputData = $this->Ajax_Model->executeQuery($countSql);
+        // echo "<pre>"; print_r($inputData);
+        if(count($inputData)>0)
+        {
+          $zeroCount     = 0;
+          $positiveCount = 0;
+          $negativeCount = 0;
+
+          foreach($inputData as $inputDataRow)
+          {
+            if($inputDataRow->input_current == 0 || $inputDataRow->input_current == 0.00)
+            {
+              $zeroCount++;
+            }
+
+            if($inputDataRow->input_current > 0)
+            {
+              $positiveCount++;
+            }
+
+            if($inputDataRow->input_current < 0)
+            {
+              $negativeCount++;
+            }
+          }
+
+          $updateCountArray[$countIfZeroKey] = $zeroCount;
+          
+          if(!empty($countPositive))
+          {
+            $updateCountArray[$countPositive]  = $positiveCount;
+          }
+          if(!empty($countNegative))
+          {
+            $updateCountArray[$countNegative]  = $negativeCount;
+          }
+        }
+      }
+      foreach($updateCountArray as $updateCountArrayKey => $updateCountArrayValue)
+      {
+        $updateCountSql = "UPDATE GAME_INPUT SET input_current=$updateCountArrayValue WHERE input_user=$UserID AND input_sublinkid=$updateCountArrayKey";
+        // echo "<br>".$updateCountSql;
+        $updateCountData = $this->Ajax_Model->executeQuery($updateCountSql,'noReturn');
+      }
+    }
+    // echo "<pre>"; print_r($updateCountArray); exit;
     $this->db->trans_complete();
     if ($this->db->trans_status() === FALSE)
     {
@@ -315,6 +387,63 @@ class CorpsimFormulaCalculation extends CI_Controller {
     }
   }
 
+  public function saveJsInputs($linkid=NULL, $gameid=NULL, $UserID=NULL)
+  {
+    // print_r($this->input->post()); die();
+    // for fetching the mapping element and component for js games, and map the values accordingly
+      if($linkid<1 || empty($linkid))
+      {
+        die(json_encode(["status" => 201, "icon" => 'error', "message" => 'No linkage selected to fetch for js games']));
+      }
+      $mapWhere = array(
+        'Js_Status' => 0,
+        'Js_SublinkId !=' => NULL,
+        'Js_LinkId' => $linkid,
+      );
+      $jsMapData = $this->Ajax_Model->fetchRecords('GAME_JSGAME', $mapWhere);
+
+      // print_r($this->db->last_query()); print_r($jsMapData); die(' here ');
+      if(count($jsMapData)<1)
+      {
+        die(json_encode(["status" => 201, "icon" => 'error', "message" => 'No linkage found for js games']));
+      }
+      else
+      {
+        $checkKeyFlag = true;
+        $userJsData = json_encode($this->input->post()); // save this data, as it contains all user data belongs to js games
+        $jsElements = array_keys($this->input->post());
+        foreach($jsMapData as $jsMapDataRow)
+        {
+          if(in_array($jsMapDataRow->Js_Element, $jsElements))
+          {
+            $updateWhere = array('input_user' => $UserID, 'input_sublinkid' => $jsMapDataRow->Js_SublinkId);
+            $updatedata = array('input_current' => $this->input->post($jsMapDataRow->Js_Element));
+
+            $updateValues = $this->Ajax_Model->updateRecords('GAME_INPUT', $updatedata, $updateWhere);
+            // echo $updateValues; print_r($this->db->last_query());
+            $checkKeyFlag = false;
+          }
+        }
+        
+        $insertArray = array(
+          'JSDATA_JsGameId' => $jsMapData[0]->Js_id,
+          'JSDATA_JsGameName' => $jsMapData[0]->Js_Name,
+          'JSDATA_GameId' => $jsMapData[0]->Js_GameId,
+          'JSDATA_ScenId' => $jsMapData[0]->Js_ScenId,
+          'JSDATA_LinkId' => $jsMapData[0]->Js_LinkId,
+          'JSDATA_UserId' => $UserID,
+          'JSDATA_GameData' => $userJsData,
+        );
+        $saveJsData = $this->Ajax_Model->insert('GAME_USER_JSGAME_DATA',$insertArray);
+        if($checkKeyFlag)
+        {
+          // die(json_encode(["status" => 201, "icon" => 'error', "message" => 'Element not mapped with components.']));
+          die(json_encode(["status" => 201, "icon" => 'error', "message" => 'Please provide your inputs.']));
+        }
+        die(json_encode(["status" => 200, "icon" => 'success', "message" => 'Input Saved Successfully.']));
+      }
+  }
+
   public function submitOutput($gameid=NULL,$linkid=NULL,$UserID=NULL,$userName=NULL)
   {
     $message = "Database queries did not completed successfully.";
@@ -326,7 +455,7 @@ class CorpsimFormulaCalculation extends CI_Controller {
       'linkid' => $linkid,
     );
     // delete the existing data or report for that particular user, deleteRecords
-    $deleteReport = $this->Ajax_Model->deleteRecords('GAME_SITE_USER_REPORT_NEW',$whereDeleteReport);
+    // $deleteReport = $this->Ajax_Model->deleteRecords('GAME_SITE_USER_REPORT_NEW',$whereDeleteReport);
     $sqlComp12    = "SELECT ls.SubLink_ID,  CONCAT(c.Comp_Name, '/', COALESCE(s.SubComp_Name,'')) AS Comp_Subcomp 
     FROM `GAME_LINKAGE_SUB` ls 
     LEFT OUTER JOIN GAME_SUBCOMPONENT s ON SubLink_SubCompID=s.SubComp_ID

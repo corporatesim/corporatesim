@@ -71,7 +71,7 @@
 		<ul class="breadcrumb">
 			<li class="completed"><a
 				href="<?php echo site_root."ux-admin/Dashboard"; ?>">Home</a></li>
-				<li class="active"><a href="javascript:void(0);">Manage Linkage</a></li>
+				<li class="active"><a href="<?php echo site_root;?>ux-admin/linkage">Manage Linkage</a></li>
 				<li class="active"><?php echo $header; ?></li>
 			</ul>
 		</div>
@@ -90,7 +90,9 @@
 								?>
 								<div class="col-sm-6">	
 									<div class="form-group">
-										<label><?=$row['Area_Name']?> (<?php echo ($row['SubLink_Type'])?'Output':'Input';?>) : </label>&nbsp;<input type="text" name="<?=$row['AreaID']?>" value="<?=$row['Area_Sequencing']?>" style="width:50px;">
+										<label><?=$row['Area_Name']?> (<?php echo ($row['SubLink_Type'])?'<span class="text-danger">Output</span>':'<span class="text-success">Input</span>';?>) : </label>
+										<input type="number" name="<?=$row['AreaID']?>" value="<?=$row['Area_Sequencing']?>" style="width:50px;" title="This sequence will be followed at the user side" min=0>
+										<input type="text" name="alias_<?=$row['AreaID']?>" value="<?=$row['Sequence_Alias']?:$row['Area_Name']?>" placeholder="Enter Alias For Area Name" title="This will show the alias for the Area at the user side">
 									</div>
 								</div>
 								<?php 

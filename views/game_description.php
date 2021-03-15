@@ -1,11 +1,39 @@
 <?php 
 include_once 'includes/header.php'; 
+  // echo "<pre>"; print_r($game); exit;
 
+  $game_Json = json_decode($game->Game_Introduction_Json, true);
+
+  // Introduction
+  $gameIntroduction           = $game_Json['gameIntroduction'] ? $game_Json['gameIntroduction'] : 'Introduction';
+  $gameIntroductionColorCode  = $game_Json['gameIntroductionColorCode'] ? $game_Json['gameIntroductionColorCode'] : 'lightcyan';
+  $gameIntroductionVisibility = $game_Json['gameIntroductionVisibility'] ? $game_Json['gameIntroductionVisibility'] : '0';
+  // Videos
+  $gameVideos           = $game_Json['gameVideos'] ? $game_Json['gameVideos'] : 'Videos';
+  $gameVideosColorCode  = $game_Json['gameVideosColorCode'] ? $game_Json['gameVideosColorCode'] : 'lavender';
+  $gameVideosVisibility = $game_Json['gameVideosVisibility'] ? $game_Json['gameVideosVisibility'] : '0';
+  // Images
+  $gameImages           = $game_Json['gameImages'] ? $game_Json['gameImages'] : 'Images';
+  $gameImagesColorCode  = $game_Json['gameImagesColorCode'] ? $game_Json['gameImagesColorCode'] : 'lavenderblush';
+  $gameImagesVisibility = $game_Json['gameImagesVisibility'] ? $game_Json['gameImagesVisibility'] : '0';
+  // Documents
+  $gameDocuments           = $game_Json['gameDocuments'] ? $game_Json['gameDocuments'] : 'Documents';
+  $gameDocumentsColorCode  = $game_Json['gameDocumentsColorCode'] ? $game_Json['gameDocumentsColorCode'] : 'lemonchiffon';
+  $gameDocumentsVisibility = $game_Json['gameDocumentsVisibility'] ? $game_Json['gameDocumentsVisibility'] : '0';
 ?>
 <!--[if IE]
   <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+<style>
+.active a {
+  background-color: lightgray !important;
+  color: black !important;
+}
+.regular a {
+  color: black !important;
+}
+</style>
 <script src="js/jquery.js"></script>
 <script src="js/jquery.prettyPhoto.js" type="text/javascript" charset="utf-8"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -51,12 +79,70 @@ include_once 'includes/header.php';
 				<!-- Nav tabs -->	
 				<div class="shadow TabMain col-sm-12">
 
-					<ul class="nav nav-tabs" role="tablist">
-						<li role="presentation" class="active regular"><a href="#generalTab" aria-controls="generalTab" role="tab" data-toggle="tab">Introduction</a></li>
-						<li role="presentation" class="regular"><a href="#videosTab" aria-controls="videosTab" role="tab" data-toggle="tab">Videos</a></li>
-						<li role="presentation" class="regular"><a href="#imagesTab" aria-controls="imagesTab" role="tab" data-toggle="tab">Images</a></li>
-						<li role="presentation" class="regular"><a href="#documentsTab" aria-controls="documentsTab" role="tab" data-toggle="tab">Documents</a></li>
-					</ul>
+            <ul class="nav nav-pills" role="tablist">
+              <!-- <li role="presentation" class="nav-item regular active" style="background-color: lightcyan;">
+                <a role="presentation" class="nav-link regular" href="#generalTab" aria-controls="generalTab" role="tab" data-toggle="tab">Introduction</a>
+              </li> -->
+              <?php if ($gameIntroductionVisibility == 0) { ?>
+              <li role="presentation" class="nav-item regular" style="background-color: <?php echo $gameIntroductionColorCode; ?>; margin:3px;">
+                <a role="presentation" class="nav-link" href="#generalTab" aria-controls="generalTab" role="tab" data-toggle="tab"><?php echo $gameIntroduction; ?></a>
+              </li>
+              <?php } ?>
+
+              <!-- <li role="presentation" class="nav-item regular" style="background-color: lavender;">
+                <a class="nav-link" href="#videosTab" aria-controls="videosTab" role="tab" data-toggle="tab">Videos</a>
+              </li> -->
+              <?php if ($gameVideosVisibility == 0) { ?>
+              <li role="presentation" class="nav-item regular" style="background-color: <?php echo $gameVideosColorCode; ?>; margin:3px;">
+                <a role="presentation" class="nav-link" href="#videosTab" aria-controls="videosTab" role="tab" data-toggle="tab"><?php echo $gameVideos; ?></a>
+              </li>
+              <?php } ?>
+
+              <!-- <li role="presentation" class="nav-item regular" style="background-color: lavenderblush;">
+                <a class="nav-link" href="#imagesTab" aria-controls="imagesTab" role="tab" data-toggle="tab">Images</a>
+              </li> -->
+              <?php if ($gameImagesVisibility == 0) { ?>
+              <li role="presentation" class="nav-item regular" style="background-color: <?php echo $gameImagesColorCode; ?>; margin:3px;">
+                <a role="presentation" class="nav-link" href="#imagesTab" aria-controls="imagesTab" role="tab" data-toggle="tab"><?php echo $gameImages; ?></a>
+              </li>
+              <?php } ?>
+   
+              <!-- <li role="presentation" class="nav-item regular" style="background-color: lemonchiffon;">
+                <a class="nav-link" href="#documentsTab" aria-controls="documentsTab" role="tab" data-toggle="tab">Documents</a>
+              </li> -->
+              <?php if ($gameDocumentsVisibility == 0) { ?>
+              <li role="presentation" class="nav-item regular" style="background-color: <?php echo $gameDocumentsColorCode; ?>; margin:3px;">
+                <a role="presentation" class="nav-link" href="#documentsTab" aria-controls="documentsTab" role="tab" data-toggle="tab"><?php echo $gameDocuments; ?></a>
+              </li>
+              <?php } ?>
+
+              <li role="presentation" class="nav-item regular" style="background-color: #337ab7; margin:3px;">
+                <a class="nav-link" href="javascript:void(0);" aria-controls="" role="tab" data-toggle="tab" onclick="closeMe()">Close Window</a>
+              </li>
+              <script>
+                function closeMe() {
+                  window.opener = self;
+                  window.close();
+                  setTimeout (window.close, 1000);
+                }
+              </script>
+            </ul>
+
+            <!-- Older tabs -->
+					<!-- <ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active regular">
+              <a href="#generalTab" aria-controls="generalTab" role="tab" data-toggle="tab">Introduction</a>
+            </li>
+						<li role="presentation" class="regular">
+              <a href="#videosTab" aria-controls="videosTab" role="tab" data-toggle="tab">Videos</a>
+            </li>
+						<li role="presentation" class="regular">
+              <a href="#imagesTab" aria-controls="imagesTab" role="tab" data-toggle="tab">Images</a>
+            </li>
+						<li role="presentation" class="regular">
+              <a href="#documentsTab" aria-controls="documentsTab" role="tab" data-toggle="tab">Documents</a>
+            </li>
+					</ul> -->
 
 					<!-- Tab panes -->
 					<div class="tab-content">

@@ -1,0 +1,264 @@
+show user o/p in result page as HTML /// Pending
+add review, result in o/p page of last scenario for user in result page /// Pending
+
+fix bug game allocation-deAllocation date from ux-admin side /// Pending
+
+Scenario brannching bug/feature for gap in range /// Pending
+
+check user access bugs for admin users /// Pending
+
+check download data functionality for pages in ux-admin side /// Pending
+
+
+game navigation collaspable for user side /// Done
+collaboration feature add /// Done
+Game catetory dropdown add /// Done
+add auto initilize feature /// Done
+Remove scenario button from i/p page /// Done
+fix leaderboard popup height for different devices /// Done
+add badges for rank in leaderboard /// Done
+rename collaboration to P2P in enterprise section /// Done
+
+
+
+
+$sqlarea = "SELECT distinct a.Area_ID as AreaID, a.Area_Name as Area_Name, a.Area_BackgroundColor as BackgroundColor, a.Area_TextColor as TextColor, gas.Sequence_Order AS Area_Sequencing
+FROM GAME_LINKAGE l 
+INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
+INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
+INNER JOIN GAME_GAME g on l.Link_GameID=g.Game_ID
+INNER JOIN GAME_SCENARIO sc on sc.Scen_ID=l.Link_ScenarioID
+INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID
+LEFT JOIN GAME_AREA_SEQUENCE gas on a.Area_ID=gas.Sequence_AreaId
+LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
+WHERE ls.SubLink_Type=1 AND gas.Sequence_LinkId=".$linkid." AND l.Link_ID=".$linkid." ORDER BY gas.Sequence_Order";
+// echo $sqlarea; // exit();
+$area    = $functionsObj->ExecuteQuery($sqlarea);
+
+
+game name
+group name
+users data
+o/p comp name/alias
+o/p value
+
+team data associated with this // see this later
+
+
+https://www.linkedin.com/search/results/people/?facetGeoRegion=%5B%22us%3A0%22%2C%22us%3A70%22%2C%22ca%3A4876%22%2C%22gb%3A4573%22%5D&keywords=technical%20recruiter&page=25
+
+SELECT gg.Game_ID, gg.Game_Name, gus.US_ScenID FROM GAME_GAME gg LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID = gg.Game_ID WHERE gus.US_UserID = 1989 ORDER BY gg.Game_Name
+
+
+INSERT INTO GAME_VIEWS( `views_Game_ID`, `views_sublinkid`, `views_key` ) SELECT '90' AS views_Game_ID, gls.SubLink_ID AS views_sublinkid, IF( gv.views_id IS NULL, CONCAT( gls.SubLink_AreaName, '_', IF( gls.SubLink_SubCompID, CONCAT('subc', '_', gls.SubLink_SubCompID), CONCAT('comp', '_', gls.SubLink_CompID) ) ), 'not insert' ) AS views_key FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_VIEWS gv ON gv.views_sublinkid = gls.SubLink_ID AND gv.views_Game_ID = 90 WHERE gls.SubLink_LinkID IN( SELECT gl.Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_GameID = 90 ) AND gv.views_id IS NULL ORDER BY `gv`.`views_sublinkid`, gls.SubLink_LinkID, gls.SubLink_SubCompID ASC;
+
+php -i | grep cafile // command to get the ssl certificate file path
+php.ini file path for live server
+/opt/cpanel/ea-php56/root/etc // this path is viaible to phpinfo for php.ini file, but doesn't work
+/usr/local/lib/php.ini // this is the file which is actually loading 
+extension=php_fileinfo.dll
+
+
+* add a 404 Page
+/opt/cpanel/ea-php56/root/usr/lib64/php/modules/   // all the modules exist here, which are loaded in php.ini file
+
+UPDATE GAME_PERSONALIZE_OUTCOME SET Outcome_Description  = REPLACE(Outcome_Description , 'https://corporatesim.com/picvid/', '/images/picvid/');
+
+public $arrContextOptions = array(
+"ssl"=>array(
+"verify_peer"      => false,
+"verify_peer_name" => false,
+),
+);
+
+Input 20
+CkEditor 20
+CkEditor 10
+
+http://localhost/corp_simulation/ux-admin/linkage/linkedit/5935 === some error with the comp that is not found in formula, that exist in o/p side
+
+SELECT gl.Link_GameID,gl.Link_ID,gl.Link_ScenarioID,MAX(gl.Link_Order) FROM GAME_LINKAGE gl WHERE gl.Link_GameID IN (46,73,90,66) GROUP BY gl.Link_GameID ORDER BY gl.Link_GameID ASC
+
+
+
+1. check that user has game or not
+a. if not then ignore
+b. if yes then =>
+
+2. check that user has completed or not 
+c. if not completed then put 0 value
+d. if completed then put it's actual value 
+
+3. after that take the average
+
+4. calculate the formula
+
+SELECT gug.UG_ID,gug.UG_GameStartDate,gug.UG_GameEndDate,gus.US_ID,gus.US_LinkID,gus.US_CompletedOn FROM GAME_USERGAMES gug LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID = gug.UG_GameID AND gus.US_UserID = 1989 WHERE gug.UG_UserID = 1989 AND gug.UG_GameID = 48
+
+SELECT gug.UG_ID, gug.UG_GameStartDate, gug.UG_GameEndDate, gus.US_ID, gus.US_LinkID, gus.US_CompletedOn, gi.input_current FROM GAME_USERGAMES gug LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID = gug.UG_GameID AND gus.US_UserID = 1989 LEFT JOIN GAME_INPUT gi ON gi.input_user = 1989 AND gi.input_sublinkid = 14143 WHERE gug.UG_UserID = 1989 AND gug.UG_GameID = 148
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://www.linkedin.com/posts/jisha-bawa-11158925_we-are-hiring-for-the-below-positions-please-activity-6640495891952295936-GTb6
+
+
+
+
+
+
+
+<script>
+var chat_appid = '16621290d93b6c6';
+var chat_auth = '1407919a165ca7faa6299d4789333b363ed91a43';
+</script>
+<?php 
+
+	if(isset($_SESSION["userid"]) && $_SESSION["userid"] > 0) { ?>
+	 <script>
+		var chat_id = "<?php echo $_SESSION["userid"]; ?>";
+		var chat_name = "<?php echo $_SESSION["FullName"]; ?>"; 
+		var chat_link = "<?php echo $_SESSION["user_link"]; ?>"; //Similarly populate it from session for user's profile link if exists
+		var chat_avatar = "<?php echo $_SESSION["user_avatar"]; ?>"; //Similarly populate it from session for user's avatar src if exists
+		var chat_role = "<?php echo $_SESSION["user_role"]; ?>"; //Similarly populate it from session for user's role if exists
+		var chat_friends = '<?php echo $_SESSION["user_friends"]; ?>'; //Similarly populate it with user's friends' site user id's eg: 14,16,20,31
+		</script>
+	<?php } ?>
+<script>
+(function() {
+    var chat_css = document.createElement('link'); chat_css.rel = 'stylesheet'; chat_css.type = 'text/css'; chat_css.href = 'https://fast.cometondemand.net/'+chat_appid+'x_xchat.css';
+    document.getElementsByTagName("head")[0].appendChild(chat_css);
+    var chat_js = document.createElement('script'); chat_js.type = 'text/javascript'; chat_js.src = 'https://fast.cometondemand.net/'+chat_appid+'x_xchat.js'; var chat_script = document.getElementsByTagName('script')[0]; chat_script.parentNode.insertBefore(chat_js, chat_script);
+})();
+</script>
+
+ ( ( comp_3804 + comp_3805 + comp_3806 ) / 3 ) * 100
+
+ 3804,3805,3806
+
+ SELECT * FROM `GAME_INPUT` WHERE input_user = 1989 AND (input_sublinkid IN(SELECT SubLink_ID FROM `GAME_LINKAGE_SUB` WHERE SubLink_CompID IN (3804,3805,3806) OR input_sublinkid in(16785, 16795)) )
+
+
+http://corporatesim.com/picvid/retailmarginskiff.png
+
+https://corporatesim.com/picvid/Reubens/Scenario/slides/Slide6-img.PNG
+
+http://corpsim.in/corporatesim/picvid/
+
+1. Replace 'https://corporatesim.com' with 'http://corpsim.in';
+2. Replace 'corporatesim.com/picvid' with 'corpsim.in/corporatesim/picvid';
+
+
+UPDATE GAME_LINKAGE_SUB SET SubLink_Details = REPLACE ( SubLink_Details, 'https://corporatesim.com/picvid', 'http://corpsim.in/corporatesim/picvid' );
+
+UPDATE GAME_LINKAGE_SUB SET SubLink_Details = REPLACE ( SubLink_Details, 'http://corporatesim.com/picvid', 'http://corpsim.in/corporatesim/picvid' );
+
+UPDATE GAME_LINKAGE_SUB SET SubLink_Details = REPLACE ( SubLink_Details, 'https://www.corporatesim.com/picvid', 'http://corpsim.in/corporatesim/picvid' );
+
+UPDATE GAME_LINKAGE_SUB SET SubLink_InputModeTypeValue = REPLACE ( SubLink_InputModeTypeValue, 'https://corporatesim.com/', 'http://corpsim.in/corporatesim/' );
+
+UPDATE GAME_PERSONALIZE_OUTCOME SET Outcome_Description = REPLACE ( Outcome_Description, 'https://corporatesim.com/', 'http://corpsim.in/corporatesim/' );
+
+INSERT INTO GAME_USERGAMES( UG_UserID, UG_GameID, UG_ParentId, UG_SubParentId, UG_GameStartDate, UG_GameEndDate ) SELECT gsu.User_id, 128, User_ParentId, User_SubParentId, '2020-11-29 08:45:00', '2020-11-29 23:59:00' FROM GAME_SITE_USERS gsu WHERE gsu.User_UploadCsv = 1606539932
+
+
+///////////// update end date for users, for particular game
+UPDATE `GAME_USERGAMES` SET `UG_GameEndDate` = '2020-12-06 18:30:00' WHERE UG_UserID IN (SELECT User_id FROM `GAME_SITE_USERS` WHERE User_UploadCsv = 1607063956) AND UG_GameID = 154
+
+///////////// needtto verify once before running, update end date for those users who has not complted yet
+UPDATE `GAME_USERGAMES` SET `UG_GameEndDate` = '2020-12-06 18:30:00' WHERE UG_UserID IN (SELECT UG_UserID FROM `GAME_USERGAMES` LEFT JOIN GAME_USERSTATUS gus ON gus.US_UserID=UG_UserID WHERE UG_UserID IN( SELECT User_id FROM `GAME_SITE_USERS` WHERE User_UploadCsv = 1607063956 ) AND gus.US_ID IS NULL) AND UG_GameID = 154
+
+
+DELETE FROM GAME_USERGAMES WHERE UG_UserID IN( SELECT User_id FROM GAME_SITE_USERS WHERE User_UploadCsv = 1598005673 )
+
+
+UPDATE GAME_SITE_USER_REPORT_NEW SET report_status = 2
+
+UPDATE GAME_LINKAGE_SUB SET SubLink_Details = REPLACE ( SubLink_Details, 'http://', 'https://' );
+
+
+UPDATE GAME_GAME SET Game_Message = REPLACE ( Game_Message, 'http://', 'https://' );
+UPDATE GAME_DOMAIN SET Domain_Name = REPLACE ( Domain_Name, 'http://', 'https://' );
+
+DELETE FROM GAME_VIEWS WHERE views_sublinkid NOT IN( SELECT SubLink_ID FROM GAME_LINKAGE_SUB );
+DELETE FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID NOT IN (SELECT Link_ID FROM GAME_LINKAGE);
+
+ALTER TABLE GAME_CHART ADD COLUMN Chart_UpdateDate DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP AFTER Chart_CreateDate;
+
+CREATE TABLE GAME_JSGAME( Js_id INT PRIMARY KEY AUTO_INCREMENT, Js_Name VARCHAR(250) COMMENT "Name of JS game", Js_GameId INT COMMENT "This is game id from game_game table", Js_ScenId INT COMMENT "This is scenario id from game_scenario table", Js_LinkId INT COMMENT "This is link id for game and scenario", Js_Element VARCHAR(250) COMMENT "this is the default elements of game, described in js code", Js_Alias VARCHAR(250) COMMENT "alias for the js game elements", Js_SublinkId LONGTEXT DEFAULT NULL COMMENT 'This is the mapped sublink id, which contains component id', Js_CreatedOn DATETIME DEFAULT CURRENT_TIMESTAMP, Js_CreatedBy INT DEFAULT NULL, Js_UpdatedOn DATETIME DEFAULT NULL, Js_UpdatedBy INT DEFAULT NULL, Js_Status TINYINT DEFAULT 0 COMMENT "0-Active, 1-Deactive" );
+
+ALTER TABLE `GAME_LINKAGE` ADD `Link_JsGameScen` TINYINT NOT NULL DEFAULT '0' COMMENT '0-Default, 1-JS Game Scenario, and can have only one area' AFTER `Link_BackToIntro`;
+
+CREATE TABLE GAME_USER_JSGAME_DATA( JSDATA_Id INT AUTO_INCREMENT PRIMARY KEY, JSDATA_JsGameId INT DEFAULT NULL COMMENT "This is js game id", JSDATA_JsGameName INT DEFAULT NULL COMMENT "This is js game name", JSDATA_GameId INT DEFAULT NULL COMMENT "This is simulation game id", JSDATA_ScenId INT DEFAULT NULL COMMENT "This is scenario id", JSDATA_LinkId INT DEFAULT NULL COMMENT "This is simulation game and scenario link id", JSDATA_UserId INT DEFAULT NULL COMMENT "This is User id", JSDATA_GameData LONGTEXT DEFAULT NULL COMMENT "This contains all the js game input data of the user, in json format", JSDATA_CreatedOn DATETIME DEFAULT CURRENT_TIMESTAMP )
+
+ALTER TABLE `GAME_GAME` CHANGE `Game_Delete` `Game_Delete` INT(11) NOT NULL COMMENT '0-Active, 1-Deactive';
+ALTER TABLE `GAME_SCENARIO` CHANGE `Scen_InputButton` `Scen_InputButton` TINYINT(4) NULL DEFAULT '1' COMMENT '0-Hidden, 1-Show';
+ALTER TABLE GAME_FORMULAS ADD COLUMN formula_updatedOn DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP AFTER date_time
+
+To check the views of game (replace game id)      ////////////////////
+
+SELECT * FROM GAME_VIEWS gv WHERE gv.views_Game_ID=25;
+
+SELECT gls.SubLink_ID, gls.SubLink_LinkID, gls.SubLink_AreaID, gls.SubLink_AreaName, gls.SubLink_CompID, gls.SubLink_CompName, gls.SubLink_SubCompID, gls.SubLink_SubcompName, gv.views_key,gv.views_id FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_VIEWS gv ON gv.views_sublinkid=gls.SubLink_ID WHERE gls.SubLink_LinkID IN( SELECT gl.Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_GameID = 25 );
+         ///////////////////      end of listing game views    ////////
+/* run the below query to live server */
+
+set global sql_mode='';
+<button onclick = "return $('#submit').trigger('click');" class="btn btn-danger" >Submit Input</button>
+
+register / login
+getCatelague
+addToCart
+removeFromCart
+purchase
+pay
+ordersummary
+registerUserOnCorporateSim
+PlayNow
+
+fname / lname / email / username / phone / password / re-password       //////////// registration
+email / password          ///////////// login
+
+ALTER TABLE GAME_INPUT ADD input_updatedOn DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP AFTER input_caretedOn;
+ALTER TABLE GAME_LINKAGE ADD Link_UpdatedOn DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE `GAME_LINKAGE_TIMER` CHANGE `timer` `timer` DECIMAL(10,3) NOT NULL;
+ALTER TABLE `GAME_LINKAGE` CHANGE `Link_Min` `Link_Min` DECIMAL(10,3) NOT NULL;
+UPDATE GAME_LINKAGE_TIMER glt INNER JOIN GAME_LINKAGE gl ON gl.Link_ID = glt.linkid SET glt.timer = ROUND( ( gl.Link_Hour * 60 + gl.Link_Min ), 2 )
+
+
+
+CREATE TABLE GAME_LINK_CHANGES( Glc_Id INT AUTO_INCREMENT PRIMARY KEY, Glc_GameId INT COMMENT 'this is the game id', Glc_ScenId INT COMMENT 'this is the scenario id', Glc_UserName VARCHAR(250), Glc_Hour VARCHAR(60), Glc_Min VARCHAR(120), Glc_Json LONGTEXT COMMENT 'This holds all the parameter of scenario linkage, keep it for later testing purpose', Glc_CreatedOn DATETIME DEFAULT CURRENT_TIMESTAMP, Glc_CreatedBy INT COMMENT "This is admin user id", Glc_Status VARCHAR(60) DEFAULT NULL COMMENT 'added or changed/updated' )
+
+////////////////////////////// To show the game link changes
+SELECT gg.Game_Name, gs.Scen_Name, glc.* FROM GAME_LINKAGE gl JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Link_ScenarioID JOIN GAME_GAME gg ON gg.Game_ID = gl.Link_GameID JOIN GAME_LINK_CHANGES glc ON glc.Glc_GameId = glc.Glc_GameId AND glc.Glc_ScenId = gl.Link_ScenarioID WHERE gl.Link_ScenarioID = 87 ORDER BY glc.Glc_Id
+
+
+CREATE TABLE GAME_APP_LOG( Gal_Id INT AUTO_INCREMENT PRIMARY KEY, Gal_UserId INT, Gal_UserData VARCHAR(255) COMMENT "This holds the fname, lname, username and email", Gal_GameId INT, Gal_ScenId INT, Gal_LinkId INT, Gal_CompId INT, Gal_CompName VARCHAR(160), Gal_SubCompId INT, Gal_SubCompName VARCHAR(160), Gal_ErrorMsg LONGTEXT, Gal_CustomErrorMsg LONGTEXT, Gal_CreatedOn DATETIME DEFAULT CURRENT_TIMESTAMP )
+
+SELECT gg.Game_Name, gs.Scen_Name, Glc_UserName, glc.Glc_Hour, glc.Glc_Min, glc.Glc_Json, glc.Glc_CreatedOn, glc.Glc_Status, ((glc.Glc_Hour * 60) + glc.Glc_Min) AS TotalMinutes FROM GAME_LINK_CHANGES glc LEFT JOIN GAME_GAME gg ON gg.Game_ID = glc.Glc_GameId LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = Glc_ScenId ORDER BY gg.Game_Name, glc.Glc_CreatedOn
+
+SELECT gg.Game_Name, gs.Scen_Name, gl.Link_Hour, gl.Link_Min, glt.timer, CONCAT( gsu.User_fname, ' ', gsu.User_lname ) AS userName, ( (gl.Link_Hour * 60) + gl.Link_Min ) AS CurrentTImeInMin FROM GAME_LINKAGE_TIMER glt LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_id = glt.userid LEFT JOIN GAME_LINKAGE gl ON gl.Link_ID = glt.linkid LEFT JOIN GAME_GAME gg ON gg.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Link_ScenarioID WHERE gsu.User_id IN( 12056, 12057, 12058, 12059, 12060, 12061, 12062, 12063, 7574, 7575 ) AND gg.Game_Name IS NOT NULL ORDER BY gsu.User_id, gg.Game_Name
+
+
+SELECT gg.Game_Name,gs.Scen_Name,glt.*, concat(gsu.User_fname,' ', gsu.User_lname, ' (', gsu.User_email,')') as UserData FROM `GAME_LINKAGE_TIMER` glt LEFT JOIN GAME_LINKAGE gll ON gll.Link_ID=linkid LEFT JOIN GAME_GAME gg ON gg.Game_ID=gll.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID=gll.Link_ScenarioID LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_id=userid WHERE userid IN( 1989, 12056, 12057, 12058, 12059, 12060, 12061, 12062, 12063, 7574, 7575,4054,12054,9846 ) AND linkid IN( SELECT gl.Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_GameID IN(48, 47, 69, 154, 155) AND gl.Link_Status = 1 ) ORDER BY userid, gg.Game_Name, gs.Scen_Name
+
+SELECT * FROM `GAME_USERSTATUS` WHERE US_UserID IN (SELECT gsu.User_id FROM GAME_SITE_USERS gsu WHERE gsu.User_ParentId=385)
+
+
+https://www.youtube.com/watch?v=I0AQW2T3HPI
+https://www.fullstack.cafe/blog/react-native-interview-questions
+https://www.bestinterviewquestion.com/react-native-interview-questions
+https://www.knowledgehut.com/interview-questions/react-native
+https://www.javatpoint.com/react-native-interview-questions
+
+ALTER TABLE `game_users` ADD `user_PasswordRequest` TINYINT NULL DEFAULT '0' COMMENT '0-Not Requested For Password Reset, 1-Requested For Password Reset' AFTER `user_AccountVerification`;

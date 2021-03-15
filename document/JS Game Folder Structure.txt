@@ -1,0 +1,9 @@
+Main folder -> jsGame
+------------------------------
+
+code         -> stores all game .js files
+common       -> have common used files
+gameData     -> stores game data like images
+jsGameFiles  -> stores game files
+
+

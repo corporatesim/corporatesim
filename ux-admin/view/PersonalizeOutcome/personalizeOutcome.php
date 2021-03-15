@@ -59,6 +59,34 @@
     display:none;
   }
 </style>
+
+  <!--========================-->
+  <!-- Start of Modal -->
+  <div class="modal fade bs-example-modal-lg" id="modal_Details" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h4 class="modal-title text-dark" id="model_Details_Header"></h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <p id="model_Details_msg"></p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- end of Modal -->
+  <!--========================-->
+
 <div class="row">
   <div class="col-lg-12">
     <h1 class="page-header">
@@ -73,6 +101,7 @@
   </h1>
 </div>
 </div>
+
 <div class="row">
   <div class="col-sm-12">
     <ul class="breadcrumb">
@@ -82,14 +111,17 @@
     </ul>
   </div>
 </div>
+
 <!-- DISPLAY ERROR MESSAGE -->
-<?php  if(!empty($_SESSION['tr_msg'])) { ?>
-  <div class="alert-success alert"><?php echo $_SESSION['tr_msg']; ?></div>
-<?php } ?>
-<?php  if(!empty($_SESSION['er_msg'])) { ?>
-  <div class="alert-danger alert"><?php echo $_SESSION['er_msg']; ?></div>
+<?php 
+  if(!empty($_SESSION['tr_msg'])) { ?>
+    <div class="alert-success alert"><?php echo $_SESSION['tr_msg']; ?></div>
+<?php }
+  if(!empty($_SESSION['er_msg'])) { ?>
+    <div class="alert-danger alert"><?php echo $_SESSION['er_msg']; ?></div>
 <?php } ?>
 <!-- DISPLAY ERROR MESSAGE END -->
+
 <style>
   span.alert-danger {
     background-color: #ffffff;
@@ -129,8 +161,8 @@
   </div>
   <button type="submit" name="download_excel" id="download_excel" class="btn btn-primary" value="Download"> Download </button>
 </div>
-
 </div>
+
 <div class="col-md-6">
   <div class="col-sm-12">
     <div class="pull-right legend">
@@ -150,6 +182,7 @@
 </div>
 </form>
 <br>
+
 <div class="row">
   <div class="panel panel-default" id="loader">
     <div class="panel-heading">
@@ -182,7 +215,13 @@
                 <td><?php echo $row->Comp_Name;?></td>
                 <td><?php echo $row->Outcome_MinVal;?></td>
                 <td><?php echo $row->Outcome_MaxVal;?></td>
-                <td><?php echo $row->Outcome_Description;?></td>
+                <td>
+                  <!-- <?php echo $row->Outcome_Description;?> -->
+                  <!-- open Model to show details -->
+                  <button type="button" class="btn btn-link" title="" data-toggle="tooltip" data-original-title="View Description" data-game="<?php echo $row->Game_Name; ?>" data-scenario="<?php echo $row->Scen_Name; ?>" data-outputcomponent="<?php echo $row->Comp_Name; ?>" data-min="<?php echo $row->Outcome_MinVal; ?>" data-max="<?php echo $row->Outcome_MaxVal; ?>" data-description='<?php echo $row->Outcome_Description; ?>' onclick="callDescription(this)">
+                    <i class="fa fa-eye text-info fa-2x"></i>
+                  </button>
+                </td>
                 <td><?php echo $row->Outcome_Order;?></td>
                 <td><?php echo $row->Outcome_Name;?></td>
                 <td><?php echo ($row->Outcome_FileName)?"<img src='".site_root.'ux-admin/upload/Badges/'.$row->Outcome_FileName."' alt='No Image' width='50' height='50'>":'No Image';?></td>
@@ -205,14 +244,31 @@
   </div>
   <div class="clearfix"></div>
   <!-- end of data table -->
-  <?php 
-  if($_SESSION['tr_msg'])
-  {
-    unset($_SESSION['tr_msg']);
-  }
-  if($_SESSION['er_msg'])
-  {
-    unset($_SESSION['er_msg']);
-  }
+
+  <?php
+    // unsetting session variable if it sets
+    if ($_SESSION['tr_msg']) {
+      unset($_SESSION['tr_msg']);
+    }
+    if ($_SESSION['er_msg']) {
+      unset($_SESSION['er_msg']);
+    }
   ?>
 
+<script>
+  // Showing Description on pop up
+  function callDescription(e){
+    var gameName        = $(e).data('game');
+    var scenario        = $(e).data('scenario');
+    var outputComponent = $(e).data('outputcomponent');
+    var minValue        = $(e).data('min');
+    var maxValue        = $(e).data('max');
+    var description     = $(e).data('description');
+
+
+    // Bootstrap Model
+    $('#model_Details_Header').html('Game- '+gameName+'<br />Scenario- '+scenario+'<br />Output Component- '+outputComponent+'<br >Range ('+minValue+' to '+maxValue+')');
+    $('#model_Details_msg').html(description);
+    $('#modal_Details').modal('show');
+  }
+</script>

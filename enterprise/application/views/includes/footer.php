@@ -1,4 +1,30 @@
-	<div id="cnf_del_modal" class="modal fade" role="dialog">
+	<!--========================-->
+  <!-- Start of Modal -->
+  <div class="modal fade" id="modal_Details" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h4 class="modal-title text-dark" id="model_Details_Header"></h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <p id="model_Details_msg"></p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- end of Modal -->
+  <!--========================-->
+  <div id="cnf_del_modal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<!-- Modal content-->
 			<div class="modal-content">
@@ -22,13 +48,14 @@
 	</div>
 
 	<div class="footer-wrap bg-white pd-20 mb-20 border-radius-5 box-shadow">
-		<a href="https://www.corporatesim.com/" target="_blank">
+		<a href="https://www.corpsim.in/" target="_blank">
 			Copyright &copy; Humanlinks Learning Pvt. Ltd.- All rights reserved
 		</a>
 	</div>
   
 	</div>
 	</div>
+  
 	<script src="<?php echo base_url('common/vendors/scripts/script.js?v=') . file_version_cs; ?>"></script>
 	<script src="<?php echo base_url('common/src/plugins/datatables/media/js/jquery.dataTables.min.js?v=') . file_version_cs; ?>"></script>
 	<script src="<?php echo base_url('common/src/plugins/datatables/media/js/dataTables.bootstrap4.js?v=') . file_version_cs; ?>"></script>
@@ -48,24 +75,29 @@
 	<script src="<?php echo base_url('common/'); ?>src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
 	<script src="<?php echo base_url('common/'); ?>src/plugins/highcharts-6.0.7/code/highcharts-more.js"></script>
 
-	<!-- <?php // if($this->uri->segment(2) == 'Competence' || $this->uri->segment(3) == 'competenceReport') { 
-				?> -->
 	<!-- adding below 2 links for exporting chart images -->
 	<script src="<?php echo base_url('common/'); ?>src/plugins/highcharts-6.0.7/code/modules/exporting.js"></script>
 	<script src="<?php echo base_url('common/'); ?>src/plugins/highcharts-6.0.7/code/modules/export-data.js"></script>
 
 	<script src="<?php echo base_url('common/'); ?>src/plugins/highcharts-6.0.7/code/modules/accessibility.js"></script>
-	<!-- <?php //} 
-				?> -->
+  <script src="<?php echo base_url('common/'); ?>src/plugins/highcharts-6.0.7/code/highcharts-3d.js"></script>
+
+  <script src="<?php echo base_url('common/'); ?>src/plugins/highcharts-6.0.7/code/modules/treemap.js"></script>
 
 	<!-- datepicker js -->
 	<script src="<?php echo base_url('common/'); ?>datetimePicker/js/datepicker.min.js"></script>
 	<!-- Include English language -->
 	<script src="<?php echo base_url('common/'); ?>datetimePicker/js/i18n/datepicker.en.js"></script>
+  <!-- CK Editor -->
+  <script src="<?php echo base_url('common/ckeditor/ckeditor.js?v=').file_version_cs; ?>" type="text/javascript"></script>
+
 	<!-- Show datatable -->
 	<script type="text/javascript">
 		$(document).ready(function() {
       deleteRowModel();
+      // setTimeout(function() {
+      //   deleteRowModel();
+      // }, 500);
 			makeTableDataTable();
 
 			$(document).ajaxStart(function() {
@@ -96,6 +128,7 @@
 					'width': '90%'
 				});
 			}, 1000);
+
 			// to manage domain/sub-domain field accordingly
 			// $('input[name=Sub-Domain]').on('change',function(){
 			// 	if($(this).val() == 'Specific')
@@ -106,7 +139,7 @@
 			// 	else
 			// 	{
 			// 		$('#addDomainField').empty();
-			// 		$('#addDomainField').append('<input type="text" name="commonDomain" id="commonDomain" class="form-control" value="" placeholder="http://abcExample.corporatesim.com">');
+			// 		$('#addDomainField').append('<input type="text" name="commonDomain" id="commonDomain" class="form-control" value="" placeholder="http://abcExample.corpsim.in">');
 			// 	}
 			// });
 			// show domain name
@@ -123,11 +156,11 @@
 							// console.log(result);
 							if (result == 'success') {
 								$('#showDomain').empty();
-								$('#showDomain').html('Your Domain will be: <span class="alert-success"><b>' + domainName + '.corporatesim.com</b></span>');
+								$('#showDomain').html('Your Domain will be: <span class="alert-success"><b>' + domainName + '.corpsim.in</b></span>');
 								$('#showDomain').append('<input type="hidden" name="allow" value="allow">');
 							} else {
 								$('#showDomain').empty();
-								$('#showDomain').html('Domain: <span class="alert-danger">"<b>' + domainName + '.corporatesim.com</b>" already taken. Please try different domain.</span>');
+								$('#showDomain').html('Domain: <span class="alert-danger">"<b>' + domainName + '.corpsim.in</b>" already taken. Please try different domain.</span>');
 							}
 						}
 					})
@@ -258,13 +291,36 @@
 			// to manage allocate and de-allocate the games
 			$('.allocateDeallocate').each(function() {
 				$(this).on('click', function() {
-					var gamedata = $(this).data('gamedata');
+					var gamedata  = $(this).data('gamedata');
+          //console.log(gamedata);
 					var startdate = $(this).prev().data('startdate');
-					var enddate = $(this).prev().data('enddate');
-					// console.log(startdate+' and '+enddate);
+					var enddate   = $(this).prev().data('enddate');
+					//console.log(startdate+' and '+enddate);
 					showPopup(gamedata, startdate, enddate);
 				});
 			});
+
+      // to show cards details on popup
+      $('.showCardDetails').each(function() {
+        $(this).on('click', function() {
+          var gamedata  = $(this).data('gamedata');
+          //console.log(gamedata);
+          
+          var result = triggerAjax("<?php echo base_url('Ajax/getCardData/'); ?>" + gamedata);
+          //console.log(result);
+          if (result.status == 200) {
+            Swal.fire({
+              title: result.Game_Name,
+              html: result.Game_ProcessOwner_Details,
+
+              showConfirmButton: false,
+              cancelButtonColor: '#d32f2f',
+              showCancelButton: true,
+              cancelButtonText: "Close",
+            });
+          } 
+        });
+      });
 
 			selectAll();
 			toggleIcons();
@@ -272,6 +328,10 @@
 		});
 		// document.ready function ends here
 
+    function callOnClick(e){
+      var gameID      = $(e).data('gameID');
+          console.log(gameID);
+    }
 		function selectAll() {
 			$('#select_all').click(function(i, e) {
 				if ($(this).is(':checked')) {
@@ -419,7 +479,7 @@
 
 		function listCompetence() {
 			var table = '<table class="stripe hover multiple-select-row data-table-export">';
-			var tableHead = '<thead><tr><th>ID</th><th>Enterprize</th><th>Factor Type</th><th>sub-factor</th><th>Description</th><th class="datatable-nosort noExport">Action</th></tr></thead>';
+			var tableHead = '<thead><tr><th>ID</th><th>Enterprize</th><th>Factor Type</th><th>sub-factor</th><th>Description</th><th>Report Creator</th><th class="datatable-nosort noExport">Action</th></tr></thead>';
 			var tableBody = '<tbody>';
 			var ajaxWhere = {
 				'Compt_Delete': '0'
@@ -453,8 +513,9 @@
 							$PerformanceType = 'Simulated Performance';
 					}
 
-					tableBody += '<tr id="parent__' + competenceList.data[i].Compt_Id + '"> <td>' + eval(i + 1) + '</td> <td>' + competenceList.data[i].Enterprise_Name + '</td> <td>' + $PerformanceType + '</td> <td id="' + competenceList.data[i].Compt_Id + '__Compt_Name" class="editable">' + competenceList.data[i].Compt_Name + '</td> <td id="' + competenceList.data[i].Compt_Id + '__Compt_Description" class="editable">' + competenceList.data[i].Compt_Description + '</td> <td style="width:70px;"><a href="javascript:void(0);" data-function="editCompetence" data-toggle="tooltip" title="Edit" data-pid="' + competenceList.data[i].Compt_Id + '" class="editIcon" id="' + competenceList.data[i].Compt_Id + '__edit"> <i class="fa fa-pencil"></i> Edit </a> <a href="javascript:void(0);" data-function="editCompetence" data-toggle="tooltip" title="Save" data-pid="' + competenceList.data[i].Compt_Id + '" class="saveIcon d-none" id="' + competenceList.data[i].Compt_Id + '__save"> <i class="fa fa-save"></i> Save </a> <br /><a href="javascript:void(0);" data-col_table="Compt_Delete__items__Compt_Id__listCompetence" data-toggle="tooltip" title="Delete" data-pid="' + competenceList.data[i].Compt_Id + '" class="deleteIcon"> <i class="fa fa-trash"></i> Delete </a></td></tr>'
+					tableBody += '<tr id="parent__' + competenceList.data[i].Compt_Id + '"> <td>' + eval(i + 1) + '</td> <td>' + competenceList.data[i].Enterprise_Name + '</td> <td>' + $PerformanceType + '</td> <td id="' + competenceList.data[i].Compt_Id + '__Compt_Name" class="editable">' + competenceList.data[i].Compt_Name + '</td> <td id="' + competenceList.data[i].Compt_Id + '__Compt_Description" class="editable">' + competenceList.data[i].Compt_Description + '</td> <!-- Conditions Text --><td><a href="Competence/itemConditionText/' + competenceList.data[i].Compt_Id + '" title="Item Conditions Text"><i class="fa fa-book"></i></a></td> <td style="width:70px;"><a href="javascript:void(0);" data-function="editCompetence" data-toggle="tooltip" title="Edit" data-pid="' + competenceList.data[i].Compt_Id + '" class="editIcon" id="' + competenceList.data[i].Compt_Id + '__edit"> <i class="fa fa-pencil"></i> Edit </a> <a href="javascript:void(0);" data-function="editCompetence" data-toggle="tooltip" title="Save" data-pid="' + competenceList.data[i].Compt_Id + '" class="saveIcon d-none" id="' + competenceList.data[i].Compt_Id + '__save"> <i class="fa fa-save"></i> Save </a> <br /><a href="javascript:void(0);" data-col_table="Compt_Delete__items__Compt_Id__listCompetence" data-toggle="tooltip" title="Delete" data-pid="' + competenceList.data[i].Compt_Id + '" class="deleteIcon"> <i class="fa fa-trash"></i> Delete </a></td></tr>'
 				});
+
 				table += tableHead + tableBody + '</tbody>' + '</table>';
 				$('#addTable').html(table);
 				// console.log(table);
@@ -512,7 +573,9 @@
       }
       makeTableDataTable();
       toggleIcons();
-      deleteRowModel();
+      setTimeout(function() {
+        deleteRowModel();
+      }, 500);
       //deleteRow();
     }
 
@@ -541,15 +604,27 @@
 
     function listCampus(){
       var table = '<table class="stripe hover multiple-select-row data-table-export">';
-      var tableHead = '<thead><tr><th>ID</th><th>Campus Name</th> <th>Address</th> <th>Email</th> <th>Contact</th> <th class="datatable-nosort noExport">Action</th></tr></thead>';
+      var tableHead = '<thead><tr><th>ID</th><th>Campus Name</th> <th>Type</th> <th>Address</th> <th>Email</th> <th>Contact</th> <th class="datatable-nosort noExport">Action</th></tr></thead>';
       var tableBody = '<tbody>';
       
       var campus = triggerAjax("<?php echo base_url('Ajax/listCampus'); ?>");
       
       if (campus.status == 200){
         $.each(campus.data, function(i, e) {
-        
-          tableBody += '<tr id="parent__'+ campus.data[i].UC_ID +'"> <!-- ID --><td>'+ eval(i + 1) +'</td> <!-- campus Name --><td id="'+ campus.data[i].UC_Name +'__Campus_Name" class="editable">'+ campus.data[i].UC_Name +'</td> <!-- Address --><td>'+ campus.data[i].UC_Address +'</td> <!-- E-mail --><td>'+ campus.data[i].UC_Email +'</td> <!-- Phone Number --><td>'+ campus.data[i].UC_Contact +'</td> <!-- Action --><td><!-- edit icon --><a href="javascript:void(0);" data-function="editCampus" data-toggle="tooltip" title="Edit" data-pid="'+ campus.data[i].UC_ID +'" class="editIcon" id="'+ campus.data[i].UC_ID +'__edit"><i class="fa fa-pencil">_Edit</i></a><!-- save icon --><a href="javascript:void(0);" data-function="editCampus" data-toggle="tooltip" title="Save" data-pid="'+ campus.data[i].UC_ID +'" class="saveIcon d-none" id="'+ campus.data[i].UC_ID +'__save"><i class="fa fa-save">_Save</i></a>&nbsp;&nbsp;<!-- <br /> --><!-- delete icon --><a href="javascript:void(0);" class="dl_btn" id="'+ campus.data[i].UC_ID +'" title="Delete"><i class="fa fa-trash">_Delete</i></a></td></tr>';
+          //setting Campus Type
+          var campusType = '';
+          switch (campus.data[i].UC_Type) {
+            case '1':
+              campusType = 'Management';
+              break;
+            case '2':
+              campusType = 'Engineering';
+              break;
+            default:
+              campusType = 'Other';
+          }
+          
+          tableBody += '<tr id="parent__'+ campus.data[i].UC_ID +'"> <!-- ID --><td>'+ eval(i + 1) +'</td> <!-- campus Name --><td id="'+ campus.data[i].UC_Name +'__Campus_Name" class="editable">'+ campus.data[i].UC_Name +'</td> <!-- Type --> <td>'+campusType+'</td> <!-- Address --><td>'+ campus.data[i].UC_Address +'</td> <!-- E-mail --><td>'+ campus.data[i].UC_Email +'</td> <!-- Phone Number --><td>'+ campus.data[i].UC_Contact +'</td> <!-- Action --><td><!-- edit icon --><a href="javascript:void(0);" data-function="editCampus" data-toggle="tooltip" title="Edit" data-pid="'+ campus.data[i].UC_ID +'" class="editIcon" id="'+ campus.data[i].UC_ID +'__edit"><i class="fa fa-pencil">_Edit</i></a><!-- save icon --><a href="javascript:void(0);" data-function="editCampus" data-toggle="tooltip" title="Save" data-pid="'+ campus.data[i].UC_ID +'" class="saveIcon d-none" id="'+ campus.data[i].UC_ID +'__save"><i class="fa fa-save">_Save</i></a>&nbsp;&nbsp;<!-- <br /> --><!-- delete icon --><a href="javascript:void(0);" class="dl_btn" id="'+ campus.data[i].UC_ID +'" title="Delete"><i class="fa fa-trash">_Delete</i></a></td></tr>';
 
         });
         table += tableHead + tableBody + '</tbody>' + '</table>';
@@ -562,7 +637,9 @@
       }
       makeTableDataTable();
       toggleIcons();
-      deleteRowModel();
+      setTimeout(function() {
+        deleteRowModel();
+      }, 500);
       //deleteRow();
     }
 
@@ -758,19 +835,20 @@
 			// if logged-in as superAdmin then show 4 options to allocate/de-allocate games
 			<?php if ($this->session->userdata('loginData')['User_Role'] == 'superadmin') { ?>
 				Swal.fire({
-					title: 'Allocate/De-Allocate Game To',
+					title: 'Allocate/De-Allocate Card To',
 					html: '<a href="<?php echo base_url('AllocateDeallocateGame/index/'); ?>' + gamedata + '/' + btoa('enterprise') + '" id="enterprise" class="btn btn-outline-primary">' +
-						'Enterprise' +
+						'Enterprize' +
 						'</a><br/>' +
-						'<a href="<?php echo base_url('AllocateDeallocateGame/index/'); ?>' + gamedata + '/' + btoa('subEnterprise') + '" id="subEnterprise" class="btn btn-outline-info">' +
-						'Subenterprise' +
-						'</a><br/>' +
+						// '<a href="<?php echo base_url('AllocateDeallocateGame/index/'); ?>' + gamedata + '/' + btoa('subEnterprise') + '" id="subEnterprise" class="btn btn-outline-info">' +
+						// 'Subenterprize' +
+						// '</a><br/>' +
 						'<a href="<?php echo base_url('AllocateDeallocateGame/index/'); ?>' + gamedata + '/' + btoa('entErpriseUsers') + '" id="entErpriseUsers" class="btn btn-outline-warning">' +
-						'Enterprise Users' +
-						'</a><br/>' +
-						'<a href="<?php echo base_url('AllocateDeallocateGame/index/'); ?>' + gamedata + '/' + btoa('subEnterpriseUsers') + '" id="subEnterpriseUsers" class="btn btn-outline-dark">' +
-						'Subenterprise Users' +
-						'</a>',
+						'Enterprize Users' +
+            '</a><br/>',
+						// '</a><br/>' +
+						// '<a href="<?php echo base_url('AllocateDeallocateGame/index/'); ?>' + gamedata + '/' + btoa('subEnterpriseUsers') + '" id="subEnterpriseUsers" class="btn btn-outline-dark">' +
+						// 'Subenterprize Users' +
+						// '</a>',
 					showConfirmButton: false,
 					showCancelButton: true,
 					cancelButtonColor: '#dc3545',
@@ -779,16 +857,17 @@
 			// if logged-in as enterpruse then show 3 options to allocate/de-allocate games
 			<?php if ($this->session->userdata('loginData')['User_Role'] == 1) { ?>
 				Swal.fire({
-					title: 'Allocate/De-Allocate Game To',
+					title: 'Allocate/De-Allocate Card To',
 					html: '<a href="<?php echo base_url('AllocateDeallocateGame/index/'); ?>' + gamedata + '/' + btoa('entErpriseUsers') + '/' + btoa(startdate) + '/' + btoa(enddate) + '" id="entErpriseUsers" class="btn btn-outline-warning">' +
 						'My Users' +
-						'</a><br/>' +
-						'<a href="<?php echo base_url('AllocateDeallocateGame/index/'); ?>' + gamedata + '/' + btoa('subEnterprise') + '/' + btoa(startdate) + '/' + btoa(enddate) + '" id="subEnterprise" class="btn btn-outline-info">' +
-						'Subenterprise' +
-						'</a><br/>' +
-						'<a href="<?php echo base_url('AllocateDeallocateGame/index/'); ?>' + gamedata + '/' + btoa('subEnterpriseUsers') + '/' + btoa(startdate) + '/' + btoa(enddate) + '" id="subEnterpriseUsers" class="btn btn-outline-dark">' +
-						'Subenterprise Users' +
-						'</a>',
+            '</a><br/>',
+						// '</a><br/>' +
+						// '<a href="<?php echo base_url('AllocateDeallocateGame/index/'); ?>' + gamedata + '/' + btoa('subEnterprise') + '/' + btoa(startdate) + '/' + btoa(enddate) + '" id="subEnterprise" class="btn btn-outline-info">' +
+						// 'Subenterprise' +
+						// '</a><br/>' +
+						// '<a href="<?php echo base_url('AllocateDeallocateGame/index/'); ?>' + gamedata + '/' + btoa('subEnterpriseUsers') + '/' + btoa(startdate) + '/' + btoa(enddate) + '" id="subEnterpriseUsers" class="btn btn-outline-dark">' +
+						// 'Subenterprise Users' +
+						// '</a>',
 					showConfirmButton: false,
 					showCancelButton: true,
 					cancelButtonColor: '#dc3545',
@@ -797,7 +876,7 @@
 			// if logged-in as subEnterprise then show 1 options to allocate/de-allocate games
 			<?php if ($this->session->userdata('loginData')['User_Role'] == 2) { ?>
 				Swal.fire({
-					title: 'Allocate/De-Allocate Game To',
+					title: 'Allocate/De-Allocate Card To',
 					html: '<a href="<?php echo base_url('AllocateDeallocateGame/index/'); ?>' + gamedata + '/' + btoa('subEnterpriseUsers') + '/' + btoa(startdate) + '/' + btoa(enddate) + '" id="subEnterpriseUsers" class="btn btn-outline-dark">' +
 						'My Users' +
 						'</a>',
@@ -898,13 +977,87 @@
       });
 
       $('#cnf_yes').click(function() {
-        var val = $(this).val();
-        var id = btoa(val);
+        var id = btoa($(this).val());
         window.location.href = loc_url_del + id + "/" + func;
       });
     }
 	</script>
 	<!-- End Delete -->
+
+    <script type="text/javascript">
+      <?php if ($this->session->userdata('loginData')['User_Role'] == 1 || $this->session->userdata('loginData')['User_Role'] == 3) {
+      if (($this->uri->segment(1) == 'Dashboard' || $this->uri->segment(1) == 'dashboard') && $this->uri->segment(2) != 'assignedCards') { ?>
+        //chart for process owner Cards
+        Highcharts.chart('containerCard', {
+          chart: {
+            type: 'column',
+            options3d: {
+              enabled: true,
+              alpha: 10,
+              beta: 0,
+              depth: 0
+            }
+          },
+          title: {text: 'Card Portfolio'},
+          subtitle: {text: ''},
+          credits: {enabled: false},
+          plotOptions: {
+            column: {depth: 25}
+          },
+          xAxis: {
+            categories: ['Assigned', 'Chosen', 'Allocated'],
+            labels: {
+              skew3d: true,
+              style: {fontSize: '16px'}
+            }
+          },
+          yAxis: {
+            title: {text: null}
+          },
+          series: [{
+            name: 'Card',
+            showInLegend: false,
+            data: [<?php echo $allCardAssigned; ?>, <?php echo $chosenCard; ?>, <?php echo $allocatedCard; ?>]
+          }]
+        });
+
+        //chart for process owner campus
+        Highcharts.chart('containerCampus', {
+          chart: {
+            type: 'column',
+            options3d: {
+              enabled: true,
+              alpha: 10,
+              beta: 0,
+              depth: 0
+            }
+          },
+          title: {text: 'Campus Portfolio'},
+          subtitle: {text: ''},
+          credits: {enabled: false},
+          plotOptions: {
+            column: {depth: 25},
+            series: {colorByPoint: true}
+          },
+          xAxis: {
+            categories: ['Available', 'Chosen', 'Management', 'Engineering', 'Other'],
+            labels: {
+              skew3d: true,
+              style: {fontSize: '16px'}
+            }
+          },
+          yAxis: {
+            title: {text: null}
+          },
+          series: [{
+            name: 'Campus',
+            showInLegend: false,
+            data: [<?php echo $availableCampus; ?>, <?php echo $chosenCampus; ?>, <?php echo $campusManagement; ?>, <?php echo $campusEngineering; ?>, <?php echo $campusOther; ?>]
+          }]
+        });
+
+      <?php } } ?>
+    </script>
 	</body>
 
 	</html>

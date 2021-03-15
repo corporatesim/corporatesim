@@ -3,7 +3,8 @@
 	var func        = "<?php echo $this->uri->segment(2);?>";
 </script>
 <div class="main-container">
-	<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+	<!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+  <div class="pd-ltr-20 height-100-p xs-pd-20-10">
 		<?php $this->load->view('components/trErMsg');?>
 		<!-- model code adding here to add collaboration -->
 		<div class="modal fade" id="addCollaborationModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -142,7 +143,7 @@
 													<label class="custom-control-label" for="enterpriseUsers">Enterprize Teams</label>
 												</div>
 											</div>
-											<div class=" col-sm-12 col-md-3 col-lg-3">
+											<div class=" col-sm-12 col-md-3 col-lg-3 d-none">
 												<div class="custom-control custom-radio mb-5">
 													<input type="radio" id="subEnterpriseUsers" name="filtertype" class="custom-control-input" value="subEnterpriseUsers" data-filtertype="superadmin">
 													<label class="custom-control-label" for="subEnterpriseUsers">SubEnterprize Teams</label>
@@ -184,7 +185,7 @@
 													<label class="custom-control-label" for="enterpriseUsers">My Teams</label>
 												</div>
 											</div>
-											<div class=" col-sm-12 col-md-3 col-lg-3">
+											<div class=" col-sm-12 col-md-3 col-lg-3 d-none">
 												<div class="custom-control custom-radio mb-5">
 													<input type="radio" id="subEnterpriseUsers" name="filtertype" class="custom-control-input" value="subEnterpriseUsers" data-filtertype="enterprise">
 													<label class="custom-control-label" for="subEnterpriseUsers">Subenterprize Teams</label>

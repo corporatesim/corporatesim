@@ -1,5 +1,19 @@
 <!-- <?php // echo "<pre>"; print_r($findScenario); exit(); 
       ?> -->
+<?php
+function encode_decode_value($arg_value)
+{
+  if (base64_encode(base64_decode($arg_value, true)) === $arg_value) {
+    if (ctype_alpha($arg_value) || is_numeric($arg_value)) {
+      return $arg_value;
+    } else {
+      return base64_decode($arg_value);
+    }
+  } else {
+    return $arg_value;
+  }
+}
+?>
 <style>
   .componentDiv,
   .componentNameDiv,
@@ -285,8 +299,8 @@
 
                       // echo $findLinkageSubRow->input_current."<pre>"; print_r($SubLink_InputModeTypeValue); echo "</pre>";
 
-                      $question       = $SubLink_InputModeTypeValue['question'];
-                      $defaultChecked = $SubLink_InputModeTypeValue['makeDefaultChecked'];
+                      $question       = encode_decode_value($SubLink_InputModeTypeValue['question']);
+                      $defaultChecked = encode_decode_value($SubLink_InputModeTypeValue['makeDefaultChecked']);
                       $questionFlag   = false;
                       // if default checked is selected from admin, then remove last element from array
                       if ($defaultChecked) {
@@ -298,12 +312,12 @@
                         // as first is question, so skip this,
                         if ($questionFlag) {
                           // hiding the default, selected from admin end
-                          $hideDefault = ($defaultChecked == $optionText) ? 'd-none' : '';
+                          $hideDefault = ($defaultChecked == encode_decode_value($optionText)) ? 'd-none' : '';
                           // check the value and make it checked
                           $checkedDefault = ($findLinkageSubRow->input_current == $optionValue) ? 'checked' : '';
                           echo '<div class="custom-control custom-radio mb-3 ' . $hideDefault . '">
-                              <input type="radio" data-sublinkid="' . $findLinkageSubRow->SubLink_ID . '" class="custom-control-input" id="' . $optionText . $optionText . '" name="radio-stacked" value="' . $optionValue . '" required ' . $checkedDefault . '>
-                              <label class="custom-control-label" for="' . $optionText . $optionText . '">' . $optionText . '</label>
+                              <input type="radio" data-sublinkid="' . $findLinkageSubRow->SubLink_ID . '" class="custom-control-input" id="' . encode_decode_value($optionText) . encode_decode_value($optionText) . '" name="radio-stacked" value="' . $optionValue . '" required ' . $checkedDefault . '>
+                              <label class="custom-control-label" for="' . encode_decode_value($optionText) . encode_decode_value($optionText) . '">' . encode_decode_value($optionText) . '</label>
                               <div class="invalid-feedback">More example invalid feedback text</div>
                               </div>';
                         }

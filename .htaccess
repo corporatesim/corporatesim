@@ -1,0 +1,3 @@
+ErrorDocument 404 /corp_simulation/errors/pageNotFound.php
+ErrorDocument 403 /corp_simulation/errors/403.php
+#Options -Indexes

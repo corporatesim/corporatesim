@@ -36,11 +36,21 @@
   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"> -->
 
   <script src="<?php echo base_url('common/vendors/sweetalert/sweetalert2.all.min.js?v=').file_version_cs;?>"></script>
-
+ 
   <!-- adding these links to include chart.js -->
   <script src="<?php echo base_url('common/vendors/chartjs/chart.bundle.min.js?v=').file_version_cs;?>"></script>
   <link href="<?php echo base_url('common/vendors/chartjs/chart.min.css?v=').file_version_cs;?>" rel="stylesheet" type="text/css">
   <script src="<?php echo base_url('common/vendors/chartjs/chart.min.js?v=').file_version_cs;?>"></script>
+
+
+  <script src="<?php echo base_url('common/jspdf/jspdf.js?v=').file_version_cs; ?>"></script>
+  <script src="<?php echo base_url('common/jspdf/dist/jspdf.min.js?v=').file_version_cs; ?>"></script>
+  <script src="<?php echo base_url('common/jspdf/libs/html2pdf.js?v=').file_version_cs; ?>"></script>
+  <script src="<?php echo base_url('common/jspdf/plugins/from_html.js?v=').file_version_cs; ?>"></script>
+  <script src="<?php echo base_url('common/jspdf/plugins/split_text_to_size.js?v=').file_version_cs; ?>"></script>
+  <script src="<?php echo base_url('common/jspdf/plugins/standard_fonts_metrics.js?v=').file_version_cs; ?>"></script>
+  
+
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -71,16 +81,17 @@
     }
   </style>
 </head>
-<body>
+<body <?php if($this->uri->segment(2) == 'viewUserReport'){ echo 'style="background-color:white;"'; } ?>>
   <div class="pre-loader"></div>
+
   <div class="header clearfix">
     <div class="header-right" style="width:100%">
       <div class="brand-logo">
         <a href="<?php echo base_url('Dashboard');?>">
-          <?php if(isset($this->session->userdata('loginData')['User_profile_pic'])) { ?>
-            <img src="<?php echo base_url('common/Logo/'.$this->session->userdata('loginData')['User_profile_pic']);?>" alt="CorporateSim">
+          <?php if (isset($this->session->userdata('loginData')['User_profile_pic'])) { ?>
+            <img src="<?php echo base_url('common/Logo/'.$this->session->userdata('loginData')['User_profile_pic']); ?>" alt="CorporateSim">
           <?php } else { ?>
-            <img src="<?php echo base_url('common/');?>vendors/images/cs_logo.jpg" alt="CorporateSim">
+            <img src="<?php echo base_url('common/'); ?>vendors/images/cs_logo.jpg" alt="CorporateSim">
           <?php } ?>
         </a> 
       </div>
@@ -95,35 +106,34 @@
         <div class="dropdown">
           <a class="dropdown-toggle" href="javascript:void(0);" role="button" data-toggle="dropdown">
             <!-- <?php
-            if($this->session->userdata('loginData')['User_Role'] > 0 )
-            {
+            if ($this->session->userdata('loginData')['User_Role'] > 0 ) {
 
-            if($this->session->userdata('loginData')['User_profile_pic'])
-            {
-              echo "<img id='image'  name='file_name' src='".base_url('common/profileImages/').$this->session->userdata('loginData')['User_profile_pic']."' alt='Picture' width='50px' class='avatar-photo' style='border-radius: 50%;'>";
+              if ($this->session->userdata('loginData')['User_profile_pic']) {
+                echo "<img id='image'  name='file_name' src='".base_url('common/profileImages/').$this->session->userdata('loginData')['User_profile_pic']."' alt='Picture' width='50px' class='avatar-photo' style='border-radius: 50%;'>";
+              }
             }
-            }
-            else
-            {
+            else {
               echo "<span class='user-icon'><i class='fa fa-user-o'></i></span>";
             } 
             ?> -->
-            <span class="user-name"><?php echo ucfirst($this->session->userdata('loginData')['User_FullName']);?>
-            <?php if($this->session->userdata('loginData')['User_Role'] == 1){?>
-              <br><span class="small"><center><code>Enterprise: <?php echo $this->session->userdata('loginData')['Enterprise_Name'];?> </code></center></span>
-            <?php }else if($this->session->userdata('loginData')['User_Role'] == 2) { ?> 
-              <br><span class="small"><center><code>Subenterprise: <?php echo $this->session->userdata('loginData')['SubEnterprise_Name'];?></code></center></span>
+            <span class="user-name"><?php echo ucfirst($this->session->userdata('loginData')['User_FullName']); ?>
+
+            <?php if ($this->session->userdata('loginData')['User_Role'] == 1) { ?>
+              <br><span class="small"><center><code>Enterprize: <?php echo $this->session->userdata('loginData')['Enterprise_Name']; ?> </code></center></span>
+            <?php } else if ($this->session->userdata('loginData')['User_Role'] == 2) { ?> 
+              <br><span class="small"><center><code>Subenterprize: <?php echo $this->session->userdata('loginData')['SubEnterprise_Name']; ?></code></center></span>
+            <?php } else if ($this->session->userdata('loginData')['User_Role'] == 3) { ?> 
+              <br><span class="small"><center><code>Report Viewer</code></center></span>
             <?php } ?>
           </span>
         </a>
         <div class="dropdown-menu dropdown-menu-right">
-          <?php if($this->session->userdata('loginData')['User_Role'] > 0 )
-          {?>
-            <a class="dropdown-item" href="<?php echo base_url('Profile');?>"><i class="fa fa-user-md" aria-hidden="true"></i> Profile</a>
-          <?php }?>
+          <?php if ($this->session->userdata('loginData')['User_Role'] == 1 || $this->session->userdata('loginData')['User_Role'] == 2) { ?>
+            <a class="dropdown-item" href="<?php echo base_url('Profile'); ?>"><i class="fa fa-user-md" aria-hidden="true"></i> Profile</a>
+          <?php } ?>
           <!-- <a class="dropdown-item" href="#" data-toggle="modal"data-target="#Enterprisemodal"><i class="fa fa-edit" aria-hidden="true"></i> Choose Logo</a> -->
           <!-- <a class="dropdown-item" href="#"><i class="fa fa-question" aria-hidden="true"></i> Help</a> -->
-          <a class="dropdown-item" href="<?php echo base_url('Dashboard/logout');?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
+          <a class="dropdown-item" href="<?php echo base_url('Dashboard/logout'); ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
         </div>
       </div>
     </div>
@@ -203,21 +213,21 @@
     </div>
   </div>
 </div>
+
 <!--Modal for upload Logo of Enterprise and SubEnterprise -->
 <div class="modal" id="Enterprisemodal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-body pd-30">
-       <form method="post" action="<?php echo base_url('Dashboard/uploadLogo')?> "enctype="multipart/form-data">
-         <div class="form-group row">
-          <label class="col-sm-12 col-md-4 col-form-label"><span style="color: red">*</span>Choose Logo</label>
-          <div class="col-sm-12 col-md-8">
-           <input type="file" name="logo" multiple="multiple" accept="image/*" id="logo" value="" class="form-control">
-         </div>
-       </div>
-       <!--  <div class="img-container"></div> -->
-     </div>
-     <div class="modal-footer">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-body pd-30">
+  <form method="post" action="<?php echo base_url('Dashboard/uploadLogo')?> "enctype="multipart/form-data">
+    <div class="form-group row">
+      <label class="col-sm-12 col-md-4 col-form-label"><span style="color: red">*</span>Choose Logo</label>
+      <div class="col-sm-12 col-md-8">
+        <input type="file" name="logo" multiple="multiple" accept="image/*" id="logo" value="" class="form-control">
+      </div>
+    </div>
+    <!-- <div class="img-container"></div> -->
+    <div class="modal-footer">
       <input type="submit" name="Upload" value="Upload" class="btn btn-primary">
       <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
     </div>
@@ -225,6 +235,8 @@
 </div>
 </div>
 </div>
+</div>
+
 <!-- general purpose modal -->
 <div id="randomModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -243,6 +255,5 @@
     </div>
   </div>
 </div>
-
 
 </div>

@@ -1,5 +1,6 @@
 <div class="main-container ">
-	<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+	<!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+  <div class="pd-ltr-20 height-100-p xs-pd-20-10">
 		<?php $this->load->view('components/trErMsg');?>
 		<div class="min-height-200px">
 			<div class="page-header">
@@ -154,7 +155,7 @@
 									<span><?php echo form_error('commonDomain'); ?></span>
 							</div>
 							<div class="col-sm-6 col-md-3" id="showDomain">
-								.corporatesim.com
+								.corpsim.in
 							</div>
 						</div>
 
@@ -165,9 +166,7 @@
 					</form>
 				</div>
 			</div>
-		</div>
-	</div>
-</div>
+
 
 
 <div id="Modal_Bulkupload" class="modal fade" role="dialog">

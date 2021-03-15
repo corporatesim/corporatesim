@@ -1,5 +1,6 @@
 <div class="main-container">
-  <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+  <!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+  <div class="pd-ltr-20 height-100-p xs-pd-20-10">
     <?php $this->load->view('components/trErMsg');?>
     <div class="min-height-200px">
       <div class="page-header">
@@ -35,7 +36,7 @@
                   
                 </div>
                   
-                  <form action="cardSelectedByEnterprise" method="POST" enctype="multipart/form-data">
+                  <form action="campusSelectedByEnterprise" method="POST" enctype="multipart/form-data">
                   <div class="row" id="addTable">
                     <table class="stripe hover multiple-select-row data-table-export">
                       <thead>
@@ -43,26 +44,25 @@
                           <th class="datatable-nosort noExport">Select</th>
                           <th>ID</th>
                           <th>Campus Name</th>
+                          <th>Type</th>
                           <th>Address</th>
                           <!-- <th>Email</th>
                           <th>Contact</th> -->
                         </tr>
                       </thead>
                       <tbody>
-                        <?php if(count($campus) < 1){ ?>
+                        <?php if (count($campus) < 1) { ?>
                           <tr>
                             <td class="text-danger text-center" colspan="4"> No Campus Found </td>
                           </tr>
                           <!-- only if record exists -->
-                        <?php } else{ $i=1; 
+                          <?php } else { $i=1; 
                           foreach ($campus as $campusRow) {
-
-                            // if($campusRow->UC_ID == $campusRow->ECampus_CampusID){
-                            if($campusRow->ECampus_Selected == 1){
+                            if ($campusRow->ECampus_Selected == 1) {
                               $checked = 'checked';
                             }
-                            else{
-                               $checked = ' ';
+                            else {
+                              $checked = ' ';
                             }
                           ?>
                           <tr>
@@ -78,6 +78,21 @@
                             <td><?php echo $i;?></td>
                             <!-- campus Name -->
                             <td><?php echo $campusRow->UC_Name; ?></td>
+                            <!-- Type -->
+                            <td>
+                              <?php
+                                switch ($campusRow->UC_Type) {
+                                  case 1:
+                                    echo 'Management';
+                                    break;
+                                  case 2:
+                                    echo 'Engineering';
+                                    break;
+                                  default:
+                                    echo 'Other';
+                                }
+                              ?>
+                            </td>
                             <!-- Address -->
                             <td><?php echo $campusRow->UC_Address; ?></td>
                             <!-- E-mail -->
@@ -85,7 +100,6 @@
                             <!-- Phone Number -->
                             <!-- <td><?php echo $campusRow->UC_Contact ;?></td> -->
                           </tr>
-                          <!-- <input type="hidden" name="campusSelectedOn[]" value="<?php //echo $campusRow->ECampus_UpdatedOn != NULL ? $campusRow->ECampus_UpdatedOn : date('Y-m-d H:i:s'); ?>" > -->
                           <?php $i++; } } ?>
                         </tbody>
                       </table>

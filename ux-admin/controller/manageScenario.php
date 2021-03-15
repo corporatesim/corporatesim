@@ -7,14 +7,28 @@ $file         = 'ScenarioList.php';
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 {
-	if($_POST['Scen_Branching'])
-	{
-		$Scen_Branching = $_POST['Scen_Branching'];
-	}
-	else
-	{
-		$Scen_Branching = 0;
-	}
+	// echo "<pre>"; print_r($_POST); exit();
+	$ScenJson = array(
+		'aliasStoryline'					 => trim($_POST['aliasStoryline']),
+    'aliasStorylineColorCode'  => trim($_POST['aliasStorylineColorCode']),
+		'aliasStorylineVisibility' => $_POST['aliasStorylineVisibility'] ? $_POST['aliasStorylineVisibility'] : 0,
+
+		'aliasVideo' 							 => trim($_POST['aliasVideo']),
+    'aliasVideoColorCode'      => trim($_POST['aliasVideoColorCode']),
+		'aliasVideoVisibility' 		 => $_POST['aliasVideoVisibility'] ? $_POST['aliasVideoVisibility'] : 0,
+
+		'aliasImage'							 => trim($_POST['aliasImage']),
+    'aliasImageColorCode'      => trim($_POST['aliasImageColorCode']),
+		'aliasImageVisibility'		 => $_POST['aliasImageVisibility'] ? $_POST['aliasImageVisibility'] : 0,
+
+		'aliasDocument' 					 => trim($_POST['aliasDocument']),
+    'aliasDocumentColorCode'   => trim($_POST['aliasDocumentColorCode']),
+		'aliasDocumentVisibility'  => $_POST['aliasDocumentVisibility'] ? $_POST['aliasDocumentVisibility'] : 0,
+	);
+	$Scen_Json = json_encode($ScenJson);
+
+	$Scen_Branching = $_POST['Scen_Branching'] ? $_POST['Scen_Branching'] : 0;
+
 	if(isset($_FILES['Scen_Image']['name']) && !empty($_FILES['Scen_Image']['name']))
 	{
 		$errors     = array();
@@ -58,7 +72,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 		'Scen_Datetime'    => date('Y-m-d H:i:s'),
 		'Scen_Status'      => 1,
 		'Scen_InputButton' => $_POST['Scen_InputButton'],
-		'Scen_Branching'   => $Scen_Branching
+		'Scen_Branching'   => $Scen_Branching,
+		'Scen_Json'  			 => $Scen_Json,
 	);
 	
 	if( !empty($_POST['name']) && !empty($_POST['comments']))
@@ -91,14 +106,27 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 {
-	if($_POST['Scen_Branching'])
-	{
-		$Scen_Branching = $_POST['Scen_Branching'];
-	}
-	else
-	{
-		$Scen_Branching = 0;
-	}
+	// echo "<pre>"; print_r($_POST); exit();
+	$ScenJson = array(
+    'aliasStoryline'           => trim($_POST['aliasStoryline']),
+    'aliasStorylineColorCode'  => trim($_POST['aliasStorylineColorCode']),
+    'aliasStorylineVisibility' => $_POST['aliasStorylineVisibility'] ? $_POST['aliasStorylineVisibility'] : 0,
+
+    'aliasVideo'               => trim($_POST['aliasVideo']),
+    'aliasVideoColorCode'      => trim($_POST['aliasVideoColorCode']),
+    'aliasVideoVisibility'     => $_POST['aliasVideoVisibility'] ? $_POST['aliasVideoVisibility'] : 0,
+
+    'aliasImage'               => trim($_POST['aliasImage']),
+    'aliasImageColorCode'      => trim($_POST['aliasImageColorCode']),
+    'aliasImageVisibility'     => $_POST['aliasImageVisibility'] ? $_POST['aliasImageVisibility'] : 0,
+
+    'aliasDocument'            => trim($_POST['aliasDocument']),
+    'aliasDocumentColorCode'   => trim($_POST['aliasDocumentColorCode']),
+    'aliasDocumentVisibility'  => $_POST['aliasDocumentVisibility'] ? $_POST['aliasDocumentVisibility'] : 0,
+	);
+	$Scen_Json = json_encode($ScenJson);
+
+	$Scen_Branching = $_POST['Scen_Branching'] ? $_POST['Scen_Branching'] : 0;
 	$Scen_Image = '';
 	// uploading image 
 	if(isset($_FILES['Scen_Image']['name']) && !empty($_FILES['Scen_Image']['name']))
@@ -144,7 +172,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		'Scen_Datetime'    => date('Y-m-d H:i:s'),
 		'Scen_Status'      => 1,
 		'Scen_InputButton' => $_POST['Scen_InputButton'],
-		'Scen_Branching'   => $Scen_Branching
+		'Scen_Branching'   => $Scen_Branching,
+		'Scen_Json'  			 => $Scen_Json,
 	);
 	// echo $existingImageName.' and '.$Scen_Image."<pre>"; print_r($gamedetails); exit();
 	if( !empty($_POST['name']) && !empty($_POST['comments']) )
@@ -271,7 +300,7 @@ elseif(isset($_GET['stat']))
 }
 else
 {
-	// fetch siteuser list from db
+	// fetch scenario list from db
 	$object = $functionsObj->SelectData(array(), 'GAME_SCENARIO', array('Scen_Delete=0'), 'Scen_datetime DESC', '', '', '', 0);
 	$file   = 'ScenarioList.php';
 }

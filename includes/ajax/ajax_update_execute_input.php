@@ -97,7 +97,7 @@ if($_POST['action']=='updateFormula')
 	// print_r($input_field_values);
 	// print_r($carry_field_data); die('here');
 	// creating component array
-	if(count($formula_json_expcomp) > 0)
+	if(isset($formula_json_expcomp) && count($formula_json_expcomp) > 0)
 	{
 		foreach ($formula_json_expcomp as $expcomp_key => $expcomp_value)
 		{
@@ -155,7 +155,7 @@ if($_POST['action']=='updateFormula')
 		}
 	}
 	// creating for subcomponent
-	if(count($formula_json_expsubc) > 0)
+	if(isset($formula_json_expsubc) && count($formula_json_expsubc) > 0)
 	{
 		foreach ($formula_json_expsubc as $expsubc_key => $expsubc_value)
 		{
@@ -212,7 +212,7 @@ if($_POST['action']=='updateFormula')
 		}
 	}
 
-	if(count($input_field_values) > 0)
+	if(isset($input_field_values) && count($input_field_values) > 0)
 	{
 		foreach ($input_field_values as $query_key => $query_value)
 		{
@@ -256,7 +256,7 @@ if($_POST['action']=='updateFormula')
 	}
 	
 
-	if(count($inserted_input_key) > 0)
+	if(isset($inserted_input_key) && count($inserted_input_key) > 0)
 	{
 		$input_key_in      = implode(',', $inserted_input_key);
 		$sql_query         = "SELECT input_id,input_key FROM GAME_INPUT WHERE input_user=$userid AND input_key IN ($input_key_in)";
@@ -328,7 +328,7 @@ if($_POST['action']=='updateFormula')
 	// report modification done
 
 	// to update the carry forward values
-	if(count($carry_field_data) > 0)
+	if(isset($carry_field_data) && count($carry_field_data) > 0)
 	{
 		foreach ($carry_field_data as $id=>$query)
 		{
@@ -408,3 +408,57 @@ if($_POST['action']=='componentBranching')
 
 }
 
+if(isset($_POST['action']) && $_POST['action']=='findCountZero')
+{
+	// print_r($_POST);
+	$mappedCompSubcompData = $_POST['mappedCompSubcompData']; // this is of array type
+	// if there is no value, then skip
+	if(empty($mappedCompSubcompData) || count($mappedCompSubcompData)<1)
+	{
+		die('no value for finding count of 0');
+	}
+	else
+	{
+		foreach($mappedCompSubcompData as $mappedCompSubcompDataKey => $mappedCompSubcompDataValue)
+		{
+			// echo $mappedCompSubcompDataKey.' __ '.$mappedCompSubcompDataValue."<br>";
+			$countSql  = "SELECT input_current FROM GAME_INPUT WHERE input_user= $userid AND input_sublinkid IN ($mappedCompSubcompDataValue)";
+			$inputData = $funObj->RunQueryFetchObject($countSql);
+			$zeroCount = 0;
+			foreach($inputData as $inputDataRow)
+			{
+				if($inputDataRow->input_current == 0 || $inputDataRow->input_current == 0.00)
+				{
+					$zeroCount++;
+				}
+			}
+			// echo 'For '.$mappedCompSubcompDataKey.' count is: '.$zeroCount.'<br><br>';
+			$mappedCompSubcompData[$mappedCompSubcompDataKey] = $zeroCount;
+		}
+		echo json_encode($mappedCompSubcompData);
+	}
+}
+
+
+if(isset($_POST['action']) && $_POST['action']=='findFormulaForNone'){
+	// print_r($_POST);
+	$sqlQuery = $_POST['query'];
+	$formulaRow = $funObj->RunQueryFetchObject($sqlQuery);
+	// print_r($formulaRow);
+	if(count($formulaRow)<1)
+	{
+		echo json_encode(['status' => 201, 'msg' => 'No record found',]);
+	}
+	else
+	{
+		$name = '';
+		$formulaTitle = '';
+
+		foreach($formulaRow as $row)
+		{
+			$name = $row->name;
+			$formulaTitle .= $row->formula_title.', ';
+		}
+		echo json_encode(['status' => 200, 'name' => $name,'msg' => trim($formulaTitle, ', ')]);
+	}
+}

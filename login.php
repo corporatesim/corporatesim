@@ -1,6 +1,6 @@
 <?php 
 // die('http://'.$_SERVER['SERVER_NAME']);
-$enterpriseDomain = 'https://'.$_SERVER['SERVER_NAME'];
+$enterpriseDomain = 'http://'.$_SERVER['SERVER_NAME'];
 //include_once 'includes/header.php'; 
 include_once 'config/settings.php';
 include_once doc_root.'config/functions.php';
@@ -96,27 +96,27 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
               if ($row['UG_GameID'] == $row['EG_GameID']) {
                 //if user and enterprise both having same game
 
-                if ($row['UG_GameEndDate'] > $row['User_GameEndDate'] && !empty($row['User_GameEndDate'])) {
+                if (strtotime($row['UG_GameEndDate']) > strtotime($row['User_GameEndDate']) && !empty(strtotime($row['User_GameEndDate']))) {
                   //if user game game end date is greater than user end date
                   $query = "UPDATE GAME_USERGAMES SET UG_GameEndDate = '".$row['User_GameEndDate']."' WHERE UG_ID = ".$row['UG_ID'];
                 }
 
-                if ($row['UG_GameEndDate'] > $row['Enterprise_EndDate'] && !empty($row['Enterprise_EndDate'])) {
+                if (strtotime($row['UG_GameEndDate']) > strtotime($row['Enterprise_EndDate']) && !empty(strtotime($row['Enterprise_EndDate']))) {
                   //if user game game end date is greater than enterprise end date
                   $query = "UPDATE GAME_USERGAMES SET UG_GameEndDate = '".$row['Enterprise_EndDate']."' WHERE UG_ID = ".$row['UG_ID'];
                 }
 
-                if ($row['UG_GameEndDate'] > $row['SubEnterprise_EndDate'] && !empty($row['SubEnterprise_EndDate'])) {
+                if (strtotime($row['UG_GameEndDate']) > strtotime($row['SubEnterprise_EndDate']) && !empty(strtotime($row['SubEnterprise_EndDate']))) {
                   //if user game game end date is greater than subenterprise end date
                   $query = "UPDATE GAME_USERGAMES SET UG_GameEndDate = '".$row['SubEnterprise_EndDate']."' WHERE UG_ID = ".$row['UG_ID'];
                 }
 
-                if ($row['UG_GameEndDate'] > $row['EG_Game_End_Date'] && !empty($row['EG_Game_End_Date'])) {
+                if (strtotime($row['UG_GameEndDate']) > strtotime($row['EG_Game_End_Date']) && !empty(strtotime($row['EG_Game_End_Date']))) {
                   //if user game game end date is greater than enterprise game end date
                   $query = "UPDATE GAME_USERGAMES SET UG_GameEndDate = '".$row['EG_Game_End_Date']."' WHERE UG_ID = ".$row['UG_ID'];
                 }
 
-                if ($row['UG_GameEndDate'] >= $row['SG_Game_End_Date'] && !empty($row['SG_Game_End_Date'])) {
+                if (strtotime($row['UG_GameEndDate']) > strtotime($row['SG_Game_End_Date']) && !empty(strtotime($row['SG_Game_End_Date']))) {
                   //if user game game end date is greater than subenterprise game end date
                   $query = "UPDATE GAME_USERGAMES SET UG_GameEndDate = '".$row['SG_Game_End_Date']."' WHERE UG_ID = ".$row['UG_ID'];
                 }

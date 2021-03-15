@@ -210,7 +210,12 @@
 					</span>
 				</a>
 				<ul class="nav nav-second-level">
-					<?php if($functionsObj->checkModuleAuth('formulas','enable')){ ?>
+					<?php if($functionsObj->checkModuleAuth('linkgame','enable')){ ?>
+						<li>
+							<a href="<?php echo site_root."ux-admin/linkgame";?>">
+							Game Integration</a>
+						</li>
+					<?php } if($functionsObj->checkModuleAuth('formulas','enable')){ ?>
 						<li>
 							<a href="<?php echo site_root."ux-admin/Formulas";?>">
 							Formulas</a>

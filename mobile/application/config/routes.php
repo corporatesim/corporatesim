@@ -50,5 +50,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller']   = 'Login';
-$route['404_override']         = 'Error';
+$route['404_override']         = 'PageNotFound';
 $route['translate_uri_dashes'] = FALSE;

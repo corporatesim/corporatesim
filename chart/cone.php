@@ -85,7 +85,7 @@ $userid = $_GET['userid'];
 //$labels = array("Funds", "Bonds", "Stocks", "Cash");
 
 # The semi-transparent colors for the pyramid layers
-$colors = array(0x60000088, 0x6066aaee, 0x60ffbb00, 0x60ee6622);
+$colors = array(0x60000088, 0x6066aaee, 0x60ffbb00, 0x60ee6622, 0x66bbbb, 0xaa6644, 0x99bb55, 0xee9944, 0x444466, 0xbb5555);
 
 # Create a PyramidChart object of size 480 x 400 pixels
 $c = new PyramidChart(800, 400);
@@ -107,7 +107,8 @@ $c->setLayerGap(0.01);
 
 # Add labels at the left side of the pyramid layers using Arial Bold font. The labels will have 3
 # lines showing the layer name, value and percentage.
-$c->setLeftLabel("{label}\nIN {value}K\n({percent}%)", "arialbd.ttf");
+// $c->setLeftLabel("{label}\nIN {value}K\n({percent}%)", "arialbd.ttf");
+$c->setLeftLabel("{label}\n ({percent}%)", "arialbd.ttf");
 
 # Output the chart
 header("Content-type: image/png");

@@ -1,38 +1,39 @@
 <script type="text/javascript">
-	var loc_url_del = "<?php echo base_url('Users/delete/');?>";
-	var func        = "<?php echo $this->uri->segment(2);?>";
+	var loc_url_del = "<?php echo base_url('Users/delete/'); ?>";
+	var func        = "<?php echo $this->uri->segment(2); ?>";
 </script>
 <div class="main-container">
-	<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
-		<?php $this->load->view('components/trErMsg');?>
+	<!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+  <div class="pd-ltr-20 height-100-p xs-pd-20-10">
+		<?php $this->load->view('components/trErMsg'); ?>
 		<div class="min-height-200px">
 			<div class="page-header">
+
 				<div class="row">
 					<div class="col-md-6 col-sm-12">
 						<div class="title">
-							<h1><a href="javascript:void(0);" data-toggle="tooltip" title="Reports"><i class="fa fa-file text-blue"> 
-							</i></a> Online Report</h1>
+							<h1><a href="javascript:void(0);" data-toggle="tooltip" title="Reports"><i class="fa fa-file text-blue"></i></a> Single Card Reports</h1>
 						</div>
 						<nav aria-label="breadcrumb" role="navigation">
 							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Online Report</li>
+								<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard'); ?>">Home</a></li>
+								<li class="breadcrumb-item active" aria-current="page">Single Card Reports</li>
 							</ol>
 						</nav>
 					</div>
 				</div>
+
 				<div class="row">
-					<div class="col-md-12 col-sm-12">
+					<div class="col-12 pb-5">
 						<div class="title">
 							<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
 								<div class="clearfix mb-20">
 									<h5 class="text-blue">Choose Filter Accordingly</h5>
 								</div>
 
-
 								<form action="" method="post" class="" id="">
 									<!-- add filters accordingly, as per the roles if user is superadmin-->
-									<?php if($this->session->userdata('loginData')['User_Role']=='superadmin'){ ?>
+									<?php if ($this->session->userdata('loginData')['User_Role'] == 'superadmin') { ?>
 										<input type="hidden" name="loggedInAs" value="superadmin">
 										<div class=" col-sm-12 col-md-12 col-lg-12 row form-group">
 											<div class=" col-sm-12 col-md-3 col-lg-3">
@@ -49,7 +50,7 @@
 												</div>
 											</div>
 
-											<div class=" col-sm-12 col-md-3 col-lg-3">
+											<div class=" col-sm-12 col-md-3 col-lg-3 d-none">
 												<div class="custom-control custom-radio mb-5">
 													<input type="radio" id="subEnterpriseUsers" name="filtertype" class="custom-control-input" value="subEnterpriseUsers" data-filtertype="superadmin">
 													<label class="custom-control-label" for="subEnterpriseUsers">SubEnterprize Users</label>
@@ -59,7 +60,7 @@
 										</div>
 										<!-- end of radio, choose dropdown -->
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="enterpriseDiv">
-											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
+											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="Enterprise" id="Enterprise" class="custom-select2 form-control Enterprise">
 													<option value="">--Select Enterprize--</option>
@@ -71,18 +72,18 @@
 										</div>
 										<!-- for subenterprise selection -->
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="subEnterpriseDiv">
-											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprise</label>
+											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="SubEnterprise" id="SubEnterprise" class="custom-select2 form-control subenterprise">
-													<option value="">-Select SubEnterprise-</option>
+													<option value="">-Select SubEnterprize-</option>
 												</select>
 											</div>
 										</div>
 									<?php }	?>
 
 
-									<!-- if user is enterprise -->
-									<?php if($this->session->userdata('loginData')['User_Role']==1){ ?>
+									<!-- if user is Enterprize -->
+									<?php if ($this->session->userdata('loginData')['User_Role'] == 1 || $this->session->userdata('loginData')['User_Role'] == 3) { ?>
 										<input type="hidden" name="loggedInAs" value="enterprise">
 										<div class=" col-sm-12 col-md-12 col-lg-12 row form-group">
 											<div class=" col-sm-12 col-md-3 col-lg-3">
@@ -92,7 +93,7 @@
 												</div>
 											</div>
 
-											<div class=" col-sm-12 col-md-3 col-lg-3">
+											<div class=" col-sm-12 col-md-3 col-lg-3 d-none">
 												<div class="custom-control custom-radio mb-5">
 													<input type="radio" id="subEnterpriseUsers" name="filtertype" class="custom-control-input" value="subEnterpriseUsers" data-filtertype="enterprise">
 													<label class="custom-control-label" for="subEnterpriseUsers">SubEnterprize Users</label>
@@ -102,17 +103,17 @@
 										</div>
 
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="enterpriseDiv">
-											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
+											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="Enterprise" id="Enterprise" class="custom-select2 form-control Enterprise" required="">
-													<option value="">--Select Enterprise--</option>
+													<option value="">--Select Enterprize--</option>
 													<?php foreach ($EnterpriseName as $EnterpriseData) { ?>
 														<option value="<?php echo $EnterpriseData->Enterprise_ID; ?>" date-enterprisename="<?php echo $EnterpriseData->Enterprise_Name;?>" selected><?php echo $EnterpriseData->Enterprise_Name; ?></option>
 													<?php } ?>
 												</select>
 											</div>
 										</div>
-										<!-- for subenterprise selection -->
+										<!-- for subEnterprize selection -->
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="subEnterpriseDiv">
 											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select Subenterprize</label>
 											<div class="col-sm-12 col-md-9">
@@ -127,9 +128,9 @@
 									<?php }	?>
 
 
-									<!-- if user is subEnterprise -->
+									<!-- if user is subEnterprize -->
 
-									<?php if($this->session->userdata('loginData')['User_Role']==2){ ?>
+									<?php if ($this->session->userdata('loginData')['User_Role'] == 2) { ?>
 										<input type="hidden" name="loggedInAs" value="subEnterprise">
 
 										<div class=" col-sm-12 col-md-12 col-lg-12 row form-group d-none">
@@ -145,7 +146,7 @@
 											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="Enterprise" id="Enterprise" class="custom-select2 form-control Enterprise" required="">
-													<option value="">--Select Enterprise--</option>
+													<option value="">--Select Enterprize--</option>
 													<?php foreach ($EnterpriseName as $EnterpriseData) { ?>
 														<option value="<?php echo $EnterpriseData->Enterprise_ID; ?>" date-enterprisename="<?php echo $EnterpriseData->Enterprise_Name;?>" selected><?php echo $EnterpriseData->Enterprise_Name; ?></option>
 													<?php } ?>
@@ -185,9 +186,9 @@
 										</div>
 									</div> -->
 
-									<div id="assignDate" class="row col-md-12 col-lg-12 col-sm-12 row form-group">
-										<label for="date" class="col-sm-12 col-md-3 col-form-label">Select Date</label>
-										<div class="col-sm-12 col-md-9">
+									<div id="assignDate" class="row col-12 row form-group">
+										<label for="date" class="col-12 col-md-3 col-form-label">Select Date</label>
+										<div class="col-sm-12 col-md-5">
 											<div class="input-group" name="gamedate" id="datepicker">
 												<input type="text" class="form-control datepicker-here" id="report_startDate" name="gamestartdate" value="" data-value="<?php echo time();?>" placeholder="Select Start Date" required="" readonly="" data-startdate="1554069600" data-enddate="<?php echo time();?>" data-language="en" data-date-format="dd-mm-yyyy">
 
@@ -198,7 +199,7 @@
 										</div>
 									</div>
 
-									<div class="row col-md-12 form-group" style="margin-left: 33%;">
+									<div class="row col-10 col-offset-2 form-group justify-content-center">
 										<button class="btn btn-primary" type="submit" id="get_reports">Get Report</button>
 										&nbsp;
 										<a href="<?php echo base_url();?>" class="btn btn-outline-danger">Cancel</a>
@@ -207,7 +208,11 @@
 							</div>
 							<!-- end of adding users -->
 						</div>
-					</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
 					<script>
 						$(document).ready(function()

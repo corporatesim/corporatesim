@@ -13,7 +13,8 @@
 	var func        = "<?php echo $this->uri->segment(2);?>";
 </script>
 <div class="main-container">
-	<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+	<!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+  <div class="pd-ltr-20 height-100-p xs-pd-20-10">
 		<?php $this->load->view('components/trErMsg');?>
 		<div class="min-height-200px">
 			<div class="page-header">
@@ -36,7 +37,7 @@
 						<div class="title">
 							<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
 								<div class="clearfix mb-20">
-									<h5 class="text-blue">Choose Filter Accordingly</h5>
+									<!-- <h5 class="text-blue">Choose Filter Accordingly</h5> -->
 								</div>
 
 
@@ -59,7 +60,7 @@
 												</div>
 											</div>
 
-											<div class=" col-sm-12 col-md-3 col-lg-3">
+											<div class=" col-sm-12 col-md-3 col-lg-3 d-none">
 												<div class="custom-control custom-radio mb-5">
 													<input type="radio" id="subEnterpriseUsers" name="filtertype" class="custom-control-input" value="subEnterpriseUsers" data-filtertype="superadmin">
 													<label class="custom-control-label" for="subEnterpriseUsers">SubEnterprize Groups</label>
@@ -69,19 +70,19 @@
 										</div>
 										<!-- end of radio, choose dropdown -->
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="enterpriseDiv">
-											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
+											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="Enterprise" id="Enterprise" class="custom-select2 form-control Enterprise">
-													<option value="">--Select Enterprise--</option>
+													<option value="">--Select Enterprize--</option>
 													<?php foreach ($enterpriseData as $enterpriseDataRow) { ?>
 														<option value="<?php echo $enterpriseDataRow->Enterprise_ID; ?>" date-enterprisename="<?php echo $enterpriseDataRow->Enterprise_Name;?>"><?php echo $enterpriseDataRow->Enterprise_Name; ?></option>
 													<?php } ?>
 												</select>
 											</div>
 										</div>
-										<!-- for subenterprise selection -->
+										<!-- for subEnterprize selection -->
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="subEnterpriseDiv">
-											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprise</label>
+											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="SubEnterprise" id="SubEnterprise" class="custom-select2 form-control subenterprise">
 													<option value="">-Select Subenterprize-</option>
@@ -91,7 +92,7 @@
 									<?php }	?>
 
 
-									<!-- if user is enterprise -->
+									<!-- if user is Enterprize -->
 									<?php if($this->session->userdata('loginData')['User_Role']==1){ ?>
 										<input type="hidden" name="loggedInAs" value="enterprise">
 										<div class=" col-sm-12 col-md-12 col-lg-12 row form-group">
@@ -102,7 +103,7 @@
 												</div>
 											</div>
 
-											<div class=" col-sm-12 col-md-3 col-lg-3">
+											<div class=" col-sm-12 col-md-3 col-lg-3 d-none">
 												<div class="custom-control custom-radio mb-5">
 													<input type="radio" id="subEnterpriseUsers" name="filtertype" class="custom-control-input" value="subEnterpriseUsers" data-filtertype="enterprise">
 													<label class="custom-control-label" for="subEnterpriseUsers">SubEnterprize Groups</label>
@@ -122,9 +123,9 @@
 												</select>
 											</div>
 										</div>
-										<!-- for subenterprise selection -->
+										<!-- for subEnterprize selection -->
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="subEnterpriseDiv">
-											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprise</label>
+											<label for="SubEnterprise" class="col-sm-12 col-md-3 col-form-label">Select SubEnterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="SubEnterprise" id="SubEnterprise" class="custom-select2 form-control subenterprise">
 													<option value="">-Select Subenterprize-</option>
@@ -137,7 +138,7 @@
 									<?php }	?>
 
 
-									<!-- if user is subEnterprise -->
+									<!-- if user is subEnterprize -->
 									<?php if($this->session->userdata('loginData')['User_Role']==2){ ?>
 										<input type="hidden" name="loggedInAs" value="subEnterprise">
 
@@ -151,7 +152,7 @@
 										</div>
 
 										<div class="row col-md-12 col-lg-12 col-sm-12 row form-group d-none" id="enterpriseDiv">
-											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprise</label>
+											<label for="Enterprise" class="col-sm-12 col-md-3 col-form-label">Select Enterprize</label>
 											<div class="col-sm-12 col-md-9">
 												<select name="Enterprise" id="Enterprise" class="custom-select2 form-control Enterprise">
 													<option value="">--Select Enterprize--</option>
@@ -210,7 +211,6 @@
 								</div>
 								<!-- end of adding users -->
 							</div>
-						</div>
 
 						<!-- show group,users,game data for the selected collaboration -->
 						<div class="col-md-12 col-sm-12">

@@ -1,10 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Ajax extends MY_Controller{
+class Ajax extends MY_Controller
+{
 
   private $loginDataLocal;
-  public function __construct(){
+  public function __construct()
+  {
     parent::__construct();
     $this->loginDataLocal = $this->session->userdata('loginData');
     if ($this->session->userdata('loginData') == NULL) {
@@ -13,12 +15,12 @@ class Ajax extends MY_Controller{
     }
   }
 
-  public function checkLoginStatus(){
+  public function checkLoginStatus()
+  {
     die($this->loginDataLocal['User_Id']);
     if ($this->loginDataLocal == NULL) {
       die('redirect');
-    } 
-    else{
+    } else {
       die($this->loginDataLocal['User_Id']);
     }
   }
@@ -32,7 +34,7 @@ class Ajax extends MY_Controller{
     );
     $where = $this->input->post();
     // print_r($tableName); print_r($data); print_r($where); exit();
- 
+
     $retData = $this->Common_Model->softDelete($tableName, $data, $where);
 
     if ($retData) {
@@ -42,7 +44,7 @@ class Ajax extends MY_Controller{
     }
   }
 
-  public function mappingItemSearch($pid=NULL)
+  public function mappingItemSearch($pid = NULL)
   {
     //$checkWhere = $this->input->post();
     $checkWhere = array(
@@ -54,10 +56,9 @@ class Ajax extends MY_Controller{
     $checkDetails = $this->Common_Model->fetchRecords('GAME_ITEMS_MAPPING', $checkWhere, 'Cmap_Id,');
     //prd($checkDetails); exit();
 
-    if(count($checkDetails) > 0){
+    if (count($checkDetails) > 0) {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "mappingFound", 'icon' => 'error', 'message' => 'Sub-factor Can not be deleted beacause it is used in Mapping.']));
-    }
-    else{
+    } else {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "mappingNotFound", 'icon' => 'success', 'message' => 'Sub-factor not used in any mapping.']));
     }
   }
@@ -71,48 +72,48 @@ class Ajax extends MY_Controller{
 
     if (count($fetchData) < 1) {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No Record Found.']));
-    } 
-    else {
+    } else {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Item Data Loaded Successfully.', "data" => $fetchData]));
     }
   }
 
-  public function listSpecialization(){
+  public function listSpecialization()
+  {
     // fetching records for Specialization
     $query = "SELECT gus.US_ID, gus.US_Name FROM GAME_USER_SPECIALIZATION gus ORDER BY gus.US_Name ASC";
     $fetchData = $this->Common_Model->executeQuery($query);
 
     if (count($fetchData) < 1) {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No Record Found.']));
-    } 
-    else {
+    } else {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Specialization Data Loaded Successfully.', "data" => $fetchData]));
     }
   }
 
   //Bulk Uploading Specialization
-  public function ajax_bulk_upload_Specialization(){
+  public function ajax_bulk_upload_Specialization()
+  {
     $maxFileSize    = 2097152; //Set max upload file size [2MB]
     //$maxFileSize    = 1000000; //Set max upload file size [1MB]
-    $validext       = array ('xls', 'xlsx', 'csv');  //Allowed Extensions
+    $validext       = array('xls', 'xlsx', 'csv');  //Allowed Extensions
     $Upload_CSV_ID  = time(); //ID as Current time
     $createdBy      = $this->session->userdata('loginData')['User_Id'];
 
     //checking user is inserted any file or not
-    if(isset($_FILES['upload_csv']['name']) && !empty($_FILES['upload_csv']['name'])){
+    if (isset($_FILES['upload_csv']['name']) && !empty($_FILES['upload_csv']['name'])) {
 
       $fileSize = filesize($_FILES['upload_csv']['tmp_name']); //uploaded file size
       //echo print_r($fileSize); exit();
 
       //checking inserted file size in not greater then declared ($maxFileSize) size 
-      if($fileSize < $maxFileSize){
+      if ($fileSize < $maxFileSize) {
         $explode_filename = explode(".", $_FILES['upload_csv']['name']); //uploaded file extension
         $ext = strtolower(end($explode_filename));
         //echo $ext."\n";
 
         //checking user is uploading valid file extension and size or not 
-        if(in_array($ext, $validext)){
-          try{
+        if (in_array($ext, $validext)) {
+          try {
             $file                  = $_FILES['upload_csv']['tmp_name'];
             $handle                = fopen($file, "r");
             $not_Inserted_Name     = array(); //array of not imported data
@@ -121,11 +122,11 @@ class Ajax extends MY_Controller{
 
             //setting file data to read mode
             $fileStructure = fgetcsv($handle, 1000, ",");
-            if(!empty($fileStructure[0])){
+            if (!empty($fileStructure[0])) {
 
-              while(($filesop = fgetcsv($handle, 1000, ",")) !== false){
-                if($flag){
-                  $flag = false; 
+              while (($filesop = fgetcsv($handle, 1000, ",")) !== false) {
+                if ($flag) {
+                  $flag = false;
                   continue;
                 }
 
@@ -136,18 +137,17 @@ class Ajax extends MY_Controller{
                 //$object = $this->Common_Model->findCount('GAME_USER_SPECIALIZATION', $where);
 
                 //$where  = array("US_Name='".$specialization_Name."'");
-                $where  = array('US_Name = "'.$specialization_Name.'"');
+                $where  = array('US_Name = "' . $specialization_Name . '"');
                 $object = $this->Common_Model->SelectData(array(), 'GAME_USER_SPECIALIZATION', $where, '', '', '', '', 0);
                 // print_r(count($object));
                 // exit();
 
-                if(count($object) > 0){
+                if (count($object) > 0) {
                   //when found any duplicate Specialization Name in Database 
                   //insert Specialization Name into not_Inserted_Name
                   array_push($not_Inserted_Name, $filesop[0]);
-                } 
-                else{
-                  if(!empty($filesop)){
+                } else {
+                  if (!empty($filesop)) {
                     //setting array for Inserting data
                     $array = array(
                       "US_Name"          => $filesop[0],
@@ -162,52 +162,43 @@ class Ajax extends MY_Controller{
               }
 
               //echo $c;
-              if(!empty($not_Inserted_Name)){
+              if (!empty($not_Inserted_Name)) {
                 //showing all Not imported Specialization Name as msg
-                $msg = "</br><p class='text-danger'><br />Not imported Specialization:- ".count($not_Inserted_Name)." <br /> Specialization Name:-<br />".implode(" , ",$not_Inserted_Name)."</p>";
-              } 
-              else{
+                $msg = "</br><p class='text-danger'><br />Not imported Specialization:- " . count($not_Inserted_Name) . " <br /> Specialization Name:-<br />" . implode(" , ", $not_Inserted_Name) . "</p>";
+              } else {
                 $msg = "";
               }
 
               $result = array(
                 //"msg"    => "Import successful. You have imported ".$c." Specialization.".$msg,
-                "msg"    => "You have imported ".$c." Specialization.".$msg,
+                "msg"    => "You have imported " . $c . " Specialization." . $msg,
                 "status" => 1
               );
-            }
-            else{
+            } else {
               $result = array(
                 "msg"    => "Please select a file with given format to import",
                 "status" => 0
               );
             }
-
-          }
-          catch(Exception $e){
+          } catch (Exception $e) {
             $result = array(
-              "msg"    => "Error: ".$e,
+              "msg"    => "Error: " . $e,
               "status" => 0
             );
           }
-        }
-        else{
+        } else {
           $result = array(
             "msg"    => "Please select a valid file with extension(xls, xlsx, csv) to import",
             "status" => 0
           );
         }
-
-      }
-      else{
+      } else {
         $result = array(
           "msg"    => "File size is longer then 2 MB",
           "status" => 0
         );
       }
-
-    }
-    else{
+    } else {
       $result = array(
         "msg"    => "Please select a file to import",
         "status" => 0
@@ -217,42 +208,43 @@ class Ajax extends MY_Controller{
     echo json_encode($result);
   } // end of ajax_bulk_upload_CSV function
 
-  public function listCampus(){
+  public function listCampus()
+  {
     // fetching records for Campus
-    $query = "SELECT guc.UC_ID, guc.UC_Name, guc.UC_Address, guc.UC_Email, guc.UC_Contact FROM GAME_USER_CAMPUS guc ORDER BY guc.UC_Name ASC";
+    $query = "SELECT guc.UC_ID, guc.UC_Name, guc.UC_Type, guc.UC_Address, guc.UC_Email, guc.UC_Contact FROM GAME_USER_CAMPUS guc ORDER BY guc.UC_Name ASC";
     $fetchData = $this->Common_Model->executeQuery($query);
 
     if (count($fetchData) < 1) {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No Record Found.']));
-    } 
-    else {
+    } else {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Campus Data Loaded Successfully.', "data" => $fetchData]));
     }
   }
 
   //Bulk Uploading Campus
-  public function ajax_bulk_upload_Campus(){
+  public function ajax_bulk_upload_Campus()
+  {
     $maxFileSize    = 2097152; //Set max upload file size [2MB]
     //$maxFileSize    = 1000000; //Set max upload file size [1MB]
-    $validext       = array ('xls', 'xlsx', 'csv');  //Allowed Extensions
+    $validext       = array('xls', 'xlsx', 'csv');  //Allowed Extensions
     $Upload_CSV_ID  = time(); //ID as Current time
     $createdBy      = $this->session->userdata('loginData')['User_Id'];
 
     //checking user is inserted any file or not
-    if(isset($_FILES['upload_csv']['name']) && !empty($_FILES['upload_csv']['name'])){
+    if (isset($_FILES['upload_csv']['name']) && !empty($_FILES['upload_csv']['name'])) {
 
       $fileSize = filesize($_FILES['upload_csv']['tmp_name']); //uploaded file size
       //echo print_r($fileSize); exit();
 
       //checking inserted file size in not greater then declared ($maxFileSize) size 
-      if($fileSize < $maxFileSize){
+      if ($fileSize < $maxFileSize) {
         $explode_filename = explode(".", $_FILES['upload_csv']['name']); //uploaded file extension
         $ext = strtolower(end($explode_filename));
         //echo $ext."\n";
 
         //checking user is uploading valid file extension and size or not 
-        if(in_array($ext, $validext)){
-          try{
+        if (in_array($ext, $validext)) {
+          try {
             $file                  = $_FILES['upload_csv']['tmp_name'];
             $handle                = fopen($file, "r");
             $not_Inserted_Name     = array(); //array of not imported data
@@ -261,11 +253,11 @@ class Ajax extends MY_Controller{
 
             //setting file data to read mode
             $fileStructure = fgetcsv($handle, 1000, ",");
-            if(!empty($fileStructure[0])){
+            if (!empty($fileStructure[0])) {
 
-              while(($filesop = fgetcsv($handle, 1000, ",")) !== false){
-                if($flag){
-                  $flag = false; 
+              while (($filesop = fgetcsv($handle, 1000, ",")) !== false) {
+                if ($flag) {
+                  $flag = false;
                   continue;
                 }
 
@@ -276,21 +268,21 @@ class Ajax extends MY_Controller{
                 //$object = $this->Common_Model->findCount('GAME_USER_CAMPUS', $where);
 
                 // $where  = array("UC_Name = '".$campus_Name."'");
-                $where  = array('UC_Name = "'.$campus_Name.'"');
+                $where  = array('UC_Name = "' . $campus_Name . '"');
                 $object = $this->Common_Model->SelectData(array(), 'GAME_USER_CAMPUS', $where, '', '', '', '', 0);
                 // print_r(count($object));
                 // exit();
 
-                if(count($object) > 0){
+                if (count($object) > 0) {
                   //when found any duplicate Campus Name in Database 
                   //insert Campus Name into not_Inserted_Name
                   array_push($not_Inserted_Name, $filesop[0]);
-                } 
-                else{
-                  if(!empty($filesop)){
+                } else {
+                  if (!empty($filesop)) {
                     //setting array for Inserting data
                     $array = array(
                       "UC_Name"          => $filesop[0],
+                      "UC_Type"          => $filesop[4],
                       "UC_Address"       => $filesop[1],
                       "UC_Email"         => $filesop[2],
                       "UC_Contact"       => $filesop[3],
@@ -305,52 +297,43 @@ class Ajax extends MY_Controller{
               }
 
               //echo $c;
-              if(!empty($not_Inserted_Name)){
+              if (!empty($not_Inserted_Name)) {
                 //showing all Not imported Campus Name as msg
-                $msg = "</br><p class='text-danger'><br />Not imported Campus:- ".count($not_Inserted_Name)." <br /> Campus Name:-<br />".implode(" , ",$not_Inserted_Name)."</p>";
-              } 
-              else{
+                $msg = "</br><p class='text-danger'><br />Not imported Campus:- " . count($not_Inserted_Name) . " <br /> Campus Name:-<br />" . implode(" , ", $not_Inserted_Name) . "</p>";
+              } else {
                 $msg = "";
               }
 
               $result = array(
                 //"msg"    => "Import successful. You have imported ".$c." Campus.".$msg,
-                "msg"    => "You have imported ".$c." Campus.".$msg,
+                "msg"    => "You have imported " . $c . " Campus." . $msg,
                 "status" => 1
               );
-            }
-            else{
+            } else {
               $result = array(
                 "msg"    => "Please select a file with given format to import",
                 "status" => 0
               );
             }
-
-          }
-          catch(Exception $e){
+          } catch (Exception $e) {
             $result = array(
-              "msg"    => "Error: ".$e,
+              "msg"    => "Error: " . $e,
               "status" => 0
             );
           }
-        }
-        else{
+        } else {
           $result = array(
             "msg"    => "Please select a valid file with extension(xls, xlsx, csv) to import",
             "status" => 0
           );
         }
-
-      }
-      else{
+      } else {
         $result = array(
           "msg"    => "File size is longer then 2 MB",
           "status" => 0
         );
       }
-
-    }
-    else{
+    } else {
       $result = array(
         "msg"    => "Please select a file to import",
         "status" => 0
@@ -408,7 +391,7 @@ class Ajax extends MY_Controller{
   public function getCompetenceItems($enterprise_ID = NULL)
   {
     //fetching all Items created under selected enterprise where item have any sublink id(mapped with sublink id)
-    $itemQuery = "SELECT DISTINCT gi.Compt_Id, gi.Compt_Name, gi.Compt_Description, gi.Compt_PerformanceType FROM GAME_ITEMS gi INNER JOIN GAME_ITEMS_MAPPING gim ON gim.Cmap_ComptId = gi.Compt_Id WHERE gi.Compt_Delete = 0 AND gi.Compt_Enterprise_ID = $enterprise_ID ORDER BY gi.Compt_Name"; 
+    $itemQuery = "SELECT DISTINCT gi.Compt_Id, gi.Compt_Name, gi.Compt_Description, gi.Compt_PerformanceType FROM GAME_ITEMS gi INNER JOIN GAME_ITEMS_MAPPING gim ON gim.Cmap_ComptId = gi.Compt_Id WHERE gi.Compt_Delete = 0 AND gi.Compt_Enterprise_ID = $enterprise_ID ORDER BY gi.Compt_Name";
     $enterpriseItemsList = $this->Common_Model->executeQuery($itemQuery);
     //print_r($itemQuery); echo '<br />'; print_r($itemData); exit();
 
@@ -436,13 +419,16 @@ class Ajax extends MY_Controller{
     if ($gameFor == 'enterpriseUsers') {
       $gameQuery = "SELECT gg.Game_ID, gg.Game_Name FROM GAME_ENTERPRISE_GAME ge LEFT JOIN GAME_GAME gg ON gg.Game_ID=ge.EG_GameID WHERE gg.Game_Delete=0 AND ge.EG_EnterpriseID=" . $id . " ORDER BY gg.Game_Name";
     }
+
     if ($gameFor == 'subEnterpriseUsers') {
       $gameQuery = "SELECT gg.Game_ID, gg.Game_Name FROM GAME_SUBENTERPRISE_GAME ge LEFT JOIN GAME_GAME gg ON gg.Game_ID=ge.SG_GameID WHERE Game_Delete=0 AND ge.SG_SubEnterpriseID=" . $id . " ORDER BY gg.Game_Name";
     }
+    
     $gameData = $this->Common_Model->executeQuery($gameQuery);
     if (count($gameData) > 0) {
       echo json_encode($gameData);
-    } else {
+    } 
+    else {
       echo 'No Card found';
     }
   }
@@ -858,8 +844,7 @@ class Ajax extends MY_Controller{
   }
 
   // to get the list of users associated with the games
-  public function getAgents()
-  {
+  public function getAgents() {
     // print_r($this->input->post()); die('<br>Search: '.$searchFilter);
     $loggedInAs      = $this->input->post('loggedInAs');
     $filterValue     = $this->input->post('filterValue');
@@ -867,9 +852,15 @@ class Ajax extends MY_Controller{
     $subEnterpriseId = $this->input->post('subEnterpriseId');
     $gameId          = $this->input->post('gameId');
     $searchFilter    = trim($this->input->post('searchFilter'));
+
+    $startDate = date('Y-m-d H:i:s', strtotime($this->input->post('gamestartdate').' 00:00:00'));
+    $endDate = date('Y-m-d H:i:s', strtotime($this->input->post('gameenddate').' 23:59:59'));
+
     // creating subquery 
-    $userDataQuery   = " SELECT gsu.User_id, gsu.User_fname, gsu.User_lname, gsu.User_email, gsu.User_ParentId, gus.US_LinkID, (SELECT gl.Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_GameID = gus.US_GameID AND gl.Link_ScenarioID = gus.US_ScenID) AS lastLinkId FROM GAME_SITE_USERS gsu
-                INNER JOIN GAME_USERSTATUS gus ON gus.US_UserID = gsu.User_id AND gus.US_GameID=$gameId WHERE gsu.User_Delete=0";
+    $userDataQuery   = " SELECT gsu.User_id, gsu.User_fname, gsu.User_lname, gsu.User_email, gsu.User_ParentId, gus.US_LinkID, (SELECT gl.Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_GameID = gus.US_GameID AND gl.Link_ScenarioID = gus.US_ScenID) AS lastLinkId 
+    FROM GAME_SITE_USERS gsu
+    INNER JOIN GAME_USERSTATUS gus ON gus.US_UserID = gsu.User_id AND gus.US_GameID=$gameId 
+    WHERE gsu.User_Delete=0";
     // adding filters here
     if ($filterValue == 'superadminUsers') {
       $userDataQuery .= " AND gsu.User_MasterParentId=21 AND gsu.User_ParentId=-1 AND gsu.User_SubParentId=-2 ";
@@ -883,32 +874,19 @@ class Ajax extends MY_Controller{
       $userDataQuery .= " AND gsu.User_ParentId=" . $enterpriseId . " AND gsu.User_SubParentId=" . $subEnterpriseId;
     }
 
-    if (isset($searchFilter) && !empty($searchFilter)) {
+    if ($searchFilter == '' || $searchFilter == ' ' || empty($searchFilter)) {
+      // nothing to do
+    }
+    else if (isset($searchFilter) && !empty($searchFilter)) {
       $userDataQuery .= " AND (gsu.User_email LIKE '%" . $searchFilter . "%' OR gsu.User_username LIKE '%" . $searchFilter . "%') ";
     }
 
     // adding the above subquery to main query
-    $agentsSql = "SELECT
-                ud.User_id AS User_id,
-                ud.User_fname AS User_fname,
-                ud.User_lname AS User_lname,
-                ud.User_email AS User_email,
-                ud.US_LinkID
-                FROM
-                GAME_SITE_USER_REPORT_NEW gr
-                INNER JOIN($userDataQuery) ud
-                ON
-                ud.User_id = gr.uid AND ud.lastLinkId = gr.linkid
-                WHERE
-                gr.linkid IN(
-                  SELECT
-                  Link_ID
-                  FROM
-                  GAME_LINKAGE
-                  WHERE
-                  Link_GameID = $gameId
-                  )
-                  ORDER BY `ud`.`US_LinkID` DESC";
+    $agentsSql = "SELECT ud.User_id, ud.User_fname, ud.User_lname, ud.User_email, ud.US_LinkID
+    FROM GAME_SITE_USER_REPORT_NEW gr
+    INNER JOIN($userDataQuery) ud ON ud.User_id = gr.uid AND ud.lastLinkId = gr.linkid
+    WHERE gr.linkid IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = $gameId ) AND gr.date_time BETWEEN '$startDate' AND '$endDate' 
+    ORDER BY ud.US_LinkID DESC";
 
     $agentsResult = $this->Common_Model->executeQuery($agentsSql);
     // die($agentsSql);
@@ -1328,19 +1306,22 @@ class Ajax extends MY_Controller{
   }
 
 
-  //csv functionality for enterprise Users
-  public function EnterpriseUsersCSV($Enterpriseid = NULL)
-  {
+  // csv functionality for enterprise Users
+  public function EnterpriseUsersCSV($Enterpriseid=NULL, $User_GameStartDateCSV=NULL, $User_GameEndDateCSV=NULL) {
     // Set max upload file size [2MB]
     $maxFileSize    = 2097152;
     $User_UploadCsv = time();
     // Allowed Extensions
     $validext       = array('xls', 'xlsx', 'csv');
 
+    // Setting date
+    $User_GameStartDate = date('Y-m-d H:i:s', strtotime(base64_decode($User_GameStartDateCSV)));
+    $User_GameEndDate   = date('Y-m-d H:i:s', strtotime(base64_decode($User_GameEndDateCSV)));
+
     if (isset($_FILES['upload_csv']['name']) && !empty($_FILES['upload_csv']['name'])) {
       $explode_filename = explode(".", $_FILES['upload_csv']['name']);
-      //echo $explode_filename[0];
-      //exit();
+      // echo $explode_filename[0];
+      // exit();
       $ext = strtolower(end($explode_filename));
       //echo $ext."\n";
       if (in_array($ext, $validext)) {
@@ -1353,6 +1334,41 @@ class Ajax extends MY_Controller{
           $flag              = true;
           $duplicate         = array();
 
+          // Setting Enterprize ID
+          if ($Enterpriseid == 0) {
+            $entid = $this->session->userdata('loginData')['User_ParentId'];
+          }
+          else {
+            $entid = $Enterpriseid;
+          }
+
+          // searching domail name 
+          if ($entid) {
+            // enterprise user
+            $domainNameWhere = array(
+              'Domain_EnterpriseId'      => $entid,
+              'Domain_SubEnterpriseId =' => NULL,
+            );
+          }
+          else {
+            $domainNameWhere = array(
+              'Domain_EnterpriseId ='    => NULL,
+              'Domain_SubEnterpriseId =' => NULL,
+            );
+          }
+
+          $domainName = $this->Common_Model->fetchRecords('GAME_DOMAIN', $domainNameWhere, 'Domain_Name', '');
+          // print_r($domainName); print_r($domainName[0]->Domain_Name); exit();
+          // if domain name is not set then set as default domain
+          if (!empty($domainName[0]->Domain_Name)) {
+            $domain = $domainName[0]->Domain_Name;
+          }
+          else {
+            $domain = "https://".$_SERVER['SERVER_NAME'];
+            // $domain = "https://corpsim.in";
+          }
+
+          // looping through each entry
           while (($filesop = fgetcsv($handle, 1000, ",")) !== false) {
             if ($flag) {
               // to skip the 1st row that is title/header in file
@@ -1361,17 +1377,23 @@ class Ajax extends MY_Controller{
             }
 
             if (!empty($filesop)) {
-              //convert the date format 
+              // convert the date format 
               $dateDoesNotAccept = array('.', '-');
-              $startDate         = str_replace($dateDoesNotAccept, '/', $filesop[6]);
-              $endDate           = str_replace($dateDoesNotAccept, '/', $filesop[7]);
-              $userStartDate     = date("Y-m-d", strtotime($startDate));
-              $userEndDate       = date("Y-m-d", strtotime($endDate));
-              $email             = $filesop[4];
+              // $startDate         = str_replace($dateDoesNotAccept, '/', $filesop[6]);
+              // $endDate           = str_replace($dateDoesNotAccept, '/', $filesop[7]);
+              // $userStartDate     = date("Y-m-d", strtotime($startDate));
+              // $userEndDate       = date("Y-m-d", strtotime($endDate));
+              $userStartDate     = $User_GameStartDate ? $User_GameStartDate : date('Y-m-d');
+              $userEndDate       = $User_GameEndDate ? $User_GameEndDate : date('Y-m-d', strtotime('+5 years'));
+
+              $username          = $filesop[2];
               $mobile            = $filesop[3];
+              $email             = $filesop[4];
+
               $where             = array(
-                "User_mobile" => $mobile,
-                "User_email"  => $email
+                "User_username" => $username,
+                "User_mobile"   => $mobile,
+                "User_email"    => $email,
               );
               // echo $filesop[7].' csvSD '.$startDate.' sD '.$userStartDate. ' csvED '.$endDate.' eD '.$userEndDate; exit();
 
@@ -1383,17 +1405,12 @@ class Ajax extends MY_Controller{
                 // exit();
               }
 
-              if ($Enterpriseid == 0) {
-                $entid = $this->session->userdata('loginData')['User_ParentId'];
-              } else {
-                $entid = $Enterpriseid;
-              }
               $insertArray = array(
                 "User_fname"         => $filesop[0],
                 "User_lname"         => $filesop[1],
-                "User_username"      => $filesop[2],
-                "User_mobile"        => $filesop[3],
-                "User_email"         => $filesop[4],
+                "User_username"      => $username,
+                "User_mobile"        => $mobile,
+                "User_email"         => $email,
                 "User_companyid"     => $filesop[5],
                 "User_Role"          => 1,
                 "User_ParentId"      => $entid,
@@ -1405,17 +1422,40 @@ class Ajax extends MY_Controller{
               // print_r($filesop); echo $userStartDate. ' and '.$userEndDate; print_r($insertArray);exit();
               $result = $this->Common_Model->insert("GAME_SITE_USERS", $insertArray, 0, 0);
               // print_r($this->db->last_query());exit;
+
               $c++;
               if ($result) {
                 $uid           = $result;
                 $password      = $this->Common_Model->random_password();
                 $login_details = array(
                   'Auth_userid'    => $uid,
-                  'Auth_username'  => $filesop[2],
+                  'Auth_username'  => $username,
                   'Auth_password'  => $password,
                   'Auth_date_time' => date('Y-m-d H:i:s')
                 );
+                // print_r($login_details); exit();
                 $result1 = $this->Common_Model->insert('GAME_USER_AUTHENTICATION', $login_details, 0, 0);
+
+                // email ===============================
+                if ($result1 && $domain) {
+                  //$message  = "Thanks for your enrolling!<br>";
+                  $message  = "Login and password for accessing our eLearning programs and/or assessments are provided below.<br><br>";
+                  $message .= "URL: $domain<br>";
+                  $message .= "Login: $username<br>";
+                  $message .= "Password: $password<br>";
+                  $message .= "<br>Please login and verify the credentials. In case of any issue and for any other details please contact your Program Administrator.<br>";
+                  $message .= "<br>Regards,<br>Admin<br>Humanlinks Learning";
+
+                  $addArray = array(
+                    'ESD_To'           => $email,
+                    'ESD_Email_Count'  => 1,
+                    'ESD_EnterprizeID' => $entid,
+                    'ESD_DateTime'     => date('Y-m-d H:i:s', time()),
+                  );
+                  // ESD_Status => 0->Not Send, 1-> Send
+                  $this->Common_Model->send_mail($email, 'Prayog access', $message, 'support@corpsim.in', $addArray);
+                }
+                // email ===============================
               }
             }
           }
@@ -1692,7 +1732,7 @@ class Ajax extends MY_Controller{
     $Domain_Name = $Domain_Name;
     $where       = array(
       'Domain_Status' => 0,
-      'Domain_Name'   => trim("http://" . $Domain_Name . ".corporatesim.com"),
+      'Domain_Name'   => trim("https://" . $Domain_Name . ".corpsim.in"),
     );
     $resultDomain_Name = $this->Common_Model->findCount('GAME_DOMAIN', $where);
     if ($resultDomain_Name > 0) {
@@ -1722,8 +1762,9 @@ class Ajax extends MY_Controller{
         'Compt_CreatedBy'       => $this->loginDataLocal['User_Id'],
       );
       $checkExistingData = array(
-        'Compt_Name'   => $Compt_Name,
-        'Compt_Delete' => 0,
+        'Compt_Name'          => $Compt_Name,
+        'Compt_Enterprise_ID' => $Compt_Enterprise_ID,
+        'Compt_Delete'        => 0,
       );
       $retData = $this->Common_Model->insert('GAME_ITEMS', $insertArray, $checkExistingData);
       if ($retData == 'duplicate') {
@@ -1734,7 +1775,8 @@ class Ajax extends MY_Controller{
     }
   }
 
-  public function addSpecialization(){
+  public function addSpecialization()
+  {
     // adding new Specialization
     $RequestMethod = $this->input->server('REQUEST_METHOD');
     if ($RequestMethod == 'POST') {
@@ -1742,10 +1784,9 @@ class Ajax extends MY_Controller{
 
       $US_Name = $this->input->post('Specialization_Name');
 
-      if (empty($US_Name)){
+      if (empty($US_Name)) {
         die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Specialization name can not be left blank.']));
-      } 
-      else{
+      } else {
         $insertArray = array(
           'US_Name'      => $US_Name,
           'US_CreatedOn' => date('Y-m-d H:i:s', time()),
@@ -1754,40 +1795,39 @@ class Ajax extends MY_Controller{
         $checkExistingData = array('US_Name' => $US_Name);
         $retData = $this->Common_Model->insert('GAME_USER_SPECIALIZATION', $insertArray, $checkExistingData);
 
-        if($retData == 'duplicate'){
+        if ($retData == 'duplicate') {
           die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Specialization Name Already Exist.']));
-        } 
-        else{
+        } else {
           die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Specialization Added Successfully.']));
         }
       }
     }
   }
 
-  public function editSpecialization(){
+  public function editSpecialization()
+  {
     // edit Specialization
     // print_r($this->input->post());
     $US_ID   = $this->input->post('US_ID');
     $US_Name = $this->input->post('Specialization_Name');
 
-    if(empty($US_Name)){
+    if (empty($US_Name)) {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Specialization Name can not be left blank.']));
-    }
-    else{
+    } else {
       $updateArray = array('US_Name' => $US_Name);
       $check = array('US_Name' => $US_Name);
       $retData = $this->Common_Model->update('GAME_USER_SPECIALIZATION', $US_ID, $updateArray, $check, 'US_ID');
 
-      if($retData == 'duplicate'){
+      if ($retData == 'duplicate') {
         die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Specialization Name Already Exist.']));
-      }
-      else{
+      } else {
         die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Specialization Name Updated Successfully.']));
       }
     }
   }
 
-  public function addCampus(){
+  public function addCampus()
+  {
     // adding new Campus
     $RequestMethod = $this->input->server('REQUEST_METHOD');
     if ($RequestMethod == 'POST') {
@@ -1795,12 +1835,13 @@ class Ajax extends MY_Controller{
 
       $UC_Name = $this->input->post('Campus_Name');
 
-      if (empty($UC_Name)){
+      if (empty($UC_Name)) {
         die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Campus name can not be left blank.']));
-      } 
-      else{
+      } else {
+        // Campus Type 1->Management, 2-> Engineering, 3-> Other
         $insertArray = array(
           'UC_Name'      => $this->input->post('Campus_Name'),
+          'UC_Type'      => $this->input->post('Campus_Type'),
           'UC_Address'   => $this->input->post('Campus_Address'),
           'UC_Email'     => $this->input->post('Campus_Email'),
           'UC_Contact'   => $this->input->post('Campus_Contact'),
@@ -1810,34 +1851,32 @@ class Ajax extends MY_Controller{
         $checkExistingData = array('UC_Name' => $UC_Name);
         $retData = $this->Common_Model->insert('GAME_USER_CAMPUS', $insertArray, $checkExistingData);
 
-        if($retData == 'duplicate'){
+        if ($retData == 'duplicate') {
           die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Campus Name Already Exist.']));
-        } 
-        else{
+        } else {
           die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Campus Added Successfully.']));
         }
       }
     }
   }
 
-  public function editCampus(){
+  public function editCampus()
+  {
     // edit Campus
     //print_r($this->input->post());
     $UC_ID   = $this->input->post('UC_ID');
     $UC_Name = $this->input->post('Campus_Name');
 
-    if(empty($UC_Name)){
+    if (empty($UC_Name)) {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Campus Name can not be left blank.']));
-    }
-    else{
+    } else {
       $updateArray = array('UC_Name' => $UC_Name);
       $check = array('UC_Name' => $UC_Name);
       $retData = $this->Common_Model->update('GAME_USER_CAMPUS', $UC_ID, $updateArray, $check, 'UC_ID');
 
-      if($retData == 'duplicate'){
+      if ($retData == 'duplicate') {
         die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Campus Name Already Exist.']));
-      }
-      else{
+      } else {
         die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Campus Name Updated Successfully.']));
       }
     }
@@ -1850,23 +1889,37 @@ class Ajax extends MY_Controller{
     $Compt_Id          = $this->input->post('Compt_Id');
     $Compt_Name        = trim($this->input->post('Compt_Name'));
     $Compt_Description = trim($this->input->post('Compt_Description'));
+
     if (empty($Compt_Name)) {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Master name can not be left blank.']));
     } else {
-      $updateArray = array(
-        'Compt_Name'        => $Compt_Name,
-        'Compt_Description' => $Compt_Description,
-        'Compt_UpdatedBy'   => $this->loginDataLocal['User_Id'],
-        'Compt_UpdatedOn'   => date('Y-m-d H:i:s'),
-      );
+      // taking enterprize ID of item Name
+      $where   = array('Compt_Id' => $Compt_Id);
+      $details = $this->Common_Model->fetchRecords('GAME_ITEMS', $where, 'Compt_Enterprise_ID', '');
+      //print_r($details); print_r($details[0]->Compt_Enterprise_ID); exit();
 
-      $check = array(
-        'Compt_Name' => $Compt_Name,
+      // checking Item name exist or not
+      $compNameWhere   = array(
+        'Compt_Name'          => $Compt_Name,
+        'Compt_Enterprise_ID' => $details[0]->Compt_Enterprise_ID,
       );
-      $retData = $this->Common_Model->update('GAME_ITEMS', $Compt_Id, $updateArray, $check, 'Compt_Id');
-      if ($retData == 'duplicate') {
+      $compNameDetails = $this->Common_Model->fetchRecords('GAME_ITEMS', $compNameWhere, 'Compt_Id, Compt_Name', '');
+      //print_r($compNameDetails); print_r($compNameDetails[0]->Compt_Id); exit();
+
+      // if item name exist then show error elae update record
+      if (!empty($compNameDetails[0]->Compt_Id)) {
         die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Master Name Already Exist.']));
       } else {
+        $where       = array('Compt_Id' => $Compt_Id);
+        $updateArray = array(
+          'Compt_Name'        => $Compt_Name,
+          'Compt_Description' => $Compt_Description,
+          'Compt_UpdatedBy'   => $this->loginDataLocal['User_Id'],
+          'Compt_UpdatedOn'   => date('Y-m-d H:i:s'),
+        );
+
+        $retData = $this->Common_Model->updateRecords('GAME_ITEMS', $updateArray, $where);
+
         die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Master Data Updated Successfully.']));
       }
     }
@@ -1909,7 +1962,6 @@ class Ajax extends MY_Controller{
 
       // finding the last scenario of selected games
       $scenSql = "SELECT gl.Link_GameID, gl.Link_ID, gl.Link_ScenarioID, gl.Link_Order, gg.Game_Name, gs.Scen_Name FROM GAME_LINKAGE gl LEFT JOIN GAME_GAME gg ON gg.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Link_ScenarioID WHERE (gl.Link_GameID, gl.Link_Order) IN( SELECT gll.Link_GameID, MAX(gll.Link_Order) FROM GAME_LINKAGE gll WHERE gll.Link_GameID IN($gamesId) AND gl.Link_Status = 1 GROUP BY gll.Link_GameID)";
-      // $scenSql = "SELECT gl.Link_GameID, gl.Link_ID, gl.Link_ScenarioID, gl.Link_Order, gg.Game_Name, gs.Scen_Name FROM GAME_LINKAGE gl JOIN GAME_LINKAGE gll ON gl.Link_Order > gll.Link_Order LEFT JOIN GAME_GAME gg ON gg.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Link_ScenarioID WHERE gl.Link_GameID IN($gamesId) GROUP BY gl.Link_GameID";
 
       $lastScenario = $this->Common_Model->executeQuery($scenSql);
       // echo $scenSql; prd($lastScenario);
@@ -1919,17 +1971,9 @@ class Ajax extends MY_Controller{
         $tableRow = '';
         foreach ($lastScenario as $lastScenarioRow) {
           $tableRow .= '<tr>'; // this is the game comp/subComp row
+
           // getting the component and subcomponent of scenario one by one
-          // $whereLink = array(
-          //   'SubLink_LinkID'   => $lastScenarioRow->Link_ID,
-          //   'SubLink_ShowHide' => 0, //0->show, 1->hide
-          //   'SubLink_Type'     => 1,
-          // );
-          // $compSubcomp = $this->Common_Model->fetchRecords('GAME_LINKAGE_SUB', $whereLink, '"' . $lastScenarioRow->Game_Name . '" AS GameName, "' . $lastScenarioRow->Scen_Name . '" AS ScenName, SubLink_ID AS SubLinkID, SubLink_CompID AS CompID, SubLink_CompName AS CompName, SubLink_SubCompID AS SubCompID, SubLink_SubcompName AS SubcompName, SubLink_Competence_Performance AS Competence_Performance, IF(SubLink_SubCompID > 0, "subComponent", "component") AS "compSubcompType", SubLink_AreaName', 'SubLink_CompName, SubLink_SubcompName, SubLink_Competence_Performance');
-
-          // $compSubcompquery = "SELECT '".$lastScenarioRow->Game_Name."' AS GameName, '".$lastScenarioRow->Scen_Name."' AS ScenName, SubLink_ID AS SubLinkID, SubLink_CompID AS CompID, SubLink_CompName AS CompName, SubLink_SubCompID AS SubCompID, SubLink_SubcompName AS SubcompName, SubLink_Competence_Performance AS Competence_Performance, IF(SubLink_SubCompID > 0, 'subComponent', 'component') AS compSubcompType, SubLink_AreaName FROM GAME_LINKAGE_SUB WHERE SubLink_LinkID = '".$lastScenarioRow->Link_ID."' AND SubLink_ShowHide = 0 AND SubLink_Type = 1 ORDER BY SubLink_CompName, SubLink_SubcompName, SubLink_Competence_Performance";
-
-          $compSubcompquery = "SELECT '".$lastScenarioRow->Game_Name."' AS GameName, '".$lastScenarioRow->Scen_Name."' AS ScenName, gls.SubLink_ID AS SubLinkID, gls.SubLink_Competence_Performance AS Competence_Performance, IF(gls.SubLink_SubCompID > 0, 'subComponent', 'component') AS compSubcompType, gls.SubLink_AreaName, CONCAT(gc.Comp_Name,' / ',gc.Comp_NameAlias) AS CompName, CONCAT(gsc.SubComp_Name,' / ',gsc.SubComp_NameAlias) AS SubcompName FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gsc ON gsc.SubComp_ID = gls.SubLink_SubCompID WHERE gls.SubLink_LinkID = '".$lastScenarioRow->Link_ID."' AND gls.SubLink_ShowHide = 0 AND gls.SubLink_Type = 1 ORDER BY gls.SubLink_CompName, gls.SubLink_SubcompName, gls.SubLink_Competence_Performance";
+          $compSubcompquery = "SELECT '" . $lastScenarioRow->Game_Name . "' AS GameName, '" . $lastScenarioRow->Scen_Name . "' AS ScenName, gls.SubLink_ID AS SubLinkID, gls.SubLink_Competence_Performance AS Competence_Performance, IF(gls.SubLink_SubCompID > 0, 'subComponent', 'component') AS compSubcompType, gls.SubLink_AreaName, CONCAT(gc.Comp_Name,' / ',gc.Comp_NameAlias) AS CompName, CONCAT(gsc.SubComp_Name,' / ',gsc.SubComp_NameAlias) AS SubcompName FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID LEFT JOIN GAME_SUBCOMPONENT gsc ON gsc.SubComp_ID = gls.SubLink_SubCompID WHERE gls.SubLink_LinkID = '" . $lastScenarioRow->Link_ID . "' AND gls.SubLink_ShowHide = 0 AND gls.SubLink_Type = 1 ORDER BY gls.SubLink_CompName, gls.SubLink_SubcompName, gls.SubLink_Competence_Performance";
 
           $compSubcomp = $this->Common_Model->executeQuery($compSubcompquery);
           // print_r($compSubcompquery); exit();
@@ -2035,26 +2079,22 @@ class Ajax extends MY_Controller{
     }
   }
 
-  public function compUserReportData()
-  {
+  public function compUserReportData() {
     // prd($this->input->post()); exit();
     $filtertype       = $this->input->post('filtertype');
     $enterpriseId     = $this->input->post('Cmap_Enterprise_ID'); //Enterprise ID for which item is created
     $formulaId        = $this->input->post('Cmap_Formula_ID'); //formula ID
-    $report_startDate =  date('Y-m-d H:i:s', strtotime($this->input->post('report_startDate').' 00:00:00'));
-    $report_endDate   =  date('Y-m-d H:i:s', strtotime($this->input->post('report_endDate').' 23:59:59'));
+    $report_startDate =  date('Y-m-d H:i:s', strtotime($this->input->post('report_startDate') . ' 00:00:00'));
+    $report_endDate   =  date('Y-m-d H:i:s', strtotime($this->input->post('report_endDate') . ' 23:59:59'));
     $usersId          = $this->input->post('Cmap_UserId'); //User ID and this is of array type
 
-    if (empty($formulaId)) 
-    {
+    if (empty($formulaId)) {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Select Formula To View Report.']));
-    } 
-    else if (empty($usersId) && $filtertype == 'oneByOneItemUsers') 
-    {
+    }
+    else if (empty($usersId) && $filtertype == 'oneByOneItemUsers') {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Select User To View Report.']));
-    } 
-    else 
-    {
+    }
+    else {
       // getting the formula content for the formula evaluation
       $formulaWhere = array(
         'Items_Formula_Id' => $formulaId,
@@ -2065,78 +2105,98 @@ class Ajax extends MY_Controller{
 
       $returnTableHtml = '<table class="stripe hover data-table-export"><thead><tr> <th>ID</th> <th>Name (email)</th>';
 
-      if($this->session->userdata('loginData')['User_Role'] == 'superadmin'){
+      // if ($this->session->userdata('loginData')['User_Role'] == 'superadmin') {
+      if ($filtertype == 'allItemUsers') {
         //if superadmin login then show Company/Institute Name
-        // $returnTableHtml .= '<th>Company/Institute</th> <th>Function/Specialization</th> <th>Overall Score</th> </tr></thead><tbody>';
-        $returnTableHtml .= '<th>Company/Institute</th> <th>Formula Value</th> </tr></thead><tbody>';
+        $returnTableHtml .= '<th>Company/Institute</th>';
       }
-      else if($this->session->userdata('loginData')['User_Role'] != 'superadmin'){
-        //else if superadmin not login then dont show Company/Institute Name
-        // $returnTableHtml .= '<th>Function/Specialization</th> <th>Overall Score</th> </tr></thead><tbody>';
-        $returnTableHtml .= '<th>Formula Value</th> </tr></thead><tbody>';
+      $returnTableHtml .= '<th>Formula Value</th> <th>Report</th> </tr></thead><tbody>';
+
+      // ==========================================================
+      // if item__id is used in formula, and $itemCompSubcompJson doesn't contain the array[item__id], this means this item id need to be mapped with comp-subcomp
+      $gameCardID = [];
+      $gameCard_SublinkID = [];
+      $slNo = 0;
+      $gameCompSubcomp = json_decode($formulaData[0]->Items_Formula_Json, true);
+      foreach ($gameCompSubcomp as $gameCompSubcompRow => $gameCompSubcompValue) {
+        // pr($gameCompSubcompRow); pr($gameCompSubcompValue); $averageJson[$gameCompSubcompRow]
+        for ($l = 0; $l < count($gameCompSubcompValue); $l++) {
+          // this contains sublinkId, gameid. So check for game existance, palyed status and then pick value
+          $sublink_gameid    = explode(',', $gameCompSubcompValue[$l]);
+          $sublinkid         = $sublink_gameid[0];
+          $gameid            = $sublink_gameid[1];
+          $gameCardID[$slNo] = $gameid;
+          $gameCard_SublinkID[$slNo] = $sublinkid;
+
+          $slNo++;
+        }
       }
+      // print_r($gameCardID); echo '<br />'; print_r($gameCard_SublinkID); exit();
+      // ==========================================================
 
       // finding the user details according filter type
-      $userQuery = "SELECT gsu.User_id, CONCAT(gsu.User_fname, ' ', gsu.User_lname) AS User_fullName, gsu.User_username, gsu.User_email, ge.Enterprise_ID, ge.Enterprise_Name FROM GAME_SITE_USERS gsu LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gsu.User_ParentId WHERE gsu.User_Role = 1 AND gsu.User_Delete = 0 AND gsu.User_datetime BETWEEN '$report_startDate' AND '$report_endDate' ";
+      // $userQuery = "SELECT DISTINCT gi.input_user, gsu.User_id, CONCAT(gsu.User_fname, ' ', gsu.User_lname) AS User_fullName, gsu.User_username, gsu.User_email, ge.Enterprise_ID, ge.Enterprise_Name 
+      // FROM GAME_SITE_USERS gsu 
+      // LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gsu.User_ParentId 
+      // LEFT JOIN GAME_INPUT gi ON gi.input_user = gsu.User_id
+      // WHERE gsu.User_Role = 1 AND gsu.User_Delete = 0 AND ge.Enterprise_ID = $enterpriseId AND gi.input_caretedOn BETWEEN '$report_startDate' AND '$report_endDate' AND gi.input_sublinkid IN (" . implode(',', $gameCard_SublinkID) . ") ";
+
+      $userQuery = "SELECT DISTINCT gi.input_user, gsu.User_id, CONCAT(gsu.User_fname, ' ', gsu.User_lname) AS User_fullName, gsu.User_username, gsu.User_email, ge.Enterprise_ID, ge.Enterprise_Name 
+      FROM GAME_SITE_USERS gsu 
+      LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gsu.User_ParentId 
+      LEFT JOIN GAME_INPUT gi ON gi.input_user = gsu.User_id
+      WHERE gsu.User_Role = 1 AND gsu.User_Delete = 0 AND gi.input_caretedOn BETWEEN '$report_startDate' AND '$report_endDate' AND gi.input_sublinkid IN (" . implode(',', $gameCard_SublinkID) . ") ";
 
       switch ($filtertype) {
         case 'oneByOneItemUsers':
           //when one enterprise selected some specific user to generate report
           $usersId = implode(',', $usersId);
           //print_r($usersId); exit();
-          $userQuery .= "AND gsu.User_id IN ($usersId) AND ge.Enterprise_ID = ". $enterpriseId." ";
+          $userQuery .= " AND gsu.User_id IN ($usersId) AND ge.Enterprise_ID = ". $enterpriseId." ";
           break;
         case 'myItemUsers':
           //when one enterprise all users selecte to generate report
-          $userQuery .= "AND ge.Enterprise_ID = ". $enterpriseId." ";
+          $userQuery .= " AND ge.Enterprise_ID = ". $enterpriseId." ";
           break;
         case 'allItemUsers':
-          //when all enterprise all users selecte to generate report
+          // when all enterprise all users selecte to generate report
           break;
-        default:
       }
 
-      $userQuery .= "ORDER BY gsu.User_fname, gsu.User_lname ASC";
+      $userQuery .= " ORDER BY gsu.User_fname, gsu.User_lname ASC ";
       //print_r($userQuery); exit();
       $userList = $this->Common_Model->executeQuery($userQuery);
 
-      if (count($userList) < 1) 
-      {
+      if (count($userList) < 1) {
         die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No User Found Between Selected Date']));
-      } 
-      else 
-      {
+      }
+      else {
         $tableRow = '';
         $slNo = 1;
         $overall_Scatter_Chart = [];
-        foreach ($userList as $userListRow) 
-        {
+        foreach ($userList as $userListRow) {
           // $tableRow .= '<tr> <td>' . $slNo . '</td> <td title="' . $userListRow->User_username . '"><a href="javascript:void(0);" data-user_id='.$userListRow->User_id.' data-enterprise_id='.$userListRow->Enterprise_ID.' data-formula_expression="'.$formulaData[0]->Items_Formula_Expression.'" data-formula_Json="'.$formulaData[0]->Items_Formula_Json.'" data-toggle="tooltip" title="View Report Chart" onclick="showReportChart(this)">' . $userListRow->User_fullName . ' (' . $userListRow->User_email . ')</a></td>';
 
-          $tableRow .= '<tr> <td>' . $slNo . '</td> <td title="' . $userListRow->User_username . '"><a href="javascript:void(0);" data-user_id='.$userListRow->User_id.' data-enterprise_id='.$userListRow->Enterprise_ID.' data-toggle="tooltip" title="View Report Chart" onclick="showReportChart(this)">' . $userListRow->User_fullName . ' (' . $userListRow->User_email . ')</a></td>';
+          $tableRow .= '<tr> <td>' . $slNo . '</td> <td title="' . $userListRow->User_username . '"><a href="javascript:void(0);" data-user_id=' . $userListRow->User_id . ' data-enterprise_id=' . $userListRow->Enterprise_ID . ' data-toggle="tooltip" title="View Sub-factor Chart" onclick="showReportChart(this)">' . $userListRow->User_fullName . ' (' . $userListRow->User_email . ')</a></td>';
 
-          if($this->session->userdata('loginData')['User_Role'] == 'superadmin'){
+          if ($filtertype == 'allItemUsers') {
             //if superadmin login then show Company/Institute Name
             // $tableRow .= '<td>' . $userListRow->Enterprise_Name . '</td> <td></td>';
             $tableRow .= '<td>' . $userListRow->Enterprise_Name . '</td>';
           }
-          else if($this->session->userdata('loginData')['User_Role'] != 'superadmin'){
-            //else if superadmin not login then dont show Company/Institute Name
-            // $tableRow .= '<td>Function/Specialization</td>';
-          }
-           // fetching user over all data according to formula
-           // $tableRow .= "<td>" . $this->overallValue($userListRow->User_id, $formulaData[0]->Items_Formula_Expression, $formulaData[0]->Items_Formula_Json) . "</td>";
+          // fetching user over all data according to formula
+          // $tableRow .= "<td>" . $this->overallValue($userListRow->User_id, $formulaData[0]->Items_Formula_Expression, $formulaData[0]->Items_Formula_Json) . "</td>";
 
           $returned_Value = $this->overallValue($userListRow->User_id, $formulaData[0]->Items_Formula_Expression, $formulaData[0]->Items_Formula_Json);
           $returned_Value = json_decode($returned_Value);
 
           $user_Input_Date       = $returned_Value->input_Date ? $returned_Value->input_Date : 0;
           //setting cap for overall value at 200
-          $user_Overall_Value    = $returned_Value->overall_Value >= 200 ? 200 :  $returned_Value->overall_Value;
-          $overall_Scatter_Chart[$slNo-1][0] = array($user_Input_Date);
-          $overall_Scatter_Chart[$slNo-1][1] = array($user_Overall_Value);
+          $user_Overall_Value    = $returned_Value->overall_Value >= 200 ? 200 :  round($returned_Value->overall_Value, 2);
+          $overall_Scatter_Chart[$slNo - 1][0] = array($user_Input_Date);
+          $overall_Scatter_Chart[$slNo - 1][1] = array($user_Overall_Value);
 
-          $tableRow .= "<td>" . $user_Overall_Value . "</td>";
+          $tableRow .= '<td>' . $user_Overall_Value . '</td> <td><a href="javascript:void(0);" data-user_id=' . $userListRow->User_id . ' data-enterprise_id=' . $userListRow->Enterprise_ID . ' data-toggle="tooltip" title="Download Report" onclick="downloadReport(this)"><i class="fa fa-download"></i></a></td>';
 
           $tableRow .= '</tr>';
           $slNo++;
@@ -2150,11 +2210,151 @@ class Ajax extends MY_Controller{
     }
   }
 
+  public function compUserReportFiveData() {
+    // prd($this->input->post()); exit();
+    $filtertype       = $this->input->post('filtertype');
+    $enterpriseId     = $this->input->post('Cmap_Enterprise_ID'); //Enterprise ID for which item is created
+    $formulaId        = $this->input->post('Cmap_Formula_ID'); // formula ID
+    $report_startDate =  date('Y-m-d H:i:s', strtotime($this->input->post('report_startDate') . ' 00:00:00'));
+    $report_endDate   =  date('Y-m-d H:i:s', strtotime($this->input->post('report_endDate') . ' 23:59:59'));
+    $usersId          = $this->input->post('Cmap_UserId'); // User ID and this is of array type
+    $action_ID        = $this->input->post('action_ID'); // Action ID
+
+    if (empty($formulaId)) {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Select Formula To View Report.']));
+    }
+    else if (empty($action_ID)) {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Select Action To View Report.']));
+    }
+    else if (empty($usersId) && $filtertype == 'oneByOneItemUsers') {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Select User To View Report.']));
+    } 
+    else {
+      if (empty($enterpriseId)) {
+
+      }
+      else {
+        
+      }
+
+      // getting the formula content for the formula evaluation
+      $formulaWhere = array(
+        'Items_Formula_Id' => $formulaId,
+        //'Items_Formula_Enterprise_Id' => $enterpriseId,
+      );
+      $formulaData = $this->Common_Model->fetchRecords('GAME_ITEMS_FORMULA', $formulaWhere, 'Items_Formula_Expression, Items_Formula_Json');
+      // prd($formulaData);
+
+      $returnTableHtml = '<table class="stripe hover data-table-export"><thead><tr> <th>Select</th> <th>Sl.No.</th> <th>Name</th> <th>Username</th> <th>Email</th>';
+      if ($filtertype == 'allItemUsers') {
+        $returnTableHtml .= '<th>Organization</th>';
+      }
+      $returnTableHtml .= '<th>Overall Score</th> </tr></thead><tbody>';
+
+      // ==========================================================
+      // if item__id is used in formula, and $itemCompSubcompJson doesn't contain the array[item__id], this means this item id need to be mapped with comp-subcomp
+      $gameCardID = [];
+      $gameCard_SublinkID = [];
+      $slNo = 0;
+      $gameCompSubcomp = json_decode($formulaData[0]->Items_Formula_Json, true);
+      foreach ($gameCompSubcomp as $gameCompSubcompRow => $gameCompSubcompValue) {
+        // pr($gameCompSubcompRow); pr($gameCompSubcompValue); $averageJson[$gameCompSubcompRow]
+        for ($l = 0; $l < count($gameCompSubcompValue); $l++) {
+          // this contains sublinkId, gameid. So check for game existance, palyed status and then pick value
+          $sublink_gameid    = explode(',', $gameCompSubcompValue[$l]);
+          $sublinkid         = $sublink_gameid[0];
+          $gameid            = $sublink_gameid[1];
+          $gameCardID[$slNo] = $gameid;
+          $gameCard_SublinkID[$slNo] = $sublinkid;
+
+          $slNo++;
+        }
+      }
+      // print_r($gameCardID); echo '<br />'; print_r($gameCard_SublinkID); exit();
+      // ==========================================================
+
+      // RF_Action_ID => 1-> Shortlist, 2-> IDP, 3-> ehire
+      // RF_Status => 0-> Not Selected, 1-> Selected
+
+      // finding the user details according filter type
+      $userQuery = "SELECT DISTINCT gi.input_user, gsu.User_id, CONCAT(gsu.User_fname, ' ', gsu.User_lname) AS User_fullName, gsu.User_username, gsu.User_email, ge.Enterprise_ID, ge.Enterprise_Name, rf.RF_ID, rf.RF_Status
+      FROM GAME_SITE_USERS gsu 
+      LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gsu.User_ParentId 
+      LEFT JOIN GAME_INPUT gi ON gi.input_user = gsu.User_id
+      LEFT JOIN GAME_REPORT_FIVE rf ON rf.RF_User_ID = gsu.User_id AND rf.RF_Enterprize_ID = $enterpriseId AND rf.RF_Formula_ID = $formulaId AND rf.RF_Action_ID = $action_ID
+      WHERE  gsu.User_Role = 1 AND gsu.User_Delete = 0 AND ge.Enterprise_ID = $enterpriseId AND gi.input_caretedOn BETWEEN '$report_startDate' AND '$report_endDate' AND gi.input_sublinkid IN (" . implode(',', $gameCard_SublinkID) . ") ";
+
+      switch ($filtertype) {
+        case 'oneByOneItemUsers':
+          // when one enterprise selected some specific user to generate report
+          $usersId = implode(',', $usersId);
+          // print_r($usersId); exit();
+          $userQuery .= " AND gsu.User_id IN ($usersId) AND ge.Enterprise_ID = ". $enterpriseId." ";
+          break;
+        case 'myItemUsers':
+          // when one enterprise all users selecte to generate report
+          $userQuery .= " AND ge.Enterprise_ID = ". $enterpriseId." ";
+          break;
+        case 'allItemUsers':
+          // when all enterprise all users selecte to generate report
+          break;
+        default:
+      }
+
+      $userQuery .= " ORDER BY rf.RF_Status DESC, gsu.User_fname, gsu.User_lname ASC ";
+      // print_r($userQuery); exit();
+      $userList = $this->Common_Model->executeQuery($userQuery);
+
+      if (count($userList) < 1) {
+        die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No User Found Between Selected Date']));
+      } 
+      else {
+        $tableRow = '';
+        $slNo = 0; // Setting serial Number
+
+        foreach ($userList as $userListRow) {
+          $slNo++; // Incrementing serial Number
+
+          if ($userListRow->RF_Status == 1) {
+            $checked = 'checked';
+          }
+          else {
+            $checked = ' ';
+          }
+
+          $tableRow .= '<tr> <td><!-- bootstrap checkbox --><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" value="'.$userListRow->User_id.'" id="'.$userListRow->User_id.'" name="selectActionUser[]" '.$checked.'><label class="custom-control-label" for="'.$userListRow->User_id.'"></label></div></td> <td>'.$slNo.'</td> <td>'.$userListRow->User_fullName.'</td> <td>'.$userListRow->User_username.'</td> <td>'.$userListRow->User_email.'</td>';
+
+          if ($filtertype == 'allItemUsers') {
+            $returnTableHtml .= '<td>'.$userListRow->Enterprise_Name.'</td>';
+          }
+
+          // fetching user over all data according to formula
+          // $tableRow .= "<td>" . $this->overallValue($userListRow->User_id, $formulaData[0]->Items_Formula_Expression, $formulaData[0]->Items_Formula_Json) . "</td>";
+
+          $returned_Value = $this->overallValue($userListRow->User_id, $formulaData[0]->Items_Formula_Expression, $formulaData[0]->Items_Formula_Json);
+          $returned_Value = json_decode($returned_Value);
+
+          $user_Input_Date       = $returned_Value->input_Date ? $returned_Value->input_Date : 0;
+          // setting cap for overall value at 200
+          $user_Overall_Value    = $returned_Value->overall_Value >= 200 ? 200 :  round($returned_Value->overall_Value, 2);
+
+          $tableRow .= '<td>'.$user_Overall_Value.'</td> </tr>';
+          
+        }
+      }
+      // print_r($returned_Value->averageJson);
+      $returnTableHtml .= $tableRow . '</tbody></table>';
+      // die($returnTableHtml);
+
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "Success", 'icon' => 'success', 'message' => 'Report Data.', 'data' => $returnTableHtml]));
+    }
+  }
+
   private function overallValue($userid = NULL, $formulaString = NULL, $itemCompSubcompJson = NULL)
   {
     $formulaString = explode(' ', $formulaString);
     $averageJson = array();
-    $input_Date_Current = ''; 
+    $input_Date_Current = '';
     // check that user has game or not, completed the game as per the date filter, and take the average and calculate the final value for that 
 
     // pr($userid); pr(explode(' ', $formulaString)); pr(json_decode($itemCompSubcompJson, true)); prd();
@@ -2174,8 +2374,10 @@ class Ajax extends MY_Controller{
         // this means game is allocated, there must be only one row for user
         //pr($userGameData);
         if (count($userGameData) > 0) {
-           //pr($userGameData[0]->US_LinkID);
-          $averageJson[$gameCompSubcompRow][$l] = ($userGameData[0]->input_current) ? $userGameData[0]->input_current : 0;
+          //pr($userGameData[0]->US_LinkID);
+          //$averageJson[$gameCompSubcompRow][$l] = ($userGameData[0]->input_current) ? number_format((float)$userGameData[0]->input_current, 2, '.', '') : 0;
+          //round($userGameData[0]->input_current, 2)
+          $averageJson[$gameCompSubcompRow][$l] = ($userGameData[0]->input_current) ? round($userGameData[0]->input_current, 2) : 0;
           //echo 'input_val '.$userGameData[0]->input_current.'<br>';
           $input_Date_Current = $userGameData[0]->UG_CratedOn;
         }
@@ -2191,16 +2393,16 @@ class Ajax extends MY_Controller{
       if (strpos($formulaString[$s], 'item__') !== false) {
         $item__id = explode('__', $formulaString[$s]);
         $itemid = end($item__id);
-        $formulaString[$s] = (array_key_exists($itemid,$averageJson)) ? $averageJson[$itemid] : 0;
+        $formulaString[$s] = (array_key_exists($itemid, $averageJson)) ? round($averageJson[$itemid], 2) : 0;
       }
     }
     //prd($averageJson); echo implode('',$formulaString).'<br><br>';
     //return eval("return ".implode('',$formulaString).";");
 
-    $overall_Value = eval("return ".implode('',$formulaString).";");
+    $overall_Value = eval("return " . implode('', $formulaString) . ";");
     // $input_Date    = date('d-m-Y', strtotime($input_Date_Current));
     $input_Date    = strtotime($input_Date_Current);
-    return(json_encode(['overall_Value' => $overall_Value, 'input_Date' => $input_Date, 'averageJson' => $averageJson]));
+    return (json_encode(['overall_Value' => $overall_Value, 'input_Date' => $input_Date, 'averageJson' => $averageJson]));
   }
 
   public function showReportChart($userid = NULL, $formulaId = NULL, $enterpriseId = NULL)
@@ -2232,7 +2434,7 @@ class Ajax extends MY_Controller{
 
       foreach ($returned_Value->averageJson as $key => $value) {
         //setting cap for overall value at 200
-        $chartData[]  = $value >= 200 ? 200 : $value;
+        $chartData[]  = $value >= 200 ? 200 : round($value, 2);
 
         //getting Item Name
         $itemWhere = array(
@@ -2247,21 +2449,21 @@ class Ajax extends MY_Controller{
           case 3:
             // 3=simulated Performance
             $chartLabels[]          = $itemData[0]->Compt_Name;
-            $chartBackgroundColor[] = 'rgba(25, 118, 210, 0.2)';//Blue
+            $chartBackgroundColor[] = 'rgba(25, 118, 210, 0.2)'; //Blue
             $chartBorderColor[]     = 'rgba(25, 118, 210, 1)';
             break;
 
           case 4:
             // 4=Competence
             $chartLabels[]          = $itemData[0]->Compt_Name;
-            $chartBackgroundColor[] = 'rgba(245, 124, 0, 0.2)';//Orange
+            $chartBackgroundColor[] = 'rgba(245, 124, 0, 0.2)'; //Orange
             $chartBorderColor[]     = 'rgba(245, 124, 0, 1)';
             break;
 
           case 5:
             // 5=Application  
             $chartLabels[]          = $itemData[0]->Compt_Name;
-            $chartBackgroundColor[] = 'rgba(69, 90, 100, 0.2)';//Blue Gray
+            $chartBackgroundColor[] = 'rgba(69, 90, 100, 0.2)'; //Blue Gray
             $chartBorderColor[]     = 'rgba(69, 90, 100, 1)';
             break;
 
@@ -2272,14 +2474,222 @@ class Ajax extends MY_Controller{
 
       //setting cap for overall value at 200
       //pushina data for overall Value
-      $chartData[]            = $returned_Value->overall_Value >= 200 ? 200 : $returned_Value->overall_Value;
+      $chartData[]            = $returned_Value->overall_Value >= 200 ? 200 : round($returned_Value->overall_Value, 2);
       $chartLabels[]          = 'Formula Value';
-      $chartBackgroundColor[] = 'rgba(56, 142, 60, 0.2)';//Green
+      $chartBackgroundColor[] = 'rgba(56, 142, 60, 0.2)'; //Green
       $chartBorderColor[]     = 'rgba(56, 142, 60, 1)';
 
       die(json_encode(['chartData' => $chartData, 'chartLabels' => $chartLabels, 'chartBackgroundColor' => $chartBackgroundColor, 'chartBorderColor' => $chartBorderColor, "status" => "200", 'title' => 'Success', 'icon' => 'success', 'message' => 'Report Graph Data.']));
-    } 
-    else {
+    } else {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Oops!', 'icon' => 'error', 'message' => 'Not completed by User']));
+    }
+  }
+
+  public function downloadReport($userid = NULL, $formulaId = NULL, $enterpriseId = NULL)
+  {
+    // query to get user Details
+    $userQuery = "SELECT gsu.User_id, gsu.User_username, gsu.User_email, gsu.User_mobile, gsu.User_fname, gsu.User_lname, ge.Enterprise_ID, ge.Enterprise_Name, gc.Country_Name FROM GAME_SITE_USERS gsu LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gsu.User_ParentId LEFT JOIN GAME_COUNTRY gc ON gc.Country_Id = ge.Enterprise_Country WHERE gsu.User_id = $userid";
+    $userDetails = $this->Common_Model->executeQuery($userQuery);
+    //prd($userDetails); exit();
+
+    // query to get Header Section of report
+    $headerQuery = "SELECT gir.IR_Text FROM GAME_ITEM_REPORT gir WHERE gir.IR_ID = 1";
+    $headerDetails = $this->Common_Model->executeQuery($headerQuery);
+    //prd($headerDetails); exit();
+
+    // query to get Disclaimer Section of report
+    $disclaimerQuery = "SELECT gir.IR_Text FROM GAME_ITEM_REPORT gir WHERE gir.IR_ID = 2";
+    $disclaimerDetails = $this->Common_Model->executeQuery($disclaimerQuery);
+    //prd($disclaimerDetails); exit();
+
+    // getting the formula content for the formula evaluation
+    $formulaWhere = array('Items_Formula_Id' => $formulaId);
+    $formulaData  = $this->Common_Model->fetchRecords('GAME_ITEMS_FORMULA', $formulaWhere, 'Items_Formula_Expression, Items_Formula_Json, Items_Formula_Report_Name_Definition, Items_Formula_Detailed_Report');
+    // prd($formulaData);
+
+    $report_Title_Definition = $formulaData[0]->Items_Formula_Report_Name_Definition ? $formulaData[0]->Items_Formula_Report_Name_Definition : '';
+
+    $report_Detailed = $formulaData[0]->Items_Formula_Detailed_Report ? $formulaData[0]->Items_Formula_Detailed_Report : '';
+
+    $returned_Value = $this->overallValue($userid, $formulaData[0]->Items_Formula_Expression, $formulaData[0]->Items_Formula_Json);
+    $returned_Value = json_decode($returned_Value);
+
+    //prd($returned_Value->overall_Value); exit();
+    //prd($returned_Value->input_Date); exit();
+    //prd($returned_Value->averageJson); exit();
+
+    $reportData = [];
+    foreach ($returned_Value->averageJson as $key => $value) {
+      $reportData[]  = $value;
+    }
+    // prd($reportData);
+
+    // $reportData = [1,2,3];
+    if (count($reportData) > 0) {
+      $reportValue               = [];
+      $reportSubFactorName       = [];
+      $reportFactorType          = [];
+      $itemConditionsText        = [];
+      $itemConditionsScoreStatus = [];
+      $itemArray                 = []; // for using in individual report
+      $valueArray                = []; // for using in individual report
+
+      foreach ($returned_Value->averageJson as $key => $value) {
+        // setting cap for overall value at 200
+        $reportValue[]  = $value >= 200 ? 200.00 : sprintf("%.2f", $value);
+        $currentValue   = $value >= 200 ? 200.00 : sprintf("%.2f", $value);
+
+        // storing into array with value for individual report
+        $itemArray[]  = $key; // item ID
+        $valueArray[] = $currentValue; //item scored value
+
+        // getting Item Name
+        $itemWhere = array('Compt_Id' => $key);
+        $itemData = $this->Common_Model->fetchRecords('GAME_ITEMS', $itemWhere, 'Compt_Name, Compt_PerformanceType');
+        // print_r($itemData); exit();
+
+        // getting Item Conditions
+        // IC_Score_Status -> 0=Show, 1=Hide
+        $query = "SELECT gic.IC_Text, gic.IC_Score_Status FROM GAME_ITEM_CONDITIONS gic WHERE gic.IC_Item_ID = $key AND gic.IC_Min_Value <= '$currentValue' AND gic.IC_Max_Value >= '$currentValue'";
+        $itemConditionsData = $this->Common_Model->executeQuery($query);
+        //print_r($itemConditionsData); exit();
+        //print_r($itemConditionsData[0]->IC_Text); exit();
+        $itemConditionsText[] = $itemConditionsData ? $itemConditionsData[0]->IC_Text : '';
+        $itemConditionsScoreStatus[] = $itemConditionsData ? $itemConditionsData[0]->IC_Score_Status : 1;
+
+        $reportSubFactorName[] = $itemData[0]->Compt_Name;
+        $reportFactorType[]    = $itemData[0]->Compt_PerformanceType;
+        // pushina data according to it's performance type
+        // 4 = Competence Readiness
+        // 5 = Competence Application
+        // 3 = Simulated Performance
+      }
+
+      // storing every outcomes of individual report
+      // $individualReport = '';
+      $individualReport = [];
+      $countLoop = 0; // count loop to store values in an array
+      // looping for individual report ( $itemArray $valueArray )
+      for ($x = 0; $x < count($itemArray); $x++) {
+        // for x-axis loop
+        for ($y = 0; $y < count($itemArray); $y++) {
+          // for y-axis loop
+
+          // setting x-axis and y-axis item id for query
+          $xAxis = $itemArray[$x];
+          $yAxis = $itemArray[$y];
+
+          // setting x-axis and y-axis value for query
+          // Readiness
+          $xAxisValue = $valueArray[$x] < 100 ? sprintf("%.2f", $valueArray[$x]) : 100.00;
+          // Application
+          $yAxisValue = $valueArray[$y] < 200 ? sprintf("%.2f", $valueArray[$y]) : 200.00;
+
+          // query to fetch data
+          // IRI_Type_Choice => 1 = EXECUTIVE SUMMARY, 2 = CONCLUSION SECTION
+          // IRI_Condition_Type => 1 = Average, 2 = Individual 
+          $query = "SELECT giri.IRI_ID, giri.IRI_Text, giri.IRI_Type_Choice, giri.IRI_Score_Status 
+          FROM GAME_ITEM_REPORT_INDIVIDUAL giri 
+          WHERE 
+                giri.IRI_Formula_Enterprize_ID = $enterpriseId 
+            AND giri.IRI_Items_Formula_Id = $formulaId 
+            AND giri.IRI_Condition_Type = 2
+            AND giri.IRI_xAxis_Item_Id = $xAxis
+            AND giri.IRI_xAxis_Min_Value <= '$xAxisValue' 
+            AND giri.IRI_xAxis_Max_Value >= '$xAxisValue'
+            AND giri.IRI_yAxis_Item_Id = $yAxis
+            AND giri.IRI_yAxis_Min_Value <= '$yAxisValue' 
+            AND giri.IRI_yAxis_Max_Value >= '$yAxisValue'";
+
+          $individualReportData = $this->Common_Model->executeQuery($query);
+          // print_r($query); exit();
+          // print_r($individualReportData); exit();
+
+          // if result found then store it into array
+          if (count($individualReportData) > 0) {
+            // $individualReport[] = $individualReportData[0];
+
+            // storing Data in to array
+            $individualReport[$countLoop]['IRI_ID'] = $individualReportData[0]->IRI_ID;
+            $individualReport[$countLoop]['IRI_Text'] = $individualReportData[0]->IRI_Text;
+
+            // IRI_Type_Choice => 1 = EXECUTIVE SUMMARY, 2 = CONCLUSION SECTION
+            $individualReport[$countLoop]['IRI_Type_Choice'] = $individualReportData[0]->IRI_Type_Choice;
+
+            // Score of x and y axis
+            $individualReport[$countLoop]['xAxisValue'] = $xAxisValue;
+            $individualReport[$countLoop]['yAxisValue'] = $yAxisValue;
+
+            // IRI_Score_Status => 0=Hide, 1=Show Both, 2=Show x-axis(Readiness), 3=Show y-axis(Application)
+            $individualReport[$countLoop]['IRI_Score_Status'] = $individualReportData[0]->IRI_Score_Status;
+
+            // Performance type => 4 = Competence Readiness, 5 = Competence Application, 3 = Simulated Performance
+            $individualReport[$countLoop]['xAxisFactorType'] = $reportFactorType[$x];
+            $individualReport[$countLoop]['yAxisFactorType'] = $reportFactorType[$y];
+
+            $countLoop++; // incrementing count loop
+          } // end of if condition
+        } // end of y-axis loop
+      } // end of x-axis loop
+
+      // print_r($individualReport); exit();
+      // ==================================
+      // print_r($individualReport[0]->IRI_Text); exit();
+
+      // setting cap for overall value at 200
+      // pushina data for overall Value
+      $reportValue[] = $returned_Value->overall_Value >= 200 ? 200.00 : sprintf("%.2f", $returned_Value->overall_Value);
+
+      $reportSubFactorName[]       = 'Formula Value';
+      $reportFactorType[]          = 'Formula';
+      $itemConditionsText[]        = 'Formula Text';
+      $itemConditionsScoreStatus[] = 'Score Status';
+      //==========================================
+      $overall_Value = round($returned_Value->overall_Value);
+
+      // when competence type set to 0 this means this card not used in formula
+      $countCR = 0;
+      $countCA = 0;
+      $countSP = 0;
+
+      // calculating total score value for each factor type that is used in selected formula
+      $scoreCR = 0;
+      $scoreCA = 0;
+      $scoreSP = 0;
+
+      for ($i = 0; $i < count($reportFactorType); $i++) {
+        // 4 = Competence Readiness
+        if ($reportFactorType[$i] == 4) {
+          $countCR++;
+          $scoreCR += $reportValue[$i];
+        }
+        // 5 = Competence Application
+        if ($reportFactorType[$i] == 5) {
+          $countCA++;
+          $scoreCA += $reportValue[$i];
+        }
+        // 3 = Simulated Performance
+        if ($reportFactorType[$i] == 3) {
+          $countSP++;
+          $scoreSP += $reportValue[$i];
+        }
+      }
+      // print_r($countCR); echo '<br />'; print_r($scoreCR); exit();
+
+      // calculating average score value for each factor type
+      $averageCR = round($scoreCR) > 0 ? sprintf("%.2f", $scoreCR / $countCR) : 0.00;
+      $averageCA = round($scoreCA) > 0 ? sprintf("%.2f", $scoreCA / $countCA) : 0.00;
+      $averageSP = round($scoreSP) > 0 ? sprintf("%.2f", $scoreSP / $countSP) : 0.00;
+      // print_r($averageCR); echo '<br />'; print_r($averageCA); echo '<br />'; print_r($averageSP); exit();
+
+      // IR_Type_Choice 1-> EXECUTIVE SUMMARY, 2-> CONCLUSION SECTION
+      // getting game_item_report Executive Summary and Conclusion Section
+      $executiveConclusionQuery = "SELECT gir.IR_Text, gir.IR_Type_Choice FROM GAME_ITEM_REPORT gir WHERE gir.IR_Formula_Enterprize_ID = $enterpriseId AND gir.IR_Items_Formula_Id = $formulaId AND gir.IR_Min_Value <= '$overall_Value' AND gir.IR_Max_Value >= '$overall_Value' AND gir.IR_CR_Min_Average_Value <= '$averageCR' AND gir.IR_CR_Max_Average_Value >= '$averageCR' AND gir.IR_CA_Min_Average_Value <= '$averageCA' AND gir.IR_CA_Max_Average_Value >= '$averageCA' AND gir.IR_SP_Min_Average_Value <= '$averageSP' AND gir.IR_SP_Max_Average_Value >= '$averageSP'";
+      $executiveConclusionData = $this->Common_Model->executeQuery($executiveConclusionQuery);
+      // print_r($executiveConclusionQuery);
+      //====================================
+      die(json_encode(['userDetails' => $userDetails, 'headerDetails' => $headerDetails, 'disclaimerDetails' => $disclaimerDetails, 'report_Title_Definition' => $report_Title_Definition, 'report_Detailed' => $report_Detailed, 'executiveConclusionData' => $executiveConclusionData, 'reportValue' => $reportValue, 'reportSubFactorName' => $reportSubFactorName, 'reportFactorType' => $reportFactorType, 'itemConditionsText' => $itemConditionsText, 'itemConditionsScoreStatus' => $itemConditionsScoreStatus, 'individualReport' => $individualReport, "status" => "200", 'title' => 'Success', 'icon' => 'success', 'message' => 'Report Data.']));
+    } else {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Oops!', 'icon' => 'error', 'message' => 'Not completed by User']));
     }
   }
@@ -2350,6 +2760,712 @@ class Ajax extends MY_Controller{
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Formula Title Already Exist.']));
     } else {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 500, "status" => "200", 'title' => "", 'icon' => 'success', 'message' => 'Formula Added Successfully.']));
+    }
+  }
+
+  public function dashboardChartData() {
+    // prd($this->input->post()); exit();
+    $formulaId = $this->input->post('Cmap_Formula_ID'); //formula ID
+    if (empty($formulaId)) {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Please Select Score Selector To View Report.']));
+    }
+    else {
+      $enterpriseId     = $this->session->userdata('loginData')['User_Id']; //Enterprise ID for which item is created
+      $report_startDate =  date('Y-m-d H:i:s', strtotime($this->input->post('report_startDate') . ' 00:00:00'));
+      $report_endDate   =  date('Y-m-d H:i:s', strtotime($this->input->post('report_endDate') . ' 23:59:59'));
+
+      // getting the formula content for the formula evaluation
+      $formulaWhere = array('Items_Formula_Id' => $formulaId);
+      $formulaData = $this->Common_Model->fetchRecords('GAME_ITEMS_FORMULA', $formulaWhere, 'Items_Formula_Expression, Items_Formula_Json');
+      // prd($formulaData);
+
+      // ==========================================================
+      // if item__id is used in formula, and $itemCompSubcompJson doesn't contain the array[item__id], this means this item id need to be mapped with comp-subcomp
+      $gameCardID = [];
+      $gameCard_SublinkID = [];
+      $slNo = 0;
+      $gameCompSubcomp = json_decode($formulaData[0]->Items_Formula_Json, true);
+      foreach ($gameCompSubcomp as $gameCompSubcompRow => $gameCompSubcompValue) {
+        // pr($gameCompSubcompRow); pr($gameCompSubcompValue); $averageJson[$gameCompSubcompRow]
+        for ($l = 0; $l < count($gameCompSubcompValue); $l++) {
+          // this contains sublinkId, gameid. So check for game existance, palyed status and then pick value
+          $sublink_gameid    = explode(',', $gameCompSubcompValue[$l]);
+          $sublinkid         = $sublink_gameid[0];
+          $gameid            = $sublink_gameid[1];
+          $gameCardID[$slNo] = $gameid;
+          $gameCard_SublinkID[$slNo] = $sublinkid;
+
+          $slNo++;
+        }
+      }
+      // print_r($gameCardID); echo '<br />'; print_r($gameCard_SublinkID); exit();
+      // ==========================================================
+
+      $userDataSql = "SELECT DISTINCT gi.input_user, gi.input_caretedOn, gsu.User_id 
+        FROM GAME_SITE_USERS gsu 
+        LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gsu.User_ParentId 
+        LEFT JOIN GAME_INPUT gi ON gi.input_user = gsu.User_id
+        WHERE gsu.User_Role = 1 AND gsu.User_Delete = 0 AND ge.Enterprise_ID = $enterpriseId AND gi.input_caretedOn BETWEEN '$report_startDate' AND '$report_endDate' AND gi.input_sublinkid IN (" . implode(',', $gameCard_SublinkID) . ")
+        GROUP BY gi.input_user 
+        ORDER BY gi.input_id DESC";
+
+      // ====================================================
+      // fetching all user list between selected date range
+      // $userDataSql = "SELECT gi.input_user, gi.input_caretedOn 
+      // FROM GAME_INPUT gi 
+      // LEFT JOIN GAME_SITE_USERS gsu ON gsu.User_id = gi.input_user 
+      // WHERE gsu.User_ParentId = $enterpriseId AND gi.input_caretedOn BETWEEN '$report_startDate' AND '$report_endDate' 
+      // GROUP BY gi.input_user 
+      // ORDER BY gi.input_id DESC";
+
+      // $userDataSql = "SELECT DISTINCT gi.input_user, gi.input_caretedOn
+      // FROM GAME_SITE_USERS gsu
+      // LEFT JOIN GAME_INPUT gi ON gi.input_user = gsu.User_id
+      // WHERE gsu.User_Role = 1 AND gsu.User_Delete = 0 AND gsu.User_ParentId = $enterpriseId AND gi.input_caretedOn BETWEEN '$report_startDate' AND '$report_endDate' 
+      // GROUP BY gi.input_user 
+      // ORDER BY gi.input_id DESC";
+      $userData = $this->Common_Model->executeQuery($userDataSql);
+      //print_r($userData); exit();
+
+      // making array to hold last 25 users chart data
+      // lastTwentyFiveChart
+      $overallValue = [];
+      $creationDate = [];
+      $i = 0;
+      $overallValue[0] = 0;
+      $creationDate[0] = 0;
+
+      foreach ($userData as $userDataRow) {
+        // if 25 users set then exit from loop
+        if ($i == 25) {
+          break;
+        }
+        $returned_Value = $this->overallValue($userDataRow->input_user, $formulaData[0]->Items_Formula_Expression, $formulaData[0]->Items_Formula_Json);
+        $returned_Value = json_decode($returned_Value);
+        // print_r($returned_Value); 
+
+        // $user_Input_Date    = $returned_Value->input_Date;
+        // if users score value greater then 0 then set that value else not set
+        if ($returned_Value->overall_Value > 0) {
+          // setting cap for overall value at 200
+          $user_Overall_Value = $returned_Value->overall_Value >= 200 ? 200 :  round($returned_Value->overall_Value, 2);
+
+          $overallValue[$i] = $user_Overall_Value ? $user_Overall_Value : 0;
+          $creationDate[$i] = $userDataRow->input_caretedOn ? date('Y-m-d', strtotime($userDataRow->input_caretedOn)) : 0;
+          $i++;
+        }
+      }
+
+      // ====================================================
+      // $userDataQuery = "SELECT gsu.User_id 
+      // FROM GAME_SITE_USERS gsu 
+      // WHERE gsu.User_Role = 1 AND gsu.User_Delete = 0 AND gsu.User_datetime BETWEEN '$report_startDate' AND '$report_endDate' AND gsu.User_ParentId = $enterpriseId";
+
+      // $userIDData = $this->Common_Model->executeQuery($userDataQuery);
+      $userIDData = $userData;
+      // print_r(count($userIDData)); exit();
+
+      // ====================================================
+      // Readiness Vs Simulated Performance
+      $quadrantCRvsSPI = []; // Quadrant I -> x-axis (100 - ---), y-axis (100 - ---)
+      $quadrantCRvsSPII = []; // Quadrant II -> x-axis (0 - 100), y-axis (100 - ---)
+      $quadrantCRvsSPIII = []; // Quadrant III -> x-axis (0 - 100), y-axis (0 - 100)
+      $quadrantCRvsSPIV = []; // Quadrant IV -> x-axis (100 - ---), y-axis (0 - 100)
+
+      // Readiness Vs Application
+      $quadrantCRvsCAI = []; // Quadrant I -> x-axis (100 - ---), y-axis (100 - ---)
+      $quadrantCRvsCAII = []; // Quadrant II -> x-axis (0 - 100), y-axis (100 - ---)
+      $quadrantCRvsCAIII = []; // Quadrant III -> x-axis (0 - 100), y-axis (0 - 100)
+      $quadrantCRvsCAIV = []; // Quadrant IV -> x-axis (100 - ---), y-axis (0 - 100)
+      // ====================================================
+
+      // highestValueChart Data
+      $heighestCR      = 0;
+      $heighestCA      = 0;
+      $heighestSP      = 0;
+      $heighestOvarall = 0;
+
+      // highestValueChart user id for singlePersonChart Data
+      $heighestUserIDCR      = 0;
+      $heighestUserIDCA      = 0;
+      $heighestUserIDSP      = 0;
+      $heighestUserIDOvarall = 0;
+
+      // averageValueChart Data
+      $averageCountCR      = 0;
+      $averageCountCA      = 0;
+      $averageCountSP      = 0;
+      $averageCountOvarall = 0;
+
+      // Setting Count Values for each iteration
+      $crCount      = 0;
+      $caCount      = 0;
+      $spCount      = 0;
+      $ovarallCount = 0;
+
+      // storing tree map chart data count (Readiness Vs Application)
+      // for Learned (score-> 81-100)
+      $x1y1 = 0; // 0-25
+      $x1y2 = 0; // 100-150
+      $x1y3 = 0; // 150-200
+      $x1y4 = 0; // 200+
+      // for Informed (score-> 61-80)
+      $x2y1 = 0; // 0-25
+      $x2y2 = 0; // 100-150
+      $x2y3 = 0; // 150-200
+      $x2y4 = 0; // 200+
+      // for Knowledgeable (score-> 41-60)
+      $x3y1 = 0; // 0-25
+      $x3y2 = 0; // 100-150
+      $x3y3 = 0; // 150-200
+      $x3y4 = 0; // 200+
+      // for Beginner / Ignorant (score-> 0-40)
+      $x4y = 0; // 0-200+
+
+      $readiness   = [];
+      $application = [];
+
+      $i = 0;
+      foreach ($userIDData as $userIDDataRow) {
+        // Storing Score Value for each item type 
+        $quadrantScoreCR = 0;
+        $quadrantScoreCA = 0;
+        $quadrantScoreSP = 0;
+
+        $quadrantCountCR = 0;
+        $quadrantCountCA = 0;
+        $quadrantCountSP = 0;
+
+        // Setting Overall Value 
+        $returned_Value = $this->overallValue($userIDDataRow->User_id, $formulaData[0]->Items_Formula_Expression, $formulaData[0]->Items_Formula_Json);
+        $returned_Value = json_decode($returned_Value);
+        // print_r($returned_Value); 
+
+        $user_Overall_Value = (int)$returned_Value->overall_Value >= 200 ? 200 :  (int)$returned_Value->overall_Value;
+        $user_Overall_Value = (int)$user_Overall_Value <= 0 ? 0 :  (int)$user_Overall_Value;
+        // print_r($user_Overall_Value); exit();
+
+        $averageCountOvarall =  (int)$averageCountOvarall + (int)$user_Overall_Value;
+        if ($user_Overall_Value > $heighestOvarall) {
+          $heighestOvarall       = (int)$user_Overall_Value;
+          $heighestUserIDOvarall = $userIDDataRow->User_id;
+        }
+        $ovarallCount++;
+
+        // Setting variables for Application and Readiness
+        $applicationValue = 0;
+        $readinessValue   = 0;
+
+        $applicationCount = 0;
+        $readinessCount   = 0;
+
+        foreach ($returned_Value->averageJson as $key => $value) {
+          // setting cap for overall value at 200
+          $value = (int)$value >= 200 ? 200 : (int)$value;
+          $value = (int)$value <= 0   ? 0   : (int)$value;
+          // $value = $user_Overall_Value; // for tree chart and quadrant chart
+
+          // getting Item Name
+          $itemWhere = array('Compt_Id' => $key);
+          $itemData = $this->Common_Model->fetchRecords('GAME_ITEMS', $itemWhere, 'Compt_Name, Compt_PerformanceType');
+          // print_r($itemData); exit();
+
+          // pushina data according to it's performance type
+          switch ($itemData[0]->Compt_PerformanceType) {
+            case 3:
+              // 3 = Simulated Performance
+              $quadrantScoreSP = $quadrantScoreSP + $value; // setting SP value for use in Quadrants
+              $averageCountSP = (int)$averageCountSP + (int)$value;
+              if ($value > $heighestSP) {
+                $heighestSP       = (int)$value;
+                $heighestUserIDSP = $userIDDataRow->User_id;
+              }
+              $quadrantCountSP++;
+              $spCount++;
+              break;
+
+            case 4:
+              // 4 = Competence Readiness
+              $readinessValue = $readinessValue + $value;
+              $readinessCount++;
+
+              $quadrantScoreCR = $quadrantScoreCR + $value; // setting CR value for use in Quadrants
+              $averageCountCR = (int)$averageCountCR + (int)$value;
+              if ($value > $heighestCR) {
+                $heighestCR       = (int)$value;
+                $heighestUserIDCR = $userIDDataRow->User_id;
+              }
+              $quadrantCountCR++;
+              $crCount++;
+              break;
+
+            case 5:
+              // 5 = Competence Application
+              $applicationValue = $applicationValue + $value;
+              $applicationCount++;
+
+              $quadrantScoreCA = $quadrantScoreCA + $value; // setting CA value for use in Quadrants
+              $averageCountCA = (int)$averageCountCA + (int)$value;
+              if ($value > $heighestCA) {
+                $heighestCA       = (int)$value;
+                $heighestUserIDCA = $userIDDataRow->User_id;
+              }
+              $quadrantCountCA++;
+              $caCount++;
+              break;
+          }
+        }
+                
+        // Setting Application and Readiness Average Values of each users in array
+        if ($readinessCount)
+          $readinessArrayValue = round($readinessValue/$readinessCount, 2);
+        else
+          $readinessArrayValue = 0;
+
+        if ($applicationCount)
+          $applicationArrayValue = round($applicationValue/$applicationCount, 2);
+        else
+          $applicationArrayValue = 0;
+ 
+        array_push($readiness, $readinessArrayValue);
+        array_push($application, $applicationArrayValue);
+
+
+        // storing score value into array
+
+        // Readiness Vs Simulated Performance
+        // x-axis -> Simulated Performance, y-axis -> Readiness
+
+        // sending values into array according to Quadrant Criteria for Readiness Vs Simulated Performance
+        // $quadrantCRvsSP = [];
+        // $quadrantCRvsSP[0]  = round($quadrantScoreSP, 2);
+        // $quadrantCRvsSP[1]  = round($quadrantScoreCR, 2);
+        // // Quadrant I
+        // if ($quadrantScoreSP > 100 && $quadrantScoreCR > 100) {
+        //   $quadrantCRvsSPI[] = $quadrantCRvsSP;
+        // }
+        // // Quadrant II
+        // else if ($quadrantScoreSP >= 0 && $quadrantScoreSP <= 100 && $quadrantScoreCR > 100) {
+        //   $quadrantCRvsSPII[] = $quadrantCRvsSP;
+        // }
+        // // Quadrant III
+        // else if ($quadrantScoreSP >= 0 && $quadrantScoreSP <= 100 && $quadrantScoreCR >= 0 && $quadrantScoreCR <= 100) {
+        //   $quadrantCRvsSPIII[] = $quadrantCRvsSP;
+        // }
+        // // Quadrant IV
+        // else if ($quadrantScoreSP > 100 && $quadrantScoreCR >= 0 && $quadrantScoreCR <= 100) {
+        //   $quadrantCRvsSPIV[] = $quadrantCRvsSP;
+        // }
+
+        // Readiness Vs Application
+        // x-axis -> Application, y-axis -> Readiness
+
+        // sending values into array according to Quadrant Criteria for Readiness Vs Application
+
+        $quadrantCRvsCA = [];
+        // CR -> x-Axis (0-100)
+        if ($quadrantCountCR > 0)
+          $quadrantCRvsCA[0] = ($quadrantScoreCR / $quadrantCountCR) > 100 ? 100 : round($quadrantScoreCR / $quadrantCountCR, 2);
+        else
+          $quadrantCRvsCA[0] = $quadrantScoreCR > 100 ? 100 : round($quadrantScoreCR, 2);
+
+        // CA -> y-Axis (0-200)
+        if ($quadrantCountCA > 0)
+          $quadrantCRvsCA[1] = ($quadrantScoreCA / $quadrantCountCA) > 200 ? 200 : round($quadrantScoreCA / $quadrantCountCA, 2);
+        else
+          $quadrantCRvsCA[1] = $quadrantScoreCA > 200 ? 200 : round($quadrantScoreCA, 2);
+        // ==========================
+
+        // Quadrant IV
+        if ($quadrantScoreCR > 60 && $quadrantScoreCA >= 0 && $quadrantScoreCA <= 100) {
+          $quadrantCRvsCAIV[] = $quadrantCRvsCA;
+        }
+        // Quadrant III
+        else if ($quadrantScoreCR >= 0 && $quadrantScoreCR <= 60 && $quadrantScoreCA >= 0 && $quadrantScoreCA <= 100) {
+          $quadrantCRvsCAIII[] = $quadrantCRvsCA;
+        }
+        // Quadrant II
+        else if ($quadrantScoreCR >= 0 && $quadrantScoreCR <= 60 && $quadrantScoreCA > 100) {
+          $quadrantCRvsCAII[] = $quadrantCRvsCA;
+        }
+        // Quadrant I
+        else if ($quadrantScoreCR > 60 && $quadrantScoreCA > 100) {
+          $quadrantCRvsCAI[] = $quadrantCRvsCA;
+        }
+        // ==========================
+
+        // setting tree map count data (Readiness Vs Application)
+        // x-> Readiness
+        if ($quadrantCountCR > 0)
+          $xAxis = ($quadrantScoreCR / $quadrantCountCR) < 100 ? $quadrantScoreCR / $quadrantCountCR : 100;
+        else
+          $xAxis = $quadrantScoreCR < 100 ? $quadrantScoreCR : 100;
+
+        //y-> Application
+        if ($quadrantCountCA > 0)
+          $yAxis = ($quadrantScoreCA / $quadrantCountCA) < 200 ? $quadrantScoreCA / $quadrantCountCA : 200;
+        else
+          $yAxis = $quadrantScoreCA < 200 ? $quadrantScoreCA : 200;
+
+        //================================
+        // $x4y => x(0-40) y(0-200)
+        if ($xAxis <= 40 && $yAxis <= 200) {
+          $x4y++;
+        }
+        //================================
+        // $x3y1 => x(41-60) y(0-25)
+        if ($xAxis > 40 && $xAxis <= 60 && $yAxis >= 0 && $yAxis <= 25) {
+          $x3y1++;
+        }
+        // $x3y2 => x(41-60) y(25-100)
+        if ($xAxis > 40 && $xAxis <= 60 && $yAxis >= 25 && $yAxis <= 100) {
+          $x3y2++;
+        }
+        // $x3y3 => x(41-60) y(100-150)
+        if ($xAxis > 40 && $xAxis <= 60 && $yAxis >= 100 && $yAxis <= 150) {
+          $x3y3++;
+        }
+        // $x3y4 => x(41-60) y(150-200)
+        if ($xAxis > 40 && $xAxis <= 60 && $yAxis >= 150 && $yAxis <= 200) {
+          $x3y4++;
+        }
+        //================================
+        // $x2y1 => x(61-80) y(0-25)
+        if ($xAxis > 60 && $xAxis <= 80 && $yAxis >= 0 && $yAxis <= 25) {
+          $x2y1++;
+        }
+        // $x2y2 => x(61-80) y(25-100)
+        if ($xAxis > 60 && $xAxis <= 80 && $yAxis >= 25 && $yAxis <= 100) {
+          $x2y2++;
+        }
+        // $x2y3 => x(61-80) y(100-150)
+        if ($xAxis > 60 && $xAxis <= 80 && $yAxis >= 100 && $yAxis <= 150) {
+          $x2y3++;
+        }
+        // $x2y4 => x(61-80) y(150-200)
+        if ($xAxis > 60 && $xAxis <= 80 && $yAxis >= 150 && $yAxis <= 250) {
+          $x2y4++;
+        }
+        //================================
+        // $x1y1 => x(81-100) y(0-25)
+        if ($xAxis > 80 && $xAxis <= 100 && $yAxis >= 0 && $yAxis <= 25) {
+          $x1y1++;
+        }
+        // $x1y2 => x(81-100) y(25-100)
+        if ($xAxis > 80 && $xAxis <= 100 && $yAxis >= 25 && $yAxis <= 100) {
+          $x1y2++;
+        }
+        // $x1y3 => x(81-100) y(100-150)
+        if ($xAxis > 80 && $xAxis <= 100 && $yAxis >= 100 && $yAxis <= 150) {
+          $x1y3++;
+        }
+        // $x1y4 => x(81-100) y(150-200)
+        if ($xAxis > 80 && $xAxis <= 100 && $yAxis >= 150 && $yAxis <= 200) {
+          $x1y4++;
+        }
+        //================================
+        // incrementing loop count
+        $i++;
+      }
+
+      // averageValueChart Data
+      $averageCR      = $averageCountCR ? (int)($averageCountCR / $crCount) : 0;
+      $averageCA      = $averageCountCA ? (int)($averageCountCA / $caCount) : 0;
+      $averageSP      = $averageCountSP ? (int)($averageCountSP / $spCount) : 0;
+      $averageOvarall = $averageCountOvarall ? (int)($averageCountOvarall / $ovarallCount) : 0;
+
+      // $averageCR      = $averageCountCR ? (int)($averageCountCR / $i) : 0;
+      // $averageCA      = $averageCountCA ? (int)($averageCountCA / $i) : 0;
+      // $averageSP      = $averageCountSP ? (int)($averageCountSP / $i) : 0;
+      // $averageOvarall = $averageCountOvarall ? (int)($averageCountOvarall / $i) : 0;
+
+      // singlePersonChart Data
+      $scoredByUserIDArray = [];
+      $scoredByUserIDArray[0] = $heighestUserIDCR;
+      $scoredByUserIDArray[1] = $heighestUserIDCA;
+      $scoredByUserIDArray[2] = $heighestUserIDSP;
+      $scoredByUserIDArray[3] = $heighestUserIDOvarall;
+
+      $scoredByUserName = [];
+      $scoredByCR       = [];
+      $scoredByCA       = [];
+      $scoredBySP       = [];
+      $scoredByOvarall  = [];
+
+      // for ($j=0; $j<=3; $j++) {
+      //   $userNameQuery = "SELECT CONCAT(gsu.User_fname,' ',gsu.User_lname) AS user_Name FROM GAME_SITE_USERS gsu WHERE gsu.User_id = $scoredByUserIDArray[$j]";
+      //   $userNameData = $this->Common_Model->executeQuery($userNameQuery);
+      //   // print_r($userNameData[0]->user_Name);
+      //   if (empty($userNameData))
+      //     $scoredByUserName[$j] = '';
+      //   else
+      //     $scoredByUserName[$j] = $userNameData[0]->user_Name;
+
+      //   $returned_Value = $this->overallValue($scoredByUserIDArray[$j], $formulaData[0]->Items_Formula_Expression, $formulaData[0]->Items_Formula_Json);
+      //   $returned_Value = json_decode($returned_Value);
+      //   // print_r($returned_Value); 
+
+      //   $user_Overall_Value = $returned_Value->overall_Value >= 200 ? 200 :  $returned_Value->overall_Value;
+
+      //   $scoredByOvarall[$j] = round($user_Overall_Value, 2);
+
+      //   foreach ($returned_Value->averageJson as $key => $value) {
+      //     // setting cap for overall value at 200
+      //     $value = $value >= 200 ? 200 : round($value, 2);
+
+      //     // getting Item Name
+      //     $itemWhere = array('Compt_Id' => $key,);
+      //     $itemData = $this->Common_Model->fetchRecords('GAME_ITEMS', $itemWhere, 'Compt_Name, Compt_PerformanceType');
+      //     // print_r($itemData); exit();
+
+      //     // pushina data according to it's performance type
+      //     switch ($itemData[0]->Compt_PerformanceType) {
+      //       case 3:
+      //         // 3 = Simulated Performance
+      //         $scoredBySP[$j] = $value;
+      //         break;
+
+      //       case 4:
+      //         // 4 = Competence Readiness
+      //         $scoredByCR[$j] = $value;
+      //         break;
+
+      //       case 5:
+      //         // 5 = Competence Application
+      //         $scoredByCA[$j] = $value;
+      //         break;
+      //     }
+      //   }
+      //   $i++;
+      // }
+
+      // print_r($readiness); echo '<br />'; print_r($application); exit();
+
+      die(json_encode(['x1y1' => $x1y1, 'x1y2' => $x1y2, 'x1y3' => $x1y3, 'x1y4' => $x1y4, 'x2y1' => $x2y1, 'x2y2' => $x2y2, 'x2y3' => $x2y3, 'x2y4' => $x2y4, 'x3y1' => $x3y1, 'x3y2' => $x3y2, 'x3y3' => $x3y3, 'x3y4' => $x3y4, 'x4y' => $x4y, 'quadrantCRvsSPI' => $quadrantCRvsSPI, 'quadrantCRvsSPII' => $quadrantCRvsSPII, 'quadrantCRvsSPIII' => $quadrantCRvsSPIII, 'quadrantCRvsSPIV' => $quadrantCRvsSPIV, 'quadrantCRvsCAI' => $quadrantCRvsCAI, 'quadrantCRvsCAII' => $quadrantCRvsCAII, 'quadrantCRvsCAIII' => $quadrantCRvsCAIII, 'quadrantCRvsCAIV' => $quadrantCRvsCAIV, 'overallValue' => $overallValue, 'creationDate' => $creationDate, 'heighestCR' => $heighestCR, 'heighestCA' => $heighestCA, 'heighestSP' => $heighestSP, 'heighestOvarall' => $heighestOvarall, 'averageCR' => $averageCR, 'averageCA' => $averageCA, 'averageSP' => $averageSP, 'averageOvarall' => $averageOvarall, 'scoredByUserName' => $scoredByUserName, 'scoredByCR' => $scoredByCR, 'scoredByCA' => $scoredByCA, 'scoredBySP' => $scoredBySP, 'scoredByOvarall' => $scoredByOvarall, 'readiness' => $readiness, 'application' => $application, "status" => "200", 'title' => 'Success', 'icon' => 'success', 'message' => 'Report Data.']));
+    }
+  }
+
+  public function dashboardCardRunChartData() {
+    if ($this->session->userdata('loginData')['User_Role'] == 3) {
+      // if report viewer login
+      $enterprise_ID = $this->session->userdata('loginData')['User_ParentId'];
+    }
+    else {
+      // if enterprize login
+      $enterprise_ID = $this->session->userdata('loginData')['User_Id'];
+    }
+
+    // fetching all game ID and Name list for loged in enterprise
+    $gameQuery = "SELECT geg.EG_GameID, gg.Game_Name FROM GAME_ENTERPRISE_GAME geg LEFT JOIN GAME_GAME gg ON gg.Game_ID = geg.EG_GameID WHERE geg.EG_EnterpriseID = $enterprise_ID ORDER BY gg.Game_Name";
+    $gameDetails = $this->Common_Model->executeQuery($gameQuery);
+    //print_r($gameDetails); print_r($gameDetails[0]->Game_Name); exit();
+
+    if (count($gameDetails) < 1 || $gameDetails == '') {
+      // no game/card available for this enterprise
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No Card Assigned.']));
+    } else {
+      // making array to hold all values for chart
+      $card_ID              = [];
+      $card_Name            = [];
+      $card_User_Total      = [];
+      $card_User_Started    = [];
+      $card_User_Completed  = [];
+      $card_User_NotStarted = [];
+
+      foreach ($gameDetails as $gameDetailsRow) {
+        $cardID   = $gameDetailsRow->EG_GameID;
+        $cardName = $gameDetailsRow->Game_Name;
+        // pushing data into array
+        $card_ID[]    = (int)$cardID;
+        $card_Name[]  = $cardName;
+
+        // counting total number of users have this game
+        //==================================================
+        $totalUserSql = "SELECT gsu.User_id, gsu.User_fname, gsu.User_lname, gsu.User_email
+        FROM GAME_SITE_USERS gsu 
+        LEFT JOIN GAME_USERGAMES gug ON gug.UG_UserID = gsu.User_id
+        WHERE gsu.User_Delete = 0 AND gsu.User_ParentId = $enterprise_ID AND gug.UG_ParentId = $enterprise_ID AND gug.UG_GameID = $cardID";
+        $totalUser = $this->Common_Model->executeQuery($totalUserSql);
+        // print_r($totalUserSql); print_r($totalUser); exit();
+        //==================================================
+        $totalUserCount = count($totalUser) ? count($totalUser) : 0;
+
+        // counting total number of users Started but not completed this game
+        //==================================================
+        // creating subquery
+        $userStartedSubQuery = "SELECT gsu.User_id, gsu.User_fname, gsu.User_lname, gsu.User_email, gsu.User_ParentId, gus.US_LinkID, ( SELECT gl.Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_GameID = gus.US_GameID AND gl.Link_ScenarioID = gus.US_ScenID ) AS lastLinkId 
+        FROM GAME_SITE_USERS gsu 
+        LEFT JOIN GAME_USERGAMES gug ON gug.UG_UserID = gsu.User_id
+        INNER JOIN GAME_USERSTATUS gus ON gus.US_UserID = gsu.User_id AND gus.US_GameID=$cardID 
+        WHERE gsu.User_Delete = 0 AND gsu.User_ParentId=$enterprise_ID AND gug.UG_ParentId = $enterprise_ID AND gug.UG_GameID = $cardID";
+
+        // adding the above subquery to main query
+        $userStartedQuery = "SELECT ud.User_id, ud.User_fname, ud.User_lname, ud.User_email, ud.US_LinkID
+        FROM GAME_SITE_USER_REPORT_NEW gr
+        INNER JOIN($userStartedSubQuery) ud ON ud.User_id = gr.uid AND ud.lastLinkId = gr.linkid
+        WHERE gr.linkid IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = $cardID ) AND ud.US_LinkID < 1 
+        ORDER BY ud.US_LinkID DESC";
+
+        $totalUserStarted = $this->Common_Model->executeQuery($userStartedQuery);
+        //==================================================
+        $totalUserStartedCount = count($totalUserStarted) ? count($totalUserStarted) : 0;
+
+        // counting total number of users Completed this game
+        //==================================================
+        // creating subquery
+        $userCompletedSubQuery   = "SELECT gsu.User_id, gsu.User_fname, gsu.User_lname, gsu.User_email, gsu.User_ParentId, gus.US_LinkID, ( SELECT gl.Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_GameID = gus.US_GameID AND gl.Link_ScenarioID = gus.US_ScenID ) AS lastLinkId 
+        FROM GAME_SITE_USERS gsu 
+        LEFT JOIN GAME_USERGAMES gug ON gug.UG_UserID = gsu.User_id
+        INNER JOIN GAME_USERSTATUS gus ON gus.US_UserID = gsu.User_id AND gus.US_GameID=$cardID
+        WHERE gsu.User_Delete = 0 AND gsu.User_ParentId=$enterprise_ID AND gug.UG_ParentId = $enterprise_ID AND gug.UG_GameID = $cardID";
+
+        // adding the above subquery to main query
+        $userCompletedQuery = "SELECT ud.User_id, ud.User_fname, ud.User_lname, ud.User_email, ud.US_LinkID
+        FROM GAME_SITE_USER_REPORT_NEW gr
+        INNER JOIN($userCompletedSubQuery) ud ON ud.User_id = gr.uid AND ud.lastLinkId = gr.linkid
+        WHERE gr.linkid IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = $cardID ) AND ud.US_LinkID > 0
+        ORDER BY ud.US_LinkID DESC";
+
+        $totalUserCompleted = $this->Common_Model->executeQuery($userCompletedQuery);
+        //==================================================
+        $totalUserCompletedCount = count($totalUserCompleted) ? count($totalUserCompleted) : 0;
+
+        // counting total number of users Not Completed this game
+        $userNotStarted = $totalUserCount - ($totalUserStartedCount + $totalUserCompletedCount);
+        $totalUserNotStartedCount = $userNotStarted > 0 ? $userNotStarted : 0;
+
+        // print_r('Total-'.$totalUserCount.' Started-'.$totalUserStartedCount.' Completed-'.$totalUserCompletedCount.' Not Started-'.$totalUserNotStartedCount);
+        // echo '<br />';
+        
+        $card_User_Total[]      = (int)$totalUserCount;
+        $card_User_Started[]    = (int)$totalUserStartedCount;
+        $card_User_Completed[]  = (int)$totalUserCompletedCount;
+        $card_User_NotStarted[] = (int)$totalUserNotStartedCount;
+      }
+      //print_r($card_Name);
+      //exit();
+
+      die(json_encode(['card_ID' => $card_ID, 'card_Name' => $card_Name, 'card_User_Total' => $card_User_Total, 'card_User_Started' => $card_User_Started, 'card_User_Completed' => $card_User_Completed, 'card_User_NotStarted' => $card_User_NotStarted, "status" => "200", 'title' => 'Success', 'icon' => 'success', 'message' => 'Card Run Data.']));
+    }
+  }
+
+  public function getCardUserDetailsData($cardID = NULL, $type = NULL) {
+    if ($this->session->userdata('loginData')['User_Role'] == 3) {
+      // if report viewer login
+      $enterprise_ID = $this->session->userdata('loginData')['User_ParentId'];
+    }
+    else {
+      // if enterprize login
+      $enterprise_ID = $this->session->userdata('loginData')['User_Id'];
+    }
+
+    $returnTableHtml = '<table class="stripe hover data-table-export"><thead><tr> <th>ID</th> <th>Name</th> <th>Username</th> <th>Email</th> </tr></thead><tbody>';
+    // setting table data accourding to condition
+    if ($type == 'totalUser') {
+
+      //==================================================
+      // counting total number of users have this game
+      $totalUserSql = "SELECT gsu.User_id, gsu.User_username, gsu.User_email, gsu.User_mobile, CONCAT(gsu.User_fname,' ',gsu.User_lname) AS user_Full_Name
+      FROM GAME_SITE_USERS gsu 
+      LEFT JOIN GAME_USERGAMES gug ON gug.UG_UserID = gsu.User_id
+      WHERE gsu.User_Delete = 0 AND gsu.User_ParentId = $enterprise_ID AND gug.UG_ParentId = $enterprise_ID AND gug.UG_GameID = $cardID";
+      $totalUser = $this->Common_Model->executeQuery($totalUserSql);
+      //==================================================
+
+      if (count($totalUser) < 1 || $totalUser == '') {
+        $returnTableHtml = '<tr> <td>No User Available for This Card</td> </tr>';
+      } else {
+        $slNo = 0;
+        foreach ($totalUser as $totalUserRow) {
+          $slNo++;
+          // $totalUserRow->User_mobile
+          $returnTableHtml .= '<tr> <td>' . $slNo . '</td> <td>' . $totalUserRow->user_Full_Name . '</td> <td>' . $totalUserRow->User_username . '</td> <td>' . $totalUserRow->User_email . '</td> </tr>';
+        }
+      }
+    } else if ($type == 'notStartes') {
+    } else if ($type == 'started') {
+
+      // counting total number of users Started this game
+      //==================================================
+      // creating subquery
+      $userStartedSubQuery = " SELECT gsu.User_id, gsu.User_fname, gsu.User_lname, gsu.User_username, gsu.User_mobile, gsu.User_email, gsu.User_ParentId, gus.US_LinkID, (SELECT gl.Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_GameID = gus.US_GameID AND gl.Link_ScenarioID = gus.US_ScenID) AS lastLinkId 
+      FROM GAME_SITE_USERS gsu 
+      LEFT JOIN GAME_USERGAMES gug ON gug.UG_UserID = gsu.User_id
+      INNER JOIN GAME_USERSTATUS gus ON gus.US_UserID = gsu.User_id AND gus.US_GameID = $cardID 
+      WHERE gsu.User_Delete = 0 AND gsu.User_ParentId = $enterprise_ID AND gug.UG_ParentId = $enterprise_ID AND gug.UG_GameID = $cardID";
+
+      // adding the above subquery to main query
+      $userStartedQuery = "SELECT ud.User_id, ud.User_username, ud.User_mobile, ud.User_email, ud.US_LinkID, CONCAT(ud.User_fname,' ',ud.User_lname) AS user_Full_Name
+      FROM GAME_SITE_USER_REPORT_NEW gr
+      INNER JOIN ($userStartedSubQuery) ud ON ud.User_id = gr.uid AND ud.lastLinkId = gr.linkid
+      WHERE gr.linkid IN ( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = $cardID ) AND ud.US_LinkID = 0 
+      ORDER BY ud.US_LinkID DESC";
+
+      $totalUserStarted = $this->Common_Model->executeQuery($userStartedQuery);
+      //==================================================
+
+      if (count($totalUserStarted) < 1 || $totalUserStarted == '') {
+        $returnTableHtml = '<tr> <td>No User Started Playing This Card</td> </tr>';
+      } else {
+        $slNo = 0;
+        foreach ($totalUserStarted as $totalUserRow) {
+          $slNo++;
+          // $totalUserRow->User_mobile
+          $returnTableHtml .= '<tr> <td>' . $slNo . '</td> <td>' . $totalUserRow->user_Full_Name . '</td> <td>' . $totalUserRow->User_username . '</td> <td>' . $totalUserRow->User_email . '</td> </tr>';
+        }
+      }
+    } else if ($type == 'completed') {
+
+      // counting total number of users Completed this game
+      //==================================================
+      // creating subquery
+      $userCompletedSubQuery = " SELECT gsu.User_id, gsu.User_fname, gsu.User_lname, gsu.User_username, gsu.User_mobile, gsu.User_email, gsu.User_ParentId, gus.US_LinkID, ( SELECT gl.Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_GameID = gus.US_GameID AND gl.Link_ScenarioID = gus.US_ScenID ) AS lastLinkId 
+      FROM GAME_SITE_USERS gsu 
+      LEFT JOIN GAME_USERGAMES gug ON gug.UG_UserID = gsu.User_id
+      INNER JOIN GAME_USERSTATUS gus ON gus.US_UserID = gsu.User_id AND gus.US_GameID = $cardID 
+      WHERE gsu.User_Delete = 0 AND gsu.User_ParentId = $enterprise_ID AND gug.UG_ParentId = $enterprise_ID AND gug.UG_GameID = $cardID";
+
+      // adding the above subquery to main query
+      $userCompletedQuery = "SELECT ud.User_id, ud.User_username, ud.User_mobile, ud.User_email, ud.US_LinkID, CONCAT(ud.User_fname,' ',ud.User_lname) AS user_Full_Name
+      FROM GAME_SITE_USER_REPORT_NEW gr
+      INNER JOIN ($userCompletedSubQuery) ud ON ud.User_id = gr.uid AND ud.lastLinkId = gr.linkid
+      WHERE gr.linkid IN ( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = $cardID ) AND ud.US_LinkID = 1 
+      ORDER BY ud.US_LinkID DESC";
+
+      $totalUserCompleted = $this->Common_Model->executeQuery($userCompletedQuery);
+      //==================================================
+
+      if (count($totalUserCompleted) < 1 || $totalUserCompleted == '') {
+        $returnTableHtml = '<tr> <td>No User Completed for This Card</td> </tr>';
+      } else {
+        $slNo = 0;
+        foreach ($totalUserCompleted as $totalUserRow) {
+          $slNo++;
+          // $totalUserRow->User_mobile
+          $returnTableHtml .= '<tr> <td>' . $slNo . '</td> <td>' . $totalUserRow->user_Full_Name . '</td> <td>' . $totalUserRow->User_username . '</td> <td>' . $totalUserRow->User_email . '</td> </tr>';
+        }
+      }
+    }
+    $returnTableHtml .= '</tbody></table>';
+
+    // sending result
+    die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "Success", 'icon' => 'success', 'message' => '', 'cardUserData' => $returnTableHtml]));
+  }
+
+  public function getCardData($game_ID = NULL)
+  {
+    $game_ID = base64_decode($game_ID);
+
+    $query = "SELECT gg.Game_ID, gg.Game_Name, gg.Game_ProcessOwner_Details FROM GAME_GAME gg WHERE gg.Game_ID = $game_ID";
+    $gameData = $this->Common_Model->executeQuery($query);
+    //print_r($this->db->last_query()); exit();
+    $Game_Name = $gameData[0]->Game_Name;
+    $Game_ProcessOwner_Details = $gameData[0]->Game_ProcessOwner_Details ? $gameData[0]->Game_ProcessOwner_Details : 'Description Not Available.';
+
+    if (!empty($Game_Name)) {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => "Success", 'icon' => 'success', 'message' => '', 'Game_Name' => $Game_Name, 'Game_ProcessOwner_Details' => $Game_ProcessOwner_Details]));
+    } else {
+      die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'Error.']));
     }
   }
 

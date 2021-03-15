@@ -1,0 +1,66 @@
+JS games Analytics Document
+================================================================
+
+Need these data to perform JS games Analytics
+
+1) Game start time
+2) Time when user made first click (after starting the game) 
+3) Game end time
+4) Total or Overall time taken = Game end time - Game start time
+5) Total number of clicks user made during the game
+6) Average click Time (Average time between each click user made)
+7) Number of steps user repeted during the game (Step repeat means repeating(going forward) one click to another click in a sequence (immediately or after some moves))
+8) Number of steps user reversed his/her move (Reversal frequency is how many times a move was reversed (whether immediately or after some moves))
+9) Average click Per element(image)
+10) Maximum click which image
+11) Minimum click which image
+12) Result (User successfully completed the game or not -> Win/Loss)
+================================================================
+
+how to check if this is js game scenario or not
+Link_JsGameScen == 1 in table GAME_LINKAGE
+
+using these table get user game data
+
+GAME_USER_JSGAME_DATA
+GAME_JSGAME
+GAME_GAME
+GAME_SCENARIO
+================================================================
+
+Get these data for analytics
+
+Overall time Taken = End time - Start time (differenceInTime)
+Avg Click -> Total Click Per Element
+Max Click -> Max click on which image
+Min Click -> Min Click on which image
+Result    -> 1(Win) or 0(Loss)
+================================================================
+
+keys present in JSON data (JSDATA_GameData in table GAME_USER_JSGAME_DATA)
+clickedOnHare  -> total times clicked on hare
+clickedOnHound -> total times clicked on hounds
+clickedOnImage -> total click on blank image to move hounds
+totalMoves     -> total time hounds moves
+totalClicks    -> total clicks (click on hounds/hare + click on blank image)
+winLoss        -> hare -> 0-win, 1-loss
+
+keep in mind 
+  hare is always user and hounds are computer
+
+if hare is present in JSON data
+or hare and hounds both are not present in JSON data
+  then hare is user and hounds is computer
+
+if hounds is present in JSON data
+  then hounds is user and hare is computer
+
+if both hare and hounds is present in JSON data
+or hounds are present and hare is not present in JSON data
+  then both hare and hounds is user
+
+harehounds0.gif -> blank image
+harehounds1.gif -> hare
+harehounds2.gif -> hounds
+harehounds3.gif -> hare
+harehounds4.gif -> clicked hounds

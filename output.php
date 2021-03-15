@@ -330,11 +330,22 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit'){
 					}
 					else
 					{
-						// if user submit from o/p page and come back to o/p page then locate to scenario or next step
-						// echo "<pre>".$unplayScen.'<br>'.$unplayScenario; print_r($subObj->Branch_IsEndScenario); exit;
-						header("Location: ".site_root."scenario_description.php?Link=".$subObj->Branch_NextLinkId);
+						// if user submit from o/p page and  no branching found, also check for skipping conditions later, for now adding leanier branching
+						$skipSql = "SELECT * FROM GAME_LINKAGE gl WHERE gl.Link_Order > (SELECT Link_Order FROM GAME_LINKAGE WHERE Link_ID=".$resultObject->Link_ID.") AND gl.Link_GameID=".$gameid." ORDER BY gl.Link_Order ASC LIMIT 0,1";
+						
+						$skipObj = $functionsObj->ExecuteQuery($skipSql);
+						$skipRes = $functionsObj->FetchObject ($skipObj);
+						$array = array (			
+							'US_ScenID' => $skipRes->Link_ScenarioID,
+							'US_Input'  => 1,
+							'US_Output' => 0
+						);
+						$result = $functionsObj->UpdateData ( 'GAME_USERSTATUS', $array, 'US_ID', $userstatusid  );
+						header("Location: ".site_root."input.php?ID=".$gameid);
 					}
 				}
+				// if branching is not matched with any condition then redirect accordingly (also check that description is skipped then also add if condition for that, for now redirection done to input page only)
+				header("Location: ".site_root."input.php?ID=".$gameid);
 			}
 			else
 			{
@@ -472,7 +483,7 @@ if($input->num_rows > 0){
 	//$url = site_root."scenario_description.php?Link=".$result->Link_ID;
 }
 
-$sqlarea = "SELECT distinct a.Area_ID as AreaID, a.Area_Name as Area_Name, a.Area_BackgroundColor as BackgroundColor, a.Area_TextColor as TextColor, gas.Sequence_Order AS Area_Sequencing
+$sqlarea = "SELECT distinct a.Area_ID as AreaID, a.Area_Name as Area_Name, a.Area_BackgroundColor as BackgroundColor, a.Area_TextColor as TextColor, gas.Sequence_Order AS Area_Sequencing, gas.Sequence_Alias AS AreaAlias
 FROM GAME_LINKAGE l 
 INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
 INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 

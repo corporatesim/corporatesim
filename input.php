@@ -259,12 +259,20 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 				// }
 			}
 		}
-
+		// echo "<pre>";
+		// get value for the current scenario only, not for all scenarios, the $object->fetch_object() gives the result for all scenarios 
+		$currentScenId = $functionsObj->RunQueryFetchObject("SELECT gls.SubLink_ID FROM GAME_LINKAGE_SUB gls WHERE gls.SubLink_LinkID =( SELECT gl.Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_GameID=$gameid AND gl.Link_ScenarioID=(SELECT US_ScenID FROM GAME_USERSTATUS WHERE US_GameID = $gameid AND US_UserID = $userid ORDER BY US_CreateDate DESC LIMIT 1) )
+		",'SubLink_ID');
+		$currentScenarioSublinkId = array_keys($currentScenId);
 		while($row = $object->fetch_object())
 		{
-			$data[$row->input_key]  = $row->input_current;
-			//echo $row->key."-".$row->current.",";
+			// echo $row->input_sublinkid.'<br>';
+			if(in_array($row->input_sublinkid, $currentScenarioSublinkId))
+			{
+				$data[$row->input_key]  = $row->input_current;
+			}
 		}
+		// print_r($currentScenarioSublinkId); die(' here ');
 	}
 	else
 	{
@@ -835,13 +843,13 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 	//$url = site_root."scenario_description.php?Link=".$result->Link_ID;
 	}
 
-	$sqlarea="SELECT DISTINCT a.Area_ID AS AreaID, a.Area_Name AS Area_Name, a.Area_BackgroundColor AS BackgroundColor, a.Area_TextColor AS TextColor, SUM(ls.SubLink_ShowHide) AS ShowHide, COUNT(ls.SubLink_ShowHide) AS countlnk, gas.Sequence_Order AS Area_Sequencing
+	$sqlarea="SELECT DISTINCT a.Area_ID AS AreaID, a.Area_Name AS Area_Name, a.Area_BackgroundColor AS BackgroundColor, a.Area_TextColor AS TextColor, SUM(ls.SubLink_ShowHide) AS ShowHide, COUNT(ls.SubLink_ShowHide) AS countlnk, gas.Sequence_Order AS Area_Sequencing, gas.Sequence_Alias AS AreaAlias
 	FROM GAME_LINKAGE l 
 	INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
 	INNER JOIN GAME_COMPONENT c on ls.SubLink_CompID=c.Comp_ID 
 	INNER join GAME_GAME g on l.Link_GameID=g.Game_ID
 	INNER JOIN GAME_AREA a on a.Area_ID=c.Comp_AreaID 
-	LEFT JOIN GAME_AREA_SEQUENCE gas on a.Area_ID=gas.Sequence_AreaId
+	INNER JOIN GAME_AREA_SEQUENCE gas on a.Area_ID=gas.Sequence_AreaId AND gas.Sequence_LinkId=".$linkid."
 	WHERE ls.SubLink_Type=0 AND l.Link_ID=".$linkid." GROUP BY a.Area_ID,a.Area_Name 
 	ORDER BY gas.Sequence_Order";
 	// echo $sqlarea; exit();
@@ -917,4 +925,25 @@ if (isset($_COOKIE['hours']) && isset($_COOKIE['minutes']))
 		print($c->makeChart2(PNG));
 	}
 	$url = site_root."input.php?Scenario=".$result->Link_ScenarioID;
-	include_once doc_root.'views/input.php';
+	// echo "<pre>"; print_r($result); die();
+	//check if this is js game scenario or not
+	if($result->Link_JsGameScen == 1)
+	{
+		// check if this is linked with any game or not
+		$findJsMapping = $functionsObj->RunQueryFetchObject("SELECT * FROM GAME_JSGAME WHERE Js_LinkId = $result->Link_ID");
+		// this is js game scenario, but don't have any mapping of component and element
+		// echo "<pre>"; print_r($findJsMapping[0]->Js_Name); die(' here ');
+		if(count($findJsMapping) > 0)
+		{
+			include_once doc_root.'jsgames/'.$findJsMapping[0]->Js_Name.'/index.php';
+		}
+		else
+		{
+			echo "<script>console.log('no mapping found for the current scenario:".$result->Scenario."');</script>";
+			include_once doc_root.'views/input.php';
+		}
+	}
+	else
+	{
+		include_once doc_root.'views/input.php';
+	}

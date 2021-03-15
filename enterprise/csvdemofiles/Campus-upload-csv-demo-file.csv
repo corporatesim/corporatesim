@@ -1,4 +1,4 @@
-Campus  Name,Address,E-mail Address,Contact
-,,,
-KIIT,"123, main street, road, colony ",123@humanlinks.com,7377992234
-NIT,"123, main street, road, colony ",abc@humanlinks.com,7377112232
+Campus  Name,Address,E-mail Address,Contact,"Type (1->Management, 2-> Engineering, 3-> Other)"
+,,,,
+KIIT,"123, main street, road, colony ",123@humanlinks.com,7377992234,3
+NIT,"123, main street, road, colony ",abc@humanlinks.com,7377112232,3

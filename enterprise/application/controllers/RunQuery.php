@@ -21,16 +21,14 @@ class RunQuery extends MY_Controller {
     else {
       // query
 
-      //$query1 = "";
-      //$runQuery1 = $this->Common_Model->executeQuery($query1, 'noReturn'); 
-      //print_r($runQuery1); exit();
+      // $query1 = "";
+      // $runQuery1 = $this->Common_Model->executeQuery($query1, 'noReturn'); 
 
-      //$query2 = "";
-      //$runQuery2 = $this->Common_Model->executeQuery($query2, 'noReturn'); 
-      //print_r($runQuery2); exit();
+      // $query2 = "";
+      // $runQuery2 = $this->Common_Model->executeQuery($query2, 'noReturn'); 
 
-      //$content['runQuery1'] = $runQuery1;
-      //$content['runQuery2'] = $runQuery2;
+      // $query3 = "";
+      // $runQuery3 = $this->Common_Model->executeQuery($query2, 'noReturn'); 
 
       $content['subview']    = 'runQuery';
       $this->load->view('main_layout', $content);
@@ -47,7 +45,7 @@ class RunQuery extends MY_Controller {
   }
 
   public function checkTableColumns() {
-    $fields = $this->db->field_data('GAME_ENTERPRISE_CAMPUS');
+    $fields = $this->db->field_data('GAME_EMAIL_SEND_DETAILS');
 
     foreach ($fields as $field){
        echo $field->name.'-';
@@ -56,5 +54,21 @@ class RunQuery extends MY_Controller {
        echo $field->primary_key;
        echo '<br />';
     }
+  }
+
+  public function checkTableData() {
+    $query = "SELECT * FROM GAME_ITEM_REPORT";
+    $queryResult = $this->Common_Model->executeQuery($query);
+    // print_r($query); print_r(count($queryResult)); exit();
+    // print_r($queryResult); exit();
+
+    echo '<table><tr> <td>IR_ID</td>  <td>IR_Formula_Enterprize_ID</td>  <td>IR_Type_Choice</td>  <td>IR_Condition_Type</td>';
+    foreach ($queryResult as $rows) {
+       echo '<tr><td>'.$rows->IR_ID.'</td>';
+       echo '<td>'.$rows->IR_Formula_Enterprize_ID.'</td>';
+       echo '<td>'.$rows->IR_Type_Choice.'</td>';
+       echo '<td>'.$rows->IR_Condition_Type.'</td></tr>';
+    }
+    echo '</table>';
   }
 }

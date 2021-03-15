@@ -132,6 +132,18 @@
 							</div>
 						</div>
 					</div>
+
+					<div class="row name col-md-4 col-lg-3 col-sm-6 col-xs-12" id="jsGameScenario">
+						<div class="form-group">
+							<div class="form-check" data-toggle="tooltip" title="If checked, then can have only components, and one area">
+								<label class="form-check-label containerCheckbox" for="Link_JsGameScen">
+									<input type="checkbox" class="form-check-input" id="Link_JsGameScen" name="Link_JsGameScen" value="1" <?php echo ($linkdetails->Link_JsGameScen == 1)?'checked':'';?>> JS Game Scenario
+									<span class="checkmark"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+
 				</div>
 				<!-- end of adding checkbox to skip introduction and description -->
 				<div class="col-md-4">
@@ -140,7 +152,10 @@
 					<label><span class="alert-danger">*</span>Select Game</label>
 					<select class="form-control" name="game_id" id="game_id">
 						<option value="">-- SELECT --</option>
-						<?php while($row = $game->fetch_object()){ 
+						<?php 
+						// if selected game is completed then don't allow user to edit/update
+						$preventEdit = "id='siteuser_btn_update'";
+						while($row = $game->fetch_object()){ 
 							// 1-bot_enabled also complted and 0 is for in progress and normal games
 							switch($row->Game_Type.','.$row->Game_Complete)
 							{
@@ -164,9 +179,13 @@
 								$editStatus = 'disabled';
 								break;
 							}
+							if(isset($linkdetails->Link_GameID) && $linkdetails->Link_GameID == $row->Game_ID && $editStatus=='disabled')
+							{
+								$preventEdit = "data-toggle='tooltip' title='Game is completed. So, can not make changes.'";
+							}
 							?>
 							<option value="<?php echo $row->Game_ID; ?>" data-gametype="<?php echo $row->Game_Type; ?>" title="<?php echo $title; ?>" <?php echo $editStatus; ?>
-								<?php if(isset($linkdetails->Link_GameID) && $linkdetails->Link_GameID == $row->Game_ID){echo 'selected'; } ?>>
+								<?php if(isset($linkdetails->Link_GameID) && $linkdetails->Link_GameID == $row->Game_ID){echo 'selected';} ?>>
 								<?php echo $row->Game_Name; ?>
 							</option>
 						<?php } ?>
@@ -250,7 +269,7 @@
 					<div class="col-sm-12">
 						<div class="form-group text-center">
 							<?php if(isset($_GET['edit']) && !empty($_GET['edit'])){?>
-								<button type="button" id="siteuser_btn_update" class="btn btn-primary"> Update </button>
+								<button type="button" <?php echo $preventEdit;?> class="btn btn-primary"> Update </button>
 								<button type="submit" name="submit" id="siteuser_update" class="btn btn-primary hidden" value="Update"> Update </button>
 								<button type="button" class="btn btn-danger" onclick="window.location='<?php echo $url; ?>';"> Cancel </button>
 							<?php }else{ ?>

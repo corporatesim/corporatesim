@@ -3,7 +3,8 @@
   //var func        = "<?php //echo $this->uri->segment(2);?>";
 </script>
 <div class="main-container">
-  <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+  <!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+  <div class="pd-ltr-20 height-100-p xs-pd-20-10">
     <?php $this->load->view('components/trErMsg');?>
     <div class="min-height-200px">
       <div class="page-header">
@@ -68,28 +69,25 @@
               </div>
             </div>
 
-            <div class="row col-md-12 col-lg-12 col-sm-12 row form-group" id="addCompSubcompOfGame">
+            <!-- <div class="row col-md-12 col-lg-12 col-sm-12 row form-group" id="addCompSubcompOfGame"> -->
              <!-- // on change of game list all the component and subcomponent here -->
-             <!-- addCompSubcompOfGame -->
-           </div>
+            <!-- </div> -->
 
            <div class="clearfix"></div>
-           <div class="text-center">
-             <a href="<?php echo base_url('Competence/viewCompetenceMapping');?>" class="btn btn-outline-danger">Close</a>
+           <div class="text-center my-3">
+             <a href="<?php echo base_url('Competence/viewCompetenceMapping');?>" class="btn btn-outline-danger my-3">Close</a>
            </div>
 
            <?php echo form_close();?>
          </div>
          <!-- end of adding users -->
-       </div>
-     </div>
 
   <script>
     $(document).ready(function(){
       <?php if(count($mappedCompSubcomp) > 0){ ?>
-        let item_ID = $("#Cmap_ComptId").val();
-        appendCompetenceGameComponentSubcomponent(item_ID,'<?php echo implode('_', $mappedCompSubcomp); ?>');
-        $('#Cmap_GameId').trigger('change');
+        // let item_ID = $("#Cmap_ComptId").val();
+        // appendCompetenceGameComponentSubcomponent(item_ID,'<?php echo implode('_', $mappedCompSubcomp); ?>');
+        // $('#Cmap_GameId').trigger('change');
       <?php } ?>
 
       $('#Cmap_GameId').attr('selected', false);

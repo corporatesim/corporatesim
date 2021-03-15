@@ -214,8 +214,13 @@ class Model extends database{
 	function Update($tblName, $array, $conditions, $print_flag=0){
 		$sql = "UPDATE " . $tblName . " SET ";
 		
-		while(list($key,$value) = each($array)){
-			$sql = $sql  . $key . "=" . "'" .$value . "'"  . ", ";
+		// while(list($key,$value) = each($array)){
+		// 	$sql = $sql  . $key . "=" . "'" .$value . "'"  . ", ";
+		// }
+
+		foreach($array as $arrayKey=>$arrayValue)
+		{
+			$sql = $sql . $arrayKey . "=" . "'" . $arrayValue . "'" . ", ";
 		}
 		
 		if(is_array($conditions)){

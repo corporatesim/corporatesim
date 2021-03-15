@@ -38,7 +38,7 @@ class Login extends CI_Controller {
 			'hash' => $this->security->get_csrf_hash()
 		);
 		// fetch the logo of the ent or subent, according to base url ('http://'.$_SERVER['SERVER_NAME'].'/mobile/')
-		$current_url        = 'https://'.$_SERVER['SERVER_NAME'];
+		$current_url        = 'http://'.$_SERVER['SERVER_NAME'];
 		$logo               = $this->Common_Model->fetchLogo($current_url);
 		$content['logo']    = $logo;
 		$content['subview'] = 'login';

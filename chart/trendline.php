@@ -76,6 +76,8 @@ $userid = $_GET['userid'];
 		$data []= $val;
 		
 	}
+
+	// echo "<pre>"; print_r($data); print_r($labels); die();
 	
 	
 	
@@ -90,9 +92,9 @@ $userid = $_GET['userid'];
     "Apr 2001", "May 2001", "Jun 2001", "Jul 2001", "Aug 2001", "Sep 2001", "Oct 2001", "Nov 2001",
     "Dec 2001"); */
 
-# Create a XYChart object of size 500 x 320 pixels, with a pale purpule (0xffccff) background, a
+# Create a XYChart object of size 500 x 320 pixels, with a pale purpule (0xffffff) background, a
 # black border, and 1 pixel 3D border effect.
-$c = new XYChart(800, 320, 0xffccff, 0x000000, 1);
+$c = new XYChart(800, 320, 0xffffff, 0x000000, 1);
 
 # Set the plotarea at (55, 45) and of size 420 x 210 pixels, with white background. Turn on both
 # horizontal and vertical grid lines with light grey color (0xc0c0c0)
@@ -105,21 +107,21 @@ $legendObj->setBackground(Transparent);
 
 # Add a title box to the chart using 13pt Times Bold Italic font. The text is white (0xffffff) on a
 # purple (0x800080) background, with a 1 pixel 3D border.
-$textBoxObj = $c->addTitle("Long Term Server Load", "timesbi.ttf", 13, 0xffffff);
-$textBoxObj->setBackground(0x800080, -1, 1);
+$textBoxObj = $c->addTitle($chartname	, "timesbi.ttf", 13, 0x000000);
+$textBoxObj->setBackground(0xffffff, -1, 1);
 
 # Add a title to the y axis
-$c->yAxis->setTitle($chartname);
+// $c->yAxis->setTitle($chartname);
 
 # Set the labels on the x axis. Rotate the font by 90 degrees.
-//$labelsObj = $c->xAxis->setLabels($labels);
-//$labelsObj->setFontAngle(90);
+$labelsObj = $c->xAxis->setLabels($labels);
+$labelsObj->setFontAngle(60);
 
 # Add a line layer to the chart
 $lineLayer = $c->addLineLayer();
 
 # Add the data to the line layer using light brown color (0xcc9966) with a 7 pixel square symbol
-$dataSetObj = $lineLayer->addDataSet($data, 0xcc9966, "Server Utilization");
+$dataSetObj = $lineLayer->addDataSet($data, 0xcc9966, " ");
 $dataSetObj->setDataSymbol(SquareSymbol, 7);
 
 # Set the line width to 2 pixels
@@ -127,7 +129,7 @@ $lineLayer->setLineWidth(2);
 
 # Add a trend line layer using the same data with a dark green (0x008000) color. Set the line width
 # to 2 pixels
-$trendLayerObj = $c->addTrendLayer($data, 0x008000, "Trend Line");
+$trendLayerObj = $c->addTrendLayer($data, 0x000000, "Trend Line");
 $trendLayerObj->setLineWidth(2);
 
 # Output the chart

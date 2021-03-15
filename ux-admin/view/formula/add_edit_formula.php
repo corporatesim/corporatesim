@@ -150,9 +150,10 @@
 						<label>Components </label>
 						<ul class="components" name="comp_id" id="comp_id">
 							<?php
+							 $selectedCompSubcomp = "style='background-color: #b7d6b2;'";
 							if( $components->num_rows > 0 ) {
-								while( $rows = $areaComponents->fetch_object() ){ ?>
-									<li id="comp_<?php echo $rows->Comp_ID; ?>" value="{<?php echo $rows->Comp_Name; ?>}" data-toggle="tooltip" title="<?php echo $rows->AreaName; ?>">
+								foreach( $areaComponents as $rows ){ ?>
+									<li id="comp_<?php echo $rows->Comp_ID; ?>" value="{<?php echo $rows->Comp_Name; ?>}" data-toggle="tooltip" title="<?php echo $rows->AreaName; ?>" <?php echo (in_array('comp_'.$rows->Comp_ID, $comp_subcomp_exp))?$selectedCompSubcomp:'';?>>
 										<?php echo $rows->Comp_Name; ?>
 										</li><?php
 									}
@@ -167,8 +168,8 @@
 							<ul class="subcomponents" name="subcomp_id" id="subcomp_id">
 								<?php
 								if( $subcomponents->num_rows > 0 ) {
-									while( $rows = $areaSubcomponents->fetch_object() ){ ?>
-										<li id="subc_<?php echo $rows->SubComp_ID; ?>" value="{<?php echo $rows->SubComp_Name; ?>}" data-toggle="tooltip" title="<?php echo 'Area: '.$rows->AreaName.', Component: '.$rows->ComponentName;?>">
+									foreach( $areaSubcomponents as $rows ){ ?>
+										<li id="subc_<?php echo $rows->SubComp_ID; ?>" value="{<?php echo $rows->SubComp_Name; ?>}" data-toggle="tooltip" title="<?php echo 'Area: '.$rows->AreaName.', Component: '.$rows->ComponentName;?>" <?php echo (in_array('subc_'.$rows->SubComp_ID, $comp_subcomp_exp))?$selectedCompSubcomp:'';?>>
 											<?php echo $rows->SubComp_Name; ?>
 											</li><?php
 										}
@@ -192,6 +193,7 @@
 
 							<div class="col-xs-12 col-sm-12 col-md-8 form-group text-center">
 								<button type="button" class="btn btn-primary" name="add_formula" id="add_formula">Submit</button>
+								<a href="<?php echo site_root.'ux-admin/Formulas';?>" class="btn btn-danger" >Cancel</a>
 							</div>
 						</div>
 					</div>

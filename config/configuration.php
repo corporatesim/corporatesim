@@ -3,16 +3,16 @@
 if($server == 'local'){
 	//local db
 	define("HST", "localhost");
-	define("USR", "root");
-	define("PWD", "");
+	define("USR", "admin");
+	define("PWD", "Admin@2020Mysql");
 	define("DBN", "uxconsul_game");
 	// user for testing (recomended)
-	// define("HST", "develop.corporatesim.com");
+	// define("HST", "develop.corpsim.in");
 	// define("USR", "organiza_devuser");
 	// define("PWD", "2GX7'_;rudyU");
 	// define("DBN", "organiza_devGameData");
 	// for live server (only if needed)
-	// define("HST", "kiit.corporatesim.com");
+	// define("HST", "kiit.corpsim.in");
 	// define("USR", "organiza_newGame");
 	// define("PWD", "2GX7'_;rudyU");
 	// define("DBN", "organiza_game");
@@ -26,7 +26,7 @@ if($server == 'local'){
 	define("DBN", "uxconsul_game");
 }else{
 	//live
-	define("HST", "kiit.corporatesim.com");
+	define("HST", "kiit.corpsim.in");
 	define("USR", "organiza_game");
 	define("PWD", "M^aAq&VLDt8Q");
 	define("DBN", "organiza_game");

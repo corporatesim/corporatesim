@@ -1,6 +1,7 @@
- <!--   <?php// echo $type."<pre>";print_r($assignGames); exit(); ?>   -->
+<!--   <?php// echo $type."<pre>";print_r($assignGames); exit(); ?>   -->
  	<div class="main-container">
- 		<div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+ 		<!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+    <div class="pd-ltr-20 height-100-p xs-pd-20-10">
       <?php $this->load->view('components/trErMsg');?>
  			<div class="min-height-200px">
  				<div class="page-header">
@@ -8,12 +9,12 @@
  					<div class="row">
  						<div class="col-md-6 col-sm-12">
  							<div class="title">
- 								<h1>Assign Games</h1>
+ 								<h1>Assign Card</h1>
  							</div>
  							<nav aria-label="breadcrumb" role="navigation">
  								<ol class="breadcrumb">
  									<li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
- 									<li class="breadcrumb-item active" aria-current="page">Game Allocation/Deallocation</li>
+ 									<li class="breadcrumb-item active" aria-current="page">Card Allocation/Deallocation</li>
  									<li class="breadcrumb-item active" aria-current="page">
  										<?php switch($type)
  										{
@@ -52,7 +53,7 @@
  						<?php
  						if(count($assignGames)<1){ ?>
  							<marquee behavior="alternate" direction="">
- 								<div class="col-md-10 col-xs-12 row text-center alert-danger">No Game Assign To User Enterprise/Subenterprise
+ 								<div class="col-md-10 col-xs-12 row text-center alert-danger">No Card Assign To User Enterprise/Subenterprise
  								</div>
  							</marquee>
  						<?php }
@@ -60,13 +61,13 @@
  							{ ?>
  								<div class="row" id="labelNames">
  									<div class="col-md-4">
- 										<label for="name"><span class="alert-danger">*</span>Select Games</label>
+ 										<label for="name"><span class="text-danger">*</span>Select Card</label>
  									</div>
  									<div class="col-md-3">
- 										<label for="name"><span class="alert-danger">*</span>Start Date</label>
+ 										<label for="name"><span class="text-danger">*</span>Start Date</label>
  									</div>
  									<div class="col-md-3">
- 										<label for="name"><span class="alert-danger">*</span>End Date</label>
+ 										<label for="name"><span class="text-danger">*</span>End Date</label>
  									</div>
  									<?php if($type!='Enterprise'&& $type!='SubEnterprise'){ ?>
  										<div class="col-md-2">
@@ -194,11 +195,11 @@
  											<div id="assignDate"class="col-md-6">
  												<input type="hidden"name="gameID[]" value="<?php echo $games->Game_ID;?>">
  												<div class="input-group" name="gamedate" id="datepicker">
- 													<input type="text" class="form-control datepicker-here" id="<?php echo $games->Game_ID;?>_startDate" name="gamestartdate[]" value="<?php echo $startDate ?>" data-value="<?php echo strtotime($startDate);?>" placeholder="Select Start Date" required="" readonly="" data-startDate="<?php echo strtotime($GameStartDate);?>" data-endDate="<?php echo strtotime($GameEndDate);?>" data-language='en' data-date-format="dd-mm-yyyy">
+ 													<input type="text" class="form-control datetimepicker" id="<?php echo $games->Game_ID;?>_startDate" name="gamestartdate[]" value="<?php echo $startDate ?>" data-value="<?php echo strtotime($startDate);?>" placeholder="Select Start Date" required="" readonly="" data-startDate="<?php echo strtotime($GameStartDate);?>" data-endDate="<?php echo strtotime($GameEndDate);?>" data-language='en' data-date-format="dd-mm-yyyy">
 
  													<span class="input-group-addon" >To</span>
 
- 													<input type ="text" class="form-control datepicker-here" id="<?php echo $games->Game_ID;?>_endDate" name="gameenddate[]" value="<?php echo $endDate ?>" data-value="<?php echo strtotime($endDate);?>" placeholder="Select End Date" required="" readonly="" data-startDate="<?php echo strtotime($GameStartDate);?>" data-endDate="<?php echo strtotime($GameEndDate);?>" data-language='en' data-date-format="dd-mm-yyyy">
+ 													<input type ="text" class="form-control datetimepicker" id="<?php echo $games->Game_ID;?>_endDate" name="gameenddate[]" value="<?php echo $endDate ?>" data-value="<?php echo strtotime($endDate);?>" placeholder="Select End Date" required="" readonly="" data-startDate="<?php echo strtotime($GameStartDate);?>" data-endDate="<?php echo strtotime($GameEndDate);?>" data-language='en' data-date-format="dd-mm-yyyy">
  												</div>
  											</div>
  											<?php if($type!='Enterprise'&& $type!='SubEnterprise'){ ?>
@@ -225,9 +226,7 @@
  					</div>
  					<div class="clearfix"></div>
  				</div>
- 			</div>
- 		</div>
- 	</div>
+
  	<script type="text/javascript">
  		$(document).ready(function(){
  			$('#select_all').click(function(i,e){

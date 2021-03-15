@@ -349,5 +349,20 @@ function sendNotification($notificationTo=NULL,$gameid=NULL,$gamename=NULL,$modi
 	}
 }
 
+// to change the game status
+if (isset($_POST['action']) && $_POST['action'] == 'changeStatus') {
+  $Game_ID = $_POST['Game_ID'];
+  $Game_Delete = $_POST['Game_Delete'];
+  if (empty($Game_ID)) {
+    die(json_encode(['status' => 201, 'showclass' => 'animate__shakeX', 'hideclass' => '', 'position' => 'top-end', 'timer' => '1500', 'icon' => 'error', 'msg' => 'No Data Provided To Delete']));
+  } else {
+    $deleteData = $funObj->ExecuteQuery("UPDATE GAME_GAME SET Game_Delete=" . $Game_Delete . " WHERE Game_ID=" . $Game_ID);
+    if ($deleteData) {
+      die(json_encode(['status' => 200, 'showclass' => 'animate__shakeX', 'hideclass' => '', 'position' => 'top-end', 'timer' => '1500', 'icon' => 'success', 'msg' => 'Status Changed Successfully']));
+    } else {
+      echo json_encode(['status' => 201, 'showclass' => 'animate__shakeX', 'hideclass' => '', 'position' => 'top-end', 'timer' => '1500', 'icon' => 'error', 'msg' => 'Error occured while updating status']);
+    }
+  }
+}
 
 ?>

@@ -36,7 +36,8 @@
   }
 </style>
 <div class="main-container">
-  <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+  <!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+  <div class="pd-ltr-20 height-100-p xs-pd-20-10">
     <?php $this->load->view('components/trErMsg');?>
     <div class="min-height-200px">
       <div class="page-header">
@@ -142,11 +143,11 @@
 
               </div>
               <!-- end of adding Formula -->
-            </div>
-          </div>
 
 <script>
   $(document).ready(function(){
+    CKEDITOR.replaceAll('details');
+
     let database_formula_expression = "<?php echo $itemFormulaList[0]->Items_Formula_Expression; ?>";
     let database_formula_string     = "<?php echo $itemFormulaList[0]->Items_Formula_String; ?>";
         //converting string to array

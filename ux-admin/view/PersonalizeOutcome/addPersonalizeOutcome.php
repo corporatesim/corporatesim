@@ -11,13 +11,15 @@
 #overlay {
   position        : fixed;
   display         : none;
-  width           : 100%;
+  width           : 85%;
   height          : 100%;
+  padding         : 5px;
+  margin          : 5px;
   top             : 0;
-  left            : 250px;
+  left            : 230px;
   right           : 0;
   bottom          : 0;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.8);
   z-index         : 2;
   cursor          : pointer;
 }
@@ -195,8 +197,11 @@ span.alert-danger {
   <?php 
   $imageSql = "SELECT Badges_ImageName FROM `GAME_OUTCOME_BADGES` WHERE Badges_Is_Active=0 GROUP BY Badges_ImageName";
   $imageObj = $functionsObj->ExecuteQuery($imageSql);
-  while($images = $imageObj->Fetch_Object()) { ?>
-    <div class="col-md-1 divImages"><img src="<?php echo site_root.'ux-admin/upload/Badges/'.$images->Badges_ImageName;?>" alt="<?php $images->Badges_ImageName;?>" id="<?php echo $images->Badges_ImageName;?>" class="selectImages"></div>
+
+  while ($images = $imageObj->Fetch_Object()) { ?>
+    <div class="col-md-1 divImages">
+      <img src="<?php echo site_root.'ux-admin/upload/Badges/'.$images->Badges_ImageName;?>" alt="<?php $images->Badges_ImageName;?>" id="<?php echo $images->Badges_ImageName;?>" class="selectImages">
+    </div>
   <?php } ?>
 </div>
 <script>

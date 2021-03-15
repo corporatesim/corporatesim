@@ -153,8 +153,8 @@
   padding: 15px;
   text-align: center;
 }
-
 </style>
+
 <div class="row">
  <div class="col-lg-12">
   <h1 class="page-header">
@@ -168,6 +168,7 @@
   </h1>
 </div>
 </div>
+
 <div class="row">
   <div class="col-sm-12">
    <ul class="breadcrumb">
@@ -176,21 +177,25 @@
     <!-- <li class="active"><?php echo $header; ?></li> -->
   </ul>
 </div>
-</div> 
+</div>
+
 <!-- DISPLAY ERROR MESSAGE -->
-<?php  if(!empty($_SESSION['tr_msg'])) { ?>
- <div class="alert-success alert"><?php echo $_SESSION['tr_msg']; ?></div>
-<?php } ?>
-<?php  if(!empty($er_msg)) { ?>
-  <div class="alert-danger alert"><?php echo $er_msg; ?></div>
+<?php 
+  if(!empty($_SESSION['tr_msg'])) { ?>
+    <div class="alert-success alert"><?php echo $_SESSION['tr_msg']; ?></div>
+<?php }
+  if(!empty($_SESSION['er_msg'])) { ?> 
+    <div class="alert-danger alert"><?php echo $_SESSION['er_msg']; ?></div>
 <?php } ?> 
 <!-- DISPLAY ERROR MESSAGE END -->
+
 <style>
   span.alert-danger {
     background-color: #ffffff;
     font-size       : 18px;
   }
-</style>   
+</style>
+
 <div class="row">
   <div class="col-lg-12">
     <div class="pull-right legend">
@@ -202,65 +207,93 @@
     </div>
   </div>
 </div>
+
 <div class="row">
   <div class="panel panel-default" id="loader">
     <div class="panel-heading">
-      <div class="jumbotron">
-        <div class="row clearfix">
+      <div class="clearfix"></div>
+      <div class="panel-body">
+        <div class="dataTable_wrapper">
+          <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+           <thead>
+            <tr>
+              <th>Sl. No</th>
+              <th>Image</th>
+              <th>Short Name</th>
+              <th>Description</th>
+              <th>Value</th>
+              <th class="no-sort" id="action">Action</th>
+            </tr>
+          </thead>
+          <tbody>
           <?php 
-          $i=1; while($badgesResult = $badges->fetch_object()){ ?>
-            <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
-              <div class="da-card box-shadow">
-                <div class="da-card-photo" style="">
-                  <a href="<?php echo site_root."ux-admin/upload/Badges/"?><?php echo $badgesResult->Badges_ImageName;?>" data-fancybox="images" data-width="2048" data-height="1365" data-caption="<?php echo $badgesResult->Badges_ImageName; ?>" >
-                    <img src="<?php echo site_root."ux-admin/upload/Badges/"?><?php echo $badgesResult->Badges_ImageName;?>" 
-                    alt="" width=50 height=150/>
-                  </a>
-                  <div class="da-overlay">
-                   <div class="da-social">
-                    <?php if($functionsObj->checkModuleAuth('outcomeBadges','edit')){ ?>
-                      <ul class="clearfix" style="list-style-type: none; align:center;">
-                        <li>
-                          <a href="<?php echo site_root."ux-admin/outcomeBadges/edit/".$badgesResult->Badges_ID;?>" title="Edit"> <i class="fa fa-pencil"></i>
-                          </a>
-                        </li>
-                        <!-- <li><a href="javascript:void(0);" class="dl_btn" id=<?php echo $badgesResult->Badges_ID;?> title="Delete"><span class="fa fa-trash"></span></a></a></li> -->
-                      </ul>
-                    <?php } ?>
-                  </div>
-                </div>
-                <div class="da-card-content">
-                  <div class="desc">
-                    <h4 class ="weight-500 mb-10"><?php echo $badgesResult->Badges_ShortName;?></h4>
-                    <p class  ="mb-0"><?php echo $badgesResult->Badges_Description;?></p>
-                    <?php
-                    $var = explode(',',$badgesResult->Badges_Value);
-                             //var_dump($var);
-                    for ($i=0; $i <count($var) ; $i++) { 
-                      if(count($var)>2)
-                      {
-                       if($i==1)
-                         echo "<label for='Minimum Value'>MinVal = </label> $var[$i]<br>";
-                       if($i==2)
-                         echo "<label for='Maximum Value'>MaxVal = </label> $var[$i]<br>"; 
-                     }
-                     else 
-                     {
-                      if($i==1)
-                       echo "<label for='Value'>Value = </label> $var[$i]<br>";
-                   }
-                 }
-                 ?>
-               </div>
-             </div>
-           </div>
-         </div>
-       </div>
-       <?php $i++; } ?>
-     </div><br><br><br>
-   </div>
-   <div class="clearfix"></div>
- </div>
-</div>
-</div>
+            $slNo=0; 
+            while ($badgesResult = $badges->fetch_object()) {
+              $slNo++; ?>
+              <tr>
+                <th><?php echo $slNo; ?></th>
+                <td>
+                  <?php echo ($badgesResult->Badges_ImageName) ? "<img src='".site_root.'ux-admin/upload/Badges/'.$badgesResult->Badges_ImageName."' alt='Image' width='50' height='50'>" : 'No Image';?>
+                </td>
+                <td><?php echo $badgesResult->Badges_ShortName; ?></td>
+                <td><?php echo $badgesResult->Badges_Description; ?></td>
+                <!-- Start of Value -->
+                <td>
+                <?php
+                  $var = explode(',',$badgesResult->Badges_Value);
+                  //var_dump($var);
+                  for ($i=0; $i <count($var) ; $i++) {
+                    if (count($var)>2) {
+                      if ($i==1)
+                        echo "<label for='Minimum Value'>MinVal = </label> $var[$i]<br>";
+                      if ($i==2)
+                        echo "<label for='Maximum Value'>MaxVal = </label> $var[$i]<br>"; 
+                    }
+                    else {
+                      if ($i==1)
+                        echo "<label for='Value'>Value = </label> $var[$i]<br>";
+                    }
+                  }
+                ?>
+                </td>
+                <!-- End of Value -->
+                <!-- Start of Action -->
+                <td>
+                  <?php 
+                  // Edit
+                  if ($functionsObj->checkModuleAuth('outcomeBadges','edit')) { ?>
+                    <a href="<?php echo site_root."ux-admin/outcomeBadges/edit/".$badgesResult->Badges_ID; ?>" title="Edit">
+                      <span class="fa fa-pencil"></span>
+                    </a> &nbsp;
+                  <?php }
+                  // Delete
+                  if ($functionsObj->checkModuleAuth('outcomeBadges','delete')) { ?>
+                     <a href="<?php echo site_root."ux-admin/outcomeBadges/delete/".$badgesResult->Badges_ID;?>" title="Delete">
+                      <span class="fa fa-trash"></span>
+                    </a>
 
+                    <!-- <a href="javascript:void(0);" class="dl_btn" id="<?php echo $badgesResult->Badges_ID; ?>" title="Delete">
+                      <span class="fa fa-trash"></span>
+                    </a> -->
+                  <?php } ?>
+                </td>
+                <!-- End of Action -->
+              </tr>
+              <?php } ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+
+  <?php
+    // unsetting session variable if it sets
+    if ($_SESSION['tr_msg']) {
+      unset($_SESSION['tr_msg']);
+    }
+    if ($_SESSION['er_msg']) {
+      unset($_SESSION['er_msg']);
+    }
+  ?>

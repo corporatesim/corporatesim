@@ -14,41 +14,6 @@ function pr($data=NULL){
 	echo "</pre>";
 }
 
-function SendMail($toEmail=NULL,$html=NULL,$subject=NULL)
-{
-	$ci =& get_instance();
-	$ci->load->library('Phpmailer');
-	$mail = new Phpmailer;
-
-	$mail->isSMTP();
-	$mail->SMTPDebug   = 0;
-	$mail->Debugoutput = 'html';
-	$mail->Host        = 'smtp.gmail.com';
-	$mail->Port        = 587;
-	$mail->SMTPSecure  = 'tls';
-	$mail->SMTPAuth    = true;
-	$mail->IsHTML(true);
-	$mail->Username    = 'goyalsajal9654@gmail.com';
-	$mail->Password    = 'digialayatesting';
-  // $mail->setFrom('bhagwatpsahu8@gmail.com', 'Digialaya');
-	$mail->addAddress($toEmail);
-	$mail->Subject = 'Digialaya - ' .$subject;
-	$mail->msgHTML($html);
-
-
-	if($mail->send())
-	{
-		$result = 'success';
-		echo json_encode($result);
-	}
-	else
-	{ 
-   // var_dump($mail->ErrorInfo); exit();
-		$result = 'error';
-		echo json_encode($result);
-	}
-}
-
 function do_upload($imageDataArray=NULL)
 {
 	// $this->prd($imageDataArray);

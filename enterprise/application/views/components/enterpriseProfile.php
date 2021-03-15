@@ -1,17 +1,18 @@
 <div class="main-container">
-  <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+  <!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+  <div class="pd-ltr-20 height-100-p xs-pd-20-10">
     <?php $this->load->view('components/trErMsg');?>
     <div class="min-height-200px">
       <div class="page-header">
         <div class="row">
           <div class="col-md-6 col-sm-12">
             <div class="title">
-              <h1>Edit Enterprise</h1>
+              <h1>Edit Enterprize</h1>
             </div>
             <nav aria-label="breadcrumb" role="navigation">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?php echo base_url('Dashboard');?>">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Edit Enterprise</li>
+                <li class="breadcrumb-item active" aria-current="page">Edit Enterprize</li>
               </ol>
             </nav>
           </div>  
@@ -19,7 +20,7 @@
         <div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
           <div class="clearfix">
             <div class="pull-left">
-              <!-- <h4 class="text-blue">Edit Enterprise</h4><br> -->
+              <!-- <h4 class="text-blue">Edit Enterprize</h4><br> -->
             </div>
           </div>
           <form method="post" action=""enctype="multipart/form-data">
@@ -35,28 +36,28 @@
             <div class="form-group row">
               <label class="col-sm-12 col-md-4 col-form-label">Contact Number</label>
               <div class="col-sm-12 col-md-6">
-                <input class="form-control" name="Enterprise_Number" value="<?php echo $userDetails->Enterprise_Number;?>" type="text" placeholder="Enter Enterprise Number" required="">
+                <input class="form-control" name="Enterprise_Number" value="<?php echo $userDetails->Enterprise_Number;?>" type="text" placeholder="Enter Enterprize Number" required="">
               </div>
             </div> 
 
             <div class="form-group row">
               <label class="col-sm-12 col-md-4 col-form-label">Email ID</label>
               <div class="col-sm-12 col-md-6">
-                <input class="form-control" name="Enterprise_Email" value="<?php echo $userDetails->Enterprise_Email;?>" type="email" placeholder="Enter Enterprise Email" required="">
+                <input class="form-control" name="Enterprise_Email" value="<?php echo $userDetails->Enterprise_Email;?>" type="email" placeholder="Enter Enterprize Email" required="">
               </div>
             </div> 
 
             <div class="form-group row">
               <label class="col-sm-12 col-md-4 col-form-label">Address1</label>
               <div class="col-sm-12 col-md-6">
-                <input class="form-control" name="Enterprise_Address1" value="<?php echo $userDetails->Enterprise_Address1;?>" type="text" placeholder="Enter Enterprise Address1" required="">
+                <input class="form-control" name="Enterprise_Address1" value="<?php echo $userDetails->Enterprise_Address1;?>" type="text" placeholder="Enter Enterprize Address1" required="">
               </div>
             </div> 
 
             <div class="form-group row">
-              <label class="col-sm-12 col-md-4 col-form-label"> Enterprise Address2</label>
+              <label class="col-sm-12 col-md-4 col-form-label">Address2</label>
               <div class="col-sm-12 col-md-6">
-                <input class="form-control" name="Enterprise_Address2" value="<?php echo $userDetails->Enterprise_Address2;?>" type="text" placeholder="Enter Enterprise Address2">
+                <input class="form-control" name="Enterprise_Address2" value="<?php echo $userDetails->Enterprise_Address2;?>" type="text" placeholder="Enter Enterprize Address2">
               </div>
             </div> 
 
@@ -89,23 +90,23 @@
             </div> 
 
             <div class="form-group row">
-              <label class="col-sm-12 col-md-4 col-form-label"> Enterprise Province</label>
+              <label class="col-sm-12 col-md-4 col-form-label">Province</label>
               <div class="col-sm-12 col-md-6">
-                <input class="form-control" name="Enterprise_Province" value="<?php echo $userDetails->Enterprise_Province;?>" type="text" placeholder="Enter Enterprise Province">
+                <input class="form-control" name="Enterprise_Province" value="<?php echo $userDetails->Enterprise_Province;?>" type="text" placeholder="Enter Enterprize Province">
               </div>
             </div> 
 
             <div class="form-group row">
               <label class="col-sm-12 col-md-4 col-form-label">Pincode</label>
               <div class="col-sm-12 col-md-6">
-                <input class="form-control" name="Enterprise_Pincode" value="<?php echo $userDetails->Enterprise_Pincode;?>" type="text" placeholder="Enter Enterprise Pincode" required="">
+                <input class="form-control" name="Enterprise_Pincode" value="<?php echo $userDetails->Enterprise_Pincode;?>" type="text" placeholder="Enter Enterprize Pincode" required="">
               </div>
             </div> 
 
             <div class="form-group row">
               <label class="col-sm-12 col-md-4 col-form-label">Password</label>
               <div class="col-sm-12 col-md-6">
-                <input class="form-control" name="Enterprise_Password" type="text" placeholder="Enter Enterprise Password" required="" value="<?php echo $userDetails->Enterprise_Password;?>">
+                <input class="form-control" name="Enterprise_Password" type="text" placeholder="Enter Enterprize Password" required="" value="<?php echo $userDetails->Enterprise_Password;?>">
               </div>
             </div> 
             <!-- end of adding field -->
@@ -130,7 +131,7 @@
             </div> -->
 
             <div class="form-group row">
-              <label class="col-sm-12 col-md-4 col-form-label">Current Enterprise Logo</label>
+              <label class="col-sm-12 col-md-4 col-form-label">Current Logo</label>
               <div class="col-sm-12 col-md-6">
                 <img src="<?php echo base_url('common/Logo/'.$userDetails->Enterprise_Logo);?>" width="100px"height="100px" alternate="Enterprise_Logo">
               </div>
@@ -142,7 +143,3 @@
           </form>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-

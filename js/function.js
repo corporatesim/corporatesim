@@ -5,6 +5,8 @@ function countdown(linkid,userid,minutes,stat) {
 	//alert('In countdown function');
 	var seconds = 60;
 	var mins    = minutes;
+	var counter = document.getElementById("timer");
+	var timerSecond = mins*60;
 	//alert(getCookie("linkid"));
 	/* if(getCookie("minutes")&&getCookie("seconds")&&stat)
 	{
@@ -14,12 +16,44 @@ function countdown(linkid,userid,minutes,stat) {
 		 //alert('min'+mins);
 		} */
 
+		// when timer in seconds, i.e. <1 min
+		function timerInSeconds()
+		{
+			// alert('timer in seconds'); console.log(linkid+' : '+userid+' : '+minutes);
+			// counter.innerHTML   = "00:" + (timerSecond < 10 ? "0" : "") + String(timerSecond);
+			var intervalId = setInterval(function(){
+				if(timerSecond < 1)
+				{
+					$("#execute_input").hide();
+					// alert('You have compeleted your time. Please submit your changes.');
+					$('.overlay').show();
+					// while auto submit then remove all required from inputs
+					$('input').each(function(){
+						$(this).prop('required',false);
+					});
+					$('#submit').trigger('click');
+					// location.reload();
+					//document.forms["game_frm"].submit();
+					clearInterval(intervalId);
+					return false;
+				}
+				timerSecond--;
+				counter.innerHTML   = "00:" + (timerSecond < 10 ? "0" : "") + String(timerSecond);
+			}, 1000);
+		}
+
+		// when timer in minutes, i.e. >=1 min
 		function tick()
 		{
 
-			var counter = document.getElementById("timer");
 			//setCookie("minutes",mins,10)
 			//setCookie("seconds",seconds,10)
+			if(mins % 1 !== 0)
+			{
+				seconds = ((mins-Math.floor(mins)).toFixed(2))*60;
+				mins = Math.floor(mins)+1
+				// alert(mins+' and '+seconds);
+			}
 			var current_minutes = mins-1
 			seconds--;
 			counter.innerHTML   = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
@@ -38,7 +72,7 @@ function countdown(linkid,userid,minutes,stat) {
 			if(seconds == 0)
 			{
 				$("#execute_input").hide();
-				alert('You have compeleted yor time. Please submit your changes.');
+				// alert('You have compeleted your time. Please submit your changes.');
 				$('.overlay').show();
       	// while auto submit then remove all required from inputs
       	$('input').each(function(){
@@ -58,7 +92,7 @@ function countdown(linkid,userid,minutes,stat) {
 		{
 			if(mins > 1)
 			{
-				// countdown(mins-1);   never reach “00? issue solved:Contributed by Victor Streithorst    
+				// countdown(mins-1);   never reach ï¿½00? issue solved:Contributed by Victor Streithorst    
 				setTimeout(function () { countdown(linkid,userid,parseInt(mins)-1,false); }, 1000);
 			}
 				//Add or Update timer in link and user wise....
@@ -77,7 +111,14 @@ function countdown(linkid,userid,minutes,stat) {
 				});
 				}
 			}
-			tick();
+			if(mins>=1)
+			{
+				tick();
+			}
+			else
+			{
+				timerInSeconds();
+			}
 		}
 		function deletecookie(cname) {
 	//alert(cname);

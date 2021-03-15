@@ -255,7 +255,7 @@
 								</div>
 								<div class="col-md-12 col-sm-12 hidden availableB2C">
 									<div class="form-group">
-										<label for="Game short Description"><span class="alert-danger">*</span>Game Long Description</label>
+										<label for="Game short Description"><span class="alert-danger">*</span>Game Long Description (<span class="text-danger">Please keep the opening and closing tag within 500 character limit</span>)</label>
 										<textarea id="Game_longDescription" name="Game_longDescription" class="form-control" placeholder="Long Description"><?php if(!empty($gamedetails->Game_longDescription)) echo $gamedetails->Game_longDescription; ?></textarea>
 									</div>
 								</div>
@@ -282,23 +282,36 @@
 								</div>
 							</div>
 
-							<div class="row name" data-toggle="tooltip" title="This text will be shown in the first half page of report">
+              <!-- Commenting this and making as hidden type -->
+							<!-- <div class="row name" data-toggle="tooltip" title="This text will be shown in the first half page of report">
 								<div >
 									<div class="form-group">
 										<label for="Game_ReportFirstPage"><span class="alert-danger">Game Report First Page</span></label>
 										<textarea id="Game_ReportFirstPage" name="Game_ReportFirstPage" class="form-control" placeholder="Game Report First Page"><?php if(!empty($gamedetails->Game_ReportFirstPage)) echo $gamedetails->Game_ReportFirstPage; ?></textarea>
 									</div>
 								</div>
-							</div>
+							</div> -->
+              <input type="hidden" id="Game_ReportFirstPage" name="Game_ReportFirstPage" class="form-control" value="<?php if(!empty($gamedetails->Game_ReportFirstPage)) echo $gamedetails->Game_ReportFirstPage; ?>">
 
-							<div class="row name" data-toggle="tooltip" title="This text will be shown in the second full page of report">
+              <!-- Commenting this and making as hidden type -->
+							<!-- <div class="row name" data-toggle="tooltip" title="This text will be shown in the second full page of report">
 								<div >
 									<div class="form-group">
 										<label for="Game_ReportSecondPage"><span class="alert-danger">Game Report Second Page</span></label>
 										<textarea id="Game_ReportSecondPage" name="Game_ReportSecondPage" class="form-control" placeholder="Game Report Second Page"><?php if(!empty($gamedetails->Game_ReportSecondPage)) echo $gamedetails->Game_ReportSecondPage; ?></textarea>
 									</div>
 								</div>
-							</div>
+							</div> -->
+              <input type="hidden" id="Game_ReportSecondPage" name="Game_ReportSecondPage" class="form-control" value="<?php if(!empty($gamedetails->Game_ReportSecondPage)) echo $gamedetails->Game_ReportSecondPage; ?>">
+
+              <div class="row name" data-toggle="tooltip" title="This text will be shown in the card of process owner">
+                <div >
+                  <div class="form-group">
+                    <label for="Game_ProcessOwner_Details"><span class="alert-danger">Process Owner Card Details</span></label>
+                    <textarea id="Game_ProcessOwner_Details" name="Game_ProcessOwner_Details" class="form-control" placeholder="Game Details to show process owner"><?php if(!empty($gamedetails->Game_ProcessOwner_Details)) echo $gamedetails->Game_ProcessOwner_Details; ?></textarea>
+                  </div>
+                </div>
+              </div>
 
 							<div class="row name">
 								<div class="col-md-6 col-xs-12">
@@ -342,8 +355,10 @@
 					<script type="text/javascript">
 						<!--
 							CKEDITOR.replace('message');
-							CKEDITOR.replace('Game_ReportFirstPage');
-							CKEDITOR.replace('Game_ReportSecondPage');
+							// CKEDITOR.replace('Game_ReportFirstPage');
+							// CKEDITOR.replace('Game_ReportSecondPage');
+              CKEDITOR.replace('Game_ProcessOwner_Details');
+							CKEDITOR.replace('Game_longDescription');
 //-->
 </script>
 <script>

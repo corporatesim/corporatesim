@@ -1,4 +1,8 @@
 <!-- <?php // echo "<pre>"; print_r($result); exit(); ?> -->
+<script>
+  console.log("Game: <?php echo $result->Game; ?>"+"\nScenario: <?php echo $result->Scenario; ?>");
+</script>
+
   <style>
    input[type=text] {
     border-radius: 12px;
@@ -20,25 +24,33 @@
 include_once 'includes/header.php'; 
 ?>
 <section id="video_player">
-	<div class="container">
-		<div class="row">
+  <div class="container">
+    <div class="row">
         <!--<div class="col-sm-9 col-md-10 no_padding"><h2 class="InnerPageHeader"><?php if(!empty($result)){ echo $result->Game." | ".$result->Scenario ; }?> Your Output</h2></div>
-        	<div class="col-sm-3 col-md-2 text-center timer">hh:mm:ss</div>-->
-          <div class="col-md-12 InnerPageHeader">
-            <?php if(!empty($result)){ echo $result->Scenario ; }?>
+          <div class="col-sm-3 col-md-2 text-center timer">hh:mm:ss</div>-->
+
+          <div class="col-md-12 InnerPageHeader" style="height: 8px; font-size: 6px;">
+            <?php if(!empty($result)) { echo $result->Scenario ; } ?>
             <button type="button" name="submit" id="submitShow" class="btn btn-danger pull-right" value="Submit" style="display: none;">Continue</button>
-            <?php if(!$skipOutput->Link_Enabled > 0){ ?>
-              <button type="button" name="submit" id="submitShowRight" class="btn btn-danger rotateCompAnti submitShowRight" value="Submit">Continue</button>
-            <?php } ?>
+            <?php if(!$skipOutput->Link_Enabled > 0) {
+              // Link_buttonActionOutput => 1-Show Side Button, 2-Show Bottom Button
+              if ($result->Link_buttonActionOutput == 1) { ?>
+                <button type="button" name="submit" id="submitShowRight" class="btn btn-danger rotateCompAnti submitShowRight hidden" value="Submit" style="margin-top: 410px;"><?php echo $result->Link_ButtonTextOutput; ?></button>
+              <?php } else { ?>
+                <span id="submitShowRight"></span>
+            <?php } } ?>
           </div>
+
           <form method="POST" action="" id="game_frm" name="game_frm">
             <input type="hidden" name="ScenarioId" id="ScenarioId" value="<?php echo $result->Link_ScenarioID; ?>">
             <input type="hidden" name="LinkId" id="LinkId" value="<?php echo ($result->Link_ID)?$result->Link_ID:$linkid; ?>">
             <?php if($result->BackgroundImage){ ?>
               <div class="col-sm-12 no_padding shadow" style="background: url(<?php echo site_root.'images/'.$result->BackgroundImage;?>); background-repeat: round;">
-              <?php } else { ?>
-                <div class="col-sm-12 no_padding shadow">
-                <?php } ?>
+              <!-- <div class="col-sm-12 no_padding shadow" style="background: url(<?php echo site_root.'images/'.$result->BackgroundImage;?>); background-repeat: round; height: 600px !important;"> -->
+            <?php } else { ?>
+              <div class="col-sm-12 no_padding shadow">
+              <!-- <div class="col-sm-12 no_padding shadow" style="height: 600px !important;"> -->
+            <?php } ?>
           <!--
             <div class="col-sm-6 ">
               <span style="margin-right:20px;"><a href="<?php echo $gameurl; ?>" target="_blank" class="innerPageLink">Game Description</a></span>
@@ -49,42 +61,47 @@ include_once 'includes/header.php';
               <button class="btn innerBtns">Save</button>
               <button class="btn innerBtns">Submit</button>
             </div>-->
-            <div class="col-sm-12  text-right pull-right"">
-            	<!-- <button type="submit" name="submit" id="submit" class="btn innerBtns" value="Download">Download</button> -->
-            	<button type="submit" name="submit" id="submit" class="btn btn-primary hidden" value="Submit">Next</button>
+            <div class="col-sm-12 text-right pull-right">
+              <!-- <button type="submit" name="submit" id="submit" class="btn innerBtns" value="Download">Download</button> -->
+              <button type="submit" name="submit" id="submit" class="btn btn-primary hidden" value="Submit">Next</button>
             </div>
             
             <!-- Nav tabs --> 
             <div class=" TabMain col-sm-12">
-            	<ul class="nav nav-tabs hidden" role="tablist">
-            		<?php 
-            		$i=0;
-            		while($row = mysqli_fetch_array($area)) {
+              <ul class="nav nav-tabs hidden" role="tablist">
+                <?php 
+                $i=0;
+                while($row = mysqli_fetch_array($area)) {
                     //echo $row->Area_Name;
-            			if($row['BackgroundColor'] || $row['TextColor'])
-            			{
-            				$areaStyle = "style='background:".$row['BackgroundColor']."; color:".$row['TextColor']." !important;'";
-            			}
-            			else
-            			{
-            				$areaStyle = '';
-            			}
+                  if($row['BackgroundColor'] || $row['TextColor'])
+                  {
+                    $areaStyle = "style='background:".$row['BackgroundColor']."; color:".$row['TextColor']." !important;'";
+                  }
+                  else
+                  {
+                    $areaStyle = '';
+                  }
                   // adding backForward class to click the forward and back button and move the area accordingly
-            			if($i==0)
-            			{
-            				echo "<li role='presentation' class='backForward active regular' id='".$row['Area_Name']."'><a href='#".$row['Area_Name']."Tab' $areaStyle aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
-            			}else{
-            				echo "<li role='presentation' class='backForward regular' id='".$row['Area_Name']."'><a href='#".$row['Area_Name']."Tab' $areaStyle aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['Area_Name']."</a></li>";
-            			}
-            			$i++;
-            		}
-            		?>
-            	</ul>
+                  if($i==0)
+                  {
+                    echo "<li role='presentation' class='backForward active regular' id='".$row['Area_Name']."'><a href='#".$row['Area_Name']."Tab' $areaStyle aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['AreaAlias']."</a></li>";
+                  }else{
+                    echo "<li role='presentation' class='backForward regular' id='".$row['Area_Name']."'><a href='#".$row['Area_Name']."Tab' $areaStyle aria-controls='".$row['Area_Name']."'Tab role='tab' data-toggle='tab'>".$row['AreaAlias']."</a></li>";
+                  }
+                  $i++;
+                }
+                ?>
+              </ul>
 
-            	<!-- Tab panes -->
-            	<div class="tab-content">
+              <!-- Tab panes -->
+              <div class="tab-content">
+                <!-- show progress bar here -->
+                <div class="progress" style="margin-bottom:0; height:13px; width:20%; float:right; background-color:#d8d8d8; border-style: solid; border-color:darkblue;" id="progressbarData">
+                  <!-- show progress bar data here -->
+                </div>
+              <!-- end of progress bar -->
 
-            		<?php
+                <?php
             //echo $area->num_rows;
                 $area = $functionsObj->ExecuteQuery($sqlarea);
                 $i    = 0;
@@ -99,6 +116,8 @@ include_once 'includes/header.php';
                   echo "<div role='tabpanel' style='height:480px;' data-tabId='".$row['Area_Name']."' class='tab-pane' id='".$row['Area_Name']."Tab'>";
                 }
                 $i++;
+                ?>
+                <?php
 
                   // $sqlcomp = "SELECT distinct a.Area_ID as AreaID, c.Comp_ID as CompID, a.Area_Name as Area_Name, 
                   // c.Comp_Name as Comp_Name, ls.SubLink_Details as Description ,ls.SubLink_ViewingOrder as ViewingOrder, ls.SubLink_LabelCurrent as LabelCurrent, ls.SubLink_LabelLast as LabelLast, ls.SubLink_InputFieldOrder as InputFieldOrder,ls.Sublink_ShowHide as ShowHide , o.output_current as Current ,ls.SubLink_BackgroundColor as BackgroundColor, ls.SubLink_TextColor as TextColor
@@ -144,7 +163,7 @@ include_once 'includes/header.php';
                 LEFT JOIN GAME_AREA ga ON ga.Area_ID=gls.SubLink_AreaID
                 LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=$userid
                 WHERE
-                gls.SubLink_Type = 1 AND gls.SubLink_SubCompID = 0 AND gls.SubLink_LinkID=".$linkid." AND gls.SubLink_AreaID=".$row['AreaID']."	GROUP BY gls.SubLink_ID ORDER BY gls.SubLink_Order";
+                gls.SubLink_Type = 1 AND gls.SubLink_SubCompID = 0 AND gls.SubLink_LinkID=".$linkid." AND gls.SubLink_AreaID=".$row['AreaID']." GROUP BY gls.SubLink_ID ORDER BY gls.SubLink_Order";
                   // echo $sqlcomp;// exit;
                 $component = $functionsObj->ExecuteQuery($sqlcomp);
               //Get Component for this area for this linkid
@@ -418,7 +437,7 @@ include_once 'includes/header.php';
                         break;
 
                         case 'admin':
-                        $value = $row1['AdminCurrent'];
+                        $value = $row1['CURRENT'];
                         break;
 
                         case 'formula':
@@ -474,13 +493,13 @@ include_once 'includes/header.php';
                       {
                        while($objectResult = $functionsObj->FetchObject($objRes))
                        {
-	                      	// echo "<pre>".$row1['CURRENT'].' mk '.$sqlOutcome; print_r($objectResult); echo "</pre>";
-		                      // if same component and not the default outcome selected i.e. 3
+                          // echo "<pre>".$row1['CURRENT'].' mk '.$sqlOutcome; print_r($objectResult); echo "</pre>";
+                          // if same component and not the default outcome selected i.e. 3
                         if($objectResult->Outcome_FileType !=3 && ($value>=$objectResult->Outcome_MinVal AND $value<=$objectResult->Outcome_MaxVal))
                         {
                           $Outcome_Description = $objectResult->Outcome_Description;
                           echo "<div class ='InlineBox'>";
-		                        // echo "<label class ='scenariaLabel'>OutcomeResult</label>";
+                            // echo "<label class ='scenariaLabel'>OutcomeResult</label>";
                           echo "<img class='showImageModal' id='".$objectResult->Outcome_FileName."' src='".site_root."ux-admin/upload/Badges/".$objectResult->Outcome_FileName."' alt='Outcome_image' width=100 />";
                           echo "</div>";
                           echo "<div class='InlineBox hidden ".$labelC."'>";
@@ -922,17 +941,20 @@ include_once 'includes/header.php';
                   echo "</div>";
                   if($row2['ViewingOrder'] == 4)
                   {
-                  	echo "<div class='col-sm-2 ".$width." text-center regular'>".((empty($row2['SubComp_NameAlias']))?$row2['SubComp_Name']:$row2['SubComp_NameAlias'])." </div>";
+                    echo "<div class='col-sm-2 ".$width." text-center regular'>".((empty($row2['SubComp_NameAlias']))?$row2['SubComp_Name']:$row2['SubComp_NameAlias'])." </div>";
                   }
                   if($row2['ViewingOrder'] == 6)
                   {
-                  	echo "<div class='col-sm-2 ".$width." text-center regular'>".((empty($row2['SubComp_NameAlias']))?$row2['SubComp_Name']:$row2['SubComp_NameAlias'])." </div>";
+                    echo "<div class='col-sm-2 ".$width." text-center regular'>".((empty($row2['SubComp_NameAlias']))?$row2['SubComp_Name']:$row2['SubComp_NameAlias'])." </div>";
                   }
                   echo "<div class='clearfix'></div>";
                   echo "</div>";
 
                 }
+                // <!-- adding this div here to show the description for outcome badges -->
+                echo $Outcome_Description;
                 echo "</div>";
+                /* commenting the below code to put the outcome description in the same div, if uncomment this then remove above $Outcome_Description;
                 if(!empty($Outcome_Description)){
                   ?>
                   <!-- adding this div here to show the description for outcome badges -->
@@ -941,8 +963,11 @@ include_once 'includes/header.php';
                       <?php echo $Outcome_Description;?>
                     </center>
                   </div>
+                  <div class="clearfix"></div>
                   <?php
                 }
+                end of commenting code */
+
                 //}
                 //else{
 
@@ -957,9 +982,19 @@ include_once 'includes/header.php';
             <div class="clearfix"></div>
             <br>
             <div class="">
-              <button type="button" class="btn btn-primary pull-right" id="goForward">Go Forward</button>
-              <button type="button" class="btn btn-danger pull-right hidden" id="submitBtn2">Continue</button>
-              <button type="button" class="btn btn-primary" id="goBackward">Go Back</button>
+              <button type="button" class="btn btn-primary pull-right" id="goForward" title="Next" style="margin-left: 2px;">>
+                <!-- <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg> -->
+              </button>
+              <?php
+              // Link_buttonActionOutput => 1-Show Side Button, 2-Show Bottom Button
+              if ($result->Link_buttonActionOutput == 2) { ?>
+                <button type="button" class="btn btn-danger pull-right" id="submitBtn2" style="margin-left: 2px;"><?php echo $result->Link_ButtonTextOutput; ?></button>
+              <?php } else { ?>
+                <span id="submitBtn2"></span>
+              <?php } ?>
+              <button type="button" class="btn btn-primary" id="goBackward" title="Previous" style="float: right;"><
+                <!-- <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/></svg> -->
+              </button>
             </div>
             <!-- end of adding next and previous buttons -->
           </div>
@@ -968,9 +1003,9 @@ include_once 'includes/header.php';
       </div>          
 
       <div class="col-sm-12 text-right">
-      	<!--<button class="btn innerBtns">Save</button>-->
-      	<button type="submit" name="submit" id="submit" class="btn innerBtns hidden" value="Download">Download</button>
-      	<!-- <button type="submit" name="submit" id="submit" class="btn innerBtns" value="Submit">Next</button> -->
+        <!--<button class="btn innerBtns">Save</button>-->
+        <button type="submit" name="submit" id="submit" class="btn innerBtns hidden" value="Download">Download</button>
+        <!-- <button type="submit" name="submit" id="submit" class="btn innerBtns" value="Submit">Next</button> -->
       </div>
 
     </div><!--row-->
@@ -979,19 +1014,19 @@ include_once 'includes/header.php';
 </section>  
 
 <footer>
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-12 text-center">
-				<span> </span>
-			</div>
-		</div>
-	</div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <span> </span>
+      </div>
+    </div>
+  </div>
 </footer>
 <script src="js/jquery.min.js"></script>  
 <script src="js/bootstrap.min.js"></script> 
 <script>
-	$(document).ready(function(){
-		// hide area if there is no component or all of them are hidden
+  $(document).ready(function(){
+    // hide area if there is no component or all of them are hidden
    $('.tab-pane').each(function(i,e)
    {
     var tabId   = $(this).attr('data-tabId');
@@ -1015,7 +1050,8 @@ include_once 'includes/header.php';
       $('#'+tabId).addClass('hidden');
     }
   });
-   $('#submitShow, #submitShowRight').on('click',function(){
+
+  $('#submitShow, #submitShowRight, #submitBtn2').on('click',function(){
     $('#submit').trigger('click');
   });
     // functionality to move forward and backward using 'go forward' and 'go back' buttons starts here
@@ -1107,38 +1143,34 @@ include_once 'includes/header.php';
       $(this).remove();
     });
 
-    function backForwardButtonsToggle()
-    {
+    function backForwardButtonsToggle() {
       // if there is no next and prev i.e. there is only one area so hide goForward and goBackward buttons
-      if(parseInt(id_count) < 2)
-      {
+      if(parseInt(id_count) < 2) {
         $('#goForward').addClass('hidden');
-        $('#submitBtn2').addClass('hidden');
-        $('#goBackward').addClass('hidden');  
+        $('#goBackward').addClass('hidden');
+        $('#submitShowRight').removeClass('hidden');
+        $('#submitBtn2').removeClass('hidden');
       }
-      else
-      {
+      else {
         // hide/show the goForward, goBackward and submit(downside) buttons accordingly
         // i.e. loaded first area selected or go to first area by clicking
-        if((isNaN(parseInt(prevActive_li)) || parseInt(prevActive_li)<0) && parseInt(nextActive_li)<parseInt(id_count))
-        {
+        if((isNaN(parseInt(prevActive_li)) || parseInt(prevActive_li)<0) && parseInt(nextActive_li)<parseInt(id_count)) {
           $('#goForward').removeClass('hidden');
+          $('#goBackward').addClass('hidden');
+          $('#submitShowRight').addClass('hidden'); 
           $('#submitBtn2').addClass('hidden');
-          $('#goBackward').addClass('hidden');  
         }
-
-        else if((isNaN(parseInt(nextActive_li)) || parseInt(nextActive_li)==parseInt(id_count)) && parseInt(prevActive_li)>=0)
-        {
+        else if((isNaN(parseInt(nextActive_li)) || parseInt(nextActive_li)==parseInt(id_count)) && parseInt(prevActive_li)>=0) {
           $('#goForward').addClass('hidden');
+          $('#goBackward').removeClass('hidden'); 
+          $('#submitShowRight').removeClass('hidden'); 
           $('#submitBtn2').removeClass('hidden');
-          $('#goBackward').removeClass('hidden');  
         }
-
-        else
-        {
-          $('#submitBtn2').addClass('hidden');
+        else {
           $('#goForward').removeClass('hidden');
           $('#goBackward').removeClass('hidden');  
+          $('#submitShowRight').addClass('hidden');
+          $('#submitBtn2').addClass('hidden');
         }
       }
       // console.log(parseInt(prevActive_li)+' : '+parseInt(currentActive_li)+' : '+parseInt(nextActive_li)+' : '+parseInt(id_count));

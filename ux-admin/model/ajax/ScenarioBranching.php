@@ -55,3 +55,38 @@ if($_POST['action'] == 'outputComponent')
 	}
 }
 
+
+// to update the button text for submit in i/p page
+if($_POST['action'] == 'updateButtonText') {
+	// print_r($_POST);
+  $linkid = $_POST['linkid'];
+
+  // input button 
+  $inputbuttontext  = trim($_POST['inputbuttontext']) ? trim($_POST['inputbuttontext']) : 'IIII';
+  // buttonAction => 1-Show Side Button, 2-Show Bottom Button, 3-Remove Both Buttons
+  $buttonAction     = trim($_POST['buttonAction']) ? trim($_POST['buttonAction']) : '2';
+
+  // output button 
+  $outputbuttontext   = trim($_POST['outputbuttontext']) ? trim($_POST['outputbuttontext']) : 'IIII';
+  // buttonActionOutput -> 1->Show Side Button, 2->Show Bottom Button
+  $buttonActionOutput = trim($_POST['buttonActionOutput']) ? trim($_POST['buttonActionOutput']) : '2';
+
+  // introduction button 
+  $introductionbuttontext      = trim($_POST['introductionbuttontext']) ? trim($_POST['introductionbuttontext']) : 'Introduction'; 
+  $introductionbuttoncolorcode = trim($_POST['introductionbuttoncolorcode']) ? trim($_POST['introductionbuttoncolorcode']) : 'lightskyblue'; 
+
+  // description button 
+  $descriptionbuttontext      = trim($_POST['descriptionbuttontext']) ? trim($_POST['descriptionbuttontext']) : 'Description'; 
+  $descriptionbuttoncolorcode = trim($_POST['descriptionbuttoncolorcode']) ? trim($_POST['descriptionbuttoncolorcode']) : 'orange'; 
+
+	if(empty($inputbuttontext) || empty($outputbuttontext)) {
+		die(json_encode(['code' => 201, 'icon'=>'error', 'statusText' => 'Button text can not be left blank']));
+	}
+	else {
+    $sql = "UPDATE GAME_LINKAGE SET Link_ButtonText='".$inputbuttontext."', Link_ButtonTextOutput='".$outputbuttontext."', Link_buttonAction='".$buttonAction."', Link_buttonActionOutput='".$buttonActionOutput."', Link_IntroductionText='".$introductionbuttontext."', Link_IntroductionColorCode='".$introductionbuttoncolorcode."', Link_DescriptionText='".$descriptionbuttontext."', Link_DescriptionColorCode='".$descriptionbuttoncolorcode."' WHERE Link_ID=$linkid";
+
+		$Object = $funObj->ExecuteQuery($sql);
+
+		die(json_encode(['code' => 200, 'icon'=>'success', 'statusText' => 'Button text updated Successfully', 'inputdefaultvalue' => $inputbuttontext, 'outputdefaultvalue' => $outputbuttontext]));
+	}
+}

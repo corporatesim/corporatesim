@@ -31,7 +31,7 @@
 	<![endif]-->
 </head>
 <?php
-$bodyArray  = array('mksahu', 'localhost', 'develop.corporatesim.com');
+$bodyArray  = array('mksahu', 'localhost', 'develop.corpsim.in');
 $colorArray = array('mksahu', 'rgba(217, 83, 79, 1)', 'rgba(51, 122, 183, 1)');
 $bgcolor    = array_search($_SERVER['HTTP_HOST'],$bodyArray);
 if($bgcolor)

@@ -77,7 +77,7 @@ $userid = $_GET['userid'];
 		
 	}
 	
-	
+	// echo "$sqlexist<pre>"; print_r($object); print_r($dataChart); die(' here ');
 # The data for the bar chart
 //$data = array(85, 156, 179, 211, 123, 189, 166);
 
@@ -85,7 +85,7 @@ $userid = $_GET['userid'];
 //$labels = array("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun");
 
 # Create a XYChart object of size 600 x 400 pixels
-$c = new XYChart(800, 300);
+$c = new XYChart(800, 310);
 
 # Add a title box using grey (0x555555) 24pt Arial Bold font
 $c->addTitle($chartname, "arialbd.ttf", 24, 0x555555);
@@ -105,7 +105,7 @@ $barLayerObj = $c->addBarLayer($data, 0x6699bb);
 $barLayerObj->setBorderColor(Transparent);
 
 # Set the labels on the x axis.
-//$c->xAxis->setLabels($labels);
+$c->xAxis->setLabels($labels);
 
 # For the automatic y-axis labels, set the minimum spacing to 40 pixels.
 $c->yAxis->setTickDensity(40);

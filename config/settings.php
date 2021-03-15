@@ -16,11 +16,13 @@ if($server == 'local')
 {
 	define("site_root","http://".$_SERVER['HTTP_HOST']."/corp_simulation/");
 	define("doc_root",$_SERVER['DOCUMENT_ROOT']."/corp_simulation/");
+	define('img_url',"http://localhost/corp_simulation/");
 }
 else
 {
 	define('site_root','https://'.$_SERVER['HTTP_HOST']."/");
 	define('doc_root',$_SERVER['DOCUMENT_ROOT']."/");
+	define('img_url',"https://corpsim.in/");
 }
 require_once doc_root.'config/configuration.php';
 require_once doc_root.'config/dbconnect.php';

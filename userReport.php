@@ -48,6 +48,13 @@ $component = $functionsObj->ExecuteQuery($sqlcomp);
 
 $url       = site_root."input.php?Scenario=".$result->Link_ScenarioID;
 
+
+// getting username and it's enterprise name to show into report
+$user_data_sql = "SELECT concat(gsu.User_fname, ' ', gsu.User_lname) AS FullName, ge.Enterprise_Name, gse.SubEnterprise_Name FROM GAME_SITE_USERS gsu LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID = gsu.User_ParentId LEFT JOIN GAME_SUBENTERPRISE gse ON gse.SubEnterprise_ID = gsu.User_SubParentId AND gse.SubEnterprise_EnterpriseID = gsu.User_ParentId WHERE gsu.User_id =".$userid;
+
+$user_data = $functionsObj->RunQueryFetchObject($user_data_sql);
+
+
 include_once doc_root.'views/report.php';
 
 

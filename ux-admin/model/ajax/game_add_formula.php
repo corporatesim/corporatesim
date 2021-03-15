@@ -7,9 +7,11 @@ $funObj = new Functions();
 if( isset( $_POST['formula'] ) && isset( $_POST['formula_string'] ) )
 {
 	// print_r($_POST); exit();
-	$fid = $_POST['formula_id'];
+	$fid = $_POST['formula_id']; // if adding then this will be empty and editing then there will be some value
+
 	if(!empty($fid))
 	{
+		// editing ad there is some value
 		$strresult = '';
 		$prev      = '';
 		$str       = explode(" ",$_POST['formula']);
@@ -37,13 +39,24 @@ if( isset( $_POST['formula'] ) && isset( $_POST['formula_string'] ) )
 		}
 		
 		$array = array(
-			"formula_title"     =>	$_POST['formula_title'],
-			"expression_string" =>	$_POST['formula_string'],
-			"expression"        =>	$strresult
+			"formula_title"      =>	$_POST['formula_title'],
+			"expression_string"  =>	$_POST['formula_string'],
+			"expression"         =>	$strresult,
+			// "formula_gameId"     =>	$_POST['game_id'],
+			// "formula_scenarioId" =>	$_POST['scen_id'],
+
 			//$_POST['formula']
 			//str_replace(' ', '', $_POST['formula'])
 		);
-		
+		if(!empty($_POST['game_id']))
+		{
+			$array['formula_gameId'] = $_POST['game_id'];
+		}
+
+		if(!empty($_POST['scen_id']))
+		{
+			$array['formula_scenarioId'] = $_POST['scen_id'];
+		}
 		$result = $funObj->UpdateData(formulas, $array, 'f_id', $fid, 0);
 		// updating the GAME_LINKAGE_SUB as we made flat table to avoid joins
 		$funObj->UpdateData('GAME_LINKAGE_SUB', array('SubLink_FormulaExpression' => $strresult), 'SubLink_FormulaID', $fid);
@@ -66,6 +79,7 @@ if( isset( $_POST['formula'] ) && isset( $_POST['formula_string'] ) )
 	}
 	else
 	{
+		// adding new formula
 		$strresult = '';
 		$prev      = '';
 		$str       = explode(" ",$_POST['formula']);
@@ -92,9 +106,11 @@ if( isset( $_POST['formula'] ) && isset( $_POST['formula_string'] ) )
 		}
 		
 		$array = array(
-			"formula_title"     =>	$_POST['formula_title'],
-			"expression_string" =>	$_POST['formula_string'],
-			"expression"        =>	$strresult,
+			"formula_title"      =>	$_POST['formula_title'],
+			"expression_string"  =>	$_POST['formula_string'],
+			"expression"         =>	$strresult,
+			"formula_gameId"     =>	$_POST['game_id'],
+			"formula_scenarioId" =>	$_POST['scen_id'],
 			//$_POST['formula'],
 			//str_replace(' ', '', $_POST['formula']),
 			"status"    =>	1,

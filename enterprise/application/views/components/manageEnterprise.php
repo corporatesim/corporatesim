@@ -3,7 +3,8 @@
   var loc_url_del  = "<?php echo base_url('Enterprise/delete/');?>";
 </script>
 <div class="main-container">
-  <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10">
+  <!-- <div class="pd-ltr-20 customscroll customscroll-10-p height-100-p xs-pd-20-10"> -->
+  <div class="pd-ltr-20 height-100-p xs-pd-20-10">
     <?php $this->load->view('components/trErMsg');?>
     <div class="min-height-200px">
       <div class="page-header">
@@ -50,11 +51,16 @@
                         <th>Email</th>
                         <th>Password</th>
                         <th>Address</th>
-                        <th>Games</th>
-                        <!-- only superadmin can view cards -->
+                        
                         <?php if($this->session->userdata('loginData')['User_Role'] == 'superadmin'){ ?>
-                        <th>Assign Card</th>
+                        <!-- only superadmin can view cards, how many cards assigned to enterprise for chosing -->
+                        <th>Assigned Cards</th>
+                        <!-- Cards selected by enterprise -->
+                        <th>Chosen Cards</th>
                         <?php } ?>
+                        <!-- Game/Cards allocated to enterprise -->
+                        <th>Allocated Cards</th>
+                        
                         <th>Domain</th>
                         <th>Duration(DD-MM-YYYY)</th>
                         <!-- <th>Created By</th> -->
@@ -91,15 +97,23 @@
                           <td>
                             <?php echo $address; ?>
                           </td>
+                          
+                          <?php if($this->session->userdata('loginData')['User_Role'] == 'superadmin'){ ?>
+                          <!-- only superadmin can view cards, how many cards assigned to enterprise for chosing -->
+                          <td>
+                            <a class="dropdown-item" href="<?php echo base_url('Card/assignCards/').base64_encode($enterprisedetails->Enterprise_ID).'/'.base64_encode($this->uri->segment(1)); ?>" title="Allocate/Deallocate Cards"><?php if($enterprisedetails->cardCount > 0){echo "<b style='color:#0029ff;'>".$enterprisedetails->cardCount."</b>"; }else{echo "<b style='color:#0029ff;'>0</b>";} ?></a>
+                          </td>
+                          <!-- Cards selected by enterprise -->
+                          <td>
+                            <a class="dropdown-item" href="<?php echo base_url('Card/assignCards/').base64_encode($enterprisedetails->Enterprise_ID).'/'.base64_encode($this->uri->segment(1)); ?>" title="Allocate/Deallocate Cards"><?php if($enterprisedetails->selectedCardCount > 0){echo "<b style='color:#0029ff;'>".$enterprisedetails->selectedCardCount."</b>"; }else{echo "<b style='color:#0029ff;'>0</b>";} ?></a>
+                          </td>
+                          <?php } ?>
+
+                          <!-- Game/Cards allocated to enterprise -->
                           <td>
                             <a class="dropdown-item" href="<?php echo base_url('Games/assignGames/').base64_encode($enterprisedetails->Enterprise_ID).'/'.base64_encode($this->uri->segment(1)); ?>" title="Allocate/Deallocate Games"><?php if($enterprisedetails->gamecount>0){echo "<b style='color:#0029ff;'>".$enterprisedetails->gamecount."</b>"; }else{echo "<b style='color:#0029ff;'>0</b>"; }?></a>
                           </td>
-                          <?php if($this->session->userdata('loginData')['User_Role'] == 'superadmin'){ ?>
-                          <td>
-                            <a class="dropdown-item" href="<?php echo base_url('Card/assignCards/').base64_encode($enterprisedetails->Enterprise_ID).'/'.base64_encode($this->uri->segment(1)); ?>" title="Allocate/Deallocate Cards"><?php if($enterprisedetails->cardcount > 0){echo "<b style='color:#0029ff;'>".$enterprisedetails->cardcount."</b>"; }else{echo "<b style='color:#0029ff;'>0</b>";} ?></a>
-                          </td> 
-                          <?php } ?>
-
+                          
                           <td>
                             <?php if ($enterprisedetails->Domain_Name != '')
                             {
@@ -141,6 +155,8 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
 
             <div id="Modal_Bulkupload" class="modal fade" role="dialog">
               <div class="modal-dialog">

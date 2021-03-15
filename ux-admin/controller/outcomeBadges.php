@@ -179,26 +179,72 @@ if(isset($_GET['edit']) && !empty($_GET['edit']))
 	}
 }
 
-if(isset($_GET['delete']) && !empty($_GET['delete']))
-{
-	$deleteId = base64_decode($_GET['delete']);
-			 //echo "<pre>"; print_r($_POST);
-	$deleteSql = "UPDATE GAME_OUTCOME_Badges SET Badges_Is_Active=1 WHERE Badges_ID=$deleteId";
-	$deleteRes = $functionsObj->ExecuteQuery($deleteSql);
-	if($deleteRes)
-	{
-		$tr_msg             = "Record Deleted Successfully";
-		$_SESSION['tr_msg'] = $tr_msg;
-	}
-	else
-	{
-		$er_msg             = "Database Connection Error While Deleting, Please Try Later";
-		$_SESSION['er_msg'] = $er_msg;
-	}
+if (isset($_GET['delete']) && !empty($_GET['delete'])) {
+	// $deleteId = base64_decode($_GET['delete']);
+  $deleteId = $_GET['delete'];
+	// echo "<pre>"; print_r($_POST);
+  //print_r($deleteId); exit();
+
+  // query to select image name of selected badge to delete
+  $query = "SELECT gob.Badges_ID, gob.Badges_ImageName FROM GAME_OUTCOME_BADGES gob WHERE gob.Badges_ID = ".$deleteId."";
+  $detailsBadge = $functionsObj->ExecuteQuery($query);
+  //print_r($query); echo '<br />';
+
+  // checking any row is selected or not
+  if ($detailsBadge->num_rows > 0) {
+    // if image found
+    $badgesResult = $detailsBadge->fetch_object();
+    $img_Name = $badgesResult->Badges_ImageName;
+    //print_r($img_Name); exit();
+
+    // query to check selected image is linked or not with GAME_PERSONALIZE_OUTCOM
+    $query = "SELECT gpo.OutcomeID, gg.Game_Name, gs.Scen_Name, gc.Comp_Name, gpo.Outcome_MinVal, gpo.Outcome_MaxVal
+    FROM GAME_PERSONALIZE_OUTCOME gpo
+      INNER JOIN GAME_GAME gg ON gg.Game_ID = gpo.Outcome_GameId
+      INNER JOIN GAME_SCENARIO gs ON gs.Scen_ID = gpo.Outcome_ScenId
+      -- INNER JOIN GAME_LINKAGE gl ON gl.Link_ID = gpo.Outcome_LinkId
+      INNER JOIN GAME_COMPONENT gc ON gc.Comp_ID = gpo.Outcome_CompId
+        WHERE gpo.Outcome_FileName = '".$img_Name."'";
+    $detailsPers = $functionsObj->ExecuteQuery($query);
+
+    // checking any row is found or not
+    if ($detailsPers->num_rows > 0) {
+      // record foung show error msg 
+      $personalizeResult = $detailsPers->fetch_object();
+      //print_r($personalizeResult); exit();
+
+      $er_msg = "Error, Linked with- <br /><strong>Game- ".$personalizeResult->Game_Name.",<br /> Scenario- ".$personalizeResult->Scen_Name.",<br /> Component- ".$personalizeResult->Comp_Name.",<br /> Range (".$personalizeResult->Outcome_MinVal." to ".$personalizeResult->Outcome_MaxVal.")</strong>";
+      $_SESSION['er_msg'] = $er_msg;
+    }
+    else {
+      // no record found delete selected outcom badge
+
+      // Badges_Is_Active => 0=Active, 1=Deleted
+      $deleteSql = "UPDATE GAME_OUTCOME_BADGES SET Badges_Is_Active = 1 WHERE Badges_ID = ".$deleteId."";
+      $deleteRes = $functionsObj->ExecuteQuery($deleteSql);
+
+      // checking selected row is deleted or not
+      if ($deleteRes) {
+        // if deleted
+        $tr_msg = "Record Deleted Successfully";
+        $_SESSION['tr_msg'] = $tr_msg;
+      }
+      else {
+        // if not deleted
+        $er_msg = "Database Connection Error While Deleting, Please Try Later";
+        $_SESSION['er_msg'] = $er_msg;
+      }
+    }
+  }
+  else {
+    // if no image found
+    $er_msg = "Database Connection Error While Deleting, Please Try Later";
+    $_SESSION['er_msg'] = $er_msg;
+  }
+
 	header("Location: ".site_root."ux-admin/outcomeBadges");
 	exit();
 }
-
 
 $sql = "SELECT * FROM GAME_OUTCOME_BADGES WHERE Badges_Is_Active=0";
 

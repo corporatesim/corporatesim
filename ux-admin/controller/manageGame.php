@@ -24,31 +24,32 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Submit')
 	// echo "<pre>"; print_r($_POST); exit();
 
 	$gamedetails = (object) array(
-		'Game_Name'              => $_POST['name'],
-		'Game_Comments'          => $_POST['comments'],
-		'Game_Message'           => $_POST['message'],
-		'Game_ReportFirstPage'   => $_POST['Game_ReportFirstPage'],
-		'Game_LeaderboardButton' => $_POST['Game_LeaderboardButton'],
-		'Game_ReportButton'      => $_POST['Game_ReportButton'],
-		'Game_ReportSecondPage'  => $_POST['Game_ReportSecondPage'],
-		'Game_Header'            => $_POST['Game_Header'],
-		'Game_shortDescription'  => $_POST['Game_shortDescription'],
-		'Game_longDescription'   => $_POST['Game_longDescription'],
-		'Game_prise'             => $_POST['Game_prize'],
-		'Game_discount'          => $_POST['Game_discount'],
-		'Game_Datetime'          => date('Y-m-d H:i:s'),
-		'Game_Status'            => (isset($_POST['Game_Status']))?$_POST['Game_Status']:0,
-		'Game_Elearning'         => $_POST['eLearning'],
-		'Game_Type'              => (isset($_POST['Game_Type']))?$_POST['Game_Type']:0,
-		'Game_Category'          => $_POST['Game_Category'],
-		'Game_Introduction'      => $Game_Introduction,
-		'Game_Description'       => $Game_Description,
-		'Game_IntroductionLink'  => $Game_IntroductionLink,
-		'Game_DescriptionLink'   => $Game_DescriptionLink,
-		'Game_BackToIntro'       => $Game_BackToIntro,
-		'Game_HideScenarioLink'  => $Game_HideScenarioLink,
-		'Game_CreatedBy'         => $_SESSION['ux-admin-id'],
-		'Game_Associates'        => $_POST['Game_Associates'],
+		'Game_Name'                 => $_POST['name'],
+		'Game_Comments'             => $_POST['comments'],
+		'Game_Message'              => $_POST['message'],
+		'Game_ReportFirstPage'      => $_POST['Game_ReportFirstPage'],
+		'Game_LeaderboardButton'    => $_POST['Game_LeaderboardButton'],
+		'Game_ReportButton'         => $_POST['Game_ReportButton'],
+		'Game_ReportSecondPage'     => $_POST['Game_ReportSecondPage'],
+    'Game_ProcessOwner_Details' => $_POST['Game_ProcessOwner_Details'],
+		'Game_Header'               => $_POST['Game_Header'],
+		'Game_shortDescription'     => $_POST['Game_shortDescription'],
+		'Game_longDescription'      => $_POST['Game_longDescription'],
+		'Game_prise'                => $_POST['Game_prize'],
+		'Game_discount'             => $_POST['Game_discount'],
+		'Game_Datetime'             => date('Y-m-d H:i:s'),
+		'Game_Status'               => (isset($_POST['Game_Status']))?$_POST['Game_Status']:0,
+		'Game_Elearning'            => $_POST['eLearning'],
+		'Game_Type'                 => (isset($_POST['Game_Type']))?$_POST['Game_Type']:0,
+		'Game_Category'             => $_POST['Game_Category'],
+		'Game_Introduction'         => $Game_Introduction,
+		'Game_Description'          => $Game_Description,
+		'Game_IntroductionLink'     => $Game_IntroductionLink,
+		'Game_DescriptionLink'      => $Game_DescriptionLink,
+		'Game_BackToIntro'          => $Game_BackToIntro,
+		'Game_HideScenarioLink'     => $Game_HideScenarioLink,
+		'Game_CreatedBy'            => $_SESSION['ux-admin-id'],
+		'Game_Associates'           => $_POST['Game_Associates'],
 	);
 	
 	if( !empty($_POST['name']) && !empty($_POST['comments']))
@@ -222,31 +223,32 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 	// echo "<pre>"; print_r($_POST); exit();
 
 	$gamedetails = (object) array(
-		'Game_Name'              => $_POST['name'],
-		'Game_Comments'          => $_POST['comments'],
-		'Game_Header'            => $_POST['Game_Header'],
-		'Game_Message'           => $_POST['message'],
-		'Game_ReportFirstPage'   => $_POST['Game_ReportFirstPage'],
-		'Game_LeaderboardButton' => $_POST['Game_LeaderboardButton'],
-		'Game_ReportButton'      => $_POST['Game_ReportButton'],
-		'Game_ReportSecondPage'  => $_POST['Game_ReportSecondPage'],
-		'Game_shortDescription'  => $_POST['Game_shortDescription'],
-		'Game_longDescription'   => $_POST['Game_longDescription'],
-		'Game_prise'             => $_POST['Game_prize'],
-		'Game_discount'          => $_POST['Game_discount'],
-		'Game_Status'            => (isset($_POST['Game_Status']))?$_POST['Game_Status']:0,
-		'Game_Elearning'         => $_POST['eLearning'],
-		'Game_Type'              => (isset($_POST['Game_Type']))?$_POST['Game_Type']:0,
-		'Game_Category'          => $_POST['Game_Category'],
-		'Game_Introduction'      => $Game_Introduction,
-		'Game_Description'       => $Game_Description,
-		'Game_IntroductionLink'  => $Game_IntroductionLink,
-		'Game_DescriptionLink'   => $Game_DescriptionLink,
-		'Game_BackToIntro'       => $Game_BackToIntro,
-		'Game_HideScenarioLink'  => $Game_HideScenarioLink,
-		'Game_UpdatedBy'         => $_SESSION['ux-admin-id'],
-		'Game_UpdatedOn'         => date('Y-m-d H:i:s'),
-		'Game_Associates'        => $_POST['Game_Associates'],
+		'Game_Name'                 => $_POST['name'],
+		'Game_Comments'             => $_POST['comments'],
+		'Game_Header'               => $_POST['Game_Header'],
+		'Game_Message'              => $_POST['message'],
+		'Game_ReportFirstPage'      => $_POST['Game_ReportFirstPage'],
+		'Game_LeaderboardButton'    => $_POST['Game_LeaderboardButton'],
+		'Game_ReportButton'         => $_POST['Game_ReportButton'],
+		'Game_ReportSecondPage'     => $_POST['Game_ReportSecondPage'],
+    'Game_ProcessOwner_Details' => $_POST['Game_ProcessOwner_Details'],
+		'Game_shortDescription'     => $_POST['Game_shortDescription'],
+		'Game_longDescription'      => $_POST['Game_longDescription'],
+		'Game_prise'                => $_POST['Game_prize'],
+		'Game_discount'             => $_POST['Game_discount'],
+		'Game_Status'               => (isset($_POST['Game_Status']))?$_POST['Game_Status']:0,
+		'Game_Elearning'            => $_POST['eLearning'],
+		'Game_Type'                 => (isset($_POST['Game_Type']))?$_POST['Game_Type']:0,
+		'Game_Category'             => $_POST['Game_Category'],
+		'Game_Introduction'         => $Game_Introduction,
+		'Game_Description'          => $Game_Description,
+		'Game_IntroductionLink'     => $Game_IntroductionLink,
+		'Game_DescriptionLink'      => $Game_DescriptionLink,
+		'Game_BackToIntro'          => $Game_BackToIntro,
+		'Game_HideScenarioLink'     => $Game_HideScenarioLink,
+		'Game_UpdatedBy'            => $_SESSION['ux-admin-id'],
+		'Game_UpdatedOn'            => date('Y-m-d H:i:s'),
+		'Game_Associates'           => $_POST['Game_Associates'],
 	);
 
 	// echo "<pre>"; print_r($_POST); print_r($gamedetails); exit();
@@ -468,9 +470,9 @@ else
 {
 	// fetch siteuser list from db
 	// $object = $functionsObj->SelectData(array(), 'GAME_GAME', array('Game_Delete=0'), 'Game_datetime DESC', '', '', '', 0);
-	$gameSql = "SELECT ( SELECT COUNT(*) FROM GAME_LINKAGE gl WHERE gl.Link_GameID = gg.Game_ID ) AS ScenarioCount, gg.*, CONCAT( ga.fname, ' ', ga.lname, ', ', ga.email ) AS nameEmail, CONCAT(ga.fname, ' ', ga.lname) AS NAME FROM GAME_GAME gg LEFT JOIN GAME_ADMINUSERS ga ON ga.id = gg.Game_CreatedBy WHERE Game_Delete = 0 ORDER BY Game_datetime DESC";
+	// $gameSql = "SELECT ( SELECT COUNT(*) FROM GAME_LINKAGE gl WHERE gl.Link_GameID = gg.Game_ID ) AS ScenarioCount, gg.*, CONCAT( ga.fname, ' ', ga.lname, ', ', ga.email ) AS nameEmail, CONCAT(ga.fname, ' ', ga.lname) AS NAME FROM GAME_GAME gg LEFT JOIN GAME_ADMINUSERS ga ON ga.id = gg.Game_CreatedBy WHERE Game_Delete = 0 ORDER BY Game_datetime DESC";
 	// echo '<pre>'.$gameSql; print_r($_SESSION);
-	$object  = $functionsObj->ExecuteQuery($gameSql);
+	// $object  = $functionsObj->ExecuteQuery($gameSql);
 	$file    = 'GameList.php';
 }
 

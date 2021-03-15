@@ -100,7 +100,7 @@ $m->setTickLength(-16, -16, -10);
 $m->setLineWidth(0, 2, 1, 1);
 
 # Demostrate different types of color scales and putting them at different positions
-$smoothColorScale = array(0, 0x3333ff, 25, 0x0088ff, 50, 0x00ff00, 75, 0xdddd00, 100, 0xff0000);
+$smoothColorScale = array(0, 0x3333ff, 25, 0x0088ff, 50, 0x00ff00, 75, 0x006400, 100, 0x006400);
 
 if ($chartIndex == 0) {
   # Add the smooth color scale at the default position
