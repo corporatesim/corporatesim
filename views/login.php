@@ -46,7 +46,7 @@ include_once 'includes/header.php';
 					<input type="password" name="password" id="password" placeholder="password" class="form-control" required="required"/>
 					<br>
 					<div class="col-sm-8 col-sm-offset-2 text-right pull-right" style="padding-bottom:2px;">
-						<a href="javascript:void(0);" class="blueColor regular" id="resetPassword">Forgot Password ?</a>
+						<a href="javascript:void(0);" class="blueColor regular" id="resetPassword">Get Your Password</a>
 					</div>
 
 					<div class="col-sm-12 text-center">
@@ -67,11 +67,11 @@ include_once 'includes/header.php';
 			<form role="form" method="post" action="">				
 				<div class="col-sm-8 col-md-6 loginBg col-sm-offset-2 col-md-offset-3" style="background:#ffffff;height:320px;margin-top:7%;padding-top:10px;">
 					<div class="col-sm-12 text-center">
-						<h1 class="pageHeadLine text-primary">Forgot Password</h1>
+						<h1 class="pageHeadLine text-primary">Request Password</h1>
 					</div>
 					<div class="form-group col-sm-8 col-sm-offset-2">
-						<label class="text-primary">Email ID</label>
-						<input type="Email" id="registeredEmail" name="registeredEmail" class="form-control" placeholder="Enter your registered Email ID" required=""></input>
+						<label class="text-primary">Email ID / Username</label>
+						<input type="text" id="registeredEmail" name="registeredEmail" class="form-control" placeholder="Enter your registered Email ID" required=""></input>
 					</div>
 					<div class="form-group col-sm-8 col-sm-offset-2">
 						<button class="btn btn-primary" value="resetPassword" name="reset">Request Password</button>

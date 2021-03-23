@@ -185,6 +185,10 @@ switch($_GET['q']){
 	$showfile = 'resetGameViews.php';
 	break;
 
+	case 'reportTwoSequence':
+	$showfile = 'reportTwoSequence.php';
+	break;
+
 	// Logout
 	case 'Logout':
 	$showfile = 'logout.php';

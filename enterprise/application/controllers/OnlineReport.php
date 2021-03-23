@@ -173,6 +173,7 @@ class OnlineReport extends MY_Controller {
     LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID='.$gameId.' AND gus.US_UserID=gu.User_id 
     LEFT JOIN GAME_COMPONENT gc ON gc.Comp_ID = gls.SubLink_CompID 
     LEFT JOIN GAME_SUBCOMPONENT gs ON gs.SubComp_ID = gls.SubLink_SubCompID 
+		LEFT JOIN GAME_REPORT_OUTPUT_SEQUENCING gros ON gros.OpSeq_SubLinkId = gls.SubLink_ID
     WHERE ( gls.SubLink_LinkID IN( SELECT Link_ID FROM GAME_LINKAGE WHERE Link_GameID = '.$gameId.' ) AND gls.SubLink_Type = 1 ) ';
 
 		if(!empty($Enterprise))
@@ -184,7 +185,7 @@ class OnlineReport extends MY_Controller {
 			$reportSql .= " AND gu.User_SubParentId=".$SubEnterprise;
 		}
 		// $reportSql .= " AND (date_time BETWEEN '".$dateTo."' AND '".$dateFrom."') ";
-		$reportSql .= " ORDER BY gls.SubLink_Order ASC ";
+		$reportSql .= " ORDER BY gros.OpSeq_Order ASC ";
 
 		// die($reportSql);
 		$reportData = $this->Common_Model->executeQuery($reportSql);

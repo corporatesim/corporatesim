@@ -14,9 +14,9 @@ define("version",1.1);
 
 if($server == 'local')
 {
-	define("site_root","http://".$_SERVER['HTTP_HOST']."/corp_simulation/");
-	define("doc_root",$_SERVER['DOCUMENT_ROOT']."/corp_simulation/");
-	define('img_url',"http://localhost/corp_simulation/");
+	define("site_root","http://".$_SERVER['HTTP_HOST']."/simulation/");
+	define("doc_root",$_SERVER['DOCUMENT_ROOT']."/simulation/");
+	define('img_url',"http://localhost/simulation/");
 }
 else
 {

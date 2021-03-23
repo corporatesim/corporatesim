@@ -275,11 +275,14 @@
 					<!-- <li>
 						<a href="<?php // echo site_root."ux-admin/createMis";?>">Create MIS</a>
 					</li> -->
-					<li>
-						<a href="<?php echo site_root."ux-admin/manageCompetence";?>">Manage Competence</a>
+					<!-- <li>
+						<a href="<?php // echo site_root."ux-admin/manageCompetence";?>">Manage Competence</a>
 					</li>
 					<li>
-						<a href="<?php echo site_root."ux-admin/competenceFormula";?>">Manag Competence Formula</a>
+						<a href="<?php // echo site_root."ux-admin/competenceFormula";?>">Manag Competence Formula</a>
+					</li> -->
+					<li>
+						<a href="<?php echo site_root."ux-admin/reportTwoSequence";?>">Report 2 Sequencing</a>
 					</li>
 				<?php } ?>
 			</ul>

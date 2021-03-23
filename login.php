@@ -5,6 +5,9 @@ $enterpriseDomain = 'http://'.$_SERVER['SERVER_NAME'];
 include_once 'config/settings.php';
 include_once doc_root.'config/functions.php';
 
+include_once 'phpMailer/src/PHPMailer.php';
+include_once 'phpMailer/src/SMTP.php';
+include_once 'phpMailer/src/Exception.php';
 
 if(isset($_SESSION['siteuser']))
 {
@@ -13,7 +16,7 @@ if(isset($_SESSION['siteuser']))
 	exit(0);
 }
 // if user is loggedin then redirect to dashboard/selectgame page
-if($_SESSION['username'] != NULL)
+if(isset($_SESSION['username']) && $_SESSION['username'] != NULL)
 {
 	header("Location:".site_root."selectgame.php");
 }
@@ -194,12 +197,14 @@ if(isset($_POST['submit']) && $_POST['submit'] == "Login")
 if(isset($_POST['reset']) && $_POST['reset'] == "resetPassword")
 {
 	$registeredEmail = $funObj->EscapeString($_POST['registeredEmail']);
-	$requestSql      = " SELECT User_id FROM GAME_SITE_USERS WHERE User_email='".$registeredEmail."'";
-	$requestObj      = $funObj->ExecuteQuery($requestSql);
-	// print_r($requestObj);exit;
-	if($requestObj->num_rows < 1)
+	$requestSql      = "SELECT gsu.User_id, gsu.User_fname, gsu.User_lname, gsu.User_email, gua.Auth_username, gua.Auth_password FROM GAME_SITE_USERS gsu LEFT JOIN GAME_USER_AUTHENTICATION gua ON gua.Auth_userid = gsu.User_id WHERE User_email = '".$registeredEmail."'";
+	$requestObj      = $funObj->RunQueryFetchObject($requestSql);
+
+	// echo "<pre>$requestSql<br>"; print_r($_POST); print_r($requestObj); exit;
+
+	if(count($requestObj) < 1)
 	{
-		$msg              = "Invalid Email ID";
+		$msg              = "Invalid Email ID / Username";
 		$_SESSION['msg']  = $msg;
 		$type             = "alert alert-danger alert-dismissible";
 		$_SESSION['type'] = $type;
@@ -207,36 +212,109 @@ if(isset($_POST['reset']) && $_POST['reset'] == "resetPassword")
 	}
 	else
 	{
-		$to             = $registeredEmail;
-		$requestResult  = $funObj->FetchObject($requestObj);
-		$userid         = $requestResult->User_id;
-		$passwordSql    = "SELECT Auth_username,Auth_password FROM GAME_USER_AUTHENTICATION WHERE Auth_userid=".$userid;
-		$passwordObj    = $funObj->ExecuteQuery($passwordSql);
-		$passwordResult = $funObj->FetchObject($passwordObj);
-		$password       = $passwordResult->Auth_password;
-		$username       = $passwordResult->Auth_username;
-		$from           = "support@corporatesim.com";
-		$subject        = "Corporate Simulation - Password Request For Account Login";
-		$message        = "<br>Dear User,<br>\r\n Your Username and Password is given below:";
-		$message       .= "<p>Username : ".$username."</p>";
-		$message       .= "<p>Password : ".$password."</p>";
-		$header         = "From:" . $from . "\r\n";
-		$header         = "Reply-To: The Sender <debasish@corporatesim.com>\r\n";
-		$header        .= "MIME-Version: 1.0\r\n";
-		$header        .= "Content-type: text/html; charset=iso 8859-1\r\n";
-		$mail           = mail($to, $subject, $message, $header);
-		// echo $to.' and '.$subject.' and '.$message; die();
+		// send email to mail id, if duplicate
+		$mailer = new phpMailer\PHPMailer\PHPMailer(); 
+		// echo "<pre>"; print_r($mailer);
+		foreach($requestObj as $requestObjRow)
+		{
+			// $requestResult  = $funObj->FetchObject($requestObj);
+			// $userid         = $requestResult->User_id;
+			// $passwordSql    = "SELECT Auth_username,Auth_password FROM GAME_USER_AUTHENTICATION WHERE Auth_userid=".$userid;
+			// $passwordObj    = $funObj->ExecuteQuery($passwordSql);
+			// $passwordResult = $funObj->FetchObject($passwordObj);
+			// $password       = $passwordResult->Auth_password;
+			// $username       = $passwordResult->Auth_username;
+			// $to             = $requestObjRow->User_email;
+			// $from           = "support@corpsim.in";
+			// $subject        = "Corporate Simulation - Password For Account Login";
+			// $message        = "<br>Dear User,<br>\r\n Your Username and Password is given below:";
+			// $message       .= "<p>Username : ".$requestObjRow->Auth_username."</p>";
+			// $message       .= "<p>Password : ".$requestObjRow->Auth_password."</p>";
+			// $header         = "From:" . $from . "\r\n";
+			// $header        .= "Reply-To: The Sender <debasish@corporatesim.com>\r\n";
+			// $header        .= "MIME-Version: 1.0\r\n";
+			// $header        .= "Content-type: text/html; charset=iso 8859-1\r\n";
+			// $mail           = mail($to, $subject, $message, $header);
 
-		if($mail)
-		{
-			$msg  = "Password sent to your registered Email ID. Please check spam also";
-			$type = "alert alert-success alert-dismissible";
+			//From email address and name
+			$mailer->From = "support@corpsim.in";
+			$mailer->FromName = "Corporate Simulations";
+			
+			//To address and name
+			$mailer->addAddress("$requestObjRow->User_email", "$requestObjRow->User_fname $requestObjRow->User_lname");
+			// $mailer->addAddress("recepient1@example.com"); //Recipient name is optional
+
+			//Address to which recipient will reply
+			$mailer->addReplyTo("debasish@corporatesim.com", "Debashish Das");
+
+			//Send HTML or Plain Text email
+			$mailer->isHTML(true);
+
+			$mailer->Subject = "Subject Text";
+			$mailer->Body = "<i>Mail body in HTML</i>";
+			$mailer->AltBody = "This is the plain text version of the email content";
+
+			try
+			{
+				$mailer->send();
+					echo "Email has been sent successfully to <b>$requestObjRow->User_email</b> <br>";
+			} catch (Exception $e) {
+					echo "Mailer Error: " . $mailer->ErrorInfo;
+			}
+
+			// try {
+			// 	//Server settings
+			// 	$mailer->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+			// 	$mailer->isSMTP();                                            //Send using SMTP
+			// 	$mailer->Host       = 'smtp.example.com';                     //Set the SMTP server to send through
+			// 	$mailer->SMTPAuth   = true;                                   //Enable SMTP authentication
+			// 	$mailer->Username   = 'contact@simulessons.com';                     //SMTP username
+			// 	$mailer->Password   = 'richie11**';                               //SMTP password
+			// 	$mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+			// 	$mailer->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+		
+			// 	//Recipients
+			// 	$mailer->setFrom('support@corpsim.in', 'Corporate Simulations');
+			// 	$mailer->addAddress("$requestObjRow->User_email", "$requestObjRow->User_fname $requestObjRow->User_lname");     //Add a recipient
+			// 	// $mailer->addAddress('ellen@example.com');               //Name is optional
+			// 	$mailer->addReplyTo("debasish@corporatesim.com", "Debashish Das");
+			// 	// $mailer->addCC('cc@example.com');
+			// 	// $mailer->addBCC('bcc@example.com');
+		
+			// 	// Attachments
+			// 	// $mailer->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+			// 	// $mailer->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+		
+			// 	//Content
+			// 	$mailer->isHTML(true);                                  //Set email format to HTML
+			// 	$mailer->Subject = 'Here is the subject';
+			// 	$mailer->Body    = 'This is the HTML message body <b>in bold!</b>';
+			// 	$mailer->AltBody = 'This is the body in plain text for non-HTML mail clients';
+		
+			// 	$mailer->send();
+			// 	echo 'Message has been sent successfully to <b>$requestObjRow->User_email</b> <br>';
+			// } catch (Exception $e) {
+			// 		echo "Message could not be sent. Mailer Error: {$mailer->ErrorInfo}";
+			// }
+
 		}
-		else
-		{
-			$msg  = "Connection Error. Please try later";
-			$type = "alert alert-danger alert-dismissible";
-		}
+		
+
+		// if($mail)
+		// {
+		// 	echo "mail sent<br>";
+		// 	$msg  = "Password sent to your registered Email ID. Please check spam also";
+		// 	$type = "alert alert-success alert-dismissible";
+		// }
+		// else
+		// {
+		// 	echo "mail not sent<br>";
+		// 	$msg  = "Connection Error. Please try later";
+		// 	$type = "alert alert-danger alert-dismissible";
+		// }
+
+		print_r(error_get_last()); die(' here ');
+
 		$_SESSION['msg']  = $msg;
 		$_SESSION['type'] = $type;
 		// echo "<pre>"; print_r($requestObj); die($registeredEmail);	var_dump($mail); exit();

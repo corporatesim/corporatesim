@@ -1,3 +1,5 @@
+
+<!-- <?php // echo "<pre>"; print_r($gamedetails); die(' here '); ?> -->
 <script src="<?php echo site_root; ?>assets/components/ckeditor/ckeditor.js" type="text/javascript"></script>
 
 <style type="text/css">
@@ -262,7 +264,7 @@
 								<div class="col-md-6 col-sm-6 col-xs-12 hidden availableB2C">
 									<div class="form-group">
 										<label for="Game Prize"><span class="alert-danger">*</span>Game Prize</label>
-										<input type="text" id="Game_prize" name="Game_prize" class="form-control" placeholder="Long Description" value="<?php echo ($gamedetails->Game_prize)?$gamedetails->Game_prize:'0.00'; ?>">
+										<input type="text" id="Game_prise" name="Game_prise" class="form-control" placeholder="Long Description" value="<?php echo ($gamedetails->Game_prise)?$gamedetails->Game_prise:'0.00'; ?>">
 									</div>
 								</div>
 								<div class="col-md-6 col-sm-6 col-xs-12 hidden availableB2C">
@@ -371,7 +373,7 @@
 					$(this).removeClass('hidden');
 					$('#Game_shortDescription').prop('required',true);
 					$('#Game_longDescription').prop('required',true);
-					$('#Game_prize').prop('required',true);
+					$('#Game_prise').prop('required',true);
 					$('#Game_discount').prop('required',true);
 				});
 			}
@@ -381,7 +383,7 @@
 					$(this).addClass('hidden');
 					$('#Game_shortDescription').prop('required',false);
 					$('#Game_longDescription').prop('required',false);
-					$('#Game_prize').prop('required',false);
+					$('#Game_prise').prop('required',false);
 					$('#Game_discount').prop('required',false);
 				});
 			}

@@ -255,10 +255,33 @@ SELECT gg.Game_Name,gs.Scen_Name,glt.*, concat(gsu.User_fname,' ', gsu.User_lnam
 SELECT * FROM `GAME_USERSTATUS` WHERE US_UserID IN (SELECT gsu.User_id FROM GAME_SITE_USERS gsu WHERE gsu.User_ParentId=385)
 
 
-https://www.youtube.com/watch?v=I0AQW2T3HPI
-https://www.fullstack.cafe/blog/react-native-interview-questions
-https://www.bestinterviewquestion.com/react-native-interview-questions
-https://www.knowledgehut.com/interview-questions/react-native
-https://www.javatpoint.com/react-native-interview-questions
-
 ALTER TABLE `game_users` ADD `user_PasswordRequest` TINYINT NULL DEFAULT '0' COMMENT '0-Not Requested For Password Reset, 1-Requested For Password Reset' AFTER `user_AccountVerification`;
+
+
+ALTER TABLE `GAME_GAME` CHANGE `Game_prise` `Game_prise` DECIMAL(20,2) NULL DEFAULT '0.00' COMMENT 'Actual Prise';
+ALTER TABLE `GAME_GAME` CHANGE `Game_discount` `Game_discount` DECIMAL(20,2) NULL DEFAULT '0.00' COMMENT 'Discount in actual prise';
+
+
+ALTER TABLE `GAME_GAME` CHANGE `Game_prise` `Game_prise` VARCHAR(60) NULL DEFAULT '0.00' COMMENT 'Actual Prise', CHANGE `Game_discount` `Game_discount` VARCHAR(60) NULL DEFAULT '0.00' COMMENT 'Discount in actual prise';
+
+
+
+CREATE TABLE GAME_REPORT_OUTPUT_SEQUENCING( OpSeq_Id INT AUTO_INCREMENT PRIMARY KEY, OpSeq_CompId INT DEFAULT NULL, OpSeq_SubcCompId INT DEFAULT NULL, OpSeq_LinkId INT DEFAULT NULL, OpSeq_SubLinkId INT DEFAULT NULL, OpSeq_Order INT, OpSeq_CreatedOn DATETIME DEFAULT CURRENT_TIMESTAMP, OpSeq_By INT DEFAULT NULL );
+ALTER TABLE `GAME_REPORT_OUTPUT_SEQUENCING` ADD `OpSeq_GameId` INT NULL DEFAULT NULL AFTER `OpSeq_Id`;
+
+contact@simulessons.com      ///////       richie11**
+
+5 new graphs with indicator… narrow horizontal bar… 
+1. Complete red, 
+2. Complete green and 
+3. Yes/No: 50%:50% … 
+4. Green,Orange,Red—33:33:33…. 
+5. Red,Orange, Green—33:33:33
+
+Mass mailing of login details while the account is created (one by one or in mass upload)
+
+Mass upload alert in case of duplicates..(duplicate emails should be shown and be downloadable)
+If I make any change in the game configuration page then the Description buttons automatically show up in all scenario
+
+Increase 4GB RAM in Simulessons…. Zip ehire and save in github
+Slides in Guide file needs to change
