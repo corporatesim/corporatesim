@@ -272,11 +272,11 @@ ALTER TABLE `GAME_REPORT_OUTPUT_SEQUENCING` ADD `OpSeq_GameId` INT NULL DEFAULT 
 contact@simulessons.com      ///////       richie11**
 
 5 new graphs with indicator… narrow horizontal bar… 
-1. Complete red, 
-2. Complete green and 
-3. Yes/No: 50%:50% … 
-4. Green,Orange,Red—33:33:33…. 
-5. Red,Orange, Green—33:33:33
+1. Complete red, completered.php
+2. Complete green,  completegreen.php
+3. Yes/No: 50%:50% … yesno5050.php
+4. Green,Orange,Red—33:33:33….  greenorangered.php
+5. Red,Orange, Green—33:33:33    redorangegreen.php
 
 Mass mailing of login details while the account is created (one by one or in mass upload)
 
