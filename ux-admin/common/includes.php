@@ -86,6 +86,10 @@ switch($_GET['q']){
 	$showfile = 'manageGameDocument.php';
 	break;
 
+	case 'ManageGameIntroduction':
+	$showfile = 'manageGameIntroduction.php';
+	break;
+
 	case 'ManageGameImage':
 	$showfile = 'manageGameImage.php';
 	break;
