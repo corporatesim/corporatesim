@@ -81,7 +81,7 @@ $smoothColorScale = array(0, 0xFF0000, 25, 0xFF0000, 75, 0xFF0000, 75, 0xFF0000,
 $m->addColorScale($smoothColorScale);
 
 # Add a blue (0x0000cc) pointer at the specified value
-$m->addPointer($value, 0x0000cc);
+// $m->addPointer($value, 0x0000cc);
 $m->addPointer($data[0], 0x000000);
 
 # Output the chart
