@@ -50,6 +50,16 @@ class Common_Model extends CI_Model
     return $result->num_rows();
   }
 
+    // finding the count of num_rows
+    public function findCountUsingOr($tableName = NULL, $where = NULL)
+    {
+      $this->db->or_where($where);
+      $result = $this->db->get($tableName);
+      // echo "<pre>"; print_r($this->db->last_query()); // exit();
+      // echo "<pre>"; print_r($result->result()); exit();
+    return $result->result();
+    }
+
   //selecting all data that exist in table 
   function SelectData($fields, $tables, $where, $order = array(), $group = array(), $limit = '', $offset = '', $print_flag = 0)
   {
@@ -429,8 +439,8 @@ class Common_Model extends CI_Model
     // // prd($insertArray);
   }
 
-  public function send_mail_pdf($to=NULL, $subject=NULL, $message=NULL, $from=NULL, $pdfdirectory=NULL) {
-
+  public function send_mail_pdf($to=NULL, $subject=NULL, $message=NULL, $from=NULL, $pdfdirectory=NULL)
+  {
     $this->load->library('email');
     $this->email->clear();
     $config['protocol']    = 'smtp';
@@ -457,7 +467,10 @@ class Common_Model extends CI_Model
 
     $this->email->subject($subject);
     $this->email->message($message);
-    $this->email->attach($pdfdirectory);
+    if(!empty($pdfdirectory))
+    {
+      $this->email->attach($pdfdirectory);
+    }
 
     // ESD_Status => 0->Not Sent, 1-> Sent
     if (!$this->email->send()) {
@@ -469,6 +482,63 @@ class Common_Model extends CI_Model
     else {
       return 1;
     //   // $errorlog = $this->email->print_debugger();
+    }
+  }
+
+  public function sendMailWithRecord($to=NULL, $subject=NULL, $message=NULL, $from=NULL, $mailRecordArray=NULL, $successMsg=NULL)
+  {
+    // print_r($mailRecordArray);
+    $this->load->library('email');
+    $this->email->clear();
+    $config['protocol']    = 'smtp';
+    $config['smtp_host']    = 'smtpout.asia.secureserver.net';
+    $config['smtp_port']    = '25'; // 465 for ssl
+    $config['smtp_timeout'] = '7';
+    $config['wordWrap'] = true;
+    // $config['smtp_crypto'] = 'ssl';
+    $config['smtp_user']    = 'support@corpsim.in';
+    $config['smtp_pass']    = 'richie11**';
+    $config['charset']    = 'utf-8';
+    // $config['newline']    = "\r\n";
+    $config['crlf']    = "\r\n";
+    $config['mailtype'] = 'html'; // or html
+    $config['validate'] = TRUE; // bool whether to validate email or not      
+    $this->email->set_newline("\r\n");
+
+    $this->email->initialize($config);
+
+    $this->email->to($to);
+    $this->email->from($from, 'corpsim.in');
+    // $this->email->cc('another@another-example.com');
+    // $this->email->bcc('them@their-example.com');
+
+    $this->email->subject($subject);
+    $this->email->message($message);
+    
+    // ESD_Status => 0->Not Sent, 1-> Sent
+    if (!$this->email->send()) {
+      //   // Generate error
+        $errorlog = $this->email->print_debugger();
+        $errorlog = $errorlog ? $errorlog : 'Email not Send.';
+      if(!empty($mailRecordArray))
+      {
+        // insert record to table for mail not send
+        $mailRecordArray['ESD_Comment'] = $errorlog;
+        $mailRecordArray['ESD_Status'] = 0;
+        $this->db->insert("GAME_EMAIL_SEND_DETAILS", $mailRecordArray);
+      }
+      return json_encode(array('code'=>201, 'msg'=>$errorlog));
+    }
+    else {
+      if(!empty($mailRecordArray))
+      {
+        // insert record to table for mail send successfully
+        $mailRecordArray['ESD_Comment'] = ($successMsg) ? $successMsg : 'Email Sent Successfully';
+        $mailRecordArray['ESD_Status'] = 1;
+        $this->db->insert("GAME_EMAIL_SEND_DETAILS", $mailRecordArray);
+      }
+      return json_encode(array('code'=>200, 'msg'=>'Email Sent Successfully'));
+      // $errorlog = $this->email->print_debugger();
     }
   }
   

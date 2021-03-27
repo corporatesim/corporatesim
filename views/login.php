@@ -64,7 +64,7 @@ include_once 'includes/header.php';
 
 		<div class="row hidden" id="forgotPassword"><br><br>
 			<br><br>
-			<form role="form" method="post" action="">				
+			<form role="form" method="post" action="" onsubmit="return verifyAndSendEmail(event);">				
 				<div class="col-sm-8 col-md-6 loginBg col-sm-offset-2 col-md-offset-3" style="background:#ffffff;height:320px;margin-top:7%;padding-top:10px;">
 					<div class="col-sm-12 text-center">
 						<h1 class="pageHeadLine text-primary">Request Password</h1>
@@ -74,7 +74,10 @@ include_once 'includes/header.php';
 						<input type="text" id="registeredEmail" name="registeredEmail" class="form-control" placeholder="Enter your registered Email ID" required=""></input>
 					</div>
 					<div class="form-group col-sm-8 col-sm-offset-2">
-						<button class="btn btn-primary" value="resetPassword" name="reset">Request Password</button>
+						<button class="btn btn-primary" value="resetPassword" id="btn-submit" name="reset">Request Password</button>
+						<button class="btn btn-primary hidden" type="button" disabled id="btn-loader">
+							Please Wait...
+						</button>
 					</div>
 					<div class="col-sm-8 col-sm-offset-2 text-right">
 						<a href="javascript:void(0);" class="blueColor regular" id="loginHere">Login Here</a>
@@ -83,17 +86,56 @@ include_once 'includes/header.php';
 			</form>
 		</div>
 		
-		<script>
-			$(document).ready(function(){
-				$('#resetPassword').on('click',function(){
-					$('#loginForm').addClass('hidden');
-					$('#forgotPassword').removeClass('hidden');
-				});
-				$('#loginHere').on('click',function(){
-					$('#loginForm').removeClass('hidden');
-					$('#forgotPassword').addClass('hidden');
-				});
+<script>
+	$(document).ready(function(){
+		$('#resetPassword').on('click',function(){
+			$('#loginForm').addClass('hidden');
+			$('#forgotPassword').removeClass('hidden');
+		});
+		$('#loginHere').on('click',function(){
+			$('#loginForm').removeClass('hidden');
+			$('#forgotPassword').addClass('hidden');
+		});
+	});
+
+	function verifyAndSendEmail(event)
+	{
+		event.preventDefault();
+		$('#btn-loader').toggleClass('hidden');
+		$('#btn-submit').toggleClass('hidden');
+		var userEmail = $("#registeredEmail").val();
+		// console.log('sending mail to:- '+userEmail);
+		fetch("<?php echo site_root.'enterprise/SendMail/sendMailToUser';?>", {
+			method: 'post',
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				"Content-type": "application/x-www-form-urlencoded;"
+				// "Content-type": "application/json;"
+			},
+			body: "action=sendPassword&User_email="+userEmail
+		})
+		.then(function(response){
+			return response.json();
+		})
+		.then(function(result){
+			console.log(result);
+			Swal.fire({
+				icon: result.icon,
+				title: result.title,
+				html: result.message,
+				position: result.position,
+				timer: result.timer,
+				showClass: {
+					popup: 'flipInX'
+				},
+				hideClass: {
+					popup: 'flipOutX'
+				}
 			});
-		</script>
+			$('#btn-loader').toggleClass('hidden');
+			$('#btn-submit').toggleClass('hidden');
+		});
+	}
+</script>
 
 		<?php include_once 'includes/footer.php'; // print_r($_SESSION); ?>

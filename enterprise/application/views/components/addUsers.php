@@ -326,15 +326,16 @@
       try {
         var response = JSON.parse( result );
         //alert(response.status);
-        if (response.status == 1) {
-          //alert('in status = 1 ');
-          $('#bulk_u_msg').html( response.msg );
-          $('#Modal_Bulkupload').modal( 'show' );
-        }
-        else {
-          $('#bulk_u_err').html( response.msg );
-          $('#Modal_BulkuploadError').modal( 'show' );
-        }
+        Swal.fire({
+          icon: 'success',
+          title: ' ',
+          html: response.msg,
+          allowOutsideClick: false,
+          showCancelButton: true,
+          showConfirmButton: false,
+          cancelButtonText: 'Close',
+          showCloseButton: true,
+        });
       } 
       catch (e) {
         console.log( result );
@@ -346,4 +347,22 @@
 
   });
 });
+
+function downloadDuplicateRecord(duplicateData)
+{
+  var fileName = $('#Enterprise1 option:selected').html()+' duplicateRecords.csv';
+  var csvRow = "First Name,Last Name,Username,Mobile,Email,Companyid \r\n"
+  $(duplicateData).each(function(i,e){
+    csvRow += e+'\r\n';
+  });
+  // console.log(JSON.stringify(duplicateData));
+  var hiddenElement = document.createElement('a');  
+  hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvRow);  
+  hiddenElement.target = '_blank';  
+    
+  //provide the name for the CSV file to be downloaded  
+  hiddenElement.download = fileName;  
+  hiddenElement.click();  
+}
+
 </script>

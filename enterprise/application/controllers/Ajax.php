@@ -25,6 +25,12 @@ class Ajax extends MY_Controller
     }
   }
 
+  public function sendMailToUser($to=NULL, $subject=NULL, $message=NULL, $from=NULL, $mailRecordArray=NULL)
+  {
+    $sendMail = $this->Common_Model->sendMailWithRecord($to=NULL, $subject=NULL, $message=NULL, $from=NULL, $mailRecordArray=NULL);
+    print_r($sendMail); die(' here ');
+  }
+
   public function deleteRecords($tableName = NULL, $dataCol = NULL)
   {
     $tableName = 'GAME_' . strtoupper($tableName);
@@ -103,13 +109,11 @@ class Ajax extends MY_Controller
     if (isset($_FILES['upload_csv']['name']) && !empty($_FILES['upload_csv']['name'])) {
 
       $fileSize = filesize($_FILES['upload_csv']['tmp_name']); //uploaded file size
-      //echo print_r($fileSize); exit();
 
       //checking inserted file size in not greater then declared ($maxFileSize) size 
       if ($fileSize < $maxFileSize) {
         $explode_filename = explode(".", $_FILES['upload_csv']['name']); //uploaded file extension
         $ext = strtolower(end($explode_filename));
-        //echo $ext."\n";
 
         //checking user is uploading valid file extension and size or not 
         if (in_array($ext, $validext)) {
@@ -130,7 +134,6 @@ class Ajax extends MY_Controller
                   continue;
                 }
 
-                //echo print_r($filesop); exit();
                 //checking uploading data is present or not in database
                 $specialization_Name  = $filesop[0];
                 //$where = array("US_Name" => $specialization_Name);
@@ -161,7 +164,6 @@ class Ajax extends MY_Controller
                 }
               }
 
-              //echo $c;
               if (!empty($not_Inserted_Name)) {
                 //showing all Not imported Specialization Name as msg
                 $msg = "</br><p class='text-danger'><br />Not imported Specialization:- " . count($not_Inserted_Name) . " <br /> Specialization Name:-<br />" . implode(" , ", $not_Inserted_Name) . "</p>";
@@ -205,7 +207,6 @@ class Ajax extends MY_Controller
       );
     }
 
-    echo json_encode($result);
   } // end of ajax_bulk_upload_CSV function
 
   public function listCampus()
@@ -234,13 +235,11 @@ class Ajax extends MY_Controller
     if (isset($_FILES['upload_csv']['name']) && !empty($_FILES['upload_csv']['name'])) {
 
       $fileSize = filesize($_FILES['upload_csv']['tmp_name']); //uploaded file size
-      //echo print_r($fileSize); exit();
 
       //checking inserted file size in not greater then declared ($maxFileSize) size 
       if ($fileSize < $maxFileSize) {
         $explode_filename = explode(".", $_FILES['upload_csv']['name']); //uploaded file extension
         $ext = strtolower(end($explode_filename));
-        //echo $ext."\n";
 
         //checking user is uploading valid file extension and size or not 
         if (in_array($ext, $validext)) {
@@ -261,7 +260,6 @@ class Ajax extends MY_Controller
                   continue;
                 }
 
-                //echo print_r($filesop); exit();
                 //checking uploading data is present or not in database
                 $campus_Name  = $filesop[0];
                 //$where = array("UC_Name" => $campus_Name);
@@ -296,7 +294,6 @@ class Ajax extends MY_Controller
                 }
               }
 
-              //echo $c;
               if (!empty($not_Inserted_Name)) {
                 //showing all Not imported Campus Name as msg
                 $msg = "</br><p class='text-danger'><br />Not imported Campus:- " . count($not_Inserted_Name) . " <br /> Campus Name:-<br />" . implode(" , ", $not_Inserted_Name) . "</p>";
@@ -340,7 +337,6 @@ class Ajax extends MY_Controller
       );
     }
 
-    echo json_encode($result);
   } // end of ajax_bulk_upload_CSV function
 
   public function getCompetenceGameItems($enterprise_ID = NULL, $performance_Type_ID = NULL)
@@ -359,7 +355,6 @@ class Ajax extends MY_Controller
     //print_r($this->db->last_query()); exit();
 
     // $result = array('itemOptions'=> $enterpriseItemsList, 'gameOptions' => $enterpriseGameList);
-    // echo json_encode($result);
 
     if (count($enterpriseItemsList) < 1 || count($enterpriseGameList) < 1) {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No Record Found.']));
@@ -393,7 +388,6 @@ class Ajax extends MY_Controller
     //fetching all Items created under selected enterprise where item have any sublink id(mapped with sublink id)
     $itemQuery = "SELECT DISTINCT gi.Compt_Id, gi.Compt_Name, gi.Compt_Description, gi.Compt_PerformanceType FROM GAME_ITEMS gi INNER JOIN GAME_ITEMS_MAPPING gim ON gim.Cmap_ComptId = gi.Compt_Id WHERE gi.Compt_Delete = 0 AND gi.Compt_Enterprise_ID = $enterprise_ID ORDER BY gi.Compt_Name";
     $enterpriseItemsList = $this->Common_Model->executeQuery($itemQuery);
-    //print_r($itemQuery); echo '<br />'; print_r($itemData); exit();
 
     if (count($enterpriseItemsList) < 1) {
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 800, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No Record Found.']));
@@ -456,9 +450,7 @@ class Ajax extends MY_Controller
     // print_r($this->input->post());  print_r($this->db->last_query()); print_r($groupData);
 
     if (count($groupData) > 0) {
-      echo json_encode($groupData);
     } else {
-      echo 'No Group found';
     }
   }
 
@@ -518,7 +510,6 @@ class Ajax extends MY_Controller
           for ($i = 0; $i < count($users); $i++) {
             // find the users(this is nothing but team o/p) o/p data from game input table, Lead_ScenId
             $inputSql = "SELECT gsu.User_id, CONCAT( gsu.User_fname, ' ', gsu.User_lname ) AS fullName, gsu.User_username, gsu.User_email, gi.input_current FROM GAME_SITE_USERS gsu LEFT JOIN GAME_INPUT gi ON gsu.User_Id = gi.input_user AND gi.input_user=" . $users[$i] . " AND gi.input_sublinkid =( SELECT SubLink_ID FROM GAME_LINKAGE_SUB gls WHERE gls.SubLink_CompID=" . $graphSqlResult[0]->Lead_CompId . " AND gls.SubLink_SubCompID < 1 AND gls.SubLink_LinkID =( SELECT Link_ID FROM GAME_LINKAGE gl WHERE gl.Link_GameID=" . $graphSqlResult[0]->Map_GameId . " AND gl.Link_Status = 1 AND gl.Link_ScenarioID=" . $graphSqlResult[0]->Lead_ScenId . " ) ) WHERE gsu.User_id=" . $users[$i] . " ORDER BY gi.input_caretedOn DESC";
-            // echo $inputSql.'<br><br>';
             $inputSqlResult             = $this->Common_Model->executeQuery($inputSql);
             $outputValue                = ($inputSqlResult[0]->input_current) ? $inputSqlResult[0]->input_current : 0;
             $returnData['userData'][]   = array(
@@ -603,7 +594,6 @@ class Ajax extends MY_Controller
 
     $gameDataSql = "SELECT gsu.User_id, CONCAT( gsu.User_fname, ' ', gsu.User_lname ) AS FullName, gsu.User_email AS Email, gsu.User_mobile AS Mobile, gsu.User_profile_pic AS ProfileImage, gg.Game_Name, gg.Game_ReportFirstPage, gg.Game_ReportSecondPage, gsu.User_ParentId, gsu.User_SubParentId, ge.Enterprise_Name, ge.Enterprise_Logo, gse.SubEnterprise_Name, gse.SubEnterprise_Logo FROM GAME_SITE_USERS gsu LEFT JOIN GAME_USERGAMES gug ON gsu.User_id = gug.UG_UserID AND gug.UG_GameID =" . $game_id . " LEFT JOIN GAME_GAME gg ON gg.Game_ID = gug.UG_GameID LEFT JOIN GAME_ENTERPRISE ge ON ge.Enterprise_ID=gsu.User_ParentId AND ge.Enterprise_Status=0 LEFT JOIN GAME_SUBENTERPRISE gse ON gse.SubEnterprise_ID=gsu.User_SubParentId AND gse.SubEnterprise_Status=0 WHERE gsu.User_id=" . $userid;
     $gameData = $this->Common_Model->executeQuery($gameDataSql)[0];
-    // echo "<pre>"; print_r($gameData); exit(); // Game_ReportFirstPage Game_ReportSecondPage
     $sqlarea = "SELECT distinct a.Area_ID as AreaID, a.Area_Name as Area_Name, a.Area_BackgroundColor as BackgroundColor, a.Area_TextColor as TextColor, gas.Sequence_Order AS Area_Sequencing
                     FROM GAME_LINKAGE l 
                     INNER JOIN GAME_LINKAGE_SUB ls on l.Link_ID=ls.SubLink_LinkID 
@@ -614,17 +604,14 @@ class Ajax extends MY_Controller
                     LEFT JOIN GAME_AREA_SEQUENCE gas on a.Area_ID=gas.Sequence_AreaId
                     LEFT OUTER JOIN GAME_SUBCOMPONENT s on ls.SubLink_SubCompID=s.SubComp_ID 
                     WHERE ls.SubLink_Type=1 AND gas.Sequence_LinkId=" . $linkid . " AND l.Link_ID=" . $linkid . " ORDER BY gas.Sequence_Order DESC";
-    // echo $sqlarea; exit();
     $area = $this->Common_Model->executeQuery($sqlarea);
     if (count($area) > 0) {
       $printPdfFlag = TRUE;
-      // echo count($area)."<pre><br>".$sqlarea.'<br>'; print_r($area); exit();
 
       foreach ($area as $areaRow) {
         // to check that this area comp are visible or hide by admin, if visible then only show area to user else not
         $checkVisibleCompSql = "SELECT gls.*,gi.input_current FROM GAME_LINKAGE_SUB gls LEFT JOIN GAME_INPUT gi ON gi.input_sublinkid=gls.SubLink_ID AND gi.input_user=" . $userid . " WHERE gls.SubLink_LinkID =" . $linkid . " AND gls.SubLink_AreaID =" . $areaRow->AreaID . " AND gls.SubLink_ShowHide = 0 AND gls.SubLink_SubCompID<1 ORDER BY gls.SubLink_Order";
         $visibleComponents   = $this->Common_Model->executeQuery($checkVisibleCompSql);
-        // echo $checkVisibleCompSql.'<br>';
 
         if (count($visibleComponents) > 0) {
           // this means this area has some comp or subcomp that is visible, take this area data and break the loop
@@ -643,7 +630,6 @@ class Ajax extends MY_Controller
       // finding the game completion date
       $gameCompletDate = $this->Common_Model->executeQuery("SELECT US_CompletedOn FROM GAME_USERSTATUS WHERE US_GameID=$game_id AND US_UserID=$userid")[0];
 
-      // echo count($visibleComponents)."<pre><br>".$checkVisibleCompSql.'<br>'; print_r($visibleComponents); exit();
       $pageHeader = '<table align="left" cellspacing="0" cellpadding="1" style"font-weight:bold;"><tr><td colspan="2" align="center" style="background-color:#f0f0f0;"><b>Participant Details</b></td></tr><tr style="background-color:#c4daec;"><td><b>Name</b>: </td><td>' . $gameData->FullName . '</td></tr> <tr style="background-color:#c4daec;"><td><b>Email</b>: </td><td>' . $gameData->Email . '</td></tr> <tr style="background-color:#c4daec;"><td><b>Mobile</b>: </td><td>' . 'XXXXXX' . substr($gameData->Mobile, -4) . '</td></tr> <tr style="background-color:#c4daec;"><td><b>Simulation/Game</b>: </td><td>' . $gameData->Game_Name . ' (' . date('d-m-Y', strtotime($gameCompletDate->US_CompletedOn)) . ')</td></tr></table><br>' . $gameData->Game_ReportFirstPage;
 
       $printData = '';
@@ -726,7 +712,6 @@ class Ajax extends MY_Controller
         // end of componentDiv
       }
 
-      // echo $printData; exit();
 
       define('Enterprise_Name', ($gameData->Enterprise_Name) ? $gameData->Enterprise_Name : 'noVal');
       define('Enterprise_Logo', ($gameData->Enterprise_Logo) ? str_replace(' ', '%20', $gameData->Enterprise_Logo) : 'noVal');
@@ -791,7 +776,6 @@ class Ajax extends MY_Controller
       // $pdf->Output($outputFileName,'I');
       // to download this pdf with the given name
       $pdf->Output($outputFileName, 'D');
-      // echo count($area)."<pre><br>".$sqlarea.'<br>'; print_r($area); exit();
     } else {
       // die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'This Card output not available/visible. Please contact admin.']));
       $this->session->set_flashdata('er_msg', 'This Card output not available/visible. Please contact admin.');
@@ -805,7 +789,6 @@ class Ajax extends MY_Controller
     $userid = base64_decode($userid);
     $completedGameSql = "SELECT gg.Game_ID, gg.Game_Name, gus.US_ScenID, gl.Link_ID FROM GAME_GAME gg LEFT JOIN GAME_USERSTATUS gus ON gus.US_GameID = gg.Game_ID LEFT JOIN GAME_LINKAGE gl ON gl.Link_GameID = gg.Game_ID AND gl.Link_ScenarioID = gus.US_ScenID WHERE gus.US_UserID =" . $userid . " ORDER BY gg.Game_Name";
     $completedGames = $this->Common_Model->executeQuery($completedGameSql);
-    // echo $completedGameSql; print_r($completedGames);
     if (count($completedGames) < 1) {
       // no game allocated or complted
       die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'Selected user has not completed any Card till now.']));
@@ -890,7 +873,6 @@ class Ajax extends MY_Controller
 
     $agentsResult = $this->Common_Model->executeQuery($agentsSql);
     // die($agentsSql);
-    echo json_encode($agentsResult);
   }
 
   // to get the agents for creating the collabration
@@ -980,18 +962,14 @@ class Ajax extends MY_Controller
     // these are mapped users
     $mappedUserData = $this->Common_Model->fetchRecords('GAME_TEAM_MAPPING', array('Team_UserId' => $Team_UserId));
 
-    // echo "<pre>"; print_r($mappedUserData); echo "<br><br>"; print_r($allUsersdata);
 
     if (count($mappedUserData) < 1) {
       // is there is no mapping
-      // echo "<pre>"; print_r($mappedUserData); echo "<br><br>"; print_r($allUsersdata);
       $collabrationTeamData = $allUsersdata;
     } else {
-      // echo "<pre>"; print_r(json_decode($mappedUserData[0]->Team_Users)); echo "<br><br>"; print_r($allUsersdata);
       $mappedUserIds = json_decode($mappedUserData[0]->Team_Users);
       foreach ($allUsersdata as $allUsersdataRow) {
         if (in_array($allUsersdataRow->User_id, $mappedUserIds)) {
-          // echo 'exist_'.$allUsersdataRow->User_id.'<br>';
           $allUsersdataRow->exist = 'checked';
         } else {
           $allUsersdataRow->exist = '';
@@ -1014,7 +992,6 @@ class Ajax extends MY_Controller
         die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => 'Error', 'icon' => 'error', 'message' => 'No User Mapped.']));
       } else {
         $mappedUserIds = implode(',', json_decode($teamData[0]->Team_Users));
-        // print_r($mappedUserIds); echo implode(',', $mappedUserIds);
         $userDetails = $this->Common_Model->fetchRecords('GAME_SITE_USERS', "User_id IN ($mappedUserIds)", 'User_id, CONCAT(User_fname," ",User_lname) AS fullName, User_mobile, User_email, User_username');
         die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "200", 'title' => 'Associated Team Members', 'icon' => 'success', 'message' => 'Associated Team Members', 'teamUsersData' => $userDetails]));
       }
@@ -1023,7 +1000,6 @@ class Ajax extends MY_Controller
 
   public function addEditDeleteFetchCollaboration($modification = NULL, $Group_Id = NULL)
   {
-    // print_r($_SESSION); print_r($this->input->post()); echo $modification.' and '.$Group_Id; exit(); enterpriseUsers subEnterpriseUsers superadminUsers
     $Enterprise_ID    = $this->input->post('Enterprise_ID');
     $SubEnterprise_ID = $this->input->post('SubEnterprise_ID');
     $fetchFor         = $this->input->post('fetchFor');
@@ -1156,12 +1132,9 @@ class Ajax extends MY_Controller
       );
       $resultState = $this->Common_Model->fetchRecords('GAME_STATE', $whereState);
       if (count($resultState) > 0) {
-        echo json_encode($resultState);
       } else {
-        echo 'nos';
       }
     } else {
-      echo 'no';
     }
   }
 
@@ -1172,7 +1145,6 @@ class Ajax extends MY_Controller
       'SubEnterprise_EnterpriseID' => $SubEnterprise_EnterpriseID,
     );
     $resultSubEnterprise = $this->Common_Model->fetchRecords('GAME_SUBENTERPRISE', $whereState);
-    echo json_encode($resultSubEnterprise);
   }
 
   public function get_dateRange($id = NULL)
@@ -1184,7 +1156,6 @@ class Ajax extends MY_Controller
     $result                       = $result[0];
     $result->Enterprise_StartDate = strtotime($result->Enterprise_StartDate);
     $result->Enterprise_EndDate   = strtotime($result->Enterprise_EndDate);
-    echo json_encode($result);
   }
 
   //csv upload for enterprise...
@@ -1238,7 +1209,6 @@ class Ajax extends MY_Controller
               //print_r($this->db->last_query()); exit();
               if ($object > 0) {
                 array_push($not_inserted_data, $filesop[2]);
-                //echo "abcd";exit;
                 //$result  = "email and mobile already registered";
               } else {
                 if ($password != '') {
@@ -1302,7 +1272,6 @@ class Ajax extends MY_Controller
         "status" => 0
       );
     }
-    echo json_encode($result);
   }
 
 
@@ -1320,10 +1289,8 @@ class Ajax extends MY_Controller
 
     if (isset($_FILES['upload_csv']['name']) && !empty($_FILES['upload_csv']['name'])) {
       $explode_filename = explode(".", $_FILES['upload_csv']['name']);
-      // echo $explode_filename[0];
       // exit();
       $ext = strtolower(end($explode_filename));
-      //echo $ext."\n";
       if (in_array($ext, $validext)) {
         try {
           $file              = $_FILES['upload_csv']['tmp_name'];
@@ -1333,6 +1300,7 @@ class Ajax extends MY_Controller
           $c                 = 0;
           $flag              = true;
           $duplicate         = array();
+          $duplicateData     = array();
 
           // Setting Enterprize ID
           if ($Enterpriseid == 0) {
@@ -1392,15 +1360,14 @@ class Ajax extends MY_Controller
 
               $where             = array(
                 "User_username" => $username,
-                "User_mobile"   => $mobile,
+                // "User_mobile"   => $mobile,
                 "User_email"    => $email,
               );
-              // echo $filesop[7].' csvSD '.$startDate.' sD '.$userStartDate. ' csvED '.$endDate.' eD '.$userEndDate; exit();
 
-              $object = $this->Common_Model->findCount('GAME_SITE_USERS', $where);
-              if ($object > 0) {
-                // echo "details already registered";
+              $object = $this->Common_Model->findCountUsingOr('GAME_SITE_USERS', $where);
+              if (count($object) > 0) {
                 $duplicate[] = $email;
+                $duplicateData[] = $filesop;
                 continue;
                 // exit();
               }
@@ -1419,7 +1386,6 @@ class Ajax extends MY_Controller
                 "User_datetime"      => date("Y-m-d H:i:s"),
                 'User_UploadCsv'     => $User_UploadCsv,
               );
-              // print_r($filesop); echo $userStartDate. ' and '.$userEndDate; print_r($insertArray);exit();
               $result = $this->Common_Model->insert("GAME_SITE_USERS", $insertArray, 0, 0);
               // print_r($this->db->last_query());exit;
 
@@ -1446,14 +1412,16 @@ class Ajax extends MY_Controller
                   $message .= "<br>Please login and verify the credentials. In case of any issue and for any other details please contact your Program Administrator.<br>";
                   $message .= "<br>Regards,<br>Admin<br>Humanlinks Learning";
 
-                  $addArray = array(
+                  $mailRecordArray = array(
                     'ESD_To'           => $email,
                     'ESD_Email_Count'  => 1,
                     'ESD_EnterprizeID' => $entid,
-                    'ESD_DateTime'     => date('Y-m-d H:i:s', time()),
+                    'ESD_From'     => 'support@corpsim.in',
+                    'ESD_Content' => $message,
+                    // 'ESD_Content' => $entid,
                   );
                   // ESD_Status => 0->Not Send, 1-> Send
-                  $this->Common_Model->send_mail($email, 'Prayog access', $message, 'support@corpsim.in', $addArray);
+                  $this->Common_Model->sendMailWithRecord($email, 'Prayog access', $message, 'support@corpsim.in', $mailRecordArray);
                 }
                 // email ===============================
               }
@@ -1461,14 +1429,15 @@ class Ajax extends MY_Controller
           }
 
           if (count($duplicate) > 0) {
-            $shoMsg = $c . " Record Import successful and the below email id's are duplicate so not inserted:-<br>" . implode('<br>', $duplicate);
+            $shoMsg = $c . " <b>Record Import successfully and the below email id's OR username are duplicate so not saved:-</b> <br><a class='text-danger' href='javascript:void(0);' onclick='return downloadDuplicateRecord(".json_encode($duplicateData).");'>Click Here To Download</a><br>" . implode('<br>', $duplicate);
           } else {
             $shoMsg = $c . " Record Import successful";
           }
 
           $result = array(
             "msg"    => $shoMsg,
-            "status" => 1
+            "status" => 1,
+            // "duplicateData" => json_encode($duplicateData),
           );
         } catch (Exception $e) {
           $result = array(
@@ -1488,7 +1457,6 @@ class Ajax extends MY_Controller
         "status" => 0
       );
     }
-    echo json_encode($result);
   }
 
   //csv upload for subenterprise...
@@ -1532,7 +1500,6 @@ class Ajax extends MY_Controller
               );
               $object = $this->Common_Model->findCount('GAME_SUBENTERPRISE', $where);
               if ($object > 0) {
-                echo "details already registered";
                 exit;
               }
 
@@ -1601,7 +1568,6 @@ class Ajax extends MY_Controller
         "status" => 0
       );
     }
-    echo json_encode($result);
   }
 
   //csv upload for subenterprise users
@@ -1646,7 +1612,6 @@ class Ajax extends MY_Controller
 
               $object = $this->Common_Model->findCount('GAME_SITE_USERS', $where);
               if ($object > 0) {
-                // echo "details already registered";
                 $duplicate[] = $email;
                 continue;
                 // exit;
@@ -1724,7 +1689,6 @@ class Ajax extends MY_Controller
       );
     }
 
-    echo json_encode($result);
   }
 
   public function getDomainName($Domain_Name = NULL)
@@ -1737,9 +1701,7 @@ class Ajax extends MY_Controller
     $resultDomain_Name = $this->Common_Model->findCount('GAME_DOMAIN', $where);
     if ($resultDomain_Name > 0) {
       // for duplicate
-      echo 'no';
     } else {
-      echo 'success';
     }
   }
 
@@ -1964,7 +1926,6 @@ class Ajax extends MY_Controller
       $scenSql = "SELECT gl.Link_GameID, gl.Link_ID, gl.Link_ScenarioID, gl.Link_Order, gg.Game_Name, gs.Scen_Name FROM GAME_LINKAGE gl LEFT JOIN GAME_GAME gg ON gg.Game_ID = gl.Link_GameID LEFT JOIN GAME_SCENARIO gs ON gs.Scen_ID = gl.Link_ScenarioID WHERE (gl.Link_GameID, gl.Link_Order) IN( SELECT gll.Link_GameID, MAX(gll.Link_Order) FROM GAME_LINKAGE gll WHERE gll.Link_GameID IN($gamesId) AND gl.Link_Status = 1 GROUP BY gll.Link_GameID)";
 
       $lastScenario = $this->Common_Model->executeQuery($scenSql);
-      // echo $scenSql; prd($lastScenario);
       if (count($lastScenario) < 1) {
         die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 1500, "status" => "201", 'title' => "Error", 'icon' => 'error', 'message' => 'No Scenario Found For Selected Cards.']));
       } else {
@@ -1979,7 +1940,6 @@ class Ajax extends MY_Controller
           // print_r($compSubcompquery); exit();
 
           // as we are taking only o/p comp/subcomp. // print_r($compSubcomp);
-          // echo "<br>starting for ".$lastScenarioRow->Link_GameID."<br><br>";
           if (count($compSubcomp) < 1) {
             // this scenario don't have any comp subcomp or all are hidden
             $tableRow .= '<td class="gameScenRow">' . $lastScenarioRow->Game_Name . ' (' . $lastScenarioRow->Scen_Name . ')</td> <td>N/A</td> <td>N/A</td> <td>N/A</td>';
@@ -2131,7 +2091,6 @@ class Ajax extends MY_Controller
           $slNo++;
         }
       }
-      // print_r($gameCardID); echo '<br />'; print_r($gameCard_SublinkID); exit();
       // ==========================================================
 
       // finding the user details according filter type
@@ -2270,7 +2229,6 @@ class Ajax extends MY_Controller
           $slNo++;
         }
       }
-      // print_r($gameCardID); echo '<br />'; print_r($gameCard_SublinkID); exit();
       // ==========================================================
 
       // RF_Action_ID => 1-> Shortlist, 2-> IDP, 3-> ehire
@@ -2378,13 +2336,11 @@ class Ajax extends MY_Controller
           //$averageJson[$gameCompSubcompRow][$l] = ($userGameData[0]->input_current) ? number_format((float)$userGameData[0]->input_current, 2, '.', '') : 0;
           //round($userGameData[0]->input_current, 2)
           $averageJson[$gameCompSubcompRow][$l] = ($userGameData[0]->input_current) ? round($userGameData[0]->input_current, 2) : 0;
-          //echo 'input_val '.$userGameData[0]->input_current.'<br>';
           $input_Date_Current = $userGameData[0]->UG_CratedOn;
         }
       }
       // evaluate avg of each item after getting the value from avove
       if (isset($averageJson[$gameCompSubcompRow])) {
-        // echo implode(' + ', $averageJson[$gameCompSubcompRow]) . "<br>";
         $averageJson[$gameCompSubcompRow] = array_sum($averageJson[$gameCompSubcompRow]) / count($averageJson[$gameCompSubcompRow]);
       }
     }
@@ -2396,7 +2352,6 @@ class Ajax extends MY_Controller
         $formulaString[$s] = (array_key_exists($itemid, $averageJson)) ? round($averageJson[$itemid], 2) : 0;
       }
     }
-    //prd($averageJson); echo implode('',$formulaString).'<br><br>';
     //return eval("return ".implode('',$formulaString).";");
 
     $overall_Value = eval("return " . implode('', $formulaString) . ";");
@@ -2674,13 +2629,11 @@ class Ajax extends MY_Controller
           $scoreSP += $reportValue[$i];
         }
       }
-      // print_r($countCR); echo '<br />'; print_r($scoreCR); exit();
 
       // calculating average score value for each factor type
       $averageCR = round($scoreCR) > 0 ? sprintf("%.2f", $scoreCR / $countCR) : 0.00;
       $averageCA = round($scoreCA) > 0 ? sprintf("%.2f", $scoreCA / $countCA) : 0.00;
       $averageSP = round($scoreSP) > 0 ? sprintf("%.2f", $scoreSP / $countSP) : 0.00;
-      // print_r($averageCR); echo '<br />'; print_r($averageCA); echo '<br />'; print_r($averageSP); exit();
 
       // IR_Type_Choice 1-> EXECUTIVE SUMMARY, 2-> CONCLUSION SECTION
       // getting game_item_report Executive Summary and Conclusion Section
@@ -2798,7 +2751,6 @@ class Ajax extends MY_Controller
           $slNo++;
         }
       }
-      // print_r($gameCardID); echo '<br />'; print_r($gameCard_SublinkID); exit();
       // ==========================================================
 
       $userDataSql = "SELECT DISTINCT gi.input_user, gi.input_caretedOn, gsu.User_id 
@@ -3239,7 +3191,6 @@ class Ajax extends MY_Controller
       //   $i++;
       // }
 
-      // print_r($readiness); echo '<br />'; print_r($application); exit();
 
       die(json_encode(['x1y1' => $x1y1, 'x1y2' => $x1y2, 'x1y3' => $x1y3, 'x1y4' => $x1y4, 'x2y1' => $x2y1, 'x2y2' => $x2y2, 'x2y3' => $x2y3, 'x2y4' => $x2y4, 'x3y1' => $x3y1, 'x3y2' => $x3y2, 'x3y3' => $x3y3, 'x3y4' => $x3y4, 'x4y' => $x4y, 'quadrantCRvsSPI' => $quadrantCRvsSPI, 'quadrantCRvsSPII' => $quadrantCRvsSPII, 'quadrantCRvsSPIII' => $quadrantCRvsSPIII, 'quadrantCRvsSPIV' => $quadrantCRvsSPIV, 'quadrantCRvsCAI' => $quadrantCRvsCAI, 'quadrantCRvsCAII' => $quadrantCRvsCAII, 'quadrantCRvsCAIII' => $quadrantCRvsCAIII, 'quadrantCRvsCAIV' => $quadrantCRvsCAIV, 'overallValue' => $overallValue, 'creationDate' => $creationDate, 'heighestCR' => $heighestCR, 'heighestCA' => $heighestCA, 'heighestSP' => $heighestSP, 'heighestOvarall' => $heighestOvarall, 'averageCR' => $averageCR, 'averageCA' => $averageCA, 'averageSP' => $averageSP, 'averageOvarall' => $averageOvarall, 'scoredByUserName' => $scoredByUserName, 'scoredByCR' => $scoredByCR, 'scoredByCA' => $scoredByCA, 'scoredBySP' => $scoredBySP, 'scoredByOvarall' => $scoredByOvarall, 'readiness' => $readiness, 'application' => $application, "status" => "200", 'title' => 'Success', 'icon' => 'success', 'message' => 'Report Data.']));
     }
@@ -3335,7 +3286,6 @@ class Ajax extends MY_Controller
         $totalUserNotStartedCount = $userNotStarted > 0 ? $userNotStarted : 0;
 
         // print_r('Total-'.$totalUserCount.' Started-'.$totalUserStartedCount.' Completed-'.$totalUserCompletedCount.' Not Started-'.$totalUserNotStartedCount);
-        // echo '<br />';
         
         $card_User_Total[]      = (int)$totalUserCount;
         $card_User_Started[]    = (int)$totalUserStartedCount;
