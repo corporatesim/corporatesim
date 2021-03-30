@@ -339,5 +339,3 @@
 				// echo "<pre>"; print_r($scen); exit;
 				include_once 'includes/footer.php'; 
 			?>
-		</body>
-		</html>

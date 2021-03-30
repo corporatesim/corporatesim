@@ -108,7 +108,7 @@
 												<tr>										
 													<th><?php echo $i;?></th>
 													<td><?php echo ucfirst($row->GameImg_Title);?></td>
-													<td><?php echo ucfirst($row->GameImg_Name);?></td>
+													<td><?php echo "<img width='50' height='50' title='".ucfirst($row->GameImg_Name)."' src='".site_root.'ux-admin/upload/'.$row->GameImg_Name."'></img>";?></td>
 													<td class="text-center">
 														<a href="<?php echo site_root."ux-admin/ManageGameImage/Edit/".base64_encode($row->GameImg_GameID)."/tab/".base64_encode($row->GameImg_ID);?>"
 															title="Edit">

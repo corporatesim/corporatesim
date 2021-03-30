@@ -235,7 +235,7 @@ include_once 'includes/header.php';
 										echo "<div class='img-container '>";
 										echo "<img src='";
 										echo "ux-admin/upload/".$row['GameImg_Name'];
-										echo "' alt='Image' class='img-cntr showImageModal'></img>";
+										echo "' alt='Image' class='img-cntr'onclick='return showNextPreviousImage(this, \"ImageDiv\");'></img>";
 										echo "</div><div class='col-sm-12 no_padding ImageName'><h4 class=''>";
 										echo $row['GameImg_Title'];
 										echo "</h4><span class='videoDiscription'>";
@@ -266,16 +266,7 @@ include_once 'includes/header.php';
 			</div>
 		</section>	
 
-		<footer>
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-12 text-center">
-						<span> </span>
-					</div>
-				</div>
-			</div>
-		</footer>
-		<script src="js/jquery.min.js"></script>	
-		<script src="js/bootstrap.min.js"></script>			
-	</body>
-	</html>
+		<?php 
+				// echo "<pre>"; print_r($scen); exit;
+				include_once 'includes/footer.php'; 
+			?>
