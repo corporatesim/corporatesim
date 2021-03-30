@@ -109,19 +109,8 @@
 		</div>
 	</div>
 	<!-- /.row -->
-	<div class="row col-md-6">
-		<canvas id="barChart" width="400" height="400"></canvas>
-		<!-- <canvas id="lineChart" width="400" height="400"></canvas> -->
-	</div>
 
-	<div class="row col-md-6">
-		<!-- <canvas id="barChart" width="400" height="400"></canvas> -->
-		<canvas id="lineChart" width="400" height="400"></canvas>
-	</div>
-
-	<div class="clearfix row"><br></div>
 	<br>
-	
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<b>Game Creator/Completion List</b>
@@ -152,6 +141,19 @@
 			</div>
 		</div>
 	</div>
+	<br>
+	<div class="clearfix"></div>
+	<div class="row col-md-6">
+		<canvas id="barChart" width="400" height="400"></canvas>
+		<!-- <canvas id="lineChart" width="400" height="400"></canvas> -->
+	</div>
+
+	<div class="row col-md-6">
+		<!-- <canvas id="barChart" width="400" height="400"></canvas> -->
+		<canvas id="lineChart" width="400" height="400"></canvas>
+	</div>
+
+	<div class="clearfix row"><br></div>
 
 	<script>
 		$(document).ready(function(){
