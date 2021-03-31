@@ -234,9 +234,19 @@
 		showImagePopUp();
 		setTimeout(function() {
 				showProgressbarData();
+				hideSliderValue();
 			},
 			100);
 	});
+
+	function hideSliderValue()
+	{
+		$('.hideRangeValue').each(function(i,e){
+			var parentDiv = $(this).parents('div.InlineBox.addCenterPadding');
+			parentDiv.find('span.range').addClass('hidden');
+		});
+		// console.log('hidden value for hideRangeValue');
+	}
 
 	function showImageModal() {
 			$('marquee').each(function() {
