@@ -338,7 +338,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Update')
 		$result = $functionsObj->UpdateData('GAME_GAME', $gamedetails, 'Game_ID', $uid, 0);
 
 		$updateLinkageSql = "UPDATE GAME_LINKAGE SET Link_Introduction=".$Game_Introduction.", Link_Description=".$Game_Description.", Link_IntroductionLink=".$Game_IntroductionLink.", Link_DescriptionLink=".$Game_DescriptionLink.", Link_BackToIntro=".$Game_BackToIntro." WHERE Link_GameID=".$uid;
-		$functionsObj->ExecuteQuery($updateLinkageSql);
+		// $functionsObj->ExecuteQuery($updateLinkageSql);
 
 		if($result === true)
 		{
