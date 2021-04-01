@@ -38,7 +38,7 @@ class SendMail extends CI_Controller
         $from = 'support@corpsim.in';
         foreach($checkRecord as $checkRecordRow)
         {
-          $message = "Hi ".ucfirst($checkRecordRow->User_fname).",<br><br> You can login to your account using the below details.<br><br> <b>URL: </b>".$checkRecordRow->Domain_Name." <br> <b>Username: </b>".$checkRecordRow->User_username." <br> <b>Password: </b>".$checkRecordRow->Auth_password." <br>";
+          $message = "Hi ".ucfirst($checkRecordRow->User_fname).",<br><br> You can login to your account using the below details:-<br><br> <b>Username: </b>".$checkRecordRow->User_username." <br> <b>Password: </b>".$checkRecordRow->Auth_password." <br><br><br>Regards,<br>Administrator";
           $mailRecordArray = array(
             'ESD_To'           => $checkRecordRow->User_email,
             'ESD_Email_Count'  => 1,
@@ -47,7 +47,8 @@ class SendMail extends CI_Controller
             'ESD_From'     => $from,
             'ESD_Content' => $message,
           );
-          $sendMail = $this->Common_Model->sendMailWithRecord($checkRecordRow->User_email, 'Password Requested', $message, $from, $mailRecordArray, 'Password sent via email successfully');
+          // die($message);
+          $sendMail = $this->Common_Model->sendMailWithRecord($checkRecordRow->User_email, 'Password Requested', $message, $from, $mailRecordArray, 'Password sent via email successfully','Login Details');
         }
 
         die(json_encode(["position" => "top-end", "showConfirmButton" => false, "timer" => 2500, "status" => "200", 'title' => "Success", 'icon' => 'success', 'message' => 'Password sent to your registered email id .']));

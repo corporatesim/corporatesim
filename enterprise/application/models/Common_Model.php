@@ -485,7 +485,7 @@ class Common_Model extends CI_Model
     }
   }
 
-  public function sendMailWithRecord($to=NULL, $subject=NULL, $message=NULL, $from=NULL, $mailRecordArray=NULL, $successMsg=NULL)
+  public function sendMailWithRecord($to=NULL, $subject=NULL, $message=NULL, $from=NULL, $mailRecordArray=NULL, $successMsg=NULL, $fromName=NULL)
   {
     // print_r($mailRecordArray);
     $this->load->library('email');
@@ -508,7 +508,7 @@ class Common_Model extends CI_Model
     $this->email->initialize($config);
 
     $this->email->to($to);
-    $this->email->from($from, 'corpsim.in');
+    $this->email->from($from, $fromName?$fromName:'corpsim.in');
     // $this->email->cc('another@another-example.com');
     // $this->email->bcc('them@their-example.com');
 
