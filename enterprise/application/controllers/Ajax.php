@@ -1132,9 +1132,12 @@ class Ajax extends MY_Controller
       );
       $resultState = $this->Common_Model->fetchRecords('GAME_STATE', $whereState);
       if (count($resultState) > 0) {
+        echo json_encode($resultState);
       } else {
+        echo 'nos';
       }
     } else {
+      echo 'no';
     }
   }
 
