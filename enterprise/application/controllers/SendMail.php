@@ -14,7 +14,7 @@ class SendMail extends CI_Controller
     die('You are not allowed to visit this page.');
   }
 
-  public function sendMailToUser($to=NULL, $subject=NULL, $message=NULL, $from=NULL, $mailRecordArray=NULL)
+  public function sendMailToUser()
   {
     $User_email = $this->input->post('User_email');
     if(empty($User_email))
@@ -55,6 +55,12 @@ class SendMail extends CI_Controller
       }
     }
     // print_r($this->input->post()); print_r($sendMail); die(' here '); // echo json_encode(array('code'=> 200, 'postData'=> $this->input->post('User_email'), 'mailData'=> $sendMail));
+  }
+
+  public function sendDynamicEmails()
+  {
+    print_r($this->input->post());
+    $sendMail = $this->Common_Model->sendDynamicEmails('toemail', 'subject', 'message', 'from', 'from name', 'smtp_user', 'smtp_pass', 'Password sent via email successfully','Login Details');
   }
 
 }

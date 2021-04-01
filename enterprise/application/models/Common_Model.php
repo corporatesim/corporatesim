@@ -541,5 +541,62 @@ class Common_Model extends CI_Model
       // $errorlog = $this->email->print_debugger();
     }
   }
+
+  public function sendDynamicEmails($to=NULL, $subject=NULL, $message=NULL, $from=NULL, $fromName=NULL, $smuser=NULL, $smpass=NULL, $successMsg=NULL )
+  {
+    // print_r($mailRecordArray);
+    $this->load->library('email');
+    $this->email->clear();
+    $config['protocol']    = 'smtp';
+    $config['smtp_host']    = 'smtpout.asia.secureserver.net';
+    $config['smtp_port']    = '25'; // 465 for ssl
+    $config['smtp_timeout'] = '7';
+    $config['wordWrap'] = true;
+    // $config['smtp_crypto'] = 'ssl';
+    $config['smtp_user']    = "$smuser";
+    $config['smtp_pass']    = "$smpass";
+    $config['charset']    = 'utf-8';
+    // $config['newline']    = "\r\n";
+    $config['crlf']    = "\r\n";
+    $config['mailtype'] = 'html'; // or html
+    $config['validate'] = TRUE; // bool whether to validate email or not      
+    $this->email->set_newline("\r\n");
+
+    $this->email->initialize($config);
+
+    $this->email->to($to);
+    $this->email->from($from, $fromName?$fromName:'corpsim.in');
+    // $this->email->cc('another@another-example.com');
+    // $this->email->bcc('them@their-example.com');
+
+    $this->email->subject($subject);
+    $this->email->message($message);
+    
+    // ESD_Status => 0->Not Sent, 1-> Sent
+    if (!$this->email->send()) {
+      //   // Generate error
+        $errorlog = $this->email->print_debugger();
+        $errorlog = $errorlog ? $errorlog : 'Email not Sent.';
+      if(!empty($mailRecordArray))
+      {
+        // insert record to table for mail not send
+        $mailRecordArray['ESD_Comment'] = $errorlog;
+        $mailRecordArray['ESD_Status'] = 0;
+        $this->db->insert("GAME_EMAIL_SEND_DETAILS", $mailRecordArray);
+      }
+      return json_encode(array('code'=>201, 'msg'=>$errorlog));
+    }
+    else {
+      if(!empty($mailRecordArray))
+      {
+        // insert record to table for mail send successfully
+        $mailRecordArray['ESD_Comment'] = ($successMsg) ? $successMsg : 'Email Sent Successfully';
+        $mailRecordArray['ESD_Status'] = 1;
+        $this->db->insert("GAME_EMAIL_SEND_DETAILS", $mailRecordArray);
+      }
+      return json_encode(array('code'=>200, 'msg'=>'Email Sent Successfully'));
+      // $errorlog = $this->email->print_debugger();
+    }
+  }
   
 }
