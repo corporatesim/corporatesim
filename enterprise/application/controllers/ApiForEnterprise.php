@@ -21,8 +21,8 @@ class ApiForEnterprise extends CI_Controller {
     $this->tempStartData = date('Y-m-d H:i:s');
     $this->tempEndData = date('Y-m-d H:i:s', strtotime("+1 week"));
     // print_r($this->input->post()); die(' in constructor ');
-    $this->entEmail = $this->input->post('email');
-    $this->entPassword = $this->input->post('password');
+    $this->entEmail = base64_decode($this->input->post('email'));
+    $this->entPassword = base64_decode($this->input->post('password'));
     if(empty($this->entEmail) || empty($this->entPassword))
     {
       die(json_encode(array('class' => 'bg-danger', 'title' => '', 'subtitle' => 'Failed', 'icon' => 'fas fa-times-circle', 'delay' => 3000, 'type' => 'Error', 'code' => 201, 'image' => '', 'imageAlt' => '', 'message' => 'email and password are mandatory.', 'devMsg' => 'No msg', 'data' => '', 'redirect' => '', 'gamesCatalogue' => '')));
@@ -75,8 +75,8 @@ class ApiForEnterprise extends CI_Controller {
   {
     // die(' play simulation'); // entUsrLogin
     // $simulationId = $this->input->post('gameid');
-    $useremail = $this->input->post('useremail');
-    $userpassword = $this->input->post('userpassword');
+    $useremail = base64_decode($this->input->post('useremail'));
+    $userpassword = base64_decode($this->input->post('userpassword'));
     $returnUrl = ($this->input->post('returnUrl'))?$this->input->post('returnUrl'):"";
     if(empty($useremail) || empty($userpassword))
     {
@@ -86,7 +86,15 @@ class ApiForEnterprise extends CI_Controller {
     $fetchedName = $this->Api_Model->executeQuery($domainSql);
     if(count($fetchedName)>0)
     {
-      $domainName = $fetchedName[0]->Domain_Name;
+      if(!empty($fetchedName[0]->Domain_Name))
+      {
+        $domainName = $fetchedName[0]->Domain_Name;
+      }
+      else
+      {
+        // $domainName = 'https://corpsim.in';
+        $domainName = 'http://localhost/simulation';
+      }
     }
     else
     {

@@ -12,6 +12,17 @@ if(isset($_GET['q']) && $_GET['q'] == "Logout"){
 	// unset($_SESSION['logo']);
 	
 	//setcookie($cookie_name, "", 1);
-	header("Location:".site_root."login.php");
+	if(isset($_COOKIE['returnUrl']))
+	{
+		$returnUrl = $_COOKIE['returnUrl'];
+		setcookie($_COOKIE['returnUrl'], time() - 3600);
+		header("Location: $returnUrl");
+		exit();
+	}
+	else
+	{
+		header("Location:".site_root."login.php");
+		exit();
+	}
 }
 ?>
